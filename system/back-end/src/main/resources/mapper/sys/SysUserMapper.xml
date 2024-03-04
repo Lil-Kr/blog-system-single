@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.single.blog.dao.SysUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.SysUser">
+        <id column="id" property="id" />
+        <result column="surrogate_id" property="surrogateId" />
+        <result column="number" property="number" />
+        <result column="login_account" property="loginAccount" />
+        <result column="user_name" property="userName" />
+        <result column="telephone" property="telephone" />
+        <result column="mail" property="mail" />
+        <result column="password" property="password" />
+        <result column="org_id" property="orgId" />
+        <result column="status" property="status" />
+        <result column="deleted" property="deleted" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="SysUserVoResultMap" type="com.cy.single.blog.pojo.vo.user.SysUserVo">
+        <id column="id" property="id" />
+        <result column="surrogate_id" property="surrogateId" />
+        <result column="number" property="number" />
+        <result column="login_account" property="loginAccount" />
+        <result column="user_name" property="userName" />
+        <result column="telephone" property="telephone" />
+        <result column="mail" property="mail" />
+        <result column="password" property="password" />
+        <result column="org_id" property="orgId" />
+        <result column="status" property="status" />
+        <result column="deleted" property="deleted" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <sql id="Table_Name">
+        sys_user
+    </sql>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, surrogate_id, `number`, login_account, password, user_name, telephone, mail, org_id, status, deleted, remark, create_time, update_time
+    </sql>
+
+    <update id="updatePasswordById">
+        update <include refid="Table_Name"/>
+        set
+            password = #{param.newPassword}
+        where surrogate_id = #{param.surrogateId}
+            and password = #{param.oldPassword}
+    </update>
+
+    <select id="selectUserPage" resultMap="SysUserVoResultMap">
+        select <include refid="Base_Column_List"/>
+        from <include refid="Table_Name"/>
+        <where>
+            <if test="param.userName != null">
+                user_name like concat('%',#{param.userName},'%')
+            </if>
+        </where>
+
+        <if test="param.createTime != null">
+            order by ${param.createTime} desc
+        </if>
+    </select>
+
+    <select id="getUserById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from <include refid="Table_Name"/>
+        <where>
+            id = #{id}
+        </where>
+    </select>
+</mapper>

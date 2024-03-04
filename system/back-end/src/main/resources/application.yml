@@ -1,0 +1,24 @@
+server:
+  port: 8089
+  tomcat:
+    uri-encoding: UTF-8
+  profiles:
+    active: dev
+
+## spring config
+spring:
+  application:
+    name: back-end
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
+    time-zone: GMT-8
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+
+# mybatis-plus config
+mybatis-plus:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.cy.single.blog.pojo.**.*
