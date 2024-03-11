@@ -23,4 +23,9 @@ public class UserServiceImpl implements SysUserService {
     public SysUser getUserById(String id) {
         return sysUserMapper.getUserById(id);
     }
+
+    @Override
+    public SysUser getUserBySurrogateId(String surrogateId) {
+        return sysUserMapper.getUserBySurrogateId(surrogateId);
+    }
 }

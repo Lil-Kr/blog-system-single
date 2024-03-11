@@ -76,4 +76,12 @@
             id = #{id}
         </where>
     </select>
+
+    <select id="getUserBySurrogateId" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from <include refid="Table_Name"/>
+        <where>
+            surrogate_id = #{surrogateId}
+        </where>
+    </select>
 </mapper>

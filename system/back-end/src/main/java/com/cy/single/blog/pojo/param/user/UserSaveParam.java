@@ -1,21 +1,18 @@
 package com.cy.single.blog.pojo.param.user;
 
 import com.cy.single.blog.utils.checkUtil.CheckUtil;
-import lombok.Data;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import javax.validation.groups.Default;
 
-@Data
 @ToString
 public class UserSaveParam {
 
     public interface GroupGetUserAcl {}
+
+    public interface GroupAdminLogin {}
 
     private Long id;
 
@@ -30,17 +27,17 @@ public class UserSaveParam {
     private String loginAccount;
 
     /**
-     * 员工姓名
+     * 用户姓名
      */
     @NotNull(groups = {Default.class},message = "用户名不能为空")
     @Length(groups = {Default.class},min = 2,max = 20, message = "用户名长度必须在2到20个字符之间")
     private String userName;
 
     /**
-     * 员工电话
+     * 用户手机号
      */
     @NotNull(groups = {Default.class},message = "用户名手机号不能为空")
-    @Length(groups = {Default.class},max = 13, message = "用户号码长度不能超过13个字符")
+    @Length(groups = {Default.class}, min = 13, max = 13, message = "请输入正确的手机号")
     private String telephone;
 
     /**
@@ -83,4 +80,100 @@ public class UserSaveParam {
      * 更改时间
      */
     private String updateTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getSurrogateId() {
+        return surrogateId;
+    }
+
+    public void setSurrogateId(Long surrogateId) {
+        this.surrogateId = surrogateId;
+    }
+
+    public String getLoginAccount() {
+        return loginAccount;
+    }
+
+    public void setLoginAccount(String loginAccount) {
+        this.loginAccount = loginAccount;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public Long getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(Long orgId) {
+        this.orgId = orgId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
 }

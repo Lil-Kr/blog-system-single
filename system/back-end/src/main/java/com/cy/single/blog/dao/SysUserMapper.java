@@ -11,4 +11,6 @@ public interface SysUserMapper {
 
     SysUser getUserById(String id);
 
+    SysUser getUserBySurrogateId(String surrogateId);
+
 }

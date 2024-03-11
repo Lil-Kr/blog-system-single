@@ -15,6 +15,7 @@ import lombok.ToString;
 public final class ApiResp<T> {
     /** 错误编码 */
     public static final int CODE_ERROR = -1;
+
     /**
      * token校验失败错误码
      */
@@ -66,6 +67,15 @@ public final class ApiResp<T> {
      */
     public static <T> ApiResp<T> success(String msg) {
         return create(CODE_SUCCESS,msg,null);
+    }
+
+    /**
+     * 成功
+     * @return
+     * @param <T>
+     */
+    public static <T> ApiResp<T> success() {
+        return create(CODE_SUCCESS, MSG_SUCCESS,null);
     }
 
     /**

@@ -11,4 +11,6 @@ public interface SysUserService {
 
     SysUser getUserById(String id);
 
+    SysUser getUserBySurrogateId(String surrogateId);
+
 }
