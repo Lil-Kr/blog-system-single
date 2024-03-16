@@ -1,31 +1,47 @@
 package com.cy.single.blog.api.sys;
 
+import com.cy.single.blog.aspect.annotations.NoCheckAuth;
+import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
-import com.cy.single.blog.pojo.param.user.UserSaveParam;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.cy.single.blog.pojo.entity.SysUser;
+import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
+import com.cy.single.blog.service.SysUserService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @Author: Lil-K
  * @Date: 2024/3/11
- * @Description: 后台登陆
+ * @Description: 后台登陆登出
  */
+@Slf4j
 @RestController
 @RequestMapping("/sys/admin")
 public class AdminLoginApi {
 
+    @Autowired
+    private SysUserService userService;
+
+    @NoCheckAuth
+    @RecordLogger
     @PostMapping("/login")
-    public ApiResp<String> login(@RequestBody @Validated({UserSaveParam.GroupAdminLogin.class}) UserSaveParam reqParam) {
-        System.out.println("用户登录成功");
-        return ApiResp.success("用户登录成功");
+    public ApiResp<SysUser> login(@RequestBody @Valid UserLoginAdminReq reqParam) {
+        return userService.adminLogin(reqParam);
     }
 
-    @PostMapping("/logout")
-    public ApiResp<String> outLogin() {
-
+    @NoCheckAuth
+    @DeleteMapping("/logout")
+    public ApiResp<Integer> logout() {
         return ApiResp.success("用户已退出");
+    }
+
+
+    @NoCheckAuth
+    @PostMapping("/register")
+    public ApiResp<String> register() {
+        return ApiResp.success("用户登录成功");
     }
 }

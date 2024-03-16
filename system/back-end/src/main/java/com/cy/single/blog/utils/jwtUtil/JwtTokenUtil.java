@@ -7,12 +7,13 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.cy.single.blog.aspect.exceptions.BusinessException;
 import com.cy.single.blog.base.ApiResp;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-
 import java.util.*;
+import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
  * @Author: Lil-K
@@ -122,7 +123,7 @@ public class JwtTokenUtil {
      * @param token
      * @return
      */
-    public static ApiResp validateToken(String token) {
+    public static ApiResp<Integer> validateToken(String token) {
         if (StringUtils.isBlank(token)) {
             return ApiResp.failure("token can not be empty or null");
         }
@@ -131,9 +132,11 @@ public class JwtTokenUtil {
             JWT.require(ALGORITHM).build().verify(token);
             return ApiResp.success("token is validate success");
         } catch (TokenExpiredException e){
-            return ApiResp.expirationTokenError("token was expired", e.getMessage());
+            log.warn("token was expired");
+            throw new BusinessException("token was expired", BUSINESS_ERROR);
         } catch (Exception e){
-            return ApiResp.errorToken("token validate was failure", e.getMessage());
+            log.warn("token validate was failure");
+            throw new BusinessException("token validate was failure", BUSINESS_ERROR);
         }
     }
 
@@ -143,8 +146,8 @@ public class JwtTokenUtil {
      * @return true: is expiration, false not expiration
      */
     public static boolean isExpiration (String token) {
-        ApiResp resp = validateToken(token);
-        if (ApiResp.CODE_ERROR_TOKEN_EXPIRED == resp.getCode()) {// token过期
+        ApiResp<Integer> resp = validateToken(token);
+        if (SYSTEM_ERROR.getCode() == resp.getCode()) {// token过期
             return true;
         }else {
             return false;
@@ -155,10 +158,10 @@ public class JwtTokenUtil {
      * 续签token, 当token 将要过期时(还没过期)
      * @return
      */
-    public static ApiResp renewToken(String token) {
-        ApiResp resp = validateToken(token);
-        if (resp.getCode() != ApiResp.CODE_SUCCESS) {// token error
-            return ApiResp.errorToken("token validate was failure", resp.getMsg());
+    public static ApiResp<String> renewToken(String token) {
+        ApiResp<Integer> resp = validateToken(token);
+        if (resp.getCode() != BUSINESS_ERROR.getCode()) {// token error
+            return ApiResp.failure("token validate was failure");
         }
 
         /**
@@ -179,20 +182,8 @@ public class JwtTokenUtil {
             JSONObject jsonObject = JSON.parseObject(payloadJson);
             Map<String,Object> payloadMap = (HashMap)jsonObject.get("payload");
             String newToken = generatorJwtToken(payloadMap);
-            return ApiResp.success(ApiResp.MSG_RENEWAL_SUCCESS,newToken);
+            return ApiResp.success(SUCCESS.getMessage(), newToken);
         }
         return null;
     }
-
-//    /**
-//     * 设置token时间长度, 校验是否过期
-//     * @param date
-//     * @param minute
-//     * @return
-//     */
-//    private static Date AddDate(Date date, Integer minute) {
-//        calendar.setTime(date);
-//        calendar.add(Calendar.MINUTE, minute);
-//        return calendar.getTime();
-//    }
 }

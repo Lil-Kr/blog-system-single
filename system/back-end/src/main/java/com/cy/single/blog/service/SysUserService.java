@@ -1,6 +1,8 @@
 package com.cy.single.blog.service;
 
+import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.pojo.entity.SysUser;
+import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
 
 /**
  * @Author: Lil-K
@@ -9,8 +11,9 @@ import com.cy.single.blog.pojo.entity.SysUser;
  */
 public interface SysUserService {
 
-    SysUser getUserById(String id);
+    SysUser getUserById(Long id);
 
-    SysUser getUserBySurrogateId(String surrogateId);
+    SysUser getUserBySurrogateId(Long surrogateId);
 
+    ApiResp<SysUser> adminLogin(UserLoginAdminReq reqParam);
 }

@@ -1,9 +1,8 @@
 package com.cy.single.blog.api.sys;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.pojo.entity.SysUser;
-import com.cy.single.blog.pojo.param.user.UserSaveParam;
+import com.cy.single.blog.pojo.req.user.UserSaveReq;
 import com.cy.single.blog.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,27 +24,25 @@ public class UserApi {
     private SysUserService userService;
 
     @GetMapping("/getUserById/{id}")
-    public ApiResp<SysUser> getUserById(@PathVariable("id") String id) {
+    public ApiResp<SysUser> getUserById(@PathVariable("id") Long id) {
         SysUser user = userService.getUserById(id);
-        log.info("hahahha, {}", JSONObject.toJSONString(user));
-        throw new RuntimeException("异常测试");
-//        return ApiResp.success(user);
+        return ApiResp.success(user);
     }
 
     @GetMapping("/getUserBySurrogateId/{surrogateId}")
-    public ApiResp<SysUser> getUserBySurrogateId(@PathVariable("surrogateId") String surrogateId) {
+    public ApiResp<SysUser> getUserBySurrogateId(@PathVariable("surrogateId") Long surrogateId) {
         SysUser user = userService.getUserBySurrogateId(surrogateId);
         return ApiResp.success(user);
     }
 
     @PostMapping("/addUser")
-    public ApiResp<String> addUser(@RequestBody @Valid UserSaveParam reqParam) {
+    public ApiResp<String> addUser(@RequestBody @Valid UserSaveReq reqParam) {
         System.out.println("addUser");
         return ApiResp.success();
     }
 
     @PostMapping("/editUser")
-    public ApiResp<String> editUser(@RequestBody @Valid UserSaveParam reqParam) {
+    public ApiResp<String> editUser(@RequestBody @Valid UserSaveReq reqParam) {
         System.out.println("editUser");
         return ApiResp.success();
     }

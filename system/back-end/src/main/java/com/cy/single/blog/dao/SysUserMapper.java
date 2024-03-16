@@ -1,6 +1,8 @@
 package com.cy.single.blog.dao;
 
 import com.cy.single.blog.pojo.entity.SysUser;
+import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @Author: Lil-K
@@ -9,8 +11,11 @@ import com.cy.single.blog.pojo.entity.SysUser;
  */
 public interface SysUserMapper {
 
-    SysUser getUserById(String id);
+    SysUser getUserById(Long id);
 
-    SysUser getUserBySurrogateId(String surrogateId);
+    SysUser getUserBySurrogateId(Long surrogateId);
 
+    SysUser getUserByToken(String token);
+
+    SysUser getUserByKeyword(@Param("param") UserLoginAdminReq reqParam);
 }

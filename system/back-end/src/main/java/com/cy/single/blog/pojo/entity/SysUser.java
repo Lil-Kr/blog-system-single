@@ -37,6 +37,11 @@ public class SysUser extends Model<SysUser> {
     private Long surrogateId;
 
     /**
+     * token
+     */
+    private String token;
+
+    /**
      * 员工编号
      */
     private String number;
@@ -44,7 +49,7 @@ public class SysUser extends Model<SysUser> {
     /**
      * 登录账号
      */
-    private String loginAccount;
+    private String account;
 
     /**
      * 员工姓名
@@ -59,7 +64,7 @@ public class SysUser extends Model<SysUser> {
     /**
      * 邮箱
      */
-    private String mail;
+    private String email;
 
     /**
      * 密码
@@ -130,12 +135,12 @@ public class SysUser extends Model<SysUser> {
         this.number = number;
     }
 
-    public String getLoginAccount() {
-        return loginAccount;
+    public String getAccount() {
+        return account;
     }
 
-    public void setLoginAccount(String loginAccount) {
-        this.loginAccount = loginAccount;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getUserName() {
@@ -154,12 +159,12 @@ public class SysUser extends Model<SysUser> {
         this.telephone = telephone;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -232,5 +237,13 @@ public class SysUser extends Model<SysUser> {
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

@@ -1,5 +1,6 @@
 package com.cy.single.blog.aspect;
 
+import com.cy.single.blog.aspect.exceptions.BusinessException;
 import com.cy.single.blog.base.ApiResp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -34,12 +35,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseBody
-    public ApiResp validateException(HttpServletRequest request,
+    public ApiResp<String> validateException(HttpServletRequest request,
                                      MethodArgumentNotValidException exception) throws Exception {
         BindingResult bindingResult = exception.getBindingResult();
         /*Map errorMesssageMap = Maps.newHashMap();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            errorMesssageMap.put(fieldError.getField(),fieldError.getDefaultMessage());
+            errorMesssageMap.put(fieldError.getField(), fieldError.getDefaultMessage());
         }*/
 
         List<String> errorMsgList = new ArrayList<>();
@@ -60,8 +61,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     @ResponseBody
-    public ApiResp validateException(HttpServletRequest request,
-                                     HttpMessageNotReadableException exception) throws Exception {
+    public ApiResp<String> validateException(HttpServletRequest request, HttpMessageNotReadableException exception) throws Exception {
         String message = exception.getMessage();
         /*Map errorMesssageMap = Maps.newHashMap();
         errorMesssageMap.put(msg, message);*/
@@ -77,8 +77,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ApiResp<String> defaultExceptionHandler(HttpServletRequest req, Exception e) throws Exception {
-        log.error("glob api exception msg: {}", e.getLocalizedMessage());
+        log.error("global exception msg: {}", e.getLocalizedMessage());
         e.printStackTrace();
         return ApiResp.error( "网络异常", e.getLocalizedMessage());
+    }
+
+    /**
+     * 捕捉Controller全局自定义异常
+     * @param req
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(BusinessException.class)
+    @ResponseBody
+    public ApiResp<String> businessExceptionHandler(HttpServletRequest req, BusinessException e) throws Exception {
+        log.warn("business exception msg: {}", e.getLocalizedMessage());
+        return ApiResp.error(e.getReturnCodeEnum().getCode() , e.getReturnCodeEnum().getMessage());
     }
 }
