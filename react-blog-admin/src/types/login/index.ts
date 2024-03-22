@@ -7,7 +7,7 @@ export namespace Login {
     password: string
   }
   export interface AdminLoginFormType {
-    login_account: string
+    account: string
     password: string
   }
   export interface ResLoginType {
@@ -18,5 +18,4 @@ export namespace Login {
 
 export interface UserResType {
   data:any
-
 }

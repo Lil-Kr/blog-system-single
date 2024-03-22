@@ -13,7 +13,7 @@ export interface BaseRespDataType {
   data?: any
 }
 
-export interface IResponse {
+export interface Response {
   code: number | string;
   data: any;
   msg: string;

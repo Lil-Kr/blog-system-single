@@ -1,9 +1,12 @@
 package com.cy.single.blog.base;
 
+import com.cy.single.blog.enums.ReturnCodeEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.ToString;
-import static com.cy.single.blog.enums.ReturnCodeEnum.*;
+
+import static com.cy.single.blog.enums.ReturnCodeEnum.SUCCESS;
+import static com.cy.single.blog.enums.ReturnCodeEnum.SYSTEM_ERROR;
 
 /**
  * API 响应体
@@ -70,6 +73,15 @@ public final class ApiResp<T> {
 
     /**
      * 成功
+     * @return
+     * @param <T>
+     */
+    public static <T> ApiResp<T> success(ReturnCodeEnum returnCodeEnum) {
+        return create(returnCodeEnum.getCode(), returnCodeEnum.getMessage(),null);
+    }
+
+    /**
+     * 成功
      * @param data
      * @return
      */
@@ -105,6 +117,9 @@ public final class ApiResp<T> {
         return create(code, msg,null);
     }
 
+    public static <T> ApiResp<T> failure(ReturnCodeEnum returnCodeEnum) {
+        return create(returnCodeEnum.getCode(), returnCodeEnum.getMessage(),null);
+    }
 
     /**
      * 错误响应体

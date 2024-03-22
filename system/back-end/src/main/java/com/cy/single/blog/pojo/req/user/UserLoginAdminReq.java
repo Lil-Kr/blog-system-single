@@ -18,7 +18,7 @@ public class UserLoginAdminReq {
     private String account;
 
     @NotNull(message = "密码不能为空")
-    private String pwd;
+    private String password;
 
     private String email;
 
@@ -46,11 +46,11 @@ public class UserLoginAdminReq {
         this.email = email;
     }
 
-    public String getPwd() {
-        return pwd;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

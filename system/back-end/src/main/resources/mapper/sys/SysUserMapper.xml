@@ -16,13 +16,15 @@
         <result column="org_id" property="orgId" />
         <result column="status" property="status" />
         <result column="deleted" property="deleted" />
+        <result column="operator" property="operator" />
+        <result column="ip" property="ip" />
         <result column="remark" property="remark" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="SysUserVoResultMap" type="com.cy.single.blog.pojo.vo.user.SysUserVo">
+    <resultMap id="SysUserVoResultMap" type="com.cy.single.blog.pojo.resp.user.SysUserVo">
         <id column="id" property="id" />
         <result column="surrogate_id" property="surrogateId" />
         <result column="token" property="token" />
@@ -46,7 +48,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, surrogate_id, token, `number`, account, password, user_name, telephone, email, org_id, status, deleted, remark, create_time, update_time
+        id, surrogate_id, token, `number`, account, password, user_name, telephone, email, org_id, status, deleted, operator, ip, remark, create_time, update_time
     </sql>
 
     <sql id="Column_1_List">
@@ -112,9 +114,60 @@
             <if test="param.email != null">
                 and email = #{param.email}
             </if>
-            <if test="param.pwd != null">
-                and password = #{param.pwd}
+            <if test="param.password != null">
+                and password = #{param.password}
             </if>
         </where>
     </select>
+
+    <!-- 根据账号查询用户 -->
+    <select id="getUserByAccount" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from <include refid="Table_Name"/>
+        <where>
+            account = #{account}
+        </where>
+    </select>
+
+    <update id="updateUserById">
+        update <include refid="Table_Name"/>
+        <set>
+            <if test="param.number != null and param.number != ''">
+                number = #{param.number},
+            </if>
+            <if test="param.account != null and param.account != ''">
+                account = #{param.account},
+            </if>
+            <if test="param.userName != null and param.userName != ''">
+                user_name = #{param.userName},
+            </if>
+            <if test="param.telephone != null and param.telephone != ''">
+                telephone = #{param.telephone},
+            </if>
+            <if test="param.email != null and param.email != ''">
+                email = #{param.email},
+            </if>
+            <if test="param.password != null and param.password != ''">
+                password = #{param.password},
+            </if>
+            <if test="param.status != null and param.status != ''">
+                status = #{param.status},
+            </if>
+            <if test="param.deleted != null and param.deleted != ''">
+                deleted = #{param.deleted},
+            </if>
+            <if test="param.ip != null and param.ip != ''">
+                ip = #{param.ip},
+            </if>
+            <if test="param.remark != null and param.remark != ''">
+                remark = #{param.remark},
+            </if>
+            <if test="param.updateTime != null and param.updateTime != ''">
+                update_time = #{param.updateTime}
+            </if>
+        </set>
+        <where>
+            surrogate_id = #{param.surrogateId}
+        </where>
+    </update>
 </mapper>

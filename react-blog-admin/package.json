@@ -26,15 +26,16 @@
     "dayjs": "^1.10.6",
     "i18next": "^21.8.10",
     "js-md5": "^0.7.3",
+    "jwt-decode": "^2.2.0",
     "mockjs": "^1.1.0",
     "nanoid": "^4.0.0",
-    "jwt-decode": "^2.2.0",
     "react": "^18.2.0",
+    "react-cookies": "^0.1.1",
     "react-dom": "^18.2.0",
     "react-i18next": "^11.17.3",
     "react-icons": "^4.4.0",
     "react-loadable": "^5.5.0",
-		"react-redux": "7.2.6",
+    "react-redux": "7.2.6",
     "react-refresh": "0.8.3",
     "react-router-dom": "^6.2.1",
     "react-router-waiter": "^1.1.5",
@@ -72,5 +73,8 @@
     "vite-plugin-mock": "^2.9.6",
     "vite-plugin-style-import": "1.4.1",
     "vite-plugin-svgr": "^2.2.2"
+  },
+  "resolutions": {
+    "**/mockjs/commander": "11.1.0"
   }
 }

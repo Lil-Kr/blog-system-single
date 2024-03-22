@@ -21,7 +21,7 @@ const loginApi = createApi({
   // }),
   baseQuery: axiosBaseQuery({
     baseUrl: VITE_APP_PROXY_API,
-    url: '/admin'
+    url: '/sys/admin'
   }),
   endpoints(build) {
     return {
@@ -43,9 +43,17 @@ const loginApi = createApi({
           }
         }
       }),
+      logout: build.mutation({
+        query() {
+          return {
+            url: '/logout',
+            method: 'DELETE'
+          }
+        }
+      }),
     }
   }
 })
 
-export const { useLoginMutation, useRegisterMutation } = loginApi
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation } = loginApi
 export default loginApi

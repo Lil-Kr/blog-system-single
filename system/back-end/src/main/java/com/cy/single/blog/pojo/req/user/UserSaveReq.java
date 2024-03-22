@@ -24,14 +24,14 @@ public class UserSaveReq {
      */
     @NotNull(groups = {Default.class},message = "用户账号不能为空")
     @Length(groups = {Default.class},max = 50, message = "用户账号长度必须在50个字符以内")
-    private String loginAccount;
+    private String account;
 
     /**
      * 用户姓名
      */
     @NotNull(groups = {Default.class},message = "用户名不能为空")
     @Length(groups = {Default.class},min = 2,max = 20, message = "用户名长度必须在2到20个字符之间")
-    private String userName;
+    private String adminName;
 
     /**
      * 用户手机号
@@ -45,7 +45,7 @@ public class UserSaveReq {
      */
     @NotNull(groups = {Default.class},message = "用户邮箱不能为空")
     @Pattern(groups = {Default.class},regexp = CheckUtil.EMAIL_REGEXP,message = "邮箱格式不正确")
-    private String mail;
+    private String email;
 
     /**
      * 用户所在组织id
@@ -56,8 +56,8 @@ public class UserSaveReq {
     /**
      * 状态, 0正常, 1冻结
      */
-    @Min(groups = {Default.class},value = 1,message = "状态不合法")
-    @Max(groups = {Default.class},value = 2,message = "状态不合法")
+    @Min(groups = {Default.class},value = 1, message = "状态不合法")
+    @Max(groups = {Default.class},value = 2, message = "状态不合法")
     private Integer status = 0;
 
     /**
@@ -97,20 +97,20 @@ public class UserSaveReq {
         this.surrogateId = surrogateId;
     }
 
-    public String getLoginAccount() {
-        return loginAccount;
+    public String getAccount() {
+        return account;
     }
 
-    public void setLoginAccount(String loginAccount) {
-        this.loginAccount = loginAccount;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getAdminName() {
+        return adminName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
     }
 
     public String getTelephone() {
@@ -121,12 +121,12 @@ public class UserSaveReq {
         this.telephone = telephone;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getOrgId() {

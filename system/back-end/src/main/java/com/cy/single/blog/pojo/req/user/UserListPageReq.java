@@ -22,12 +22,12 @@ public class UserListPageReq {
     private Long size;
 
     /**
-     * 员工姓名
+     * 姓名
      */
     private String userName;
 
     /**
-     * 员工电话
+     * 电话
      */
     private String telephone;
 

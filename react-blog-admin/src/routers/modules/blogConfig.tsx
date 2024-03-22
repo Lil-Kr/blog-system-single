@@ -14,7 +14,7 @@ const blogConfig: RouteItemType[] = [
 		children: [
 			{
 				meta: {
-					title: '博客管理',
+					title: '发布博客',
 					key: '/index',
 					icon: <UserOutlined />
 				},

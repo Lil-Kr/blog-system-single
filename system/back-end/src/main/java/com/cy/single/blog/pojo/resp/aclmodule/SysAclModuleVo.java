@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.vo.aclmodule;
+package com.cy.single.blog.pojo.resp.aclmodule;
 
 import com.cy.single.blog.pojo.entity.SysAclModule;
 import lombok.Data;

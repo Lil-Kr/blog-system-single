@@ -3,14 +3,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { SizeType } from "antd/lib/config-provider/SizeContext"
 
 const globalState: GlobalState = {
-  token: "",
-  userInfo: "",
-  assemblySize: "middle",
-  language: "zh",
+  token: '',
+  userInfo: '',
+  assemblySize: 'middle',
+  language: 'zh',
   themeConfig: {
-    primary: "#1890ff",
+    primary: '#1890ff',
     isDark: false,
-    weakOrGray: ""
+    weakOrGray: ''
   }
 }
 

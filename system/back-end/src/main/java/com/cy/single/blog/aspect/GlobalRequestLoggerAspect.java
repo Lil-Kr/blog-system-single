@@ -1,6 +1,7 @@
 package com.cy.single.blog.aspect;
 
 import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -35,16 +36,16 @@ public class GlobalRequestLoggerAspect {
 
     /**
      * record log for request info
-     * @param joinPoint
+     * @param proceedingJoinPoint
      * @return
      * @throws Throwable
      */
     @Around("requestLog()")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object recordLog(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         String url = servletRequest.getRequestURL().toString();
         String reqType = servletRequest.getMethod();
-        Object[] args = joinPoint.getArgs();
-        String apiName = joinPoint.getSignature().getName();
+        Object[] args = proceedingJoinPoint.getArgs();
+        String apiName = proceedingJoinPoint.getSignature().getName();
         log.info("========================= start =========================");
         log.info("url:              {}", url);
         log.info("request type:     {}", reqType);
@@ -54,8 +55,9 @@ public class GlobalRequestLoggerAspect {
         Instant startTime = Instant.now();
 
         /** execute point cut **/
-        Object resp = joinPoint.proceed();
+        Object resp = proceedingJoinPoint.proceed();
 
+        log.info("resp body:        {}", JSONObject.toJSONString(resp));
         log.info("Time-Consuming:   {}ms", ChronoUnit.MILLIS.between(startTime, Instant.now()));
         log.info("========================= end =========================");
         return resp;

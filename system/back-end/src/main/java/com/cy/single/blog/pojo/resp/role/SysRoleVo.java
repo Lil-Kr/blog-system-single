@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.vo.role;
+package com.cy.single.blog.pojo.resp.role;
 
 import com.cy.single.blog.pojo.entity.SysRole;
 import lombok.Data;

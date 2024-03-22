@@ -4,7 +4,10 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AutoCodeUtil {
+/**
+ * 流水号生成
+ */
+public class RunCodeUtil {
 
     private static final int count = 0 ; //总数量：一般在实际业务中是需要在数据库中获取到当前的数据总数量
     private static final String STR_FORMAT = "000"; //需要格式化的流水号规则
@@ -46,7 +49,7 @@ public class AutoCodeUtil {
     }
 
     public static String getFourPipelineNumbers(String prefix) {
-        return prefix + IdWorker.getsnowFlakeId();
+        return prefix + IdWorker.getSnowFlakeId();
     }
 
 }

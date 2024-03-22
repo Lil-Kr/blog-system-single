@@ -116,7 +116,7 @@ public class IdWorker {
 
     public static  Snowflake snowflake = IdUtil.getSnowflake(1, 1);
 
-    public static Long getsnowFlakeId () {
+    public static Long getSnowFlakeId() {
         return snowflake.nextId();
     }
 

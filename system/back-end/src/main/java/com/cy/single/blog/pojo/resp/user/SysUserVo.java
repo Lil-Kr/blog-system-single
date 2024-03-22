@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.vo.user;
+package com.cy.single.blog.pojo.resp.user;
 
 import com.cy.single.blog.pojo.entity.SysUser;
 import com.fasterxml.jackson.annotation.JsonInclude;

@@ -5,7 +5,6 @@ import busConfig, { testConfig, homeConfig } from './modules'
 import { handleRouterItems } from '@/utils/router/routerCommonUtil'
 import { UserOutlined } from '@ant-design/icons'
 import { getBreadCrumbItems, getMenuItems, getTabsMap } from '@/utils/common'
-
 import Login from '@/views/login'
 
 /**
@@ -29,15 +28,6 @@ const routersConfig: RouteItemType[] = [
 		},
 		path: '/login',
 		element: <Login />
-	},
-	{
-		meta: {
-			key: '/loginOut',
-			title: '退出登录',
-			icon: <UserOutlined />
-		},
-		path: '/loginOut',
-		element: lazyLoadUtil(lazy(() => import('@/views/login')))
 	},
 	...busConfig
 ]

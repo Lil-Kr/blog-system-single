@@ -42,7 +42,7 @@ public class SysUser extends Model<SysUser> {
     private String token;
 
     /**
-     * 员工编号
+     * 编号
      */
     private String number;
 
@@ -52,12 +52,12 @@ public class SysUser extends Model<SysUser> {
     private String account;
 
     /**
-     * 员工姓名
+     * 用户名
      */
     private String userName;
 
     /**
-     * 员工电话
+     * 手机号
      */
     private String telephone;
 
@@ -94,7 +94,7 @@ public class SysUser extends Model<SysUser> {
     /**
      * 操作ip
      */
-    private String operateIp;
+    private String ip;
 
     /**
      * 备注
@@ -207,12 +207,12 @@ public class SysUser extends Model<SysUser> {
         this.operator = operator;
     }
 
-    public String getOperateIp() {
-        return operateIp;
+    public String getIp() {
+        return ip;
     }
 
-    public void setOperateIp(String operateIp) {
-        this.operateIp = operateIp;
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
     public String getRemark() {

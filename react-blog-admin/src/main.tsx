@@ -1,8 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client';
 import App from './App'
 import { HashRouter } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
+
+// cookies
+import { CookiesProvider } from 'react-cookies'
 
 // stroe
 import store, { persistor } from '@/redux'
@@ -24,22 +28,38 @@ import { Spin } from 'antd'
  * https://github.com/react-component/menu/pull/551
  * https://github.com/ant-design/ant-design/issues/38534
  */
-ReactDOM.render(
-	<Provider store={store}>
-		<PersistGate loading={<Spin />} persistor={persistor}>
-			<HashRouter>
-				<App />
-			</HashRouter>
-		</PersistGate>
-	</Provider>,
-	document.getElementById('root')
-)
+// ReactDOM.render(
+// 	<Provider store={store}>
+// 		<PersistGate loading={<Spin />} persistor={persistor}>
+// 			<HashRouter>
+// 				<App />
+// 			</HashRouter>
+// 		</PersistGate>
+// 	</Provider>,
+// 	document.getElementById('root')
+// )
 
 // react 18 使用 ReactDOM.createRoot 渲染, antd Menu 菜单(子菜单组件) 在收缩展开时会闪烁, 先使用ReactDOM.render渲染组件, 等待官方修复
-// ReactDOM.createRoot(document.getElementById('root')).render(
-// 	// <React.StrictMode>
-// 	// </React.StrictMode>
-// 	<HashRouter>
-// 		<App />
-// 	</HashRouter>
+
+const app = document.getElementById('root');
+const root = createRoot(app);
+root.render(
+  <Provider store={store}>
+      <PersistGate loading={<Spin />} persistor={persistor}>
+        <HashRouter>
+            <App />
+        </HashRouter>
+      </PersistGate>
+    </Provider>
+);
+
+// ReactDOM.createRoot( 
+//   document.getElementById('root')).render(
+//     <Provider store={store}>
+//       <PersistGate loading={<Spin />} persistor={persistor}>
+//         <HashRouter>
+//           <App />
+//         </HashRouter>
+//       </PersistGate>
+//     </Provider>`
 // )

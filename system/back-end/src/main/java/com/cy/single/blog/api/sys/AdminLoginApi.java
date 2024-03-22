@@ -1,10 +1,10 @@
 package com.cy.single.blog.api.sys;
 
-import com.cy.single.blog.aspect.annotations.NoCheckAuth;
 import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
-import com.cy.single.blog.pojo.entity.SysUser;
+import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
+import com.cy.single.blog.pojo.req.user.UserRegisterReq;
 import com.cy.single.blog.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,23 +25,21 @@ public class AdminLoginApi {
     @Autowired
     private SysUserService userService;
 
-    @NoCheckAuth
     @RecordLogger
-    @PostMapping("/login")
-    public ApiResp<SysUser> login(@RequestBody @Valid UserLoginAdminReq reqParam) {
-        return userService.adminLogin(reqParam);
+    @PutMapping("/login")
+    public ApiResp<String> login(@RequestBody @Valid UserLoginAdminReq req) {
+        return userService.adminLogin(req);
     }
 
-    @NoCheckAuth
     @DeleteMapping("/logout")
     public ApiResp<Integer> logout() {
+        // 移除用户
+        RequestHolder.remove();
         return ApiResp.success("用户已退出");
     }
 
-
-    @NoCheckAuth
     @PostMapping("/register")
-    public ApiResp<String> register() {
-        return ApiResp.success("用户登录成功");
+    public ApiResp<Integer> register(@RequestBody @Valid UserRegisterReq req) {
+        return userService.registerAdmin(req);
     }
 }

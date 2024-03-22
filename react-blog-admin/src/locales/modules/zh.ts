@@ -3,10 +3,10 @@ export default {
 		btn: "点我"
 	},
 	logo: {
-		title: "后台管理系统"
+		title: "博客后台管理"
 	},
 	login: {
-		title: "后台系统登陆",
+		title: "博客后台系统登陆",
 		confirm: "登录",
 		reset: "重置",
 		btn: "登录",

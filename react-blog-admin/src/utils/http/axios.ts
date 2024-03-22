@@ -5,7 +5,7 @@ import { setAccessToken } from '@/redux/modules/global'
 import { AUTHORIZATION_KEY } from '@/utils/constant/constant'
 
 // type
-import { ResponseType } from '@/types/http/responseType'
+import { ResponseType } from '@/types/http/respType'
 
 import { message } from 'antd'
 
@@ -42,10 +42,13 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
 	(response: AxiosResponse) => {
 		console.log('--> interceptors.response:', response)
+
 		const { data, config, headers, request, status, statusText } = response
 		console.log('--> response data:', data)
+
 		const { code, msg, token, userInfo } = data
 		console.log('--> response token:', token)
+    
 		if (token) {
 			// setGlobalToken(token)
 			store.dispatch(setAccessToken(token))
@@ -53,8 +56,7 @@ axiosInstance.interceptors.response.use(
 
 		if (status === 200) {
 			if (code !== 0) {
-				message.error(msg)
-				return response
+				message.success(msg)
 			}
 			return response
 		} else {

@@ -1,6 +1,7 @@
 package com.cy.single.blog.common.holder;
 
 import com.cy.single.blog.pojo.entity.SysUser;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Date: 2024/3/16
  * @Description:
  */
+@Component
 public class RequestHolder {
     /**
      * 存放线程隔离的用户信息

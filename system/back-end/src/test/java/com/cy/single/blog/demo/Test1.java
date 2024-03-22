@@ -2,18 +2,21 @@ package com.cy.single.blog.demo;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: Lil-K
  * @Date: 2024/3/16
  * @Description:
  */
+@Slf4j
 public class Test1 {
 
     @Test
     public void test1() {
-//        Cache<Object, Object> cache = CacheBuilder.newBuilder().expireAfterAccess(2, TimeUnit.MILLISECONDS).build();
         /**
          * LRU cache
          */
@@ -27,6 +30,23 @@ public class Test1 {
         System.out.println(cache.getIfPresent("key4"));
         System.out.println(cache.getIfPresent("key2"));
         System.out.println(cache.getIfPresent("key3"));
+
+    }
+
+    @Test
+    public void test2() throws InterruptedException {
+        Cache<Object, Object> cache = CacheBuilder.newBuilder().expireAfterAccess(100, TimeUnit.MILLISECONDS).build();
+        cache.put("k1", "v1");
+        cache.put("k2", "v2");
+
+        System.out.println("第一次访问 k2");
+        Object k2 = cache.getIfPresent("k2");
+        log.info("k2: {}", k2);
+
+        TimeUnit.MILLISECONDS.sleep(1);
+        log.info("过3秒之后访问 k2");
+        Object k22 = cache.getIfPresent("k2");
+        log.info("k2: {}", k22);
 
     }
 

@@ -1,8 +1,27 @@
 import React from 'react'
-import { Avatar, Dropdown, MenuProps } from 'antd'
+import { Avatar, Dropdown, MenuProps, message } from 'antd'
+import { useNavigate } from 'react-router-dom'
 import avatar from '@/assets/images/icons/avatar.png'
+import { Response } from '@/types/http/respType'
+import { useLogoutMutation } from '@/redux/apis/login/loginApi'
+import { USER_TOKEN_KEY } from '@/utils/constant/constant'
+
+// cookie
+import cookie from 'react-cookies'
 
 const AvatarIcon = () => {
+	const navigateTo = useNavigate()
+
+  const [
+		logoutFn,
+		{
+			data: logoutResp,
+			isSuccess: isLogoutSuccess,
+			isError: isLogoutError,
+			isUninitialized: isLogoutUninitialized
+		}
+	] = useLogoutMutation()
+
 	const items: MenuProps['items'] = [
 		{
 			key: '1',
@@ -17,19 +36,39 @@ const AvatarIcon = () => {
 			label: <span className="dropdown-item">修改密码</span>
 		},
 		{
-			type: 'divider'
-		},
-		{
 			key: '4',
 			label: <span className="dropdown-item">退出登录</span>
 		}
 	]
 
 	const handleMenuClick: MenuProps['onClick'] = (event) => {
-		// message.info('Click on menu item.')
-		// console.log('click', e)
-		console.log('--> abc:', event)
-	}
+    let key = event.key
+    switch (key) {
+      case '1':
+        message.info(key)
+        break;
+      case '2':
+        message.info(key)
+        break;
+      case '3':
+        message.info(key)
+        break;
+      case '4':
+        logoutFn({}).then((res: Response) => {
+          console.log('--> 登陆成功返回的参数 res: ', res)
+          if (res.data.code == 200) {
+            cookie.remove(USER_TOKEN_KEY)
+            navigateTo('/login')
+          } else {
+            message.warn(res.msg)
+          }
+        })
+        break;
+      default:
+        message.info(key)
+        break;
+    }
+  }
 
 	const menuProps = {
 		items,
@@ -43,6 +82,7 @@ const AvatarIcon = () => {
 			</Dropdown>
 		</>
 	)
+
 }
 
 export default AvatarIcon
