@@ -5,11 +5,13 @@ import avatar from '@/assets/images/icons/avatar.png'
 import { Response } from '@/types/http/respType'
 import { useLogoutMutation } from '@/redux/apis/login/loginApi'
 import { USER_TOKEN_KEY } from '@/utils/constant/constant'
+import { clearAccessToken } from '@/redux/modules/slice/sys/tokenSlice'
 
-// cookie
-import cookie from 'react-cookies'
+// redux
+import { useAppDispatch } from '@/redux'
 
 const AvatarIcon = () => {
+  const dispatch = useAppDispatch()
 	const navigateTo = useNavigate()
 
   const [
@@ -55,9 +57,9 @@ const AvatarIcon = () => {
         break;
       case '4':
         logoutFn({}).then((res: Response) => {
-          console.log('--> 登陆成功返回的参数 res: ', res)
+          console.log('--> 退出成功返回的参数 res: ', res)
           if (res.data.code == 200) {
-            cookie.remove(USER_TOKEN_KEY)
+            dispatch(clearAccessToken())
             navigateTo('/login')
           } else {
             message.warn(res.msg)

@@ -1,10 +1,10 @@
 import React from 'react'
 import { RootState, useAppDispatch, useAppSelector } from '@/redux'
-import { setLanguage } from '@/redux/modules/global'
+import { setLanguage } from '@/redux/modules/slice/global/globalSystem'
 import { Dropdown, MenuProps } from 'antd'
 
 const LanguageChange = () => {
-	const { language } = useAppSelector((state: RootState) => state.global)
+	const { language } = useAppSelector((state: RootState) => state.globalSystem)
 	const dispatch = useAppDispatch()
 
 	const items: MenuProps['items'] = [

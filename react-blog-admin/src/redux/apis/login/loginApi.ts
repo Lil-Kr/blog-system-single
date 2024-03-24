@@ -16,9 +16,6 @@ const { VITE_APP_PROXY_API } = import.meta.env
 const loginApi = createApi({
   // API 标识, 不能与其他Api或者reducer重复
   reducerPath: 'loginApi',
-  // baseQuery: fetchBaseQuery({
-  //   baseUrl: VITE_APP_PROXY_API + '/sys'
-  // }),
   baseQuery: axiosBaseQuery({
     baseUrl: VITE_APP_PROXY_API,
     url: '/sys/admin'

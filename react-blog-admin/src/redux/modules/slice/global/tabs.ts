@@ -3,7 +3,6 @@
  */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { TabsState } from "@/types/common"
-import { TabType } from "@/types/common/tabType"
 import { HOME_NAME, HOME_ROUTER_URL } from "@/config"
 
 const tabState: TabsState = {

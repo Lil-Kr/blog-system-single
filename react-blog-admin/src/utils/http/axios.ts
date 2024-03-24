@@ -1,8 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-// import { getGlobalToken, setGlobalToken } from '@/redux/modules/common'
-import store, { state, RootState, useAppSelector } from '@/redux'
-import { setAccessToken } from '@/redux/modules/global'
-import { AUTHORIZATION_KEY } from '@/utils/constant/constant'
+import store, { state, RootState, useAppSelector,useAppDispatch } from '@/redux'
+import { setAccessToken } from '@/redux/modules/slice/sys/tokenSlice'
 
 // type
 import { ResponseType } from '@/types/http/respType'
@@ -24,9 +22,9 @@ let axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
 	(config: AxiosRequestConfig) => {
-		// const token = getGlobalToken()
+    // TODO: 请求时都携带token进行请求
 		// 从redux中获取token
-		const token = state.global.token
+		const token = useAppSelector(state => state.token.token)
 		if (token) {
 			config.headers.Authorization = token
 		}
@@ -50,7 +48,6 @@ axiosInstance.interceptors.response.use(
 		console.log('--> response token:', token)
     
 		if (token) {
-			// setGlobalToken(token)
 			store.dispatch(setAccessToken(token))
 		}
 

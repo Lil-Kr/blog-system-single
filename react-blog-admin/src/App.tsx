@@ -7,7 +7,7 @@ import { getBrowserLang } from './utils/common'
 import zhCN from 'antd/lib/locale/zh_CN'
 import enUS from 'antd/lib/locale/en_US'
 import i18n from 'i18next'
-import { setLanguage } from './redux/modules/global'
+import { setLanguage } from './redux/modules/slice/global/globalSystem'
 import useTheme from './hooks/useTheme'
 
 // console.log('--> import.meta.env:', import.meta.env)
@@ -24,7 +24,7 @@ const Router = () => {
 
 const App = () => {
 	const dispatch = useAppDispatch()
-	const { language, assemblySize } = useAppSelector((state: RootState) => state.global)
+	const { language, assemblySize } = useAppSelector((state: RootState) => state.globalSystem)
 	const [i18nLocale, setI18nLocale] = useState(zhCN)
 
 	/**

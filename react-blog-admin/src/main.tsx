@@ -5,10 +5,7 @@ import App from './App'
 import { HashRouter } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 
-// cookies
-import { CookiesProvider } from 'react-cookies'
-
-// stroe
+// redux stroe
 import store, { persistor } from '@/redux'
 import { Provider } from 'react-redux'
 
@@ -41,9 +38,7 @@ import { Spin } from 'antd'
 
 // react 18 使用 ReactDOM.createRoot 渲染, antd Menu 菜单(子菜单组件) 在收缩展开时会闪烁, 先使用ReactDOM.render渲染组件, 等待官方修复
 
-const app = document.getElementById('root');
-const root = createRoot(app);
-root.render(
+createRoot(document.getElementById('root')).render(
   <Provider store={store}>
       <PersistGate loading={<Spin />} persistor={persistor}>
         <HashRouter>

@@ -3,7 +3,7 @@ import { menuItems, tabMap } from '@/routers'
 import { Tabs } from 'antd'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { RootState, useAppSelector, useAppDispatch } from '@/redux'
-import { setTabs, removeTab, setTabActive } from '@/redux/modules/global/tabs'
+import { removeTab, setTabActive } from '@/redux/modules/slice/global/tabs'
 import { TabType } from '@/types/common/tabType'
 
 const { TabPane } = Tabs
@@ -51,7 +51,7 @@ const TabsLayout = () => {
 		// console.log('--> 将要关闭的tab:', targetKey)
 
 		/**
-		 * 计算出删除tab 位置的前一个tab的所引
+		 * 计算出删除 tab 位置的前一个tab的所引
 		 */
 		let delIndex = 0
 		let curIndex = 0

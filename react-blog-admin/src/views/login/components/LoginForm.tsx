@@ -7,9 +7,6 @@ import { Response } from '@/types/http/respType'
 import type { SizeType } from 'antd/es/config-provider/SizeContext'
 import { USER_TOKEN_KEY } from '@/utils/constant/constant'
 
-// cookie
-import cookie, { useCookies } from 'react-cookies'
-
 // redux
 import { useAppDispatch } from '@/redux'
 import { useLoginMutation, useLogoutMutation } from '@/redux/apis/login/loginApi'
@@ -17,10 +14,11 @@ import { useLoginMutation, useLogoutMutation } from '@/redux/apis/login/loginApi
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input } from 'antd'
 import styles from '../index.module.scss'
+import { setAccessToken } from '@/redux/modules/slice/sys/tokenSlice'
 
 
 const LoginForm = () => {
-	const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
 	const { t } = useTranslation()
 	const navigateTo = useNavigate()
 	const [form] = Form.useForm()
@@ -47,12 +45,14 @@ const LoginForm = () => {
 		loginFn(loginInfo).then((res: Response) => {
 			console.log('--> 登陆成功返回的参数 res: ', res)
 			console.log('--> 登陆成功返回的参数 code: ', res.data.code)
+			console.log('--> 登陆成功返回的参数 token: ', res.data.data)
+      const {token, code, data} = res.data
 			// todo: 修改 local storge 为 home
-      if (res.data.code == 200) {
+      if (code == 200) {
         /**
          * set cookie value
          */
-        cookie.save(USER_TOKEN_KEY, res.data.data)
+        dispatch(setAccessToken(token))
         navigateTo('/main/home')
       } else {
         console.log('--> 用户名或密码错误')
