@@ -1,6 +1,6 @@
 import React from 'react'
 import { RootState, useAppDispatch, useAppSelector } from '@/redux'
-import { setLanguage } from '@/redux/modules/slice/global/globalSystem'
+import { setLanguage } from '@/redux/slice/global/globalSystem'
 import { Dropdown, MenuProps } from 'antd'
 
 const LanguageChange = () => {

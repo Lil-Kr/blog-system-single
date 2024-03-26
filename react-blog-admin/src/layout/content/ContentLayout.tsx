@@ -1,10 +1,11 @@
 import React from 'react'
 import { useRoutes, Outlet } from 'react-router-dom'
-
 import { Layout } from 'antd'
 
 const { Content } = Layout
+
 const ContentLayout = () => {
+
 	return (
 		<>
 			<Content

@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react'
 import { RouteItemType } from '@/types/router/routeType'
-import { lazyLoadUtil } from '@/utils/router'
+import LazyLoad from '@/routers/component/LazyLoad'
 import { UserOutlined, VideoCameraOutlined } from '@ant-design/icons'
 
 const testConfig: RouteItemType[] = [
@@ -11,7 +11,6 @@ const testConfig: RouteItemType[] = [
 			icon: <UserOutlined />
 		},
 		path: '/',
-		// redirect: <Navigate to="/login" replace={true} />
 		redirect: '/login'
 	},
 	{
@@ -21,7 +20,7 @@ const testConfig: RouteItemType[] = [
 			icon: <UserOutlined />
 		},
 		path: '/login',
-		element: lazyLoadUtil(lazy(() => import('@/views/login')))
+		element: LazyLoad(lazy(() => import('@/views/login')))
 	},
 	{
 		meta: {
@@ -29,7 +28,7 @@ const testConfig: RouteItemType[] = [
 			title: '主框架页面',
 			icon: <UserOutlined />
 		},
-		layout: lazyLoadUtil(lazy(() => import('@/layout'))),
+		layout: LazyLoad(lazy(() => import('@/layout'))),
 		children: [
 			{
 				meta: {
@@ -38,7 +37,7 @@ const testConfig: RouteItemType[] = [
 					title: '首页'
 				},
 				path: '/home',
-				element: lazyLoadUtil(lazy(() => import('@/views/home')))
+				element: LazyLoad(lazy(() => import('@/views/home')))
 			},
 			{
 				meta: {
@@ -54,7 +53,7 @@ const testConfig: RouteItemType[] = [
 							icon: <VideoCameraOutlined />
 						},
 						path: '/menu',
-						element: lazyLoadUtil(lazy(() => import('@/views/permission/Menu')))
+						element: LazyLoad(lazy(() => import('@/views/permission/Menu')))
 					},
 					{
 						meta: {
@@ -63,7 +62,7 @@ const testConfig: RouteItemType[] = [
 							icon: <UserOutlined />
 						},
 						path: '/role',
-						element: lazyLoadUtil(lazy(() => import('@/views/permission/Role')))
+						element: LazyLoad(lazy(() => import('@/views/permission/Role')))
 					},
 					{
 						meta: {
@@ -79,7 +78,7 @@ const testConfig: RouteItemType[] = [
 									icon: <UserOutlined />
 								},
 								path: '/btn-1',
-								element: lazyLoadUtil(lazy(() => import('@/views/permission/Button1')))
+								element: LazyLoad(lazy(() => import('@/views/permission/Button1')))
 							},
 							{
 								meta: {
@@ -88,7 +87,7 @@ const testConfig: RouteItemType[] = [
 									icon: <UserOutlined />
 								},
 								path: '/btn-2',
-								element: lazyLoadUtil(lazy(() => import('@/views/permission/Button2')))
+								element: LazyLoad(lazy(() => import('@/views/permission/Button2')))
 							}
 						]
 					}

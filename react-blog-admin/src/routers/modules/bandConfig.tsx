@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react'
 import { RouteItemType } from '@/types/router/routeType'
 
-import { lazyLoadUtil } from '@/utils/router'
+import LazyLoad from '@/routers/component/LazyLoad'
 import { UserOutlined } from '@ant-design/icons'
 
 const bandConfig: RouteItemType[] = [
@@ -19,7 +19,7 @@ const bandConfig: RouteItemType[] = [
 					icon: <UserOutlined />
 				},
 				path: '/index',
-				element: lazyLoadUtil(lazy(() => import('@/views/band')))
+				element: LazyLoad(lazy(() => import('@/views/band')))
 			}
 		]
 	}

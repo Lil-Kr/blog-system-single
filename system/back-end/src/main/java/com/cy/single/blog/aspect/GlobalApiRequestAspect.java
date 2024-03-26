@@ -6,6 +6,7 @@ import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysUserMapper;
 import com.cy.single.blog.enums.ReturnCodeEnum;
 import com.cy.single.blog.pojo.entity.SysUser;
+import com.google.common.net.HostAndPort;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,6 +15,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -40,6 +42,10 @@ public class GlobalApiRequestAspect {
     @Around("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
     public Object checkAuth(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         try {
+            HostAndPort remoteAddress = HostAndPort.fromString(servletRequest.getRemoteAddr());
+            String clientIP = remoteAddress.getHost() + remoteAddress.getPort();
+            System.out.println(clientIP);
+
             /**
              * get cookie
              */
@@ -57,7 +63,7 @@ public class GlobalApiRequestAspect {
                     .map(Cookie::getValue)
                     .orElse("");
 
-            if (StringUtils.isEmpty(token)) {
+            if (StringUtils.isBlank(token)) {
                 log.error("the request have exception:             {}");
                 throw new BusinessException("token is null", ReturnCodeEnum.BUSINESS_ERROR);
             }

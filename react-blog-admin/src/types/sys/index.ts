@@ -15,7 +15,11 @@ export namespace Login {
   }
 }
 
-
 export interface UserResType {
   data:any
+}
+
+export interface AuthType{
+  token: string
+  isLogin: Boolean
 }

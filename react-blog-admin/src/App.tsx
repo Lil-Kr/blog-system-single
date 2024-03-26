@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Button, Spin, ConfigProvider } from 'antd'
-import { routers } from '@/routers'
-import { useRoutes, NavLink, Outlet } from 'react-router-dom'
+import { onRouteBefore, routers, routersConfig } from '@/routers'
+import { useRoutes } from 'react-router-dom'
+
 import { RootState, useAppSelector, useAppDispatch } from './redux'
 import { getBrowserLang } from './utils/common'
 import zhCN from 'antd/lib/locale/zh_CN'
 import enUS from 'antd/lib/locale/en_US'
 import i18n from 'i18next'
-import { setLanguage } from './redux/modules/slice/global/globalSystem'
+import { setLanguage } from './redux/slice/global/globalSystem'
 import useTheme from './hooks/useTheme'
+import RouterWaiter from 'react-router-waiter'
 
 // console.log('--> import.meta.env:', import.meta.env)
 // console.log('--> import.meta.env.MODE:', import.meta.env.MODE)
@@ -18,8 +20,8 @@ import useTheme from './hooks/useTheme'
 // console.log('--> loadEnv:', loadEnv)
 
 const Router = () => {
-	const outlet = useRoutes(routers)
-	return outlet
+	const elements = useRoutes(routers)
+	return elements
 }
 
 const App = () => {
@@ -53,7 +55,10 @@ const App = () => {
 	return (
 		<>
 			<ConfigProvider locale={i18nLocale} componentSize={assemblySize}>
-				<Router />
+        
+        {/* <RouterWaiter routes={routersConfig} onRouteBefore={onRouteBefore}>
+        </RouterWaiter> */}
+          <Router />
 			</ConfigProvider>
 		</>
 	)

@@ -1,14 +1,10 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import store, { state, RootState, useAppSelector,useAppDispatch } from '@/redux'
-import { setAccessToken } from '@/redux/modules/slice/sys/tokenSlice'
-
-// type
-import { ResponseType } from '@/types/http/respType'
-
+import store from '@/redux'
+import { setAccessToken } from '@/redux/slice/sys/authSlice'
 import { message } from 'antd'
 
 // 创建axios实例
-let axiosInstance: AxiosInstance = axios.create({
+const axiosInstance: AxiosInstance = axios.create({
 	// baseURL: import.meta.env.VITE_APP_PROXY_API,
 	headers: {
 		"Accept": "application/json",
@@ -22,12 +18,12 @@ let axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
 	(config: AxiosRequestConfig) => {
-    // TODO: 请求时都携带token进行请求
-		// 从redux中获取token
-		const token = useAppSelector(state => state.token.token)
-		if (token) {
-			config.headers.Authorization = token
-		}
+    const token = store.getState().auth.token
+    // if (token != '') {
+    //   store.dispatch(setAccessToken(token))
+    // }
+		console.log('--> request intercept token', token)
+
 		console.log('--> request intercept config', config)
 		return config
 	},
@@ -39,13 +35,13 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
 	(response: AxiosResponse) => {
-		console.log('--> interceptors.response:', response)
+		console.log('--> response interceptors response:', response)
 
 		const { data, config, headers, request, status, statusText } = response
-		console.log('--> response data:', data)
+		console.log('--> response interceptors data:', data)
 
 		const { code, msg, token, userInfo } = data
-		console.log('--> response token:', token)
+		console.log('--> response interceptors token:', token)
     
 		if (token) {
 			store.dispatch(setAccessToken(token))
@@ -77,7 +73,7 @@ axiosInstance.interceptors.response.use(
 			const respData = { code: response.status, msg: response.statusText, data: '' }
 			return respData
 		} else {
-			message.error('网络连接异常,请稍后再试!')
+			message.error('网络连接异常, 请稍后再试!')
 		}
 	}
 )

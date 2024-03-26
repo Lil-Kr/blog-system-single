@@ -1,4 +1,5 @@
-import lazyLoadUtil from './lazyLoadUtil'
-import routerCommonUtil, { redireactUtil, handleRouterItems } from './routerCommonUtil'
+import { redireactUtil, getRouterItems } from '@/utils/router/routerCommonUtil'
+export { getRouterItems, redireactUtil }
 
-export { lazyLoadUtil, handleRouterItems, routerCommonUtil, redireactUtil }
+import { getAllRoutersMap } from '@/utils/router/routerUtils'
+export { getAllRoutersMap }

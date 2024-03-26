@@ -1,7 +1,6 @@
 import React, { Suspense, lazy } from 'react'
 import { RouteItemType } from '@/types/router/routeType'
-
-import { lazyLoadUtil } from '@/utils/router'
+import LazyLoad from '@/routers/component/LazyLoad'
 import { VideoCameraOutlined } from '@ant-design/icons'
 
 const userConfig: RouteItemType[] = [
@@ -19,7 +18,7 @@ const userConfig: RouteItemType[] = [
 					title: '用户信息'
 				},
 				path: '/user/user',
-				element: lazyLoadUtil(lazy(() => import('@/views/user/User')))
+				element: LazyLoad(lazy(() => import('@/views/user/User')))
 			},
 			{
 				meta: {
@@ -28,7 +27,7 @@ const userConfig: RouteItemType[] = [
 					title: '游客管理'
 				},
 				path: '/touristische',
-				element: lazyLoadUtil(lazy(() => import('@/views/user/Touristische')))
+				element: LazyLoad(lazy(() => import('@/views/user/Touristische')))
 			}
 		]
 	}

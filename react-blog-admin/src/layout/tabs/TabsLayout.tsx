@@ -3,7 +3,7 @@ import { menuItems, tabMap } from '@/routers'
 import { Tabs } from 'antd'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { RootState, useAppSelector, useAppDispatch } from '@/redux'
-import { removeTab, setTabActive } from '@/redux/modules/slice/global/tabs'
+import { removeTab, setTabActive } from '@/redux/slice/global/tabs'
 import { TabType } from '@/types/common/tabType'
 
 const { TabPane } = Tabs
@@ -33,7 +33,6 @@ const TabsLayout = () => {
 	}, [pathname])
 
 	const onChange = (newActiveKey: string) => {
-		// console.log('--> onChange:', newActiveKey)
 		dispatch(setTabActive({ tabActive: { key: newActiveKey, path: newActiveKey } }))
 		setActiveKey(newActiveKey)
 		navigateTo(newActiveKey)

@@ -42,7 +42,7 @@ createRoot(document.getElementById('root')).render(
   <Provider store={store}>
       <PersistGate loading={<Spin />} persistor={persistor}>
         <HashRouter>
-            <App />
+          <App />
         </HashRouter>
       </PersistGate>
     </Provider>

@@ -1,20 +1,20 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import md5 from 'js-md5'
-import { Login } from '@/types/login'
+import { Login } from '@/types/sys'
 import { Response } from '@/types/http/respType'
 import type { SizeType } from 'antd/es/config-provider/SizeContext'
-import { USER_TOKEN_KEY } from '@/utils/constant/constant'
 
 // redux
 import { useAppDispatch } from '@/redux'
-import { useLoginMutation, useLogoutMutation } from '@/redux/apis/login/loginApi'
+import { useLoginMutation } from '@/redux/apis/login/loginApi'
+import { setAccessToken } from '@/redux/slice/sys/authSlice'
+
 // stlyes
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Form, Input } from 'antd'
+import { Button, Form, Input, message } from 'antd'
 import styles from '../index.module.scss'
-import { setAccessToken } from '@/redux/modules/slice/sys/tokenSlice'
 
 
 const LoginForm = () => {
@@ -24,6 +24,17 @@ const LoginForm = () => {
 	const [form] = Form.useForm()
 	const [loading, setLoading] = useState<boolean>(false)
   const [btnSize, setSize] = useState<SizeType>('large')
+
+  useEffect(() => {
+    window.history.pushState(null, '', document.URL)
+    window.onpopstate = function () {
+      window.history.pushState(null, '', document.URL)
+    }
+    return () => {
+      // 回退事件只作用于当前组件，则需要在离开页面、组件销毁时把回退事件销毁
+      window.onpopstate = null
+    }
+  }, [])
 
 	const [
 		loginFn,
@@ -46,16 +57,17 @@ const LoginForm = () => {
 			console.log('--> 登陆成功返回的参数 res: ', res)
 			console.log('--> 登陆成功返回的参数 code: ', res.data.code)
 			console.log('--> 登陆成功返回的参数 token: ', res.data.data)
-      const {token, code, data} = res.data
+      const {msg, code, data:token} = res.data
+      
 			// todo: 修改 local storge 为 home
-      if (code == 200) {
+      if (code == 200 && token) {
         /**
          * set cookie value
          */
-        dispatch(setAccessToken(token))
+        dispatch(setAccessToken({token, isLogin: true}))
         navigateTo('/main/home')
       } else {
-        console.log('--> 用户名或密码错误')
+        onFinishFailed({})
       }
 		})
 	}
@@ -65,8 +77,8 @@ const LoginForm = () => {
    * @param errorInfo 
    */
   const onFinishFailed = (errorInfo: any) => {
-		console.log('Failed:', errorInfo)
-		// console.log('--> form:', form)
+		// console.log('login failed:', errorInfo)
+    message.error(t('login.login_failed'))
 	}
 
 	return (

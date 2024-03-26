@@ -13,7 +13,8 @@ export default {
 		username_placeholder: "username",
 		password_placeholder: "password",
 		username_message: "Please input your username!",
-		password_message: "Please input your password!"
+		password_message: "Please input your password!",
+    login_failed: "username or password error!"
 	},
 	home: {
 		welcome: "Welcome"

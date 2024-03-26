@@ -1,11 +1,13 @@
-import React, { Suspense, lazy } from 'react'
 import { RouteItemType } from '@/types/router/routeType'
-import { lazyLoadUtil } from '@/utils/router'
 import busConfig, { testConfig, homeConfig } from './modules'
-import { handleRouterItems } from '@/utils/router/routerCommonUtil'
+import { getRouterItems, getAllRoutersMap } from '@/utils/router'
 import { UserOutlined } from '@ant-design/icons'
 import { getBreadCrumbItems, getMenuItems, getTabsMap } from '@/utils/common'
 import Login from '@/views/login'
+import { OnRouteBeforeType } from 'react-router-waiter'
+import BaseError from '@/views/error/BaseError'
+import LazyLoad from './component/LazyLoad'
+import { lazy } from 'react'
 
 /**
  * original router config
@@ -18,7 +20,6 @@ const routersConfig: RouteItemType[] = [
 			icon: <UserOutlined />
 		},
 		path: '/',
-		// redirect: <Navigate to="/login" replace={true} />
 		redirect: '/login'
 	},
 	{
@@ -29,13 +30,24 @@ const routersConfig: RouteItemType[] = [
 		path: '/login',
 		element: <Login />
 	},
+	{
+		meta: {
+			key: '/404',
+			title: '404'
+		},
+		path: '/404',
+    element: LazyLoad(lazy(() => import('@/views/error/BaseError')))
+	},
 	...busConfig
 ]
+
+const routerAllMap = getAllRoutersMap(routersConfig)
+console.log('--> 用户全局路由保护辅助的路由数据: ', routerAllMap)
 
 /**
  * handle router structure
  */
-const routers = handleRouterItems(routersConfig)
+const routers = getRouterItems(routersConfig)
 console.log('--> 处理后的路由表:', routers)
 
 /**
@@ -43,7 +55,7 @@ console.log('--> 处理后的路由表:', routers)
  * // todo: 后续由后端直接返回, 或者返回后再处理
  */
 const menuItems = getMenuItems(routersConfig)
-console.log('--> 处理后的菜单结构:', menuItems)
+console.log('--> 根据路由处理后的菜单结构:', menuItems)
 
 /**
  * generate breadcrumb nav
@@ -63,5 +75,6 @@ const config = () => {
 	return <></>
 }
 
+
 export default config
-export { routersConfig, routers, menuItems, breadcrumbMap, tabMap }
+export { routersConfig, routers, menuItems, breadcrumbMap, tabMap, routerAllMap }

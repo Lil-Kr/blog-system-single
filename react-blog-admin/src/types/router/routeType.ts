@@ -1,4 +1,4 @@
-import { NonIndexRouteObject } from 'react-router-dom'
+import { NonIndexRouteObject, RouteObject } from 'react-router-dom'
 
 
 interface FunctionalImportType {
@@ -15,7 +15,7 @@ interface MetaType {
 interface RouteItemType extends NonIndexRouteObject {
   redirect?: string
   layout?: React.ReactNode
-  component?: React.ReactNode | FunctionalImportType
+  component?: FunctionalImportType
   meta?: MetaType
   children?: RouteItemType[]
 }

@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react'
 import { RouteItemType } from '@/types/router/routeType'
 
-import { lazyLoadUtil } from '@/utils/router'
+import LazyLoad from '@/routers/component/LazyLoad'
 import homeConfig from './homeConfig'
 import blogConfig from './blogConfig'
 import bandConfig from './bandConfig'
@@ -18,8 +18,7 @@ const busConfig: RouteItemType[] = [
 			title: '主框架页面',
 			icon: <UserOutlined />
 		},
-		// path: '/main',
-		layout: lazyLoadUtil(lazy(() => import('@/layout'))),
+		layout: LazyLoad(lazy(() => import('@/layout'))),
 		children: [
 			...homeConfig,
 			...blogConfig,

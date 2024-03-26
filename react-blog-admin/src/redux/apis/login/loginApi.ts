@@ -9,7 +9,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
 import { axiosBaseQuery } from '@/utils/http/axios'
 
-import { Login } from '@/types/login'
+import { Login } from '@/types/sys'
 
 const { VITE_APP_PROXY_API } = import.meta.env
 

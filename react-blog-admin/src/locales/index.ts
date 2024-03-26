@@ -12,7 +12,7 @@ i18n.use(initReactI18next).init({
 			translation: zhCnTrans
 		}
 	},
-	// 选择默认语言，选择内容为上述配置中的 key，即 en/zh
+	// 选择默认语言, 选择内容为上述配置中的 key, 即 en/zh
 	fallbackLng: "zh",
 	debug: false,
 	interpolation: {

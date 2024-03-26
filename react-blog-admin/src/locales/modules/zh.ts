@@ -13,7 +13,8 @@ export default {
 		username_placeholder: "用户名",
 		password_placeholder: "密码",
 		username_message: "用户名不能为空",
-		password_message: "密码不能为空"
+		password_message: "密码不能为空",
+    login_failed: "用户名或密码错误!"
 	},
 	home: {
 		welcome: "欢迎使用"

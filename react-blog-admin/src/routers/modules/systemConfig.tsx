@@ -1,7 +1,6 @@
 import React, { Suspense, lazy } from 'react'
 import { RouteItemType } from '@/types/router/routeType'
-
-import { lazyLoadUtil } from '@/utils/router'
+import LazyLoad from '@/routers/component/LazyLoad'
 import { UploadOutlined, UserOutlined } from '@ant-design/icons'
 
 const systemConfig: RouteItemType[] = [
@@ -19,7 +18,7 @@ const systemConfig: RouteItemType[] = [
 					icon: <UserOutlined />
 				},
 				path: '/configuration',
-				element: lazyLoadUtil(lazy(() => import('@/views/system')))
+				element: LazyLoad(lazy(() => import('@/views/system')))
 			}
 		]
 	}

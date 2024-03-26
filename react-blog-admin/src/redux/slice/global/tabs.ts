@@ -11,7 +11,7 @@ const tabState: TabsState = {
 }
 
 const tabSlice = createSlice({
-  name: "tab", // 自动生成action中的type
+  name: 'tab', // 自动生成action中的type
   initialState: tabState,
   reducers: {
     setTabList(state: TabsState, { payload }: PayloadAction<{ [propName: string]: any }>) {

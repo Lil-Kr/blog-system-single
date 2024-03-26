@@ -1,4 +1,3 @@
-import { testConfig } from '@/routers/modules'
 import { RouteItemType } from '@/types/router/routeType'
 import { CheckSquareFilled } from '@ant-design/icons'
 import { Children } from 'react'

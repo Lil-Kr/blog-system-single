@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react'
 import { RouteItemType } from '@/types/router/routeType'
 
-import { lazyLoadUtil } from '@/utils/router'
+import LazyLoad from '@/routers/component/LazyLoad'
 import { UserOutlined, VideoCameraOutlined } from '@ant-design/icons'
 
 const permissionConfig: RouteItemType[] = [
@@ -19,7 +19,7 @@ const permissionConfig: RouteItemType[] = [
 					icon: <VideoCameraOutlined />
 				},
 				path: '/menu',
-				element: lazyLoadUtil(lazy(() => import('@/views/permission/Menu')))
+				element: LazyLoad(lazy(() => import('@/views/permission/Menu')))
 			},
 			{
 				meta: {
@@ -28,7 +28,7 @@ const permissionConfig: RouteItemType[] = [
 					icon: <UserOutlined />
 				},
 				path: '/role',
-				element: lazyLoadUtil(lazy(() => import('@/views/permission/Role')))
+				element: LazyLoad(lazy(() => import('@/views/permission/Role')))
 			},
 			{
 				meta: {
@@ -44,7 +44,7 @@ const permissionConfig: RouteItemType[] = [
 							icon: <UserOutlined />
 						},
 						path: '/btn-1',
-						element: lazyLoadUtil(lazy(() => import('@/views/permission/Button1')))
+						element: LazyLoad(lazy(() => import('@/views/permission/Button1')))
 					},
 					{
 						meta: {
@@ -53,7 +53,7 @@ const permissionConfig: RouteItemType[] = [
 							icon: <UserOutlined />
 						},
 						path: '/btn-2',
-						element: lazyLoadUtil(lazy(() => import('@/views/permission/Button2')))
+						element: LazyLoad(lazy(() => import('@/views/permission/Button2')))
 					}
 				]
 			}

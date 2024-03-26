@@ -5,10 +5,11 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
 import { persistStore } from 'redux-persist'
-import rootPersistReducer from '@/redux/modules/persist'
+import rootPersistReducer from '@/redux/persist'
 
 // API config
 import loginApi from '@/redux/apis/login/loginApi'
+
 
 const store = configureStore({
   reducer: rootPersistReducer,

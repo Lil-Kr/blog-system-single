@@ -7,8 +7,7 @@ import { MenuItemType, SubMenuType } from '@/types/common'
 import { getMenuOpenKeysUtil } from '@/utils/common'
 import { breadcrumbMap, menuItems, tabMap } from '@/routers'
 import { useAppDispatch } from '@/redux'
-import { setBreadcrumbMap } from '@/redux/modules/slice/global/breadcrumb'
-import { setTab } from '@/redux/modules/slice/global/tabs'
+import { setBreadcrumbMap,setTab } from '@/redux/slice'
 
 const MenuLayout = (props) => {
 	const { collapsed } = props

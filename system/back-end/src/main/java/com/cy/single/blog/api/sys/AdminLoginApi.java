@@ -1,5 +1,6 @@
 package com.cy.single.blog.api.sys;
 
+import com.cy.single.blog.aspect.annotations.CheckAuth;
 import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.common.holder.RequestHolder;
@@ -32,6 +33,7 @@ public class AdminLoginApi {
     }
 
     @DeleteMapping("/logout")
+    @CheckAuth
     public ApiResp<Integer> logout() {
         // 移除用户
         RequestHolder.remove();
@@ -39,6 +41,7 @@ public class AdminLoginApi {
     }
 
     @PostMapping("/register")
+    @CheckAuth
     public ApiResp<Integer> register(@RequestBody @Valid UserRegisterReq req) {
         return userService.registerAdmin(req);
     }
