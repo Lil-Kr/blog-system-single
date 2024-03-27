@@ -4,8 +4,6 @@ import { getRouterItems, getAllRoutersMap } from '@/utils/router'
 import { UserOutlined } from '@ant-design/icons'
 import { getBreadCrumbItems, getMenuItems, getTabsMap } from '@/utils/common'
 import Login from '@/views/login'
-import { OnRouteBeforeType } from 'react-router-waiter'
-import BaseError from '@/views/error/BaseError'
 import LazyLoad from './component/LazyLoad'
 import { lazy } from 'react'
 
@@ -32,10 +30,10 @@ const routersConfig: RouteItemType[] = [
 	},
 	{
 		meta: {
-			key: '/404',
+			key: '*',
 			title: '404'
 		},
-		path: '/404',
+		path: '*',
     element: LazyLoad(lazy(() => import('@/views/error/BaseError')))
 	},
 	...busConfig

@@ -1,10 +1,8 @@
 package com.cy.single.blog.pojo.dto.req;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.cy.single.blog.pojo.entity.SysUser;
 import com.cy.single.blog.pojo.req.user.UserRegisterReq;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
-import com.cy.single.blog.utils.jwtUtil.JwtTokenUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import org.springframework.beans.BeanUtils;
 
@@ -30,7 +28,7 @@ public class UserDTO {
         String nowDateTime = DateUtil.getNowDateTime();
         req.setCreateTime(nowDateTime);
         req.setUpdateTime(nowDateTime);
-        req.setToken(JwtTokenUtil.generatorJwtToken(BeanUtil.beanToMap(req)));
+        req.setToken(IdWorker.generateUUID());
 
         return req;
     }

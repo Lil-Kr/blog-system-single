@@ -10,7 +10,6 @@ const Blog = () => {
   return (
     <>
       <div>这是博客页面</div>
-      <p>{local}</p>
     </>
   )
 }

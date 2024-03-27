@@ -10,7 +10,7 @@ export default {
 		confirm: "Login",
 		reset: "Reset",
 		btn: "Login",
-		username_placeholder: "username",
+		username_placeholder: "username/e-mail",
 		password_placeholder: "password",
 		username_message: "Please input your username!",
 		password_message: "Please input your password!",

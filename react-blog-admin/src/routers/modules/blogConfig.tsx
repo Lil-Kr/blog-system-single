@@ -29,6 +29,24 @@ const blogConfig: RouteItemType[] = [
 				},
 				path: '/share',
 				element: LazyLoad(lazy(() => import('@/views/blog')))
+			},
+			{
+				meta: {
+					key: '/editor-rt',
+					title: '富文本编辑器-1',
+					icon: <UserOutlined />
+				},
+				path: '/editor-rt',
+				element: LazyLoad(lazy(() => import('@/views/blog/BlogMd1')))
+			},
+			{
+				meta: {
+					key: '/editor-rt-2',
+					title: '富文本编辑器-2',
+					icon: <UserOutlined />
+				},
+				path: '/editor-rt-2',
+				element: LazyLoad(lazy(() => import('@/views/blog/BlogMd2')))
 			}
 		]
 	}

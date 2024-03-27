@@ -120,4 +120,12 @@ public class IdWorker {
         return snowflake.nextId();
     }
 
+    /**
+     * generate uuid
+     * @return
+     */
+    public static String generateUUID() {
+        return IdUtil.randomUUID();
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.cy.single.blog.demo;
 
+import cn.hutool.core.util.IdUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,13 @@ public class Test1 {
         log.info("过3秒之后访问 k2");
         Object k22 = cache.getIfPresent("k2");
         log.info("k2: {}", k22);
+    }
+
+    @Test
+    public void test3() {
+        String uuid = IdUtil.randomUUID();
+        System.out.println(uuid);
+
 
     }
 

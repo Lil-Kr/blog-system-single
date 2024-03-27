@@ -6,7 +6,6 @@ import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysUserMapper;
 import com.cy.single.blog.enums.ReturnCodeEnum;
 import com.cy.single.blog.pojo.entity.SysUser;
-import com.google.common.net.HostAndPort;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -42,10 +41,6 @@ public class GlobalApiRequestAspect {
     @Around("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
     public Object checkAuth(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         try {
-            HostAndPort remoteAddress = HostAndPort.fromString(servletRequest.getRemoteAddr());
-            String clientIP = remoteAddress.getHost() + remoteAddress.getPort();
-            System.out.println(clientIP);
-
             /**
              * get cookie
              */
@@ -58,7 +53,7 @@ public class GlobalApiRequestAspect {
             }
 
             String token = Arrays.stream(cookies)
-                    .filter(cookie -> "token".equals(cookie.getName()))
+                    .filter(cookie -> "_cl__t".equals(cookie.getName()))
                     .findFirst()
                     .map(Cookie::getValue)
                     .orElse("");
@@ -72,8 +67,8 @@ public class GlobalApiRequestAspect {
              * 先与缓存中对应的用户 token 做校验
              * 如果缓存中没有token 就查询用户在DB中的 token, 并返回
              */
-            Object[] args = proceedingJoinPoint.getArgs();
-            log.info(JSONArray.toJSONString(args));
+//            Object[] args = proceedingJoinPoint.getArgs();
+//            log.info(JSONArray.toJSONString(args));
             SysUser user = userMapper.getUserByToken(token);
             if (Objects.isNull(user)) {
                 log.error("The request {} try fake token");

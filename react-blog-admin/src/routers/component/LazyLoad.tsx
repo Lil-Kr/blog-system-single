@@ -18,10 +18,12 @@ const LazyLoad = (Comp: React.LazyExoticComponent<any>) => {
     const token = useAppSelector((state) => state.auth.token)
     const isLogin = useAppSelector((state) => state.auth.isLogin)
 
+    // TODO: 全局路由守卫还需要修改
     if (!token || !isLogin) {
-      useEffect(() => {
-        navigateTo('/login', {replace:true})
-      }, [navigateTo]);
+      // useEffect(() => {
+      //   navigateTo('/login', {replace:true})
+      // }, [navigateTo])
+      navigateTo('/login', {replace:true})
     }
 
     return (

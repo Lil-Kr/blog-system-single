@@ -10,7 +10,7 @@ export default {
 		confirm: "登录",
 		reset: "重置",
 		btn: "登录",
-		username_placeholder: "用户名",
+		username_placeholder: "用户名/邮箱",
 		password_placeholder: "密码",
 		username_message: "用户名不能为空",
 		password_message: "密码不能为空",
