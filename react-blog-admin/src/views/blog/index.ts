@@ -2,9 +2,9 @@ import Blog from './Blog'
 export default Blog
 
 
-import BlogMd1 from './BlogMd1'
-export {BlogMd1}
+import BlogType from './BlogType'
+export {BlogType}
 
 
-import BlogMd2 from './BlogMd2'
-export {BlogMd2}
+import BlogLable from './BlogLable'
+export {BlogLable}

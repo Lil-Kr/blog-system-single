@@ -43,7 +43,7 @@ const permissionRouterConfig = new Router({
         {
           meta: {
             key: '/btn',
-            title: '按钮管理',
+            title: '按钮权限',
             layout: false,
             icon: <UserOutlined />
           },

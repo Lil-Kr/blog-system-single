@@ -32,34 +32,44 @@ const blogRouterConfig = new Router({
         },
         {
           meta: {
-            key: '/share',
-            title: '分享博客',
+            key: '/type',
+            title: '分类管理',
             layout: false,
             icon: <UserOutlined />
           },
-          path: 'share',
-          element: LazyLoad(lazy(() => import('@/views/blog')))
+          path: 'type',
+          element: LazyLoad(lazy(() => import('@/views/blog/BlogType')))
         },
         {
           meta: {
-            key: '/editor-rt',
-            title: '富文本编辑器-1',
+            key: '/topics',
+            title: '专题管理',
             layout: false,
             icon: <UserOutlined />
           },
-          path: 'editor-rt',
-          element: LazyLoad(lazy(() => import('@/views/blog/BlogMd1')))
+          path: 'topics',
+          element: LazyLoad(lazy(() => import('@/views/blog/BlogTopics')))
         },
         {
           meta: {
-            key: '/editor-rt-2',
-            title: '富文本编辑器-2',
+            key: '/label',
+            title: '标签管理',
             layout: false,
             icon: <UserOutlined />
           },
-          path: 'editor-rt-2',
-          element: LazyLoad(lazy(() => import('@/views/blog/BlogMd2')))
-        }
+          path: 'label',
+          element: LazyLoad(lazy(() => import('@/views/blog/BlogLable')))
+        },
+        {
+          meta: {
+            key: '/recommend',
+            title: '推荐管理',
+            layout: false,
+            icon: <UserOutlined />
+          },
+          path: 'recommend',
+          element: LazyLoad(lazy(() => import('@/views/blog/BlogRecommend')))
+        },
       ]
     }
   ]

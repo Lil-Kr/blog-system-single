@@ -3,6 +3,8 @@ import { UserOutlined } from "@ant-design/icons"
 import Router from "oh-router"
 import { lazy } from "react"
 import {homeConfig} from './homeConfig'
+import { userRouterConfig, userConfig} from './userConfig'
+import { logRouterConfig, logConfig} from './logConfig'
 import { blogConfig } from './blogConfig'
 import { systemConfig } from './systemConfig'
 import { permissionConfig } from './permissionConfig'
@@ -22,6 +24,8 @@ const busRouterConfig: any = new Router({
       children: [
         ...homeConfig,
         ...blogConfig,
+        ...userConfig,
+        ...logConfig,
         ...systemConfig,
         ...permissionConfig
       ]

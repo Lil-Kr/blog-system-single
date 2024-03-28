@@ -29,6 +29,16 @@ const systemRouterConfig = new Router({
           },
           path: 'configuration',
           element: LazyLoad(lazy(() => import('@/views/system')))
+        },
+        {
+          meta: {
+            key: '/params',
+            title: '参数配置',
+            layout: false,
+            icon: <UserOutlined />
+          },
+          path: 'params',
+          element: LazyLoad(lazy(() => import('@/views/system/Params')))
         }
       ]
     }
