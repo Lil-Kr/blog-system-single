@@ -1,3 +1,4 @@
-import config, { routersConfig, routers, menuItems, breadcrumbMap, tabMap, routerAllMap} from './config'
-export default config
-export { routersConfig, routers, menuItems, breadcrumbMap, tabMap, routerAllMap}
+import { rootRouterConfig, rootConfig, menuItems, breadcrumbMap, tabMap } from '@/routers/config'
+
+export { rootRouterConfig, rootConfig }
+export { menuItems, breadcrumbMap, tabMap }

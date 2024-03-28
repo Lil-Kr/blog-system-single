@@ -21,7 +21,14 @@ export {setAssemblySize, setLanguage, globalSystemReducer}
 /**======================== sys ================= */
 
 /**
- * tokenSlice
+ * authSlice
  */
 import {setAccessToken, clearAccessToken, authReducer} from '@/redux/slice/sys/authSlice'
 export {setAccessToken, clearAccessToken, authReducer}
+
+
+/**
+ * loginSlice
+ */
+import { setLoginStatue, loginReducer } from '@/redux/slice/sys/loginSlice'
+export { setLoginStatue, loginReducer } 

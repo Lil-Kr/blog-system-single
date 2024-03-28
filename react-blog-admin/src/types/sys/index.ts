@@ -21,5 +21,8 @@ export interface UserResType {
 
 export interface AuthType{
   token: string
-  isLogin: Boolean
+}
+
+export interface LoginCheckType {
+  statue: boolean | string
 }

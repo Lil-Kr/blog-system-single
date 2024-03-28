@@ -30,6 +30,8 @@
     "md-editor-rt": "^4.12.2",
     "mockjs": "^1.1.0",
     "nanoid": "^4.0.0",
+    "oh-router": "^0.4.0",
+    "oh-router-react": "^0.0.11",
     "react": "^18.2.0",
     "react-cookies": "^0.1.1",
     "react-dom": "^18.2.0",

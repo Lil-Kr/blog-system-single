@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+// import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'oh-router-react'
+import { rootRouterConfig } from '@/routers'
 import { useTranslation } from 'react-i18next'
 import md5 from 'js-md5'
 import { Login } from '@/types/sys'
@@ -9,7 +11,7 @@ import type { SizeType } from 'antd/es/config-provider/SizeContext'
 // redux
 import { useAppDispatch } from '@/redux'
 import { useLoginMutation } from '@/redux/apis/login/loginApi'
-import { setAccessToken } from '@/redux/slice/sys/authSlice'
+import { setAccessToken, setLoginStatue } from '@/redux/slice'
 
 // stlyes
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
@@ -21,20 +23,10 @@ const LoginForm = () => {
   const dispatch = useAppDispatch()
 	const { t } = useTranslation()
 	const navigateTo = useNavigate()
+  
 	const [form] = Form.useForm()
 	const [loading, setLoading] = useState<boolean>(false)
   const [btnSize, setSize] = useState<SizeType>('large')
-
-  useEffect(() => {
-    window.history.pushState(null, '', document.URL)
-    window.onpopstate = function () {
-      window.history.pushState(null, '', document.URL)
-    }
-    return () => {
-      // 回退事件只作用于当前组件，则需要在离开页面、组件销毁时把回退事件销毁
-      window.onpopstate = null
-    }
-  }, [])
 
 	const [
 		loginFn,
@@ -58,13 +50,14 @@ const LoginForm = () => {
 			console.log('--> 登陆成功返回的参数 code: ', res.data.code)
 			console.log('--> 登陆成功返回的参数 token: ', res.data.data)
       const {msg, code, data:token} = res.data
-      
+      console.log('--> 退出: ', token)
 			// todo: 修改 local storge 为 home
       if (code == 200 && token) {
         /**
          * set cookie value
          */
-        dispatch(setAccessToken({token, isLogin: true}))
+        dispatch(setAccessToken({token}))
+        dispatch(setLoginStatue({statue: true}))
         navigateTo('/main/home')
       } else {
         onFinishFailed({})

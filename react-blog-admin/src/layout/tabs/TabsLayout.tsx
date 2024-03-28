@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { menuItems, tabMap } from '@/routers'
 import { Tabs } from 'antd'
-import { useLocation, useNavigate } from 'react-router-dom'
+// import { useLocation, useNavigate } from 'react-router-dom'
+import {useNavigate, useLocation} from 'oh-router-react'
 import { RootState, useAppSelector, useAppDispatch } from '@/redux'
 import { removeTab, setTabActive } from '@/redux/slice/global/tabs'
 import { TabType } from '@/types/common/tabType'
@@ -14,7 +14,6 @@ const TabsLayout = () => {
 	const dispatch = useAppDispatch()
 	const navigateTo = useNavigate()
 	const { pathname } = useLocation()
-
 	/**
 	 * 从 redux 读取最后一次打开的所有 tab, 并初始化展开的 tab
 	 */

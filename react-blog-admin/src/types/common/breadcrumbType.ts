@@ -2,7 +2,7 @@
  * definition breadcrumb type
  */
 interface BreadcrumbState {
-  breadcrumbMap?: Map<String, any>
+  breadcrumbMap?: Map<string, any[]>
   breadcrumbList?: any[]
 }
 

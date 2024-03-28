@@ -53,7 +53,7 @@ public class GlobalApiRequestAspect {
             }
 
             String token = Arrays.stream(cookies)
-                    .filter(cookie -> "_cl__t".equals(cookie.getName()))
+                    .filter(cookie -> "clt".equals(cookie.getName()))
                     .findFirst()
                     .map(Cookie::getValue)
                     .orElse("");

@@ -1,20 +1,24 @@
-import React, { Suspense, lazy } from 'react'
-import { RouteItemType } from '@/types/router/routeType'
-import { SvgIcon } from '@/assets/images'
+import { lazy } from "react"
+import LazyLoad from "@/routers/component/LazyLoad"
+import { UserOutlined } from "@ant-design/icons"
+import Router from "oh-router"
+import { OhRouterItemType } from "@/types/router/routeType"
 
-import LazyLoad from '@/routers/component/LazyLoad'
-import { UserOutlined } from '@ant-design/icons'
+const homeRouterConfig = new Router({
+  routes:[
+    {
+      meta: {
+        key:'/home',
+        title: '首页',
+        layout: false,
+        icon: <UserOutlined />
+      },
+      path: 'home',
+      element: LazyLoad(lazy(() => import('@/views/home')))
+    }
+  ]
+})
 
-const homeConfig: RouteItemType[] = [
-	{
-		meta: {
-			key: '/home',
-			icon: <UserOutlined />,
-			title: '首页'
-		},
-		path: '/home',
-		element: LazyLoad(lazy(() => import('@/views/home')))
-	}
-]
+const homeConfig: OhRouterItemType[] = homeRouterConfig.getRoutes()
 
-export default homeConfig
+export { homeRouterConfig, homeConfig}

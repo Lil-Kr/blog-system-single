@@ -1,9 +1,10 @@
 import React from 'react'
-import { useRoutes, Outlet } from 'react-router-dom'
+// import { useRoutes, Outlet } from 'react-router-dom'
+import {Outlet} from 'oh-router-react'
 import { Layout } from 'antd'
 
-const { Content } = Layout
 
+const { Content } = Layout
 const ContentLayout = () => {
 
 	return (

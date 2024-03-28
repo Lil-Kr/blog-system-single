@@ -9,6 +9,9 @@ import { PersistGate } from 'redux-persist/integration/react'
 import store, { persistor } from '@/redux'
 import { Provider } from 'react-redux'
 
+// antd 
+import { Spin } from 'antd'
+
 // 国际化
 import '@/locales'
 
@@ -18,7 +21,6 @@ import 'reset-css'
 // 引入全局样式
 import '@/assets/styles/global.scss'
 import '@/assets/iconfont/iconfont.scss'
-import { Spin } from 'antd'
 
 /**
  * 使用 ReactDOM.render 渲染, 解决 react18(ReactDOM.createRoot) 并发模式下带来的问题
@@ -41,20 +43,7 @@ import { Spin } from 'antd'
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
       <PersistGate loading={<Spin />} persistor={persistor}>
-        <HashRouter>
           <App />
-        </HashRouter>
       </PersistGate>
     </Provider>
-);
-
-// ReactDOM.createRoot( 
-//   document.getElementById('root')).render(
-//     <Provider store={store}>
-//       <PersistGate loading={<Spin />} persistor={persistor}>
-//         <HashRouter>
-//           <App />
-//         </HashRouter>
-//       </PersistGate>
-//     </Provider>`
-// )
+)

@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Button, Spin, ConfigProvider } from 'antd'
-import { onRouteBefore, routers, routersConfig } from '@/routers'
-import { useRoutes } from 'react-router-dom'
-
 import { RootState, useAppSelector, useAppDispatch } from './redux'
 import { getBrowserLang } from './utils/common'
 import zhCN from 'antd/lib/locale/zh_CN'
@@ -10,24 +7,27 @@ import enUS from 'antd/lib/locale/en_US'
 import i18n from 'i18next'
 import { setLanguage } from './redux/slice/global/globalSystem'
 import useTheme from './hooks/useTheme'
-import RouterWaiter from 'react-router-waiter'
+import { RouterView } from 'oh-router-react'
+import {rootConfig, rootRouterConfig} from '@/routers'
+import { getBreadCrumbItems } from "@/utils/common"
+import { setBreadcrumbMap } from './redux/slice'
 
 // console.log('--> import.meta.env:', import.meta.env)
 // console.log('--> import.meta.env.MODE:', import.meta.env.MODE)
 // console.log('--> import.meta.env.VITE_APP_BASE_API:', import.meta.env.VITE_APP_BASE_API)
 // console.log('--> process.env.NODE_ENV:', process.env.NODE_ENV)
-
 // console.log('--> loadEnv:', loadEnv)
 
-const Router = () => {
-	const elements = useRoutes(routers)
-	return elements
-}
 
 const App = () => {
 	const dispatch = useAppDispatch()
 	const { language, assemblySize } = useAppSelector((state: RootState) => state.globalSystem)
 	const [i18nLocale, setI18nLocale] = useState(zhCN)
+  
+  /**
+   * set breadcrumb into redux
+   */
+  const breadcrumbMap: Map<string, string[]> = getBreadCrumbItems(rootConfig)
 
 	/**
 	 * 全局使用主题
@@ -50,15 +50,14 @@ const App = () => {
 		i18n.changeLanguage(language || getBrowserLang())
 		dispatch(setLanguage(language || getBrowserLang()))
 		setAntdLanguage()
+    dispatch(setBreadcrumbMap({breadcrumbMap}))
 	}, [language])
 
 	return (
 		<>
 			<ConfigProvider locale={i18nLocale} componentSize={assemblySize}>
-        
-        {/* <RouterWaiter routes={routersConfig} onRouteBefore={onRouteBefore}>
-        </RouterWaiter> */}
-          <Router />
+          {/* <Router /> */}
+        <RouterView router={rootRouterConfig}/>
 			</ConfigProvider>
 		</>
 	)

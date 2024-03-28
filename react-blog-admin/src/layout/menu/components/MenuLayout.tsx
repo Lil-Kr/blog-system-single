@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Logo from './logo/Logo'
 import { Breadcrumb, Button, Layout, Menu, MenuProps, Spin } from 'antd'
-import { UserOutlined, VideoCameraOutlined, UploadOutlined } from '@ant-design/icons'
-import { useNavigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
+import {useNavigate, useLocation} from 'oh-router-react'
 import { MenuItemType, SubMenuType } from '@/types/common'
 import { getMenuOpenKeysUtil } from '@/utils/common'
-import { breadcrumbMap, menuItems, tabMap } from '@/routers'
+import { menuItems, tabMap } from '@/routers'
 import { useAppDispatch } from '@/redux'
-import { setBreadcrumbMap,setTab } from '@/redux/slice'
+import { setBreadcrumbMap, setTab } from '@/redux/slice'
 
 const MenuLayout = (props) => {
 	const { collapsed } = props
@@ -20,25 +19,12 @@ const MenuLayout = (props) => {
 	const [loading, setLoading] = useState(false)
 
 	const keys: string[] = getMenuOpenKeysUtil(pathname)
-	// console.log('--> keys:', keys)
 	useEffect(() => {
 		setSelectedKeys([pathname])
 		collapsed ? null : setOpenKeys(keys)
 	}, [pathname, collapsed])
 
 	// todo:后端加载菜单数据, 并渲染
-
-	// set breadcrumb value
-	dispatch(setBreadcrumbMap({ breadcrumbMap }))
-
-	/**
-	 * det default openkeys and active tab
-	 */
-	// const setDefaultOpenKeys = (params) => {
-	// 	const { keys, pathname } = params
-	// 	setOpenKeys(keys)
-	// 	dispatch(setTabActive({ tabActive: pathname }))
-	// }
 
 	/**
 	 * jump content page

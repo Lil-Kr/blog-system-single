@@ -1,18 +1,20 @@
 import React, { useMemo } from 'react'
-import { useLocation } from 'react-router-dom'
+import {useLocation} from 'oh-router-react'
 import { RootState, useAppSelector } from '@/redux'
 import { Breadcrumb } from 'antd'
 
 const BreadcrumbNav = () => {
 	const { pathname } = useLocation()
-	// get breadcrumbMap from redux
-	const { breadcrumbMap } = useAppSelector((state: RootState) => state.breadcrumb)
-	const breadcrumbs: string[] = breadcrumbMap.get(pathname) || []
+  
+  const breadcrumbMap: Map<string, string[]> = useAppSelector((state: RootState) => state.breadcrumb.breadcrumbMap)
 
+	/**
+   * get breadcrumbMap from redux
+   */
+	const breadcrumbs: string[] = breadcrumbMap.get(pathname) || []
 	return (
 		<>
 			<Breadcrumb>
-				<Breadcrumb.Item>{`首页`}</Breadcrumb.Item>
 				{breadcrumbs.map((item: string, index: number) => {
 					return <Breadcrumb.Item key={index}>{item}</Breadcrumb.Item>
 				})}

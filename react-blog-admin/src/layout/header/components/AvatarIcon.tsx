@@ -1,14 +1,17 @@
 import React from 'react'
 import { Avatar, Dropdown, MenuProps, message } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import {useNavigate, useLocation} from 'oh-router-react'
 import avatar from '@/assets/images/icons/avatar.png'
 import { Response } from '@/types/http/respType'
 import { useLogoutMutation } from '@/redux/apis/login/loginApi'
-import { USER_TOKEN_KEY } from '@/utils/constant/constant'
 import { clearAccessToken } from '@/redux/slice/sys/authSlice'
 
 // redux
 import { useAppDispatch } from '@/redux'
+
+// cookie
+import cookie from 'react-cookies'
+import { CLT } from '@/utils/constant/constant'
 
 const AvatarIcon = () => {
   const dispatch = useAppDispatch()
@@ -59,8 +62,8 @@ const AvatarIcon = () => {
         logoutFn({}).then((res: Response) => {
           console.log('--> 退出成功返回的参数 res: ', res)
           if (res.data.code == 200) {
-            dispatch(clearAccessToken())
-            navigateTo('/login', {replace:true})
+            dispatch(clearAccessToken({}))
+            navigateTo('/login')
           } else {
             message.warn(res.data.msg)
           }

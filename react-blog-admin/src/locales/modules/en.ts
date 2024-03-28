@@ -37,5 +37,8 @@ export default {
 		personalData: "Personal Data",
 		changePassword: "Change Password",
 		logout: "Logout"
-	}
+	},
+  router: {
+    
+  }
 };

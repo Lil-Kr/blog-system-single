@@ -1,42 +1,34 @@
-import React, { Suspense, lazy } from 'react'
-import { RouteItemType } from '@/types/router/routeType'
+import LazyLoad from "@/routers/component/LazyLoad"
+import { UserOutlined } from "@ant-design/icons"
+import Router from "oh-router"
+import { lazy } from "react"
+import {homeConfig} from './homeConfig'
+import { blogConfig } from './blogConfig'
+import { systemConfig } from './systemConfig'
+import { permissionConfig } from './permissionConfig'
+import { OhRouterItemType } from "@/types/router/routeType"
 
-import LazyLoad from '@/routers/component/LazyLoad'
-import homeConfig from './homeConfig'
-import blogConfig from './blogConfig'
-import bandConfig from './bandConfig'
-import userConfig from './userConfig'
-import systemConfig from './systemConfig'
-import permissionConfig from './permissionConfig'
-import testConfig from './testConfig'
-import { UserOutlined } from '@ant-design/icons'
+const busRouterConfig: any = new Router({
+  routes: [
+    {
+      meta: {
+        key: '/main',
+        title: '主框架',
+        layout: true,
+        icon: <UserOutlined />
+      },
+      path:'main',
+      element: LazyLoad(lazy(() => import('@/layout'))),
+      children: [
+        ...homeConfig,
+        ...blogConfig,
+        ...systemConfig,
+        ...permissionConfig
+      ]
+    }
+  ]
+})
 
-const busConfig: RouteItemType[] = [
-	{
-		meta: {
-			key: '/main',
-			title: '主框架页面',
-			icon: <UserOutlined />
-		},
-		layout: LazyLoad(lazy(() => import('@/layout'))),
-		children: [
-			...homeConfig,
-			...blogConfig,
-			...bandConfig,
-			...userConfig,
-			...systemConfig,
-			...permissionConfig
-		]
-	}
-]
+const busConfig: OhRouterItemType[] = busRouterConfig.getRoutes()
 
-export default busConfig
-export {
-	homeConfig,
-	blogConfig,
-	bandConfig,
-	userConfig,
-	systemConfig,
-	permissionConfig,
-	testConfig
-}
+export {busRouterConfig, busConfig}

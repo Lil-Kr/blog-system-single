@@ -19,9 +19,6 @@ const axiosInstance: AxiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
 	(config: AxiosRequestConfig) => {
     const token = store.getState().auth.token
-    // if (token != '') {
-    //   store.dispatch(setAccessToken(token))
-    // }
 		console.log('--> request intercept token', token)
 
 		console.log('--> request intercept config', config)
@@ -42,10 +39,6 @@ axiosInstance.interceptors.response.use(
 
 		const { code, msg, token, userInfo } = data
 		console.log('--> response interceptors token:', token)
-    
-		if (token) {
-			store.dispatch(setAccessToken(token))
-		}
 
 		if (status === 200) {
 			if (code !== 0) {
