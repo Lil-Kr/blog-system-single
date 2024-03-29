@@ -18,7 +18,7 @@ const systemRouterConfig = new Router({
         {
           meta:{key:'system-index'},
           index: true,
-          element: LazyLoad(lazy(() => import('@/views/permission/Button1')))
+          element: LazyLoad(lazy(() => import('@/views/system')))
         },
         {
           meta: {
@@ -39,6 +39,26 @@ const systemRouterConfig = new Router({
           },
           path: 'params',
           element: LazyLoad(lazy(() => import('@/views/system/Params')))
+        },
+        {
+          meta: {
+            key: '/dict',
+            title: '字典管理',
+            layout: false,
+            icon: <UserOutlined />
+          },
+          path: 'dict',
+          element: LazyLoad(lazy(() => import('@/views/system/Dict')))
+        },
+        {
+          meta: {
+            key: '/about',
+            title: '关于我',
+            layout: false,
+            icon: <UserOutlined />
+          },
+          path: 'about',
+          element: LazyLoad(lazy(() => import('@/views/system/About')))
         }
       ]
     }

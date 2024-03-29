@@ -1,6 +1,6 @@
 import LazyLoad from "@/routers/component/LazyLoad"
 import { OhRouterItemType } from "@/types/router/routeType"
-import { UserOutlined, VideoCameraOutlined } from "@ant-design/icons"
+import { UserOutlined, VideoCameraOutlined,GoldOutlined } from "@ant-design/icons"
 import Router from "oh-router"
 import { lazy } from "react"
 
@@ -19,6 +19,26 @@ const permissionRouterConfig = new Router({
           meta:{key:'permission-index'},
           index: true,
           element: LazyLoad(lazy(() => import('@/views/permission/Menu')))
+        },
+        {
+          meta: {
+            key: '/admin',
+            title: '管理员管理',
+            layout: false,
+            icon: <VideoCameraOutlined />
+          },
+          path: 'admin',
+          element: LazyLoad(lazy(() => import('@/views/permission/Admin')))
+        },
+        {
+          meta: {
+            key: '/org',
+            title: '组织架构',
+            layout: false,
+            icon: <GoldOutlined />
+          },
+          path: 'org',
+          element: LazyLoad(lazy(() => import('@/views/permission/Org')))
         },
         {
           meta: {

@@ -1,6 +1,6 @@
 import LazyLoad from "@/routers/component/LazyLoad"
 import { OhRouterItemType } from "@/types/router/routeType"
-import { UserOutlined } from "@ant-design/icons"
+import { BookOutlined, SendOutlined, SnippetsOutlined,CopyFilled,HighlightFilled,CheckOutlined } from "@ant-design/icons"
 import Router from "oh-router"
 import { lazy } from "react"
 
@@ -11,7 +11,7 @@ const blogRouterConfig = new Router({
         key:'/blog',
         title: '博客管理',
         layout: false,
-        icon: <UserOutlined />
+        icon: <BookOutlined />
       },
       path:'blog',
       children: [
@@ -25,7 +25,7 @@ const blogRouterConfig = new Router({
             key: '/index',
             title: '发布博客',
             layout: false,
-            icon: <UserOutlined />
+            icon: <SendOutlined />
           },
           path: 'index',
           element: LazyLoad(lazy(() => import('@/views/blog')))
@@ -35,7 +35,7 @@ const blogRouterConfig = new Router({
             key: '/type',
             title: '分类管理',
             layout: false,
-            icon: <UserOutlined />
+            icon: <SnippetsOutlined />
           },
           path: 'type',
           element: LazyLoad(lazy(() => import('@/views/blog/BlogType')))
@@ -45,7 +45,7 @@ const blogRouterConfig = new Router({
             key: '/topics',
             title: '专题管理',
             layout: false,
-            icon: <UserOutlined />
+            icon: <CopyFilled />
           },
           path: 'topics',
           element: LazyLoad(lazy(() => import('@/views/blog/BlogTopics')))
@@ -55,7 +55,7 @@ const blogRouterConfig = new Router({
             key: '/label',
             title: '标签管理',
             layout: false,
-            icon: <UserOutlined />
+            icon: <HighlightFilled />
           },
           path: 'label',
           element: LazyLoad(lazy(() => import('@/views/blog/BlogLable')))
@@ -65,7 +65,7 @@ const blogRouterConfig = new Router({
             key: '/recommend',
             title: '推荐管理',
             layout: false,
-            icon: <UserOutlined />
+            icon: <CheckOutlined />
           },
           path: 'recommend',
           element: LazyLoad(lazy(() => import('@/views/blog/BlogRecommend')))

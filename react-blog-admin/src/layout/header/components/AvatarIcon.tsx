@@ -1,6 +1,6 @@
 import React from 'react'
 import { Avatar, Dropdown, MenuProps, message } from 'antd'
-import {useNavigate, useLocation} from 'oh-router-react'
+import {useNavigate} from 'oh-router-react'
 import avatar from '@/assets/images/icons/avatar.png'
 import { Response } from '@/types/http/respType'
 import { useLogoutMutation } from '@/redux/apis/login/loginApi'
@@ -8,10 +8,6 @@ import { clearAccessToken } from '@/redux/slice/sys/authSlice'
 
 // redux
 import { useAppDispatch } from '@/redux'
-
-// cookie
-import cookie from 'react-cookies'
-import { CLT } from '@/utils/constant/constant'
 
 const AvatarIcon = () => {
   const dispatch = useAppDispatch()
@@ -34,7 +30,7 @@ const AvatarIcon = () => {
 		},
 		{
 			key: '2',
-			label: <span className="dropdown-item">个人信息</span>
+			label: <span className="dropdown-item">关于我</span>
 		},
 		{
 			key: '3',
@@ -52,7 +48,7 @@ const AvatarIcon = () => {
       case '1':
         message.info(key)
         break;
-      case '2':
+      case '2':// 关于我
         message.info(key)
         break;
       case '3':

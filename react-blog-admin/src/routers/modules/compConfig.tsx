@@ -4,47 +4,47 @@ import { SlidersOutlined, DotChartOutlined,AreaChartOutlined } from "@ant-design
 import Router from "oh-router"
 import { lazy } from "react"
 
-const logRouterConfig = new Router({
+const compsRouterConfig = new Router({
   routes:[
     {
       meta: {
-        key:'/logs',
-        title: '日志管理',
+        key:'/comps',
+        title: '组件管理',
         layout: false,
         icon: <DotChartOutlined />
       },
-      path:'logs',
+      path:'comps',
       children: [
         {
-          meta:{key:'logs-index', title:'logs-index'},
+          meta:{key:'comps-index', title:'comps-index'},
           index: true,
-          element: LazyLoad(lazy(() => import('@/views/logs/SystemLogs')))
+          element: LazyLoad(lazy(() => import('@/views/comps/md-editor/MdEditor1')))
         },
         {
           meta: {
             key: '/index',
-            title: '系统日志',
+            title: 'markdwon-1',
             layout: false,
             icon: <AreaChartOutlined  />
           },
           path: 'index',
-          element: LazyLoad(lazy(() => import('@/views/logs/SystemLogs')))
+          element: LazyLoad(lazy(() => import('@/views/comps/md-editor/MdEditor1')))
         },
         {
           meta: {
-            key: '/operat',
-            title: '操作日志',
+            key: '/md-editor-2',
+            title: 'markdwon-2',
             layout: false,
             icon: <SlidersOutlined />
           },
-          path: 'operat',
-          element: LazyLoad(lazy(() => import('@/views/logs/OperatLogs')))
+          path: 'md-editor-2',
+          element: LazyLoad(lazy(() => import('@/views/comps/md-editor/MdEditor2')))
         }
       ]
     }
   ]
 })
 
-const logConfig: OhRouterItemType[] = logRouterConfig.getRoutes()
+const compsConfig: OhRouterItemType[] = compsRouterConfig.getRoutes()
 
-export { logRouterConfig, logConfig}
+export { compsRouterConfig, compsConfig}

@@ -1,6 +1,6 @@
 import LazyLoad from "@/routers/component/LazyLoad"
 import { OhRouterItemType } from "@/types/router/routeType"
-import { UserOutlined } from "@ant-design/icons"
+import { UserOutlined, UserSwitchOutlined, UsergroupAddOutlined } from "@ant-design/icons"
 import Router from "oh-router"
 import { lazy } from "react"
 
@@ -25,7 +25,7 @@ const userRouterConfig = new Router({
             key: '/index',
             title: '用户管理',
             layout: false,
-            icon: <UserOutlined />
+            icon: <UsergroupAddOutlined />
           },
           path: 'index',
           element: LazyLoad(lazy(() => import('@/views/user/User')))
@@ -35,7 +35,7 @@ const userRouterConfig = new Router({
             key: '/touristische',
             title: '游客管理',
             layout: false,
-            icon: <UserOutlined />
+            icon: <UserSwitchOutlined />
           },
           path: 'touristische',
           element: LazyLoad(lazy(() => import('@/views/user/Touristische')))

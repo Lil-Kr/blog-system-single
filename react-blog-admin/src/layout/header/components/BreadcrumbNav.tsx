@@ -16,7 +16,7 @@ const BreadcrumbNav = () => {
 		<>
 			<Breadcrumb>
 				{breadcrumbs.map((item: string, index: number) => {
-					return <Breadcrumb.Item key={index}>{item}</Breadcrumb.Item>
+					return <Breadcrumb.Item href="" key={index}>{item}</Breadcrumb.Item>
 				})}
 			</Breadcrumb>
 		</>
