@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
-// import { useLocation, useNavigate } from 'react-router-dom'
 import { useLocation, useNavigate } from 'oh-router-react'
-import { rootRouterConfig } from '@/routers'
 import { useTranslation } from 'react-i18next'
 import md5 from 'js-md5'
 import { Login } from '@/types/sys'
