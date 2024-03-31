@@ -1,6 +1,6 @@
 package com.cy.single.blog.pojo.dto.req;
 
-import com.cy.single.blog.pojo.entity.SysUser;
+import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.user.UserRegisterReq;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;

@@ -5,7 +5,7 @@ import com.cy.single.blog.aspect.exceptions.BusinessException;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysUserMapper;
 import com.cy.single.blog.enums.ReturnCodeEnum;
-import com.cy.single.blog.pojo.entity.SysUser;
+import com.cy.single.blog.pojo.entity.sys.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;

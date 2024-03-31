@@ -9,6 +9,7 @@ import rootPersistReducer from '@/redux/persist'
 
 // API config
 import loginApi from '@/redux/apis/login/loginApi'
+import blogLabelApi from '@/redux/apis/blog/blogLabelApi'
 
 
 const store = configureStore({
@@ -18,7 +19,7 @@ const store = configureStore({
    * @param curryGetDefaultMiddleware
    * @returns 
    */
-  middleware: curryGetDefaultMiddleware => curryGetDefaultMiddleware({ serializableCheck: false }).concat(loginApi.middleware),
+  middleware: curryGetDefaultMiddleware => curryGetDefaultMiddleware({ serializableCheck: false }).concat(loginApi.middleware).concat(blogLabelApi.middleware),
   devTools: process.env.NODE_ENV !== 'production'
   // devTools: true
 })

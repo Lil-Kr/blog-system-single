@@ -14,7 +14,7 @@ const { Sider } = Layout
 
 const MainLayout = () => {
 	const [collapsed, setCollapsed] = useState(false)
-  console.log('--> 主框架页面 首先加载')
+  // console.log('--> 主框架页面 首先加载')
 	return (
 		<div className={styles.container}>
 			<Sider trigger={null} collapsible collapsed={collapsed}>
@@ -22,7 +22,7 @@ const MainLayout = () => {
 			</Sider>
 			<Layout className="site-layout">
 				<HeaderLayout collapsed={collapsed} setCollapsed={setCollapsed} />
-				<TabsLayout></TabsLayout>
+				<TabsLayout/>
 				<ContentLayout />
 				<FooterLayout />
 			</Layout>

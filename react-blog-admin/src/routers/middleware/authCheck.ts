@@ -9,7 +9,7 @@ class LoginCheckMiddleware extends Middleware {
     // const isLogin = store.getState().auth.isLogin
     const token = cookie.load(CLT)
     if (!token || token == '' ) {
-      console.log('--> 允许跳转登陆: ', {token})
+      // console.log('--> 允许跳转登陆: ', {token})
       rootRouterConfig.navigate('/login')
     }else {
       await next()

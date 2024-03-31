@@ -1,6 +1,6 @@
 package com.cy.single.blog.common.holder;
 
-import com.cy.single.blog.pojo.entity.SysUser;
+import com.cy.single.blog.pojo.entity.sys.SysUser;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;

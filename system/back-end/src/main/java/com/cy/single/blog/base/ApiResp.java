@@ -101,6 +101,14 @@ public final class ApiResp<T> {
 
     /**
      * 失败
+     * @return
+     */
+    public static <T> ApiResp<T> failure() {
+        return create(SYSTEM_ERROR.getCode(), SYSTEM_ERROR.getMessage(),null);
+    }
+
+    /**
+     * 失败
      * @param msg
      * @return
      */
@@ -117,6 +125,12 @@ public final class ApiResp<T> {
         return create(code, msg,null);
     }
 
+    /**
+     *
+     * @param returnCodeEnum
+     * @return
+     * @param <T>
+     */
     public static <T> ApiResp<T> failure(ReturnCodeEnum returnCodeEnum) {
         return create(returnCodeEnum.getCode(), returnCodeEnum.getMessage(),null);
     }

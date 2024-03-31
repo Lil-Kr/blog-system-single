@@ -2,7 +2,7 @@ package com.cy.single.blog.api;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.cy.single.blog.common.holder.RequestHolder;
-import com.cy.single.blog.pojo.entity.SysUser;
+import com.cy.single.blog.pojo.entity.sys.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

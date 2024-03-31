@@ -1,6 +1,8 @@
 package com.cy.single.blog.demo;
 
 import cn.hutool.core.util.IdUtil;
+import com.cy.single.blog.utils.keyUtil.IdWorker;
+import com.cy.single.blog.utils.keyUtil.RunCodeUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -52,9 +54,16 @@ public class Test1 {
 
     @Test
     public void test3() {
-        String uuid = IdUtil.randomUUID();
-        System.out.println(uuid);
+        String uuid1 = IdUtil.randomUUID();
+        System.out.println(uuid1);
 
+        String uuid2 = IdUtil.randomUUID();
+        System.out.println(uuid2);
+
+        Long id = IdWorker.getSnowFlakeId();
+        System.out.println(id);
+
+        String fourPipelineNumbers = RunCodeUtil.getFourPipelineNumbers();
 
     }
 

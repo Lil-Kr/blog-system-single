@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'oh-router-react'
 import { useTranslation } from 'react-i18next'
 import md5 from 'js-md5'
@@ -48,7 +48,6 @@ const LoginForm = () => {
 			console.log('--> 登陆成功返回的参数 code: ', res.data.code)
 			console.log('--> 登陆成功返回的参数 token: ', res.data.data)
       const {msg, code, data:token} = res.data
-      console.log('--> 退出: ', token)
 			// todo: 修改 local storge 为 home
       if (code == 200 && token) {
         /**
@@ -87,7 +86,7 @@ const LoginForm = () => {
 						autoComplete="off"
 					>
 						<Form.Item
-							name="account"
+							name={'account'}
 							rules={[{ required: true, message: t('login.username_message') }]}
 						>
 							<Input

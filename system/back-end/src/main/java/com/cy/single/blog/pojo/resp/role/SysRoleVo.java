@@ -1,6 +1,6 @@
 package com.cy.single.blog.pojo.resp.role;
 
-import com.cy.single.blog.pojo.entity.SysRole;
+import com.cy.single.blog.pojo.entity.sys.SysRole;
 import lombok.Data;
 import lombok.ToString;
 

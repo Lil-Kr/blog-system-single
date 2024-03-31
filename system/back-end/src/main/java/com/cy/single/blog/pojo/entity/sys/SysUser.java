@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.entity;
+package com.cy.single.blog.pojo.entity.sys;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

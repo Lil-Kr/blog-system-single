@@ -60,7 +60,7 @@ public class DateUtil {
      * @param date
      * @return
      */
-    public static LocalDateTime strToLcoalDateTime(String date){
+    public static LocalDateTime strToLocalDateTime(String date){
         return LocalDateTime.parse(date,formatterForTime);
     }
 

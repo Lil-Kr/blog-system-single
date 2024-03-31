@@ -6,9 +6,11 @@ import { persistReducer, createTransform } from "redux-persist"
 import storage from 'redux-persist/lib/storage'
 import { breadcrumbReducer } from "@/redux/slice/global/breadcrumb"
 import { tabReducer } from "@/redux/slice/global/tabs"
-import { globalSystemReducer, authReducer } from "@/redux/slice"
+import { globalSystemReducer, authReducer, blogLabelReducer } from "@/redux/slice"
+
 // API
 import loginApi from '@/redux/apis/login/loginApi'
+import blogLabelApi from '@/redux/apis/blog/blogLabelApi'
 
 /**
  * transform
@@ -64,7 +66,9 @@ const rootReducer = combineReducers({
   tab: tabReducer,
   globalSystem: globalSystemReducer,
   auth: authReducer,
-  [loginApi.reducerPath]: loginApi.reducer
+  blogLabel: blogLabelReducer,
+  [loginApi.reducerPath]: loginApi.reducer,
+  [blogLabelApi.reducerPath]: blogLabelApi.reducer,
 })
 
 const rootPersistReducer = persistReducer(rootPersistConfig, rootReducer)

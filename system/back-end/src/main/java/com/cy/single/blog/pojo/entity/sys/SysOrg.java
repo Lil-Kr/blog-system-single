@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.entity;
+package com.cy.single.blog.pojo.entity.sys;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -12,39 +12,59 @@ import lombok.*;
  * </p>
  *
  * @author Lil-Kr
- * @since 2020-11-26
+ * @since 2020-11-24
  */
 @Data
-@ToString
+@EqualsAndHashCode(callSuper = false)
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@TableName("sys_role_acl")
-public class SysRoleAcl extends Model<SysRoleAcl> {
+@TableName("sys_org")
+public class SysOrg extends Model<SysOrg> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 自增主键
      */
-    @TableId(value = "id", type = IdType.AUTO)
+      @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
-     * 角色-权限id唯一主键
+     * 唯一主键
      */
     private Long surrogateId;
 
     /**
-     * 角色id
+     * 组织编号
      */
-    private Long roleId;
+    private String number;
 
     /**
-     * 权限id
+     * 组织名称
      */
-    private Long aclId;
+    private String name;
+
+    /**
+     * 父id
+     */
+    private Long parentId;
+
+    /**
+     * 组织层级, 0. / 0.1, 0.2
+     */
+    private String level;
+
+    /**
+     * 排序, 组织咋当前层级目录下的顺序
+     */
+    private Integer seq;
+
+    /**
+     * 备注
+     */
+    private String remark;
 
     /**
      * 操作人

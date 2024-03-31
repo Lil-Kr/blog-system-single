@@ -32,3 +32,10 @@ export {setAccessToken, clearAccessToken, authReducer}
  */
 import { setLoginStatue, loginReducer } from '@/redux/slice/sys/loginSlice'
 export { setLoginStatue, loginReducer } 
+
+
+/**
+ * blogSlice
+ */
+import { addLabel, editLabel, deleteLabel, setTableLoading, blogLabelReducer } from '@/redux/slice/blog/labelSlice'
+export { addLabel, editLabel, deleteLabel, setTableLoading, blogLabelReducer } 

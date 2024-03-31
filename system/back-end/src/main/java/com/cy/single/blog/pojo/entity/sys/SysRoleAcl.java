@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.entity;
+package com.cy.single.blog.pojo.entity.sys;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -15,13 +15,13 @@ import lombok.*;
  * @since 2020-11-26
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("sys_rol")
-public class SysRole extends Model<SysRole> {
+@EqualsAndHashCode(callSuper = false)
+@TableName("sys_role_acl")
+public class SysRoleAcl extends Model<SysRoleAcl> {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,29 +32,19 @@ public class SysRole extends Model<SysRole> {
     private Long id;
 
     /**
-     * 角色id唯一主键
+     * 角色-权限id唯一主键
      */
     private Long surrogateId;
 
     /**
-     * 角色名称
+     * 角色id
      */
-    private String name;
+    private Long roleId;
 
     /**
-     * 角色类型, 1超级管理员, 2管理员, 3.普通角色
+     * 权限id
      */
-    private Integer type;
-
-    /**
-     * 状态, 0正常，1删除
-     */
-    private Integer deleted;
-
-    /**
-     * 备注
-     */
-    private String remark;
+    private Long aclId;
 
     /**
      * 操作人
@@ -75,6 +65,5 @@ public class SysRole extends Model<SysRole> {
      * 更改时间
      */
     private String updateTime;
-
 
 }

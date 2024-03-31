@@ -1,7 +1,7 @@
 package com.cy.single.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cy.single.blog.pojo.entity.SysUser;
+import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
 import org.apache.ibatis.annotations.Param;
 

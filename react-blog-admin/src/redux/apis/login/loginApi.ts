@@ -18,7 +18,7 @@ const loginApi = createApi({
   reducerPath: 'loginApi',
   baseQuery: axiosBaseQuery({
     baseUrl: VITE_APP_PROXY_API,
-    url: '/sys/admin'
+    url: '/sys/user'
   }),
   endpoints(build) {
     return {

@@ -1,7 +1,7 @@
 package com.cy.single.blog.api.sys;
 
 import com.cy.single.blog.base.ApiResp;
-import com.cy.single.blog.pojo.entity.SysUser;
+import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.user.UserSaveReq;
 import com.cy.single.blog.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;

@@ -90,7 +90,6 @@ const getBreadCrumbItems = (config: OhRouterItemType[]): Map<string, string[]> =
         let secondPath = key + meta.key
         let secondCrumb = title + '.' + meta.title
         breadCrumbItemMap.set(secondPath, secondCrumb)
-        console.log('--> oh-router 面包屑处理类:', {secondPath, secondCrumb})
         continue
       }else {
         let secondPath = key + meta.key

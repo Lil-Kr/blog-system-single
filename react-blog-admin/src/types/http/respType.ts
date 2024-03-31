@@ -4,7 +4,17 @@
 * @Date: 2022-10-27
 * @LastEditTime: 2022-10-27
 */
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios"
+
+export interface ApiResp<T> {
+  code: number
+  msg: string
+  data: T[] | T
+}
+
+export interface BaseResp {
+  
+}
 
 export interface BaseRespDataType {
   code: number | string,
@@ -14,13 +24,14 @@ export interface BaseRespDataType {
 }
 
 export interface Response {
-  code: number | string;
-  data: any;
-  msg: string;
+  code: number | string
+  msg: string
+  data: any | any[]
 }
 
 export interface ResponseType extends AxiosResponse {
   code: number | string
-  data: any
   msg: string
+  data: any
 }
+

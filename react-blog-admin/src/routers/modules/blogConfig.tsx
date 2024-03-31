@@ -58,7 +58,7 @@ const blogRouterConfig = new Router({
             icon: <HighlightFilled />
           },
           path: 'label',
-          element: LazyLoad(lazy(() => import('@/views/blog/BlogLable')))
+          element: LazyLoad(lazy(() => import('@/views/blog/lable/BlogLable')))
         },
         {
           meta: {

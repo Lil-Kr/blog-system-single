@@ -7,7 +7,7 @@ import { userConfig} from './userConfig'
 import { logConfig} from './logConfig'
 import { blogConfig } from './blogConfig'
 import { pictureConfig } from './pictureConfig'
-import { compsConfig } from './compConfig'
+import { compsConfig } from './compsConfig'
 import { systemConfig } from './systemConfig'
 import { permissionConfig } from './permissionConfig'
 import { OhRouterItemType } from "@/types/router/routeType"

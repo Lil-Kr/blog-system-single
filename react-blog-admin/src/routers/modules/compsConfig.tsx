@@ -23,7 +23,7 @@ const compsRouterConfig = new Router({
         {
           meta: {
             key: '/index',
-            title: 'markdwon-1',
+            title: 'md-editor-rt',
             layout: false,
             icon: <AreaChartOutlined  />
           },
@@ -33,7 +33,7 @@ const compsRouterConfig = new Router({
         {
           meta: {
             key: '/md-editor-2',
-            title: 'markdwon-2',
+            title: 'react-md-editor',
             layout: false,
             icon: <SlidersOutlined />
           },

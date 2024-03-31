@@ -20,8 +20,8 @@ import javax.validation.Valid;
  */
 @Slf4j
 @RestController
-@RequestMapping("/sys/admin")
-public class AdminLoginApi {
+@RequestMapping("/sys/user")
+public class UserLoginApi {
 
     @Autowired
     private SysUserService userService;

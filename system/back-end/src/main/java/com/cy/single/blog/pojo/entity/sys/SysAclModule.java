@@ -1,9 +1,10 @@
-package com.cy.single.blog.pojo.entity;
+package com.cy.single.blog.pojo.entity.sys;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 /**
@@ -15,13 +16,14 @@ import lombok.*;
  * @since 2020-11-26
  */
 @Data
-@EqualsAndHashCode(of = {"surrogateId"})
+@EqualsAndHashCode(callSuper = false)
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@TableName("sys_acl")
-public class SysAcl extends Model<SysAcl> {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@TableName("sys_acl_module")
+public class SysAclModule extends Model<SysAclModule> {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,44 +34,39 @@ public class SysAcl extends Model<SysAcl> {
     private Long id;
 
     /**
-     * 权限id唯一主键
+     * 权限模块id,唯一主键
      */
     private Long surrogateId;
 
     /**
-     * 权限编码
+     * 权限模块number
      */
     private String number;
 
     /**
-     * 权限名
+     * 权限模块名称
      */
     private String name;
 
     /**
-     * 权限模块id
+     * 父id
      */
-    private Long aclModuleId;
+    private Long parentId;
 
     /**
-     * 请求的url
+     * 权限模块层级
      */
-    private String url;
+    private String level;
 
     /**
-     * 1:菜单权限, 2按钮, 3其他
-     */
-    private Integer type;
-
-    /**
-     * 状态
-     */
-    private Integer status;
-
-    /**
-     * 排序
+     * 顺序
      */
     private Integer seq;
+
+    /**
+     * 0正常, 1冻结
+     */
+    private Integer status;
 
     /**
      * 备注
@@ -95,5 +92,6 @@ public class SysAcl extends Model<SysAcl> {
      * 更改时间
      */
     private String updateTime;
+
 
 }

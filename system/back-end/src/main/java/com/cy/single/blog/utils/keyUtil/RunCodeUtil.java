@@ -28,7 +28,7 @@ public class RunCodeUtil {
     /**
      * @return 获取年月日+三位流水号（根据当天生成的单据数量，生成流水号如：20190522001,20190601001）
      */
-    public String getFourPipelineNumbers() {
+    public static String getFourPipelineNumbers() {
         // 所要获取的流水编码code
         StringBuffer code = new StringBuffer();
         // 设定所需的时间格式

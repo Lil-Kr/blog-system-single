@@ -1,7 +1,7 @@
 package com.cy.single.blog.service;
 
 import com.cy.single.blog.base.ApiResp;
-import com.cy.single.blog.pojo.entity.SysUser;
+import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
 import com.cy.single.blog.pojo.req.user.UserRegisterReq;
 

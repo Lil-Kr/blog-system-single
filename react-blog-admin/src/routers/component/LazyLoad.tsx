@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react'
+import React, { Suspense } from 'react'
 import { Spin } from 'antd'
 import store, { RootState, useAppDispatch, useAppSelector } from '@/redux'
 

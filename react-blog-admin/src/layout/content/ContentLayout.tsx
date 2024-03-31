@@ -5,15 +5,17 @@ import { Layout } from 'antd'
 
 
 const { Content } = Layout
-const ContentLayout = () => {
 
+const ContentLayout = () => {
 	return (
 		<>
 			<Content
 				className="site-layout-background content-layout"
 				style={{
-					margin: '10px 15px 10px',
-					minHeight: '280'
+          padding: 15,
+          margin: 0,
+          maxHeight:'calc(100vh - 160px)',
+          overflow: 'auto'
 				}}
 			>
 				<Outlet />

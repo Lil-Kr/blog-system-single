@@ -19,9 +19,8 @@ const axiosInstance: AxiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
 	(config: AxiosRequestConfig) => {
     const token = store.getState().auth.token
-		console.log('--> request intercept token', token)
-
-		console.log('--> request intercept config', config)
+		// console.log('--> request intercept token', token)
+		// console.log('--> request intercept config', config)
 		return config
 	},
 	(error: any) => {
@@ -41,9 +40,9 @@ axiosInstance.interceptors.response.use(
 		console.log('--> response interceptors token:', token)
 
 		if (status === 200) {
-			if (code !== 0) {
-				message.success(msg)
-			}
+			// if (code !== 0) {
+			// 	message.success(msg)
+			// }
 			return response
 		} else {
 			message.error('网络连接异常,请稍后再试!')
