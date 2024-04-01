@@ -9,5 +9,5 @@ import BlogType from './BlogType'
 export {BlogType}
 
 
-import BlogLable from './lable/BlogLable'
+import BlogLable from './lable/BlogLabel'
 export {BlogLable}

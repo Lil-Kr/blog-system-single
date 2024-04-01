@@ -12,11 +12,7 @@ import { Button, Form, Input, InputNumber, Modal, Space, Table, message } from '
 const { Column, ColumnGroup } = Table
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons'
 
-// type
-import { Response } from '@/types/http/respType'
-
 const data = []
-
 
 const BlogLable = () => {
   const dispatch = useAppDispatch()
@@ -170,7 +166,7 @@ const BlogLable = () => {
 
 
   return (
-    <div>
+    <div className='blog-label-wrapper'>
         <Space direction='horizontal'>
           <Button size={btnSize} type="primary" icon={<PlusOutlined />} onClick={createLabelFn}>创建标签</Button>
           <Button size={btnSize} type="primary" icon={<DeleteOutlined />} danger onClick={deleteBatch}>批量删除</Button> 
