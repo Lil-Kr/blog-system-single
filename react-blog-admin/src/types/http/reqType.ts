@@ -1,8 +1,8 @@
 
 export interface BaseReqType {
   deleted?: number
-  creatorId?: number
-  modifierId?: number
+  creatorId?: string
+  modifierId?: string
   createTime?: string
   updateTime?: string
 }

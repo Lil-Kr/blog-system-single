@@ -1,6 +1,6 @@
 package com.cy.single.blog.pojo.req.blog;
 
-import com.cy.single.blog.base.BaseDO;
+import com.cy.single.blog.base.BaseVO;
 import lombok.Data;
 import lombok.ToString;
 
@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @ToString
 @Data
-public class BlogLabelListReq extends BaseDO {
+public class BlogLabelListReq extends BaseVO {
 
     private Long id;
 

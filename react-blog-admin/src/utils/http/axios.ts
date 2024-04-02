@@ -18,7 +18,7 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
 	(config: AxiosRequestConfig) => {
-    const token = store.getState().auth.token
+    // const token = store.getState().auth.token
 		// console.log('--> request intercept token', token)
 		// console.log('--> request intercept config', config)
 		return config

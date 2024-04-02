@@ -1,5 +1,7 @@
 package com.cy.single.blog.base;
 
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,7 +10,8 @@ import java.util.Date;
  * @Date: 2024/3/31
  * @Description:
  */
-public class BaseDO implements Serializable {
+@ToString
+public class BaseVO implements Serializable {
 
     private static final long serialVersionUID = -4120652138040137224L;
 
@@ -33,6 +36,7 @@ public class BaseDO implements Serializable {
      * 更改时间
      */
     private Date updateTime;
+
 
     public Integer getDeleted() {
         return deleted;

@@ -24,8 +24,10 @@ public class BlogDTO {
     public static BlogLabel convertSaveLabelReq(BlogLabelReq baseReq) {
         BlogLabel req = BlogLabel.builder().build();
         BeanUtils.copyProperties(baseReq, req);
-        req.setSurrogateId(IdWorker.getSnowFlakeId());
+
+        req.setSurrogateId(String.valueOf(IdWorker.getSnowFlakeId()));
         Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
+
         req.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
         req.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
         req.setCreateTime(nowDateTime);
@@ -61,15 +63,12 @@ public class BlogDTO {
      * @param blogLabels
      * @return
      */
-    public static List<BlogLabelVO> convertLabelsToIdStr(List<BlogLabel> blogLabels) {
+    public static List<BlogLabelVO> convertLabelsToVO(List<BlogLabel> blogLabels) {
         return blogLabels.stream()
                 .map(blogLabel -> {
-//                    BlogLabelVO.builder().surrogateIdStr(String.valueOf(blogLabel.getSurrogateId())
-                    BlogLabelVO res = new BlogLabelVO();
-                    BeanUtils.copyProperties(blogLabel, res);
-                    res.setSurrogateIdStr(String.valueOf(blogLabel.getSurrogateId()));
-
-                    return res;
+                    BlogLabelVO req = new BlogLabelVO();
+                    BeanUtils.copyProperties(blogLabel, req);
+                    return req;
                 })
                 .collect(Collectors.toList());
     }

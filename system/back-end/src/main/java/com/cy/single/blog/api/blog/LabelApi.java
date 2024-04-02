@@ -9,6 +9,7 @@ import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
 import com.cy.single.blog.service.BlogLabelService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,7 +46,7 @@ public class LabelApi {
     @RecordLogger
     @CheckAuth
     @PostMapping("/save")
-    public ApiResp<String> save(@RequestBody @Valid BlogLabelReq req) {
+    public ApiResp<String> save(@RequestBody @Validated({BlogLabelReq.GroupTypeSave.class}) BlogLabelReq req) {
         return blogLabelService.save(req);
     }
 
@@ -53,15 +54,22 @@ public class LabelApi {
     @RecordLogger
     @CheckAuth
     @PostMapping("/edit")
-    public ApiResp<String> edit(@RequestBody @Valid BlogLabelReq req) {
+    public ApiResp<String> edit(@RequestBody @Validated({BlogLabelReq.GroupTypeSave.class}) BlogLabelReq req) {
         return blogLabelService.edit(req);
     }
 
     @RecordLogger
     @CheckAuth
-    @DeleteMapping("/delete")
-    public ApiResp<String> delete(@RequestBody @Valid BlogLabelReq req) {
+    @PostMapping("/delete")
+    public ApiResp<String> delete(@RequestBody @Validated({BlogLabelReq.GroupTypeDel.class}) BlogLabelReq req) {
         return blogLabelService.delete(req);
+    }
+
+    @RecordLogger
+    @CheckAuth
+    @PostMapping("/deleteBatch")
+    public ApiResp<String> deleteBatch(@RequestBody @Validated({BlogLabelReq.GroupTypeDel.class}) BlogLabelReq req) {
+        return blogLabelService.deleteBatch(req);
     }
 
 }

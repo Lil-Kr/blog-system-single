@@ -14,10 +14,7 @@
     </sql>
 
 
-    <insert id="save">
-    </insert>
-
-    <delete id="editById">
+    <delete id="editBySurrogateId">
         update <include refid="Table_Name" />
         <set>
             <if test="param.number != null and param.number != ''">
@@ -32,8 +29,8 @@
             <if test="param.modifierId != null and param.modifierId != ''">
                 modifier_id = #{param.modifierId},
             </if>
-            <if test="param.updateTime != null and param.updateTime != ''">
-                update_time = #{param.update_time},
+            <if test="param.updateTime != null">
+                update_time = #{param.updateTime},
             </if>
         </set>
         <where>
@@ -42,6 +39,23 @@
     </delete>
 
 
-    <delete id="delete">
+    <delete id="deleteBySurrogateId">
+        delete from <include refid="Table_Name"/>
+        <where>
+            surrogate_id = #{surrogateId}
+        </where>
+    </delete>
+
+    <select id="getLabelList" resultType="com.cy.single.blog.pojo.vo.blog.BlogLabelVO">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name"/>
+    </select>
+
+    <delete id="deleteBatch">
+        DELETE FROM <include refid="Table_Name"/>
+        WHERE surrogate_id IN
+        <foreach item="surrogate_id" collection="list" open="(" separator="," close=")">
+            #{surrogate_id}
+        </foreach>
     </delete>
 </mapper>

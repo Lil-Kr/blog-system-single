@@ -2,8 +2,12 @@ package com.cy.single.blog.dao;
 
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.cy.single.blog.pojo.req.blog.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.BlogLabelReq;
+import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,8 +19,11 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface BlogLabelMapper extends BaseMapper<BlogLabel> {
 
-    Integer editById(@Param("param") BlogLabelReq req);
+    Integer editBySurrogateId(@Param("param") BlogLabelReq req);
 
-    Integer delete(@Param("param") BlogLabelReq req);
+    Integer deleteBySurrogateId(String surrogateId);
 
+    List<BlogLabelVO> getLabelList(@Param("param") BlogLabelListReq req);
+
+    Integer deleteBatch(List<String> list);
 }

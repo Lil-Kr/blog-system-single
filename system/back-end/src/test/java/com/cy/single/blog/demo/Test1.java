@@ -1,12 +1,12 @@
 package com.cy.single.blog.demo;
 
-import cn.hutool.core.util.IdUtil;
-import com.cy.single.blog.utils.keyUtil.IdWorker;
-import com.cy.single.blog.utils.keyUtil.RunCodeUtil;
+import com.alibaba.fastjson2.JSONObject;
+import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -54,17 +54,11 @@ public class Test1 {
 
     @Test
     public void test3() {
-        String uuid1 = IdUtil.randomUUID();
-        System.out.println(uuid1);
 
-        String uuid2 = IdUtil.randomUUID();
-        System.out.println(uuid2);
-
-        Long id = IdWorker.getSnowFlakeId();
-        System.out.println(id);
-
-        String fourPipelineNumbers = RunCodeUtil.getFourPipelineNumbers();
-
+        BlogLabel baseReq = BlogLabel.builder().number("3").name("aaa").remark("ssss").build();
+        BlogLabel req = BlogLabel.builder().build();
+        BeanUtils.copyProperties(baseReq, req);
+        System.out.println(JSONObject.toJSONString(req));
     }
 
 }

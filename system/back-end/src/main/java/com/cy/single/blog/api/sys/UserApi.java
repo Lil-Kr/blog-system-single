@@ -6,7 +6,7 @@ import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
-import com.cy.single.blog.pojo.req.user.UserRegisterReq;
+import com.cy.single.blog.pojo.req.user.UserRegisterApiReq;
 import com.cy.single.blog.pojo.req.user.UserSaveReq;
 import com.cy.single.blog.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +44,7 @@ public class UserApi {
 
     @PostMapping("/register")
     @CheckAuth
-    public ApiResp<Integer> register(@RequestBody @Valid UserRegisterReq req) {
+    public ApiResp<Integer> register(@RequestBody @Valid UserRegisterApiReq req) {
         return userService.registerAdmin(req);
     }
 

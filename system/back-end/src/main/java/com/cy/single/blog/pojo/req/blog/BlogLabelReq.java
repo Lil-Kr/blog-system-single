@@ -1,6 +1,7 @@
 package com.cy.single.blog.pojo.req.blog;
 
-import com.cy.single.blog.base.BaseDO;
+import com.cy.single.blog.base.BaseVO;
+import lombok.Data;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
@@ -13,7 +14,8 @@ import javax.validation.groups.Default;
  * @Description:
  */
 @ToString
-public class BlogLabelReq extends BaseDO {
+@Data
+public class BlogLabelReq extends BaseVO {
 
     public interface GroupTypeSave {}
     public interface GroupTypeEdit {}
@@ -22,9 +24,9 @@ public class BlogLabelReq extends BaseDO {
     private Long id;
 
     @NotNull(groups = {GroupTypeEdit.class, GroupTypeDel.class}, message = "surrogateId是必须的")
-    private Long surrogateId;
+    private String surrogateId;
 
-    private Integer number;
+    private String number;
 
     @NotNull(groups = {Default.class, GroupTypeSave.class}, message = "标签类型名不能为空")
     @Length(groups = {Default.class, GroupTypeSave.class}, max = 50, message = "标签类型名长度在50个字符以内")
@@ -32,6 +34,7 @@ public class BlogLabelReq extends BaseDO {
 
     @Length(groups = {Default.class, GroupTypeSave.class},max = 200, message = "备注长度必须在200个字符以内")
     private String remark;
+
 
     public Long getId() {
         return id;
@@ -41,19 +44,19 @@ public class BlogLabelReq extends BaseDO {
         this.id = id;
     }
 
-    public Long getSurrogateId() {
+    public String getSurrogateId() {
         return surrogateId;
     }
 
-    public void setSurrogateId(Long surrogateId) {
+    public void setSurrogateId(String surrogateId) {
         this.surrogateId = surrogateId;
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

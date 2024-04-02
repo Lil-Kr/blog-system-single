@@ -1,6 +1,6 @@
 package com.cy.single.blog.pojo.req.user;
 
-import com.cy.single.blog.base.BaseReq;
+import com.cy.single.blog.base.BaseApiReq;
 import com.cy.single.blog.utils.checkUtil.CheckUtil;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -15,7 +15,7 @@ import javax.validation.constraints.Pattern;
  * @Description:
  */
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class UserRegisterReq extends BaseReq {
+public class UserRegisterApiReq extends BaseApiReq {
 
     /**
      * 登录账号

@@ -3,7 +3,7 @@ package com.cy.single.blog.pojo.entity.blog;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.cy.single.blog.base.BaseDO;
+import com.cy.single.blog.base.BaseVO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -24,7 +24,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @TableName("blog_label")
-public class BlogLabel extends BaseDO implements Serializable {
+public class BlogLabel extends BaseVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,7 +34,7 @@ public class BlogLabel extends BaseDO implements Serializable {
     /**
      * 唯一键
      */
-    private Long surrogateId;
+    private String surrogateId;
 
     /**
      * 编号
@@ -59,11 +59,11 @@ public class BlogLabel extends BaseDO implements Serializable {
         this.id = id;
     }
 
-    public Long getSurrogateId() {
+    public String getSurrogateId() {
         return surrogateId;
     }
 
-    public void setSurrogateId(Long surrogateId) {
+    public void setSurrogateId(String surrogateId) {
         this.surrogateId = surrogateId;
     }
 

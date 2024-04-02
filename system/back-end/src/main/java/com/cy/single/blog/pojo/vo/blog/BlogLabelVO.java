@@ -15,13 +15,4 @@ public class BlogLabelVO extends BlogLabel implements Serializable {
 
     private static final long serialVersionUID = -4260688027806695727L;
 
-    private String surrogateIdStr;
-
-    public String getSurrogateIdStr() {
-        return surrogateIdStr;
-    }
-
-    public void setSurrogateIdStr(String surrogateIdStr) {
-        this.surrogateIdStr = surrogateIdStr;
-    }
 }

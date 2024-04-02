@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @Description:
  */
 @ToString
-public class BaseReq implements Serializable {
+public class BaseApiReq implements Serializable {
 
     private static final long serialVersionUID = 7567175837804014960L;
 

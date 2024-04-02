@@ -23,4 +23,6 @@ public interface BlogLabelService {
     ApiResp<String> edit(BlogLabelReq req);
 
     ApiResp<String> delete(BlogLabelReq req);
+
+    ApiResp<String> deleteBatch(BlogLabelReq req);
 }

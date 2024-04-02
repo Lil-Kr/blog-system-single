@@ -1,7 +1,7 @@
 package com.cy.single.blog.pojo.dto.req;
 
 import com.cy.single.blog.pojo.entity.sys.SysUser;
-import com.cy.single.blog.pojo.req.user.UserRegisterReq;
+import com.cy.single.blog.pojo.req.user.UserRegisterApiReq;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import org.springframework.beans.BeanUtils;
@@ -18,7 +18,7 @@ public class UserDTO {
      * @param baseReq
      * @return
      */
-    public static SysUser convertSaveAdminReq(UserRegisterReq baseReq) {
+    public static SysUser convertSaveAdminReq(UserRegisterApiReq baseReq) {
         SysUser req = SysUser.builder().build();
         BeanUtils.copyProperties(baseReq, req);
 

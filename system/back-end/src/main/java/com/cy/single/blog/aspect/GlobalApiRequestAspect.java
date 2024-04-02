@@ -2,6 +2,7 @@ package com.cy.single.blog.aspect;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.cy.single.blog.aspect.exceptions.BusinessException;
+import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysUserMapper;
 import com.cy.single.blog.enums.ReturnCodeEnum;
@@ -86,9 +87,9 @@ public class GlobalApiRequestAspect {
             return proceed;
         }catch (Throwable e) {
             log.error("api request ERROR: {}", e.getMessage());
-            Object res = proceedingJoinPoint.proceed();
+//            Object res = proceedingJoinPoint.proceed();
             RequestHolder.remove();
-            return res;
+            return ApiResp.error(e.getMessage());
         }
     }
 }
