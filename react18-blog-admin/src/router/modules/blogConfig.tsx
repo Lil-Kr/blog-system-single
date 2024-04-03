@@ -37,6 +37,16 @@ const blogConfig: RouterItemType[] = [
         },
         path: 'label',
         element: LazyLoad(lazy(() => import('@/views/blog//label/BlogLabel')))
+      },
+      {
+        meta: {
+          key: '/type',
+          title: '分类管理',
+          layout: false,
+          icon: <SnippetsOutlined />
+        },
+        path: 'type',
+        element: LazyLoad(lazy(() => import('@/views/blog/type/BlogType')))
       }
     ]
   }

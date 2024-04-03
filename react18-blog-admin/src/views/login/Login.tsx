@@ -1,49 +1,49 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Form, Input, Button } from 'antd'
 import md5 from 'js-md5'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import React, { useState } from 'react'
-import { baseAxiosRequest } from '@/utils/http/request'
 import useLoginAdminStore from '@/store/login'
 import { LoginTpye } from '@/types/user'
 import userApi from '@/apis/user'
-import { Result } from '@/types/base/response'
-// cookie
-import cookie from 'react-cookies'
-import { CLT } from '@/constant'
 import { rootRouterConfig } from '@/router'
+
+import { Form, Input, Button, message } from 'antd'
+// scss
+import styles from './css/index.module.scss'
 
 const Login = () => {
   const [btnSize, setSize] = useState<SizeType>('large')
   const [loading, setLoading] = useState<boolean>(false)
-  const { loginData, setToken } = useLoginAdminStore()
-  const token = useLoginAdminStore(state => state.loginData.token)
+  const { setToken } = useLoginAdminStore()
 
   const onFinish = async (loginInfo: LoginTpye.LoginFormType) => {
-    let { account, password } = loginInfo
+    let { password } = loginInfo
     loginInfo.password = md5.md5(password)
     const loginRes = await userApi.login(loginInfo)
-    const expirationDate = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
-    cookie.save(CLT, loginRes.data, { path: '/', expires: expirationDate })
-
-    // 跳转
-    rootRouterConfig.navigate('/main/blog/label')
+    const { code, data: token, msg } = loginRes
+    if (code === 200) {
+      setToken(token)
+      // 跳转
+      rootRouterConfig.navigate('/main/home')
+    } else {
+      message.error('登陆失败')
+      rootRouterConfig.navigate('/login')
+    }
   }
 
   const onFinishFailed = () => {}
 
   const handle = () => {
-    console.log('--> zustand')
-    let abc = { token: '卧槽, 还能这么用' }
-    setToken(abc)
+    let token = { token: '卧槽, 还能这么用' }
+    setToken('卧槽, 还能这么用')
   }
 
   return (
-    <div className='login-warpper'>
+    <div className='loginWarpper'>
       {/* <p>token: {token}</p>
       <Button onClick={handle}>zustand</Button> */}
       <Form
-        className='login-warpper-form'
+        className='loginForm'
         name='basic'
         layout='horizontal'
         initialValues={{ remember: true }}

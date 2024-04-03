@@ -16,7 +16,7 @@ const busConfig: RouterItemType[] = [
       icon: <UserOutlined />
     },
     path: 'main',
-    // element: LazyLoad(lazy(() => import('@/layout/MainLayout'))),
+    element: LazyLoad(lazy(() => import('@/layout/MainLayout'))),
     children: [...homeConfig, ...blogConfig]
   }
 ]

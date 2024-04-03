@@ -1,7 +1,7 @@
 import { Middleware, MiddlewareContext } from 'oh-router'
 import { rootRouterConfig } from '@/router'
-import { CLT } from '@/constant'
 import cookie from 'react-cookies'
+import { CLT } from '@/config'
 
 class LoginCheckMiddleware extends Middleware {
   async handler(ctx: MiddlewareContext<{}>, next: () => Promise<any>): Promise<void> {

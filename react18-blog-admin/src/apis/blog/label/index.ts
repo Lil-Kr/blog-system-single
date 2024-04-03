@@ -2,7 +2,8 @@ import { baseAxiosRequest } from '@/utils/http/request'
 import { LabelType } from '@/types/blog/labelType'
 import { Result } from '@/types/base/response'
 import { LabelReqParams, CreateLabel, EditLabel, DelLabel } from '@/types/apis/blog'
-import { PREFIX_URL_BLOG_LABEL } from '@/constant'
+import { PREFIX_URL_BLOG_LABEL } from '@/config'
+
 
 export default {
   getLabelList(params: LabelReqParams) {

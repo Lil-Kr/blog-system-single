@@ -49,8 +49,11 @@
     ],
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+
+    // zustand PartialState config
+    // "exactOptionalPropertyTypes": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/store/global/tabStore.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

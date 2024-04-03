@@ -1,10 +1,11 @@
+import { PREFIX_BASE_URL } from '@/config'
 import { message } from 'antd'
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 // 创建axios实例
 const axiosInstance: AxiosInstance = axios.create({
   // baseURL: import.meta.env.VITE_APP_PROXY_API,
-  baseURL: '/api',
+  baseURL: PREFIX_BASE_URL,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json'
@@ -33,6 +34,7 @@ axiosInstance.interceptors.response.use(
     const { data, config, headers, request, status, statusText } = response
     console.log('--> response interceptors data:', data)
 
+    // todo: 每次请求成功都重新set token Cookie
     const { code, msg, token, userInfo } = data
     console.log('--> response interceptors token:', token)
 

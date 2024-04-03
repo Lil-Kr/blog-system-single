@@ -2,8 +2,8 @@
  * Tabs type
  */
 interface TabsState {
-  tabActive?: TabType;
-  tabsList: TabType[];
+  tabActive?: TabType
+  tabList: TabType[]
 }
 
 interface TabType {
