@@ -1,5 +1,0 @@
-export const USERINFO_KEY = 'userInfo'
-export const AUTHORIZATION_KEY = 'authorization'
-export const CLT = 'clt'
-export const CLN = 'cln'
-export const CLL = 'cll'
