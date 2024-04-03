@@ -1,0 +1,56 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true, // 不允许对同一个文件使用不一致格式的引用
+    "sourceMap": true, // 生成相应的.map文件
+    "declaration": true, // 生成相应的.d.ts文件
+    "incremental": true, // 通过从以前的编译中读取/写入信息到磁盘上的文件来启用增量编译
+    "rootDir": "./", // 用来控制输出目录结构 --outDir.
+    "removeComments": true, // 删除编译后的所有的注释
+    "importHelpers": true, // 从 tslib 导入辅助工具函数
+    "isolatedModules": true, // 将每个文件做为单独的模块 （与 'ts.transpileModule' 类似）
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true, // 启用所有严格类型检查选项， 不允许隐式any类型
+    "noImplicitAny": true, // 在表达式和声明上有隐含的 any类型时报错
+    "strictNullChecks": true, // 启用严格的 null 检查
+    "noImplicitThis": true, // 当 this 表达式值为 any 类型的时候， 生成一个错误
+    "alwaysStrict": true, // 以严格模式检查每个模块， 并在每个文件里加入 'use strict'
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Source Map Options */
+    "sourceRoot": "./", // 指定调试器应该找到 TypeScript 文件而不是源文件的位置
+    "inlineSources": true, // 将代码与 sourcemaps 生成到一个文件中， 要求同时设置了 --inlineSourceMap 或 --sourceMap 属性
+
+    /* 其他选项 */
+    "experimentalDecorators": true, // 启用装饰器
+    "emitDecoratorMetadata": true, // 为装饰器提供元数据的支持
+
+    "baseUrl": "./",
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "*": ["node_modules/@types/*", "*"]
+      }
+    ],
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

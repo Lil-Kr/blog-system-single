@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.cy.single.blog.base.BaseVO;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 import java.io.Serializable;
@@ -34,7 +36,8 @@ public class BlogLabel extends BaseVO implements Serializable {
     /**
      * 唯一键
      */
-    private String surrogateId;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long surrogateId;
 
     /**
      * 编号
@@ -59,11 +62,11 @@ public class BlogLabel extends BaseVO implements Serializable {
         this.id = id;
     }
 
-    public String getSurrogateId() {
+    public Long getSurrogateId() {
         return surrogateId;
     }
 
-    public void setSurrogateId(String surrogateId) {
+    public void setSurrogateId(Long surrogateId) {
         this.surrogateId = surrogateId;
     }
 

@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -82,8 +81,6 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 
     @Override
     public ApiResp<String> delete(BlogLabelReq req) {
-//        BlogLabel delEntity = BlogDTO.convertDelLabelReq(req);
-//        Wrapper<BlogLabel> wrapper = new QueryWrapper<>(delEntity);
         int count = blogLabelMapper.deleteBySurrogateId(req.getSurrogateId());
         if (count >= 1) {
             return ApiResp.success();
@@ -94,8 +91,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 
     @Override
     public ApiResp<String> deleteBatch(BlogLabelReq req) {
-        List<String> list = Arrays.asList(req.getSurrogateId().split(","));
-        Integer count = blogLabelMapper.deleteBatch(list);
+        Integer count = blogLabelMapper.deleteBatch(req.getSurrogateIds());
         if (count >= 1) {
             return ApiResp.success();
         }else {

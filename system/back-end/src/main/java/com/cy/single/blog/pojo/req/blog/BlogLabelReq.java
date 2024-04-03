@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
+import java.util.List;
 
 /**
  * @Author: Lil-K
@@ -20,11 +21,18 @@ public class BlogLabelReq extends BaseVO {
     public interface GroupTypeSave {}
     public interface GroupTypeEdit {}
     public interface GroupTypeDel {}
+    public interface GroupTypeDelBatch {}
 
     private Long id;
 
     @NotNull(groups = {GroupTypeEdit.class, GroupTypeDel.class}, message = "surrogateId是必须的")
-    private String surrogateId;
+    private Long surrogateId;
+
+    /**
+     * batch operation
+     */
+    @NotNull(groups = {GroupTypeDelBatch.class}, message = "批量删除surrogateId不能为空")
+    private List<Long> surrogateIds;
 
     private String number;
 
@@ -44,11 +52,11 @@ public class BlogLabelReq extends BaseVO {
         this.id = id;
     }
 
-    public String getSurrogateId() {
+    public Long getSurrogateId() {
         return surrogateId;
     }
 
-    public void setSurrogateId(String surrogateId) {
+    public void setSurrogateId(Long surrogateId) {
         this.surrogateId = surrogateId;
     }
 

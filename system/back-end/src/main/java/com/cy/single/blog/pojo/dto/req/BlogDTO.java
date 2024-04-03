@@ -25,7 +25,7 @@ public class BlogDTO {
         BlogLabel req = BlogLabel.builder().build();
         BeanUtils.copyProperties(baseReq, req);
 
-        req.setSurrogateId(String.valueOf(IdWorker.getSnowFlakeId()));
+        req.setSurrogateId(IdWorker.getSnowFlakeId());
         Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
 
         req.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());

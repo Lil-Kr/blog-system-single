@@ -1,12 +1,9 @@
 package com.cy.single.blog.demo;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.BeanUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -54,11 +51,9 @@ public class Test1 {
 
     @Test
     public void test3() {
+        String a = "1775218637536366592";
+        String b = "563583455628754944";
 
-        BlogLabel baseReq = BlogLabel.builder().number("3").name("aaa").remark("ssss").build();
-        BlogLabel req = BlogLabel.builder().build();
-        BeanUtils.copyProperties(baseReq, req);
-        System.out.println(JSONObject.toJSONString(req));
     }
 
 }

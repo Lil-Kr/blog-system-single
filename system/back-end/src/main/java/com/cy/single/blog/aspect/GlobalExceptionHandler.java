@@ -26,6 +26,24 @@ import java.util.List;
 @Slf4j
 public class GlobalExceptionHandler {
 
+
+    /**
+     * com.fasterxml.jackson.databind.exc.InvalidFormatException
+     * @param request
+     * @param exception
+     * @return
+     */
+//    @ExceptionHandler(value = InvalidFormatException.class)
+//    @ResponseBody
+//    public ApiResp<String> validateFormatException(HttpServletRequest request,
+//                                                   InvalidFormatException exception) {
+//        String message = exception.getMessage();
+//
+//
+//        return ApiResp.error(message);
+//    }
+
+
     /**
      * 参数校验异常捕获
      * @param request

@@ -1,5 +1,7 @@
 package com.cy.single.blog.base;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.ToString;
 
 import java.io.Serializable;
@@ -20,11 +22,13 @@ public class BaseVO implements Serializable {
     /**
      * 创建人
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long creatorId;
 
     /**
      * 修改人
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long modifierId;
 
     /**

@@ -68,7 +68,7 @@ public class LabelApi {
     @RecordLogger
     @CheckAuth
     @PostMapping("/deleteBatch")
-    public ApiResp<String> deleteBatch(@RequestBody @Validated({BlogLabelReq.GroupTypeDel.class}) BlogLabelReq req) {
+    public ApiResp<String> deleteBatch(@RequestBody @Validated({BlogLabelReq.GroupTypeDelBatch.class}) BlogLabelReq req) {
         return blogLabelService.deleteBatch(req);
     }
 
