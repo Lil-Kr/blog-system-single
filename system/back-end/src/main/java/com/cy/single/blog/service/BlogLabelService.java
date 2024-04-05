@@ -1,12 +1,11 @@
 package com.cy.single.blog.service;
 
 import com.cy.single.blog.base.ApiResp;
-import com.cy.single.blog.pojo.entity.blog.BlogLabel;
+import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.blog.BlogLabelListReq;
+import com.cy.single.blog.pojo.req.blog.BlogLabelPageReq;
 import com.cy.single.blog.pojo.req.blog.BlogLabelReq;
 import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
-
-import java.util.List;
 
 /**
  * @author Lil-K
@@ -14,9 +13,9 @@ import java.util.List;
  */
 public interface BlogLabelService {
 
-    List<BlogLabel> pageList(BlogLabelListReq req);
+    PageResult<BlogLabelVO> pageList(BlogLabelPageReq req);
 
-    ApiResp<List<BlogLabelVO>> list(BlogLabelListReq req);
+    PageResult<BlogLabelVO> list(BlogLabelListReq req);
 
     ApiResp<String> save(BlogLabelReq req);
 

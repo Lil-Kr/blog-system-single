@@ -13,6 +13,7 @@ const MenuLayout = (props: { collapsed: boolean }) => {
   const navigateTo = useNavigate()
   const { pathname } = useLocation()
   const [openKeys, setOpenKeys] = useState<string[]>([])
+  /**  */
   const [selectedKeys, setSelectedKeys] = useState<string[]>([pathname])
   const [loading, setLoading] = useState(false)
 
@@ -39,6 +40,10 @@ const MenuLayout = (props: { collapsed: boolean }) => {
       tabActive: tabInfo,
       tabList: []
     })
+
+    /**
+     * pathname 改变了
+     */
     navigateTo(key)
   }
 
@@ -59,7 +64,7 @@ const MenuLayout = (props: { collapsed: boolean }) => {
           mode='inline'
           triggerSubMenuAction='click'
           openKeys={openKeys}
-          selectedKeys={selectedKeys}
+          selectedKeys={selectedKeys} // 当前选中的菜单项 key 数组
           // default open menu
           // defaultOpenKeys={defaultOpenKeys}
           items={menuItems}

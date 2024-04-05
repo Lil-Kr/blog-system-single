@@ -16,17 +16,17 @@ const blogConfig: RouterItemType[] = [
       {
         meta: { key: 'blog-index', title: 'blog-index' },
         index: true,
-        element: LazyLoad(lazy(() => import('@/views/blog/Blog')))
+        element: LazyLoad(lazy(() => import('@/views/blog/publish/Blogs')))
       },
       {
         meta: {
           key: '/index',
-          title: '发布博客',
+          title: '博客列表',
           layout: false,
           icon: <SendOutlined />
         },
         path: 'index',
-        element: LazyLoad(lazy(() => import('@/views/blog/Blog')))
+        element: LazyLoad(lazy(() => import('@/views/blog/publish/Blogs')))
       },
       {
         meta: {

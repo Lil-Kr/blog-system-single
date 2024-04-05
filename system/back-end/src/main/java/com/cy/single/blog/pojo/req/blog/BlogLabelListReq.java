@@ -1,6 +1,6 @@
 package com.cy.single.blog.pojo.req.blog;
 
-import com.cy.single.blog.base.BaseVO;
+import com.cy.single.blog.base.BaseReq;
 import lombok.Data;
 import lombok.ToString;
 
@@ -11,9 +11,7 @@ import lombok.ToString;
  */
 @ToString
 @Data
-public class BlogLabelListReq extends BaseVO {
-
-    private Long id;
+public class BlogLabelListReq extends BaseReq {
 
     private Long surrogateId;
 

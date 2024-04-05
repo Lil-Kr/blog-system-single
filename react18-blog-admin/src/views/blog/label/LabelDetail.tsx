@@ -1,11 +1,11 @@
 import { Form, Input, Modal, message } from 'antd'
 import React, { useImperativeHandle, useState } from 'react'
-import { LabelShowType } from '@/types/blog/labelType'
+import { LabelDO } from '@/types/apis/blog/label'
 import { IAction, IModalProp } from '@/types/modal'
 // api
 import blogApi from '@/apis/blog/label'
 
-const LabelDetail = (props: IModalProp<LabelShowType>) => {
+const LabelDetail = (props: IModalProp<LabelDO>) => {
   const [labelForm] = Form.useForm()
   const [openModal, setOpenModal] = useState(false)
   const [action, setAction] = useState('create')
@@ -13,7 +13,12 @@ const LabelDetail = (props: IModalProp<LabelShowType>) => {
 
   const { mRef, update } = props
 
-  const open = (type: IAction, data?: LabelShowType) => {
+  useImperativeHandle(mRef, () => ({
+    form: labelForm,
+    open
+  }))
+
+  const open = (type: IAction, data?: LabelDO) => {
     const { action, open } = type
     setOpenModal(open)
     setAction(action)
@@ -69,11 +74,6 @@ const LabelDetail = (props: IModalProp<LabelShowType>) => {
     setInputDisabled(false)
     labelForm.resetFields()
   }
-
-  useImperativeHandle(mRef, () => ({
-    form: labelForm,
-    open
-  }))
 
   return (
     <div className='label-modal'>

@@ -1,25 +1,28 @@
 {
-  "name": "react18-blog-portal",
+  "name": "react18-blog-admin",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "build": "tsc --noEmit && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@nextui-org/button": "^2.0.27",
-    "@nextui-org/react": "^2.2.10",
-    "@nextui-org/system": "^2.0.15",
-    "@nextui-org/theme": "^2.1.18",
+    "@ant-design/icons": "^5.3.6",
     "@types/estree": "^1.0.5",
     "@types/node": "^20.12.2",
+    "@uiw/react-md-editor": "^4.0.4",
+    "antd": "^5.16.0",
+    "antd-style": "^3.6.2",
     "axios": "^1.6.8",
-    "framer-motion": "^11.0.24",
+    "dayjs": "^1.11.10",
+    "echarts": "^5.5.0",
+    "history": "5.3.0",
     "i18next": "^23.10.1",
     "js-md5": "^0.8.3",
+    "md-editor-rt": "^4.12.4",
     "oh-router": "^0.4.0",
     "oh-router-react": "^0.0.11",
     "react": "^18.2.0",
@@ -28,6 +31,7 @@
     "react-i18next": "^14.1.0",
     "react-router-dom": "^6.22.3",
     "screenfull": "^6.0.2",
+    "vite-plugin-checker": "^0.6.4",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
@@ -49,7 +53,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "sass": "^1.72.0",
-    "tailwindcss": "^3.4.3",
+    "typescript": "5.4.3",
     "vite": "^5.2.0",
     "vite-plugin-imp": "^2.4.0",
     "vite-plugin-svgr": "^4.2.0"

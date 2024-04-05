@@ -1,4 +1,4 @@
-import Blog from '@/views/blog/Blog'
+import Blog from '@/views/blog/publish/Blogs'
 export { Blog }
 
 import BlogLabel from '@/views/blog/label/BlogLabel'

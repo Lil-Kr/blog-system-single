@@ -6,7 +6,7 @@ import com.cy.single.blog.enums.ReturnCodeEnum;
 import com.cy.single.blog.pojo.dto.req.UserDTO;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
-import com.cy.single.blog.pojo.req.user.UserRegisterApiReq;
+import com.cy.single.blog.pojo.req.user.UserRegisterReq;
 import com.cy.single.blog.service.SysUserService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +57,7 @@ public class UserServiceImpl implements SysUserService {
      * @return
      */
     @Override
-    public ApiResp<Integer> registerAdmin(UserRegisterApiReq req) {
+    public ApiResp<Integer> registerAdmin(UserRegisterReq req) {
         SysUser admin = sysUserMapper.getUserByAccount(req.getAccount());
         if (Objects.nonNull(admin)) {
             return ApiResp.failure(ReturnCodeEnum.USER_INFO_EXIST);

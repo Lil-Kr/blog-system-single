@@ -3,17 +3,21 @@ package com.cy.single.blog.api.blog;
 import com.cy.single.blog.aspect.annotations.CheckAuth;
 import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
+import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.blog.BlogLabelListReq;
+import com.cy.single.blog.pojo.req.blog.BlogLabelPageReq;
 import com.cy.single.blog.pojo.req.blog.BlogLabelReq;
 import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
 import com.cy.single.blog.service.BlogLabelService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @Author: Lil-K
@@ -31,16 +35,17 @@ public class LabelApi {
     @RecordLogger
     @CheckAuth
     @PostMapping("/pageList")
-    public ApiResp<String> pageList(@RequestBody @Valid BlogLabelListReq req) {
-
-        return null;
+    public ApiResp<PageResult<BlogLabelVO>> pageList(@RequestBody @Valid BlogLabelPageReq req) {
+        PageResult<BlogLabelVO> list = blogLabelService.pageList(req);
+        return ApiResp.success(list);
     }
 
     @RecordLogger
     @CheckAuth
     @PostMapping("/list")
-    public ApiResp<List<BlogLabelVO>> list(@RequestBody @Valid BlogLabelListReq req) {
-        return blogLabelService.list(req);
+    public ApiResp<PageResult<BlogLabelVO>> list(@RequestBody @Valid BlogLabelListReq req) {
+        PageResult<BlogLabelVO> list = blogLabelService.list(req);
+        return ApiResp.success(list);
     }
 
     @RecordLogger
@@ -49,7 +54,6 @@ public class LabelApi {
     public ApiResp<String> save(@RequestBody @Validated({BlogLabelReq.GroupTypeSave.class}) BlogLabelReq req) {
         return blogLabelService.save(req);
     }
-
 
     @RecordLogger
     @CheckAuth

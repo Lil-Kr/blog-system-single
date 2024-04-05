@@ -6,6 +6,7 @@ import { lazy } from 'react'
 import { blogConfig } from './blogConfig'
 import { RouterItemType } from '@/types/router/routeType'
 import { homeConfig } from './homeConfig'
+import { compsConfig } from './compsConfig'
 
 const busConfig: RouterItemType[] = [
   {
@@ -17,7 +18,7 @@ const busConfig: RouterItemType[] = [
     },
     path: 'main',
     element: LazyLoad(lazy(() => import('@/layout/MainLayout'))),
-    children: [...homeConfig, ...blogConfig]
+    children: [...homeConfig, ...blogConfig, ...compsConfig]
   }
 ]
 

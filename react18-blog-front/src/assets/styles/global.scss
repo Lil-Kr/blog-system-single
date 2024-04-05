@@ -1,0 +1,46 @@
+$color: #fff;
+
+body{
+  background-color: $color;
+  // 禁用文字选中
+  // user-select: none;
+}
+
+img{
+  // 禁止图片拖动
+  -webkit-user-drag: none;
+}
+
+// layout
+.site-layout .site-layout-background {
+  background: $color;
+}
+
+.trigger {
+  padding: 0 15px;
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.trigger:hover {
+  color: #2d3b48;
+}
+
+.logo {
+  // height: 30px;
+  margin: 15px;
+  background: rgba(255, 255, 255, 0.3);
+  text-align: center;
+}
+
+// loading
+.spin-large-style {
+  margin: 20px 0;
+  margin-bottom: 20px;
+  padding: 30px 50px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}

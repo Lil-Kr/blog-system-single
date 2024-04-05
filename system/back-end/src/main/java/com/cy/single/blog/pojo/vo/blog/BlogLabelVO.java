@@ -1,6 +1,7 @@
 package com.cy.single.blog.pojo.vo.blog;
 
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
+import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * @Description:
  */
 @ToString
+@Data
 public class BlogLabelVO extends BlogLabel implements Serializable {
 
     private static final long serialVersionUID = -4260688027806695727L;

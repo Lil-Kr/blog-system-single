@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Tabs } from 'antd'
+import { Button, Tabs, TabsProps } from 'antd'
 import { useNavigate, useLocation } from 'oh-router-react'
 import { TabType } from '@/types/common/tabType'
 import { useTabsStore } from '@/store/global'
-const { TabPane } = Tabs
 // css
 import './index.scss'
 
@@ -21,7 +20,6 @@ const TabsLayout = () => {
 
   useEffect(() => {
     addTabs()
-    setActiveKey(tabActive!.key)
   }, [pathname])
 
   /**
@@ -29,7 +27,6 @@ const TabsLayout = () => {
    * @param newActiveKey
    */
   const onChange = (newActiveKey: string) => {
-    // dispatch(setTabActive({ tabActive: { key: newActiveKey, path: newActiveKey } }))
     setTabActive({
       key: newActiveKey,
       path: newActiveKey,
@@ -44,7 +41,8 @@ const TabsLayout = () => {
    * 添加tab信息
    */
   const addTabs = () => {
-    setItems(tabList)
+    setItems([...tabList])
+    setActiveKey(tabActive!.key)
   }
 
   const remove = (targetKey: string) => {
@@ -78,6 +76,7 @@ const TabsLayout = () => {
     let newActiveTab: TabType = newTabs[selectedIndex]
     // console.log('--> newActiveTab:', newActiveTab)
 
+    // console.log('--> newTabs', newTabs)
     setItems(newTabs)
     setActiveKey(newActiveTab.key)
     navigateTo(newActiveTab.key)
@@ -89,17 +88,16 @@ const TabsLayout = () => {
     if (action === 'add') {
       addTabs()
     } else {
-      console.log('--> tab newKey', e.toString())
       const { newTabs, newActiveTab } = remove(e.toString())
       // remove(targetKey)
       // dispatch(removeTab({ tabsList: newTabs, tabActive: newActiveTab }))
       removeTab({ tabList: newTabs, tabActive: newActiveTab })
     }
   }
+
   return (
     <div className='tabs'>
       <Tabs hideAdd type='editable-card' onChange={onChange} activeKey={activeKey} onEdit={onEdit} items={items}></Tabs>
-      <TabPane>sssss</TabPane>
     </div>
   )
 }

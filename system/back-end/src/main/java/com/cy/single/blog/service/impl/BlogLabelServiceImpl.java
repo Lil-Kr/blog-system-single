@@ -1,11 +1,13 @@
 package com.cy.single.blog.service.impl;
 
 import com.cy.single.blog.base.ApiResp;
+import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.dao.BlogLabelMapper;
 import com.cy.single.blog.dao.BlogTypeMapper;
 import com.cy.single.blog.pojo.dto.req.BlogDTO;
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.req.blog.BlogLabelListReq;
+import com.cy.single.blog.pojo.req.blog.BlogLabelPageReq;
 import com.cy.single.blog.pojo.req.blog.BlogLabelReq;
 import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
 import com.cy.single.blog.service.BlogLabelService;
@@ -15,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,23 +38,23 @@ public class BlogLabelServiceImpl implements BlogLabelService {
     private BlogLabelMapper blogLabelMapper;
 
     @Override
-    public List<BlogLabel> pageList(BlogLabelListReq req) {
-        return null;
+    public PageResult<BlogLabelVO> pageList(BlogLabelPageReq req) {
+        List<BlogLabelVO> pageList = blogLabelMapper.pageList(req);
+        Integer count = blogLabelMapper.getCountByList(req);
+        if (CollectionUtils.isEmpty(pageList)) {
+            return new PageResult<>(new ArrayList<>(0), 0);
+        }else {
+            return new PageResult<>(pageList, count);
+        }
     }
 
     @Override
-    public ApiResp<List<BlogLabelVO>> list(BlogLabelListReq req) {
-//        BlogLabel queryLabel = BlogDTO.convertQueryLabelReq(req);
-//        Wrapper<BlogLabel> wrapper = new QueryWrapper<>(queryLabel);
-//        List<BlogLabel> blogLabels = blogLabelMapper.selectList(wrapper);
+    public PageResult<BlogLabelVO> list(BlogLabelListReq req) {
         List<BlogLabelVO> blogLabels = blogLabelMapper.getLabelList(req);
-
-
         if (CollectionUtils.isEmpty(blogLabels)) {
-            return ApiResp.success(Collections.emptyList());
+            return new PageResult<>(new ArrayList<>(0), 0);
         }else {
-//            List<BlogLabelVO> res = BlogDTO.convertLabelsToVO(blogLabels);
-            return ApiResp.success(blogLabels);
+            return new PageResult<>(blogLabels, blogLabels.size());
         }
     }
 

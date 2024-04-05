@@ -49,6 +49,20 @@
     <select id="getLabelList" resultType="com.cy.single.blog.pojo.vo.blog.BlogLabelVO">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name"/>
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                    `number` like concat('%',#{param.keyWords},'%')
+                    or
+                    `name` like concat('%',#{param.keyWords},'%')
+                    or
+                    remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
     </select>
 
     <delete id="deleteBatch">
@@ -58,4 +72,42 @@
             #{surrogate_id}
         </foreach>
     </delete>
+
+    <select id="pageList" resultType="com.cy.single.blog.pojo.vo.blog.BlogLabelVO">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name"/>
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `number` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="getCountByList" resultType="java.lang.Integer">
+        select count(1)
+        from <include refid="Table_Name"/>
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `number` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+    </select>
 </mapper>

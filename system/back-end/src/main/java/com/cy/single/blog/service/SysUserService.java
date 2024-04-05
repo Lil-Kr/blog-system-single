@@ -3,7 +3,7 @@ package com.cy.single.blog.service;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
-import com.cy.single.blog.pojo.req.user.UserRegisterApiReq;
+import com.cy.single.blog.pojo.req.user.UserRegisterReq;
 
 /**
  * @Author: Lil-K
@@ -18,5 +18,5 @@ public interface SysUserService {
 
     ApiResp<String> adminLogin(UserLoginAdminReq reqParam);
 
-    ApiResp<Integer> registerAdmin(UserRegisterApiReq req);
+    ApiResp<Integer> registerAdmin(UserRegisterReq req);
 }

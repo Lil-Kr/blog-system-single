@@ -1,24 +1,25 @@
 import { baseAxiosRequest } from '@/utils/http/request'
-import { LabelType } from '@/types/blog/labelType'
-import { Result } from '@/types/base/response'
-import { LabelReqParams, CreateLabel, EditLabel, DelLabel } from '@/types/apis/blog'
+import { LabelType } from '@/types/entity/blog/labelTyp'
+import { Result, ResultPage } from '@/types/base/response'
+import { LabelReq, CreateLabelReq, EditLabelReq, DelLabelReq, LabelVO, LabelApi } from '@/types/apis/blog/label'
 import { PREFIX_URL_BLOG_LABEL } from '@/config'
 
-
-export default {
-  getLabelList(params: LabelReqParams) {
-    return baseAxiosRequest.post<Result<LabelType[]>>(PREFIX_URL_BLOG_LABEL + '/list', { params })
+const labelApi: LabelApi = {
+  getLabelList(params: LabelReq) {
+    return baseAxiosRequest.post<ResultPage<LabelVO>>(PREFIX_URL_BLOG_LABEL + '/list', { params })
   },
-  save(params: CreateLabel) {
+  save(params: CreateLabelReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_LABEL + '/save', params)
   },
-  edit(params: EditLabel) {
+  edit(params: EditLabelReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_LABEL + '/edit', params)
   },
-  delete(params: DelLabel) {
+  delete(params: DelLabelReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_LABEL + '/delete', params)
   },
-  deleteBatch(params: DelLabel) {
+  deleteBatch(params: DelLabelReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_LABEL + '/deleteBatch', params)
   }
 }
+
+export default labelApi
