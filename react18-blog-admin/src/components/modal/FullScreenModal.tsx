@@ -1,5 +1,5 @@
 import { BaseApi } from '@/types/apis'
-import { IAction, IModalParams, IModalRequestAction, ModalType } from '@/types/modal'
+import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { Button, ConfigProvider, Form, Input, Modal, message } from 'antd'
 import { createStyles, useTheme } from 'antd-style'
 import { useImperativeHandle, useState } from 'react'
@@ -26,8 +26,11 @@ const FullScreenModal = (props: ModalType.FullScreenModalType) => {
   const [action, setAction] = useState('create')
   const [title, setTitle] = useState('')
   const [openModal, setOpenModal] = useState(false)
+  const [modalStyle, setmdalStyle] = useState<IModalStyle>()
+  const [items, setItems] = useState<ModalType.InputType[]>([])
+  const [inputDisabled, setInputDisabled] = useState<boolean>(false)
 
-  const [requestParams, setRequestParams] = useState<IModalRequestAction<BaseApi>>({
+  const [requestParams, setRequestParams] = useState<IModalRequestAction>({
     api: {}
   })
 
@@ -36,18 +39,35 @@ const FullScreenModal = (props: ModalType.FullScreenModalType) => {
     open
   }))
 
-  const open = (requestParams: IModalRequestAction<any>, params: IModalParams, type: IAction, data?: any) => {
-    console.log('--> 进入open方法, data: ', data)
+  const open = (
+    requestParams: IModalRequestAction,
+    params: IModalParams,
+    type: IAction,
+    modalStyle: IModalStyle,
+    items: ModalType.InputType[],
+    data?: any
+  ) => {
     const { action, open } = type
     const { title } = params
+
+    if (action === 'create') {
+    } else if (action === 'edit') {
+      console.log('--> action edit : ', action)
+      fullScreenModalForm.setFieldsValue(data)
+    } else {
+      fullScreenModalForm.setFieldsValue(data)
+      setInputDisabled(true)
+    }
+
     setOpenModal(open)
     setAction(action)
     setTitle(title)
     setRequestParams(requestParams)
+    setmdalStyle(modalStyle)
+    setItems(items)
   }
 
   const handleCancel = () => {
-    console.log('--> 关闭了')
     setOpenModal(false)
     fullScreenModalForm.resetFields()
   }
@@ -72,11 +92,12 @@ const FullScreenModal = (props: ModalType.FullScreenModalType) => {
         }}
       >
         <Modal
-          style={{
-            maxWidth: '100vw',
-            top: 0,
-            paddingBottom: 0
-          }}
+          // style={{
+          //   maxWidth: '100vw',
+          //   top: 0,
+          //   paddingBottom: 0
+          // }}
+          style={modalStyle?.style}
           title={title}
           width={'100vw'}
           okText={'确定'}
@@ -90,19 +111,12 @@ const FullScreenModal = (props: ModalType.FullScreenModalType) => {
           // forceRender={true} // 强制渲染
           maskClosable={false}
         >
-          <Form form={fullScreenModalForm}>
-            <Form.Item name={'number'} label='编号'>
-              <Input placeholder='编号, 选填' style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item name={'number'} label='编号'>
-              <Input placeholder='编号, 选填' style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item name={'number'} label='编号'>
-              <Input placeholder='编号, 选填' style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item name={'number'} label='编号'>
-              <Input placeholder='编号, 选填' style={{ width: '100%' }} />
-            </Form.Item>
+          <Form form={fullScreenModalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
+            {items.map((item, index) => (
+              <Form.Item key={index} name={item.name} label={item.label} rules={item.rules}>
+                <Input placeholder={item.textValue} style={item.style} />
+              </Form.Item>
+            ))}
           </Form>
         </Modal>
       </ConfigProvider>

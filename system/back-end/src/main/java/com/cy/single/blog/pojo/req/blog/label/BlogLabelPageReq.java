@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.req.blog;
+package com.cy.single.blog.pojo.req.blog.label;
 
 import com.cy.single.blog.base.BasePageReq;
 import lombok.Data;

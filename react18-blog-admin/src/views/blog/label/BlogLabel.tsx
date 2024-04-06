@@ -2,17 +2,17 @@ import React, { useEffect, useRef, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Flex, Form, Input, Pagination, PaginationProps, Popconfirm, Space, Table, message } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
-import { LabelDO, LabelReq } from '@/types/apis/blog/label'
-import { TableRowSelection } from 'antd/es/table/interface'
+import { LabelDTO, LabelReqParams } from '@/types/apis/blog/label'
+import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
 import LabelDetail from './LabelDetail'
-import { IAction } from '@/types/modal'
+import { IAction } from '@/types/component/modal'
 
 // api
-import blogApi from '@/apis/blog/label'
+import blogLabelApi from '@/apis/blog/label'
 
 const BlogLabel = () => {
-  const columns = [
+  const columns: ColumnsType<any> = [
     {
       key: 'number',
       dataIndex: 'number',
@@ -36,7 +36,7 @@ const BlogLabel = () => {
       dataIndex: 'oparet',
       title: '操作',
       width: 150,
-      render: (_: object, record: LabelDO) => (
+      render: (_: object, record: LabelDTO) => (
         <Space size='middle'>
           <Button
             name='look'
@@ -68,17 +68,21 @@ const BlogLabel = () => {
   ]
 
   const [form] = useForm()
-  const labelRef = useRef<{ open: (type: IAction, data?: LabelDO) => void }>()
+  const labelRef = useRef<{ open: (type: IAction, data?: LabelDTO) => void }>()
   const [btnSize] = useState<SizeType>('middle')
   const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
   const [rowKeys, setRowKeys] = useState<React.Key[]>([])
-  const [dataSource, setDataSource] = useState<LabelDO[]>([])
+  const [dataSource, setDataSource] = useState<LabelDTO[]>([])
   const [tableLoading, setTableLoading] = useState<boolean>(false)
   const [pageSize, setPageSize] = useState<number>(5)
   const [totalSize, setTotalSize] = useState<number>(0)
 
-  const deleteItemConfirm = async (record: LabelDO) => {
-    const res = await blogApi.delete({ surrogateId: record.key })
+  /**
+   * 删除确认提示
+   * @param record
+   */
+  const deleteItemConfirm = async (record: LabelDTO) => {
+    const res = await blogLabelApi.delete({ surrogateId: record.key })
     if (res.code === 200) {
       message.success('操作成功')
       getLabelList({ keyWord: '' })
@@ -90,12 +94,12 @@ const BlogLabel = () => {
   /**
    * 多选
    */
-  const rowSelection: TableRowSelection<LabelDO> = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: LabelDO[]) => {
+  const rowSelection: TableRowSelection<LabelDTO> = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: LabelDTO[]) => {
       // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
       setRowKeys(selectedRowKeys)
     },
-    getCheckboxProps: (record: LabelDO) => ({
+    getCheckboxProps: (record: LabelDTO) => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked
       name: record.name
     })
@@ -106,7 +110,7 @@ const BlogLabel = () => {
    * @param key
    * @param record
    */
-  const lookItem = (key: string, record: LabelDO) => {
+  const lookItem = (key: string, record: LabelDTO) => {
     labelRef.current?.open({ action: 'look', open: true }, record)
   }
 
@@ -115,7 +119,7 @@ const BlogLabel = () => {
    * @param key
    * @param record
    */
-  const editItem = (key: string, record: LabelDO) => {
+  const editItem = (key: string, record: LabelDTO) => {
     labelRef.current?.open({ action: 'edit', open: true }, record)
   }
 
@@ -136,7 +140,7 @@ const BlogLabel = () => {
     }
 
     const ids = rowKeys.join(',')
-    const res = await blogApi.deleteBatch({ surrogateId: ids })
+    const res = await blogLabelApi.deleteBatch({ surrogateId: ids })
     if (res.code === 200) {
       message.success(res.msg)
       getLabelList({ keyWord: '' })
@@ -145,6 +149,9 @@ const BlogLabel = () => {
     }
   }
 
+  /**
+   * 搜索
+   */
   const search = () => {}
 
   /**
@@ -157,10 +164,10 @@ const BlogLabel = () => {
   /**
    * 获取标签列表, 不分页
    */
-  const getLabelList = async (params: LabelReq) => {
+  const getLabelList = async (params: LabelReqParams) => {
     const values = form.getFieldsValue()
 
-    const labelList = await blogApi.getLabelList({ ...values })
+    const labelList = await blogLabelApi.getLabelList({ ...values })
     const { code, data, msg } = labelList
     if (code === 200) {
       const datas = data.list.map(({ surrogateId, number, name, remark }) => ({
@@ -171,6 +178,7 @@ const BlogLabel = () => {
       }))
       setDataSource(datas)
       setTotalSize(data.total)
+      setTableLoading(false)
     }
   }
 
@@ -227,8 +235,8 @@ const BlogLabel = () => {
             }}
             loading={tableLoading}
             columns={columns}
+            // dataSource={dataSource}
             dataSource={dataSource}
-            // pagination={{ pageSize: pageSize, total: totalSize }} // 分页使用
             pagination={{
               hideOnSinglePage: false, // only one pageSize then hidden Paginator
               pageSizeOptions: [10, 20, 50], // specify how many items can be displayed on each page

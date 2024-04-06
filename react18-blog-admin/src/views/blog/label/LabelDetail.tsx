@@ -1,11 +1,11 @@
 import { Form, Input, Modal, message } from 'antd'
 import React, { useImperativeHandle, useState } from 'react'
-import { LabelDO } from '@/types/apis/blog/label'
-import { IAction, IModalProp } from '@/types/modal'
+import { LabelDTO } from '@/types/apis/blog/label'
+import { IAction, IModalProp } from '@/types/component/modal'
 // api
 import blogApi from '@/apis/blog/label'
 
-const LabelDetail = (props: IModalProp<LabelDO>) => {
+const LabelDetail = (props: IModalProp<LabelDTO>) => {
   const [labelForm] = Form.useForm()
   const [openModal, setOpenModal] = useState(false)
   const [action, setAction] = useState('create')
@@ -18,7 +18,7 @@ const LabelDetail = (props: IModalProp<LabelDO>) => {
     open
   }))
 
-  const open = (type: IAction, data?: LabelDO) => {
+  const open = (type: IAction, data?: LabelDTO) => {
     const { action, open } = type
     setOpenModal(open)
     setAction(action)

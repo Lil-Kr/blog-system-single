@@ -2,9 +2,9 @@ package com.cy.single.blog.dao;
 
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cy.single.blog.pojo.req.blog.BlogLabelListReq;
-import com.cy.single.blog.pojo.req.blog.BlogLabelPageReq;
-import com.cy.single.blog.pojo.req.blog.BlogLabelReq;
+import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
+import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
+import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
 import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
 import org.apache.ibatis.annotations.Param;
 

@@ -23,6 +23,7 @@ axiosInstance.interceptors.request.use(
   },
   (error: AxiosError) => {
     console.log('--> request intercept error:', error)
+    message.error(error.message)
     return Promise.reject(error)
   }
 )
@@ -34,15 +35,20 @@ axiosInstance.interceptors.response.use(
     const { data, config, headers, request, status, statusText } = response
     // console.log('--> response interceptors data:', data)
 
-    // todo: 每次请求成功都重新set token Cookie
-    const { code, msg, token, userInfo } = data
     // console.log('--> response interceptors token:', token)
 
     if (status === 200) {
       const { data } = response
+
+      // todo: 每次请求成功都重新set token Cookie
+      const { code, msg, token, userInfo } = data
+
+      if (code !== 200) {
+        message.error(msg)
+      }
       return data
     } else {
-      message.error(msg)
+      message.error('网络异常')
       return response
     }
   },
@@ -71,6 +77,7 @@ const baseAxiosRequest = {
     return axiosInstance.get(url, { params })
   },
   post<T>(url: string, body?: object): Promise<T> {
+    console.log('--> baseAxiosRequest', url, body)
     return axiosInstance.post(url, body)
   },
   put<T>(url: string, body?: object): Promise<T> {

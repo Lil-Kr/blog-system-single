@@ -8,9 +8,11 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -33,15 +35,26 @@ public class GlobalExceptionHandler {
      * @param exception
      * @return
      */
-//    @ExceptionHandler(value = InvalidFormatException.class)
-//    @ResponseBody
-//    public ApiResp<String> validateFormatException(HttpServletRequest request,
-//                                                   InvalidFormatException exception) {
-//        String message = exception.getMessage();
-//
-//
-//        return ApiResp.error(message);
-//    }
+    @ExceptionHandler(value = MissingServletRequestParameterException.class)
+    @ResponseBody
+    public ApiResp<String> validateParameterException(HttpServletRequest request,
+                                                   MissingServletRequestParameterException exception) {
+        String message = exception.getMessage();
+        return ApiResp.error(message);
+    }
+
+    /**
+     * 校验参数类型不一致
+     * @param request
+     * @param exception
+     * @return
+     */
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    public ApiResp<String> validateNumberFormatException(HttpServletRequest request,
+                                                         MethodArgumentTypeMismatchException exception) {
+        String message = exception.getMessage();
+        return ApiResp.error(message);
+    }
 
 
     /**

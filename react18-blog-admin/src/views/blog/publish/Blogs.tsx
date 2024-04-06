@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react'
 import { Button, Flex, Radio, Slider, Space } from 'antd'
 import { BlogContenType } from '@/types/entity/blog'
 import { useForm } from 'antd/es/form/Form'
-import { FullScreenModal } from '@/components/modal'
-import { IAction, IModalParams, IModalRequestAction } from '@/types/modal'
+import { BaseModal, FullScreenModal } from '@/components/modal'
+import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { LabelApi } from '@/types/apis/blog/label'
 import labelApi from '@/apis/blog/label'
 
@@ -12,9 +12,11 @@ const Blogs = () => {
 
   const blogsRef = useRef<{
     open: (
-      requestParams: IModalRequestAction<LabelApi>,
+      requestParams: IModalRequestAction,
       params: IModalParams,
       type: IAction,
+      modalStyle: IModalStyle,
+      items: ModalType.InputType[],
       data: BlogContenType.BlogContentShow
     ) => void
   }>()
@@ -27,7 +29,29 @@ const Blogs = () => {
       { api: labelApi },
       { title: '创建博客' },
       { action: 'create', open: true },
-      { key: 'sss', number: 'sss', name: 'sss', remark: 'sss' }
+      { style: { maxWidth: '70vw' } },
+      [
+        {
+          name: 'number',
+          label: '编号',
+          textValue: '编号, 必填',
+          style: { width: '100%' },
+          rules: [{ required: true, message: '编号不能为空' }]
+        },
+        {
+          name: 'name',
+          label: '姓名',
+          textValue: '姓名, 必填',
+          style: { width: '100%' }
+        },
+        {
+          name: 'remark',
+          label: '备注',
+          textValue: '备注, 必填',
+          style: { width: '100%' }
+        }
+      ],
+      { key: '1', number: '007', name: 'cy', remark: '备注' }
     )
   }
 
@@ -47,7 +71,8 @@ const Blogs = () => {
 
         <Flex gap='small' className='site-button-ghost-wrapper'>
           {/* <Button type='primary'>测试按钮</Button> */}
-          <FullScreenModal mRef={blogsRef} />
+          {/* <FullScreenModal mRef={blogsRef} /> */}
+          <BaseModal mRef={blogsRef} />
         </Flex>
       </Flex>
     </div>

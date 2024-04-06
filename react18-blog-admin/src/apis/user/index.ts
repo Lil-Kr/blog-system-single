@@ -1,5 +1,5 @@
 import { baseAxiosRequest } from '@/utils/http/request'
-import { LabelType } from '@/types/entity/blog/labelTyp'
+import { LabelType } from '@/types/entity/blog/labelType'
 import { Result } from '@/types/base/response'
 import { LoginTpye } from '@/types/user'
 import { PREFIX_URL_SYS_USER } from '@/config'

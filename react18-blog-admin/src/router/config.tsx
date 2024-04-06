@@ -69,7 +69,7 @@ const rootConfig: RouterItemType[] = [
  * create router
  */
 const rootRouterConfig: Router<{}> = new Router({
-  // middlewares: [new LoginCheckMiddleware()],
+  middlewares: [new LoginCheckMiddleware()],
   routes: rootConfig
 })
 

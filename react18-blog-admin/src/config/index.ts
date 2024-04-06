@@ -23,6 +23,11 @@ export const PREFIX_BASE_URL = '/api'
 export const PREFIX_URL_SYS_USER = '/sys/user'
 
 /**
- * blog-label constant
+ * blog-label
  */
 export const PREFIX_URL_BLOG_LABEL = '/blog/label'
+
+/**
+ * blog-type
+ */
+export const PREFIX_URL_BLOG_TYPE = '/blog/type'

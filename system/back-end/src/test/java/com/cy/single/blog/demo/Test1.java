@@ -1,5 +1,6 @@
 package com.cy.single.blog.demo;
 
+import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -51,8 +52,8 @@ public class Test1 {
 
     @Test
     public void test3() {
-        String a = "1775218637536366592";
-        String b = "563583455628754944";
+        Long snowFlakeId = IdWorker.getSnowFlakeId();
+        System.out.println(snowFlakeId);
 
     }
 

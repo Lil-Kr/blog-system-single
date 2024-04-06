@@ -1,17 +1,16 @@
 /**
- * blog
+ * blog.label
  */
-
-import { BaseEntityRequiredType, BaseEntityType } from '@/types/base'
+import { BaseEntityPageType, BaseEntityType } from '@/types/base'
 import { Result, ResultPage } from '@/types/base/response'
-import { LabelType } from '@/types/entity/blog/labelTyp'
+import { LabelType } from '@/types/entity/blog/labelType'
 import { BaseApi } from '..'
 
 /**
  * blog label request API type
  */
 export interface LabelApi extends BaseApi {
-  getLabelList(params: LabelReq): Promise<ResultPage<LabelVO>>
+  getLabelList(params: LabelReqParams): Promise<ResultPage<LabelVO>>
   save(params: CreateLabelReq): Promise<Result<string>>
   edit(params: EditLabelReq): Promise<Result<string>>
   delete(params: DelLabelReq): Promise<Result<string>>
@@ -21,7 +20,7 @@ export interface LabelApi extends BaseApi {
 /**
  * ==================== label request ====================
  */
-export interface LabelReq extends BaseEntityType {
+export interface LabelReqParams extends BaseEntityType {
   keyWord?: string
 }
 
@@ -46,7 +45,7 @@ export interface DelLabelReq {
 /**
  * ==================== label response ====================
  */
-export interface LabelDO {
+export interface LabelDTO {
   key: string
   number: string | number
   name: string

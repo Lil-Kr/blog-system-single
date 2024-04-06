@@ -37,6 +37,16 @@ const compsConfig: RouterItemType[] = [
         },
         path: 'md-editor-2',
         element: LazyLoad(lazy(() => import('@/views/comps/md-editor/MdEditor2')))
+      },
+      {
+        meta: {
+          key: '/modal',
+          title: 'Modal组件',
+          layout: false,
+          icon: <SlidersOutlined />
+        },
+        path: 'modal',
+        element: LazyLoad(lazy(() => import('@/views/comps/modal/ModalTest')))
       }
     ]
   }

@@ -166,7 +166,25 @@ public final class ApiResp<T> {
         return create(SYSTEM_ERROR.getCode(), msg, null);
     }
 
+    /**
+     * 错误
+     * @return
+     */
+    public static <T> ApiResp<T> error() {
+        return create(SYSTEM_ERROR.getCode(), SYSTEM_ERROR.getMessage(), null);
+    }
+
     public static <T> ApiResp<T> error(int code, String msg) {
         return create(code, msg, null);
+    }
+
+    /**
+     *
+     * @param returnCodeEnum
+     * @return
+     * @param <T>
+     */
+    public static <T> ApiResp<T> error(ReturnCodeEnum returnCodeEnum) {
+        return create(returnCodeEnum.getCode(), returnCodeEnum.getMessage(),null);
     }
 }

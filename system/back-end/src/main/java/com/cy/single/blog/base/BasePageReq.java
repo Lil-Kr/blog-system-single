@@ -19,6 +19,9 @@ public class BasePageReq extends BaseReq implements Serializable {
 
     private static final long serialVersionUID = -6142804525222073440L;
 
+    /**
+     * todo: @Min @Max cannot be verified
+     */
     @NotNull(message = "当前页码数不能为空")
     @Min(value = 1, message ="页码不能小于1")
     @Max(value = 10, message ="页码不能大于10")

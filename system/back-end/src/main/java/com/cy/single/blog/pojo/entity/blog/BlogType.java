@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -40,7 +40,7 @@ public class BlogType extends Model<BlogType> implements Serializable {
     /**
      * 编号
      */
-    private Integer number;
+    private String number;
 
     /**
      * 类别名称
@@ -65,12 +65,12 @@ public class BlogType extends Model<BlogType> implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 更改时间
      */
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
     public Integer getId() {
         return id;
@@ -88,11 +88,11 @@ public class BlogType extends Model<BlogType> implements Serializable {
         this.surrogateId = surrogateId;
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -128,34 +128,20 @@ public class BlogType extends Model<BlogType> implements Serializable {
         this.modifierId = modifierId;
     }
 
-    public LocalDateTime getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public LocalDateTime getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 
-    @Override
-    public String toString() {
-        return "BlogType{" +
-        "id = " + id +
-        ", surrogateId = " + surrogateId +
-        ", number = " + number +
-        ", name = " + name +
-        ", remark = " + remark +
-        ", creatorId = " + creatorId +
-        ", modifierId = " + modifierId +
-        ", createTime = " + createTime +
-        ", updateTime = " + updateTime +
-        "}";
-    }
 }

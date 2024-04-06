@@ -1,11 +1,11 @@
 import { baseAxiosRequest } from '@/utils/http/request'
-import { LabelType } from '@/types/entity/blog/labelTyp'
+import { LabelType } from '@/types/entity/blog/labelType'
 import { Result, ResultPage } from '@/types/base/response'
-import { LabelReq, CreateLabelReq, EditLabelReq, DelLabelReq, LabelVO, LabelApi } from '@/types/apis/blog/label'
+import { LabelReqParams, CreateLabelReq, EditLabelReq, DelLabelReq, LabelVO, LabelApi } from '@/types/apis/blog/label'
 import { PREFIX_URL_BLOG_LABEL } from '@/config'
 
 const labelApi: LabelApi = {
-  getLabelList(params: LabelReq) {
+  getLabelList(params: LabelReqParams) {
     return baseAxiosRequest.post<ResultPage<LabelVO>>(PREFIX_URL_BLOG_LABEL + '/list', { params })
   },
   save(params: CreateLabelReq) {

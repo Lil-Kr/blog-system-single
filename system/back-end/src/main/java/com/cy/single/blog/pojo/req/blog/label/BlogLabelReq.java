@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.req.blog;
+package com.cy.single.blog.pojo.req.blog.label;
 
 import com.cy.single.blog.base.BaseParameter;
 import lombok.Data;
@@ -18,27 +18,27 @@ import java.util.List;
 @Data
 public class BlogLabelReq extends BaseParameter {
 
-    public interface GroupTypeSave {}
-    public interface GroupTypeEdit {}
-    public interface GroupTypeDel {}
-    public interface GroupTypeDelBatch {}
+    public interface GroupLabelSave {}
+    public interface GroupLabelEdit {}
+    public interface GroupLabelDel {}
+    public interface GroupLabelDelBatch {}
 
-    @NotNull(groups = {GroupTypeEdit.class, GroupTypeDel.class}, message = "surrogateId是必须的")
+    @NotNull(groups = {GroupLabelEdit.class, GroupLabelDel.class}, message = "surrogateId是必须的")
     private Long surrogateId;
 
     /**
      * batch operation
      */
-    @NotNull(groups = {GroupTypeDelBatch.class}, message = "批量删除surrogateId不能为空")
+    @NotNull(groups = {GroupLabelDelBatch.class}, message = "批量删除surrogateId不能为空")
     private List<Long> surrogateIds;
 
     private String number;
 
-    @NotNull(groups = {Default.class, GroupTypeSave.class}, message = "标签类型名不能为空")
-    @Length(groups = {Default.class, GroupTypeSave.class}, max = 50, message = "标签类型名长度在50个字符以内")
+    @NotNull(groups = {Default.class, GroupLabelSave.class}, message = "标签类型名不能为空")
+    @Length(groups = {Default.class, GroupLabelSave.class, GroupLabelEdit.class}, max = 50, message = "标签类型名长度在50个字符以内")
     private String name;
 
-    @Length(groups = {Default.class, GroupTypeSave.class},max = 200, message = "备注长度必须在200个字符以内")
+    @Length(groups = {Default.class, GroupLabelSave.class},max = 200, message = "备注长度必须在200个字符以内")
     private String remark;
 
 

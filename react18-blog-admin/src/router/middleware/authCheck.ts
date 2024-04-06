@@ -20,11 +20,11 @@ class LoginCheckMiddleware extends Middleware {
    * @param param
    * @returns
    */
-  // register = ({ to }: MiddlewareContext<{}>) => {
-  //   // 如果 path 不是 '/login' 则为当前路由注册该中间件
-  //   // console.log('--> to.pathname: ', to.pathname)
-  //   return to.pathname !== '/login'
-  // }
+  register = ({ to }: MiddlewareContext<{}>) => {
+    // 如果 path 不是 '/login' 则为当前路由注册该中间件
+    // console.log('--> to.pathname: ', to.pathname)
+    return to.pathname !== '/login'
+  }
 }
 
 export { LoginCheckMiddleware }

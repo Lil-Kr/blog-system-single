@@ -3,12 +3,11 @@ package com.cy.single.blog.service.impl;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.dao.BlogLabelMapper;
-import com.cy.single.blog.dao.BlogTypeMapper;
 import com.cy.single.blog.pojo.dto.req.BlogDTO;
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
-import com.cy.single.blog.pojo.req.blog.BlogLabelListReq;
-import com.cy.single.blog.pojo.req.blog.BlogLabelPageReq;
-import com.cy.single.blog.pojo.req.blog.BlogLabelReq;
+import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
+import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
+import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
 import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
 import com.cy.single.blog.service.BlogLabelService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
@@ -21,8 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.cy.single.blog.enums.ReturnCodeEnum.DEL_ERROR;
-import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
+import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
  * @author Lil-K
@@ -30,9 +28,6 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
  */
 @Service
 public class BlogLabelServiceImpl implements BlogLabelService {
-
-    @Autowired
-    private BlogTypeMapper blogTypeMapper;
 
     @Autowired
     private BlogLabelMapper blogLabelMapper;
@@ -87,7 +82,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
         if (count >= 1) {
             return ApiResp.success();
         }else {
-            return ApiResp.failure(DEL_ERROR);
+            return ApiResp.failure(OPERATE_ERROR);
         }
     }
 
@@ -97,7 +92,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
         if (count >= 1) {
             return ApiResp.success();
         }else {
-            return ApiResp.failure(DEL_ERROR);
+            return ApiResp.failure(OPERATE_ERROR);
         }
     }
 }

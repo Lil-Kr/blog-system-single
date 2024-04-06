@@ -1,17 +1,17 @@
-package com.cy.single.blog.pojo.req.blog;
+package com.cy.single.blog.pojo.req.blog.type;
 
-import com.cy.single.blog.base.BaseReq;
+import com.cy.single.blog.base.BasePageReq;
 import lombok.Data;
 import lombok.ToString;
 
 /**
  * @Author: Lil-K
- * @Date: 2024/3/31
+ * @Date: 2024/4/6
  * @Description:
  */
 @ToString
 @Data
-public class BlogLabelListReq extends BaseReq {
+public class BlogTypePageReq extends BasePageReq {
 
     private Long surrogateId;
 
@@ -20,5 +20,4 @@ public class BlogLabelListReq extends BaseReq {
     private String name;
 
     private String remark;
-
 }

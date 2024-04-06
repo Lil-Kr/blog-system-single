@@ -2,11 +2,119 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.BlogTypeMapper">
 
-    <insert id="save">
 
-    </insert>
+    <sql id="Table_Name">
+        blog_type
+    </sql>
 
-    <update id="edit">
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,surrogate_id, `number`, `name`, remark, deleted, creator_id,modifier_id,create_time,update_time
+    </sql>
 
-    </update>
+
+    <delete id="editBySurrogateId">
+        update <include refid="Table_Name" />
+        <set>
+            <if test="param.number != null and param.number != ''">
+                number = #{param.number},
+            </if>
+            <if test="param.name != null and param.name != ''">
+                name = #{param.name},
+            </if>
+            <if test="param.remark != null and param.remark != ''">
+                remark = #{param.remark},
+            </if>
+            <if test="param.modifierId != null and param.modifierId != ''">
+                modifier_id = #{param.modifierId},
+            </if>
+            <if test="param.updateTime != null">
+                update_time = #{param.updateTime},
+            </if>
+        </set>
+        <where>
+            surrogate_id = #{param.surrogateId}
+        </where>
+    </delete>
+
+
+    <delete id="deleteBySurrogateId">
+        delete from <include refid="Table_Name"/>
+        <where>
+            surrogate_id = #{surrogateId}
+        </where>
+    </delete>
+
+    <select id="getTypeList" resultType="com.cy.single.blog.pojo.vo.blog.BlogTypeVO">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name"/>
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `number` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteBatch">
+        DELETE FROM <include refid="Table_Name"/>
+        WHERE surrogate_id IN
+        <foreach item="surrogate_id" collection="list" open="(" separator="," close=")">
+            #{surrogate_id}
+        </foreach>
+    </delete>
+
+    <select id="pageTypeList" resultType="com.cy.single.blog.pojo.vo.blog.BlogTypeVO">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name"/>
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `number` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="getCountByList" resultType="java.lang.Integer">
+        select count(1)
+        from <include refid="Table_Name"/>
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `number` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="selectBySurrogateId" resultType="com.cy.single.blog.pojo.entity.blog.BlogType">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name" />
+        <where>
+            surrogate_id = #{surrogateId}
+        </where>
+    </select>
 </mapper>
