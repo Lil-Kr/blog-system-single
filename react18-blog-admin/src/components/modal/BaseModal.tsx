@@ -1,11 +1,11 @@
 import React, { useImperativeHandle, useState } from 'react'
 import Modal from 'antd/es/modal/Modal'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { ConfigProvider, Form, Input } from 'antd'
-import { act } from 'react-dom/test-utils'
+import { ConfigProvider, Form, Input, message } from 'antd'
+import { i } from 'node_modules/vite/dist/node/types.d-aGj9QkWt'
 
 const BaseModal = (props: ModalType.BaseModalType) => {
-  const { mRef } = props
+  const { mRef, update } = props
   const [baseModalForm] = Form.useForm()
   const [action, setAction] = useState('create')
   const [title, setTitle] = useState('')
@@ -35,8 +35,8 @@ const BaseModal = (props: ModalType.BaseModalType) => {
     const { title } = params
 
     if (action === 'create') {
+      baseModalForm.resetFields()
     } else if (action === 'edit') {
-      console.log('--> action edit : ', action)
       baseModalForm.setFieldsValue(data)
     } else {
       baseModalForm.setFieldsValue(data)
@@ -53,6 +53,7 @@ const BaseModal = (props: ModalType.BaseModalType) => {
 
   const handleCancel = () => {
     setOpenModal(false)
+    setInputDisabled(false)
     baseModalForm.resetFields()
   }
 
@@ -60,12 +61,40 @@ const BaseModal = (props: ModalType.BaseModalType) => {
     const valid = await baseModalForm.validateFields()
     const { api } = requestParams
     console.log('--> 封装组件Modal: ')
-    let param = {
-      number: '100',
-      name: '分布式系统',
-      remard: '分布式系统'
+
+    const params = baseModalForm.getFieldsValue()
+    if (!valid) {
+      return
     }
-    // await api.save!(param)
+
+    if (action == 'create') {
+      const res = await api.save!(params)
+      const { code, msg, data } = res
+      if (code === 200) {
+        message.success(msg)
+        handleCancel()
+        update()
+      } else {
+        message.error(msg)
+        return
+      }
+    } else if (action === 'edit') {
+      const param = { surrogateId: params.key, ...params }
+      console.log('--> param: ', param)
+      const res = await api.edit!(param)
+      const { code, msg, data } = res
+      if (code === 200) {
+        message.success(msg)
+        handleCancel()
+        update()
+      } else {
+        message.error(msg)
+        return
+      }
+    } else {
+      message.error('操作失败')
+      return
+    }
   }
 
   return (
@@ -93,6 +122,9 @@ const BaseModal = (props: ModalType.BaseModalType) => {
         maskClosable={false}
       >
         <Form form={baseModalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
+          <Form.Item name={'key'} hidden>
+            <Input />
+          </Form.Item>
           {items.map((item, index) => (
             <Form.Item key={index} name={item.name} label={item.label} rules={item.rules}>
               <Input placeholder={item.textValue} style={item.style} />

@@ -22,6 +22,8 @@ public interface BlogTypeMapper extends BaseMapper<BlogType> {
 
     BlogType selectBySurrogateId(Long surrogateId);
 
+    BlogType selectByNumber(String Number);
+
     List<BlogTypeVO> pageTypeList(@Param("param") BlogTypePageReq req);
 
     Integer getCountByList(@Param("param") BlogTypePageReq req);

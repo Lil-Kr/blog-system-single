@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { TabsState, TabType } from '@/types/common'
 import { HOME_NAME, HOME_ROUTER_URL } from '@/config'
-import { persist, createJSONStorage } from 'zustand/middleware'
+import { persist } from 'zustand/middleware'
 
 type Actions = {
   pushTabList: (tabsList: TabType[]) => void

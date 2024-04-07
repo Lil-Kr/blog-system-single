@@ -13,10 +13,6 @@ const AvatarIcon = () => {
 
   const items: MenuProps['items'] = [
     {
-      key: '1',
-      label: <span className='dropdown-item'>首页</span>
-    },
-    {
       key: '2',
       label: <span className='dropdown-item'>关于我</span>
     },
@@ -31,20 +27,11 @@ const AvatarIcon = () => {
   ]
 
   const loginoutFunc = async () => {
-    const logoutRes = await userApi.logout()
-    const { code, data, msg } = logoutRes
-    if (code === 200) {
-      /**
-       * remove token
-       */
-      removeToken()
-      // 跳转
-      navigateTo('/login')
-      message.success(msg)
-    } else {
-      message.error(msg)
-      navigateTo('/login')
-    }
+    /**
+     * remove token
+     */
+    removeToken()
+    navigateTo('/login')
   }
 
   const handleMenuClick: MenuProps['onClick'] = event => {
@@ -60,6 +47,8 @@ const AvatarIcon = () => {
         message.info(key)
         break
       case '4':
+        loginoutFunc()
+        // message.success('')
         break
       default:
         message.info(key)

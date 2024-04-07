@@ -27,6 +27,7 @@ public class BlogTypeDTO {
         blogType.setSurrogateId(IdWorker.getSnowFlakeId());
 
         Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
+        blogType.setDeleted(0);
         blogType.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
         blogType.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
         blogType.setCreateTime(nowDateTime);

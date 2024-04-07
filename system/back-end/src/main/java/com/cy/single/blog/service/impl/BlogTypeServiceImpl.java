@@ -49,13 +49,11 @@ public class BlogTypeServiceImpl implements BlogTypeService {
 
     @Override
     public ApiResp<String> save(BlogTypeReq req) {
-        BlogType blogTypeRes = blogTypeMapper.selectBySurrogateId(req.getSurrogateId());
-        if (Objects.isNull(blogTypeRes)) {
-            return ApiResp.failure(USER_INFO_EXIST);
-        }
-
-        if (blogTypeRes.getNumber().equals(req.getNumber())) {
+        BlogType blogTypeRes = blogTypeMapper.selectByNumber(req.getNumber());
+        if (Objects.nonNull(blogTypeRes)) {
             return ApiResp.failure(DATA_INFO_REPEAT);
+        }else {
+            blogTypeRes = BlogType.builder().build();
         }
 
         BlogType saveEntity = BlogTypeDTO.convertSaveTypeReq(req, blogTypeRes);
@@ -67,16 +65,15 @@ public class BlogTypeServiceImpl implements BlogTypeService {
         }
     }
 
-
     @Override
     public ApiResp<String> edit(BlogTypeReq req) {
         BlogType blogTypeRes = blogTypeMapper.selectBySurrogateId(req.getSurrogateId());
         if (Objects.isNull(blogTypeRes)) {
-            return ApiResp.failure(USER_INFO_EXIST);
+            return ApiResp.failure(OPERATE_ERROR);
         }
 
-        if (blogTypeRes.getNumber().equals(req.getNumber())) {
-            return ApiResp.failure(DATA_INFO_REPEAT);
+        if (!blogTypeRes.getNumber().equalsIgnoreCase(req.getNumber())) {
+            return ApiResp.failure(OPERATE_ERROR);
         }
 
         BeanUtils.copyProperties(req, blogTypeRes);

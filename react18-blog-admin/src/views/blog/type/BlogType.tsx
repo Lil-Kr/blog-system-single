@@ -4,8 +4,9 @@ import { Button, Flex, Form, Input, Pagination, PaginationProps, Popconfirm, Spa
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
-import { IAction } from '@/types/component/modal'
+import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { BlogTypeReqParams, TypeDTO } from '@/types/apis/blog/type'
+import { BaseModal } from '@/components/modal'
 
 // api
 import blogTypeApi from '@/apis/blog/type'
@@ -67,13 +68,23 @@ const BlogType = () => {
   ]
 
   const [form] = useForm()
-  const labelRef = useRef<{ open: (type: IAction, data?: TypeDTO) => void }>()
+  // const labelRef = useRef<{ open: (type: IAction, data?: TypeDTO) => void }>()
+  const typeRef = useRef<{
+    open: (
+      requestParams: IModalRequestAction,
+      params: IModalParams,
+      type: IAction,
+      modalStyle: IModalStyle,
+      items: ModalType.InputType[],
+      data?: any
+    ) => void
+  }>()
   const [btnSize] = useState<SizeType>('middle')
   const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
   const [rowKeys, setRowKeys] = useState<React.Key[]>([])
   const [dataSource, setDataSource] = useState<TypeDTO[]>([])
   const [tableLoading, setTableLoading] = useState<boolean>(true)
-  const [pageSize, setPageSize] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(10)
   const [totalSize, setTotalSize] = useState<number>(0)
 
   /**
@@ -81,13 +92,13 @@ const BlogType = () => {
    * @param record
    */
   const deleteItemConfirm = async (record: TypeDTO) => {
-    // const res = await blogApi.delete({ surrogateId: record.key })
-    // if (res.code === 200) {
-    //   message.success('操作成功')
-    //   getLabelList({ keyWord: '' })
-    // } else {
-    //   message.success('操作失败')
-    // }
+    const res = await blogTypeApi.delete!({ surrogateId: record.key })
+    if (res.code === 200) {
+      message.success(res.msg)
+      getTypePageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
+    } else {
+      message.error(res.msg)
+    }
   }
 
   /**
@@ -110,7 +121,35 @@ const BlogType = () => {
    * @param record
    */
   const lookItem = (key: string, record: TypeDTO) => {
-    labelRef.current?.open({ action: 'look', open: true }, record)
+    typeRef.current?.open(
+      { api: blogTypeApi },
+      { title: '查看博客类型' },
+      { action: 'look', open: true }, // create | edit | look
+      { style: { maxWidth: '30vw' } },
+      [
+        {
+          name: 'number',
+          label: '分类编号',
+          textValue: '分类编号, 必填',
+          style: { width: '100%' },
+          rules: [{ required: true, message: '分类编号不能为空' }]
+        },
+        {
+          name: 'name',
+          label: '分类名称',
+          textValue: '分类名称, 必填',
+          style: { width: '100%' },
+          rules: [{ required: true, message: '分类名称不能为空' }]
+        },
+        {
+          name: 'remark',
+          label: '备注',
+          textValue: '备注不超过200个字符',
+          style: { width: '100%' }
+        }
+      ],
+      { ...record }
+    )
   }
 
   /**
@@ -119,14 +158,69 @@ const BlogType = () => {
    * @param record
    */
   const editItem = (key: string, record: TypeDTO) => {
-    labelRef.current?.open({ action: 'edit', open: true }, record)
+    typeRef.current?.open(
+      { api: blogTypeApi },
+      { title: '编辑博客类型' },
+      { action: 'edit', open: true }, // create | edit | look
+      { style: { maxWidth: '30vw' } },
+      [
+        {
+          name: 'number',
+          label: '分类编号',
+          textValue: '分类编号, 必填',
+          style: { width: '100%' },
+          rules: [{ required: true, message: '分类编号不能为空' }]
+        },
+        {
+          name: 'name',
+          label: '分类名称',
+          textValue: '分类名称, 必填',
+          style: { width: '100%' },
+          rules: [{ required: true, message: '分类名称不能为空' }]
+        },
+        {
+          name: 'remark',
+          label: '备注',
+          textValue: '备注不超过200个字符',
+          style: { width: '100%' }
+        }
+      ],
+      { ...record }
+    )
   }
 
   /**
    * create
    */
   const createType = () => {
-    // labelRef.current?.open({ action: 'create', open: true })
+    typeRef.current?.open(
+      { api: blogTypeApi },
+      { title: '创建博客类型' },
+      { action: 'create', open: true }, // create | edit | look
+      { style: { maxWidth: '30vw' } },
+      [
+        {
+          name: 'number',
+          label: '分类编号',
+          textValue: '分类编号, 必填',
+          style: { width: '100%' },
+          rules: [{ required: true, message: '分类编号不能为空' }]
+        },
+        {
+          name: 'name',
+          label: '分类名称',
+          textValue: '分类名称, 必填',
+          style: { width: '100%' },
+          rules: [{ required: true, message: '分类名称不能为空' }]
+        },
+        {
+          name: 'remark',
+          label: '备注',
+          textValue: '备注不超过200个字符',
+          style: { width: '100%' }
+        }
+      ]
+    )
   }
 
   /**
@@ -138,7 +232,7 @@ const BlogType = () => {
       return
     }
 
-    const ids = rowKeys.join(',')
+    // const ids = rowKeys.join(',')
     // const res = await blogApi.deleteBatch({ surrogateId: ids })
     // if (res.code === 200) {
     //   message.success(res.msg)
@@ -151,13 +245,23 @@ const BlogType = () => {
   /**
    * 搜索
    */
-  const search = () => {}
+  const search = () => {
+    let data = form.getFieldsValue()
+    const searchParam = { ...data, currentPageNum: 1, pageSize: pageSize }
+    console.log('--> searchParam: ', searchParam)
+    getTypePageList({ ...searchParam })
+  }
+
+  const resetSearch = () => {
+    form.resetFields()
+    getTypePageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
+  }
 
   /**
    * 初始化
    */
   useEffect(() => {
-    getTypePageList({ keyWord: '', currentPageNum: 1, pageSize: pageSize })
+    getTypePageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
   }, [])
 
   /**
@@ -209,14 +313,20 @@ const BlogType = () => {
       <Flex gap='middle' vertical={true}>
         <Form form={form}>
           <Flex gap='small'>
-            <Form.Item name={'keyWord'} label='搜索关键字'>
+            <Form.Item name={'keyWords'} label='搜索关键字'>
               <Input placeholder='搜索关键字' />
             </Form.Item>
             <Form.Item>
               <Button icon={<SearchOutlined />} type='primary' onClick={search} />
             </Form.Item>
+            <Form.Item>
+              <Button type='primary' onClick={resetSearch}>
+                置空
+              </Button>
+            </Form.Item>
           </Flex>
         </Form>
+
         <div className='operation-btn'>
           <Flex gap='small'>
             <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createType}>
@@ -227,6 +337,7 @@ const BlogType = () => {
             </Button>
           </Flex>
         </div>
+
         <div className='list'>
           <Table
             key={1}
@@ -240,7 +351,7 @@ const BlogType = () => {
             dataSource={dataSource}
             pagination={{
               hideOnSinglePage: false, // only one pageSize then hidden Paginator
-              pageSizeOptions: [pageSize, 2, 20, 50], // specify how many items can be displayed on each page
+              pageSizeOptions: [pageSize, 20, 50], // specify how many items can be displayed on each page
               onChange: onChange,
               onShowSizeChange: onShowSizeChange,
               showSizeChanger: true,
@@ -249,6 +360,12 @@ const BlogType = () => {
             }}
           />
         </div>
+        <BaseModal
+          mRef={typeRef}
+          update={() => {
+            getTypePageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
+          }}
+        />
       </Flex>
     </div>
   )

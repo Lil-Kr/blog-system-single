@@ -46,7 +46,6 @@ export namespace ModalType {
             requestParams: IModalRequestAction,
             params: IModalParams,
             type: IAction,
-            modalStyle: IModalStyle,
             items: InputType[],
             data: T
           ) => void
@@ -72,6 +71,6 @@ export namespace ModalType {
       | undefined
     >
 
-    update?: () => void
+    update: () => void
   }
 }

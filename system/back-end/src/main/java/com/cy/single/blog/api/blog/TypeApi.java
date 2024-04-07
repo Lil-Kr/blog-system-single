@@ -43,7 +43,7 @@ public class TypeApi {
     @RecordLogger
     @CheckAuth
     @PostMapping("/save")
-    public ApiResp<String> save(@RequestBody @Valid BlogTypeReq req) {
+    public ApiResp<String> save(@RequestBody @Validated({BlogTypeReq.GroupTypeSave.class}) BlogTypeReq req) {
         return blogTypeService.save(req);
     }
 
@@ -53,7 +53,6 @@ public class TypeApi {
     public ApiResp<String> edit(@RequestBody @Validated({BlogTypeReq.GroupTypeEdit.class}) BlogTypeReq req) {
         return blogTypeService.edit(req);
     }
-
 
     @RecordLogger
     @CheckAuth

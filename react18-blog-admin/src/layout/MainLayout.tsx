@@ -10,7 +10,6 @@ const { Sider } = Layout
 
 // css
 import styles from '@/layout/css/index.module.scss'
-import { useBreadcrumbStore } from '@/store/global'
 
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false)

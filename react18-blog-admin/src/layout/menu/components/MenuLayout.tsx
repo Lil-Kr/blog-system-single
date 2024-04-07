@@ -24,7 +24,7 @@ const MenuLayout = (props: { collapsed: boolean }) => {
     collapsed ? null : setOpenKeys(keys)
   }, [pathname, collapsed])
 
-  // todo:后端加载菜单数据, 并渲染
+  // todo: 后端加载菜单数据, 并渲染
 
   /**
    * jump content page

@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -39,7 +40,11 @@ public class GlobalApiRequestAspect {
     @Autowired
     private SysUserMapper userMapper;
 
-    @Around("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
+    @Pointcut("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
+    public void auth() {}
+
+//    @Around("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
+    @Around("auth()")
     public Object checkAuth(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         try {
             /**

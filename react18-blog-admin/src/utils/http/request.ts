@@ -77,7 +77,6 @@ const baseAxiosRequest = {
     return axiosInstance.get(url, { params })
   },
   post<T>(url: string, body?: object): Promise<T> {
-    console.log('--> baseAxiosRequest', url, body)
     return axiosInstance.post(url, body)
   },
   put<T>(url: string, body?: object): Promise<T> {

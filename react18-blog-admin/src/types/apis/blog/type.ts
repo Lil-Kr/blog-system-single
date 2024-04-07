@@ -16,7 +16,24 @@ export interface BlogTypeApi extends BaseApi {
 
 /** ==================== blog type request ====================  */
 export interface BlogTypeReqParams extends BaseEntityPageType {
-  keyWord?: string
+  keyWords?: string | number
+}
+
+export interface CreateTypeReq {
+  number: string
+  name: string
+  remark: string
+}
+
+export interface EditTypeReq {
+  surrogateId: string
+  number: string
+  name: string
+  remark: string
+}
+
+export interface DelTypeReq {
+  surrogateId: string
 }
 
 /** ==================== blog type response ====================  */

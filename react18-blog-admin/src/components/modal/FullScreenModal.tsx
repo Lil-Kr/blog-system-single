@@ -26,7 +26,7 @@ const FullScreenModal = (props: ModalType.FullScreenModalType) => {
   const [action, setAction] = useState('create')
   const [title, setTitle] = useState('')
   const [openModal, setOpenModal] = useState(false)
-  const [modalStyle, setmdalStyle] = useState<IModalStyle>()
+  // const [modalStyle, setModalStyle] = useState<IModalStyle>()
   const [items, setItems] = useState<ModalType.InputType[]>([])
   const [inputDisabled, setInputDisabled] = useState<boolean>(false)
 
@@ -43,7 +43,6 @@ const FullScreenModal = (props: ModalType.FullScreenModalType) => {
     requestParams: IModalRequestAction,
     params: IModalParams,
     type: IAction,
-    modalStyle: IModalStyle,
     items: ModalType.InputType[],
     data?: any
   ) => {
@@ -63,7 +62,7 @@ const FullScreenModal = (props: ModalType.FullScreenModalType) => {
     setAction(action)
     setTitle(title)
     setRequestParams(requestParams)
-    setmdalStyle(modalStyle)
+    // setModalStyle(modalStyle)
     setItems(items)
   }
 
@@ -92,12 +91,12 @@ const FullScreenModal = (props: ModalType.FullScreenModalType) => {
         }}
       >
         <Modal
-          // style={{
-          //   maxWidth: '100vw',
-          //   top: 0,
-          //   paddingBottom: 0
-          // }}
-          style={modalStyle?.style}
+          style={{
+            maxWidth: '100vw',
+            top: 0,
+            paddingBottom: 0
+          }}
+          // style={modalStyle?.style}
           title={title}
           width={'100vw'}
           okText={'确定'}

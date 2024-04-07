@@ -117,4 +117,12 @@
             surrogate_id = #{surrogateId}
         </where>
     </select>
+
+    <select id="selectByNumber" resultType="com.cy.single.blog.pojo.entity.blog.BlogType">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name" />
+        <where>
+            number = #{number}
+        </where>
+    </select>
 </mapper>

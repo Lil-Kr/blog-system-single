@@ -15,9 +15,8 @@ const Blogs = () => {
       requestParams: IModalRequestAction,
       params: IModalParams,
       type: IAction,
-      modalStyle: IModalStyle,
       items: ModalType.InputType[],
-      data: BlogContenType.BlogContentShow
+      data?: any
     ) => void
   }>()
 
@@ -29,7 +28,6 @@ const Blogs = () => {
       { api: labelApi },
       { title: '创建博客' },
       { action: 'create', open: true },
-      { style: { maxWidth: '70vw' } },
       [
         {
           name: 'number',
@@ -68,13 +66,8 @@ const Blogs = () => {
             删除博客
           </Button>
         </Flex>
-
-        <Flex gap='small' className='site-button-ghost-wrapper'>
-          {/* <Button type='primary'>测试按钮</Button> */}
-          {/* <FullScreenModal mRef={blogsRef} /> */}
-          <BaseModal mRef={blogsRef} />
-        </Flex>
       </Flex>
+      <FullScreenModal mRef={blogsRef} update={() => {}} />
     </div>
   )
 }

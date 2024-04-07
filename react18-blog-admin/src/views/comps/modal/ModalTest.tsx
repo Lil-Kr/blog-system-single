@@ -26,7 +26,6 @@ const ModalTest = () => {
       requestParams: IModalRequestAction,
       params: IModalParams,
       type: IAction,
-      modalStyle: IModalStyle,
       items: ModalType.InputType[],
       data: BlogContenType.BlogContentShow
     ) => void
@@ -73,14 +72,7 @@ const ModalTest = () => {
     let param = fullScreenModalTestRef.current?.open(
       { api: labelApi },
       { title: '创建博客' },
-      { action: 'look', open: true }, // create | edit | look
-      {
-        style: {
-          maxWidth: '100vw',
-          top: 0,
-          paddingBottom: 0
-        }
-      },
+      { action: 'create', open: true }, // create | edit | look
       [
         {
           name: 'number',
@@ -126,7 +118,12 @@ const ModalTest = () => {
         <Flex gap='small' className='site-button-ghost-wrapper'>
           {/* <Button type='primary'>测试按钮</Button> */}
           <FullScreenModal mRef={fullScreenModalTestRef} />
-          <BaseModal mRef={baseModalTestRef} />
+          <BaseModal
+            mRef={baseModalTestRef}
+            update={() => {
+              console.log('--> 关闭modal的回调')
+            }}
+          />
         </Flex>
       </Flex>
     </div>

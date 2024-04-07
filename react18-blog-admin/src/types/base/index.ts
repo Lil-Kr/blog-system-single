@@ -18,11 +18,11 @@ export interface BaseEntityRequiredType {
 }
 
 export interface BaseEntityPageType extends BasePageReq {
-  deleted?: number | 0
-  creatorId?: string | ''
-  modifierId?: string | ''
-  createTime?: string | ''
-  updateTime?: string | ''
+  deleted?: number
+  creatorId?: string
+  modifierId?: string
+  createTime?: string
+  updateTime?: string
 }
 
 export interface BaseEntityRequiredPageType extends BasePageReq {

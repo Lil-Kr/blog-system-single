@@ -48,7 +48,8 @@ const LabelDetail = (props: IModalProp<LabelDTO>) => {
           handleCancel()
           props.update()
         } else {
-          message.success('操作失败')
+          message.error('操作失败')
+          return
         }
       } else if (action === 'edit') {
         const param = { surrogateId: params.key, ...params }
@@ -58,11 +59,13 @@ const LabelDetail = (props: IModalProp<LabelDTO>) => {
           handleCancel()
           props.update()
         } else {
-          message.success('操作失败')
+          message.error('操作失败')
+          return
         }
       }
     } else {
-      message.success('操作失败')
+      message.error('操作失败')
+      return
     }
   }
 

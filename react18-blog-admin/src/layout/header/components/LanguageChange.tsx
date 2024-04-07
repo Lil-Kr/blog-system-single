@@ -23,7 +23,7 @@ const LanguageChange = () => {
   const handleMenuClick: MenuProps['onClick'] = event => {
     // message.info('Click on menu item.')
     // console.log('click', e)
-    console.log('--> abc:', event)
+    // console.log('--> abc:', event)
   }
 
   const menuProps = {
