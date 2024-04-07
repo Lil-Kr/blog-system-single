@@ -3,7 +3,7 @@ package com.cy.single.blog.service.impl;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.dao.BlogLabelMapper;
-import com.cy.single.blog.pojo.dto.req.BlogDTO;
+import com.cy.single.blog.pojo.dto.blog.BlogLabelDTO;
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
@@ -55,7 +55,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 
     @Override
     public ApiResp<String> save(BlogLabelReq req) {
-        BlogLabel saveEntity = BlogDTO.convertSaveLabelReq(req);
+        BlogLabel saveEntity = BlogLabelDTO.convertSaveLabelReq(req);
         Integer save = blogLabelMapper.insert(saveEntity);
         if (save >= 1) {
             return ApiResp.success();

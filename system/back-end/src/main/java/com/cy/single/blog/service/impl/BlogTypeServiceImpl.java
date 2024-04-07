@@ -3,7 +3,7 @@ package com.cy.single.blog.service.impl;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.dao.BlogTypeMapper;
-import com.cy.single.blog.pojo.dto.req.BlogDTO;
+import com.cy.single.blog.pojo.dto.blog.BlogTypeDTO;
 import com.cy.single.blog.pojo.entity.blog.BlogType;
 import com.cy.single.blog.pojo.req.blog.type.BlogTypePageReq;
 import com.cy.single.blog.pojo.req.blog.type.BlogTypeReq;
@@ -15,6 +15,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,7 +58,7 @@ public class BlogTypeServiceImpl implements BlogTypeService {
             return ApiResp.failure(DATA_INFO_REPEAT);
         }
 
-        BlogType saveEntity = BlogDTO.convertSaveTypeReq(req, blogTypeRes);
+        BlogType saveEntity = BlogTypeDTO.convertSaveTypeReq(req, blogTypeRes);
         Integer save = blogTypeMapper.insert(saveEntity);
         if (save >= 1) {
             return ApiResp.success();

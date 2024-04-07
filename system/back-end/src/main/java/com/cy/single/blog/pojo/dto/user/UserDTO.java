@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.dto.req;
+package com.cy.single.blog.pojo.dto.user;
 
 import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.user.UserRegisterReq;

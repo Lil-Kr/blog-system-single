@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MissingServletRequestParameterException.class)
     @ResponseBody
     public ApiResp<String> validateParameterException(HttpServletRequest request,
-                                                   MissingServletRequestParameterException exception) {
+                                                      MissingServletRequestParameterException exception) {
         String message = exception.getMessage();
         return ApiResp.error(message);
     }
@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseBody
     public ApiResp<String> validateException(HttpServletRequest request,
-                                     MethodArgumentNotValidException exception) throws Exception {
+                                             MethodArgumentNotValidException exception) throws Exception {
         BindingResult bindingResult = exception.getBindingResult();
         /*Map errorMesssageMap = Maps.newHashMap();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -92,7 +92,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     @ResponseBody
-    public ApiResp<String> validateException(HttpServletRequest request, HttpMessageNotReadableException exception) throws Exception {
+    public ApiResp<String> validateException(HttpServletRequest request,
+                                             HttpMessageNotReadableException exception) throws Exception {
         String message = exception.getMessage();
         /*Map errorMesssageMap = Maps.newHashMap();
         errorMesssageMap.put(msg, message);*/

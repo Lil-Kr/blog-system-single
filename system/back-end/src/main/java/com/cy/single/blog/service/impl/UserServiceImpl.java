@@ -3,7 +3,7 @@ package com.cy.single.blog.service.impl;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.dao.SysUserMapper;
 import com.cy.single.blog.enums.ReturnCodeEnum;
-import com.cy.single.blog.pojo.dto.req.UserDTO;
+import com.cy.single.blog.pojo.dto.user.UserDTO;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
 import com.cy.single.blog.pojo.req.user.UserRegisterReq;

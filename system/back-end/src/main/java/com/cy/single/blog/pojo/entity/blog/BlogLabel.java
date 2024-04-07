@@ -19,7 +19,7 @@ import java.io.Serializable;
  * @author Lil-K
  * @since 2024-03-31
  */
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @ToString
 @Builder
 @NoArgsConstructor
