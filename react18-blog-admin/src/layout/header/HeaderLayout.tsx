@@ -8,17 +8,19 @@ import Theme from './components/Theme'
 import Fullscreen from './components/Fullscreen'
 import AvatarIcon from './components/AvatarIcon'
 
+// css
 import styles from './index.module.scss'
+import { TabType } from '@/types/common'
 
 const { Header } = Layout
 
-const HeaderLayout = (props: { collapsed: boolean; setCollapsed: any }) => {
-  let { collapsed, setCollapsed } = props
+const HeaderLayout = () => {
+  // console.log('--> 刷新 HeaderLayout')
   return (
     <Header className={styles.layoutHeader} style={{ padding: 0 }}>
       <div className='header-lf'>
         {/* collaps icon */}
-        <CollapsIcon collapsed={collapsed} setCollapsed={setCollapsed} />
+        <CollapsIcon />
         {/* breadcrumb nav */}
         <BreadcrumbNav />
       </div>

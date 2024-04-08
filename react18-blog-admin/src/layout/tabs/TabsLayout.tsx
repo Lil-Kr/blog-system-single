@@ -2,24 +2,35 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button, Tabs, TabsProps } from 'antd'
 import { useNavigate, useLocation } from 'oh-router-react'
 import { TabType } from '@/types/common/tabType'
-import { useTabsStore } from '@/store/global'
 // css
 import './index.scss'
+import { useMenuStore, useTabsStoreTest } from '@/store/global/globalLayoutStore'
+import { getMenuOpenKeysUtil } from '@/utils/common'
+import { menuItems, tabMap } from '@/router'
 
+type TargetKey = React.MouseEvent | React.KeyboardEvent | string
+
+/**
+ *
+ * @returns
+ */
 const TabsLayout = () => {
   const navigateTo = useNavigate()
   const { pathname } = useLocation()
   /**
    * 从 zustand 读取最后一次打开的所有 tab, 并初始化展开的 tab
    */
-  const { tabList, tabActive, setTabActive, removeTab } = useTabsStore()
-
-  // 初始化 首页
-  const [items, setItems] = useState(tabList)
-  const [activeKey, setActiveKey] = useState(tabActive!.key)
+  const { historyOpenTabs, tabActive, setTabActive, removeTab } = useTabsStoreTest()
+  const [items, setItems] = useState<TabType[]>(historyOpenTabs)
+  const [activeKey, setActiveKey] = useState(historyOpenTabs[0].key)
+  // const { collapsed, selectedKeys, setSelectedKeys, setOpenMenuKeys } = useMenuStore()
+  console.log('--> TabsLayout 加载, historyOpenTabs: tabActive: ', historyOpenTabs, tabActive)
 
   useEffect(() => {
-    addTabs()
+    console.log('--> useEffect TabsLayout: ', historyOpenTabs)
+    setItems(historyOpenTabs)
+    setActiveKey(tabActive.key)
+    // collapsed ? null : setOpenMenuKeys(keys)
   }, [pathname])
 
   /**
@@ -27,77 +38,79 @@ const TabsLayout = () => {
    * @param newActiveKey
    */
   const onChange = (newActiveKey: string) => {
-    setTabActive({
+    console.log('--> tabsLayout onChange, 切换tab')
+    const newActiveTab = {
       key: newActiveKey,
       path: newActiveKey,
       label: '',
       closable: true
-    })
-    setActiveKey(newActiveKey)
+    }
+    // historyOpenTabs.push(newActiveTab)
+    setTabActive(newActiveTab)
     navigateTo(newActiveKey)
   }
 
-  /**
-   * 添加tab信息
-   */
-  const addTabs = () => {
-    setItems([...tabList])
-    setActiveKey(tabActive!.key)
-  }
-
-  const remove = (targetKey: string) => {
-    /**
-     * 计算出删除 tab 位置的前一个tab的所引
-     */
-    let delIndex = 0
-    let curIndex = 0
-    tabList.forEach(function (item, index, arr) {
-      // 获取待删除的tab index
+  const remove = (targetKey: TargetKey) => {
+    let newActiveKey = tabActive.key
+    let lastIndex = -1
+    items.forEach((item, i) => {
       if (item.key === targetKey) {
-        delIndex = index
-      }
-      // 获取当前选中的tab index
-      if (item.key === pathname) {
-        curIndex = index
+        lastIndex = i - 1
       }
     })
-
-    const newTabs = tabList.filter(item => item.key !== targetKey)
-    let selectedIndex = 0
-    if (delIndex > curIndex) {
-      selectedIndex = curIndex
-    } else if (delIndex < curIndex) {
-      selectedIndex = curIndex - 1
-    } else {
-      selectedIndex = newTabs.length - 1
+    const newPanes = items.filter(item => item.key !== targetKey)
+    if (newPanes.length && newActiveKey === targetKey) {
+      if (lastIndex >= 0) {
+        newActiveKey = newPanes[lastIndex].key
+      } else {
+        newActiveKey = newPanes[0].key
+      }
     }
-    // console.log('--> :selectedIndex', selectedIndex)
+    console.log('--> newPanes: ', newPanes)
 
-    let newActiveTab: TabType = newTabs[selectedIndex]
-    // console.log('--> newActiveTab:', newActiveTab)
-
-    // console.log('--> newTabs', newTabs)
-    setItems(newTabs)
-    setActiveKey(newActiveTab.key)
-    navigateTo(newActiveTab.key)
-    return { newTabs, newActiveTab }
+    const tabInfo = tabMap.get(newActiveKey)
+    console.log('--> newActive: ', tabInfo)
+    removeTab(tabInfo!, newPanes)
+    setItems(newPanes)
   }
 
   // const onEdit = (targetKey: string, action: 'add' | 'remove') => {
   const onEdit = (e: React.MouseEvent | React.KeyboardEvent | string, action: 'add' | 'remove') => {
+    console.log('--> tabsLayout onEdit')
     if (action === 'add') {
-      addTabs()
+      // addTabs()
     } else {
-      const { newTabs, newActiveTab } = remove(e.toString())
-      // remove(targetKey)
-      // dispatch(removeTab({ tabsList: newTabs, tabActive: newActiveTab }))
-      removeTab({ tabList: newTabs, tabActive: newActiveTab })
+      // const { newTabs, newActiveTab } = remove(e.toString())
+      remove(e.toString())
     }
+  }
+
+  // console.log('--> 刷新 TabsLayout')
+
+  const tabClick = (key: string, e: any) => {
+    console.log('--> tabsLayout tabClick, 切换tab')
+    const newActiveTab = {
+      key: key,
+      path: key,
+      label: '',
+      closable: true
+    }
+    // historyOpenTabs.push(newActiveTab)
+    setTabActive(newActiveTab)
+    navigateTo(key)
   }
 
   return (
     <div className='tabs'>
-      <Tabs hideAdd type='editable-card' onChange={onChange} activeKey={activeKey} onEdit={onEdit} items={items}></Tabs>
+      <Tabs
+        hideAdd
+        type='editable-card'
+        onChange={onChange}
+        activeKey={activeKey}
+        onEdit={onEdit}
+        items={items}
+        onTabClick={tabClick}
+      ></Tabs>
     </div>
   )
 }

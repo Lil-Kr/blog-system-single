@@ -1,4 +1,4 @@
-import { MenuItemType } from '@/types/common'
+import { MenuItemType, TabType } from '@/types/common'
 import { RouterItemType } from '@/types/router/routeType'
 
 // /**
@@ -125,3 +125,9 @@ function deepLoopRouterMenuItems(
 }
 
 export { getRouterMenuItems }
+
+const getPushMenu = (historyOpenTabs: TabType[], key: string): TabType[] => {
+  return historyOpenTabs.filter(item => item.key === key)
+}
+
+export { getPushMenu }

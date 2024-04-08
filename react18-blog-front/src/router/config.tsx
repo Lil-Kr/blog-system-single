@@ -33,6 +33,16 @@ const rootConfig: RouterItemType[] = [
   },
   {
     meta: {
+      key: '/home',
+      title: '首页',
+      layout: false,
+      icon: ''
+    },
+    path: 'home',
+    element: LazyLoad(lazy(() => import('@/views/home/Home')))
+  },
+  {
+    meta: {
       key: '/403',
       title: '403',
       layout: false,

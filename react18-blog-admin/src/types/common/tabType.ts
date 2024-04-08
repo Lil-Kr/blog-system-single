@@ -1,3 +1,13 @@
+import type {
+  AnimatedConfig,
+  EditableConfig,
+  OnTabScroll,
+  RenderTabBar,
+  Tab,
+  TabBarExtraContent,
+  TabPosition,
+  TabsLocale
+} from 'node_modules/rc-tabs/lib/interface'
 /**
  * Tabs type
  */
@@ -6,10 +16,10 @@ interface TabsState {
   tabList: TabType[]
 }
 
-interface TabType {
+interface TabType extends Tab {
   key: string
   path: string
-  label: string
+  label: string | React.ReactNode
   closable: boolean
 }
 

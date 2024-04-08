@@ -7,6 +7,9 @@ export interface BearState {
   decrease: (by: number) => void
 }
 
+/**
+ * 不需要持久化
+ */
 export const useBearStore = create<BearState>()(
   persist(
     set => ({
@@ -16,4 +19,15 @@ export const useBearStore = create<BearState>()(
     }),
     { name: 'bearStore' }
   )
+
+  // set => ({
+  //   bears: 0,
+  //   increase: by => set(state => ({ bears: state.bears + by })),
+  //   decrease: by => set(state => ({ bears: state.bears - by }))
+  // })
 )
+
+const decreaseFunc = (state: BearState, by: number) => {
+  state.bears = state.bears - by
+  return state
+}

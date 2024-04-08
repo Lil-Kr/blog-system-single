@@ -2,29 +2,18 @@ import React, { useEffect, useState } from 'react'
 import Logo from './logo/Logo'
 import { Breadcrumb, Button, Layout, Menu, MenuProps, Spin } from 'antd'
 import { useNavigate, useLocation } from 'oh-router-react'
-import { SubMenuType } from '@/types/common'
-import { getMenuOpenKeysUtil } from '@/utils/common'
+import { SubMenuType, TabType } from '@/types/common'
 import { menuItems, tabMap } from '@/router'
-import { useTabsStore } from '@/store/global'
+import { useMenuStore, useTabsStoreTest } from '@/store/global/globalLayoutStore'
+import { getPushMenu } from '@/utils/common/layoutUtils/menuUtil'
+import { getMenuOpenKeysUtil } from '@/utils/common'
 
-const MenuLayout = (props: { collapsed: boolean }) => {
-  const { collapsed } = props
-  const { tabActive, tabList, setTab, setTabActive } = useTabsStore()
-  const navigateTo = useNavigate()
+const MenuLayout = () => {
   const { pathname } = useLocation()
-  const [openKeys, setOpenKeys] = useState<string[]>([])
-  /**  */
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([pathname])
-  const [loading, setLoading] = useState(false)
-
-  const keys: string[] = getMenuOpenKeysUtil(pathname)
-
-  useEffect(() => {
-    setSelectedKeys([pathname])
-    collapsed ? null : setOpenKeys(keys)
-  }, [pathname, collapsed])
-
-  // todo: 后端加载菜单数据, 并渲染
+  const { historyOpenTabs, tabActive, setTabActive, setTabActive2, removeTab } = useTabsStoreTest()
+  const { collapsed, selectedKeys, openKeys, setSelectedKeys, setOpenMenuKeys } = useMenuStore()
+  const navigateTo = useNavigate()
+  // const [loading, setLoading] = useState(false)
 
   /**
    * jump content page
@@ -32,17 +21,18 @@ const MenuLayout = (props: { collapsed: boolean }) => {
    */
   const clickMenu = (e: SubMenuType) => {
     const { key, keyPath } = e
+    console.log('--> MenuLayout 点了菜单项 key: ', key)
     /**
-     * 将 router path 存入 状态管理器 中
+     * 选中菜单
      */
+    // setSelectedKeys([key])
     const tabInfo = tabMap.get(key)
-    setTab({
-      tabActive: tabInfo,
-      tabList: []
-    })
+    setTabActive(tabInfo!)
+    // setTabActive2(tabInfo!)
+    // pushHistoryOpenTabs(tabInfo!)
 
     /**
-     * pathname 改变了
+     * pathname
      */
     navigateTo(key)
   }
@@ -52,25 +42,28 @@ const MenuLayout = (props: { collapsed: boolean }) => {
    * @param openKeys
    */
   const handleOpenMenu = (openKeys: string[]) => {
-    setOpenKeys(openKeys)
+    console.log('--> MenuLayout handleOpenMenu openKeys: ', openKeys)
+    setOpenMenuKeys(openKeys)
   }
 
   return (
     <>
-      <Spin spinning={loading} tip='Loading...'>
-        <Logo collapsed={collapsed} />
+      <Spin spinning={false} tip='Loading...'>
+        <Logo />
         <Menu
           theme='dark'
           mode='inline'
           triggerSubMenuAction='click'
           openKeys={openKeys}
           selectedKeys={selectedKeys} // 当前选中的菜单项 key 数组
+          // selectedKeys={['/main/blog/index']} // 当前选中的菜单项 key 数组
           // default open menu
           // defaultOpenKeys={defaultOpenKeys}
           items={menuItems}
           // 初始选中的菜单项 key 数组
           // defaultSelectedKeys={defaultSelectKeys}
           onClick={clickMenu}
+          // onOpenChange={openKeys => setOpenMenuKeys(openKeys)}
           onOpenChange={handleOpenMenu}
         />
       </Spin>

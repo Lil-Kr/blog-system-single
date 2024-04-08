@@ -6,9 +6,12 @@ import userApi from '@/apis/user'
 
 // zustand
 import useLoginAdminStore from '@/store/login'
+import { useMenuStore, useTabsStoreTest } from '@/store/global'
 
 const AvatarIcon = () => {
   const { removeToken } = useLoginAdminStore()
+  const { resetTabs } = useTabsStoreTest()
+  const { restMenuState } = useMenuStore()
   const navigateTo = useNavigate()
 
   const items: MenuProps['items'] = [
@@ -31,6 +34,8 @@ const AvatarIcon = () => {
      * remove token
      */
     removeToken()
+    resetTabs()
+    restMenuState()
     navigateTo('/login')
   }
 

@@ -12,6 +12,7 @@ import { getBreadCrumbItems, getBrowserLang } from './utils/common'
 import { BreadcrumbType } from './types/common/breadcrumbType'
 
 function App() {
+  console.log('--> APP 也要渲染')
   const { language, assemblySize, setLanguage } = useSystemStore()
   const { setBreadcrumbMap } = useBreadcrumbStore()
   const [i18nLocale, setI18nLocale] = useState(zhCN)

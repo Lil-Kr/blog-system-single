@@ -2,12 +2,18 @@ import React from 'react'
 
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
+import { useMenuStore } from '@/store/global'
 
-const CollapsIcon = (props: { collapsed: boolean; setCollapsed: any }) => {
-  let { collapsed, setCollapsed } = props
+const CollapsIcon = () => {
+  const { collapsed, setMenuStyleCollapsed } = useMenuStore()
+
+  const onChange = () => {
+    console.log('--> 刷新 CollapsIcon, collapsed: ', !collapsed)
+    setMenuStyleCollapsed(!collapsed)
+  }
 
   return (
-    <div className='trigger collapsed' onClick={() => setCollapsed(!collapsed)}>
+    <div className='trigger collapsed' onClick={onChange}>
       {collapsed ? (
         <Button type='text' icon={<MenuUnfoldOutlined />} />
       ) : (

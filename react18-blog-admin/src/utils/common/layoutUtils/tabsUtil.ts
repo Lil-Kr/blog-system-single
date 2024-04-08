@@ -18,6 +18,7 @@ const getTabsMap = (breadcrumbMap: Map<string, BreadcrumbType[]>): Map<string, T
   let tabs: Map<string, TabType> = new Map()
   breadcrumbMap.forEach((value, key, arr) => {
     tabs.set(key, { key, path: key, label: value.pop()!.title, closable: HOME_ROUTER_URL === key ? false : true })
+    // tabs.set(key, { key, label: value.pop()!.title, closable: HOME_ROUTER_URL === key ? false : true })
   })
   return tabs
 }
@@ -50,7 +51,5 @@ const items: TabsProps['items'] = [
     children: 'Content of Tab Pane 3'
   }
 ]
-
-
 
 export { getTabsMap }

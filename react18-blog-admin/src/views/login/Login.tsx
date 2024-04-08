@@ -5,16 +5,21 @@ import React, { useState } from 'react'
 import useLoginAdminStore from '@/store/login'
 import { LoginTpye } from '@/types/user'
 import userApi from '@/apis/user'
-import { rootRouterConfig } from '@/router'
 
 import { Form, Input, Button, message } from 'antd'
 // scss
 import styles from './css/index.module.scss'
+import { useNavigate } from 'oh-router-react'
+import { useMenuStore, useTabsStoreTest } from '@/store/global'
+import { HOME_NAME, HOME_ROUTER_URL } from '@/config'
 
 const Login = () => {
   const [btnSize, setSize] = useState<SizeType>('large')
   const [loading, setLoading] = useState<boolean>(false)
+  const { resetTabs } = useTabsStoreTest()
+  // const { setSelectedKeys } = useMenuStore()
   const { setToken } = useLoginAdminStore()
+  const navigateTo = useNavigate()
 
   const onFinish = async (loginInfo: LoginTpye.LoginFormType) => {
     let { password } = loginInfo
@@ -23,11 +28,17 @@ const Login = () => {
     const { code, data: token, msg } = loginRes
     if (code === 200) {
       setToken(token)
+      const path = '/main/home'
       // 跳转
-      rootRouterConfig.navigate('/main/home')
+      navigateTo(path)
+      // const tabActive = { key: HOME_ROUTER_URL, path: HOME_ROUTER_URL, label: HOME_NAME, closable: false }
+      // const historyOpenTabs = [{ key: HOME_ROUTER_URL, path: HOME_ROUTER_URL, label: HOME_NAME, closable: false }]
+      // setTabActive(tabActive, historyOpenTabs)
+      // setSelectedKeys([path])
     } else {
       message.error('登陆失败')
-      rootRouterConfig.navigate('/login')
+      navigateTo('/login')
+      resetTabs()
     }
   }
 
