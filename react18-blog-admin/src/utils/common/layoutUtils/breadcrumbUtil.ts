@@ -15,7 +15,6 @@ const getBreadCrumbItems = (config: RouterItemType[]): Map<string, BreadcrumbTyp
   for (const idx in config) {
     const { meta, path, element, children, index } = config[idx]
     const { key, title } = meta!
-    // console.log('--> ', {key, title})// 不需要这个
     // just handle
     if (!children || children.length < 1) {
       continue
@@ -78,14 +77,12 @@ const handleBreadCrumbItems = (
       const { key, title } = meta!
       routerPathKey = routerPathKey + key
       rounterCrumbKey = rounterCrumbKey + '.' + title
-      // console.log('--> 进来了', {routerPathKey, rounterCrumbKey, })
       breadcrumbMap.set(routerPathKey, rounterCrumbKey)
       continue
     } else {
       const { key, title } = meta!
       routerPathKey = routerPathKey + key
       rounterCrumbKey = rounterCrumbKey + '.' + title
-      // console.log('--> 进来了', {routerPathKey, rounterCrumbKey, })
       handleBreadCrumbItems(children, routerPathKey, rounterCrumbKey, breadcrumbMap)
     }
   }

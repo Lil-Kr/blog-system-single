@@ -8,7 +8,6 @@ class LoginCheckMiddleware extends Middleware {
     // const isLogin = store.getState().auth.isLogin
     const token = cookie.load(CLT)
     if (!token || token == '') {
-      console.log('--> 不允许进入系统: ', { token })
       rootRouterConfig.navigate('/login')
     } else {
       await next()
@@ -22,7 +21,6 @@ class LoginCheckMiddleware extends Middleware {
    */
   register = ({ to }: MiddlewareContext<{}>) => {
     // 如果 path 不是 '/login' 则为当前路由注册该中间件
-    // console.log('--> to.pathname: ', to.pathname)
     return to.pathname !== '/login'
   }
 }

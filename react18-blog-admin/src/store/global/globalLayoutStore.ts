@@ -35,17 +35,6 @@ const useMenuStore = create<GlobaMenuState>()(
     }),
     { name: 'useMenuStore' }
   )
-
-  // (set, get) => ({
-  //   ...menuInitialState,
-  //   setMenuStyleCollapsed: (collapsed: boolean) => set(state => ({ collapsed: (state.collapsed = collapsed) })),
-  //   setSelectedKeys: (selectedKeys: string[]) =>
-  //     set(state => ({ selectedKeys: (state.selectedKeys = selectedKeys) })),
-  //   setOpenMenuKeys: (openKeys: string[]) => set(state => ({ openKeys: (state.openKeys = openKeys) })),
-  //   restMenuState: () => {
-  //     set(menuInitialState)
-  //   }
-  // }),
 )
 
 export { useMenuStore }
@@ -56,8 +45,6 @@ interface GlobalTabsState {
   tabActive: TabType
   historyOpenTabs: TabType[]
   setTabActive: (tabActive: TabType) => void
-  setTabActive2: (tabActive: TabType) => void
-  pushHistoryOpenTabs: (tabActive: TabType) => void
   removeTab: (tabActive: TabType, newTabs: TabType[]) => void
   resetTabs: () => void
 }
@@ -74,34 +61,20 @@ const useTabsStoreTest = create<GlobalTabsState>()(
       ...tabsInitialState,
       setTabActive: (tabActive: TabType) =>
         set(state => {
-          state.tabActive = tabActive
-          let tempHistorys = get().historyOpenTabs
-          let tempArr = tempHistorys.find(item => item.key === tabActive.key)
-          if (!tempArr) {
-            state.historyOpenTabs.push(tabActive)
+          let exsit = state.historyOpenTabs.some(item => item.key === tabActive.key)
+          if (!exsit) {
+            return {
+              ...state,
+              tabActive,
+              historyOpenTabs: [...state.historyOpenTabs, tabActive]
+            }
+          } else {
+            return { ...state, tabActive }
           }
-          return state
-        }),
-      setTabActive2: (tabActive: TabType) => set(state => ({ tabActive: (state.tabActive = tabActive) })),
-      pushHistoryOpenTabs: (tabActive: TabType) =>
-        set(state => {
-          let tempHistorys = get().historyOpenTabs
-          let tempArr = tempHistorys.filter(item => item.key === tabActive.key)
-          if (tempArr.length <= 0) {
-            state.historyOpenTabs.push(tabActive)
-          }
-          return state
         }),
       removeTab: (tabActive: TabType, newTabs: TabType[]) =>
         set(state => {
-          state.tabActive = tabActive
-
-          // let tempHistorys = get().historyOpenTabs
-          // let tempArr = tempHistorys.filter(item => item.key !== tabActive.key)
-          // console.log('--> 移除tab后剩余的tab:tempArr  ', tempArr)
-
-          state.historyOpenTabs = newTabs
-          return state
+          return { ...state, tabActive, historyOpenTabs: newTabs }
         }),
       resetTabs: () => {
         set(tabsInitialState)

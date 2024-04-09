@@ -16,20 +16,14 @@ import styles from '@/layout/css/index.module.scss'
 
 const MainLayout = () => {
   const { pathname } = useLocation()
-  const { historyOpenTabs, tabActive, setTabActive } = useTabsStoreTest()
-  const { collapsed, selectedKeys, setSelectedKeys, setOpenMenuKeys } = useMenuStore()
-  // const { historyOpenTabs } = useTabsStoreTest()
-  console.log('--> 主框架页面加载: historyOpenTabs: ', historyOpenTabs)
+  const { historyOpenTabs } = useTabsStoreTest()
+  const { collapsed, setSelectedKeys, setOpenMenuKeys } = useMenuStore()
 
-  // useEffect(() => {
-  //   /**
-  //    * 设置
-  //    */
-  //   // const tabInfo = tabMap.get(pathname)
-  //   // setTabActive(tabInfo!)
-  //   setSelectedKeys([pathname])
-  //   // collapsed ? null : setOpenMenuKeys(keys)
-  // }, [pathname, tabActive, historyOpenTabs])
+  const keys: string[] = getMenuOpenKeysUtil(pathname)
+  useEffect(() => {
+    setSelectedKeys([pathname])
+    collapsed ? null : setOpenMenuKeys(keys)
+  }, [pathname, collapsed])
 
   return (
     <div className={styles.mainLayoutWarpper}>

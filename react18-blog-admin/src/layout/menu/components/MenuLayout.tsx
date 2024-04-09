@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import Logo from './logo/Logo'
-import { Breadcrumb, Button, Layout, Menu, MenuProps, Spin } from 'antd'
+import { Menu, Spin } from 'antd'
 import { useNavigate, useLocation } from 'oh-router-react'
-import { SubMenuType, TabType } from '@/types/common'
+import { SubMenuType } from '@/types/common'
 import { menuItems, tabMap } from '@/router'
 import { useMenuStore, useTabsStoreTest } from '@/store/global/globalLayoutStore'
-import { getPushMenu } from '@/utils/common/layoutUtils/menuUtil'
-import { getMenuOpenKeysUtil } from '@/utils/common'
+import Logo from './logo/Logo'
 
 const MenuLayout = () => {
-  const { pathname } = useLocation()
-  const { historyOpenTabs, tabActive, setTabActive, setTabActive2, removeTab } = useTabsStoreTest()
-  const { collapsed, selectedKeys, openKeys, setSelectedKeys, setOpenMenuKeys } = useMenuStore()
+  const { setTabActive, removeTab } = useTabsStoreTest()
+  const {  selectedKeys, openKeys, setSelectedKeys, setOpenMenuKeys } = useMenuStore()
   const navigateTo = useNavigate()
-  // const [loading, setLoading] = useState(false)
 
   /**
    * jump content page
@@ -21,15 +16,11 @@ const MenuLayout = () => {
    */
   const clickMenu = (e: SubMenuType) => {
     const { key, keyPath } = e
-    console.log('--> MenuLayout 点了菜单项 key: ', key)
     /**
      * 选中菜单
      */
-    // setSelectedKeys([key])
     const tabInfo = tabMap.get(key)
     setTabActive(tabInfo!)
-    // setTabActive2(tabInfo!)
-    // pushHistoryOpenTabs(tabInfo!)
 
     /**
      * pathname
@@ -42,7 +33,6 @@ const MenuLayout = () => {
    * @param openKeys
    */
   const handleOpenMenu = (openKeys: string[]) => {
-    console.log('--> MenuLayout handleOpenMenu openKeys: ', openKeys)
     setOpenMenuKeys(openKeys)
   }
 

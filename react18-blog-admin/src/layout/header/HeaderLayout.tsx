@@ -15,7 +15,6 @@ import { TabType } from '@/types/common'
 const { Header } = Layout
 
 const HeaderLayout = () => {
-  // console.log('--> 刷新 HeaderLayout')
   return (
     <Header className={styles.layoutHeader} style={{ padding: 0 }}>
       <div className='header-lf'>

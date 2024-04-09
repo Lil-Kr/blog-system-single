@@ -6,10 +6,8 @@ const TableBase = (props: TableBaseParames) => {
   const { tableId, style, rowSelection, loading, columns, dataSource, pagination } = props
 
   const [pageSize, setPageSize] = useState<number>(5)
-  // const [pagination, setPagination] = useState<number>(5)
 
   const onChange: PaginationProps['onChange'] = (page, pageSize) => {
-    console.log('-->onChange: ', page, pageSize)
   }
 
   /**
@@ -19,7 +17,6 @@ const TableBase = (props: TableBaseParames) => {
    * @param pageSize
    */
   const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
-    console.log('-->onShowSizeChange: ', current, pageSize)
     setPageSize(pageSize)
   }
 

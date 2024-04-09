@@ -62,7 +62,6 @@ const getRouterItems = (routerConfig: RouterItemType[]): RouterItemType[] => {
       routeInfo.push(mainRouter)
     }
   }
-  // console.log('--> routeInfo:', routeInfo)
   return routeInfo
 }
 
@@ -76,11 +75,9 @@ function deepLoopRouterChildren(
     const { key } = meta!
 
     const routerPath = rootKey + key
-    // console.log('--> routerPath:', routerPath)
     // handle deep loop to end case
     if (!childrenRoute || childrenRoute.length <= 0) {
       routerTable.push({ path: routerPath, element, component })
-      // console.log('--> routerTable:', routerTable)
       continue
     }
     // deep loop

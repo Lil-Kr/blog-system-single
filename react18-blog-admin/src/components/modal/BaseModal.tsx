@@ -57,10 +57,13 @@ const BaseModal = (props: ModalType.BaseModalType) => {
     baseModalForm.resetFields()
   }
 
+  /**
+   * 点击确定事件
+   * @returns
+   */
   const handleOk = async () => {
     const valid = await baseModalForm.validateFields()
     const { api } = requestParams
-    console.log('--> 封装组件Modal: ')
 
     const params = baseModalForm.getFieldsValue()
     if (!valid) {
@@ -80,7 +83,6 @@ const BaseModal = (props: ModalType.BaseModalType) => {
       }
     } else if (action === 'edit') {
       const param = { surrogateId: params.key, ...params }
-      console.log('--> param: ', param)
       const res = await api.edit!(param)
       const { code, msg, data } = res
       if (code === 200) {

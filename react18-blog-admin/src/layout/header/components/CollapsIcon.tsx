@@ -8,7 +8,6 @@ const CollapsIcon = () => {
   const { collapsed, setMenuStyleCollapsed } = useMenuStore()
 
   const onChange = () => {
-    console.log('--> 刷新 CollapsIcon, collapsed: ', !collapsed)
     setMenuStyleCollapsed(!collapsed)
   }
 

@@ -51,7 +51,6 @@ const FullScreenModal = (props: ModalType.FullScreenModalType) => {
 
     if (action === 'create') {
     } else if (action === 'edit') {
-      console.log('--> action edit : ', action)
       fullScreenModalForm.setFieldsValue(data)
     } else {
       fullScreenModalForm.setFieldsValue(data)
@@ -73,7 +72,6 @@ const FullScreenModal = (props: ModalType.FullScreenModalType) => {
 
   const handleOk = async () => {
     const { api } = requestParams
-    console.log('--> 封装组件Modal: ')
     let param = {
       number: '100',
       name: '分布式系统',

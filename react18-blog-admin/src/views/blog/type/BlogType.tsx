@@ -248,7 +248,6 @@ const BlogType = () => {
   const search = () => {
     let data = form.getFieldsValue()
     const searchParam = { ...data, currentPageNum: 1, pageSize: pageSize }
-    console.log('--> searchParam: ', searchParam)
     getTypePageList({ ...searchParam })
   }
 
@@ -291,7 +290,6 @@ const BlogType = () => {
    * @param pageSize
    */
   const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
-    console.log('-->onShowSizeChange: ', current, pageSize)
     const values = form.getFieldsValue()
     getTypePageList({ ...values, currentPageNum: current, pageSize: pageSize })
     setPageSize(pageSize)
@@ -303,7 +301,6 @@ const BlogType = () => {
    * @param pageSize 每页记录数
    */
   const onChange: PaginationProps['onChange'] = (page, pageSize) => {
-    // console.log('-->onChange: ', page, pageSize)
     const values = form.getFieldsValue()
     getTypePageList({ ...values, currentPageNum: page, pageSize: pageSize })
   }

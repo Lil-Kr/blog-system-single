@@ -33,10 +33,6 @@ axiosInstance.interceptors.response.use(
     console.log('--> response interceptors response:', response)
 
     const { data, config, headers, request, status, statusText } = response
-    // console.log('--> response interceptors data:', data)
-
-    // console.log('--> response interceptors token:', token)
-
     if (status === 200) {
       const { data } = response
 

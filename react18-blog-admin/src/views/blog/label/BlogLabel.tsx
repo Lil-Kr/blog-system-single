@@ -189,7 +189,6 @@ const BlogLabel = () => {
    * @param pageSize
    */
   const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
-    console.log('-->onShowSizeChange: ', current, pageSize)
     setPageSize(pageSize)
   }
 
@@ -199,7 +198,6 @@ const BlogLabel = () => {
    * @param pageSize
    */
   const onChange: PaginationProps['onChange'] = (page, pageSize) => {
-    console.log('-->onChange: ', page, pageSize)
   }
 
   return (

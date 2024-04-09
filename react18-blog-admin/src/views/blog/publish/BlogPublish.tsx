@@ -102,7 +102,6 @@ const BlogPublish = () => {
    * @param v
    */
   const blogTypeFunc = (v: string) => {
-    console.log('--> 文章分类搜索', v)
   }
 
   /**
@@ -110,13 +109,11 @@ const BlogPublish = () => {
    * @param v
    */
   const onFinish = (html: string) => {
-    console.log('--> html: ', html)
   }
   /**
    * onFinishFailed
    */
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
   }
 
   return (

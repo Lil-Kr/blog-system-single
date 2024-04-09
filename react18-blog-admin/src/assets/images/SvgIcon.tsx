@@ -14,7 +14,6 @@ function isExternal(path: string) {
 
 const SvgIcon = () => {
 	// const symbolId = `#${prefix}-${name}`
-	// console.log('--> symbolId:', symbolId)
 	// const symbolId = `#${name}`
 	// const logoSvg = require('./svg/article-create.svg')
 	return (
