@@ -1,4 +1,4 @@
-import { BaseEntityRequiredType } from '../../base'
+import { BaseEntityRequiredType, BaseEntityType } from '../../base'
 
 /**
  * blog content
@@ -11,13 +11,10 @@ export namespace BlogContenType {
     remark: string
   }
 
-  export interface BlogContent extends BaseEntityRequiredType {
+  export interface BlogContent extends BaseEntityType {
     id?: number
     surrogateId?: string
     number?: number | string
     name?: string
-    remark?: string
   }
 }
-
-

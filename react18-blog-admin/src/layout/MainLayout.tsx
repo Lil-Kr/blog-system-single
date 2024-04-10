@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useMenuStore, useTabsStoreTest } from '@/store/global/globalLayoutStore'
+import { useMenuStore, useTabsStore } from '@/store/global/globalStore'
 import MenuLayout from './menu'
 import HeaderLayout from './header'
 import ContentLayout from './content'
@@ -16,7 +16,7 @@ import styles from '@/layout/css/index.module.scss'
 
 const MainLayout = () => {
   const { pathname } = useLocation()
-  const { historyOpenTabs } = useTabsStoreTest()
+  const { historyOpenTabs } = useTabsStore()
   const { collapsed, setSelectedKeys, setOpenMenuKeys } = useMenuStore()
 
   const keys: string[] = getMenuOpenKeysUtil(pathname)

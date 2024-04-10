@@ -17,15 +17,16 @@ const useBreadcrumbStore = create<BreadcrumbState & Actions>()(
       breadcrumbList: [],
 
       setBreadcrumbMap: (breadcrumbMap: Map<string, BreadcrumbType[]>) =>
-        set(state => setBreadcrumbMapFunc(state, breadcrumbMap))
+        // set(state => setBreadcrumbMapFunc(state, breadcrumbMap))
+        set(state => {
+          return {
+            ...state,
+            breadcrumbMap
+          }
+        })
     }),
     { name: 'breadcrumbStore' }
   )
 )
-
-const setBreadcrumbMapFunc = (state: BreadcrumbState & Actions, breadcrumbMap: Map<string, BreadcrumbType[]>) => {
-  state.breadcrumbMap = breadcrumbMap
-  return state
-}
 
 export default useBreadcrumbStore

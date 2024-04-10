@@ -8,5 +8,5 @@ export interface LabelType extends BaseEntityRequiredType {
   surrogateId: string
   number: number | string
   name: string
-  remark: string
+  color: string
 }

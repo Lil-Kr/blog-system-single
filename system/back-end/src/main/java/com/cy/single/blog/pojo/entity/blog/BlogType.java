@@ -3,7 +3,7 @@ package com.cy.single.blog.pojo.entity.blog;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.cy.single.blog.base.BaseParameter;
+import com.cy.single.blog.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -26,7 +26,7 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @TableName("blog_type")
 @Data
-public class BlogType extends BaseParameter implements Serializable {
+public class BlogType extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

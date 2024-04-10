@@ -3,7 +3,7 @@ package com.cy.single.blog.pojo.entity.blog;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.cy.single.blog.base.BaseParameter;
+import com.cy.single.blog.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -26,7 +26,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @TableName("blog_label")
-public class BlogLabel extends BaseParameter implements Serializable {
+public class BlogLabel extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,6 +48,11 @@ public class BlogLabel extends BaseParameter implements Serializable {
      * 标签名
      */
     private String name;
+
+    /**
+     * 标签颜色
+     */
+    private String color;
 
     /**
      * 备注
@@ -84,6 +89,14 @@ public class BlogLabel extends BaseParameter implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getRemark() {

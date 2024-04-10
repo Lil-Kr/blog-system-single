@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+*/*.tsbuildinfo
 
 # Build and Release Folders
 bin-debug/
@@ -80,6 +81,7 @@ target
 *.diff
 *.patch
 *.tmp
+*.tsbuildinfo
 
 # system ignore
 .DS_Store

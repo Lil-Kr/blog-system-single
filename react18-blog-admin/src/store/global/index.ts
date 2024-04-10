@@ -1,5 +1,5 @@
-import { useMenuStore, useTabsStoreTest } from './globalLayoutStore'
-export { useMenuStore, useTabsStoreTest }
+import { useMenuStore, useTabsStore } from './globalStore'
+export { useMenuStore, useTabsStore }
 
 import useBreadcrumbStore from './breadcrumbStore'
 export { useBreadcrumbStore }

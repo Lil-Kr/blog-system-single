@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Flex, Form, Input, Pagination, PaginationProps, Popconfirm, Space, Table, message } from 'antd'
+import { Button, Flex, Form, Input, Pagination, PaginationProps, Popconfirm, Space, Table, Tag, message } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { LabelDTO, LabelReqParams } from '@/types/apis/blog/label'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
@@ -23,7 +23,14 @@ const BlogLabel = () => {
       key: 'name',
       dataIndex: 'name',
       title: '标签名',
-      width: 100
+      width: 100,
+      render: (_, record: LabelDTO) => (
+        <>
+          <Tag key={record.key} color={record.color}>
+            {record.name}
+          </Tag>
+        </>
+      )
     },
     {
       key: 'remark',
@@ -170,10 +177,11 @@ const BlogLabel = () => {
     const labelList = await blogLabelApi.getLabelList({ ...values })
     const { code, data, msg } = labelList
     if (code === 200) {
-      const datas = data.list.map(({ surrogateId, number, name, remark }) => ({
+      const datas = data.list.map(({ surrogateId, number, name, color, remark }) => ({
         key: surrogateId,
         number,
         name,
+        color,
         remark
       }))
       setDataSource(datas)
@@ -197,8 +205,7 @@ const BlogLabel = () => {
    * @param page
    * @param pageSize
    */
-  const onChange: PaginationProps['onChange'] = (page, pageSize) => {
-  }
+  const onChange: PaginationProps['onChange'] = (page, pageSize) => {}
 
   return (
     <div className='blog-label-warpper'>

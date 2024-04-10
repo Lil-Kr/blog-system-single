@@ -49,6 +49,7 @@ export interface LabelDTO {
   key: string
   number: string | number
   name: string
+  color?: string
   remark: string
 }
 

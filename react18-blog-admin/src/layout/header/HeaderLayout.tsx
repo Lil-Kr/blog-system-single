@@ -1,6 +1,4 @@
-import React, { useState } from 'react'
-import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
-import { Breadcrumb, Button, Dropdown, Flex, Layout, Space } from 'antd'
+import { Layout } from 'antd'
 import BreadcrumbNav from './components/BreadcrumbNav'
 import CollapsIcon from './components/CollapsIcon'
 import LanguageChange from './components/LanguageChange'
@@ -10,7 +8,6 @@ import AvatarIcon from './components/AvatarIcon'
 
 // css
 import styles from './index.module.scss'
-import { TabType } from '@/types/common'
 
 const { Header } = Layout
 
@@ -24,9 +21,13 @@ const HeaderLayout = () => {
         <BreadcrumbNav />
       </div>
       <div className='header-ri'>
+        {/* select language */}
         <LanguageChange />
+        {/* select them */}
         <Theme />
+        {/* select full screen */}
         <Fullscreen />
+        {/* avatar */}
         <AvatarIcon />
       </div>
     </Header>

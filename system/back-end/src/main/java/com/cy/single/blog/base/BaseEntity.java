@@ -15,11 +15,18 @@ import java.util.Date;
  */
 @ToString
 @Data
-public class BaseParameter implements Serializable {
+public class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -4120652138040137224L;
 
-    private Integer deleted;
+    private Integer status;
+
+    private String remark;
+
+    /**
+     * 默认 0
+     */
+    private Integer deleted = 0;
     
     /**
      * 创建人

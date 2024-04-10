@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * @Author: Lil-K
  * @Date: 2024/3/4
- * @Description:
+ * @Description: 基础查询参数
  */
 @ToString
 @Data

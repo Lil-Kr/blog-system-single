@@ -10,13 +10,13 @@ import { Form, Input, Button, message } from 'antd'
 // scss
 import styles from './css/index.module.scss'
 import { useNavigate } from 'oh-router-react'
-import { useMenuStore, useTabsStoreTest } from '@/store/global'
+import { useMenuStore, useTabsStore } from '@/store/global'
 import { HOME_NAME, HOME_ROUTER_URL } from '@/config'
 
 const Login = () => {
   const [btnSize, setSize] = useState<SizeType>('large')
   const [loading, setLoading] = useState<boolean>(false)
-  const { resetTabs } = useTabsStoreTest()
+  const { resetTabs } = useTabsStore()
   // const { setSelectedKeys } = useMenuStore()
   const { setToken } = useLoginAdminStore()
   const navigateTo = useNavigate()

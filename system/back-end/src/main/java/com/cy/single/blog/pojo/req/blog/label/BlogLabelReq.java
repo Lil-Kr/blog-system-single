@@ -1,6 +1,6 @@
 package com.cy.single.blog.pojo.req.blog.label;
 
-import com.cy.single.blog.base.BaseParameter;
+import com.cy.single.blog.base.BaseEntity;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @ToString
 @Data
-public class BlogLabelReq extends BaseParameter {
+public class BlogLabelReq extends BaseEntity {
 
     public interface GroupLabelSave {}
     public interface GroupLabelEdit {}
@@ -38,39 +38,11 @@ public class BlogLabelReq extends BaseParameter {
     @Length(groups = {Default.class, GroupLabelSave.class, GroupLabelEdit.class}, max = 50, message = "标签类型名长度在50个字符以内")
     private String name;
 
+//    @NotNull(groups = {Default.class, GroupLabelSave.class}, message = "标签颜色不能为空")
+//    @Length(groups = {Default.class, GroupLabelSave.class, GroupLabelEdit.class}, max = 20, message = "标签颜色值不超过20个字符")
+    private String color;
+
     @Length(groups = {Default.class, GroupLabelSave.class},max = 200, message = "备注长度必须在200个字符以内")
     private String remark;
 
-
-    public Long getSurrogateId() {
-        return surrogateId;
-    }
-
-    public void setSurrogateId(Long surrogateId) {
-        this.surrogateId = surrogateId;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
 }

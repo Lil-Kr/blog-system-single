@@ -3,6 +3,8 @@
  */
 export interface BaseEntityType {
   deleted?: number | 0
+  status?: number // 未使用
+  remark?: string
   creatorId?: string | ''
   modifierId?: string | ''
   createTime?: string | ''
@@ -10,7 +12,9 @@ export interface BaseEntityType {
 }
 
 export interface BaseEntityRequiredType {
-  deleted?: number
+  status?: number // 未使用
+  remark: string
+  deleted?: number // 未使用
   creatorId: string
   modifierId: string
   createTime: string
@@ -18,6 +22,8 @@ export interface BaseEntityRequiredType {
 }
 
 export interface BaseEntityPageType extends BasePageReq {
+  status?: number
+  remark?: string
   deleted?: number
   creatorId?: string
   modifierId?: string
@@ -26,7 +32,9 @@ export interface BaseEntityPageType extends BasePageReq {
 }
 
 export interface BaseEntityRequiredPageType extends BasePageReq {
-  deleted?: number
+  status: number
+  remark: string
+  deleted?: number // 未使用
   creatorId: string
   modifierId: string
   createTime: string

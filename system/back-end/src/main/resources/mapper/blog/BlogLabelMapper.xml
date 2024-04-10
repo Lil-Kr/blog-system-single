@@ -9,7 +9,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,surrogate_id, `number`, `name`, remark, deleted, creator_id,modifier_id,create_time,update_time
+        id,surrogate_id, `number`, `name`, color, remark, deleted, creator_id,modifier_id,create_time,update_time
     </sql>
 
 
@@ -21,6 +21,9 @@
             </if>
             <if test="param.name != null and param.name != ''">
                 name = #{param.name},
+            </if>
+            <if test="param.color != null and param.color != ''">
+                color = #{param.color},
             </if>
             <if test="param.remark != null and param.remark != ''">
                 remark = #{param.remark},

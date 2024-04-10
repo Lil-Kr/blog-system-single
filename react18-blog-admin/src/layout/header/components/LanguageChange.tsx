@@ -1,4 +1,3 @@
-import React from 'react'
 import { Dropdown, MenuProps } from 'antd'
 import { useSystemStore } from '@/store/global'
 
@@ -20,8 +19,7 @@ const LanguageChange = () => {
     }
   ]
 
-  const handleMenuClick: MenuProps['onClick'] = event => {
-  }
+  const handleMenuClick: MenuProps['onClick'] = event => {}
 
   const menuProps = {
     items,

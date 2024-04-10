@@ -6,7 +6,6 @@ import { UserOutlined } from '@ant-design/icons'
 import { busConfig } from './modules'
 import { RouterItemType, RouterMetaType } from '@/types/router/routeType'
 import { getBreadCrumbItems, getRouterMenuItems, getTabsMap } from '@/utils/common'
-import { useBreadcrumbStore } from '@/store/global'
 import { BreadcrumbType } from '@/types/common/breadcrumbType'
 
 // antd

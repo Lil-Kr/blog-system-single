@@ -1,14 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Button, Tabs, TabsProps } from 'antd'
-import { useNavigate, useLocation } from 'oh-router-react'
+import React from 'react'
+import { Tabs } from 'antd'
+import { useNavigate } from 'oh-router-react'
 import { TabType } from '@/types/common/tabType'
+
 // css
 import './index.scss'
-import { useMenuStore, useTabsStoreTest } from '@/store/global/globalLayoutStore'
+import { useMenuStore, useTabsStore } from '@/store/global/globalStore'
 import { getMenuOpenKeysUtil } from '@/utils/common'
-import { menuItems, tabMap } from '@/router'
-
-type TargetKey = React.MouseEvent | React.KeyboardEvent | string
 
 /**
  *
@@ -16,12 +14,11 @@ type TargetKey = React.MouseEvent | React.KeyboardEvent | string
  */
 const TabsLayout = () => {
   const navigateTo = useNavigate()
-  const { pathname } = useLocation()
   /**
    * 从 zustand 读取最后一次打开的所有 tab, 并初始化展开的 tab
    */
-  const { historyOpenTabs, tabActive, setTabActive, removeTab } = useTabsStoreTest()
-  const { collapsed, selectedKeys, setSelectedKeys, setOpenMenuKeys } = useMenuStore()
+  const { historyOpenTabs, tabActive, setTabActive, removeTab } = useTabsStore()
+  const { setSelectedKeys, setOpenMenuKeys } = useMenuStore()
 
   /**
    * onChange
@@ -34,9 +31,7 @@ const TabsLayout = () => {
       label: '',
       closable: true
     }
-    // historyOpenTabs.push(newActiveTab)
     setTabActive(newActiveTab)
-    // setOpenMenuKeys([newActiveKey])
     navigateTo(newActiveKey)
   }
 
@@ -57,10 +52,11 @@ const TabsLayout = () => {
         delIndex = index
       }
       // 获取当前选中的tab index
-      if (item.key === pathname) {
+      if (item.key === tabActive.key) {
         curIndex = index
       }
     })
+
     /**
      * 筛选出移除tab之后的新数组
      */
@@ -71,18 +67,23 @@ const TabsLayout = () => {
     } else if (delIndex < curIndex) {
       selectedIndex = curIndex - 1
     } else {
-      selectedIndex = newTabs.length - 1
+      selectedIndex = curIndex - 1
     }
     let newActiveTab: TabType = newTabs[selectedIndex]
-    return { newTabs, newActiveTab }
+
+    return { newActiveTab, newTabs }
   }
 
   const onEdit = (e: React.MouseEvent | React.KeyboardEvent | string, action: 'add' | 'remove') => {
     if (action === 'add') {
       // addTabs()
     } else {
-      const { newTabs, newActiveTab } = remove(e.toString())
+      const { newActiveTab, newTabs } = remove(e.toString())
       removeTab(newActiveTab, newTabs)
+      const keys: string[] = getMenuOpenKeysUtil(newActiveTab.key)
+      setSelectedKeys([newActiveTab.key])
+      setOpenMenuKeys(keys)
+      navigateTo(newActiveTab.key)
     }
   }
 

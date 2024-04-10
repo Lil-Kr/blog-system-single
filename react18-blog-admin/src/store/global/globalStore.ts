@@ -55,7 +55,7 @@ const tabsInitialState = {
   historyOpenTabs: [{ key: HOME_ROUTER_URL, path: HOME_ROUTER_URL, label: HOME_NAME, closable: false }]
 }
 
-const useTabsStoreTest = create<GlobalTabsState>()(
+const useTabsStore = create<GlobalTabsState>()(
   persist(
     (set, get) => ({
       ...tabsInitialState,
@@ -80,8 +80,8 @@ const useTabsStoreTest = create<GlobalTabsState>()(
         set(tabsInitialState)
       }
     }),
-    { name: 'tabsStoreTest' }
+    { name: 'useTabsStore' }
   )
 )
 
-export { useTabsStoreTest }
+export { useTabsStore }

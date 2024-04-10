@@ -1,6 +1,6 @@
 package com.cy.single.blog.pojo.req.blog.type;
 
-import com.cy.single.blog.base.BaseParameter;
+import com.cy.single.blog.base.BaseEntity;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @ToString
 @Data
-public class BlogTypeReq extends BaseParameter {
+public class BlogTypeReq extends BaseEntity {
 
     public interface GroupTypeSave {}
     public interface GroupTypeEdit {}
