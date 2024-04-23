@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useMenuStore, useTabsStore } from '@/store/global/globalStore'
+import { useMenuStore } from '@/store/global/globalStore'
 import MenuLayout from './menu'
 import HeaderLayout from './header'
 import ContentLayout from './content'
@@ -9,14 +9,12 @@ import { Layout } from 'antd'
 const { Sider } = Layout
 import { useLocation } from 'oh-router-react'
 import { getMenuOpenKeysUtil } from '@/utils/common'
-import { menuItems, tabMap } from '@/router'
 
 // css
 import styles from '@/layout/css/index.module.scss'
 
 const MainLayout = () => {
   const { pathname } = useLocation()
-  const { historyOpenTabs } = useTabsStore()
   const { collapsed, setSelectedKeys, setOpenMenuKeys } = useMenuStore()
 
   const keys: string[] = getMenuOpenKeysUtil(pathname)
@@ -35,7 +33,7 @@ const MainLayout = () => {
           <HeaderLayout />
           <TabsLayout />
           <ContentLayout />
-          {/*<FooterLayout /> */}
+          <FooterLayout />
         </Layout>
       </Layout>
     </div>

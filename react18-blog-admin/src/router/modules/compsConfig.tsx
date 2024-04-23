@@ -47,6 +47,46 @@ const compsConfig: RouterItemType[] = [
         },
         path: 'modal',
         element: LazyLoad(lazy(() => import('@/views/comps/modal/ModalTest')))
+      },
+      {
+        meta: {
+          key: '/tiptap',
+          title: 'tiptap',
+          layout: false,
+          icon: <SlidersOutlined />
+        },
+        path: 'tiptap',
+        element: LazyLoad(lazy(() => import('@/views/comps/tiptap/Tiptap')))
+      },
+      {
+        meta: {
+          key: '/quill',
+          title: 'quill',
+          layout: false,
+          icon: <SlidersOutlined />
+        },
+        path: 'quill',
+        element: LazyLoad(lazy(() => import('@/views/comps/quill/ReactQuillEditor')))
+      },
+      {
+        meta: {
+          key: '/quill2',
+          title: 'quill2',
+          layout: false,
+          icon: <SlidersOutlined />
+        },
+        path: 'quill2',
+        element: LazyLoad(lazy(() => import('@/views/comps/quill/QuillEditor2')))
+      },
+      {
+        meta: {
+          key: '/tinymce',
+          title: 'tinymce',
+          layout: false,
+          icon: <SlidersOutlined />
+        },
+        path: 'tinymce',
+        element: LazyLoad(lazy(() => import('@/views/comps/tinymce/Tinymce')))
       }
     ]
   }

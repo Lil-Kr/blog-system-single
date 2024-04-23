@@ -1,7 +1,7 @@
 import React from 'react'
 import { RouterItemType } from '@/types/router/routeType'
-// import {  } from 'oh-router-react'
-import { Navigate } from 'react-router-dom'
+import { NavigateOptions, Link } from 'oh-router-react'
+// import { Navigate } from 'react-router-dom'
 
 /**
  * TODO: 还需要处理
@@ -11,7 +11,7 @@ import { Navigate } from 'react-router-dom'
  */
 const redireactUtil = (params: any) => {
   const { redireactPath, replace } = params
-  return <Navigate to={redireactPath} replace={replace} />
+  return <Link to={redireactPath} replace={replace} />
 }
 
 /**
@@ -86,4 +86,4 @@ function deepLoopRouterChildren(
   return routerTable
 }
 
-export { redireactUtil, getRouterItems, deepLoopRouterChildren }
+export { redireactUtil, getRouterItems }
