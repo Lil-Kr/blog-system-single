@@ -50,7 +50,8 @@ public class GlobalRequestLoggerAspect {
         log.info("url:              {}", url);
         log.info("request type:     {}", reqType);
         log.info("api name:         {}", apiName);
-        log.info("args:             {}", JSONArray.toJSONString(args));
+//        log.info("args:             {}", JSONArray.toJSONString(args));
+        log.info("args:             {}", args instanceof Object ? JSONObject.toJSONString(args) : JSONArray.toJSONString(args));
 
         Instant startTime = Instant.now();
 

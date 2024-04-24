@@ -10,3 +10,13 @@ spring:
     url: jdbc:mysql://localhost:3306/single_blog_system?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: 123456
+
+
+## upload config
+upload:
+  ## change to linux file path
+  rootDir: D:/project/mine/java-project
+  uploadDir: /upload
+  requestMappingPath: /upload/**
+  moduleImagePath: /image
+  moduleBlogPath: /blog

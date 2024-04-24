@@ -19,6 +19,7 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config: any) => {
+    console.log('--> request intercept:', config)
     return config
   },
   (error: AxiosError) => {

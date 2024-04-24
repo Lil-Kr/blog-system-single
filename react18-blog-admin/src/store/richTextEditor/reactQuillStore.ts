@@ -35,7 +35,7 @@ interface TinymceState {
 }
 
 const tinymceInit = {
-  contents: 'write something.....'
+  contents: ''
 }
 
 const useTinymceStore = create<TinymceState>()((set, get) => ({

@@ -11,6 +11,17 @@ spring:
     username: root
     password: 123456
 
+
+## mybatis-plus
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+## upload config
+upload:
+  rootDir: D:/project/mine/java-project
+  uploadDir: /upload
+  requestMappingPath: /upload/**
+  moduleImagePath: /image
+  moduleBlogPath: /blog

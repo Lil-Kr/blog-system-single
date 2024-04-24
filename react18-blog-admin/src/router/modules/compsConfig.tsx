@@ -87,6 +87,16 @@ const compsConfig: RouterItemType[] = [
         },
         path: 'tinymce',
         element: LazyLoad(lazy(() => import('@/views/comps/tinymce/Tinymce')))
+      },
+      {
+        meta: {
+          key: '/image-uploader',
+          title: '图片上传',
+          layout: false,
+          icon: <SlidersOutlined />
+        },
+        path: 'image-uploader',
+        element: LazyLoad(lazy(() => import('@/views/comps/imageupload/ImageUploda')))
       }
     ]
   }
