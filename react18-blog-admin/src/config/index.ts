@@ -13,6 +13,13 @@ export const HOME_NAME = '首页'
 export const HOME_ROUTER_URL: string = '/main/home'
 
 /**
+ * constants
+ */
+
+
+
+
+/**
  * =================== api base path ==================
  */
 export const PREFIX_BASE_URL = '/api'

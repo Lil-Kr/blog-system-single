@@ -4,7 +4,7 @@
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "skipLibCheck": true,
+    "skipLibCheck": true, // 跳过对 .d.ts 文件的类型检查
     "allowJs": true,
     "forceConsistentCasingInFileNames": true, // 不允许对同一个文件使用不一致格式的引用
     "sourceMap": true, // 生成相应的.map文件
@@ -54,6 +54,6 @@
     // zustand PartialState config
     // "exactOptionalPropertyTypes": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/store/global/tabStore.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx",],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

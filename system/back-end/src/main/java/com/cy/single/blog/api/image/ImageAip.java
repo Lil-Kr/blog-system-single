@@ -29,7 +29,6 @@ import java.nio.file.StandardCopyOption;
 @RequestMapping("/image")
 public class ImageAip {
 
-
   @Value("${upload.rootDir}")
   private String rootDir;
 
@@ -44,18 +43,17 @@ public class ImageAip {
   @PostMapping("/pageList")
   public ApiResp<String> pageList() {
 //    PageResult<BlogLabelVO> list = blogLabelService.pageList(req);
-
     return ApiResp.success();
   }
 
   /**
-   * TODO: 校验图片大小
+   * TODO: check image size(2M)
    * @param imageFile
    * @return
    * @throws IOException
    */
-  @RecordLogger
-  @CheckAuth
+//  @RecordLogger
+//  @CheckAuth
   @PostMapping("/upload")
   public ApiResp<ImageUploadVO> upload(@RequestParam("avatar") MultipartFile imageFile) throws IOException {
     String imageFullName = imageFile.getOriginalFilename();
@@ -78,15 +76,18 @@ public class ImageAip {
     try(InputStream inputStream = imageFile.getInputStream()) {
       Files.copy(inputStream, Paths.get(resourcePath.toString()), StandardCopyOption.REPLACE_EXISTING);
       String imageUrl = uploadDir + moduleImagePath + imageReName;
-      System.out.println(imageUrl);
-      // todo insert DB
+//      System.out.println(imageUrl);
 
+      /**
+       * TODO: insert DB
+       * splice name, image_url, type ...
+       */
     } catch (Exception e) {
       log.info("upload image error: {}", e.getMessage());
       return ApiResp.failure(e.getMessage());
     }
 
-    return ApiResp.success("upload " + imageFullName + "success");
+    return ApiResp.success("upload " + imageFullName + " success");
   }
 
   @RecordLogger

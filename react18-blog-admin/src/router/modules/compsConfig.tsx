@@ -16,27 +16,7 @@ const compsConfig: RouterItemType[] = [
       {
         meta: { key: 'comps-index', title: 'comps-index' },
         index: true,
-        element: LazyLoad(lazy(() => import('@/views/comps/md-editor/MdEditor1')))
-      },
-      {
-        meta: {
-          key: '/index',
-          title: 'md-editor-rt',
-          layout: false,
-          icon: <AreaChartOutlined />
-        },
-        path: 'index',
-        element: LazyLoad(lazy(() => import('@/views/comps/md-editor/MdEditor1')))
-      },
-      {
-        meta: {
-          key: '/md-editor-2',
-          title: 'react-md-editor',
-          layout: false,
-          icon: <SlidersOutlined />
-        },
-        path: 'md-editor-2',
-        element: LazyLoad(lazy(() => import('@/views/comps/md-editor/MdEditor2')))
+        element: LazyLoad(lazy(() => import('@/views/comps/modal/ModalTest')))
       },
       {
         meta: {
@@ -50,43 +30,23 @@ const compsConfig: RouterItemType[] = [
       },
       {
         meta: {
-          key: '/tiptap',
-          title: 'tiptap',
+          key: '/tinymce-cloud',
+          title: 'tinymce-cloud',
           layout: false,
           icon: <SlidersOutlined />
         },
-        path: 'tiptap',
-        element: LazyLoad(lazy(() => import('@/views/comps/tiptap/Tiptap')))
+        path: 'tinymce-cloud',
+        element: LazyLoad(lazy(() => import('@/views/comps/tinymce/TinymceCloud')))
       },
       {
         meta: {
-          key: '/quill',
-          title: 'quill',
+          key: '/tinymce-local',
+          title: 'tinymce-local',
           layout: false,
           icon: <SlidersOutlined />
         },
-        path: 'quill',
-        element: LazyLoad(lazy(() => import('@/views/comps/quill/ReactQuillEditor')))
-      },
-      {
-        meta: {
-          key: '/quill2',
-          title: 'quill2',
-          layout: false,
-          icon: <SlidersOutlined />
-        },
-        path: 'quill2',
-        element: LazyLoad(lazy(() => import('@/views/comps/quill/QuillEditor2')))
-      },
-      {
-        meta: {
-          key: '/tinymce',
-          title: 'tinymce',
-          layout: false,
-          icon: <SlidersOutlined />
-        },
-        path: 'tinymce',
-        element: LazyLoad(lazy(() => import('@/views/comps/tinymce/Tinymce')))
+        path: 'tinymce-local',
+        element: LazyLoad(lazy(() => import('@/views/comps/tinymce/TinymceLocal')))
       },
       {
         meta: {

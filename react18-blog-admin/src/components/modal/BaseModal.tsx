@@ -2,7 +2,6 @@ import React, { useImperativeHandle, useState } from 'react'
 import Modal from 'antd/es/modal/Modal'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { ConfigProvider, Form, Input, message } from 'antd'
-import { i } from 'node_modules/vite/dist/node/types.d-aGj9QkWt'
 
 const BaseModal = (props: ModalType.BaseModalType) => {
   const { mRef, update } = props

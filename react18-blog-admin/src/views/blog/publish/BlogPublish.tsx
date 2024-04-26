@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Form, Input, Select, Space, Tag } from 'antd'
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect'
-import { EditorProps, MdEditor } from 'md-editor-rt'
+// import { EditorProps, MdEditor } from 'md-editor-rt'
 import { SizeType } from 'antd/lib/config-provider/SizeContext'
 
 // css
@@ -92,10 +92,10 @@ const BlogPublish = () => {
   const [btnSize, setBntSize] = useState<SizeType>('middle')
   const [id, setId] = useState('preview-only')
 
-  const [toolbar, setToolbar] = useState<EditorProps>({
-    modelValue: '',
-    toolbarsExclude: ['save']
-  })
+  // const [toolbar, setToolbar] = useState<EditorProps>({
+  //   modelValue: '',
+  //   toolbarsExclude: ['save']
+  // })
 
   /**
    * 文章分类搜索
@@ -173,7 +173,7 @@ const BlogPublish = () => {
           </Form.Item>
 
           <Form.Item>
-            <MdEditor
+            {/* <MdEditor
               key={1}
               editorId={id}
               // htmlPreview preview={false}
@@ -183,7 +183,7 @@ const BlogPublish = () => {
               onHtmlChanged={v => setHtml(v)}
               // toolbars={data.toolbars}
               toolbarsExclude={toolbar.toolbarsExclude}
-            />
+            /> */}
           </Form.Item>
 
           <Form.Item>

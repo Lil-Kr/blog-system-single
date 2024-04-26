@@ -1,6 +1,5 @@
 package com.cy.single.blog.aspect;
 
-import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -51,7 +50,7 @@ public class GlobalRequestLoggerAspect {
         log.info("request type:     {}", reqType);
         log.info("api name:         {}", apiName);
 //        log.info("args:             {}", JSONArray.toJSONString(args));
-        log.info("args:             {}", args instanceof Object ? JSONObject.toJSONString(args) : JSONArray.toJSONString(args));
+//        log.info("args:             {}", args instanceof Object ? JSONObject.toJSONString(args) : JSONArray.toJSONString(args));
 
         Instant startTime = Instant.now();
 
