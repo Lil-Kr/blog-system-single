@@ -2,7 +2,6 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Divider, Flex, GetProp, Upload, Image as ImageUpload, UploadFile, UploadProps, message } from 'antd'
 import React, { useState } from 'react'
 import ImgCrop from 'antd-img-crop'
-import { RcFile } from 'antd/es/upload'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 const fileMaxSize = 1024 * 1024 * 2 // 2M
@@ -147,51 +146,72 @@ const ImageUploda = () => {
   return (
     <div>
       <Flex gap='middle' wrap='wrap'>
-        <h2>直接上传到服务器</h2>
-        <Upload
-          id='image-upload-1'
-          name='avatar'
-          listType='picture-card'
-          className='avatar-uploader'
-          // showUploadList={true}
-          fileList={fileList1}
-          action={'http://localhost:7010/api/image/upload'}
-          maxCount={2} // 单次上传的数量, 也是展示的数量
-          multiple
-          onPreview={handlePreview}
-          beforeUpload={beforeUpload}
-          onChange={handleChange}
-        >
-          {imageUrl ? <img src={imageUrl} alt='avatar' style={{ width: '100%' }} /> : uploadButton}
-        </Upload>
-
-        {previewImage1 && (
-          <ImageUpload
-            wrapperStyle={{ display: 'none' }}
-            preview={{
-              visible: previewOpen1,
-              onVisibleChange: visible => setPreviewOpen1(visible),
-              afterOpenChange: visible => !visible && setPreviewImage1('')
-            }}
-            src={previewImage1}
-          />
-        )}
-        <Divider />
-        <h2>调整/裁剪图片后上传, 达到数量后移除上传按钮</h2>
-        <ImgCrop rotationSlider>
+        <Flex vertical={true}>
+          <h2>直接上传到服务器</h2>
           <Upload
+            id='image-upload-1'
             name='avatar'
-            className='avatar-uploader'
-            action={'http://localhost:7010/api/image/upload'}
             listType='picture-card'
-            fileList={fileList}
-            onChange={onChange}
-            onPreview={onPreview}
+            className='avatar-uploader'
+            // showUploadList={true}
+            fileList={fileList1}
+            action={'http://localhost:7010/api/image/upload'}
+            maxCount={2} // 单次上传的数量, 也是展示的数量
+            multiple
+            onPreview={handlePreview}
+            beforeUpload={beforeUpload}
+            onChange={handleChange}
           >
-            {fileList.length < 3 && '+ Upload'}
+            {imageUrl ? <img src={imageUrl} alt='avatar' style={{ width: '100%' }} /> : uploadButton}
           </Upload>
-        </ImgCrop>
 
+          {previewImage1 && (
+            <ImageUpload
+              wrapperStyle={{ display: 'none' }}
+              preview={{
+                visible: previewOpen1,
+                onVisibleChange: visible => setPreviewOpen1(visible),
+                afterOpenChange: visible => !visible && setPreviewImage1('')
+              }}
+              src={previewImage1}
+            />
+          )}
+        </Flex>
+        <Divider />
+
+        <Flex vertical={true}>
+          <h2>调整/裁剪图片后上传, 达到数量后移除上传按钮</h2>
+          <ImgCrop rotationSlider>
+            <Upload
+              name='avatar'
+              className='avatar-uploader'
+              action={'http://localhost:7010/api/image/upload'}
+              listType='picture-card'
+              fileList={fileList}
+              onChange={onChange}
+              onPreview={onPreview}
+            >
+              {fileList.length < 3 && '+ Upload'}
+            </Upload>
+          </ImgCrop>
+        </Flex>
+        <Divider />
+        <Flex vertical={true}>
+          <h2>图片裁剪, 修改图片大小</h2>
+          <ImgCrop quality={0.2} showGrid rotationSlider aspectSlider showReset resetText={'reset'}>
+            <Upload
+              name='avatar'
+              className='avatar-uploader'
+              action={'http://localhost:7010/api/image/upload'}
+              listType='picture-card'
+              fileList={fileList}
+              onChange={onChange}
+              onPreview={onPreview}
+            >
+              {fileList.length < 3 && '+ Upload'}
+            </Upload>
+          </ImgCrop>
+        </Flex>
         <Divider />
         <h2></h2>
       </Flex>

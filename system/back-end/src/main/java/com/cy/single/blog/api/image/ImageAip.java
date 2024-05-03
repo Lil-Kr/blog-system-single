@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+
 /**
  * @Author: Lil-K
  * @Date: 2024/4/24
@@ -75,8 +76,11 @@ public class ImageAip {
 
     try(InputStream inputStream = imageFile.getInputStream()) {
       Files.copy(inputStream, Paths.get(resourcePath.toString()), StandardCopyOption.REPLACE_EXISTING);
-      String imageUrl = uploadDir + moduleImagePath + imageReName;
+      String imageUrl = uploadDir + moduleImagePath + "/" + imageReName;
+      // /upload/imageJay1_20240422212922_1784458980102377472.png
 //      System.out.println(imageUrl);
+
+
 
       /**
        * TODO: insert DB

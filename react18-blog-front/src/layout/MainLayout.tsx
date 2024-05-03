@@ -1,17 +1,22 @@
 import React, { useState } from 'react'
-import { Layout } from 'antd'
+import { Flex, Layout } from 'antd'
+import { Content, Footer, Header } from 'antd/es/layout/layout'
 const { Sider } = Layout
 
+import { Headers } from '@/layout/header'
+import { ContentLayout } from './contentLayout'
+
 // css
+import mainLayout from '@/layout/css/index.module.scss'
 
 const MainLayout = () => {
-  const [collapsed, setCollapsed] = useState<boolean>(false)
-  // console.log('--> 主框架页面 首先加载')
   return (
-    <div className='mainLayoutWarpper'>
-      <Layout>
-      </Layout>
-    </div>
+    <Layout className={mainLayout.mainLayoutWarpper}>
+      <Flex gap='middle' vertical={true}>
+        <Headers />
+        <ContentLayout />
+      </Flex>
+    </Layout>
   )
 }
 

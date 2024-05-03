@@ -7,14 +7,18 @@ body {
 .homeWarpper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* 设置容器的最小高度为视口高度 */
-  background: #d48806;
+  min-height: 100vh; /*
 
-  // .homeWarpper .header-warpper {
-  //   background: #389e0d;
-  //   display: flex;
-  //   align-items: center; /* 垂直居中显示 */
-  //   justify-content: center; /* 水平居中显示 */
-  //   // flex: 1; /* 填充剩余空间 */
-  // }
+  设置容器的最小高度为视口高度 */
+  background: #ffffff;
+
+  .header-warpper {
+    display: flex;
+    height: '100px';
+    position: 'sticky';
+    top: 0;
+    z-index: 1;
+    width: '100%';
+    align-items: 'center';
+  }
 }

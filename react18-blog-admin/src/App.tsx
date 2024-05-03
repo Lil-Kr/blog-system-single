@@ -47,16 +47,22 @@ function App() {
       <ConfigProvider
         locale={i18nLocale}
         componentSize={assemblySize}
-        // theme={{ // 设置统一主题风格
-        //   token: {
-        //     // Seed Token, 影响范围大
-        //     colorPrimary: '#00b96b',
-        //     borderRadius: 2,
+        theme={{
+          components: {
+            Layout: {
+              // siderBg: '#ffbb96'
+            }
+          }
 
-        //     // 派生变量，影响范围小
-        //     colorBgContainer: '#f6ffed'
-        //   }
-        // }}
+          // 设置统一主题风格
+          //   token: {
+          //     // Seed Token, 影响范围大
+          //     colorPrimary: '#00b96b',
+          //     borderRadius: 2,
+          //     // 派生变量, 影响范围小
+          //     colorBgContainer: '#f6ffed'
+          //   }
+        }}
       >
         <RouterView router={rootRouterConfig} />
       </ConfigProvider>

@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { Content, Footer, Header } from 'antd/es/layout/layout'
-import useToken from 'antd/es/theme/useToken'
+import React from 'react'
+import { Content } from 'antd/es/layout/layout'
+import { Card, Col, Flex, Row, Image, Button, Tag, List, Space } from 'antd'
 import {
   EditOutlined,
   EllipsisOutlined,
@@ -14,69 +14,17 @@ import {
   StarTwoTone,
   WechatFilled
 } from '@ant-design/icons'
-import Search from 'antd/es/input/Search'
-import {
-  Avatar,
-  Breadcrumb,
-  Button,
-  Card,
-  Col,
-  Flex,
-  FlexProps,
-  Layout,
-  Menu,
-  Pagination,
-  PaginationProps,
-  Row,
-  Segmented,
-  SegmentedProps,
-  Skeleton,
-  Space,
-  Image,
-  theme,
-  Upload,
-  ConfigProvider,
-  Divider,
-  Tag,
-  Typography,
-  Carousel,
-  List
-} from 'antd'
-import { Headers } from '@/layout/header'
-const { Title, Paragraph, Text, Link } = Typography
 
 // css
-import homeStyle from '@/views/home/css/home.module.scss'
-
-const justifyOptions = ['flex-start', 'center', 'flex-end', 'space-between', 'space-around', 'space-evenly']
-const alignOptions = ['flex-start', 'center', 'flex-end']
-
-const cardStyle: React.CSSProperties = {
-  width: '90%'
-}
-
-const imgStyle: React.CSSProperties = {
-  display: 'block',
-  width: 200
-}
+import mainLayout from '@/layout/css/index.module.scss'
+import ImageCarousel from './ImageCarousel'
 
 const gridStyle: React.CSSProperties = {
   width: '50%',
   textAlign: 'center'
 }
 
-/**
- * 图片轮播
- */
-const contentStyle: React.CSSProperties = {
-  height: '600px',
-  color: '#fff',
-  lineHeight: '160px',
-  textAlign: 'center',
-  background: '#364d79'
-}
-
-const data = [
+const dataCardList = [
   {
     title: 'react18+antd5+ts+vite',
     content: 'content',
@@ -90,12 +38,12 @@ const data = [
   {
     title: 'Title 3',
     content: 'content',
-    coverImageUrl: 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
+    coverImageUrl: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
   },
   {
     title: 'Title 4',
     content: 'content',
-    coverImageUrl: 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
+    coverImageUrl: 'http://localhost:8089/upload/image/bak.webp'
   },
   {
     title: 'Title 5',
@@ -109,7 +57,7 @@ const data = [
   }
 ]
 
-const dataList = Array.from({ length: 23 }).map((_, i) => ({
+const cardDataList = Array.from({ length: 23 }).map((_, i) => ({
   href: 'https://ant.design',
   title: `ant design part ${i}`,
   avatar: `https://api.dicebear.com/7.x/miniavs/svg?seed=${i}`,
@@ -125,40 +73,24 @@ const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
   </Space>
 )
 
-const Home = () => {
-  const [colorBgContainer] = useToken()
-  const itemRender: PaginationProps['itemRender'] = (_, type, originalElement) => {
-    if (type === 'prev') {
-      return <a>Previous</a>
-    }
-    if (type === 'next') {
-      return <a>Next</a>
-    }
-    return originalElement
-  }
-
-  const [justify, setJustify] = useState<FlexProps['justify']>(justifyOptions[1])
-  const [alignItem, setAlignItems] = useState<FlexProps['align']>(alignOptions[1])
-
+const ContentLayout = () => {
   return (
-    <Layout className={homeStyle.homeWarpper}>
-      <Header className={'header-warpper'}>
-        <Flex vertical={false} gap={'large'}>
-          <div>ababa</div>
-          <div>ababa</div>
-          <div>ababa</div>
-          <div>ababa</div>
-        </Flex>
-      </Header>
-      {/* <Headers /> */}
-      <Content
-        className='content-warpper'
-        style={{ marginLeft: '15%', marginRight: '15%', display: 'flex', flexDirection: 'column', height: '100%' }}
-      >
-        <Row className='content-main' style={{ width: '100%', flexGrow: 1 }}>
-          {/* 左侧栏 */}
-          <Col className='content-main-right' span={6} style={{ backgroundColor: '#d9f7be', alignItems: 'center' }}>
-            <Flex gap='large' vertical={true} style={{ width: '80%', backgroundColor: '#d6e4ff' }}>
+    <Content
+      className={mainLayout.contentWapper}
+      style={{
+        display: 'flex',
+        marginLeft: '8%',
+        marginRight: '8%',
+        flexDirection: 'column',
+        height: '100%'
+        // backgroundColor: '#ffffff'
+      }}
+    >
+      <Row className='content-row' style={{ width: '100%' }}>
+        <Col className='content-main-left' span={6}>
+          <Flex justify='center' align='center'>
+            {/* 左侧栏的内容 */}
+            <Flex gap='large' vertical={true} style={{ width: '80%', minHeight: '100hv' }}>
               <Card>
                 <Flex gap={'large'} align='center' vertical={true}>
                   <Image
@@ -169,14 +101,13 @@ const Home = () => {
                     // wrapperStyle={{ display: 'none' }}
                     src='http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg'
                   />
-                  <Flex gap={'large'} justify={justify} align={alignItem}>
+                  <Flex gap={'large'} justify={'center'} align={'center'}>
                     <GithubFilled style={{ fontSize: '16pt' }} />
                     <WechatFilled style={{ fontSize: '16pt' }} />
                     <MailFilled style={{ fontSize: '16pt' }} />
                   </Flex>
                 </Flex>
               </Card>
-              {/* <Divider type='horizontal' /> */}
 
               {/* 最新文章 */}
               <Card title='最新文章' style={{ width: '100%' }} extra={<a href='#'>更多</a>}>
@@ -184,10 +115,11 @@ const Home = () => {
                 <li>Card content</li>
                 <li>Card content</li>
               </Card>
+
               <Card title='分类' style={{ width: '100%' }} extra={<a href='#'>更多</a>}>
                 <Flex wrap='wrap' gap='small'>
-                  <Tag color='magenta'>magenta</Tag>
-                  <Tag color='red'>red</Tag>
+                  <Tag color='magenta'>Java后端</Tag>
+                  <Tag color='red'>操作系统</Tag>
                   <Tag color='volcano'>volcano</Tag>
                   <Tag color='orange'>orange</Tag>
                   <Tag color='gold'>gold</Tag>
@@ -199,6 +131,7 @@ const Home = () => {
                   <Tag color='purple'>purple</Tag>
                 </Flex>
               </Card>
+
               <Card title='标签' style={{ width: '100%' }} extra={<a href='#'>更多</a>}>
                 <Flex wrap='wrap' gap='small'>
                   <Tag color='#f50'>#f50</Tag>
@@ -207,7 +140,9 @@ const Home = () => {
                   <Tag color='#108ee9'>#108ee9</Tag>
                 </Flex>
               </Card>
+
               <Card title='归档' style={{ width: '100%' }} extra={<a href='#'>更多</a>}>
+                <Card.Grid style={gridStyle}>Content</Card.Grid>
                 <Card.Grid style={gridStyle}>Content</Card.Grid>
                 <Card.Grid style={gridStyle}>Content</Card.Grid>
                 <Card.Grid style={gridStyle}>Content</Card.Grid>
@@ -219,28 +154,30 @@ const Home = () => {
                 <Card.Grid style={gridStyle}>Content</Card.Grid>
               </Card>
             </Flex>
-          </Col>
+          </Flex>
+        </Col>
 
-          {/* 左侧 */}
-          <Col className='content-main-left' span={18} style={{ backgroundColor: '#efdbff' }}>
+        <Col className='content-main-right' span={18}>
+          <Flex gap={'large'} vertical={true}>
+            <ImageCarousel />
             <List
               grid={{ gutter: 18, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3 }}
-              dataSource={data}
+              dataSource={dataCardList}
               renderItem={(item, zIndex) => (
                 <List.Item>
                   <Card
-                    // style={{ width: '400px', height: '400px' }}
+                    // style={{ width: '100px', height: '300px' }}
                     // title={item.title}
                     // extra={<a href='#'>查看全部</a>}
                     // className={''}
                     size={'small'}
                     hoverable
-                    cover={<img width={100} height={300} alt='example' src={item.coverImageUrl} />}
+                    cover={<img width={100} height={400} alt='example' src={item.coverImageUrl} />}
                   >
                     {/* <Meta title='Card title' description='This is the description' /> */}
                     <Flex vertical={true} gap={'small'}>
                       <div>
-                        <a href='#' style={{ fontSize: '20pt', color: '#531dab' }}>
+                        <a href='#' style={{ fontSize: '16pt', color: '#531dab' }}>
                           {item.title}
                         </a>
                       </div>
@@ -257,7 +194,7 @@ const Home = () => {
             <List
               itemLayout='vertical'
               size='small'
-              dataSource={dataList}
+              dataSource={cardDataList}
               renderItem={(item, zIndex) => (
                 <List.Item
                   key={item.title}
@@ -291,14 +228,11 @@ const Home = () => {
                 </List.Item>
               )}
             />
-          </Col>
-        </Row>
-      </Content>
-      <Footer>
-        <Pagination total={500} itemRender={itemRender} />
-      </Footer>
-    </Layout>
+          </Flex>
+        </Col>
+      </Row>
+    </Content>
   )
 }
 
-export default Home
+export default ContentLayout

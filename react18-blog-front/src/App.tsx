@@ -15,16 +15,27 @@ function App() {
           components: {
             Layout: {
               /* 这里是你的组件 token */
-              bodyBg: '#d48806',
-              footerBg: '#7cb305'
+              // bodyBg: '#ffd666',
+              /** Header **/
+              // headerBg: '#ffffff',
+              // headerHeight: 80,
+              /** foot **/
+              footerBg: '#eaff8f'
+            },
+            Card: {
+              // headerBg:'red',
+              // headerFontSizeSM: 20
+              // colorBgContainer: 'red'
+              // tabsMarginBottom: 10,
+              // actionsLiMargin: '120px 0'
             },
             Menu: {
               activeBarHeight: 1,
               activeBarWidth: 1000
             }
-          }
+          },
           // 暗黑主题
-          // algorithm: theme.darkAlgorithm,
+          algorithm: theme.defaultAlgorithm // theme.darkAlgorithm, theme.compactAlgorithm
           // 设置统一主题风格
           // token: {
           //   // Seed Token, 影响范围大

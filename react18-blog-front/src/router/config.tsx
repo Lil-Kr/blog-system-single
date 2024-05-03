@@ -13,33 +13,14 @@ import { BreadcrumbType } from '@/types/common/breadcrumbType'
 const rootConfig: RouterItemType[] = [
   {
     meta: {
-      key: '/',
-      title: '重定向到登录页',
-      layout: false,
-      icon: <UserOutlined />
-    },
-    path: '/',
-    redirect: '/login'
-  },
-  {
-    meta: {
-      key: '/login',
-      title: '登录',
-      layout: false,
-      icon: ''
-    },
-    path: '/login',
-    element: LazyLoad(lazy(() => import('@/views/login/Login')))
-  },
-  {
-    meta: {
       key: '/home',
       title: '首页',
       layout: false,
       icon: ''
     },
     path: 'home',
-    element: LazyLoad(lazy(() => import('@/views/home/Home')))
+    // element: LazyLoad(lazy(() => import('@/views/home/Home')))
+    element: LazyLoad(lazy(() => import('@/layout/MainLayout')))
   },
   {
     meta: {
@@ -70,6 +51,16 @@ const rootConfig: RouterItemType[] = [
     },
     path: '*',
     element: LazyLoad(lazy(() => import('@/views/error/Error404')))
+  },
+  {
+    meta: {
+      key: '/imageCarousel',
+      title: '图片轮播',
+      layout: false,
+      icon: ''
+    },
+    path: 'imageCarousel',
+    element: LazyLoad(lazy(() => import('@/layout/contentLayout/ImageCarousel')))
   },
   ...busConfig
 ]

@@ -19,6 +19,10 @@ const TinymceLocal = () => {
     }
   }
 
+  // const handleUploadImage = (blobInfo, success, failure, progress) => {
+
+  // }
+
   return (
     <div>
       <Editor
@@ -38,26 +42,30 @@ const TinymceLocal = () => {
             'advlist',
             'link',
             'code',
-            'codesample',
-            'imagetools',
+            'preview',
+            // 'codesample',
+            // 'codemirror',
             'image',
+            'imagetools',
             'searchreplace',
             'fullscreen',
             'emoticons',
-            'anchor',
-            'accordion'
+            'insertdatetime',
+            'anchor'
           ],
           toolbar:
             'undo redo |' +
+            'styleselect |' +
+            // 'blocks |' +
             'bold italic underline strikethrough forecolor backcolor |' +
             'alignleft aligncenter alignright alignjustify |' +
             'bullist numlist outdent indent |' +
-            'code codesample |' +
+            // 'code codesample |' +
+            'code preview |' +
             'link image |' +
             'searchreplace fullscreen |' +
-            'emoticons anchor accordion |' +
-            'removeformat'
-          ,
+            'emoticons anchor insertdatetime |' +
+            'removeformat',
           advlist_bullet_styles: 'square',
           paste_data_images: true,
           image_advtab: true, // add advanced image tab
@@ -78,7 +86,7 @@ const TinymceLocal = () => {
                 }
 
                 const file = files[0]
-                // 在这里可以对选中的文件进行处理，例如上传到服务器等操作
+                // 在这里可以对选中的文件进行处理, 例如上传到服务器等操作
                 if (!file.type.startsWith('image/')) {
                   return
                 }
@@ -97,7 +105,11 @@ const TinymceLocal = () => {
               input.click()
             }
           },
-          content_style: 'body { font-family:Helvetica, Arial, sans-serif; font-size: 20px }'
+          insertdatetime_formats: ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d', '%Y/%m/%d', '%H:%M:%S', '%D'],
+          insertdatetime_element: true, // insert time/date plugin
+          content_style: 'body { font-family:Helvetica, Arial, sans-serif; font-size: 16px }',
+          // skin: 'oxide-dark',
+          // content_css: 'dark'
         }}
         onEditorChange={(newValue, editor) => {
           setContents(editor.getContent())
