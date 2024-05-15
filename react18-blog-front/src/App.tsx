@@ -4,8 +4,6 @@ import { useBearStore } from '@/store/demo/bearStore'
 import { rootConfig, rootRouterConfig } from '@/router/config'
 
 function App() {
-  // const { bears, increase, decrease } = useBearStore()
-  console.log('--> APP 也要渲染')
   return (
     <>
       <ConfigProvider
@@ -34,17 +32,23 @@ function App() {
               activeBarWidth: 1000
             }
           },
-          // 暗黑主题
-          algorithm: theme.defaultAlgorithm // theme.darkAlgorithm, theme.compactAlgorithm
-          // 设置统一主题风格
-          // token: {
-          //   // Seed Token, 影响范围大
-          //   colorPrimary: '#00b96b',
-          //   borderRadius: 2,
 
-          //   // 派生变量，影响范围小
-          //   colorBgContainer: '#00b96b'
-          // }
+          /**
+           * 设置统一主题风格 - 默认主题
+           * theme.darkAlgorithm,
+           * theme.compactAlgorithm
+           */
+          algorithm: theme.compactAlgorithm,
+          token: {
+            fontSize: 20
+            // Seed Token, 影响范围大
+            // colorPrimary: '#00b96b',
+            // borderRadius: 2,
+            // fontFamily: 'Apple Color Emoji',
+            // colorBorder:'#7cb305'
+            // 派生变量, 影响范围小
+            // colorBgContainer: '#00b96b'
+          }
         }}
       >
         <RouterView router={rootRouterConfig} />

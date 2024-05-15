@@ -4,7 +4,7 @@ import { Content, Footer, Header } from 'antd/es/layout/layout'
 const { Sider } = Layout
 
 import { Headers } from '@/layout/header'
-import { ContentLayout } from './contentLayout'
+import { ContentLayout } from '@/layout/contentLayout'
 
 // css
 import mainLayout from '@/layout/css/index.module.scss'
@@ -12,7 +12,7 @@ import mainLayout from '@/layout/css/index.module.scss'
 const MainLayout = () => {
   return (
     <Layout className={mainLayout.mainLayoutWarpper}>
-      <Flex gap='middle' vertical={true}>
+      <Flex gap='large' vertical={true}>
         <Headers />
         <ContentLayout />
       </Flex>

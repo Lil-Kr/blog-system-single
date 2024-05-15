@@ -7,7 +7,6 @@ import {
   Menu,
   MenuProps,
   Row,
-  Tabs,
   Space,
   Button,
   Switch,
@@ -15,99 +14,69 @@ import {
   InputRef,
   Tooltip
 } from 'antd'
-import { Header } from 'antd/es/layout/layout'
-
-import Search from 'antd/es/input/Search'
 
 // css
 import mainLayout from '@/layout/css/index.module.scss'
 import {
+  ApartmentOutlined,
   AppstoreOutlined,
   DownloadOutlined,
-  MailOutlined,
+  EditOutlined,
+  HomeOutlined,
   MoonFilled,
   SearchOutlined,
   SettingOutlined,
   SunFilled
 } from '@ant-design/icons'
-// import MenuItem from 'antd/es/menu/MenuItem'
-
-const baseStyle: React.CSSProperties = {
-  // display: 'block',
-  width: '25%',
-  height: '60%'
-}
 
 type MenuItem = Required<MenuProps>['items'][number]
 
 const items: MenuItem[] = [
   {
-    label: '首页',
-    key: 'mail',
-    icon: <MailOutlined />
+    key: 'home-website',
+    label: '本站',
+    icon: <HomeOutlined />
   },
   {
-    label: '随笔',
-    key: 'app',
-    icon: <AppstoreOutlined />,
-    disabled: false // false
-  },
-  {
-    label: '系列文章',
     key: 'SubMenu',
-    icon: <SettingOutlined />,
+    label: '系列文章',
+    icon: <ApartmentOutlined />,
     children: [
       { label: '操作系统', key: 'setting:1' },
       { label: 'MIT CS-618', key: 'setting:2' },
       { label: 'SpringBoot', key: 'setting:3' },
       { label: 'SpringCloud', key: 'setting:4' }
-      // {
-      //   type: 'group',
-      //   label: 'Item 1',
-      //   children: [
-      //     { label: 'Option 1', key: 'setting:1' },
-      //     { label: 'Option 2', key: 'setting:2' }
-      //   ]
-      // },
-      // {
-      //   type: 'group',
-      //   label: 'Item 2',
-      //   children: [
-      //     { label: 'Option 3', key: 'setting:3' },
-      //     { label: 'Option 4', key: 'setting:4' }
-      //   ]
-      // }
     ]
   },
   {
-    key: 'alipay',
+    key: 'recommended-article',
     label: (
       // <a href='https://ant.design' target='_blank' rel='noopener noreferrer'>
       <a href='#' target='_blank' rel='noopener noreferrer'>
-        关于我
+        推荐文章
       </a>
     )
   },
   {
-    key: 'alipay2',
+    key: 'comments',
     label: (
       // <a href='https://ant.design' target='_blank' rel='noopener noreferrer'>
       <a href='#' target='_blank' rel='noopener noreferrer'>
-        关于我
+        精选留言
       </a>
     )
   },
   {
-    key: 'alipay3',
+    key: 'website-plugin',
     label: (
       // <a href='https://ant.design' target='_blank' rel='noopener noreferrer'>
       <a href='#' target='_blank' rel='noopener noreferrer'>
-        关于我
+        本站插件
       </a>
     )
   },
   {
-    key: 'alipay4',
+    key: 'about-me',
     label: (
       // <a href='https://ant.design' target='_blank' rel='noopener noreferrer'>
       <a href='#' target='_blank' rel='noopener noreferrer'>
@@ -134,13 +103,13 @@ const Headers = () => {
     }
   }
 
-  useEffect(() => {
-    document.addEventListener('keyup', PopupKeyUp, false)
-    return () => {
-      //销毁键盘事件
-      document.removeEventListener('keyup', PopupKeyUp, false)
-    }
-  }, [])
+  // useEffect(() => {
+  //   document.addEventListener('keyup', PopupKeyUp, false)
+  //   return () => {
+  //     //销毁键盘事件
+  //     document.removeEventListener('keyup', PopupKeyUp, false)
+  //   }
+  // }, [])
 
   return (
     <Flex
@@ -158,7 +127,7 @@ const Headers = () => {
         borderBottom: '1px solid #f6f6f6', //
         boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
         top: 0,
-        zIndex: 1
+        zIndex: 1000
       }}
     >
       <ConfigProvider

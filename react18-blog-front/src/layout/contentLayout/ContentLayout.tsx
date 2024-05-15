@@ -1,26 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Content } from 'antd/es/layout/layout'
-import { Card, Col, Flex, Row, Image, Button, Tag, List, Space } from 'antd'
+import { Card, Col, Flex, Row, Image, Button, Tag, List, Space, Typography, TabsProps, Tabs } from 'antd'
 import {
+  AppstoreAddOutlined,
+  BookOutlined,
+  CalendarOutlined,
   EditOutlined,
-  EllipsisOutlined,
   GithubFilled,
-  GithubOutlined,
-  MailFilled,
-  SettingOutlined,
-  StarOutlined,
-  MessageOutlined,
   LikeOutlined,
+  MailFilled,
+  MessageOutlined,
   StarTwoTone,
+  TagsOutlined,
   WechatFilled
 } from '@ant-design/icons'
-
-// css
-import mainLayout from '@/layout/css/index.module.scss'
 import ImageCarousel from './ImageCarousel'
 
+// css
+import contentLayoutStyle from './css/contentlayout.module.scss'
+import { PaginationAlign, PaginationPosition } from 'antd/es/pagination/Pagination'
+
 const gridStyle: React.CSSProperties = {
-  width: '50%',
+  width: '50%'
+}
+const gridCategoryStyle: React.CSSProperties = {
+  width: '100%',
+  height: '20%',
   textAlign: 'center'
 }
 
@@ -66,6 +71,15 @@ const cardDataList = Array.from({ length: 23 }).map((_, i) => ({
     'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.'
 }))
 
+// 分类
+const dataType = [
+  '聊一聊如何学习前端?',
+  '云原生架构下SpringCloud会不会被替代?',
+  'Australian walks 100km after outback crash.',
+  'Man charged over missing wedding girl.',
+  'Los Angeles battles huge wildfires.'
+]
+
 const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
   <Space>
     {React.createElement(icon)}
@@ -73,165 +87,219 @@ const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
   </Space>
 )
 
+const tabsItems: TabsProps['items'] = [
+  {
+    key: '1',
+    label: '首页'
+  },
+  {
+    key: '2',
+    label: 'Java后端'
+  },
+  {
+    key: '3',
+    label: 'ReactJS'
+  }
+]
+
 const ContentLayout = () => {
+  const [position, setPosition] = useState<PaginationPosition>('bottom')
+  const [align, setAlign] = useState<PaginationAlign>('center')
+
   return (
-    <Content
-      className={mainLayout.contentWapper}
-      style={{
-        display: 'flex',
-        marginLeft: '8%',
-        marginRight: '8%',
-        flexDirection: 'column',
-        height: '100%'
-        // backgroundColor: '#ffffff'
-      }}
-    >
-      <Row className='content-row' style={{ width: '100%' }}>
-        <Col className='content-main-left' span={6}>
-          <Flex justify='center' align='center'>
-            {/* 左侧栏的内容 */}
-            <Flex gap='large' vertical={true} style={{ width: '80%', minHeight: '100hv' }}>
-              <Card>
-                <Flex gap={'large'} align='center' vertical={true}>
-                  <Image
-                    className='home-avatar'
-                    width={'80%'}
-                    preview={false}
-                    style={{ borderRadius: '20%', marginTop: '10%' }}
-                    // wrapperStyle={{ display: 'none' }}
-                    src='http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg'
-                  />
-                  <Flex gap={'large'} justify={'center'} align={'center'}>
-                    <GithubFilled style={{ fontSize: '16pt' }} />
-                    <WechatFilled style={{ fontSize: '16pt' }} />
-                    <MailFilled style={{ fontSize: '16pt' }} />
-                  </Flex>
-                </Flex>
-              </Card>
-
-              {/* 最新文章 */}
-              <Card title='最新文章' style={{ width: '100%' }} extra={<a href='#'>更多</a>}>
-                <li>Card content</li>
-                <li>Card content</li>
-                <li>Card content</li>
-              </Card>
-
-              <Card title='分类' style={{ width: '100%' }} extra={<a href='#'>更多</a>}>
-                <Flex wrap='wrap' gap='small'>
-                  <Tag color='magenta'>Java后端</Tag>
-                  <Tag color='red'>操作系统</Tag>
-                  <Tag color='volcano'>volcano</Tag>
-                  <Tag color='orange'>orange</Tag>
-                  <Tag color='gold'>gold</Tag>
-                  <Tag color='lime'>lime</Tag>
-                  <Tag color='green'>green</Tag>
-                  <Tag color='cyan'>cyan</Tag>
-                  <Tag color='blue'>blue</Tag>
-                  <Tag color='geekblue'>geekblue</Tag>
-                  <Tag color='purple'>purple</Tag>
-                </Flex>
-              </Card>
-
-              <Card title='标签' style={{ width: '100%' }} extra={<a href='#'>更多</a>}>
-                <Flex wrap='wrap' gap='small'>
-                  <Tag color='#f50'>#f50</Tag>
-                  <Tag color='#2db7f5'>#2db7f5</Tag>
-                  <Tag color='#87d068'>#87d068</Tag>
-                  <Tag color='#108ee9'>#108ee9</Tag>
-                </Flex>
-              </Card>
-
-              <Card title='归档' style={{ width: '100%' }} extra={<a href='#'>更多</a>}>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-              </Card>
-            </Flex>
-          </Flex>
-        </Col>
-
-        <Col className='content-main-right' span={18}>
-          <Flex gap={'large'} vertical={true}>
-            <ImageCarousel />
-            <List
-              grid={{ gutter: 18, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3 }}
-              dataSource={dataCardList}
-              renderItem={(item, zIndex) => (
-                <List.Item>
-                  <Card
-                    // style={{ width: '100px', height: '300px' }}
-                    // title={item.title}
-                    // extra={<a href='#'>查看全部</a>}
-                    // className={''}
-                    size={'small'}
-                    hoverable
-                    cover={<img width={100} height={400} alt='example' src={item.coverImageUrl} />}
-                  >
-                    {/* <Meta title='Card title' description='This is the description' /> */}
-                    <Flex vertical={true} gap={'small'}>
-                      <div>
-                        <a href='#' style={{ fontSize: '16pt', color: '#531dab' }}>
-                          {item.title}
-                        </a>
-                      </div>
-                      <div>
-                        <Tag color='geekblue'>Java</Tag>
-                        <Tag color='purple'>后端</Tag>
-                      </div>
-                    </Flex>
-                  </Card>
-                </List.Item>
-              )}
-            />
-
-            <List
-              itemLayout='vertical'
-              size='small'
-              dataSource={cardDataList}
-              renderItem={(item, zIndex) => (
-                <List.Item
-                  key={item.title}
-                  actions={[
-                    <IconText icon={StarTwoTone} text='156' key='list-vertical-star-o' />,
-                    <IconText icon={LikeOutlined} text='156' key='list-vertical-like-o' />,
-                    <IconText icon={MessageOutlined} text='2' key='list-vertical-message' />
-                  ]}
-                  extra={
-                    <img
-                      width={200}
-                      height={150}
-                      // alt='logo'
+    <div className={contentLayoutStyle.contentWapper}>
+      <Content className={'content-main'}>
+        <Row className={'content-main-row'}>
+          <Col className='content-main-left' span={6}>
+            <Flex justify='center' align='center'>
+              {/* 左侧栏的内容 */}
+              <Flex className={'column-left'} gap={'large'} vertical={true}>
+                <Card className={'card-column-avatar-info'}>
+                  <Flex gap={'large'} align='center' vertical={true}>
+                    <Image
+                      className='home-avatar'
+                      width={'80%'}
+                      preview={false}
                       src='http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg'
                     />
+                    <Flex gap={'large'} justify={'center'} align={'center'}>
+                      <GithubFilled className='card-avatar-about' />
+                      <WechatFilled className='card-avatar-about' />
+                      <MailFilled className='card-avatar-about' />
+                    </Flex>
+                  </Flex>
+                </Card>
+
+                {/* 最新文章 */}
+                <Card
+                  className={'card-column-new-article'}
+                  title={
+                    <Flex vertical={false} gap={'middle'}>
+                      <BookOutlined className='card-icon' />
+                      <span className='card-title'>最新文章</span>
+                    </Flex>
+                  }
+                  extra={
+                    <a className='card-more' href='#'>
+                      更多
+                    </a>
                   }
                 >
-                  <List.Item.Meta
-                    // avatar={<Avatar src={item.avatar} />} // 头像
-                    // avatar={
-                    //   <img
-                    //     width={200}
-                    //     height={150}
-                    //     src={'http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg'}
-                    //   />
-                    // } // 头像
-                    title={<a href={item.href}>{item.title}</a>}
-                    description={item.description} // 描述
+                  <List
+                    dataSource={dataType}
+                    // size='small'
+                    renderItem={item => (
+                      <List.Item>
+                        <a>{item}</a>
+                      </List.Item>
+                    )}
                   />
-                  {item.content}
-                </List.Item>
-              )}
-            />
-          </Flex>
-        </Col>
-      </Row>
-    </Content>
+                </Card>
+
+                {/* 分类 */}
+                <Card
+                  className={'card-column-category'}
+                  title={
+                    <Flex vertical={false} gap={'middle'}>
+                      <AppstoreAddOutlined className='card-icon' />
+                      <span className='card-title'>分类</span>
+                    </Flex>
+                  }
+                  extra={
+                    <a className='card-more' href='#'>
+                      更多
+                    </a>
+                  }
+                >
+                  <Card.Grid style={gridCategoryStyle}>Content</Card.Grid>
+                  <Card.Grid style={gridCategoryStyle}>Content</Card.Grid>
+                  <Card.Grid style={gridCategoryStyle}>Content</Card.Grid>
+                </Card>
+
+                {/* 标签 */}
+                <Card
+                  className={'card-column-tags'}
+                  title={
+                    <Flex vertical={false} gap={'middle'}>
+                      <TagsOutlined className='card-icon' />
+                      <span className='card-title'>标签</span>
+                    </Flex>
+                  }
+                  extra={
+                    <a className='card-more' href='#'>
+                      更多
+                    </a>
+                  }
+                >
+                  <Flex wrap='wrap' gap='middle'>
+                    <Tag bordered={false} color='magenta'>
+                      Java后端
+                    </Tag>
+                    <Tag bordered={false} color='red'>
+                      操作系统
+                    </Tag>
+                    <Tag bordered={false} color='volcano'>
+                      volcano
+                    </Tag>
+                    <Tag bordered={false} color='orange'>
+                      orange
+                    </Tag>
+                    <Tag bordered={false} color='gold'>
+                      gold
+                    </Tag>
+                    <Tag bordered={false} color='lime'>
+                      lime
+                    </Tag>
+                    <Tag bordered={false} color='green'>
+                      green
+                    </Tag>
+                    <Tag bordered={false} color='cyan'>
+                      cyan
+                    </Tag>
+                    <Tag bordered={false} color='blue'>
+                      blue
+                    </Tag>
+                    <Tag bordered={false} color='geekblue'>
+                      geekblue
+                    </Tag>
+                    <Tag bordered={false} color='purple'>
+                      purple
+                    </Tag>
+                  </Flex>
+                </Card>
+
+                {/* 归档 */}
+                <Card
+                  className={'card-column-archive'}
+                  title={
+                    <Flex vertical={false} gap={'small'}>
+                      <CalendarOutlined className='card-icon' />
+                      <span className='card-title'>{'归档'}</span>
+                    </Flex>
+                  }
+                  extra={
+                    <a className='card-more' href='#'>
+                      更多
+                    </a>
+                  }
+                >
+                  <Card.Grid style={gridStyle}>Content</Card.Grid>
+                  <Card.Grid style={gridStyle}>Content</Card.Grid>
+                  <Card.Grid style={gridStyle}>Content</Card.Grid>
+                  <Card.Grid style={gridStyle}>Content</Card.Grid>
+                  <Card.Grid style={gridStyle}>Content</Card.Grid>
+                  <Card.Grid style={gridStyle}>Content</Card.Grid>
+                </Card>
+              </Flex>
+            </Flex>
+          </Col>
+
+          <Col className='content-main-right' span={18}>
+            <Flex gap={'large'} vertical={true}>
+              <ImageCarousel />
+              <Tabs defaultActiveKey='1' items={tabsItems} onChange={() => {}} />
+              <List
+                grid={{ gutter: 20, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3 }}
+                dataSource={dataCardList}
+                pagination={{ position, align }}
+                renderItem={(item, zIndex) => (
+                  <List.Item>
+                    <Card
+                      // style={{ width: '100px', height: '300px' }}
+                      // title={item.title}
+                      // extra={<a href='#'>查看全部</a>}
+                      // className={''}
+                      hoverable
+                      size={'small'}
+                      cover={<img width={100} height={400} alt='example' src={item.coverImageUrl} />}
+                    >
+                      <Flex vertical={true} gap={'small'}>
+                        <div>
+                          <a href='#' style={{ fontSize: '16pt', color: '#531dab' }}>
+                            {item.title}
+                          </a>
+                        </div>
+                        <div>
+                          <Tag bordered={false} color='geekblue'>
+                            Java
+                          </Tag>
+                          <Tag bordered={false} color='purple'>
+                            后端
+                          </Tag>
+                        </div>
+                        <div>
+                          <span>2023-12-26</span>
+                        </div>
+                      </Flex>
+                    </Card>
+                  </List.Item>
+                )}
+              />
+            </Flex>
+          </Col>
+        </Row>
+      </Content>
+    </div>
   )
 }
 

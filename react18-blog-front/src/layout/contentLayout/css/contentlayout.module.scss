@@ -1,0 +1,40 @@
+.contentWapper {
+  width: '100%';
+
+  :global(.content-main) {
+    // background-color: red;
+    margin-left: 5%;
+    margin-right: 8%;
+  }
+
+  // :global(.content-main-left) {
+  // }
+
+  // :global(.content-main-right) {
+  // }
+
+  :global(.column-left) {
+    width: 80%;
+
+    :global(.card-column-avatar-info) {
+      :global(.card-avatar-about) {
+        font-size: 2rem;
+      }
+    }
+
+    :global(.home-avatar) {
+      border-radius: 20%;
+      margin-top: 10%;
+    }
+
+    :global(.card-icon) {
+      font-size: 1.2rem;
+    }
+    :global(.card-title) {
+      font-size: 1.2rem;
+    }
+    :global(.card-more) {
+      font-size: 1rem;
+    }
+  }
+}
