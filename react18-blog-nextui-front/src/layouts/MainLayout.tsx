@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import { ThemeSwitcher, ThemeSwitcherDemo } from '@/components/themeSwitcher'
 import { NavbarHorizontal } from '@/components/navbar'
 import Header from './header/Header'
-import Container from './container/Container'
+import { Container, ContainerGrid, ContainerFlex } from './container'
 
 const MainLayout = () => {
   return (
-    <div className='main-layout-wrapper'>
+    <div className='flex flex-col gap-y-4'>
       <Header />
-      <Container />
+      {/* <Container /> */}
+      <ContainerFlex />
     </div>
   )
 }

@@ -1,3 +1,5 @@
+import { Container } from 'postcss'
+
 const { nextui } = require('@nextui-org/react')
 
 /** @type {import('tailwindcss').Config} */
@@ -10,7 +12,7 @@ export default {
   plugins: [
     nextui({
       prefix: 'nextui',
-      addCommonColors: false, // override common colors (e.g. "blue", "green", "pink").
+      addCommonColors: true, // override common colors (e.g. "blue", "green", "pink").
       defaultTheme: 'light', // default theme from the themes object
       defaultExtendTheme: 'light',
       layout: {
@@ -20,7 +22,7 @@ export default {
           tiny: '0.75rem', // text-tiny
           small: '0.875rem', // text-small
           medium: '1rem', // text-medium
-          large: '1.125rem' // text-large
+          large: '1.25rem' // text-large
         },
         lineHeight: {
           tiny: '1rem', // text-tiny
@@ -29,9 +31,9 @@ export default {
           large: '1.75rem' // text-large
         },
         radius: {
-          small: '8px', // rounded-small
-          medium: '12px', // rounded-medium
-          large: '14px' // rounded-large
+          small: '4px', // rounded-small
+          medium: '6px', // rounded-medium
+          large: '8px' // rounded-large
         },
         borderWidth: {
           small: '1px', // border-small
@@ -42,6 +44,7 @@ export default {
       themes: {
         light: {
           layout: {
+            disabledOpacity: '0.3',
             hoverOpacity: 0.8, //  this value is applied as opacity-[value] when the component is hovered
             boxShadow: {
               // shadow-small
@@ -97,6 +100,7 @@ export default {
           },
           layout: {
             disabledOpacity: '0.3',
+            hoverOpacity: 0.8,
             radius: {
               small: '4px',
               medium: '6px',
