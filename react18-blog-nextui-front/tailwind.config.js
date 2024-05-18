@@ -12,7 +12,7 @@ export default {
   plugins: [
     nextui({
       prefix: 'nextui',
-      addCommonColors: true, // override common colors (e.g. "blue", "green", "pink").
+      addCommonColors: false, // override common colors (e.g. "blue", "green", "pink").
       defaultTheme: 'light', // default theme from the themes object
       defaultExtendTheme: 'light',
       layout: {
@@ -58,7 +58,22 @@ export default {
                 '0px 0px 30px 0px rgb(0 0 0 / 0.04), 0px 30px 60px 0px rgb(0 0 0 / 0.12), 0px 0px 1px 0px rgb(0 0 0 / 0.3)'
             }
           },
-          colors: {}
+          colors: {
+            primary: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+              DEFAULT: '#4757d5',
+              foreground: '#ffffff'
+            }
+          }
         },
         dark: {
           layout: {
@@ -75,28 +90,74 @@ export default {
                 '0px 0px 30px 0px rgb(0 0 0 / 0.07), 0px 30px 60px 0px rgb(0 0 0 / 0.26), inset 0px 0px 1px 0px rgb(255 255 255 / 0.15)'
             }
           },
-          colors: {}
+          colors: {
+            focus: '#F182F6',
+            primary: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+              // DEFAULT: '#4f46e5',
+              DEFAULT: '#4757d5',
+              foreground: '#ffffff'
+            },
+            purplePrimary: {
+              50: '#FEECFE',
+              100: '#FDD5F9',
+              200: '#FCADF9',
+              300: '#F182F6',
+              400: '#DD62ED',
+              500: '#c031e2',
+              600: '#9823C2',
+              700: '#7318A2',
+              800: '#520F83',
+              900: '#3B096C',
+              DEFAULT: '#DD62ED',
+              foreground: '#ffffff'
+            }
+          }
         },
         'purple-dark': {
           extend: 'dark', // <- inherit default values from dark theme
           colors: {
-            background: '#0D001A',
+            background: '#0D001A', // them bg-color
             foreground: '#ffffff',
+            focus: '#F182F6',
             primary: {
-              50: '#3B096C',
-              100: '#520F83',
-              200: '#7318A2',
-              300: '#9823C2',
-              400: '#c031e2',
-              500: '#DD62ED',
-              600: '#F182F6',
-              700: '#FCADF9',
-              800: '#FDD5F9',
-              900: '#FEECFE',
-              DEFAULT: '#DD62ED',
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+              // DEFAULT: '#4f46e5',
+              DEFAULT: '#4757d5',
               foreground: '#ffffff'
             },
-            focus: '#F182F6'
+            purplePrimary: {
+              50: '#FEECFE',
+              100: '#FDD5F9',
+              200: '#FCADF9',
+              300: '#F182F6',
+              400: '#DD62ED',
+              500: '#c031e2',
+              600: '#9823C2',
+              700: '#7318A2',
+              800: '#520F83',
+              900: '#3B096C',
+              DEFAULT: '#DD62ED',
+              foreground: '#ffffff'
+            }
           },
           layout: {
             disabledOpacity: '0.3',

@@ -1,5 +1,4 @@
 import {
-  Button,
   Input,
   Link,
   Navbar,
@@ -8,8 +7,7 @@ import {
   NavbarItem,
   NavbarMenu,
   NavbarMenuItem,
-  NavbarMenuToggle,
-  ScrollShadow
+  NavbarMenuToggle
 } from '@nextui-org/react'
 import React from 'react'
 import AcmeLogo from './icon/AcmeLogo'
@@ -31,16 +29,15 @@ const NavbarHorizontal = () => {
     'Log Out'
   ]
   return (
-    <Navbar isBordered={true} onMenuOpenChange={setIsMenuOpen}>
+    <Navbar className='flex flex-row w-full h-16 shadow-md' isBordered={true} onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent justify='start'>
-        <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className='sm:hidden' />
         <NavbarBrand>
           <AcmeLogo />
-          <p className='font-bold text-inherit'>HOME</p>
+          <p className='font-bold text-inherit'>BLOG</p>
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className='hidden sm:flex gap-4' justify='center'>
+      <NavbarContent className='hidden lg:flex md:flex gap-4' justify='center'>
         <NavbarItem>
           <Link color='foreground' href='#'>
             热门文章
@@ -63,22 +60,29 @@ const NavbarHorizontal = () => {
         </NavbarItem>
       </NavbarContent>
 
-      <NavbarContent justify='end'>
-        <NavbarItem>
+      {/*  */}
+      <NavbarContent className='lg:flex md:flex' justify='end'>
+        <NavbarItem className='shrink'>
           <Input
-            className='w-200'
             type='search'
-            // color='primary'
-            placeholder='search something...'
+            placeholder='Search something...'
             labelPlacement='outside'
-            startContent={<SearchIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />}
-            endContent={<SearchIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />}
+            startContent={
+              <SearchIcon className='hidden lg:flex lg:text-2xl lg:text-default-400 lg:pointer-events-none lg:flex-shrink-0 md:flex md:text-2xl md:text-default-400 md:pointer-events-none md:flex-shrink-0' />
+            }
+            endContent={
+              <SearchIcon className='hidden lg:text-2xl lg:text-default-400 lg:pointer-events-none lg:flex-shrink-0 lg:flex md:hidden' />
+            }
           />
         </NavbarItem>
-        <NavbarItem>
+        <NavbarItem className='hidden lg:flex'>
           <ThemeSwitcher />
         </NavbarItem>
       </NavbarContent>
+      <NavbarContent className='lg:hidden md:hidden' justify='end'>
+        <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} />
+      </NavbarContent>
+
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>

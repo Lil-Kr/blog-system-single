@@ -50,9 +50,6 @@
     "paths": {
       "@/*": ["src/*"]
     }
-
-    // zustand PartialState config
-    // "exactOptionalPropertyTypes": true
   },
   "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
