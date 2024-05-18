@@ -7,7 +7,7 @@ const NavBarTest = () => {
   const linkList = ['推荐文章', '系列文章', '本站插件', '精选留言', '关于本站', '关于作者']
 
   return (
-    <div className='flex flex-row w-full h-16 sticky top-0 z-50 justify-center shadow-md border-b-1 border-gray-500 dark:border-purple-800'>
+    <div className='flex flex-row w-full h-16 sticky top-0 z-50 justify-center shadow-md border-b-1 border-gray-500 dark:border-purple-700'>
       <div className='flex flex-row w-full basis-5/6 justify-between'>
         <div className='flex flex-row w-auto h-auto items-center'>
           {/* <AcmeLogo /> */}
