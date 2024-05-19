@@ -1,7 +1,6 @@
 import React from 'react'
 import { Card, CardBody, CardHeader, Listbox, ListboxItem } from '@nextui-org/react'
 import { CardBaseDataType } from '@/types/components/CardType'
-import SvgIcon from '../svg/SvgIcon'
 
 const CardSimple = (props: CardBaseDataType) => {
   const { headTitle, headMoreText, svgIcon } = props

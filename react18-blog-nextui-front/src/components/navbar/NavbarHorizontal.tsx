@@ -31,10 +31,10 @@ const NavbarHorizontal = () => {
   return (
     <Navbar className='flex flex-row w-full h-16 shadow-md' isBordered={true} onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent justify='start'>
-        <NavbarBrand>
-          <AcmeLogo />
+        {/* <NavbarBrand>
           <p className='font-bold text-inherit'>BLOG</p>
-        </NavbarBrand>
+        </NavbarBrand> */}
+        <p className='font-bold text-inherit'>BLOG</p>
       </NavbarContent>
 
       <NavbarContent className='hidden lg:flex md:flex gap-4' justify='center'>
@@ -61,8 +61,8 @@ const NavbarHorizontal = () => {
       </NavbarContent>
 
       {/*  */}
-      <NavbarContent className='lg:flex md:flex' justify='end'>
-        <NavbarItem className='shrink'>
+      <NavbarContent className='lg:flex md:flex lg:shrink md:shrink' justify='center'>
+        <NavbarItem>
           <Input
             type='search'
             placeholder='Search something...'
@@ -75,11 +75,15 @@ const NavbarHorizontal = () => {
             }
           />
         </NavbarItem>
-        <NavbarItem className='hidden lg:flex'>
+      </NavbarContent>
+
+      <NavbarContent className='lg:flex md:flex hidden' justify='center'>
+        <NavbarItem>
           <ThemeSwitcher />
         </NavbarItem>
       </NavbarContent>
-      <NavbarContent className='lg:hidden md:hidden' justify='end'>
+
+      <NavbarContent className='lg:hidden md:hidden flex' justify='end'>
         <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} />
       </NavbarContent>
 

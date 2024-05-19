@@ -80,8 +80,6 @@ public class ImageAip {
       // /upload/imageJay1_20240422212922_1784458980102377472.png
 //      System.out.println(imageUrl);
 
-
-
       /**
        * TODO: insert DB
        * splice name, image_url, type ...

@@ -2,21 +2,41 @@ import AcmeLogo from '@/components/navbar/icon/AcmeLogo'
 import SearchIcon from '@/components/navbar/icon/SearchIcon'
 import { ThemeSwitcher } from '@/components/themeSwitcher'
 import { Input, Link } from '@nextui-org/react'
+import { useTheme } from 'next-themes'
 
 const NavBarTest = () => {
-  const linkList = ['推荐文章', '系列文章', '本站插件', '精选留言', '关于本站', '关于作者']
+  const linkList = ['推荐文章', '系列文章', '精彩留言', '本站插件', '关于本站', '关于作者']
+
+  const { theme, setTheme } = useTheme()
 
   return (
-    <div className='flex flex-row w-full h-16 sticky top-0 z-50 justify-center shadow-md border-b-1 border-gray-500 dark:border-purple-700'>
+    <div
+      className={`flex flex-row w-full h-16 justify-center shadow-sm border-b ${
+        theme === 'purple-dark' ? 'bg-[#0D001A] border-[#32263E]' : 'bg-white'
+      }`}
+    >
       <div className='flex flex-row w-full basis-5/6 justify-between'>
         <div className='flex flex-row w-auto h-auto items-center'>
-          {/* <AcmeLogo /> */}
-          <p className='font-bold'>HOME</p>
+          <a className='font-bold hover:bg-success px-2 py-2 rounded-lg' href='#'>
+            HOME
+          </a>
+          {/* <Link className='font-bold hover:bg-success  px-2 py-2 rounded-lg' href='#'>
+            HOME
+          </Link> */}
         </div>
-        <div className='flex flex-row w-auto items-center gap-x-4'>
+        <div className='flex flex-row w-auto items-center gap-x-2'>
           {linkList.map((item, index) => {
             return (
-              <Link key={index} isBlock href='#' className='font-bold'>
+              <Link
+                key={index}
+                // isBlock
+                href='#'
+                // disableAnimation={false}
+                // color='primary'
+                className={`flex rounded-lg hover:bg-[#4757d5] w-auto px-2 py-2 ${
+                  theme === 'purple-dark' ? 'text-[#ffffff]' : 'text-black hover:text-[#ffffff]'
+                }`}
+              >
                 {item}
               </Link>
             )
@@ -36,10 +56,6 @@ const NavBarTest = () => {
           />
           <ThemeSwitcher />
         </div>
-      </div>
-
-      <div className='box-content h-32 w-32 p-4 border-4 bg-gray-500'>
-        <a className='flex flex-row bg-purple-500 h-full w-full items-center justify-center text-white hover:bg-[#4757d5]' href='#'>abc</a>
       </div>
     </div>
   )

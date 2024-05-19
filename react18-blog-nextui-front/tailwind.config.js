@@ -103,7 +103,6 @@ export default {
               700: '#4338ca',
               800: '#3730a3',
               900: '#312e81',
-              // DEFAULT: '#4f46e5',
               DEFAULT: '#4757d5',
               foreground: '#ffffff'
             },
@@ -126,9 +125,9 @@ export default {
         'purple-dark': {
           extend: 'dark', // <- inherit default values from dark theme
           colors: {
-            background: '#0D001A', // them bg-color
+            background: '#0D001A', // them bg-color(purple color theme)
             foreground: '#ffffff',
-            focus: '#F182F6',
+            focus: '#F182F6', // when focus color(purple type theme)
             primary: {
               50: '#eef2ff',
               100: '#e0e7ff',
@@ -140,7 +139,6 @@ export default {
               700: '#4338ca',
               800: '#3730a3',
               900: '#312e81',
-              // DEFAULT: '#4f46e5',
               DEFAULT: '#4757d5',
               foreground: '#ffffff'
             },
