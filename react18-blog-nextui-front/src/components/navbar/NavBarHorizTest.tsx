@@ -1,11 +1,11 @@
 import AcmeLogo from '@/components/navbar/icon/AcmeLogo'
 import SearchIcon from '@/components/navbar/icon/SearchIcon'
 import { ThemeSwitcher } from '@/components/themeSwitcher'
-import { Input, Link } from '@nextui-org/react'
+import { Input, Kbd, Link } from '@nextui-org/react'
 import { useTheme } from 'next-themes'
 
 const NavBarTest = () => {
-  const linkList = ['推荐文章', '系列文章', '精彩留言', '本站插件', '关于本站', '关于作者']
+  const navItems = ['推荐文章', '系列文章', '精彩留言', '本站插件', '关于本站', '关于作者']
 
   const { theme, setTheme } = useTheme()
 
@@ -25,9 +25,9 @@ const NavBarTest = () => {
           </Link> */}
         </div>
         <div className='flex flex-row w-auto items-center gap-x-2'>
-          {linkList.map((item, index) => {
+          {navItems.map((item, index) => {
             return (
-              <Link
+              <a
                 key={index}
                 // isBlock
                 href='#'
@@ -38,7 +38,7 @@ const NavBarTest = () => {
                 }`}
               >
                 {item}
-              </Link>
+              </a>
             )
           })}
         </div>
@@ -51,7 +51,13 @@ const NavBarTest = () => {
               <SearchIcon className='hidden lg:flex lg:text-2xl lg:text-default-400 lg:pointer-events-none lg:flex-shrink-0 md:flex md:text-2xl md:text-default-400 md:pointer-events-none md:flex-shrink-0' />
             }
             endContent={
-              <SearchIcon className='hidden lg:text-2xl lg:text-default-400 lg:pointer-events-none lg:flex-shrink-0 lg:flex md:hidden' />
+              // <SearchIcon className='hidden lg:text-2xl lg:text-default-400 lg:pointer-events-none lg:flex-shrink-0 lg:flex md:hidden' />
+              <Kbd
+                className='hidden lg:text-md lg:text-default-400 lg:pointer-events-none lg:flex-shrink-0 lg:flex md:text-sm md:text-default-400 md:pointer-events-none md:flex-shrink-0 md:flex'
+                keys={['command']}
+              >
+                K
+              </Kbd>
             }
           />
           <ThemeSwitcher />

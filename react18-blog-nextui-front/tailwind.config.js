@@ -1,5 +1,3 @@
-import { Container } from 'postcss'
-
 const { nextui } = require('@nextui-org/react')
 
 /** @type {import('tailwindcss').Config} */
@@ -59,6 +57,8 @@ export default {
             }
           },
           colors: {
+            white: '#FFFFFF',
+            black: '#000000',
             primary: {
               50: '#eef2ff',
               100: '#e0e7ff',
@@ -72,6 +72,28 @@ export default {
               900: '#312e81',
               DEFAULT: '#4757d5',
               foreground: '#ffffff'
+            },
+            purplePrimary: {
+              50: '#FEECFE',
+              100: '#FDD5F9',
+              200: '#FCADF9',
+              300: '#F182F6',
+              400: '#DD62ED',
+              500: '#c031e2',
+              600: '#9823C2',
+              700: '#7318A2',
+              800: '#520F83',
+              900: '#3B096C',
+              DEFAULT: '#DD62ED',
+              foreground: '#ffffff'
+            },
+            fontColor: {
+              100: '#000000',
+              DEFAULT: '#000000'
+            },
+            hoverFontColor: {
+              100: '#ffffff',
+              DEFAULT: '#ffffff'
             }
           }
         },
@@ -91,6 +113,8 @@ export default {
             }
           },
           colors: {
+            white: '#FFFFFF',
+            black: '#000000',
             focus: '#F182F6',
             primary: {
               50: '#eef2ff',
@@ -127,6 +151,8 @@ export default {
           colors: {
             background: '#0D001A', // them bg-color(purple color theme)
             foreground: '#ffffff',
+            white: '#FFFFFF',
+            black: '#000000',
             focus: '#F182F6', // when focus color(purple type theme)
             primary: {
               50: '#eef2ff',
@@ -155,6 +181,14 @@ export default {
               900: '#3B096C',
               DEFAULT: '#DD62ED',
               foreground: '#ffffff'
+            },
+            fontColor: {
+              100: '#FFFFFF',
+              DEFAULT: '#FFFFFF'
+            },
+            hoverFontColor: {
+              100: '#FFFFFF',
+              DEFAULT: '#FFFFFF'
             }
           },
           layout: {

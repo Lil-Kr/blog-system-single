@@ -5,6 +5,7 @@ type CardBaseDataType = {
   headTitle: string
   headMoreText: string
   svgIcon: ReactNode
+  content: ReactNode
 }
 
 export type { CardBaseDataType }

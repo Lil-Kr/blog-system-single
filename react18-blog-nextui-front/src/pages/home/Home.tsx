@@ -1,97 +1,56 @@
 import React from 'react'
 import { AnimatePresence, motion, useScroll } from 'framer-motion'
-import { Button, Divider } from '@nextui-org/react'
+import { Button, Divider, Image } from '@nextui-org/react'
+import { CardBlogItem } from '@/components/card'
+import { BlogItemsType } from '@/types/blog'
+import { PaginationBase } from '@/components/pagination'
+import { ItemBase } from '@/components/listBox'
+
+const blogItems: BlogItemsType[] = [
+  {
+    key: 1,
+    image: {
+      alt: 'test image',
+      src: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
+    },
+    tags: ['Java后台开发', '微服务', 'TS'],
+    blogTitle: 'React8 hook 学习经验分享',
+    publishDate: '2022-02-22'
+  },
+  {
+    key: 2,
+    image: {
+      alt: 'test image',
+      src: 'http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg'
+    },
+    tags: ['Java后台开发', '微服务', 'TS'],
+    blogTitle: '操作系统中的线程与进程',
+    publishDate: '2022-09-22'
+  },
+  {
+    key: 3,
+    image: {
+      alt: 'test image',
+      src: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
+    },
+    tags: ['编译原理', '计算机基础'],
+    blogTitle: '操作系统中的线程与进程',
+    publishDate: '2024-04-22'
+  }
+]
 
 const Home = () => {
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.5
-      }
-    }
-  }
-
-  const item = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1 }
-  }
-
-  const { scrollYProgress } = useScroll()
-
   return (
-    // <div className='flex flex-col w-full bg-purple-100'>
-    // </div>
-    <div className='flex flex-col w-full gap-y-6'>
-      <motion.button
-        className='bg-primary-400 px-10 py-10 text-white'
-        whileHover={{ scale: 1 }}
-        whileTap={{ scale: 0.9 }}
-        color='primary'
-      >
-        运动
-      </motion.button>
-      <motion.div className='bg-primary-600 px-10 py-10 text-large text-white' animate={{ x: 50 }}>
-        animate(动画组件)
-      </motion.div>
-
-      <motion.div
-        className='bg-primary-600 px-10 py-10 text-large text-white'
-        animate={{ x: 50, y: 50 }}
-        transition={{ ease: 'easeOut', duration: 2 }}
-        initial={false}
-      >
-        transitions(过度动画组件)
-      </motion.div>
-
-      <AnimatePresence>
-        <motion.div
-          className='bg-purple-400 px-10 py-10 text-large text-white'
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 1 }}
-        >
-          Exit animations
-        </motion.div>
-      </AnimatePresence>
-
-      {/* <motion.div
-        className='box bg-purple-600 px-10 py-10 text-large text-white'
-        animate={{
-          scale: [1, 2, 2, 1, 1],
-          rotate: [0, 0, 180, 180, 0],
-          borderRadius: ['0%', '0%', '50%', '50%', '0%']
-        }}
-        transition={{
-          duration: 2,
-          ease: 'easeInOut',
-          times: [0, 0.2, 0.5, 0.8, 1],
-          repeat: Infinity,
-          repeatDelay: 1
-        }}
-      >
-        Exit animations
-      </motion.div> */}
-
-      <motion.div
-        className='bg-sky-400 px-5 py-5 text-large text-white'
-        transition={{ type: 'spring', stiffness: 200, damping: 5 }}
-        whileHover={{ scale: 1.1 }}
-      >
-        abc
-      </motion.div>
-
-      <motion.a className='bg-sky-600 px-5 py-5 text-large text-white' whileFocus={{ scale: 1.2 }} href='#'>
-        abc
-      </motion.a>
-
-      <motion.input className='placeholder-gray-500 border border-grap-300' whileFocus={{ scale: 1.1 }} />
-
-      <motion.div className='progress-bar' style={{ scaleX: scrollYProgress }} />
-      <h1>
-        <code>useScroll</code>
-      </h1>
+    <div className='flex flex-col w-full gap-y-4'>
+      <div className='flex w-full h-96 bg-blue-500'>图片轮播</div>
+      <div className='grid grid-cols-3 gap-4'>
+        {blogItems.map((blogItem, index) => (
+          <CardBlogItem key={index} blogItem={blogItem} />
+        ))}
+      </div>
+      <div className='flex flex-row justify-center pt-6'>
+        <PaginationBase />
+      </div>
     </div>
   )
 }
