@@ -49,7 +49,7 @@ const rootConfig: RouterItemType[] = [
   {
     meta: {
       key: '/about',
-      title: '关于',
+      title: '关于我',
       layout: false,
       icon: ''
     },

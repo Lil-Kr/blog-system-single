@@ -1,11 +1,13 @@
 import { Card, Image } from '@nextui-org/react'
 import React from 'react'
 
-// props: { item: any }
-
-const ItemBase = () => {
+/**
+ * List item display component
+ * @returns
+ */
+const ItemListBase = () => {
   return (
-    <Card className='flex flex-row w-full gap-x-6 hover:border hover:border-primary' radius='none' shadow='none'>
+    <Card className='flex flex-row w-full gap-x-6 hover:border hover:border-primary' radius='md' shadow='none'>
       <div className='flex'>
         <Image
           className='object-cover rounded-none'
@@ -18,12 +20,12 @@ const ItemBase = () => {
         />
       </div>
       <div className='flex flex-col items-start justify-center gap-y-4'>
-        <div> sss </div>
-        <div> sss </div>
-        <div> sss </div>
+        <div>sss</div>
+        <div>sss</div>
+        <div>sss</div>
       </div>
     </Card>
   )
 }
 
-export default ItemBase
+export default ItemListBase

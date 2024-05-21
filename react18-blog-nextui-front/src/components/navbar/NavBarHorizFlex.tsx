@@ -6,12 +6,11 @@ import { useTheme } from 'next-themes'
 
 const NavBarTest = () => {
   const navItems = ['推荐文章', '系列文章', '精彩留言', '本站插件', '关于本站', '关于作者']
-
   const { theme, setTheme } = useTheme()
 
   return (
     <div
-      className={`flex flex-row w-full h-16 justify-center shadow-sm border-b ${
+      className={`flex flex-row w-full h-[5vh] justify-center shadow-sm border-b ${
         theme === 'purple-dark' ? 'bg-[#0D001A] border-[#32263E]' : 'bg-white'
       }`}
     >
@@ -51,7 +50,6 @@ const NavBarTest = () => {
               <SearchIcon className='hidden lg:flex lg:text-2xl lg:text-default-400 lg:pointer-events-none lg:flex-shrink-0 md:flex md:text-2xl md:text-default-400 md:pointer-events-none md:flex-shrink-0' />
             }
             endContent={
-              // <SearchIcon className='hidden lg:text-2xl lg:text-default-400 lg:pointer-events-none lg:flex-shrink-0 lg:flex md:hidden' />
               <Kbd
                 className='hidden lg:text-md lg:text-default-400 lg:pointer-events-none lg:flex-shrink-0 lg:flex md:text-sm md:text-default-400 md:pointer-events-none md:flex-shrink-0 md:flex'
                 keys={['command']}

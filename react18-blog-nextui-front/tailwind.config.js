@@ -94,6 +94,10 @@ export default {
             hoverFontColor: {
               100: '#ffffff',
               DEFAULT: '#ffffff'
+            },
+            hoverBackground: {
+              100: '#ffffff',
+              DEFAULT: '#ffffff'
             }
           }
         },
@@ -189,6 +193,10 @@ export default {
             hoverFontColor: {
               100: '#FFFFFF',
               DEFAULT: '#FFFFFF'
+            },
+            hoverBackground: {
+              100: '#0D001A',
+              DEFAULT: '#0D001A'
             }
           },
           layout: {

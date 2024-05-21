@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardBody, CardFooter, Image } from '@nextui-org/react'
+import { Card, CardFooter, Image } from '@nextui-org/react'
 import SvgIcon from '../svg/SvgIcon'
 
 const CardMe = () => {
@@ -19,7 +19,7 @@ const CardMe = () => {
           isZoomed={true}
           width={300}
           height={200}
-          shadow='sm'
+          // shadow='sm'
           radius='full'
           src='http://localhost:8089/upload/image/Jay1_20240422212922.png'
         />

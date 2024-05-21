@@ -4,7 +4,6 @@ import { Button, Divider, Image } from '@nextui-org/react'
 import { CardBlogItem } from '@/components/card'
 import { BlogItemsType } from '@/types/blog'
 import { PaginationBase } from '@/components/pagination'
-import { ItemBase } from '@/components/listBox'
 
 const blogItems: BlogItemsType[] = [
   {
@@ -43,6 +42,9 @@ const Home = () => {
   return (
     <div className='flex flex-col w-full gap-y-4'>
       <div className='flex w-full h-96 bg-blue-500'>图片轮播</div>
+      <div className="flex">
+        
+      </div>
       <div className='grid grid-cols-3 gap-4'>
         {blogItems.map((blogItem, index) => (
           <CardBlogItem key={index} blogItem={blogItem} />

@@ -1,18 +1,14 @@
 import React from 'react'
-import { ItemBase } from '@/components/listBox'
+import { ItemListBase } from '@/components/list'
 import { TabsBase } from '@/components/tab'
+import { Card } from '@nextui-org/react'
 
 const Category = () => {
   return (
     <div className='flex flex-col w-full'>
-      <div className='flex flex-row w-full'>
+      <Card className='w-full px-2 py-2 flex-wrap' shadow='sm'>
         <TabsBase />
-      </div>
-      <div className='flex flex-col w-full gap-y-4'>
-        {Array.from({ length: 6 }).map((item, index) => (
-          <ItemBase />
-        ))}
-      </div>
+      </Card>
     </div>
   )
 }

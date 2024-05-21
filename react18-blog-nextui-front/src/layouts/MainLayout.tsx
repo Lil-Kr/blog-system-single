@@ -10,7 +10,10 @@ const MainLayout = () => {
     <div className='flex flex-col gap-y-4'>
       <Header />
       {/* <Container /> */}
-      <ContainerFlex />
+      {/* <ContainerFlex /> */}
+      <div className='flex flex-col w-full items-center'>
+        <ContainerGrid />
+      </div>
       <Footer />
     </div>
   )
