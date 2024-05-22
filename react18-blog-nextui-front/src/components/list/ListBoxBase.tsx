@@ -11,12 +11,11 @@ const ListBoxBase = (props: { items: ListBoxItemType[]; type: compType }) => {
       <Listbox aria-label='actions' color='primary' onAction={key => console.log(key)}>
         {type === 'link'
           ? items.map((item, index) => (
-              <ListboxItem key={index} href={item.url} target='_blank'>
+              <ListboxItem key={index} href={item.url} textValue={item.text} target='_blank'>
                 <div className='flex justify-between text-medium'>
                   <span>
                     {item.text.length > textLength ? item.text.substring(0, textLength) + ' ....' : item.text}
                   </span>
-                  {/* <span>{item.extend?.node}</span> */}
                   <span>{'12'}</span>
                 </div>
               </ListboxItem>

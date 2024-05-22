@@ -87,15 +87,19 @@ export default {
               DEFAULT: '#DD62ED',
               foreground: '#ffffff'
             },
+            borderColor: {
+              100: '#E7E7E9',
+              DEFAULT: '#E7E7E9'
+            },
             fontColor: {
               100: '#000000',
               DEFAULT: '#000000'
             },
-            hoverFontColor: {
+            hoverBackground: {
               100: '#ffffff',
               DEFAULT: '#ffffff'
             },
-            hoverBackground: {
+            hoverFontColor: {
               100: '#ffffff',
               DEFAULT: '#ffffff'
             }
@@ -185,6 +189,10 @@ export default {
               900: '#3B096C',
               DEFAULT: '#DD62ED',
               foreground: '#ffffff'
+            },
+            borderColor: {
+              100: '#30243C',
+              DEFAULT: '#30243C'
             },
             fontColor: {
               100: '#FFFFFF',

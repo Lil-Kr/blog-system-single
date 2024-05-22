@@ -1,7 +1,6 @@
 import React from 'react'
 import { Card, CardBody, Image, Link } from '@nextui-org/react'
 import { BlogItemsType } from '@/types/blog'
-import SvgIcon from '../svg/SvgIcon'
 
 const CardBlogItem = (props: { blogItem: BlogItemsType }) => {
   const { blogItem } = props
@@ -14,7 +13,7 @@ const CardBlogItem = (props: { blogItem: BlogItemsType }) => {
           isZoomed
           className='w-full aspect-[4/3]'
           alt={blogItem.image.alt}
-          src={blogItem.image.src}
+          src={blogItem.image.url}
         />
       </a>
       <div className='flex flex-col'>

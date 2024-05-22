@@ -17,7 +17,7 @@ const rootConfig: RouterItemType[] = [
   {
     meta: {
       key: '/',
-      title: 'home page',
+      title: 'blog-website',
       layout: false,
       icon: ''
     },
@@ -26,35 +26,83 @@ const rootConfig: RouterItemType[] = [
     children: [
       {
         meta: {
-          key: '/home',
+          key: '/main',
           title: '首页',
           layout: false,
           icon: ''
         },
-        path: 'home',
-        element: LazyLoad(lazy(() => import('@/pages/home/Home')))
+        path: 'main',
+        element: LazyLoad(lazy(() => import('@/pages/main/Main'))),
+        children: [
+          {
+            index: true,
+            element: LazyLoad(lazy(() => import('@/pages/home/Home')))
+          },
+          {
+            meta: {
+              key: '/home',
+              title: '首页',
+              layout: false,
+              icon: ''
+            },
+            path: 'home',
+            element: LazyLoad(lazy(() => import('@/pages/home/Home')))
+          },
+          {
+            meta: {
+              key: '/category',
+              title: '分类',
+              layout: false,
+              icon: ''
+            },
+            path: 'category',
+            element: LazyLoad(lazy(() => import('@/pages/category/Category'))),
+            children: [
+              {
+                meta: {
+                  key: '/item',
+                  title: '分类-详情',
+                  layout: false,
+                  icon: ''
+                },
+                path: ':id',
+                element: LazyLoad(lazy(() => import('@/pages/category/CategoryDetail')))
+              }
+            ]
+          },
+          {
+            meta: {
+              key: '/blogs',
+              title: '博客列表',
+              layout: false,
+              icon: ''
+            },
+            path: 'blogs',
+            element: LazyLoad(lazy(() => import('@/pages/blog/BlogList')))
+          }
+        ]
       },
       {
         meta: {
-          key: '/category',
-          title: '分类',
+          key: '/blog',
+          title: '博客详情',
           layout: false,
           icon: ''
         },
-        path: 'category',
-        element: LazyLoad(lazy(() => import('@/pages/category/Category')))
+        path: 'blog',
+        element: LazyLoad(lazy(() => import('@/pages/blog/BlogDetails')))
+      },
+      {
+        meta: {
+          key: '/about',
+          title: '关于我',
+          layout: false,
+          icon: ''
+        },
+        path: 'about',
+        element: LazyLoad(lazy(() => import('@/pages/about/About')))
       }
     ]
-  },
-  {
-    meta: {
-      key: '/about',
-      title: '关于我',
-      layout: false,
-      icon: ''
-    },
-    path: 'about',
-    element: LazyLoad(lazy(() => import('@/pages/about/About')))
   },
   {
     meta: {
@@ -64,7 +112,7 @@ const rootConfig: RouterItemType[] = [
       icon: ''
     },
     path: 'navbar',
-    element: LazyLoad(lazy(() => import('@/pages/testnavbar/NavBarTest')))
+    element: LazyLoad(lazy(() => import('@/components/menu/NavBarHorizSubMenu')))
   }
 ]
 

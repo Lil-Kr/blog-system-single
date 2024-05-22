@@ -1,28 +1,62 @@
 import React from 'react'
-import { CardSimple, CardBase } from '@/components/card'
+import { AnimatePresence, motion, useScroll } from 'framer-motion'
+import { Button, Divider, Image } from '@nextui-org/react'
+import { CardBlogItem, CardSimple } from '@/components/card'
+import { BlogItemsType } from '@/types/blog'
+import { PaginationBase } from '@/components/pagination'
+import CardMe from '@/components/card/CardMe'
 import { CardBaseDataType } from '@/types/components/CardType'
 import SvgIcon from '@/components/svg/SvgIcon'
-import { Outlet } from 'oh-router-react'
 import { ListBoxBase } from '@/components/list'
-import { ListBoxItemType } from '@/types/components/ListBoxType'
 import { LinkListBase } from '@/components/link'
-import { LinkArchiveType, LinkBaseType } from '@/types/components/LinkType'
 import LinkListArchive from '@/components/link/LinkListArchive'
-import CardMe from '@/components/card/CardMe'
+import { LinkArchiveType, LinkBaseType } from '@/types/components/LinkType'
+import { ListBoxItemType } from '@/types/components/ListBoxType'
+import { Outlet } from 'oh-router-react'
 
-const newBlogs: ListBoxItemType[] = [
-  { text: '聊一聊微服务架构与k8s的优劣势' },
-  { text: 'Java21的新特性有哪些?' },
-  { text: 'Java21的新特性有哪些?' },
-  { text: 'Java21的新特性有哪些?' },
-  { text: 'Java21的新特性有哪些?' },
-  { text: 'Java21的新特性有哪些?' }
+const blogItems: BlogItemsType[] = [
+  {
+    key: 1,
+    image: {
+      alt: 'test image',
+      url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
+    },
+    tags: ['Java后台开发', '微服务', 'TS'],
+    blogTitle: 'React8 hook 学习经验分享',
+    publishDate: '2022-02-22'
+  },
+  {
+    key: 2,
+    image: {
+      alt: 'test image',
+      url: 'http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg'
+    },
+    tags: ['Java后台开发', '微服务', 'TS'],
+    blogTitle: '操作系统中的线程与进程',
+    publishDate: '2022-09-22'
+  },
+  {
+    key: 3,
+    image: {
+      alt: 'test image',
+      url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
+    },
+    tags: ['编译原理', '计算机基础'],
+    blogTitle: '操作系统中的线程与进程',
+    publishDate: '2024-04-22'
+  }
 ]
 
-const categorys: ListBoxItemType[] = [
-  { text: 'Java后端', url: '/category/java', extend: { node: <div>{'1'}</div> } },
-  { text: 'ReactJS', url: '#', extend: { node: <div>{'3'}</div> } },
-  { text: '操作系统', url: '#', extend: { node: <div>{'4'}</div> } }
+const newBlogs: ListBoxItemType[] = [
+  { text: '聊一聊微服务架构与k8s的优劣势', url: '#' },
+  {
+    text: 'Java21的新特性有哪些?Java21的新特性有哪些?Java21的新特性有哪些?Java21的新特性有哪些?Java21的新特性有哪些?',
+    url: '#'
+  },
+  { text: 'Java21的新特性有哪些?', url: '#' },
+  { text: 'Java21的新特性有哪些?', url: '#' },
+  { text: 'Java21的新特性有哪些?', url: '#' },
+  { text: 'Java21的新特性有哪些?', url: '#' }
 ]
 
 const tags: LinkBaseType[] = [
@@ -122,6 +156,12 @@ const archives: LinkArchiveType[] = [
   }
 ]
 
+const categorys: ListBoxItemType[] = [
+  { text: 'Java后端', url: '/category/java', extend: { node: <div>{'1'}</div> } },
+  { text: 'ReactJS', url: '#', extend: { node: <div>{'3'}</div> } },
+  { text: '操作系统', url: '#', extend: { node: <div>{'4'}</div> } }
+]
+
 const cardList: CardBaseDataType[] = [
   {
     key: 1,
@@ -135,7 +175,7 @@ const cardList: CardBaseDataType[] = [
     key: 2,
     headTitle: '分类',
     headMoreText: '更多',
-    moreUrl: '',
+    moreUrl: '/main/category',
     svgIcon: <SvgIcon name='category' />,
     content: <ListBoxBase type={'link'} items={categorys} />
   },
@@ -157,22 +197,24 @@ const cardList: CardBaseDataType[] = [
   }
 ]
 
-const ContainerFlex = () => {
+const Main = () => {
   return (
-    <div className='container-flex-warpper flex w-full justify-center'>
-      <div className='flex flex-col gap-x-6 lg:flex-row lg:basis-5/6 md:flex-row md:basis-5/6'>
+    <>
+      {/* 左侧侧边栏 */}
+      <div className='col-span-3'>
         <div className='sider-left-warpper hidden flex-col lg:basis-1/4 md:basis-1/4 lg:flex md:flex items-center gap-y-4'>
           <CardMe />
           {cardList.map(item => (
             <CardSimple key={item.key} cardItem={item} />
           ))}
         </div>
-        <div className='content-right-warpper flex flex-col w-full lg:basis-3/4 items-start'>
-          <Outlet />
-        </div>
       </div>
-    </div>
+      {/* 右侧主体内容 */}
+      <div className='col-span-9 w-full'>
+        <Outlet />
+      </div>
+    </>
   )
 }
 
-export default ContainerFlex
+export default Main

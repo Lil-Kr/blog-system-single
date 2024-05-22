@@ -5,7 +5,7 @@ export type BlogItemsType = {
   key: string | number
   image: {
     alt: string
-    src: string
+    url: string
   }
   tags: string[]
   blogTitle: string

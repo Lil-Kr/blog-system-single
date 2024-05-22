@@ -1,19 +1,31 @@
 import React, { useState } from 'react'
 import { Card, CardBody, Tab, Tabs, dataFocusVisibleClasses } from '@nextui-org/react'
-import { ItemListBase } from '../list'
+import { ListItemBase } from '../list'
 import { Key } from '@react-types/shared'
+import { BlogItemsType } from '@/types/blog'
+
+const blogItem: BlogItemsType = {
+  key: 1,
+  image: {
+    alt: 'test image',
+    url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
+  },
+  tags: ['Java后台开发', '微服务', 'TS'],
+  blogTitle: 'React8 hook 学习经验分享',
+  publishDate: '2022-02-22'
+}
 
 const TabsBase = () => {
   const [selectKey, setSelectKey] = useState<number | string>(0)
 
-  let tabs = Array.from({ length: 10 }).map((item, index) => {
+  let tabs = Array.from({ length: 3 }).map((item, index) => {
     let value = {
       id: index,
-      label: <div className='text-medium'>{'随笔-' + `${index}`}</div>,
+      label: <div className='text-medium text-fontColor hover:text-hoverFontColor'>{'随笔-' + `${index}`}</div>,
       content: (
-        <div className='flex flex-col w-full gap-y-4'>
+        <div className='flex flex-col w-full gap-y-2'>
           {Array.from({ length: 6 }).map((item, index) => (
-            <ItemListBase key={index} />
+            <ListItemBase key={index} blogItem={blogItem} />
           ))}
         </div>
       )
@@ -38,6 +50,7 @@ const TabsBase = () => {
       variant='solid'
       selectedKey={selectKey}
       size={'lg'}
+      radius='sm'
       onSelectionChange={selectChange}
       items={tabs}
     >

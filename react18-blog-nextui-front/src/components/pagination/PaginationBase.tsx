@@ -9,16 +9,20 @@ const PaginationBase = () => {
       {/* <Pagination total={10} color='secondary' page={currentPage} onChange={setCurrentPage} /> */}
       <div className='flex flex-row gap-x-6'>
         <Button
-          size='lg'
-          variant='flat'
+          className='border-1 border-borderColor hover:border-borderColor'
+          size='md'
+          isDisabled={false}
+          variant='ghost'
           color='primary'
           onPress={() => setCurrentPage(prev => (prev > 1 ? prev - 1 : prev))}
         >
           Previous
         </Button>
         <Button
-          size='lg'
-          variant='flat'
+          className='border-1 border-borderColor hover:border-borderColor'
+          isDisabled={false}
+          size='md'
+          variant='ghost'
           color='primary'
           onPress={() => setCurrentPage(prev => (prev < 10 ? prev + 1 : prev))}
         >

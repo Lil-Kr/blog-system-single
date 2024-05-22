@@ -1,8 +1,8 @@
 import ListBoxBase from './ListBoxBase'
 export { ListBoxBase }
 
-import ItemListBase from './ItemListBase'
-export { ItemListBase }
+import ListItemBase from './ListItemBase'
+export { ListItemBase }
 
 import LinkItem from './LinkItem'
 export { LinkItem }

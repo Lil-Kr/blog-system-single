@@ -3,16 +3,10 @@ import SearchIcon from '@/components/navbar/icon/SearchIcon'
 import { ThemeSwitcher } from '@/components/themeSwitcher'
 import { Input, Link } from '@nextui-org/react'
 import { it } from 'node:test'
+import { NavBarSubMenuItem } from '@/types/components/MenuType'
+import MenuIncludeSub from './MenuIncludeSub'
 
-type NavbarItem = {
-  id: number | string
-  title: string
-  link: string
-  icon?: React.ReactNode
-  children?: NavbarItem[]
-}
-
-const navbarItems: NavbarItem[] = [
+const navbarItems: NavBarSubMenuItem[] = [
   {
     id: 1,
     title: '推荐文章',
@@ -74,7 +68,12 @@ const navbarItems: NavbarItem[] = [
   }
 ]
 
-const NavBarTest = () => {
+
+/**
+ * support submenu navbar
+ * @returns
+ */
+const NavBarHorizSubMenu = () => {
   return (
     <div className='flex flex-row w-full h-[4vh] justify-center gap-x-2 border-b-1 border-borderColor sticky top-0'>
       <div className='flex flex-row w-full h-full basis-5/6 justify-between'>
@@ -83,31 +82,7 @@ const NavBarTest = () => {
             Placeholder
           </a>
         </div>
-        <div className='flex flex-row gap-x-4'>
-          {navbarItems.map((item, index) => (
-            <div
-              key={index}
-              className='group relative flex flex-col p-2 justify-center items-center rounded-lg hover:bg-primary hover:text-hoverFontColor'
-            >
-              <a key={index} href={item.link}>
-                {item.title}
-              </a>
-              {item?.children && (
-                <div className='absolute hidden top-full flex-col gap-y-2 rounded-md border-1 border-borderColor group-hover:flex group-hover:bg-hoverBackground group-hover:text-fontColor'>
-                  {item.children.map((child, index) => (
-                    <a
-                      key={index}
-                      className='flex whitespace-nowrap px-2 py-1 rounded-md hover:bg-primary hover:text-hoverFontColor'
-                      href={child.link}
-                    >
-                      {child.title}
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        <MenuIncludeSub items={navbarItems} />
         <div className='flex flex-row w-auto items-center'>
           <span>Placeholder</span>
         </div>
@@ -116,4 +91,4 @@ const NavBarTest = () => {
   )
 }
 
-export default NavBarTest
+export default NavBarHorizSubMenu
