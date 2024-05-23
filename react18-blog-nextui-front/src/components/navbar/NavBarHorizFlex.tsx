@@ -27,7 +27,7 @@ const NavBarHorizFlex = () => {
     >
       <div className='flex flex-row w-full basis-5/6 justify-between'>
         <div className='flex flex-row w-auto h-auto items-center'>
-          <a className='font-bold hover:bg-success px-2 py-2 rounded-lg' href='/main/home'>
+          <a className='font-bold hover:bg-success px-2 py-2 rounded-lg' href='/blog/home'>
             HOME
           </a>
           {/* <Link className='font-bold hover:bg-success  px-2 py-2 rounded-lg' href='#'>

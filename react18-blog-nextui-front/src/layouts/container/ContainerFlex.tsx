@@ -126,32 +126,40 @@ const cardList: CardBaseDataType[] = [
   {
     key: 1,
     headTitle: '近期文章',
-    headMoreText: '更多',
-    moreUrl: '',
+    headRightContent: {
+      headMoreText: '更多',
+      moreUrl: ''
+    },
     svgIcon: <SvgIcon name='book' />,
     content: <ListBoxBase type={'link'} items={newBlogs} />
   },
   {
     key: 2,
     headTitle: '分类',
-    headMoreText: '更多',
-    moreUrl: '',
+    headRightContent: {
+      headMoreText: '更多',
+      moreUrl: ''
+    },
     svgIcon: <SvgIcon name='category' />,
     content: <ListBoxBase type={'link'} items={categorys} />
   },
   {
     key: 3,
     headTitle: '标签',
-    headMoreText: '更多',
-    moreUrl: '',
+    headRightContent: {
+      headMoreText: '更多',
+      moreUrl: ''
+    },
     svgIcon: <SvgIcon name='tag-1' />,
     content: <LinkListBase items={tags} />
   },
   {
     key: 4,
     headTitle: '归档',
-    headMoreText: '更多',
-    moreUrl: '',
+    headRightContent: {
+      headMoreText: '更多',
+      moreUrl: ''
+    },
     svgIcon: <SvgIcon name='calendar-1' />,
     content: <LinkListArchive items={archives} />
   }

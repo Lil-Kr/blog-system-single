@@ -1,46 +1,44 @@
 import React from 'react'
-import { TabsBase } from '@/components/tab'
-import { Card, Snippet } from '@nextui-org/react'
-import { PaginationBase } from '@/components/pagination'
+import { Card } from '@nextui-org/react'
 import { MenuIncludePageSub } from '@/components/menu'
 import { NavBarSubMenuItem } from '@/types/components/MenuType'
-import { Outlet, useLocation, useParams } from 'oh-router-react'
+import { Outlet, useParams } from 'oh-router-react'
 
 const navbarItems: NavBarSubMenuItem[] = [
   {
     id: '0',
     title: '随笔',
-    link: '/main/category/default'
+    link: '/blog/category/default'
   },
   {
     id: '1',
     title: 'Java后端',
-    link: '/main/category/java'
+    link: '/blog/category/java'
   },
   {
     id: '2',
     title: '前端',
-    link: '/main/category/front'
+    link: '/blog/category/front'
   },
   {
     id: '3',
     title: '数据库',
-    link: '/main/category/database'
+    link: '/blog/category/database'
   },
   {
     id: '4',
     title: '编译原理',
-    link: '/main/category/compile'
+    link: '/blog/category/compile'
   },
   {
     id: '5',
     title: '计算机网络',
-    link: '/main/category/networking'
+    link: '/blog/category/networking'
   },
   {
     id: '6',
     title: '数据结构',
-    link: '/main/category/datastructure'
+    link: '/blog/category/datastructure'
   }
 ]
 

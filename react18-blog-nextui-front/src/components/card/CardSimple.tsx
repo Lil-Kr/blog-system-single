@@ -19,9 +19,14 @@ const CardSimple = (props: { cardItem: CardBaseDataType }) => {
           <p className='text-large font-bolb'>{cardItem.headTitle}</p>
         </div>
         <div className='flex flex-col px-2 '>
-          <span className='text-medium hover:text-primary cursor-pointer' onClick={() => moreFunction(cardItem.moreUrl)}>
-            {cardItem.headMoreText}
-          </span>
+          {cardItem.headRightContent && (
+            <span
+              className='text-medium hover:text-primary cursor-pointer'
+              onClick={() => moreFunction(cardItem.headRightContent!.moreUrl)}
+            >
+              {cardItem.headRightContent.headMoreText}
+            </span>
+          )}
         </div>
       </CardHeader>
       <CardBody className='flex -mt-4'>{cardItem.content}</CardBody>

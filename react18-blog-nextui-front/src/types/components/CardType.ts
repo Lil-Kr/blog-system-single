@@ -2,10 +2,12 @@ import { ReactNode } from 'react'
 
 type CardBaseDataType = {
   key: string | number
-  headTitle: string
-  headMoreText: string
-  moreUrl: string
   svgIcon: ReactNode
+  headTitle: String
+  headRightContent?: {
+    headMoreText: string
+    moreUrl: string
+  }
   content: ReactNode
 }
 

@@ -1,9 +1,8 @@
 import React from 'react'
 import { AnimatePresence, motion, useScroll } from 'framer-motion'
 import { Button, Divider, Image } from '@nextui-org/react'
-import { CardBlogItem, CardSimple } from '@/components/card'
+import { CardSimple } from '@/components/card'
 import { BlogItemsType } from '@/types/blog'
-import { PaginationBase } from '@/components/pagination'
 import CardMe from '@/components/card/CardMe'
 import { CardBaseDataType } from '@/types/components/CardType'
 import SvgIcon from '@/components/svg/SvgIcon'
@@ -166,32 +165,40 @@ const cardList: CardBaseDataType[] = [
   {
     key: 1,
     headTitle: '近期文章',
-    headMoreText: '更多',
-    moreUrl: '',
+    headRightContent: {
+      headMoreText: '更多',
+      moreUrl: ''
+    },
     svgIcon: <SvgIcon name='book' />,
     content: <ListBoxBase type={'link'} items={newBlogs} />
   },
   {
     key: 2,
     headTitle: '分类',
-    headMoreText: '更多',
-    moreUrl: '/main/category',
+    headRightContent: {
+      headMoreText: '更多',
+      moreUrl: '/main/category'
+    },
     svgIcon: <SvgIcon name='category' />,
     content: <ListBoxBase type={'link'} items={categorys} />
   },
   {
     key: 3,
     headTitle: '标签',
-    headMoreText: '更多',
-    moreUrl: '',
+    headRightContent: {
+      headMoreText: '更多',
+      moreUrl: ''
+    },
     svgIcon: <SvgIcon name='tag-1' />,
     content: <LinkListBase items={tags} />
   },
   {
     key: 4,
     headTitle: '归档',
-    headMoreText: '更多',
-    moreUrl: '',
+    headRightContent: {
+      headMoreText: '更多',
+      moreUrl: ''
+    },
     svgIcon: <SvgIcon name='calendar-1' />,
     content: <LinkListArchive items={archives} />
   }
@@ -202,7 +209,7 @@ const Main = () => {
     <>
       {/* 左侧侧边栏 */}
       <div className='col-span-3'>
-        <div className='sider-left-warpper hidden flex-col lg:basis-1/4 md:basis-1/4 lg:flex md:flex items-center gap-y-4'>
+        <div className='sider-left-warpper flex-col hidden lg:basis-1/4 md:basis-1/4 lg:flex md:flex items-center gap-y-4'>
           <CardMe />
           {cardList.map(item => (
             <CardSimple key={item.key} cardItem={item} />
@@ -210,7 +217,7 @@ const Main = () => {
         </div>
       </div>
       {/* 右侧主体内容 */}
-      <div className='col-span-9 w-full'>
+      <div className='col-span-9'>
         <Outlet />
       </div>
     </>

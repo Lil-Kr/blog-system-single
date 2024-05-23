@@ -1,5 +1,5 @@
 import React from 'react'
-import { CardBlogItem } from '@/components/card'
+import { CardBlogListItem } from '@/components/card'
 import { BlogItemsType } from '@/types/blog'
 import { PaginationBase } from '@/components/pagination'
 
@@ -44,7 +44,7 @@ const Home = () => {
         <div className='flex w-full h-96 bg-blue-500'>图片轮播</div>
         <div className='grid grid-cols-3 gap-4'>
           {blogItems.map((blogItem, index) => (
-            <CardBlogItem key={index} blogItem={blogItem} />
+            <CardBlogListItem key={index} blogItem={blogItem} />
           ))}
         </div>
         <div className='flex flex-row justify-center pt-6'>

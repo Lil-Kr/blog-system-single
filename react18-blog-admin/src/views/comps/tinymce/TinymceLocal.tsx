@@ -43,7 +43,7 @@ const TinymceLocal = () => {
             'link',
             'code',
             'preview',
-            // 'codesample',
+            'codesample',
             // 'codemirror',
             'image',
             'imagetools',
@@ -61,7 +61,7 @@ const TinymceLocal = () => {
             'alignleft aligncenter alignright alignjustify |' +
             'bullist numlist outdent indent |' +
             // 'code codesample |' +
-            'code preview |' +
+            'code preview  codesample |' +
             'link image |' +
             'searchreplace fullscreen |' +
             'emoticons anchor insertdatetime |' +
