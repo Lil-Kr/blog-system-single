@@ -4,5 +4,5 @@ export { Blog }
 import BlogLabel from '@/views/blog/label/BlogLabel'
 export { BlogLabel }
 
-import BlogType from '@/views/blog/type/BlogType'
-export { BlogType }
+import BlogCategory from '@/views/blog/category/BlogCategory'
+export { BlogCategory }

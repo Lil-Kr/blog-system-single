@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cy.single.blog.dao.BlogTypeMapper">
+<mapper namespace="com.cy.single.blog.dao.BlogCategoryMapper">
 
 
     <sql id="Table_Name">
-        blog_type
+        blog_category
     </sql>
 
     <!-- 通用查询结果列 -->
@@ -45,7 +45,7 @@
         </where>
     </delete>
 
-    <select id="getTypeList" resultType="com.cy.single.blog.pojo.vo.blog.BlogTypeVO">
+    <select id="getTypeList" resultType="com.cy.single.blog.pojo.vo.blog.BlogCategoryVO">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name"/>
         <where>
@@ -72,7 +72,7 @@
         </foreach>
     </delete>
 
-    <select id="pageTypeList" resultType="com.cy.single.blog.pojo.vo.blog.BlogTypeVO">
+    <select id="pageTypeList" resultType="com.cy.single.blog.pojo.vo.blog.BlogCategoryVO">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name"/>
         <where>
@@ -110,7 +110,7 @@
         </where>
     </select>
 
-    <select id="selectBySurrogateId" resultType="com.cy.single.blog.pojo.entity.blog.BlogType">
+    <select id="selectBySurrogateId" resultType="com.cy.single.blog.pojo.entity.blog.BlogCategory">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         <where>
@@ -118,7 +118,7 @@
         </where>
     </select>
 
-    <select id="selectByNumber" resultType="com.cy.single.blog.pojo.entity.blog.BlogType">
+    <select id="selectByNumber" resultType="com.cy.single.blog.pojo.entity.blog.BlogCategory">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         <where>

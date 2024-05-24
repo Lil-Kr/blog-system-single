@@ -6,8 +6,8 @@ import { BlogType } from '@/types/entity/blog/blogType'
 /**
  * blog label request API type
  */
-export interface BlogTypeApi extends BaseApi {
-  getTypePageList(params: BlogTypeReqParams): Promise<ResultPage<BlogTypeVO>>
+export interface BlogCategoryApi extends BaseApi {
+  getTypePageList(params: BlogTypeReqParams): Promise<ResultPage<BlogCategoryVO>>
   // save(params: CreateLabelReq): Promise<Result<string>>
   // edit(params: EditLabelReq): Promise<Result<string>>
   // delete(params: DelLabelReq): Promise<Result<string>>
@@ -37,7 +37,7 @@ export interface DelTypeReq {
 }
 
 /** ==================== blog type response ====================  */
-export interface TypeDTO {
+export interface CategoryDTO {
   key: string
   number: string | number
   name: string
@@ -45,4 +45,4 @@ export interface TypeDTO {
 }
 
 /** ==================== mapping back-end data ====================  */
-export interface BlogTypeVO extends BlogType {}
+export interface BlogCategoryVO extends BlogType {}

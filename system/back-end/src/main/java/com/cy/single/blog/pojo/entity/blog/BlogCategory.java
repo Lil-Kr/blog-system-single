@@ -24,9 +24,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@TableName("blog_type")
+@TableName("blog_category")
 @Data
-public class BlogType extends BaseEntity implements Serializable {
+public class BlogCategory extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

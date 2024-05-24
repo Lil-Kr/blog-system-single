@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.req.blog.type;
+package com.cy.single.blog.pojo.req.blog.category;
 
 import com.cy.single.blog.base.BasePageReq;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @ToString
 @Data
-public class BlogTypePageReq extends BasePageReq {
+public class BlogCategoryPageReq extends BasePageReq {
 
     private Long surrogateId;
 

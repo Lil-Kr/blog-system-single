@@ -61,7 +61,7 @@ const getLayoutRouterItem = (config: RouterItemType[]): boolean => {
 
 const handleBreadCrumbItems = (
   childrens: RouterItemType[],
-  routerPath: string, // /main/blog
+  routerPath: string, // /admin/blog
   breadcrumb: string, // 博客管理
   breadcrumbMap: Map<string, string>
 ): Map<string, string> => {

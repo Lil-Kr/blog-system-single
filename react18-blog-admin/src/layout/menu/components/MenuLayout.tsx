@@ -46,7 +46,7 @@ const MenuLayout = () => {
           triggerSubMenuAction='click'
           openKeys={openKeys}
           selectedKeys={selectedKeys} // 当前选中的菜单项 key 数组
-          // selectedKeys={['/main/blog/index']} // 当前选中的菜单项 key 数组
+          // selectedKeys={['/admin/blog/index']} // 当前选中的菜单项 key 数组
           // default open menu
           // defaultOpenKeys={defaultOpenKeys}
           items={menuItems}

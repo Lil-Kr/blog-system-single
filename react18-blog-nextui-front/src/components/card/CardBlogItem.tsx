@@ -86,12 +86,8 @@ const CardBlogItem = () => {
       <Divider className='h-[2px]' />
       <div className='blog-article flex flex-col'>
         {/* <a className='w-full break-words whitespace-normal'>aba</a> */}
-        <p>
-          <a id='asdb'></a>asdfasdfasdfas
-        </p>
-        <pre className='language-java bg-primary'>
-          <code className='text-white'>String imageFullName = imageFile.getOriginalFilename();</code>
-        </pre>
+
+        <p dangerouslySetInnerHTML={{ __html: '' }} />
       </div>
     </Card>
   )

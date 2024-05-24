@@ -2,13 +2,13 @@ package com.cy.single.blog.service.impl;
 
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.dao.BlogTypeMapper;
-import com.cy.single.blog.pojo.dto.blog.BlogTypeDTO;
-import com.cy.single.blog.pojo.entity.blog.BlogType;
-import com.cy.single.blog.pojo.req.blog.type.BlogTypePageReq;
-import com.cy.single.blog.pojo.req.blog.type.BlogTypeReq;
-import com.cy.single.blog.pojo.vo.blog.BlogTypeVO;
-import com.cy.single.blog.service.BlogTypeService;
+import com.cy.single.blog.dao.BlogCategoryMapper;
+import com.cy.single.blog.pojo.dto.blog.BlogCategoryDTO;
+import com.cy.single.blog.pojo.entity.blog.BlogCategory;
+import com.cy.single.blog.pojo.req.blog.category.BlogCategoryPageReq;
+import com.cy.single.blog.pojo.req.blog.category.BlogCategoryReq;
+import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
+import com.cy.single.blog.service.BlogCategoryService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -31,15 +31,15 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.*;
  */
 @Slf4j
 @Service
-public class BlogTypeServiceImpl implements BlogTypeService {
+public class BlogCategoryServiceImpl implements BlogCategoryService {
 
     @Autowired
-    private BlogTypeMapper blogTypeMapper;
+    private BlogCategoryMapper blogCategoryMapper;
 
     @Override
-    public PageResult<BlogTypeVO> pageTypeList(BlogTypePageReq req) {
-        List<BlogTypeVO> pageList = blogTypeMapper.pageTypeList(req);
-        Integer count = blogTypeMapper.getCountByList(req);
+    public PageResult<BlogCategoryVO> pageTypeList(BlogCategoryPageReq req) {
+        List<BlogCategoryVO> pageList = blogCategoryMapper.pageTypeList(req);
+        Integer count = blogCategoryMapper.getCountByList(req);
         if (CollectionUtils.isEmpty(pageList)) {
             return new PageResult<>(new ArrayList<>(0), 0);
         }else {
@@ -48,16 +48,16 @@ public class BlogTypeServiceImpl implements BlogTypeService {
     }
 
     @Override
-    public ApiResp<String> save(BlogTypeReq req) {
-        BlogType blogTypeRes = blogTypeMapper.selectByNumber(req.getNumber());
-        if (Objects.nonNull(blogTypeRes)) {
+    public ApiResp<String> save(BlogCategoryReq req) {
+        BlogCategory blogCategoryRes = blogCategoryMapper.selectByNumber(req.getNumber());
+        if (Objects.nonNull(blogCategoryRes)) {
             return ApiResp.failure(DATA_INFO_REPEAT);
         }else {
-            blogTypeRes = BlogType.builder().build();
+            blogCategoryRes = BlogCategory.builder().build();
         }
 
-        BlogType saveEntity = BlogTypeDTO.convertSaveTypeReq(req, blogTypeRes);
-        Integer save = blogTypeMapper.insert(saveEntity);
+        BlogCategory saveEntity = BlogCategoryDTO.convertSaveCategoryReq(req, blogCategoryRes);
+        Integer save = blogCategoryMapper.insert(saveEntity);
         if (save >= 1) {
             return ApiResp.success();
         }else {
@@ -66,20 +66,20 @@ public class BlogTypeServiceImpl implements BlogTypeService {
     }
 
     @Override
-    public ApiResp<String> edit(BlogTypeReq req) {
-        BlogType blogTypeRes = blogTypeMapper.selectBySurrogateId(req.getSurrogateId());
-        if (Objects.isNull(blogTypeRes)) {
+    public ApiResp<String> edit(BlogCategoryReq req) {
+        BlogCategory blogCategoryRes = blogCategoryMapper.selectBySurrogateId(req.getSurrogateId());
+        if (Objects.isNull(blogCategoryRes)) {
             return ApiResp.failure(OPERATE_ERROR);
         }
 
-        if (!blogTypeRes.getNumber().equalsIgnoreCase(req.getNumber())) {
+        if (!blogCategoryRes.getNumber().equalsIgnoreCase(req.getNumber())) {
             return ApiResp.failure(OPERATE_ERROR);
         }
 
-        BeanUtils.copyProperties(req, blogTypeRes);
+        BeanUtils.copyProperties(req, blogCategoryRes);
         Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
-        blogTypeRes.setUpdateTime(nowDateTime);
-        Integer count = blogTypeMapper.editBySurrogateId(blogTypeRes);
+        blogCategoryRes.setUpdateTime(nowDateTime);
+        Integer count = blogCategoryMapper.editBySurrogateId(blogCategoryRes);
         if (count >= 1) {
             return ApiResp.success();
         }else {
@@ -89,7 +89,7 @@ public class BlogTypeServiceImpl implements BlogTypeService {
 
     @Override
     public ApiResp<String> delete(Long surrogateId) {
-        int count = blogTypeMapper.deleteBySurrogateId(surrogateId);
+        int count = blogCategoryMapper.deleteBySurrogateId(surrogateId);
         if (count >= 1) {
             return ApiResp.success();
         }else {
@@ -98,8 +98,8 @@ public class BlogTypeServiceImpl implements BlogTypeService {
     }
 
     @Override
-    public ApiResp<String> deleteBatch(BlogTypeReq req) {
-        Integer count = blogTypeMapper.deleteBatch(req.getSurrogateIds());
+    public ApiResp<String> deleteBatch(BlogCategoryReq req) {
+        Integer count = blogCategoryMapper.deleteBatch(req.getSurrogateIds());
         if (count >= 1) {
             return ApiResp.success();
         }else {

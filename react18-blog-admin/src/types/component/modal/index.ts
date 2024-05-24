@@ -73,4 +73,21 @@ export namespace ModalType {
 
     update: () => void
   }
+
+  export interface SaveBlogModal<T = any> {
+    mRef: MutableRefObject<
+      | {
+          open: (
+            requestParams: IModalRequestAction,
+            params: IModalParams,
+            type: IAction
+            // items: InputType[],
+            // data: T
+          ) => void
+        }
+      | undefined
+    >
+
+    update?: () => void
+  }
 }

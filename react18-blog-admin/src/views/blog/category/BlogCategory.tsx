@@ -5,13 +5,13 @@ import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { BlogTypeReqParams, TypeDTO } from '@/types/apis/blog/type'
+import { BlogTypeReqParams, CategoryDTO } from '@/types/apis/blog/category'
 import { BaseModal } from '@/components/modal'
 
 // api
 import blogTypeApi from '@/apis/blog/type'
 
-const BlogType = () => {
+const BlogCategory = () => {
   const columns: ColumnsType<any> = [
     {
       key: 'number',
@@ -36,7 +36,7 @@ const BlogType = () => {
       dataIndex: 'oparet',
       title: '操作',
       width: 150,
-      render: (_: object, record: TypeDTO) => (
+      render: (_: object, record: CategoryDTO) => (
         <Space size='middle'>
           <Button
             name='look'
@@ -82,7 +82,7 @@ const BlogType = () => {
   const [btnSize] = useState<SizeType>('middle')
   const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
   const [rowKeys, setRowKeys] = useState<React.Key[]>([])
-  const [dataSource, setDataSource] = useState<TypeDTO[]>([])
+  const [dataSource, setDataSource] = useState<CategoryDTO[]>([])
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [pageSize, setPageSize] = useState<number>(10)
   const [totalSize, setTotalSize] = useState<number>(0)
@@ -91,7 +91,7 @@ const BlogType = () => {
    * 删除确认提示
    * @param record
    */
-  const deleteItemConfirm = async (record: TypeDTO) => {
+  const deleteItemConfirm = async (record: CategoryDTO) => {
     const res = await blogTypeApi.delete!({ surrogateId: record.key })
     if (res.code === 200) {
       message.success(res.msg)
@@ -104,12 +104,12 @@ const BlogType = () => {
   /**
    * 多选
    */
-  const rowSelection: TableRowSelection<TypeDTO> = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: TypeDTO[]) => {
+  const rowSelection: TableRowSelection<CategoryDTO> = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: CategoryDTO[]) => {
       // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
       setRowKeys(selectedRowKeys)
     },
-    getCheckboxProps: (record: TypeDTO) => ({
+    getCheckboxProps: (record: CategoryDTO) => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked
       name: record.name
     })
@@ -120,7 +120,7 @@ const BlogType = () => {
    * @param key
    * @param record
    */
-  const lookItem = (key: string, record: TypeDTO) => {
+  const lookItem = (key: string, record: CategoryDTO) => {
     typeRef.current?.open(
       { api: blogTypeApi },
       { title: '查看博客类型' },
@@ -157,7 +157,7 @@ const BlogType = () => {
    * @param key
    * @param record
    */
-  const editItem = (key: string, record: TypeDTO) => {
+  const editItem = (key: string, record: CategoryDTO) => {
     typeRef.current?.open(
       { api: blogTypeApi },
       { title: '编辑博客类型' },
@@ -368,4 +368,4 @@ const BlogType = () => {
   )
 }
 
-export default BlogType
+export default BlogCategory

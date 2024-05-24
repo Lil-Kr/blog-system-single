@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.single.blog.dao.BlogContentMapper">
+
+    <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.blog.BlogContent">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="surrogate_id" jdbcType="BIGINT" property="surrogateId" />
+        <result column="category_id" jdbcType="BIGINT" property="categoryId" />
+        <result column="label_ids" jdbcType="VARCHAR" property="labelIds" />
+        <result column="topic_id" jdbcType="BIGINT" property="topicId" />
+        <result column="number" jdbcType="VARCHAR" property="number" />
+        <result column="original" jdbcType="INTEGER" property="original" />
+        <result column="recommend" jdbcType="INTEGER" property="recommend" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
+        <result column="paragraph" jdbcType="VARCHAR" property="paragraph" />
+        <result column="word_count" jdbcType="BIGINT" property="wordCount" />
+        <result column="publish_time" jdbcType="TIMESTAMP" property="publishTime" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="deleted" jdbcType="INTEGER" property="deleted" />
+        <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
+        <result column="modifier_id" jdbcType="BIGINT" property="modifierId" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+
+    <sql id="Table_Name">
+        blog_content
+    </sql>
+
+    <sql id="Base_Column_List">
+        id, surrogate_id, category_id, label_ids, topic_id, `number`, original, recommend,
+    title, img_url, paragraph, word_count, publish_time, `status`, remark, deleted, creator_id,
+    modifier_id, create_time, update_time
+    </sql>
+
+</mapper>

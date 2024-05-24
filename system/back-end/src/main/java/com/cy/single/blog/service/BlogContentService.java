@@ -1,5 +1,8 @@
 package com.cy.single.blog.service;
 
+import com.cy.single.blog.base.ApiResp;
+import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
+
 /**
  * <p>
  *  服务类
@@ -10,4 +13,5 @@ package com.cy.single.blog.service;
  */
 public interface BlogContentService {
 
+  ApiResp<String> save(BlogContentReq req);
 }

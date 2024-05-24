@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.req.blog.type;
+package com.cy.single.blog.pojo.req.blog.category;
 
 import com.cy.single.blog.base.BaseEntity;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @ToString
 @Data
-public class BlogTypeReq extends BaseEntity {
+public class BlogCategoryReq extends BaseEntity {
 
     public interface GroupTypeSave {}
     public interface GroupTypeEdit {}

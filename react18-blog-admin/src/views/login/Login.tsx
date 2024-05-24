@@ -28,7 +28,7 @@ const Login = () => {
     const { code, data: token, msg } = loginRes
     if (code === 200) {
       setToken(token)
-      const path = '/main/home'
+      const path = '/admin/home'
       // 跳转
       navigateTo(path)
       // const tabActive = { key: HOME_ROUTER_URL, path: HOME_ROUTER_URL, label: HOME_NAME, closable: false }

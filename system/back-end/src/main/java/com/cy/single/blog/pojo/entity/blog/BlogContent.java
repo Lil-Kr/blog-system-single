@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -42,20 +43,30 @@ public class BlogContent extends BaseEntity implements Serializable {
      */
     private String number;
 
+    private Integer original;
+
+    private Integer recommend;
+
     /**
      * 博客文章标题
      */
     private String title;
 
+    private String imgUrl;
+
+    private String paragraph;
+
+    private Date publishTime;
+
     /**
      * 博客分类ids
      */
-    private Long type_ids;
+    private Long categoryId;
 
     /**
      * 博客标签ids
      */
-    private String lableIds;
+    private String labelIds;
 
     /**
      * 博客专题id

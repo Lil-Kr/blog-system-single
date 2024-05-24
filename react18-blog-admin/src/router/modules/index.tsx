@@ -8,18 +8,19 @@ import { RouterItemType } from '@/types/router/routeType'
 import { homeConfig } from './homeConfig'
 import { compsConfig } from './compsConfig'
 import { aideToolsConfig } from './aideToolsConfig'
+import { portalConfig } from './portalConfig'
 
 const busConfig: RouterItemType[] = [
   {
     meta: {
-      key: '/main',
+      key: '/admin',
       title: '主框架',
       layout: true,
       icon: <UserOutlined />
     },
-    path: 'main',
+    path: 'admin',
     element: LazyLoad(lazy(() => import('@/layout/MainLayout'))),
-    children: [...homeConfig, ...blogConfig, ...compsConfig, ...aideToolsConfig]
+    children: [...homeConfig, ...blogConfig, ...portalConfig, ...compsConfig, ...aideToolsConfig]
   }
 ]
 
