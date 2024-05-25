@@ -37,6 +37,11 @@ export const PREFIX_URL_BLOG_LABEL = '/blog/label'
 export const PREFIX_URL_BLOG_CATEGORY = '/blog/category'
 
 /**
+ * blog-topic
+ */
+export const PREFIX_URL_BLOG_TOPIC = '/blog/topic'
+
+/**
  * blog-content
  */
 export const PREFIX_URL_BLOG_CONTENT = '/blog/content'

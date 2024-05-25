@@ -18,15 +18,55 @@ const Blogs = () => {
     {
       key: 'name',
       dataIndex: 'name',
-      title: '标签名',
+      title: '博客标题',
       width: 100,
       render: (_, record: LabelDTO) => (
-        <>
-          <Tag key={record.key} color={record.color}>
-            {record.name}
-          </Tag>
-        </>
+        <Tag key={record.key} color={record.color}>
+          {record.name}
+        </Tag>
       )
+    },
+    {
+      key: 'label_ids',
+      dataIndex: 'label_ids',
+      title: '博客标签',
+      width: 100
+    },
+    {
+      key: 'topic_id',
+      dataIndex: 'topic_id',
+      title: '博客专题',
+      width: 100
+    },
+    {
+      key: 'category_id',
+      dataIndex: 'category_id',
+      title: '博客分类',
+      width: 100
+    },
+    {
+      key: 'original',
+      dataIndex: 'original',
+      title: '是否原创',
+      width: 100
+    },
+    {
+      key: 'recommend',
+      dataIndex: 'recommend',
+      title: '是否推荐',
+      width: 100
+    },
+    {
+      key: 'status',
+      dataIndex: 'status',
+      title: '发布状态',
+      width: 100
+    },
+    {
+      key: 'publish_time',
+      dataIndex: 'publish_time',
+      title: '发布时间',
+      width: 100
     },
     {
       key: 'remark',
@@ -140,14 +180,13 @@ const Blogs = () => {
         <div>
           <Table
             key={1}
-            style={{ width: '40%' }}
+            style={{ width: '100%' }}
             rowSelection={{
               type: 'checkbox',
               ...rowSelection
             }}
             loading={tableLoading}
             columns={columns}
-            // dataSource={dataSource}
             dataSource={dataSource}
             pagination={{
               hideOnSinglePage: false, // only one pageSize then hidden Paginator
@@ -158,7 +197,6 @@ const Blogs = () => {
               pageSize: pageSize,
               total: totalSize
             }}
-            // scroll={{ y: 1000 }}
           />
         </div>
       </Flex>

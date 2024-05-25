@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/colors": "^7.0.2",
     "@ant-design/icons": "^5.3.6",
     "@tinymce/tinymce-react": "^5.0.1",
     "@types/estree": "^1.0.5",

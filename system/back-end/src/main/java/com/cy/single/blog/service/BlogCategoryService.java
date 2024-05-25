@@ -13,7 +13,9 @@ import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
  */
 public interface BlogCategoryService {
 
-    PageResult<BlogCategoryVO> pageTypeList(BlogCategoryPageReq req);
+    PageResult<BlogCategoryVO> pageCategoryList(BlogCategoryPageReq req);
+
+    PageResult<BlogCategoryVO> list(BlogCategoryPageReq req);
 
     ApiResp<String> save(BlogCategoryReq req);
 

@@ -72,7 +72,7 @@
         </foreach>
     </delete>
 
-    <select id="pageTypeList" resultType="com.cy.single.blog.pojo.vo.blog.BlogCategoryVO">
+    <select id="pageCategoryList" resultType="com.cy.single.blog.pojo.vo.blog.BlogCategoryVO">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name"/>
         <where>
@@ -123,6 +123,25 @@
         from <include refid="Table_Name" />
         <where>
             number = #{number}
+        </where>
+    </select>
+
+    <select id="categoryList" resultType="com.cy.single.blog.pojo.vo.blog.BlogCategoryVO">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name" />
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `number` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
         </where>
     </select>
 </mapper>

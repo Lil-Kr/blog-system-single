@@ -42,6 +42,9 @@ public class BlogLabelReq extends BaseEntity {
 //    @Length(groups = {Default.class, GroupLabelSave.class, GroupLabelEdit.class}, max = 20, message = "标签颜色值不超过20个字符")
     private String color;
 
+    @NotNull(groups = {Default.class, GroupLabelSave.class, GroupLabelEdit.class}, message = "标签展示颜色不能为空")
+    private String colorText;
+
     @Length(groups = {Default.class, GroupLabelSave.class},max = 200, message = "备注长度必须在200个字符以内")
     private String remark;
 

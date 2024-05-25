@@ -1,29 +1,28 @@
 import { baseAxiosRequest } from '@/utils/http/request'
 import { Result, ResultPage } from '@/types/base/response'
-import { CreateLabelReq, EditLabelReq, DelLabelReq, LabelVO, LabelApi } from '@/types/apis/blog/label'
 import { PREFIX_URL_BLOG_CATEGORY } from '@/config'
 import {
   BlogCategoryApi,
-  BlogTypeReqParams,
+  BlogCategoryReqParams,
   BlogCategoryVO,
-  CreateTypeReq,
-  EditTypeReq,
-  DelTypeReq
+  CreateCategoryReq,
+  EditCategoryReq,
+  DelCategoryReq
 } from '@/types/apis/blog/category'
 
-const blogTypeApi: BlogCategoryApi = {
-  getTypePageList(params: BlogTypeReqParams) {
+const blogCategoryApi: BlogCategoryApi = {
+  getCategoryPageList(params: BlogCategoryReqParams) {
     return baseAxiosRequest.post<ResultPage<BlogCategoryVO>>(PREFIX_URL_BLOG_CATEGORY + '/pageCategoryList', params)
   },
-  save(params: CreateTypeReq) {
+  save(params: CreateCategoryReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CATEGORY + '/save', params)
   },
-  edit(params: EditTypeReq) {
+  edit(params: EditCategoryReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CATEGORY + '/edit', params)
   },
-  delete(params: DelTypeReq) {
+  delete(params: DelCategoryReq) {
     return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_BLOG_CATEGORY + '/delete', params)
   }
 }
 
-export default blogTypeApi
+export default blogCategoryApi

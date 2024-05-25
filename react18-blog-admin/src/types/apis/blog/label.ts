@@ -50,6 +50,7 @@ export interface LabelDTO {
   number: string | number
   name: string
   color?: string
+  colorText: string
   remark: string
 }
 

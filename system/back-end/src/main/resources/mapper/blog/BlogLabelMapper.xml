@@ -9,11 +9,11 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,surrogate_id, `number`, `name`, color, remark, deleted, creator_id,modifier_id,create_time,update_time
+        id,surrogate_id, `number`, `name`, color, color_text, remark, deleted, creator_id,modifier_id,create_time,update_time
     </sql>
 
 
-    <delete id="editBySurrogateId">
+    <update id="editBySurrogateId">
         update <include refid="Table_Name" />
         <set>
             <if test="param.number != null and param.number != ''">
@@ -24,6 +24,9 @@
             </if>
             <if test="param.color != null and param.color != ''">
                 color = #{param.color},
+            </if>
+            <if test="param.colorText != null and param.colorText != ''">
+                color_text = #{param.colorText},
             </if>
             <if test="param.remark != null and param.remark != ''">
                 remark = #{param.remark},
@@ -38,7 +41,7 @@
         <where>
             surrogate_id = #{param.surrogateId}
         </where>
-    </delete>
+    </update>
 
 
     <delete id="deleteBySurrogateId">

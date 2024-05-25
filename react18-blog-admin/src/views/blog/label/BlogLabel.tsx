@@ -33,10 +33,21 @@ const BlogLabel = () => {
       )
     },
     {
+      key: 'colorText',
+      dataIndex: 'colorText',
+      title: '展示颜色',
+      width: 100,
+      render: (_, record: LabelDTO) => (
+        <Tag key={record.key} color={record.colorText}>
+          {record.name}
+        </Tag>
+      )
+    },
+    {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: 100
+      width: 200
     },
     {
       key: 'oparet',
@@ -86,7 +97,7 @@ const BlogLabel = () => {
 
   /**
    * 删除确认提示
-   * @param record
+   *    * @param record
    */
   const deleteItemConfirm = async (record: LabelDTO) => {
     const res = await blogLabelApi.delete({ surrogateId: record.key })
@@ -177,11 +188,12 @@ const BlogLabel = () => {
     const labelList = await blogLabelApi.getLabelList({ ...values })
     const { code, data, msg } = labelList
     if (code === 200) {
-      const datas = data.list.map(({ surrogateId, number, name, color, remark }) => ({
+      const datas = data.list.map(({ surrogateId, number, name, color, colorText, remark }) => ({
         key: surrogateId,
         number,
         name,
         color,
+        colorText,
         remark
       }))
       setDataSource(datas)
@@ -230,7 +242,7 @@ const BlogLabel = () => {
             </Button>
           </Flex>
         </div>
-        <div className='list'>
+        <Flex className='list' gap='middle' vertical={true}>
           <Table
             key={1}
             style={{ width: '40%' }}
@@ -251,10 +263,9 @@ const BlogLabel = () => {
               pageSize: pageSize,
               total: totalSize
             }}
-            // scroll={{ y: 1000 }}
           />
           {/* <Pagination defaultCurrent={6} total={500} /> */}
-        </div>
+        </Flex>
       </Flex>
       <LabelDetail
         mRef={labelRef}

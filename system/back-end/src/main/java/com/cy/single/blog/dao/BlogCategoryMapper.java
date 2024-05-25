@@ -24,7 +24,9 @@ public interface BlogCategoryMapper extends BaseMapper<BlogCategory> {
 
     BlogCategory selectByNumber(String Number);
 
-    List<BlogCategoryVO> pageTypeList(@Param("param") BlogCategoryPageReq req);
+    List<BlogCategoryVO> pageCategoryList(@Param("param") BlogCategoryPageReq req);
+
+    List<BlogCategoryVO> categoryList(@Param("param") BlogCategoryPageReq req);
 
     Integer getCountByList(@Param("param") BlogCategoryPageReq req);
 

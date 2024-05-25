@@ -35,8 +35,17 @@ public class CategoryApi {
     @RecordLogger
     @CheckAuth
     @PostMapping("/pageCategoryList")
-    public ApiResp<PageResult<BlogCategoryVO>> pageTypeList(@RequestBody @Valid BlogCategoryPageReq req) {
-        PageResult<BlogCategoryVO> list = blogCategoryService.pageTypeList(req);
+    public ApiResp<PageResult<BlogCategoryVO>> pageCategoryList(@RequestBody @Valid BlogCategoryPageReq req) {
+        PageResult<BlogCategoryVO> list = blogCategoryService.pageCategoryList(req);
+        return ApiResp.success(list);
+    }
+
+
+    @RecordLogger
+    @CheckAuth
+    @PostMapping("/list")
+    public ApiResp<PageResult<BlogCategoryVO>> list(@RequestBody @Valid BlogCategoryPageReq req) {
+        PageResult<BlogCategoryVO> list = blogCategoryService.list(req);
         return ApiResp.success(list);
     }
 

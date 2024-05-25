@@ -40,12 +40,12 @@ const blogConfig: RouterItemType[] = [
       },
       {
         meta: {
-          key: '/type',
+          key: '/category',
           title: '分类管理',
           layout: false,
           icon: <SnippetsOutlined />
         },
-        path: 'type',
+        path: 'category',
         element: LazyLoad(lazy(() => import('@/views/blog/category/BlogCategory')))
       },
       {
@@ -56,7 +56,7 @@ const blogConfig: RouterItemType[] = [
           icon: <SnippetsOutlined />
         },
         path: 'topic',
-        element: LazyLoad(lazy(() => import('@/views/blog/category/BlogCategory')))
+        element: LazyLoad(lazy(() => import('@/views/blog/topic/BlogTopic')))
       }
     ]
   }

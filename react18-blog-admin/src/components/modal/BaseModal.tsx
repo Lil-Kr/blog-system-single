@@ -1,7 +1,7 @@
 import React, { useImperativeHandle, useState } from 'react'
 import Modal from 'antd/es/modal/Modal'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { ConfigProvider, Form, Input, message } from 'antd'
+import { Form, Input, message } from 'antd'
 
 const BaseModal = (props: ModalType.BaseModalType) => {
   const { mRef, update } = props
@@ -82,6 +82,7 @@ const BaseModal = (props: ModalType.BaseModalType) => {
       }
     } else if (action === 'edit') {
       const param = { surrogateId: params.key, ...params }
+      console.log('--> param: ', { ...param })
       const res = await api.edit!(param)
       const { code, msg, data } = res
       if (code === 200) {

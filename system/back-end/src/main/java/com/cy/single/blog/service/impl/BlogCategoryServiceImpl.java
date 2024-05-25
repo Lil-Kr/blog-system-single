@@ -2,6 +2,7 @@ package com.cy.single.blog.service.impl;
 
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
+import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.BlogCategoryMapper;
 import com.cy.single.blog.pojo.dto.blog.BlogCategoryDTO;
 import com.cy.single.blog.pojo.entity.blog.BlogCategory;
@@ -15,13 +16,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -37,8 +36,8 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
     private BlogCategoryMapper blogCategoryMapper;
 
     @Override
-    public PageResult<BlogCategoryVO> pageTypeList(BlogCategoryPageReq req) {
-        List<BlogCategoryVO> pageList = blogCategoryMapper.pageTypeList(req);
+    public PageResult<BlogCategoryVO> pageCategoryList(BlogCategoryPageReq req) {
+        List<BlogCategoryVO> pageList = blogCategoryMapper.pageCategoryList(req);
         Integer count = blogCategoryMapper.getCountByList(req);
         if (CollectionUtils.isEmpty(pageList)) {
             return new PageResult<>(new ArrayList<>(0), 0);
@@ -47,7 +46,19 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
         }
     }
 
-    @Override
+  @Override
+  public PageResult<BlogCategoryVO> list(BlogCategoryPageReq req) {
+    List<BlogCategoryVO> list = blogCategoryMapper.categoryList(req);
+
+    if (CollectionUtils.isEmpty(list)) {
+      return new PageResult<>(new ArrayList<>(0), 0);
+    }else {
+      return new PageResult<>(list, list.size());
+    }
+
+  }
+
+  @Override
     public ApiResp<String> save(BlogCategoryReq req) {
         BlogCategory blogCategoryRes = blogCategoryMapper.selectByNumber(req.getNumber());
         if (Objects.nonNull(blogCategoryRes)) {
@@ -79,6 +90,7 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
         BeanUtils.copyProperties(req, blogCategoryRes);
         Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
         blogCategoryRes.setUpdateTime(nowDateTime);
+        blogCategoryRes.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
         Integer count = blogCategoryMapper.editBySurrogateId(blogCategoryRes);
         if (count >= 1) {
             return ApiResp.success();

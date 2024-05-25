@@ -1,13 +1,13 @@
 import { BaseEntityPageType, BasePageReq } from '@/types/base'
 import { BaseApi } from '..'
 import { ResultPage } from '@/types/base/response'
-import { BlogType } from '@/types/entity/blog/blogType'
+import { BlogCategoryType } from '@/types/entity/blog/categoryType'
 
 /**
  * blog label request API type
  */
 export interface BlogCategoryApi extends BaseApi {
-  getTypePageList(params: BlogTypeReqParams): Promise<ResultPage<BlogCategoryVO>>
+  getCategoryPageList(params: BlogCategoryReqParams): Promise<ResultPage<BlogCategoryVO>>
   // save(params: CreateLabelReq): Promise<Result<string>>
   // edit(params: EditLabelReq): Promise<Result<string>>
   // delete(params: DelLabelReq): Promise<Result<string>>
@@ -15,24 +15,24 @@ export interface BlogCategoryApi extends BaseApi {
 }
 
 /** ==================== blog type request ====================  */
-export interface BlogTypeReqParams extends BaseEntityPageType {
+export interface BlogCategoryReqParams extends BaseEntityPageType {
   keyWords?: string | number
 }
 
-export interface CreateTypeReq {
+export interface CreateCategoryReq {
   number: string
   name: string
   remark: string
 }
 
-export interface EditTypeReq {
+export interface EditCategoryReq {
   surrogateId: string
   number: string
   name: string
   remark: string
 }
 
-export interface DelTypeReq {
+export interface DelCategoryReq {
   surrogateId: string
 }
 
@@ -45,4 +45,4 @@ export interface CategoryDTO {
 }
 
 /** ==================== mapping back-end data ====================  */
-export interface BlogCategoryVO extends BlogType {}
+export interface BlogCategoryVO extends BlogCategoryType {}

@@ -5,11 +5,11 @@ import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { BlogTypeReqParams, CategoryDTO } from '@/types/apis/blog/category'
+import { BlogCategoryReqParams, CategoryDTO } from '@/types/apis/blog/category'
 import { BaseModal } from '@/components/modal'
 
 // api
-import blogTypeApi from '@/apis/blog/type'
+import blogCategoryApi from '@/apis/blog/category'
 
 const BlogCategory = () => {
   const columns: ColumnsType<any> = [
@@ -29,7 +29,7 @@ const BlogCategory = () => {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: 100
+      width: 200
     },
     {
       key: 'oparet',
@@ -92,10 +92,10 @@ const BlogCategory = () => {
    * @param record
    */
   const deleteItemConfirm = async (record: CategoryDTO) => {
-    const res = await blogTypeApi.delete!({ surrogateId: record.key })
+    const res = await blogCategoryApi.delete!({ surrogateId: record.key })
     if (res.code === 200) {
       message.success(res.msg)
-      getTypePageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
+      getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
     } else {
       message.error(res.msg)
     }
@@ -122,7 +122,7 @@ const BlogCategory = () => {
    */
   const lookItem = (key: string, record: CategoryDTO) => {
     typeRef.current?.open(
-      { api: blogTypeApi },
+      { api: blogCategoryApi },
       { title: '查看博客类型' },
       { action: 'look', open: true }, // create | edit | look
       { style: { maxWidth: '30vw' } },
@@ -159,7 +159,7 @@ const BlogCategory = () => {
    */
   const editItem = (key: string, record: CategoryDTO) => {
     typeRef.current?.open(
-      { api: blogTypeApi },
+      { api: blogCategoryApi },
       { title: '编辑博客类型' },
       { action: 'edit', open: true }, // create | edit | look
       { style: { maxWidth: '30vw' } },
@@ -194,7 +194,7 @@ const BlogCategory = () => {
    */
   const createType = () => {
     typeRef.current?.open(
-      { api: blogTypeApi },
+      { api: blogCategoryApi },
       { title: '创建博客类型' },
       { action: 'create', open: true }, // create | edit | look
       { style: { maxWidth: '30vw' } },
@@ -248,27 +248,27 @@ const BlogCategory = () => {
   const search = () => {
     let data = form.getFieldsValue()
     const searchParam = { ...data, currentPageNum: 1, pageSize: pageSize }
-    getTypePageList({ ...searchParam })
+    getCategoryPageList({ ...searchParam })
   }
 
   const resetSearch = () => {
     form.resetFields()
-    getTypePageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
+    getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
   }
 
   /**
    * 初始化
    */
   useEffect(() => {
-    getTypePageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
+    getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
   }, [])
 
   /**
    * 获取标签列表, 不分页
    */
-  const getTypePageList = async (params: BlogTypeReqParams) => {
+  const getCategoryPageList = async (params: BlogCategoryReqParams) => {
     const values = form.getFieldsValue()
-    const blogTypesRes = await blogTypeApi.getTypePageList({ ...params, ...values })
+    const blogTypesRes = await blogCategoryApi.getCategoryPageList({ ...params, ...values })
     const { code, data, msg } = blogTypesRes
     if (code === 200) {
       const datas = data.list.map(({ surrogateId, number, name, remark }) => ({
@@ -291,7 +291,7 @@ const BlogCategory = () => {
    */
   const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
     const values = form.getFieldsValue()
-    getTypePageList({ ...values, currentPageNum: current, pageSize: pageSize })
+    getCategoryPageList({ ...values, currentPageNum: current, pageSize: pageSize })
     setPageSize(pageSize)
   }
 
@@ -302,11 +302,11 @@ const BlogCategory = () => {
    */
   const onChange: PaginationProps['onChange'] = (page, pageSize) => {
     const values = form.getFieldsValue()
-    getTypePageList({ ...values, currentPageNum: page, pageSize: pageSize })
+    getCategoryPageList({ ...values, currentPageNum: page, pageSize: pageSize })
   }
 
   return (
-    <div className='blog-label-warpper'>
+    <div className='blog-category-warpper'>
       <Flex gap='middle' vertical={true}>
         <Form form={form}>
           <Flex gap='small'>
@@ -348,7 +348,7 @@ const BlogCategory = () => {
             dataSource={dataSource}
             pagination={{
               hideOnSinglePage: false, // only one pageSize then hidden Paginator
-              pageSizeOptions: [pageSize, 20, 50], // specify how many items can be displayed on each page
+              pageSizeOptions: [10, 20, 50], // specify how many items can be displayed on each page
               onChange: onChange,
               onShowSizeChange: onShowSizeChange,
               showSizeChanger: true,
@@ -360,7 +360,7 @@ const BlogCategory = () => {
         <BaseModal
           mRef={typeRef}
           update={() => {
-            getTypePageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
+            getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
           }}
         />
       </Flex>

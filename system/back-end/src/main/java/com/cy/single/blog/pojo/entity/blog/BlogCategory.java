@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.cy.single.blog.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 import java.io.Serializable;
@@ -36,6 +38,7 @@ public class BlogCategory extends BaseEntity implements Serializable {
     /**
      * 唯一键
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long surrogateId;
 
     /**
@@ -56,11 +59,13 @@ public class BlogCategory extends BaseEntity implements Serializable {
     /**
      * 创建人
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long creatorId;
 
     /**
      * 修改人
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long modifierId;
 
     /**

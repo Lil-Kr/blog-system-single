@@ -55,6 +55,11 @@ public class BlogLabel extends BaseEntity implements Serializable {
     private String color;
 
     /**
+     * 前端展示颜色
+     */
+    private String colorText;
+
+    /**
      * 备注
      */
     private String remark;
@@ -97,6 +102,14 @@ public class BlogLabel extends BaseEntity implements Serializable {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getColorText() {
+        return colorText;
+    }
+
+    public void setColorText(String colorText) {
+        this.colorText = colorText;
     }
 
     public String getRemark() {
