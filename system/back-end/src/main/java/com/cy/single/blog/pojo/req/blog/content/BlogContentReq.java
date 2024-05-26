@@ -27,24 +27,24 @@ public class BlogContentReq extends BaseEntity {
 //  @Length(groups = {Default.class, GroupBlogContentSave.class}, min=3, max = 20, message = "number长度必须在3~20字之间")
 //  private String number;
 
-  @NotNull(groups = {GroupBlogContentSave.class}, message = "original是必须的")
+  @NotNull(groups = {GroupBlogContentSave.class, GroupBlogContentEdit.class}, message = "original是必须的")
   private Integer original;
 
-  @NotNull(groups = {GroupBlogContentSave.class}, message = "recommend是必须的")
+  @NotNull(groups = {GroupBlogContentSave.class, GroupBlogContentEdit.class}, message = "recommend是必须的")
   private Integer recommend;
 
-  @NotNull(groups = {GroupBlogContentSave.class}, message = "title是必须的")
+  @NotNull(groups = {GroupBlogContentSave.class, GroupBlogContentEdit.class}, message = "title是必须的")
   private String title;
 
-  @NotNull(groups = {GroupBlogContentSave.class}, message = "categoryId是必须的")
+  @NotNull(groups = {GroupBlogContentSave.class, GroupBlogContentEdit.class}, message = "categoryId是必须的")
   private Long categoryId;
 
-  @NotNull(groups = {GroupBlogContentSave.class}, message = "labelIds是必须的")
+  @NotNull(groups = {GroupBlogContentSave.class, GroupBlogContentEdit.class}, message = "labelIds是必须的")
   private List<String> labelIds;
 
 //  @NotNull(groups = {GroupBlogContentSave.class}, message = "topicId是必须的")
   private Long topicId;
 
-  @NotNull(groups = {GroupBlogContentSave.class}, message = "contentText是必须的")
+  @NotNull(groups = {GroupBlogContentSave.class, GroupBlogContentEdit.class}, message = "contentText是必须的")
   private String contentText;
 }

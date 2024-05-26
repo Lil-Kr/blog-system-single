@@ -3,6 +3,7 @@ package com.cy.single.blog.api.blog;
 import com.cy.single.blog.aspect.annotations.CheckAuth;
 import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
+import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicPageReq;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicReq;
@@ -32,7 +33,7 @@ public class TopicApi {
   @RecordLogger
   @CheckAuth
   @PostMapping("/pageTopicList")
-  public ApiResp<PageResult<BlogTopicVO>> pageTopicList(@RequestBody @Valid BlogTopicPageReq req) {
+  public ApiResp<PageResult<BlogTopicVO>> pageTopicList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogTopicPageReq req) {
     PageResult<BlogTopicVO> blogTopicVOPageResult = blogTopicService.pageTopicList(req);
     return ApiResp.success(blogTopicVOPageResult);
   }

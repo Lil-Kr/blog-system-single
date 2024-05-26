@@ -3,6 +3,7 @@ package com.cy.single.blog.api.blog;
 import com.cy.single.blog.aspect.annotations.CheckAuth;
 import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
+import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
@@ -38,7 +39,7 @@ public class LabelApi {
     @RecordLogger
     @CheckAuth
     @PostMapping("/pageList")
-    public ApiResp<PageResult<BlogLabelVO>> pageList(@RequestBody @Valid BlogLabelPageReq req) {
+    public ApiResp<PageResult<BlogLabelVO>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogLabelPageReq req) {
         PageResult<BlogLabelVO> list = blogLabelService.pageList(req);
         return ApiResp.success(list);
     }

@@ -60,7 +60,7 @@ public class UserServiceImpl implements SysUserService {
     public ApiResp<Integer> registerAdmin(UserRegisterReq req) {
         SysUser admin = sysUserMapper.getUserByAccount(req.getAccount());
         if (Objects.nonNull(admin)) {
-            return ApiResp.failure(ReturnCodeEnum.USER_INFO_EXIST);
+            return ApiResp.failure(ReturnCodeEnum.INFO_EXIST);
         }
 
         SysUser user = UserDTO.convertSaveAdminReq(req);

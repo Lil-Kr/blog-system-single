@@ -245,7 +245,7 @@ const BlogLabel = () => {
         <Flex className='list' gap='middle' vertical={true}>
           <Table
             key={1}
-            style={{ width: '40%' }}
+            style={{ width: '60%' }}
             rowSelection={{
               type: selectionType,
               ...rowSelection

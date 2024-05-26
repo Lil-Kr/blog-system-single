@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.cy.single.blog.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 import java.io.Serializable;
@@ -21,7 +23,6 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Data
 @ToString
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -36,6 +37,7 @@ public class BlogContent extends BaseEntity implements Serializable {
     /**
      * 唯一键
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long surrogateId;
 
     /**
@@ -61,6 +63,7 @@ public class BlogContent extends BaseEntity implements Serializable {
     /**
      * 博客分类ids
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long categoryId;
 
     /**
@@ -71,22 +74,13 @@ public class BlogContent extends BaseEntity implements Serializable {
     /**
      * 博客专题id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long topicId;
-
-    /**
-     * 博客内容, html文本格式
-     */
-    private String contentText;
-
-    /**
-     * 博客内容, markdown文本格式
-     */
-    private String markdownText;
 
     /**
      * 文章字数
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long wordCount;
-
 
 }

@@ -5,7 +5,7 @@ public enum ReturnCodeEnum {
     SUCCESS(200, "成功"),
     USER_INFO_NO_EXIST(411, "用户不存在"),
     USER_INFO_ERROR(412, "用户名或密码错误"),
-    USER_INFO_EXIST(413, "用户信息不存在"),
+    INFO_EXIST(413, "信息不存在"),
     USER_OLD_PASSWORD_ERROR(414, "原密码错误"),
     SAME_PASSWORD_ERROR(415, "不能与原密码一样"),
     SEND_MAIL_ERROR(416, "调用邮件服务器错误"),

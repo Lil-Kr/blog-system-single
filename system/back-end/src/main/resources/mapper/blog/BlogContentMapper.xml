@@ -35,4 +35,59 @@
     modifier_id, create_time, update_time
     </sql>
 
+    <select id="pageContentList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name" />
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.original != null and param.original != ''">
+                and original = #{param.original}
+            </if>
+            <if test="param.recommend != null and param.recommend != ''">
+                and recommend = #{param.recommend}
+            </if>
+            <if test="param.status != null and param.status != ''">
+                and status = #{param.status}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `number` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="contentList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name" />
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.original != null and param.original != ''">
+                and original = #{param.original}
+            </if>
+            <if test="param.recommend != null and param.recommend != ''">
+                and recommend = #{param.recommend}
+            </if>
+            <if test="param.status != null and param.status != ''">
+                and status = #{param.status}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `number` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+    </select>
 </mapper>

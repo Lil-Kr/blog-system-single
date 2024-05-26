@@ -309,7 +309,7 @@ const BlogTopic = () => {
       <Flex className='blog-topic-table' gap='small'>
         <Table
           key={1}
-          // style={{ width: '60%' }}
+          style={{ width: '60%' }}
           rowSelection={{
             type: selectionType,
             ...rowSelection

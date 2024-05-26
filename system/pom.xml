@@ -33,6 +33,9 @@
 		<!--redis-->
 		<redis.version>2.8.1</redis.version>
 
+		<!--mongoDB-->
+<!--		<mongodb.version>3.2.5</mongodb.version>-->
+
 		<!--logs-->
 		<lombok.version>1.18.24</lombok.version>
 		<slf4j.version>1.7.36</slf4j.version>

@@ -19,15 +19,17 @@ public class BasePageReq extends BaseReq implements Serializable {
 
     private static final long serialVersionUID = -6142804525222073440L;
 
+    public interface GroupPageQuery{}
+
     /**
      * todo: @Min @Max cannot be verified
      */
-    @NotNull(message = "当前页码数不能为空")
-    @Min(value = 1, message ="页码不能小于1")
-    @Max(value = 10, message ="页码不能大于10")
+    @NotNull(groups = {GroupPageQuery.class}, message = "当前页码数不能为空")
+    @Min(groups = {GroupPageQuery.class}, value = 1, message ="页码不能小于1")
+    @Max(groups = {GroupPageQuery.class}, value = 10, message ="页码不能大于10")
     private Integer currentPageNum;
 
-    @NotNull(message = "每页记录数不能为空")
-    @Max(value = 100, message = "每页记录数不能超过100条")
+    @NotNull(groups = {GroupPageQuery.class}, message = "每页记录数不能为空")
+    @Max(groups = {GroupPageQuery.class}, value = 100, message = "每页记录数不能超过100条")
     private Integer pageSize;
 }

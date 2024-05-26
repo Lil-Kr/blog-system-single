@@ -3,6 +3,7 @@ package com.cy.single.blog.api.blog;
 import com.cy.single.blog.aspect.annotations.CheckAuth;
 import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
+import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryPageReq;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryReq;
@@ -35,16 +36,15 @@ public class CategoryApi {
     @RecordLogger
     @CheckAuth
     @PostMapping("/pageCategoryList")
-    public ApiResp<PageResult<BlogCategoryVO>> pageCategoryList(@RequestBody @Valid BlogCategoryPageReq req) {
+    public ApiResp<PageResult<BlogCategoryVO>> pageCategoryList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogCategoryPageReq req) {
         PageResult<BlogCategoryVO> list = blogCategoryService.pageCategoryList(req);
         return ApiResp.success(list);
     }
 
-
     @RecordLogger
     @CheckAuth
     @PostMapping("/list")
-    public ApiResp<PageResult<BlogCategoryVO>> list(@RequestBody @Valid BlogCategoryPageReq req) {
+    public ApiResp<PageResult<BlogCategoryVO>> list(@RequestBody @Validated BlogCategoryPageReq req) {
         PageResult<BlogCategoryVO> list = blogCategoryService.list(req);
         return ApiResp.success(list);
     }

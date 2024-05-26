@@ -14,4 +14,5 @@ import java.io.Serializable;
 @ToString
 @Data
 public class BlogContentVO extends BlogContent implements Serializable {
+  private String contentText;
 }

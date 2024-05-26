@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { Button, Flex, PaginationProps, Popconfirm, Space, Table, Tag } from 'antd'
-import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
+import { IAction, IModalParams, IModalRequestAction } from '@/types/component/modal'
 import blogContentApi from '@/apis/blog/content'
 import SaveBlogModal from './SaveBlogModal'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'

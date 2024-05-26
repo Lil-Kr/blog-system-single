@@ -33,6 +33,46 @@ const blogItems: BlogItemsType[] = [
     tags: ['编译原理', '计算机基础'],
     blogTitle: '操作系统中的线程与进程',
     publishDate: '2024-04-22'
+  },
+  {
+    key: 4,
+    image: {
+      alt: 'test image',
+      url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
+    },
+    tags: ['编译原理', '计算机基础'],
+    blogTitle: '操作系统中的线程与进程',
+    publishDate: '2024-04-22'
+  },
+  {
+    key: 5,
+    image: {
+      alt: 'test image',
+      url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
+    },
+    tags: ['编译原理', '计算机基础'],
+    blogTitle: '操作系统中的线程与进程',
+    publishDate: '2024-04-22'
+  },
+  {
+    key: 6,
+    image: {
+      alt: 'test image',
+      url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
+    },
+    tags: ['编译原理', '计算机基础'],
+    blogTitle: '操作系统中的线程与进程',
+    publishDate: '2024-04-22'
+  },
+  {
+    key: 7,
+    image: {
+      alt: 'test image',
+      url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
+    },
+    tags: ['编译原理', '计算机基础'],
+    blogTitle: '操作系统中的线程与进程',
+    publishDate: '2024-04-22'
   }
 ]
 

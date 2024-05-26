@@ -32,7 +32,7 @@ export default defineConfig({
         javascriptEnabled: true
         // additionalData:''
         // modifyVars: {
-        //   '@primary-color': '#4377FE',//设置antd主题色
+        //   '@primary-color': '#4377FE',// 设置antd主题色
         // },
       },
       scss: {
