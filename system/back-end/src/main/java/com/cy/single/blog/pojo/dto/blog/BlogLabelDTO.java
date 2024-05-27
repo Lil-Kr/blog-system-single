@@ -23,7 +23,7 @@ public class BlogLabelDTO {
 
     /** ======================= blog-label  ======================= **/
     public static BlogLabel convertSaveLabelReq(BlogLabelReq baseReq) {
-        BlogLabel req = BlogLabel.builder().build();
+        BlogLabel req = new BlogLabel();
         BeanUtils.copyProperties(baseReq, req);
 
         req.setSurrogateId(IdWorker.getSnowFlakeId());
@@ -37,7 +37,7 @@ public class BlogLabelDTO {
     }
 
     public static BlogLabel convertEditLabelReq(BlogLabelReq baseReq) {
-        BlogLabel req = BlogLabel.builder().build();
+        BlogLabel req = new BlogLabel();
         BeanUtils.copyProperties(baseReq, req);
 
         Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
@@ -48,13 +48,13 @@ public class BlogLabelDTO {
 
 
     public static BlogLabel convertDelLabelReq(BlogLabelReq baseReq) {
-        BlogLabel req = BlogLabel.builder().build();
+        BlogLabel req = new BlogLabel();
         BeanUtils.copyProperties(baseReq, req);
         return req;
     }
 
     public static BlogLabel convertQueryLabelReq(BlogLabelListReq baseReq) {
-        BlogLabel req = BlogLabel.builder().build();
+        BlogLabel req = new BlogLabel();
         BeanUtils.copyProperties(baseReq, req);
         return req;
     }

@@ -1,46 +1,37 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button, Flex, PaginationProps, Popconfirm, Space, Table, Tag } from 'antd'
 import { IAction, IModalParams, IModalRequestAction } from '@/types/component/modal'
-import blogContentApi from '@/apis/blog/content'
 import SaveBlogModal from './SaveBlogModal'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
-import { LabelDTO } from '@/types/apis/blog/label'
 import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
+import {
+  BlogContentDTO,
+  BlogContentReqParams,
+  BlogContentVO,
+  CreateBlogContentReq
+} from '@/types/apis/blog/blogContent'
+import { useForm } from 'antd/es/form/Form'
+
+// api
+import blogContentApi from '@/apis/blog/content'
 
 const Blogs = () => {
   const columns: ColumnsType<any> = [
     {
-      key: 'number',
-      dataIndex: 'number',
-      title: '编号',
+      key: 'title',
+      dataIndex: 'title',
+      title: '博客标题',
       width: 100
     },
     {
-      key: 'name',
-      dataIndex: 'name',
-      title: '博客标题',
-      width: 100,
-      render: (_, record: LabelDTO) => (
-        <Tag key={record.key} color={record.color}>
-          {record.name}
-        </Tag>
-      )
-    },
-    {
-      key: 'label_ids',
-      dataIndex: 'label_ids',
+      key: 'labelNames',
+      dataIndex: 'labelNames',
       title: '博客标签',
       width: 100
     },
     {
-      key: 'topic_id',
-      dataIndex: 'topic_id',
-      title: '博客专题',
-      width: 100
-    },
-    {
-      key: 'category_id',
-      dataIndex: 'category_id',
+      key: 'categoryName',
+      dataIndex: 'categoryName',
       title: '博客分类',
       width: 100
     },
@@ -63,8 +54,8 @@ const Blogs = () => {
       width: 100
     },
     {
-      key: 'publish_time',
-      dataIndex: 'publish_time',
+      key: 'publishTime',
+      dataIndex: 'publishTime',
       title: '发布时间',
       width: 100
     },
@@ -78,35 +69,35 @@ const Blogs = () => {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
-      width: 150,
-      render: (_: object, record: LabelDTO) => (
-        <Space size='middle'>
-          <Button
-            name='look'
-            type='primary'
-            shape='circle'
-            icon={<SearchOutlined />}
-            // onClick={() => lookItem(record.key, record)}
-          />
-          <Button
-            name='edit'
-            type='primary'
-            shape='circle'
-            icon={<EditOutlined />}
-            // onClick={() => editItem(record.key, record)}
-          />
-          <Popconfirm
-            title='删除标签'
-            description={`确定要删除 [${record.name}] 这个标签吗?`}
-            // onConfirm={() => deleteItemConfirm(record)}
-            onCancel={() => {}}
-            okText='确定'
-            cancelText='取消'
-          >
-            <Button name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
-          </Popconfirm>
-        </Space>
-      )
+      width: 150
+      // render: (_: object, record: BlogContentDTO) => (
+      //   <Space size='middle'>
+      //     <Button
+      //       name='look'
+      //       type='primary'
+      //       shape='circle'
+      //       icon={<SearchOutlined />}
+      //       // onClick={() => lookItem(record.key, record)}
+      //     />
+      //     <Button
+      //       name='edit'
+      //       type='primary'
+      //       shape='circle'
+      //       icon={<EditOutlined />}
+      //       // onClick={() => editItem(record.key, record)}
+      //     />
+      //     <Popconfirm
+      //       title='删除标签'
+      //       description={`确定要删除 [${record.name}] 这个标签吗?`}
+      //       // onConfirm={() => deleteItemConfirm(record)}
+      //       onCancel={() => {}}
+      //       okText='确定'
+      //       cancelText='取消'
+      //     >
+      //       <Button name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
+      //     </Popconfirm>
+      //   </Space>
+      // )
     }
   ]
   const blogsRef = useRef<{
@@ -118,23 +109,25 @@ const Blogs = () => {
       // data?: any
     ) => void
   }>()
+
+  const [form] = useForm()
   const [rowKeys, setRowKeys] = useState<React.Key[]>([])
   const [tableLoading, setTableLoading] = useState<boolean>(false)
-  const [dataSource, setDataSource] = useState<LabelDTO[]>([])
-  const [pageSize, setPageSize] = useState<number>(5)
+  const [dataSource, setDataSource] = useState<BlogContentDTO[]>([])
+  const [pageSize, setPageSize] = useState<number>(10)
   const [totalSize, setTotalSize] = useState<number>(0)
 
   /**
    * 多选
    */
-  const rowSelection: TableRowSelection<LabelDTO> = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: LabelDTO[]) => {
+  const rowSelection: TableRowSelection<BlogContentDTO> = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: BlogContentDTO[]) => {
       // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
       setRowKeys(selectedRowKeys)
     },
-    getCheckboxProps: (record: LabelDTO) => ({
-      disabled: record.name === 'Disabled User', // Column configuration not to be checked
-      name: record.name
+    getCheckboxProps: (record: BlogContentDTO) => ({
+      // disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      // name: record.name
     })
   }
   /**
@@ -162,6 +155,37 @@ const Blogs = () => {
   }
 
   const deleteBlog = () => {}
+
+  /**
+   * 初始化数据
+   */
+  useEffect(() => {
+    getBlogContentPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
+  }, [])
+
+  const getBlogContentPageList = async (params: BlogContentReqParams) => {
+    const values = form.getFieldsValue()
+    const blogTypesRes = await blogContentApi.getBlogContentPageList({ ...params, ...values })
+    const { code, data, msg } = blogTypesRes
+    if (code === 200) {
+      const dataMapping = data.list.map(
+        ({ surrogateId, title, original, recommend, labelNames, categoryName, status, publishTime, remark }) => ({
+          key: surrogateId,
+          title,
+          original,
+          recommend: recommend === 1 ? '是' : '否',
+          labelNames,
+          categoryName,
+          status: status === 1 ? '已发布' : '未发布',
+          publishTime,
+          remark
+        })
+      )
+      setDataSource(dataMapping)
+      setTotalSize(data.total)
+      setTableLoading(false)
+    }
+  }
 
   return (
     <div className='blogs-publish-index-warpper'>

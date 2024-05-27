@@ -12,7 +12,7 @@ export interface BaseEntityType {
 }
 
 export interface BaseEntityRequiredType {
-  status?: number // 未使用
+  status: number // 未使用
   remark: string
   deleted?: number // 未使用
   creatorId: string

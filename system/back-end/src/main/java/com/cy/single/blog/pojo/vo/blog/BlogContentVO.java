@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @Author: Lil-K
@@ -14,5 +15,14 @@ import java.io.Serializable;
 @ToString
 @Data
 public class BlogContentVO extends BlogContent implements Serializable {
+
+  /**
+   * label names, ","号分隔
+   */
+  private List<String> labelNames;
+
+  /**
+   * content text
+   */
   private String contentText;
 }

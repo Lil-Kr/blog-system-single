@@ -1,11 +1,12 @@
 package com.cy.single.blog.pojo.req.blog.content;
 
-import com.cy.single.blog.base.BaseEntity;
 import lombok.Data;
 import lombok.ToString;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: Lil-K
@@ -14,13 +15,14 @@ import java.util.List;
  */
 @ToString
 @Data
-public class BlogContentReq extends BaseEntity {
+public class BlogContentReq {
 
   public interface GroupBlogContentSave {}
   public interface GroupBlogContentEdit {}
   public interface GroupBlogContentDelete {}
+  public interface GroupBlogContentPublish {}
 
-  @NotNull(groups = {GroupBlogContentEdit.class, GroupBlogContentDelete.class}, message = "surrogateId是必须的")
+  @NotNull(groups = {GroupBlogContentEdit.class, GroupBlogContentDelete.class, GroupBlogContentPublish.class}, message = "surrogateId是必须的")
   private Long surrogateId;
 
 //  @NotNull(groups = {GroupBlogContentSave.class}, message = "number是必须的")
@@ -39,12 +41,17 @@ public class BlogContentReq extends BaseEntity {
   @NotNull(groups = {GroupBlogContentSave.class, GroupBlogContentEdit.class}, message = "categoryId是必须的")
   private Long categoryId;
 
-  @NotNull(groups = {GroupBlogContentSave.class, GroupBlogContentEdit.class}, message = "labelIds是必须的")
-  private List<String> labelIds;
+  @NotNull(groups = {GroupBlogContentSave.class, GroupBlogContentEdit.class}, message = "labelIds是必须的, 并用多个','分隔")
+  private Set<String> labelIds;
 
 //  @NotNull(groups = {GroupBlogContentSave.class}, message = "topicId是必须的")
   private Long topicId;
 
   @NotNull(groups = {GroupBlogContentSave.class, GroupBlogContentEdit.class}, message = "contentText是必须的")
   private String contentText;
+
+  @NotNull(groups = {GroupBlogContentPublish.class}, message = "status是必须的")
+  @Max(groups = {GroupBlogContentPublish.class}, value = 1, message = "status必须是0或1")
+  @Min(groups = {GroupBlogContentPublish.class}, value = 0, message = "status必须是0或1")
+  private Integer status;
 }

@@ -31,7 +31,7 @@ import java.util.Objects;
 @Slf4j
 @Component
 @Aspect
-@Order(2)
+@Order(3)
 public class GlobalApiRequestAspect {
 
     @Autowired

@@ -1,10 +1,18 @@
 import { baseAxiosRequest } from '@/utils/http/request'
 import { LabelType } from '@/types/entity/blog/labelType'
 import { Result, ResultPage } from '@/types/base/response'
-import { BlogContentApi, CreateBlogContentReq } from '@/types/apis/blog/blogContent'
+import {
+  BlogContentApi,
+  BlogContentReqParams,
+  BlogContentVO,
+  CreateBlogContentReq
+} from '@/types/apis/blog/blogContent'
 import { PREFIX_URL_BLOG_CONTENT } from '@/config'
 
 const blogContentApi: BlogContentApi = {
+  getBlogContentPageList(params: BlogContentReqParams) {
+    return baseAxiosRequest.post<ResultPage<BlogContentVO>>(PREFIX_URL_BLOG_CONTENT + '/pageContentList', params)
+  },
   save(params: CreateBlogContentReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CONTENT + '/save', params)
   }

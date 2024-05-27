@@ -30,4 +30,8 @@ public interface BlogContentService {
   ApiResp<BlogContentVO> get(Long surrogateId);
 
   ApiResp<String> edit(BlogContentReq req);
+
+  ApiResp<String> publishBlog(BlogContentReq req);
+
+  PageResult<BlogContentVO> contentFrontList();
 }

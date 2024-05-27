@@ -10,6 +10,8 @@ import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @Author: Lil-K
@@ -23,6 +25,8 @@ public class BlogContentDTO {
     BeanUtils.copyProperties(baseReq, blogContent);
     blogContent.setSurrogateId(IdWorker.getSnowFlakeId());
     blogContent.setNumber(RunCodeUtil.getFourPipelineNumbers("blog-"));
+    blogContent.setLabelIds(convertBlogLabelToString(baseReq.getLabelIds()));
+    Set<String> labelIds = baseReq.getLabelIds();
     blogContent.setDeleted(0);
 
     blogContent.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
@@ -34,4 +38,9 @@ public class BlogContentDTO {
 
     return blogContent;
   }
+
+  public static String convertBlogLabelToString(Set<String> labelIds) {
+    return labelIds.stream().collect(Collectors.joining(","));
+  }
+
 }

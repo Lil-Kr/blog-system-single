@@ -67,7 +67,7 @@ public class BlogContent extends BaseEntity implements Serializable {
     private Long categoryId;
 
     /**
-     * 博客标签ids
+     * 博客标签ids, ","分隔
      */
     private String labelIds;
 

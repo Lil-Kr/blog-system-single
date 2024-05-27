@@ -33,7 +33,7 @@ public class ContentApi {
   @RecordLogger
   @CheckAuth
   @PostMapping("/pageContentList")
-  public ApiResp<PageResult<BlogContentVO>> pageCategoryList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogContentPageReq req) {
+  public ApiResp<PageResult<BlogContentVO>> pageContentList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogContentPageReq req) {
     PageResult<BlogContentVO> list = blogContentService.pageContentList(req);
     return ApiResp.success(list);
   }
@@ -48,6 +48,13 @@ public class ContentApi {
 
   @RecordLogger
   @CheckAuth
+  @PostMapping("/publish")
+  public ApiResp<String> publishBlog(@RequestBody @Validated({BlogContentReq.GroupBlogContentPublish.class}) BlogContentReq req) {
+    return blogContentService.publishBlog(req);
+  }
+
+  @RecordLogger
+  @CheckAuth
   @GetMapping("/get")
   public ApiResp<BlogContentVO> get(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
     return blogContentService.get(surrogateId);
@@ -57,8 +64,7 @@ public class ContentApi {
   @CheckAuth
   @PostMapping("/save")
   public ApiResp<String> save(@RequestBody @Validated({BlogContentReq.GroupBlogContentSave.class}) BlogContentReq req) {
-    blogContentService.save(req);
-    return ApiResp.success();
+    return blogContentService.save(req);
   }
 
   @RecordLogger
@@ -76,5 +82,15 @@ public class ContentApi {
 //    return blogContentService.delete(surrogateId);
     return null;
   }
+
+
+  /** =============== 门户网站接口 ===============从**/
+  @RecordLogger
+  @GetMapping("/contentFrontList")
+  public ApiResp<PageResult<BlogContentVO>> contentFrontList() {
+    PageResult<BlogContentVO> list = blogContentService.contentFrontList();
+    return ApiResp.success(list);
+  }
+
 
 }

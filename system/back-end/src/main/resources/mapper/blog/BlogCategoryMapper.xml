@@ -35,6 +35,15 @@
         <where>
             surrogate_id = #{param.surrogateId}
         </where>
+        <if test="param.isOrder != null and param.isOrder != ''">
+            order by create_time
+            <if test="param.isOrder == 0">
+                asc
+            </if>
+            <if test="param.isOrder == 1">
+                desc
+            </if>
+        </if>
     </delete>
 
 
@@ -62,6 +71,15 @@
                 )
             </if>
         </where>
+        <if test="param.isOrder != null and param.isOrder != ''">
+            order by create_time
+            <if test="param.isOrder == 0">
+                asc
+            </if>
+            <if test="param.isOrder == 1">
+                desc
+            </if>
+        </if>
     </select>
 
     <delete id="deleteBatch">
@@ -89,6 +107,15 @@
                 )
             </if>
         </where>
+        <if test="param.isOrder != null and param.isOrder != ''">
+            order by create_time
+            <if test="param.isOrder == 0">
+                asc
+            </if>
+            <if test="param.isOrder == 1">
+                desc
+            </if>
+        </if>
     </select>
 
     <select id="getCountByList" resultType="java.lang.Integer">
@@ -133,7 +160,7 @@
             <if test="param.surrogateId != null and param.surrogateId != ''">
                 and surrogate_id = #{param.surrogateId}
             </if>
-            <if test="param.keyWords!=null and param.keyWords!=''">
+            <if test="param.keyWords != null and param.keyWords != ''">
                 and (
                 `number` like concat('%',#{param.keyWords},'%')
                 or
@@ -143,5 +170,14 @@
                 )
             </if>
         </where>
+        <if test="param.isOrder != null and param.isOrder != ''">
+            order by create_time
+            <if test="param.isOrder == 0">
+                asc
+            </if>
+            <if test="param.isOrder == 1">
+                desc
+            </if>
+        </if>
     </select>
 </mapper>

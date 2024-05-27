@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
+import com.cy.single.blog.common.cache.CacheManager;
+import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.BlogContentMapper;
 import com.cy.single.blog.dao.BlogContentMongoMapper;
 import com.cy.single.blog.pojo.dto.blog.BlogContentDTO;
@@ -13,11 +15,13 @@ import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
 import com.cy.single.blog.pojo.vo.blog.BlogContentVO;
 import com.cy.single.blog.service.BlogContentService;
+import com.cy.single.blog.utils.dateUtil.DateUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -76,23 +80,27 @@ public class BlogContentServiceImpl implements BlogContentService {
   @Override
   public PageResult<BlogContentVO> pageContentList(BlogContentPageReq req) {
     List<BlogContentVO> pageList = blogContentMapper.pageContentList(req);
-
     if (CollectionUtils.isEmpty(pageList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
-    }else {
-      return new PageResult<>(pageList, pageList.size());
     }
+    /**
+     * 标签ids
+     */
+    pageList.stream().forEach(item -> item.setLabelNames(CacheManager.getBlogLabelNameListCache(item.getLabelIds())));
+
+    return new PageResult<>(pageList, pageList.size());
   }
 
   @Override
   public PageResult<BlogContentVO> contentList(BlogContentPageReq req) {
     List<BlogContentVO> pageList = blogContentMapper.contentList(req);
-
     if (CollectionUtils.isEmpty(pageList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
-    }else {
-      return new PageResult<>(pageList, pageList.size());
     }
+
+    pageList.stream().forEach(item -> item.setLabelNames(CacheManager.getBlogLabelNameListCache(item.getLabelIds())));
+
+    return new PageResult<>(pageList, pageList.size());
   }
 
   @Override
@@ -126,17 +134,45 @@ public class BlogContentServiceImpl implements BlogContentService {
       return ApiResp.failure();
     }
 
+    BeanUtils.copyProperties(req, blogContent);
+    blogContent.setUpdateTime(DateUtil.localDateTimeToDate(LocalDateTime.now()));
+    blogContent.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+
     UpdateWrapper<BlogContent> updateWrapper = new UpdateWrapper<>();
     updateWrapper.eq("surrogate_id", req.getSurrogateId());
     int update = blogContentMapper.update(blogContent, updateWrapper);
 
-    BlogContentMongo updateMongo = BlogContentMongo.builder().id(String.valueOf(req.getSurrogateId())).contentText(req.getContentText()).build();
-
     if (update > 0) {
+      // update mongodb
+      BlogContentMongo updateMongo = BlogContentMongo.builder().id(String.valueOf(req.getSurrogateId())).contentText(req.getContentText()).build();
       BlogContentMongo blogContentMongo = saveBlogContentMongo(updateMongo);
       return ApiResp.success();
     }else {
       return ApiResp.failure();
     }
+  }
+
+  /**
+   * publish blog
+   * @param req
+   * @return
+   */
+  @Override
+  public ApiResp<String> publishBlog(BlogContentReq req) {
+    Integer update = blogContentMapper.updateStatusBySurrogateId(req);
+    if (update > 0) {
+      return ApiResp.success();
+    }else {
+      return ApiResp.failure();
+    }
+  }
+
+  @Override
+  public PageResult<BlogContentVO> contentFrontList() {
+    List<BlogContentVO> res = blogContentMapper.contentFrontList();
+    if (CollectionUtils.isEmpty(res)) {
+      return new PageResult<>(new ArrayList<>(), 0);
+    }
+    return new PageResult<>(res, res.size());
   }
 }

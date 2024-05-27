@@ -24,4 +24,6 @@ public interface BlogLabelService {
     ApiResp<String> delete(BlogLabelReq req);
 
     ApiResp<String> deleteBatch(BlogLabelReq req);
+
+//    List<BlogLabelVO> getLabelNames(List<Long> labelIds);
 }

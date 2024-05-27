@@ -50,4 +50,9 @@ public class BaseEntity implements Serializable {
      */
     private Date updateTime;
 
+    /**
+     * 是否排序 ->  0:升序, 1:降序, null:不做排序
+     */
+    private Integer isOrder;
+
 }

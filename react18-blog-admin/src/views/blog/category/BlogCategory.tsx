@@ -257,7 +257,7 @@ const BlogCategory = () => {
   }
 
   /**
-   * 初始化
+   * 初始化数据
    */
   useEffect(() => {
     getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })

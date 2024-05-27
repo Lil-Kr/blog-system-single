@@ -51,7 +51,7 @@
             <if test="param.status != null and param.status != ''">
                 and status = #{param.status}
             </if>
-            <if test="param.keyWords!=null and param.keyWords!=''">
+            <if test="param.keyWords != null and param.keyWords != ''">
                 and (
                 `number` like concat('%',#{param.keyWords},'%')
                 or
@@ -61,6 +61,15 @@
                 )
             </if>
         </where>
+        <if test="param.isOrder != null and param.isOrder != ''">
+            order by create_time
+            <if test="param.isOrder == 0">
+                asc
+            </if>
+            <if test="param.isOrder == 1">
+                desc
+            </if>
+        </if>
     </select>
 
     <select id="contentList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">
@@ -89,5 +98,29 @@
                 )
             </if>
         </where>
+        <if test="param.isOrder != null and param.isOrder != ''">
+            order by create_time
+            <if test="param.isOrder == 0">
+                asc
+            </if>
+            <if test="param.isOrder == 1">
+                desc
+            </if>
+        </if>
+    </select>
+
+    <update id="updateStatusBySurrogateId">
+        update <include refid="Table_Name" />
+        set status = #{param.status}
+        <where>
+            surrogate_id = #{param.surrogateId}
+        </where>
+    </update>
+
+    <select id="contentFrontList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name" />
+        order by create_time desc
+        limit 10
     </select>
 </mapper>
