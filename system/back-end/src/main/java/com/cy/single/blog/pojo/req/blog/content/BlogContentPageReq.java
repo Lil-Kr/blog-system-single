@@ -19,6 +19,8 @@ public class BlogContentPageReq extends BasePageReq {
 
   private String name;
 
+  private String title;
+
   private Integer original;
 
   private Integer recommend;

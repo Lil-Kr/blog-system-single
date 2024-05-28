@@ -5,10 +5,13 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
+import com.cy.single.blog.common.cache.CacheManager;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryPageReq;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryReq;
 import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
+import com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO;
 import com.cy.single.blog.service.BlogCategoryService;
+import com.cy.single.blog.service.BlogContentService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Map;
 
 import static com.cy.single.blog.utils.checkUtil.ParamValidator.checkSurrogateIds;
 
@@ -32,6 +37,10 @@ public class CategoryApi {
 
     @Autowired
     private BlogCategoryService blogCategoryService;
+
+    @Autowired
+    private BlogContentService blogContentService;
+
 
     @RecordLogger
     @CheckAuth
@@ -78,4 +87,17 @@ public class CategoryApi {
         if (!checkSurrogateIds(req.getSurrogateIds())) return ApiResp.failure("surrogateIds不规范");
         return blogCategoryService.deleteBatch(req);
     }
+
+    /** =============== 门户网站接口 ===============**/
+    @RecordLogger
+    @GetMapping("/frontCategoryCountList")
+    public ApiResp<List<BlogContentGroupVO>> frontCategoryCountList() {
+        List<BlogContentGroupVO> blogContentGroupList = blogContentService.frontContentByGroupCategory();
+
+        Map<Long, String> blogCategoryAllMapCache = CacheManager.getBlogCategoryAllMapCache();
+
+        blogContentGroupList.forEach(item -> item.setCategoryName(blogCategoryAllMapCache.getOrDefault(item.getCategoryId(), "")));
+        return ApiResp.success(blogContentGroupList);
+    }
+
 }

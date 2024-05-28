@@ -125,6 +125,16 @@ const rootConfig: RouterItemType[] = [
     },
     path: 'navbar',
     element: LazyLoad(lazy(() => import('@/components/menu/NavBarHorizSubMenu')))
+  },
+  {
+    meta: {
+      key: '/imageCarouse',
+      title: '测试图片轮播',
+      layout: false,
+      icon: ''
+    },
+    path: 'imageCarouse',
+    element: LazyLoad(lazy(() => import('@/components/imageCarousel/CarouselBase')))
   }
 ]
 

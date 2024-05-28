@@ -4,7 +4,7 @@ export interface LinkBaseType {
   key: string | number
   text?: string
   textColor?: string
-  url: string
+  url?: string
   extend?: ReactNode
 }
 

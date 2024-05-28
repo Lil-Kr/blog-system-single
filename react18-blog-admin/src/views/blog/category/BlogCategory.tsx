@@ -270,17 +270,19 @@ const BlogCategory = () => {
     const values = form.getFieldsValue()
     const blogTypesRes = await blogCategoryApi.getCategoryPageList({ ...params, ...values })
     const { code, data, msg } = blogTypesRes
-    if (code === 200) {
-      const datas = data.list.map(({ surrogateId, number, name, remark }) => ({
-        key: surrogateId,
-        number,
-        name,
-        remark
-      }))
-      setDataSource(datas)
-      setTotalSize(data.total)
-      setTableLoading(false)
+    if (code !== 200) {
+      return []
     }
+
+    const datas = data.list.map(({ surrogateId, number, name, remark }) => ({
+      key: surrogateId,
+      number,
+      name,
+      remark
+    }))
+    setDataSource(datas)
+    setTotalSize(data.total)
+    setTableLoading(false)
   }
 
   /**

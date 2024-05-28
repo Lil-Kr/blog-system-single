@@ -5,6 +5,7 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
+import com.cy.single.blog.common.cache.CacheManager;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
@@ -14,12 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 import static com.cy.single.blog.utils.checkUtil.ParamValidator.checkSurrogateIds;
 
@@ -80,6 +79,14 @@ public class LabelApi {
         if (CollectionUtils.isEmpty(req.getSurrogateIds())) return ApiResp.failure("surrogateIds不能为空");
         if (!checkSurrogateIds(req.getSurrogateIds())) return ApiResp.failure("surrogateIds不规范");
         return blogLabelService.deleteBatch(req);
+    }
+
+
+    /** =============== 门户网站接口 ===============**/
+    @RecordLogger
+    @GetMapping("/frontLabelList")
+    public ApiResp<List<BlogLabelVO>> frontLabelList() {
+        return ApiResp.success(CacheManager.getBlogLabelListCache());
     }
 
 }

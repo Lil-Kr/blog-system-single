@@ -11,18 +11,18 @@ import LinkListArchive from '@/components/link/LinkListArchive'
 import CardMe from '@/components/card/CardMe'
 
 const newBlogs: ListBoxItemType[] = [
-  { text: '聊一聊微服务架构与k8s的优劣势' },
-  { text: 'Java21的新特性有哪些?' },
-  { text: 'Java21的新特性有哪些?' },
-  { text: 'Java21的新特性有哪些?' },
-  { text: 'Java21的新特性有哪些?' },
-  { text: 'Java21的新特性有哪些?' }
+  {id: '1', text: '聊一聊微服务架构与k8s的优劣势' },
+  {id: '2', text: 'Java21的新特性有哪些?' },
+  {id: '3', text: 'Java21的新特性有哪些?' },
+  {id: '4', text: 'Java21的新特性有哪些?' },
+  {id: '5', text: 'Java21的新特性有哪些?' },
+  {id: '6', text: 'Java21的新特性有哪些?' }
 ]
 
 const categorys: ListBoxItemType[] = [
-  { text: 'Java后端', url: '/category/java', extend: { node: <div>{'1'}</div> } },
-  { text: 'ReactJS', url: '#', extend: { node: <div>{'3'}</div> } },
-  { text: '操作系统', url: '#', extend: { node: <div>{'4'}</div> } }
+  { id: '1', text: 'Java后端', url: '/category/java', extend: { node: <div>{'1'}</div> } },
+  { id: '2', text: 'ReactJS', url: '#', extend: { node: <div>{'3'}</div> } },
+  { id: '3', text: '操作系统', url: '#', extend: { node: <div>{'4'}</div> } }
 ]
 
 const tags: LinkBaseType[] = [

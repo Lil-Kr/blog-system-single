@@ -13,6 +13,7 @@ import com.cy.single.blog.pojo.entity.blog.BlogContent;
 import com.cy.single.blog.pojo.entity.blog.BlogContentMongo;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
+import com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO;
 import com.cy.single.blog.pojo.vo.blog.BlogContentVO;
 import com.cy.single.blog.service.BlogContentService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
@@ -22,11 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
-import static com.cy.single.blog.enums.ReturnCodeEnum.*;
+import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_EXIST;
+import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
 
 /**
  * @Author: Lil-K
@@ -168,11 +168,32 @@ public class BlogContentServiceImpl implements BlogContentService {
   }
 
   @Override
-  public PageResult<BlogContentVO> contentFrontList() {
-    List<BlogContentVO> res = blogContentMapper.contentFrontList();
+  public ApiResp<List<BlogContentVO>> frontContentList() {
+    List<BlogContentVO> res = blogContentMapper.frontContentList();
     if (CollectionUtils.isEmpty(res)) {
-      return new PageResult<>(new ArrayList<>(), 0);
+      return ApiResp.success(new ArrayList<>());
     }
-    return new PageResult<>(res, res.size());
+    return ApiResp.success(res);
+  }
+
+  @Override
+  public List<BlogContentGroupVO> frontContentByGroupCategory() {
+    return blogContentMapper.frontContentByGroupCategory();
+  }
+
+  @Override
+  public PageResult<BlogContentVO> frontContentPageList(BlogContentPageReq req) {
+    List<BlogContentVO> pageList = blogContentMapper.frontContentPageList(req);
+    if (CollectionUtils.isEmpty(pageList)) {
+      return new PageResult<>(new ArrayList<>(0), 0);
+    }
+
+    Map<Long, String> blogLabelAllMapCache = CacheManager.getBlogLabelAllMapCache();
+    
+    pageList.stream().forEach(item -> {
+      item.setLabelNames(CacheManager.getBlogLabelNameListCache(item.getLabelIds()));
+    });
+
+    return new PageResult<>(new ArrayList<>(pageList), pageList.size());
   }
 }

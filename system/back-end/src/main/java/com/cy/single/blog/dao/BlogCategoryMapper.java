@@ -33,4 +33,6 @@ public interface BlogCategoryMapper extends BaseMapper<BlogCategory> {
     Integer deleteBySurrogateId(Long surrogateId);
 
     Integer deleteBatch(List<Long> surrogateIds);
+
+  List<BlogCategoryVO> frontList();
 }

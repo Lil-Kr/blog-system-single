@@ -42,6 +42,7 @@ public class StartupInitializerServiceImpl implements StartupInitializerService 
 
   }
 
+  @PostConstruct
   @Override
   public void initBlogCategory() {
     List<BlogCategoryVO> blogCategoryVOS = blogCategoryMapper.categoryList(new BlogCategoryPageReq());

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @Author: Lil-K
@@ -84,13 +85,18 @@ public class ContentApi {
   }
 
 
-  /** =============== 门户网站接口 ===============从**/
+  /** ================== 门户网站接口 =============== **/
   @RecordLogger
-  @GetMapping("/contentFrontList")
-  public ApiResp<PageResult<BlogContentVO>> contentFrontList() {
-    PageResult<BlogContentVO> list = blogContentService.contentFrontList();
-    return ApiResp.success(list);
+  @GetMapping("/frontContentList")
+  public ApiResp<List<BlogContentVO>> frontContentList() {
+    return blogContentService.frontContentList();
   }
 
+  @RecordLogger
+  @PostMapping("/frontContentPageList")
+  public ApiResp<PageResult<BlogContentVO>> frontContentPageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogContentPageReq req) {
+    PageResult<BlogContentVO> list = blogContentService.frontContentPageList(req);
+    return ApiResp.success(list);
+  }
 
 }

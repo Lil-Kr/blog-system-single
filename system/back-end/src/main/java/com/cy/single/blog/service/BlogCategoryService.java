@@ -6,6 +6,8 @@ import com.cy.single.blog.pojo.req.blog.category.BlogCategoryPageReq;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryReq;
 import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
 
+import java.util.List;
+
 /**
  * @Author: Lil-K
  * @Date: 2024/4/6
@@ -24,4 +26,6 @@ public interface BlogCategoryService {
     ApiResp<String> delete(Long surrogateId);
 
     ApiResp<String> deleteBatch(BlogCategoryReq req);
+
+    List<BlogCategoryVO> frontList();
 }

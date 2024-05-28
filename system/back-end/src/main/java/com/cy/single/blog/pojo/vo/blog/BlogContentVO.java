@@ -25,4 +25,6 @@ public class BlogContentVO extends BlogContent implements Serializable {
    * content text
    */
   private String contentText;
+
+  private Integer count;
 }

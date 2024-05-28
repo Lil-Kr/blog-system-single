@@ -10,9 +10,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.cy.single.blog.common.constants.CommonConstants.CACHE_KEY_BLOG_CATEGORY_LIST;
@@ -72,6 +70,12 @@ public class CacheManager {
       });
   }
 
+  public static Map<Long, String> getBlogLabelAllMapCache() {
+    return blogLabelCache.getIfPresent(CACHE_KEY_BLOG_LABEL_LIST)
+      .stream()
+      .collect(Collectors.toMap(BlogLabelVO::getSurrogateId, BlogLabelVO::getName));
+  }
+
 
   /**
    * ====================== blog category cache, long live catch ======================
@@ -87,6 +91,12 @@ public class CacheManager {
     }else {
       return list;
     }
+  }
+
+  public static Map<Long, String> getBlogCategoryAllMapCache() {
+    return blogCategoryCache.getIfPresent(CACHE_KEY_BLOG_CATEGORY_LIST)
+      .stream()
+      .collect(Collectors.toMap(BlogCategoryVO::getSurrogateId, BlogCategoryVO::getName));
   }
 
   public static BlogCategoryVO getBlogCategoryCache(Long surrogateId) {

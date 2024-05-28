@@ -72,7 +72,7 @@ public class GlobalSqlInterceptor implements Interceptor {
         log.info("sql intercept methodName: {}", methodName);
 
         /** page 开头的方法需要分页 **/
-        if (StringUtils.isNotEmpty(methodName) && methodName.toLowerCase().startsWith("page")) {
+        if (StringUtils.isNotEmpty(methodName) && methodName.toLowerCase().contains("page")) {
             ParameterHandler parameter = (ParameterHandler)metaObject.getValue("delegate.parameterHandler");
             Map<String, Object> parameterObject = (Map<String, Object>) parameter.getParameterObject();
             log.info("parameterObject: {}", JSONObject.toJSONString(parameterObject));

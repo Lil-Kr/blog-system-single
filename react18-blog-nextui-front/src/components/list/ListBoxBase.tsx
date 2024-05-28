@@ -4,6 +4,11 @@ import { ListBoxItemType, compType } from '@/types/components/ListBoxType'
 
 const textLength = 32
 
+/**
+ *
+ * @param props
+ * @returns
+ */
 const ListBoxBase = (props: { items: ListBoxItemType[]; type: compType }) => {
   const { items, type } = props
   return (
@@ -16,7 +21,7 @@ const ListBoxBase = (props: { items: ListBoxItemType[]; type: compType }) => {
                   <span>
                     {item.text.length > textLength ? item.text.substring(0, textLength) + ' ....' : item.text}
                   </span>
-                  <span>{'12'}</span>
+                  <span>{item.extend?.node}</span>
                 </div>
               </ListboxItem>
             ))

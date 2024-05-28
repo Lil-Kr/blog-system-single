@@ -180,4 +180,8 @@
             </if>
         </if>
     </select>
+
+    <select id="frontList" resultType="com.cy.single.blog.pojo.vo.blog.BlogCategoryVO">
+        select
+    </select>
 </mapper>

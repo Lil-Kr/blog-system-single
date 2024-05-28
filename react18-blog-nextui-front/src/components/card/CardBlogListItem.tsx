@@ -31,7 +31,7 @@ const CardBlogListItem = (props: { blogItem: BlogItemsType }) => {
             {blogItem.blogTitle}
           </Link>
         </div>
-        <div className='blog-publish-date flex px-1 py-1 text-md font-bold text-zinc-400'>{blogItem.publishDate}</div>
+        <div className='blog-publish-date flex px-1 py-1 text-md font-bold text-zinc-400'>{blogItem.publishTime}</div>
       </div>
     </Card>
   )

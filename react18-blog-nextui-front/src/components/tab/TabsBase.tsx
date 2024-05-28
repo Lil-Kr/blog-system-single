@@ -12,7 +12,7 @@ const blogItem: BlogItemsType = {
   },
   tags: ['Java后台开发', '微服务', 'TS'],
   blogTitle: 'React8 hook 学习经验分享',
-  publishDate: '2022-02-22'
+  publishTime: '2022-02-22'
 }
 
 const TabsBase = () => {

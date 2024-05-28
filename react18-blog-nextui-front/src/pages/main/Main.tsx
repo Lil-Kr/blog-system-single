@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AnimatePresence, motion, useScroll } from 'framer-motion'
 import { Button, Divider, Image } from '@nextui-org/react'
 import { CardSimple } from '@/components/card'
@@ -12,103 +12,106 @@ import LinkListArchive from '@/components/link/LinkListArchive'
 import { LinkArchiveType, LinkBaseType } from '@/types/components/LinkType'
 import { ListBoxItemType } from '@/types/components/ListBoxType'
 import { Outlet } from 'oh-router-react'
+import categoryApi from '@/apis/categoryApi'
+import labelApi from '@/apis/labelApi'
+import blogContentApi from '@/apis/contentApi'
 
-const blogItems: BlogItemsType[] = [
-  {
-    key: 1,
-    image: {
-      alt: 'test image',
-      url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
-    },
-    tags: ['Java后台开发', '微服务', 'TS'],
-    blogTitle: 'React8 hook 学习经验分享',
-    publishDate: '2022-02-22'
-  },
-  {
-    key: 2,
-    image: {
-      alt: 'test image',
-      url: 'http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg'
-    },
-    tags: ['Java后台开发', '微服务', 'TS'],
-    blogTitle: '操作系统中的线程与进程',
-    publishDate: '2022-09-22'
-  },
-  {
-    key: 3,
-    image: {
-      alt: 'test image',
-      url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
-    },
-    tags: ['编译原理', '计算机基础'],
-    blogTitle: '操作系统中的线程与进程',
-    publishDate: '2024-04-22'
-  }
-]
+// const blogItems: BlogItemsType[] = [
+//   {
+//     key: 1,
+//     image: {
+//       alt: 'test image',
+//       url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
+//     },
+//     tags: ['Java后台开发', '微服务', 'TS'],
+//     blogTitle: 'React8 hook 学习经验分享',
+//     publishTime: '2022-02-22'
+//   },
+//   {
+//     key: 2,
+//     image: {
+//       alt: 'test image',
+//       url: 'http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg'
+//     },
+//     tags: ['Java后台开发', '微服务', 'TS'],
+//     blogTitle: '操作系统中的线程与进程',
+//     publishTime: '2022-09-22'
+//   },
+//   {
+//     key: 3,
+//     image: {
+//       alt: 'test image',
+//       url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
+//     },
+//     tags: ['编译原理', '计算机基础'],
+//     blogTitle: '操作系统中的线程与进程',
+//     publishTime: '2024-04-22'
+//   }
+// ]
 
-const newBlogs: ListBoxItemType[] = [
-  { text: '聊一聊微服务架构与k8s的优劣势', url: '#' },
-  {
-    text: 'Java21的新特性有哪些?Java21的新特性有哪些?Java21的新特性有哪些?Java21的新特性有哪些?Java21的新特性有哪些?',
-    url: '#'
-  },
-  { text: 'Java21的新特性有哪些?', url: '#' },
-  { text: 'Java21的新特性有哪些?', url: '#' },
-  { text: 'Java21的新特性有哪些?', url: '#' },
-  { text: 'Java21的新特性有哪些?', url: '#' }
-]
+// const newBlogs: ListBoxItemType[] = [
+//   { text: '聊一聊微服务架构与k8s的优劣势', url: '#' },
+//   {
+//     text: 'Java21的新特性有哪些?Java21的新特性有哪些?Java21的新特性有哪些?Java21的新特性有哪些?Java21的新特性有哪些?',
+//     url: '#'
+//   },
+//   { text: 'Java21的新特性有哪些?', url: '#' },
+//   { text: 'Java21的新特性有哪些?', url: '#' },
+//   { text: 'Java21的新特性有哪些?', url: '#' },
+//   { text: 'Java21的新特性有哪些?', url: '#' }
+// ]
 
-const tags: LinkBaseType[] = [
-  {
-    key: 1,
-    text: 'SpringBoot',
-    textColor: 'text-yellow-500',
-    url: '#',
-    extend: <div>{'3'}</div>
-  },
-  {
-    key: 2,
-    text: 'SpringCloud',
-    textColor: 'text-sky-500',
-    url: '#',
-    extend: <div>{'4'}</div>
-  },
-  {
-    key: 3,
-    text: 'Linux',
-    textColor: 'text-purple-400',
-    url: '#',
-    extend: <div>{'4'}</div>
-  },
-  {
-    key: 4,
-    text: 'Windows',
-    textColor: 'text-gray-400',
-    url: '#',
-    extend: <div>{'4'}</div>
-  },
-  {
-    key: 5,
-    text: 'Java',
-    textColor: 'text-cyan-400',
-    url: '#',
-    extend: <div>{'4'}</div>
-  },
-  {
-    key: 6,
-    text: '前端',
-    textColor: 'text-blue-400',
-    url: '#',
-    extend: <div>{'4'}</div>
-  },
-  {
-    key: 7,
-    text: '编译原理',
-    textColor: 'text-pink-400',
-    url: '#',
-    extend: <div>{'12'}</div>
-  }
-]
+// const tags: LinkBaseType[] = [
+//   {
+//     key: 1,
+//     text: 'SpringBoot',
+//     textColor: 'text-yellow-500',
+//     url: '#',
+//     extend: <div>{'3'}</div>
+//   },
+//   {
+//     key: 2,
+//     text: 'SpringCloud',
+//     textColor: 'text-sky-500',
+//     url: '#',
+//     extend: <div>{'4'}</div>
+//   },
+//   {
+//     key: 3,
+//     text: 'Linux',
+//     textColor: 'text-purple-400',
+//     url: '#',
+//     extend: <div>{'4'}</div>
+//   },
+//   {
+//     key: 4,
+//     text: 'Windows',
+//     textColor: 'text-gray-400',
+//     url: '#',
+//     extend: <div>{'4'}</div>
+//   },
+//   {
+//     key: 5,
+//     text: 'Java',
+//     textColor: 'text-cyan-400',
+//     url: '#',
+//     extend: <div>{'4'}</div>
+//   },
+//   {
+//     key: 6,
+//     text: '前端',
+//     textColor: 'text-blue-400',
+//     url: '#',
+//     extend: <div>{'4'}</div>
+//   },
+//   {
+//     key: 7,
+//     text: '编译原理',
+//     textColor: 'text-pink-400',
+//     url: '#',
+//     extend: <div>{'12'}</div>
+//   }
+// ]
 
 const archives: LinkArchiveType[] = [
   {
@@ -155,56 +158,115 @@ const archives: LinkArchiveType[] = [
   }
 ]
 
-const categorys: ListBoxItemType[] = [
-  { text: 'Java后端', url: '/category/java', extend: { node: <div>{'1'}</div> } },
-  { text: 'ReactJS', url: '#', extend: { node: <div>{'3'}</div> } },
-  { text: '操作系统', url: '#', extend: { node: <div>{'4'}</div> } }
-]
-
-const cardList: CardBaseDataType[] = [
-  {
-    key: 1,
-    headTitle: '近期文章',
-    headRightContent: {
-      headMoreText: '更多',
-      moreUrl: ''
-    },
-    svgIcon: <SvgIcon name='book' />,
-    content: <ListBoxBase type={'link'} items={newBlogs} />
-  },
-  {
-    key: 2,
-    headTitle: '分类',
-    headRightContent: {
-      headMoreText: '更多',
-      moreUrl: '/main/category'
-    },
-    svgIcon: <SvgIcon name='category' />,
-    content: <ListBoxBase type={'link'} items={categorys} />
-  },
-  {
-    key: 3,
-    headTitle: '标签',
-    headRightContent: {
-      headMoreText: '更多',
-      moreUrl: ''
-    },
-    svgIcon: <SvgIcon name='tag-1' />,
-    content: <LinkListBase items={tags} />
-  },
-  {
-    key: 4,
-    headTitle: '归档',
-    headRightContent: {
-      headMoreText: '更多',
-      moreUrl: ''
-    },
-    svgIcon: <SvgIcon name='calendar-1' />,
-    content: <LinkListArchive items={archives} />
-  }
-]
+// const categorys: ListBoxItemType[] = [
+//   { text: 'Java后端', url: '/category/java', extend: { node: <div>{'1'}</div> } },
+//   { text: 'ReactJS', url: '#', extend: { node: <div>{'3'}</div> } },
+//   { text: '操作系统', url: '#', extend: { node: <div>{'4'}</div> } }
+// ]
 
 const Main = () => {
+  const [categorys, setCategory] = useState<ListBoxItemType[]>([])
+  const [labels, setLabel] = useState<LinkBaseType[]>([])
+  const [contents, setContents] = useState<ListBoxItemType[]>([])
+
+  const cardList: CardBaseDataType[] = [
+    {
+      key: 1,
+      headTitle: '近期文章',
+      headRightContent: {
+        headMoreText: '更多',
+        moreUrl: ''
+      },
+      svgIcon: <SvgIcon name='book' />,
+      content: <ListBoxBase type={'link'} items={contents} />
+    },
+    {
+      key: 2,
+      headTitle: '分类',
+      headRightContent: {
+        headMoreText: '更多',
+        moreUrl: '/blog/category'
+      },
+      svgIcon: <SvgIcon name='category' />,
+      content: <ListBoxBase type={'link'} items={categorys} />
+    },
+    {
+      key: 3,
+      headTitle: '标签',
+      svgIcon: <SvgIcon name='tag-1' />,
+      content: <LinkListBase items={labels} />
+    },
+    {
+      key: 4,
+      headTitle: '归档',
+      headRightContent: {
+        headMoreText: '更多',
+        moreUrl: ''
+      },
+      svgIcon: <SvgIcon name='calendar-1' />,
+      content: <LinkListArchive items={archives} />
+    }
+  ]
+
+  /**
+   * 初始化数据
+   */
+  useEffect(() => {
+    frontContentRecentList()
+    frontCategoryCountList()
+    frontLabelList()
+  }, [])
+
+  const frontCategoryCountList = async () => {
+    const categorys = await categoryApi.frontCategoryCountList()
+    const { code, data, msg } = categorys
+    if (code !== 200) {
+      return []
+    }
+
+    const categoryData = data.map(({ categoryId, categoryName, categoryCount }) => ({
+      id: categoryId,
+      text: categoryName,
+      url: `/category/${categoryId}`,
+      extend: { node: <div>{categoryCount}</div> }
+    }))
+
+    setCategory(categoryData)
+  }
+
+  const frontLabelList = async () => {
+    const labels = await labelApi.frontLabelList()
+    const { code, data, msg } = labels
+    if (code !== 200) {
+      return []
+    }
+
+    const labelData = data.map(({ id, surrogateId, number, name, color, colorText }) => ({
+      key: surrogateId,
+      text: name,
+      textColor: colorText,
+      url: `/label/${surrogateId}`
+      // extend: <div>{'12'}</div>
+    }))
+    setLabel(labelData)
+  }
+
+  const frontContentRecentList = async () => {
+    const contents = await blogContentApi.frontContentRecentList()
+    const { code, data, msg } = contents
+    if (code !== 200) {
+      return []
+    }
+
+    const contentData = data.map(({ id, surrogateId, number, title, original, recommend }) => ({
+      id: surrogateId,
+      text: title,
+      url: `/blog/${surrogateId}`
+    }))
+    // setLabel(contentData)
+    setContents(contentData)
+  }
+
   return (
     <>
       {/* 左侧侧边栏 */}

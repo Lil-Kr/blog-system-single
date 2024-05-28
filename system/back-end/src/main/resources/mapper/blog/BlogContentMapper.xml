@@ -117,10 +117,56 @@
         </where>
     </update>
 
-    <select id="contentFrontList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">
+    <select id="frontContentList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
-        order by create_time desc
+        order by publish_time desc
         limit 10
+    </select>
+
+    <select id="frontContentByGroupCategory" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO">
+        select category_id, count(1) as 'category_count'
+        from <include refid="Table_Name" />
+        where `status` = 1
+        group by category_id
+    </select>
+
+    <select id="frontContentPageList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name" />
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.original != null and param.original != ''">
+                and original = #{param.original}
+            </if>
+            <if test="param.recommend != null and param.recommend != ''">
+                and recommend = #{param.recommend}
+            </if>
+            <if test="param.status != null and param.status != ''">
+                and status = #{param.status}
+            </if>
+            <if test="param.keyWords != null and param.keyWords != ''">
+                and (
+                `number` like concat('%',#{param.keyWords},'%')
+                or
+                `title` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+        <if test="param.isOrder != null and param.isOrder != ''">
+            order by publish_time
+            <if test="param.isOrder == 0">
+                asc
+            </if>
+            <if test="param.isOrder == 1">
+                desc
+            </if>
+        </if>
     </select>
 </mapper>

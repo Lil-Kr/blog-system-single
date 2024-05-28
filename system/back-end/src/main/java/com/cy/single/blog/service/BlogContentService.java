@@ -5,7 +5,10 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.entity.blog.BlogContentMongo;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
+import com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO;
 import com.cy.single.blog.pojo.vo.blog.BlogContentVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -33,5 +36,9 @@ public interface BlogContentService {
 
   ApiResp<String> publishBlog(BlogContentReq req);
 
-  PageResult<BlogContentVO> contentFrontList();
+  ApiResp<List<BlogContentVO>> frontContentList();
+
+  List<BlogContentGroupVO> frontContentByGroupCategory();
+
+  PageResult<BlogContentVO> frontContentPageList(BlogContentPageReq req);
 }

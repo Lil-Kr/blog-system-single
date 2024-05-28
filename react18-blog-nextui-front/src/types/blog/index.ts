@@ -9,5 +9,6 @@ export type BlogItemsType = {
   }
   tags: string[]
   blogTitle: string
-  publishDate: string
+  publishTime: string
+  backendApi?: string
 }

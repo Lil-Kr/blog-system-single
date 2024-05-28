@@ -32,19 +32,19 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 @Service
 public class BlogCategoryServiceImpl implements BlogCategoryService {
 
-    @Autowired
-    private BlogCategoryMapper blogCategoryMapper;
+  @Autowired
+  private BlogCategoryMapper blogCategoryMapper;
 
-    @Override
-    public PageResult<BlogCategoryVO> pageCategoryList(BlogCategoryPageReq req) {
-        List<BlogCategoryVO> pageList = blogCategoryMapper.pageCategoryList(req);
-        Integer count = blogCategoryMapper.getCountByList(req);
-        if (CollectionUtils.isEmpty(pageList)) {
-            return new PageResult<>(new ArrayList<>(0), 0);
-        }else {
-            return new PageResult<>(pageList, count);
-        }
+  @Override
+  public PageResult<BlogCategoryVO> pageCategoryList(BlogCategoryPageReq req) {
+    List<BlogCategoryVO> pageList = blogCategoryMapper.pageCategoryList(req);
+    Integer count = blogCategoryMapper.getCountByList(req);
+    if (CollectionUtils.isEmpty(pageList)) {
+        return new PageResult<>(new ArrayList<>(0), 0);
+    }else {
+        return new PageResult<>(pageList, count);
     }
+  }
 
   @Override
   public PageResult<BlogCategoryVO> list(BlogCategoryPageReq req) {
@@ -55,67 +55,73 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
     }else {
       return new PageResult<>(list, list.size());
     }
-
   }
 
   @Override
-    public ApiResp<String> save(BlogCategoryReq req) {
-        BlogCategory blogCategoryRes = blogCategoryMapper.selectByNumber(req.getNumber());
-        if (Objects.nonNull(blogCategoryRes)) {
-            return ApiResp.failure(DATA_INFO_REPEAT);
-        }else {
-            blogCategoryRes = BlogCategory.builder().build();
-        }
-
-        BlogCategory saveEntity = BlogCategoryDTO.convertSaveCategoryReq(req, blogCategoryRes);
-        Integer save = blogCategoryMapper.insert(saveEntity);
-        if (save >= 1) {
-            return ApiResp.success();
-        }else {
-            return ApiResp.failure(SAVE_ERROR);
-        }
+  public ApiResp<String> save(BlogCategoryReq req) {
+    BlogCategory blogCategoryRes = blogCategoryMapper.selectByNumber(req.getNumber());
+    if (Objects.nonNull(blogCategoryRes)) {
+        return ApiResp.failure(DATA_INFO_REPEAT);
+    }else {
+        blogCategoryRes = BlogCategory.builder().build();
     }
+
+    BlogCategory saveEntity = BlogCategoryDTO.convertSaveCategoryReq(req, blogCategoryRes);
+    Integer save = blogCategoryMapper.insert(saveEntity);
+    if (save >= 1) {
+        return ApiResp.success();
+    }else {
+        return ApiResp.failure(SAVE_ERROR);
+    }
+  }
 
     @Override
     public ApiResp<String> edit(BlogCategoryReq req) {
-        BlogCategory blogCategoryRes = blogCategoryMapper.selectBySurrogateId(req.getSurrogateId());
-        if (Objects.isNull(blogCategoryRes)) {
-            return ApiResp.failure(OPERATE_ERROR);
-        }
+      BlogCategory blogCategoryRes = blogCategoryMapper.selectBySurrogateId(req.getSurrogateId());
+      if (Objects.isNull(blogCategoryRes)) {
+          return ApiResp.failure(OPERATE_ERROR);
+      }
 
-        if (!blogCategoryRes.getNumber().equalsIgnoreCase(req.getNumber())) {
-            return ApiResp.failure(OPERATE_ERROR);
-        }
+      if (!blogCategoryRes.getNumber().equalsIgnoreCase(req.getNumber())) {
+          return ApiResp.failure(OPERATE_ERROR);
+      }
 
-        BeanUtils.copyProperties(req, blogCategoryRes);
-        Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
-        blogCategoryRes.setUpdateTime(nowDateTime);
-        blogCategoryRes.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
-        Integer count = blogCategoryMapper.editBySurrogateId(blogCategoryRes);
-        if (count >= 1) {
-            return ApiResp.success();
-        }else {
-            return ApiResp.failure(SAVE_ERROR);
-        }
+      BeanUtils.copyProperties(req, blogCategoryRes);
+      Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
+      blogCategoryRes.setUpdateTime(nowDateTime);
+      blogCategoryRes.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+      Integer count = blogCategoryMapper.editBySurrogateId(blogCategoryRes);
+      if (count >= 1) {
+          return ApiResp.success();
+      }else {
+          return ApiResp.failure(SAVE_ERROR);
+      }
     }
 
     @Override
     public ApiResp<String> delete(Long surrogateId) {
-        int count = blogCategoryMapper.deleteBySurrogateId(surrogateId);
-        if (count >= 1) {
-            return ApiResp.success();
-        }else {
-            return ApiResp.failure(OPERATE_ERROR);
-        }
+      int count = blogCategoryMapper.deleteBySurrogateId(surrogateId);
+      if (count >= 1) {
+          return ApiResp.success();
+      }else {
+          return ApiResp.failure(OPERATE_ERROR);
+      }
     }
 
-    @Override
-    public ApiResp<String> deleteBatch(BlogCategoryReq req) {
-        Integer count = blogCategoryMapper.deleteBatch(req.getSurrogateIds());
-        if (count >= 1) {
-            return ApiResp.success();
-        }else {
-            return ApiResp.failure(DEL_ERROR);
-        }
+  @Override
+  public ApiResp<String> deleteBatch(BlogCategoryReq req) {
+    Integer count = blogCategoryMapper.deleteBatch(req.getSurrogateIds());
+    if (count >= 1) {
+        return ApiResp.success();
+    }else {
+        return ApiResp.failure(DEL_ERROR);
     }
+  }
+
+  @Override
+  public List<BlogCategoryVO> frontList() {
+    List<BlogCategoryVO> res = blogCategoryMapper.frontList();
+
+    return res;
+  }
 }

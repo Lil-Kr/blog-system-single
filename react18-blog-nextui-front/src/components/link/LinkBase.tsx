@@ -6,11 +6,12 @@ const LinkBase = (props: { item: LinkBaseType }) => {
   return (
     <a
       key={item.key}
-      className={`flex flex-row justify-between px-1 py-1 text-md ${item.textColor} hover:bg-primary hover:text-white rounded-md`}
+      // className={`flex flex-row justify-between px-1 py-1 text-md ${item.textColor} hover:bg-primary hover:text-white rounded-md`}
+      className={`flex flex-row justify-between px-1 py-1 text-md text-stone-600 hover:bg-primary hover:text-white rounded-md`}
       href={item.url}
       target='_blank'
     >
-      <div>{item.text}</div>
+      <span>{item.text}</span>
       <div className='text-sm'>{item.extend}</div>
     </a>
   )
