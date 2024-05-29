@@ -56,20 +56,22 @@ const ImageManage = () => {
       return []
     }
 
-    const datas = data.list.map(({ surrogateId, number, name, imageUrl, status, createTime, updateTime, remark }) => ({
-      key: surrogateId,
-      label: name
-      // number,
-      // name,
-      // imageUrl,
-      // status,
-      // createTime,
-      // updateTime,
-      // remark
-    }))
+    const tabsData = data.list.map(
+      ({ surrogateId, number, name, imageUrl, status, createTime, updateTime, remark }) => ({
+        key: surrogateId,
+        label: name
+        // number,
+        // name,
+        // imageUrl,
+        // status,
+        // createTime,
+        // updateTime,
+        // remark
+      })
+    )
 
-    setTabsItem(datas)
-    setActiveKey(datas[0].key)
+    setTabsItem(tabsData)
+    getImageInfo({ surrogateId: tabsData[0].key })
   }
 
   const getImageInfo = async (params: ImageInfoReqParams) => {
@@ -78,11 +80,11 @@ const ImageManage = () => {
 
     tabsItem?.map((item, index) => {
       if (item.key === params.surrogateId) {
-        item.children = JSON.stringify(data)
+        item.children = JSON.stringify(imageInfo)
       }
     })
 
-    console.log('--> tabsItem: ', tabsItem)
+    // console.log('--> tabsItem: ', tabsItem)
     setTabsItem(tabsItem)
     setActiveKey(params.surrogateId)
   }

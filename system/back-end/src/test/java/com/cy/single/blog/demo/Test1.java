@@ -3,7 +3,7 @@ package com.cy.single.blog.demo;
 import com.alibaba.fastjson2.JSONArray;
 import com.cy.single.blog.common.cache.CacheManager;
 import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
-import com.cy.single.blog.utils.dateUtil.DateUtil;
+import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -75,8 +75,8 @@ public class Test1 {
 
     @Test
     public void test4() {
-        String nowDateTime = DateUtil.getNowDateTime();
-        System.out.println(nowDateTime);
+        Long snowFlakeId = IdWorker.getSnowFlakeId();
+        System.out.println(snowFlakeId);
     }
 
 }

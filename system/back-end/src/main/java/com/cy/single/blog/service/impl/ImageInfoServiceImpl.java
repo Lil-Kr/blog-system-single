@@ -10,17 +10,15 @@ import com.cy.single.blog.pojo.req.image.ImageInfoPageReq;
 import com.cy.single.blog.pojo.req.image.ImageInfoReq;
 import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
 import com.cy.single.blog.service.ImageInfoService;
-import com.cy.single.blog.utils.dateUtil.DateUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import static com.cy.single.blog.enums.ReturnCodeEnum.DEL_ERROR;
-import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
+import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
  * @Author: Lil-K
@@ -68,16 +66,16 @@ public class ImageInfoServiceImpl implements ImageInfoService {
 
   @Override
   public ApiResp<ImageInfoVO> get(Long surrogateId) {
-//    ImageInfoVO imageInfoVO = imageInfoMapper.get(surrogateId);
-//    if (Objects.isNull(imageInfoVO)) {
-//      return ApiResp.failure(INFO_EXIST);
-//    }
-//    ImageDTO.convertImageInfoVO(imageInfoVO);
-//    return ApiResp.success(imageInfoVO);
-    ImageInfoVO imageInfoVO = new ImageInfoVO();
-    imageInfoVO.setName("这是测试" + DateUtil.localDateTimeToDate(LocalDateTime.now()));
-    imageInfoVO.setRemark("abc");
+    ImageInfoVO imageInfoVO = imageInfoMapper.get(surrogateId);
+    if (Objects.isNull(imageInfoVO)) {
+      return ApiResp.failure(INFO_EXIST);
+    }
+    ImageDTO.convertImageInfoVO(imageInfoVO);
     return ApiResp.success(imageInfoVO);
+//    ImageInfoVO imageInfoVO = new ImageInfoVO();
+//    imageInfoVO.setName("这是测试" + DateUtil.localDateTimeToDate(LocalDateTime.now()));
+//    imageInfoVO.setRemark("abc");
+//    return ApiResp.success(imageInfoVO);
   }
 
   @Override
