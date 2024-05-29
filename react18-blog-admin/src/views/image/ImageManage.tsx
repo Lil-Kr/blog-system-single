@@ -70,7 +70,12 @@ const ImageManage = () => {
       })
     )
 
+    /**
+     * 1. init tabs card title
+     * 2. 
+     */
     setTabsItem(tabsData)
+
     getImageInfo({ surrogateId: tabsData[0].key })
   }
 
