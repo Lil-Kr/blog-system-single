@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.single.blog.dao.ImageCategoryMapper">
+  <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.image.ImageCategory">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="surrogate_id" jdbcType="BIGINT" property="surrogateId" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
+    <result column="modifier_id" jdbcType="BIGINT" property="modifierId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="Table_Name">
+    image_category
+  </sql>
+
+  <sql id="Base_Column_List">
+    id, surrogate_id, `number`, `name`, image_url, `status`, remark, deleted, creator_id, 
+    modifier_id, create_time, update_time
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from image_category
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from image_category
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.cy.single.blog.pojo.entity.image.ImageCategory">
+    insert into image_category
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="surrogateId != null">
+        surrogate_id,
+      </if>
+      <if test="number != null">
+        `number`,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="imageUrl != null">
+        image_url,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="modifierId != null">
+        modifier_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="surrogateId != null">
+        #{surrogateId,jdbcType=BIGINT},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null">
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="modifierId != null">
+        #{modifierId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cy.single.blog.pojo.entity.image.ImageCategory">
+    update image_category
+    <set>
+      <if test="surrogateId != null">
+        surrogate_id = #{surrogateId,jdbcType=BIGINT},
+      </if>
+      <if test="number != null">
+        `number` = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null">
+        image_url = #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="creatorId != null">
+        creator_id = #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="modifierId != null">
+        modifier_id = #{modifierId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cy.single.blog.pojo.entity.image.ImageCategory">
+    update image_category
+    set surrogate_id = #{surrogateId,jdbcType=BIGINT},
+      `number` = #{number,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
+      image_url = #{imageUrl,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      deleted = #{deleted,jdbcType=INTEGER},
+      creator_id = #{creatorId,jdbcType=BIGINT},
+      modifier_id = #{modifierId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="pageList" resultType="com.cy.single.blog.pojo.vo.image.ImageCategoryVO">
+    select <include refid="Base_Column_List"/>
+    from <include refid="Table_Name"/>
+    <where>
+      <if test="param.keyWords != null and param.keyWords != ''">
+        and (
+        `number` like concat('%',#{param.keyWords},'%')
+        or
+        `name` like concat('%',#{param.keyWords},'%')
+        or
+        remark like concat('%',#{param.keyWords},'%')
+        )
+      </if>
+    </where>
+    <if test="param.isOrder != null and param.isOrder != ''">
+      order by create_time
+      <if test="param.isOrder == 0">
+        asc
+      </if>
+      <if test="param.isOrder == 1">
+        desc
+      </if>
+    </if>
+  </select>
+
+  <select id="total" resultType="java.lang.Integer">
+    select count(1)
+    from <include refid="Table_Name"/>
+    <where>
+      <if test="param.keyWords != null and param.keyWords != ''">
+        and (
+        `number` like concat('%',#{param.keyWords},'%')
+        or
+        `name` like concat('%',#{param.keyWords},'%')
+        or
+        remark like concat('%',#{param.keyWords},'%')
+        )
+      </if>
+    </where>
+    <if test="param.isOrder != null and param.isOrder != ''">
+      order by create_time
+      <if test="param.isOrder == 0">
+        asc
+      </if>
+      <if test="param.isOrder == 1">
+        desc
+      </if>
+    </if>
+  </select>
+
+  <select id="imageCategoryList" resultType="com.cy.single.blog.pojo.vo.image.ImageCategoryVO">
+    select <include refid="Base_Column_List"/>
+    from <include refid="Table_Name"/>
+    <where>
+      <if test="param.keyWords != null and param.keyWords != ''">
+        and (
+        `number` like concat('%',#{param.keyWords},'%')
+        or
+        `name` like concat('%',#{param.keyWords},'%')
+        or
+        remark like concat('%',#{param.keyWords},'%')
+        )
+      </if>
+    </where>
+    <if test="param.isOrder != null and param.isOrder != ''">
+      order by create_time
+      <if test="param.isOrder == 0">
+        asc
+      </if>
+      <if test="param.isOrder == 1">
+        desc
+      </if>
+    </if>
+  </select>
+
+  <select id="get" resultType="com.cy.single.blog.pojo.vo.image.ImageCategoryVO">
+    select <include refid="Base_Column_List"/>
+    from <include refid="Table_Name"/>
+    where surrogate_id = #{surrogateId}
+  </select>
+
+</mapper>

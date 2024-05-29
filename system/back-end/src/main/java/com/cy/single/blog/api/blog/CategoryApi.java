@@ -41,7 +41,6 @@ public class CategoryApi {
     @Autowired
     private BlogContentService blogContentService;
 
-
     @RecordLogger
     @CheckAuth
     @PostMapping("/pageCategoryList")

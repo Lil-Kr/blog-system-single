@@ -9,6 +9,7 @@ import { homeConfig } from './homeConfig'
 import { compsConfig } from './compsConfig'
 import { aideToolsConfig } from './aideToolsConfig'
 import { portalConfig } from './portalConfig'
+import { imageToolsConfig } from './imageToolsConfig'
 
 const busConfig: RouterItemType[] = [
   {
@@ -20,7 +21,7 @@ const busConfig: RouterItemType[] = [
     },
     path: 'admin',
     element: LazyLoad(lazy(() => import('@/layout/MainLayout'))),
-    children: [...homeConfig, ...blogConfig, ...portalConfig, ...compsConfig, ...aideToolsConfig]
+    children: [...homeConfig, ...blogConfig, ...imageToolsConfig, ...portalConfig, ...compsConfig, ...aideToolsConfig]
   }
 ]
 

@@ -12,4 +12,6 @@ public interface StartupInitializerService {
   void initBlogTopic();
 
   void initBlogCategory();
+
+  void initImageCategory();
 }

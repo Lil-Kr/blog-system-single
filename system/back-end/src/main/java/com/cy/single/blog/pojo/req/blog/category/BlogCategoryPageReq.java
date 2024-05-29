@@ -15,7 +15,7 @@ public class BlogCategoryPageReq extends BasePageReq {
 
     private Long surrogateId;
 
-    private Integer number;
+    private String number;
 
     private String name;
 

@@ -84,7 +84,6 @@ public class ContentApi {
     return null;
   }
 
-
   /** ================== 门户网站接口 =============== **/
   @RecordLogger
   @GetMapping("/frontContentList")
@@ -99,4 +98,9 @@ public class ContentApi {
     return ApiResp.success(list);
   }
 
+  @RecordLogger
+  @GetMapping("/frontGet")
+  public ApiResp<BlogContentVO> frontGetBlog(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+    return blogContentService.get(surrogateId);
+  }
 }

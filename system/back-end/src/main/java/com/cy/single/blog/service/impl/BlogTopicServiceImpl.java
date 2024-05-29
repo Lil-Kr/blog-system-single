@@ -101,7 +101,6 @@ public class BlogTopicServiceImpl implements BlogTopicService {
 
     UpdateWrapper<BlogTopic> updateWrapper = new UpdateWrapper<>();
     updateWrapper.eq("surrogate_id", blogTopic.getSurrogateId());
-
     int update = blogTopicMapper.update(blogTopic, updateWrapper);
 
     if (update >= 1) {

@@ -82,7 +82,7 @@ const BaseModal = (props: ModalType.BaseModalType) => {
       }
     } else if (action === 'edit') {
       const param = { surrogateId: params.key, ...params }
-      console.log('--> param: ', { ...param })
+      // console.log('--> param: ', { ...param })
       const res = await api.edit!(param)
       const { code, msg, data } = res
       if (code === 200) {

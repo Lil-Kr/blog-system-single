@@ -45,3 +45,10 @@ export const PREFIX_URL_BLOG_TOPIC = '/blog/topic'
  * blog-content
  */
 export const PREFIX_URL_BLOG_CONTENT = '/blog/content'
+
+/**
+ * image-category
+ */
+export const PREFIX_URL_IMAGE_CATEGORY = '/image/category'
+
+export const PREFIX_URL_IMAGE_INFO = '/image/info'

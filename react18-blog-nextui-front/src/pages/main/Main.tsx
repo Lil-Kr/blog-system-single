@@ -196,16 +196,16 @@ const Main = () => {
       svgIcon: <SvgIcon name='tag-1' />,
       content: <LinkListBase items={labels} />
     },
-    {
-      key: 4,
-      headTitle: '归档',
-      headRightContent: {
-        headMoreText: '更多',
-        moreUrl: ''
-      },
-      svgIcon: <SvgIcon name='calendar-1' />,
-      content: <LinkListArchive items={archives} />
-    }
+    // {
+    //   key: 4,
+    //   headTitle: '归档',
+    //   headRightContent: {
+    //     headMoreText: '更多',
+    //     moreUrl: ''
+    //   },
+    //   svgIcon: <SvgIcon name='calendar-1' />,
+    //   content: <LinkListArchive items={archives} />
+    // }
   ]
 
   /**

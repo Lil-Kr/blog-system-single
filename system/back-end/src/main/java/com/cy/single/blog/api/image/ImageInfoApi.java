@@ -3,10 +3,18 @@ package com.cy.single.blog.api.image;
 import com.cy.single.blog.aspect.annotations.CheckAuth;
 import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
+import com.cy.single.blog.base.BasePageReq;
+import com.cy.single.blog.base.PageResult;
+import com.cy.single.blog.pojo.req.image.ImageInfoPageReq;
+import com.cy.single.blog.pojo.req.image.ImageInfoReq;
+import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
 import com.cy.single.blog.pojo.vo.image.ImageUploadVO;
+import com.cy.single.blog.service.ImageInfoService;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,16 +27,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-
 /**
  * @Author: Lil-K
- * @Date: 2024/4/24
+ * @Date: 2024/5/29
  * @Description:
  */
+
 @Slf4j
 @RestController
-@RequestMapping("/image")
-public class ImageAip {
+@RequestMapping("/image/info")
+public class ImageInfoApi {
+
 
   @Value("${upload.rootDir}")
   private String rootDir;
@@ -39,12 +48,51 @@ public class ImageAip {
   @Value("${upload.moduleImagePath}")
   private String moduleImagePath;
 
+  @Autowired
+  private ImageInfoService imageInfoService;
+
   @RecordLogger
   @CheckAuth
   @PostMapping("/pageList")
-  public ApiResp<String> pageList() {
-//    PageResult<BlogLabelVO> list = blogLabelService.pageList(req);
-    return ApiResp.success();
+  public ApiResp<PageResult<ImageInfoVO>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) ImageInfoPageReq req) {
+    PageResult<ImageInfoVO> imageInfoVOPageResult = imageInfoService.pageImageInfoList(req);
+    return ApiResp.success(imageInfoVOPageResult);
+  }
+
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/list")
+  public ApiResp<PageResult<ImageInfoVO>> list(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) ImageInfoPageReq req) {
+    PageResult<ImageInfoVO> imageInfoVOPageResult = imageInfoService.imageInfoList(req);
+    return ApiResp.success(imageInfoVOPageResult);
+  }
+
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/save")
+  public ApiResp<String> list(@RequestBody @Validated({ImageInfoReq.GroupImageInfoSave.class}) ImageInfoReq req) {
+    return imageInfoService.save(req);
+  }
+
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/edit")
+  public ApiResp<String> edit(@RequestBody @Validated(ImageInfoReq.GroupImageInfoEdit.class) ImageInfoReq req) {
+    return imageInfoService.save(req);
+  }
+
+  @RecordLogger
+  @CheckAuth
+  @GetMapping("/get")
+  public ApiResp<ImageInfoVO> get(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+    return imageInfoService.get(surrogateId);
+  }
+
+  @RecordLogger
+  @CheckAuth
+  @DeleteMapping("/delete")
+  public ApiResp<String> delete(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+    return imageInfoService.delete(surrogateId);
   }
 
   /**
@@ -53,8 +101,8 @@ public class ImageAip {
    * @return
    * @throws IOException
    */
-//  @RecordLogger
-//  @CheckAuth
+  @RecordLogger
+  @CheckAuth
   @PostMapping("/upload")
   public ApiResp<ImageUploadVO> upload(@RequestParam("avatar") MultipartFile imageFile) throws IOException {
     String imageFullName = imageFile.getOriginalFilename();
@@ -88,16 +136,7 @@ public class ImageAip {
       log.info("upload image error: {}", e.getMessage());
       return ApiResp.failure(e.getMessage());
     }
-
     return ApiResp.success("upload " + imageFullName + " success");
-  }
-
-  @RecordLogger
-  @CheckAuth
-  @DeleteMapping("/delete")
-  public ApiResp<String> delete(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
-
-    return ApiResp.success();
   }
 
 }

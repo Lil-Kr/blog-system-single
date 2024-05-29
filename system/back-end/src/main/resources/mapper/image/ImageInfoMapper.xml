@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.single.blog.dao.ImageInfoMapper">
+  <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.image.ImageInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="surrogate_id" jdbcType="BIGINT" property="surrogateId" />
+    <result column="image_category_id" jdbcType="BIGINT" property="imageCategoryId" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="image_original_name" jdbcType="VARCHAR" property="imageOriginalName" />
+    <result column="image_type" jdbcType="VARCHAR" property="imageType" />
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
+    <result column="modifier_id" jdbcType="BIGINT" property="modifierId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="Table_Name">
+    image_info
+  </sql>
+
+  <sql id="Base_Column_List">
+    id, surrogate_id, image_category_id, `number`, `name`, image_original_name, image_type, 
+    image_url, remark, deleted, creator_id, modifier_id, create_time, update_time
+  </sql>
+
+  <sql id="ALIASES_BASE_COLUMN_LIST_A">
+    a.id, a.surrogate_id, a.image_category_id, a.`number`, a.`name`, a.image_original_name, a.image_type,
+    a.image_url, a.remark, a.deleted, a.creator_id, a.modifier_id, a.create_time, a.update_time
+  </sql>
+
+  <sql id="ALIASES_BASE_COLUMN_LIST_B">
+    b.id, b.surrogate_id, b.image_category_id, b.`number`, b.`name`, b.image_original_name, b.image_type,
+    b.image_url, b.remark, b.deleted, b.creator_id, b.modifier_id, b.create_time, b.update_time
+  </sql>
+
+
+  <select id="pageImageInfoList" resultType="com.cy.single.blog.pojo.vo.image.ImageInfoVO">
+    select <include refid="Base_Column_List" />
+    from <include refid="Table_Name" />
+    <where>
+      <if test="param.surrogateId != null and param.surrogateId != ''">
+        and surrogate_id = #{param.surrogateId}
+      </if>
+      <if test="param.keyWords != null and param.keyWords != ''">
+        and (
+        `number` like concat('%',#{param.keyWords},'%')
+        or
+        `name` like concat('%',#{param.keyWords},'%')
+        or
+        `imageOriginalName` like concat('%',#{param.keyWords},'%')
+        or
+        `imageType` like concat('%',#{param.keyWords},'%')
+        or
+        remark like concat('%',#{param.keyWords},'%')
+        )
+      </if>
+      <if test="param.isOrder != null and param.isOrder != ''">
+        order by create_time
+        <if test="param.isOrder == 0">
+          asc
+        </if>
+        <if test="param.isOrder == 1">
+          desc
+        </if>
+      </if>
+    </where>
+  </select>
+
+  <select id="imageInfoList" resultType="com.cy.single.blog.pojo.vo.image.ImageInfoVO">
+    select <include refid="Base_Column_List" />
+    from <include refid="Table_Name" />
+    <where>
+      <if test="param.surrogateId != null and param.surrogateId != ''">
+        and surrogate_id = #{param.surrogateId}
+      </if>
+      <if test="param.keyWords != null and param.keyWords != ''">
+        and (
+        `number` like concat('%',#{param.keyWords},'%')
+        or
+        `name` like concat('%',#{param.keyWords},'%')
+        or
+        `imageOriginalName` like concat('%',#{param.keyWords},'%')
+        or
+        `imageType` like concat('%',#{param.keyWords},'%')
+        or
+        remark like concat('%',#{param.keyWords},'%')
+        )
+      </if>
+      <if test="param.isOrder != null and param.isOrder != ''">
+        order by create_time
+        <if test="param.isOrder == 0">
+          asc
+        </if>
+        <if test="param.isOrder == 1">
+          desc
+        </if>
+      </if>
+    </where>
+  </select>
+
+  <select id="get" resultType="com.cy.single.blog.pojo.vo.image.ImageInfoVO">
+    select <include refid="ALIASES_BASE_COLUMN_LIST_B" />,
+    a.surrogate_id as 'image_category_id',
+    a.name as 'image_category_name'
+    from image_category as a
+    inner join image_info as b on (a.surrogate_id = b.image_category_id and b.image_category_id = #{param.surrogateId})
+<!--    <where>-->
+<!--      b.image_category_id = #{param.surrogateId}-->
+<!--    </where>-->
+  </select>
+</mapper>

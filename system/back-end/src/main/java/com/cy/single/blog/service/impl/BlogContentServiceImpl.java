@@ -93,14 +93,14 @@ public class BlogContentServiceImpl implements BlogContentService {
 
   @Override
   public PageResult<BlogContentVO> contentList(BlogContentPageReq req) {
-    List<BlogContentVO> pageList = blogContentMapper.contentList(req);
-    if (CollectionUtils.isEmpty(pageList)) {
+    List<BlogContentVO> list = blogContentMapper.contentList(req);
+    if (CollectionUtils.isEmpty(list)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
 
-    pageList.stream().forEach(item -> item.setLabelNames(CacheManager.getBlogLabelNameListCache(item.getLabelIds())));
+    list.stream().forEach(item -> item.setLabelNames(CacheManager.getBlogLabelNameListCache(item.getLabelIds())));
 
-    return new PageResult<>(pageList, pageList.size());
+    return new PageResult<>(list, list.size());
   }
 
   @Override

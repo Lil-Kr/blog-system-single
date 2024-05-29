@@ -9,6 +9,7 @@ export interface BaseEntityType {
   modifierId?: string | ''
   createTime?: string | ''
   updateTime?: string | ''
+  isOrder?: number
 }
 
 export interface BaseEntityRequiredType {
@@ -19,6 +20,7 @@ export interface BaseEntityRequiredType {
   modifierId: string
   createTime: string
   updateTime: string
+  isOrder?: number
 }
 
 export interface BaseEntityPageType extends BasePageReq {
@@ -29,6 +31,7 @@ export interface BaseEntityPageType extends BasePageReq {
   modifierId?: string
   createTime?: string
   updateTime?: string
+  isOrder?: number
 }
 
 export interface BaseEntityRequiredPageType extends BasePageReq {
@@ -39,6 +42,7 @@ export interface BaseEntityRequiredPageType extends BasePageReq {
   modifierId: string
   createTime: string
   updateTime: string
+  isOrder?: number
 }
 
 /**

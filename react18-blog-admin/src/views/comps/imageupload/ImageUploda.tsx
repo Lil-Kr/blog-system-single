@@ -155,7 +155,7 @@ const ImageUploda = () => {
             className='avatar-uploader'
             // showUploadList={true}
             fileList={fileList1}
-            action={'http://localhost:7010/api/image/upload'}
+            action={'http://localhost:7010/api/image/info/upload'}
             maxCount={2} // 单次上传的数量, 也是展示的数量
             multiple
             onPreview={handlePreview}
@@ -185,7 +185,7 @@ const ImageUploda = () => {
             <Upload
               name='avatar'
               className='avatar-uploader'
-              action={'http://localhost:7010/api/image/upload'}
+              action={'http://localhost:7010/api/image/info/upload'}
               listType='picture-card'
               fileList={fileList}
               onChange={onChange}
@@ -202,7 +202,7 @@ const ImageUploda = () => {
             <Upload
               name='avatar'
               className='avatar-uploader'
-              action={'http://localhost:7010/api/image/upload'}
+              action={'http://localhost:7010/api/image/info/upload'}
               listType='picture-card'
               fileList={fileList}
               onChange={onChange}

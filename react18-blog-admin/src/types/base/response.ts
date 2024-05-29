@@ -4,6 +4,12 @@ export interface Result<T = any> {
   data: T
 }
 
+export interface ResultList<T = any> {
+  code: number | string
+  msg: string
+  data: PageData<T>
+}
+
 export interface ResultPage<T = any> {
   code: number | string
   msg: string

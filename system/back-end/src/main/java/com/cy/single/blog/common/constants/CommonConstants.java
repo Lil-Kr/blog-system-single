@@ -22,5 +22,9 @@ public class CommonConstants {
     public static final String CACHE_KEY_BLOG_LABEL_LIST = "blog-label-list";
 
     public static final String CACHE_KEY_BLOG_CATEGORY_LIST = "blog-category-list";
+    public static final String CACHE_KEY_BLOG_CATEGORY_MAP = "blog-category-map";
+
+    public static final String CACHE_KEY_IMAGE_CATEGORY_LIST = "image-category-list";
+    public static final String CACHE_KEY_IMAGE_CATEGORY_MAP = "image-category-map";
 
 }

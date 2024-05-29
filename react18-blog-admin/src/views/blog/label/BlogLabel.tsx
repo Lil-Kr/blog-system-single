@@ -97,7 +97,7 @@ const BlogLabel = () => {
 
   /**
    * 删除确认提示
-   *    * @param record
+   * @param record
    */
   const deleteItemConfirm = async (record: LabelDTO) => {
     const res = await blogLabelApi.delete({ surrogateId: record.key })
