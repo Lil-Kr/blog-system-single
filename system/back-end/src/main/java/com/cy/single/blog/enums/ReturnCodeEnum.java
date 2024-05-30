@@ -12,7 +12,7 @@ public enum ReturnCodeEnum {
     DATA_INFO_REPEAT(417, "数据重复"),
     SAVE_ERROR(421, "保存失败"),
     EDITE_ERROR(422, "修改失败"),
-    DEL_ERROR(423, "删除失败"),
+    DEL_ERROR(423, "删除失败, 可能存在依赖项"),
     OPERATE_ERROR(424, "操作失败"),
     SYSTEM_ERROR(500, "系统异常"),
     BUSINESS_ERROR(501, "业务异常"),

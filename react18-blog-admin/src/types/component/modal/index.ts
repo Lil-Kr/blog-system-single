@@ -1,6 +1,7 @@
 import { MutableRefObject } from 'react'
 import { BaseApi } from '../../apis'
 import { Rule } from 'antd/es/form'
+import exp from 'constants'
 
 export interface IAction {
   action: string
@@ -56,6 +57,8 @@ export namespace ModalType {
     update?: () => void
   }
 
+  export type innerComponentType = 'all-input' | 'image-upload'
+
   export interface BaseModalType<T = any> {
     mRef: MutableRefObject<
       | {
@@ -70,7 +73,7 @@ export namespace ModalType {
         }
       | undefined
     >
-
+    innerComponent?: innerComponentType
     update: () => void
   }
 
@@ -83,6 +86,22 @@ export namespace ModalType {
             type: IAction
             // items: InputType[],
             // data: T
+          ) => void
+        }
+      | undefined
+    >
+
+    update?: () => void
+  }
+
+  export interface ImageUploadModal<T = any> {
+    mRef: MutableRefObject<
+      | {
+          open: (
+            requestParams: IModalRequestAction,
+            params: IModalParams,
+            type: IAction,
+            data: T
           ) => void
         }
       | undefined

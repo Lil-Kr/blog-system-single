@@ -37,7 +37,7 @@ axiosInstance.interceptors.response.use(
     if (status === 200) {
       const { data } = response
 
-      // todo: 每次请求成功都重新set token Cookie
+      // todo: 每次请求成功都重新 set token cookie
       const { code, msg, token, userInfo } = data
 
       if (code !== 200) {
@@ -75,6 +75,9 @@ const baseAxiosRequest = {
   },
   post<T>(url: string, body?: object): Promise<T> {
     return axiosInstance.post(url, body)
+  },
+  postUpload<T>(url: string, body?: object, header?: object): Promise<T> {
+    return axiosInstance.post(url, body, header)
   },
   put<T>(url: string, body?: object): Promise<T> {
     return axiosInstance.put(url, body)

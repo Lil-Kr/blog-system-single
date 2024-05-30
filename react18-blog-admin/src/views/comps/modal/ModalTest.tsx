@@ -4,7 +4,6 @@ import { BlogContenType } from '@/types/entity/blog'
 import { useForm } from 'antd/es/form/Form'
 import { BaseModal, FullScreenModal } from '@/components/modal'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { LabelApi } from '@/types/apis/blog/label'
 import labelApi from '@/apis/blog/label'
 
 const ModalTest = () => {
@@ -120,6 +119,7 @@ const ModalTest = () => {
           <FullScreenModal mRef={fullScreenModalTestRef} />
           <BaseModal
             mRef={baseModalTestRef}
+            innerComponent={'all-input'}
             update={() => {
               console.log('--> 关闭modal的回调')
             }}

@@ -7,9 +7,9 @@ import {
   ImageCategoryPageReqParams,
   ImageCategoryReqParams,
   ImageCategoryVO,
-  ImageInfoReqParams,
   ImageInfoVO
 } from '@/types/apis/image/image'
+import { BaseDelReq } from '@/types/base'
 
 const imageCategoryApi: ImageCategoryApi = {
   imageCategoryPageList(params: ImageCategoryPageReqParams) {
@@ -21,8 +21,8 @@ const imageCategoryApi: ImageCategoryApi = {
   save(params: CreactImageCategoryReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_IMAGE_CATEGORY + '/save', params)
   },
-  get(params: ImageInfoReqParams) {
-    return baseAxiosRequest.get<Result<ImageInfoVO>>(PREFIX_URL_IMAGE_CATEGORY + '/get', params)
+  delete(params: BaseDelReq) {
+    return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_IMAGE_CATEGORY + '/delete', params)
   }
 }
 

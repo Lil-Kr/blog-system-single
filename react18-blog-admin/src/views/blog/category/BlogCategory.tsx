@@ -361,6 +361,7 @@ const BlogCategory = () => {
         </div>
         <BaseModal
           mRef={typeRef}
+          innerComponent={'all-input'}
           update={() => {
             getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
           }}

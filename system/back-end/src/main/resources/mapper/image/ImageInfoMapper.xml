@@ -37,13 +37,50 @@
     b.image_url, b.remark, b.deleted, b.creator_id, b.modifier_id, b.create_time, b.update_time
   </sql>
 
-
   <select id="pageImageInfoList" resultType="com.cy.single.blog.pojo.vo.image.ImageInfoVO">
     select <include refid="Base_Column_List" />
     from <include refid="Table_Name" />
     <where>
       <if test="param.surrogateId != null and param.surrogateId != ''">
         and surrogate_id = #{param.surrogateId}
+      </if>
+      <if test="param.imageCategoryId != null and param.imageCategoryId != ''">
+        and image_category_id = #{param.imageCategoryId}
+      </if>
+      <if test="param.keyWords != null and param.keyWords != ''">
+        and (
+          `number` like concat('%',#{param.keyWords},'%')
+          or
+          `name` like concat('%',#{param.keyWords},'%')
+          or
+          `imageOriginalName` like concat('%',#{param.keyWords},'%')
+          or
+          `imageType` like concat('%',#{param.keyWords},'%')
+          or
+          remark like concat('%',#{param.keyWords},'%')
+        )
+      </if>
+      <if test="param.isOrder != null and param.isOrder != ''">
+        order by create_time
+        <if test="param.isOrder == 0">
+          asc
+        </if>
+        <if test="param.isOrder == 1">
+          desc
+        </if>
+      </if>
+    </where>
+  </select>
+
+  <select id="pageImageInfoListCount" resultType="java.lang.Integer">
+    select count(1)
+    from <include refid="Table_Name" />
+    <where>
+      <if test="param.surrogateId != null and param.surrogateId != ''">
+        and surrogate_id = #{param.surrogateId}
+      </if>
+      <if test="param.imageCategoryId != null and param.imageCategoryId != ''">
+        and image_category_id = #{param.imageCategoryId}
       </if>
       <if test="param.keyWords != null and param.keyWords != ''">
         and (
@@ -102,14 +139,24 @@
     </where>
   </select>
 
-  <select id="get" resultType="com.cy.single.blog.pojo.vo.image.ImageInfoVO">
+  <select id="pageImageInfoListByCategoryId" resultType="com.cy.single.blog.pojo.vo.image.ImageInfoVO">
     select <include refid="ALIASES_BASE_COLUMN_LIST_B" />,
     a.surrogate_id as 'image_category_id',
     a.name as 'image_category_name'
     from image_category as a
-    inner join image_info as b on (a.surrogate_id = b.image_category_id and b.image_category_id = #{param.surrogateId})
+    inner join image_info as b on (a.surrogate_id = b.image_category_id and b.image_category_id = #{surrogateId})
 <!--    <where>-->
 <!--      b.image_category_id = #{param.surrogateId}-->
 <!--    </where>-->
   </select>
+
+  <select id="pageImageInfoListByCategoryIdCount" resultType="java.lang.Integer">
+    select count(1)
+    from image_category as a
+    inner join image_info as b on (a.surrogate_id = b.image_category_id and b.image_category_id = #{surrogateId})
+    <!--    <where>-->
+    <!--      b.image_category_id = #{param.surrogateId}-->
+    <!--    </where>-->
+  </select>
+
 </mapper>

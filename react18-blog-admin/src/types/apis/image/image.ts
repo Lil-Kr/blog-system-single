@@ -1,14 +1,14 @@
 import { Result, ResultList, ResultPage } from '@/types/base/response'
 import { BaseApi } from '..'
-import { BaseEntityPageType, BaseEntityRequiredType, BaseEntityType } from '@/types/base'
+import { BaseDelReq, BaseEntityPageType, BaseEntityRequiredType, BaseEntityType } from '@/types/base'
 
 export interface ImageCategoryApi extends BaseApi {
   imageCategoryPageList(params: ImageCategoryPageReqParams): Promise<ResultPage<ImageCategoryVO>>
   imageCategoryList(params: ImageCategoryReqParams): Promise<ResultList<ImageCategoryVO>>
   save(params: CreactImageCategoryReq): Promise<Result<string>>
-  get(params: ImageInfoReqParams): Promise<Result<ImageInfoVO>>
+  // get(params: ImageInfoReqParams): Promise<Result<ImageInfoVO>>
   // edit(params: EditLabelReq): Promise<Result<string>>
-  // delete(params: DelLabelReq): Promise<Result<string>>
+  delete(params: BaseDelReq): Promise<Result<string>>
   // deleteBatch(params: DelLabelReq): Promise<Result<string>>
 }
 
@@ -27,6 +27,7 @@ export interface ImageCategoryType extends BaseEntityRequiredType {
  * image category request API type
  */
 export interface ImageCategoryPageReqParams extends BaseEntityPageType {
+  imageCategoryId?: string
   keyWords?: string | number
 }
 
@@ -85,9 +86,4 @@ export interface ImageInfoType extends BaseEntityRequiredType {
 
 export interface ImageInfoVO extends ImageInfoType {
   imageCategoryName: string
-}
-
-/** ============== ImageInfo req params ===============  **/
-export interface ImageInfoReqParams {
-  surrogateId: string
 }

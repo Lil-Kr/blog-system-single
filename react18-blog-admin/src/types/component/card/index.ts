@@ -3,6 +3,6 @@ export interface CardActionProps {
   avatar?: string
   imageUrl: string
   imageName: string
-  actions: React.ReactNode[]
+  actions?: React.ReactNode[]
   extra?: any
 }

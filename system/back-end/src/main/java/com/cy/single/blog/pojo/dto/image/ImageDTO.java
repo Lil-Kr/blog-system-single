@@ -50,9 +50,11 @@ public class ImageDTO {
     return imageInfo;
   }
 
-  public static ImageInfoVO convertImageInfoVO(ImageInfoVO imageInfoVO) {
-    String imageCategoryName = CacheManager.getImageCategoryCacheMap().getOrDefault(imageInfoVO.getImageCategoryId(), "");
+  public static ImageInfoVO convertImageInfoVO(ImageInfo imageInfo) {
+    String imageCategoryName = CacheManager.getImageCategoryCacheMap().getOrDefault(imageInfo.getImageCategoryId(), "");
 
+    ImageInfoVO imageInfoVO = new ImageInfoVO();
+    BeanUtils.copyProperties(imageInfo, imageInfoVO);
     imageInfoVO.setImageCategoryName(imageCategoryName);
     return imageInfoVO;
   }

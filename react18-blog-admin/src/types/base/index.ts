@@ -45,6 +45,11 @@ export interface BaseEntityRequiredPageType extends BasePageReq {
   isOrder?: number
 }
 
+export interface BaseDelReq {
+  id?: string
+  surrogateId: string
+}
+
 /**
  * 分页请求
  */

@@ -17,7 +17,11 @@ public interface ImageInfoMapper extends BaseMapper<ImageInfo> {
 
   List<ImageInfoVO> pageImageInfoList(@Param("param") ImageInfoPageReq req);
 
+  Integer pageImageInfoListCount(@Param("param") ImageInfoPageReq req);
+
   List<ImageInfoVO> imageInfoList(@Param("param") ImageInfoPageReq req);
 
-  ImageInfoVO get(Long surrogateId);
+  List<ImageInfoVO> pageImageInfoListByCategoryId(Long surrogateId);
+
+  Integer pageImageInfoListByCategoryIdCount(Long surrogateId);
 }

@@ -105,7 +105,7 @@ const BlogLabel = () => {
       message.success('操作成功')
       getLabelList({ keyWord: '' })
     } else {
-      message.success('操作失败')
+      message.warning('操作失败')
     }
   }
 

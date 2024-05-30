@@ -1,10 +1,10 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table } from 'antd'
+import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table, message } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
 import React, { useEffect, useRef, useState } from 'react'
-import { ImageCategoryDTO, ImageCategoryPageReqParams, ImageCategoryReqParams } from '@/types/apis/image/image'
+import { ImageCategoryDTO, ImageCategoryPageReqParams } from '@/types/apis/image/image'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { BaseModal } from '@/components/modal'
 
@@ -23,7 +23,7 @@ const ImageCategory = () => {
       key: 'imageUrl',
       dataIndex: 'imageUrl',
       title: '标题图',
-      width: 200,
+      width: 100,
       render: (_: object, record: ImageCategoryDTO) => (
         <img height={100} style={{ objectFit: 'cover' }} src={record.imageUrl} />
       )
@@ -34,23 +34,23 @@ const ImageCategory = () => {
       title: '分类名',
       width: 100
     },
-    {
-      key: 'status',
-      dataIndex: 'status',
-      title: '状态',
-      width: 60
-    },
+    // {
+    //   key: 'status',
+    //   dataIndex: 'status',
+    //   title: '状态',
+    //   width: 60
+    // },
     {
       key: 'createTime',
       dataIndex: 'createTime',
       title: '创建时间',
-      width: 150
+      width: 100
     },
     {
       key: 'updateTime',
       dataIndex: 'updateTime',
       title: '更新时间',
-      width: 150
+      width: 100
     },
     {
       key: 'oparet',
@@ -59,29 +59,21 @@ const ImageCategory = () => {
       width: 150,
       render: (_: object, record: ImageCategoryDTO) => (
         <Space size='middle'>
-          <Button
-            name='look'
-            type='primary'
-            shape='circle'
-            icon={<SearchOutlined />}
-            // onClick={() => lookItem(record.key, record)}
-          />
-          <Button
-            name='edit'
-            type='primary'
-            shape='circle'
-            icon={<EditOutlined />}
-            // onClick={() => editItem(record.key, record)}
-          />
           <Popconfirm
             title='删除标签'
             description={`确定要删除 [${record.name}] 这个分类吗?`}
-            // onConfirm={() => deleteItemConfirm(record)}
-            onCancel={() => {}}
+            onConfirm={() => deleteItemConfirm(record)}
             okText='确定'
             cancelText='取消'
           >
-            <Button name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
+            <Button
+              name='delete'
+              type='primary'
+              shape='circle'
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => delItem(record.key)}
+            />
           </Popconfirm>
         </Space>
       )
@@ -144,12 +136,6 @@ const ImageCategory = () => {
           rules: [{ required: true, message: '类别名称不能为空' }]
         },
         {
-          name: 'imageUrl',
-          label: '封面图url',
-          textValue: '封面图url',
-          style: { width: '100%' }
-        },
-        {
           name: 'remark',
           label: '备注',
           textValue: '备注',
@@ -157,6 +143,21 @@ const ImageCategory = () => {
         }
       ]
     )
+  }
+
+  const deleteItemConfirm = async (record: ImageCategoryDTO) => {
+    const delRes = await imageCategoryApi.delete({ surrogateId: record.key })
+    const { code } = delRes
+    if (code !== 200) {
+      message.warning('删除失败')
+      return
+    }
+    imageCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageInfo.pageSize })
+    message.success('删除成功')
+  }
+
+  const delItem = async (key: string) => {
+    // const { key } = rowKeys[0]
   }
 
   const deleteBatch = async () => {}
@@ -270,7 +271,7 @@ const ImageCategory = () => {
           />
         </Flex>
       </Flex>
-      <BaseModal mRef={imageCategoryRef} update={() => {}} />
+      <BaseModal innerComponent={'all-input'} mRef={imageCategoryRef} update={() => {}} />
     </div>
   )
 }

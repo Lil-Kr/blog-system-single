@@ -5,6 +5,9 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.image.ImageInfoPageReq;
 import com.cy.single.blog.pojo.req.image.ImageInfoReq;
 import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * @Author: Lil-K
@@ -12,7 +15,6 @@ import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
  * @Description:
  */
 public interface ImageInfoService {
-
 
   PageResult<ImageInfoVO> pageImageInfoList(ImageInfoPageReq req);
 
@@ -22,5 +24,9 @@ public interface ImageInfoService {
 
   ApiResp<ImageInfoVO> get(Long surrogateId);
 
+  Long countByImageCategoryId(Long imageCategoryId);
+
   ApiResp<String> delete(Long surrogateId);
+
+  ApiResp<String> imageUpload(MultipartFile imageFile) throws IOException;
 }

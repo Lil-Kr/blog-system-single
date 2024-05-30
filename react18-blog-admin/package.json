@@ -26,6 +26,7 @@
     "js-md5": "^0.8.3",
     "oh-router": "^0.4.0",
     "oh-router-react": "^0.0.11",
+    "rc-upload": "^4.5.2",
     "react": "^18.2.0",
     "react-cookies": "^0.1.1",
     "react-dom": "^18.2.0",

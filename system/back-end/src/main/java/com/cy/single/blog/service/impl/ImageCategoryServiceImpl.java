@@ -12,6 +12,7 @@ import com.cy.single.blog.pojo.req.image.ImageCategoryPageReq;
 import com.cy.single.blog.pojo.req.image.ImageCategoryReq;
 import com.cy.single.blog.pojo.vo.image.ImageCategoryVO;
 import com.cy.single.blog.service.ImageCategoryService;
+import com.cy.single.blog.service.ImageInfoService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +37,9 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
 
   @Autowired
   private ImageCategoryMapper imageCategoryMapper;
+
+  @Autowired
+  private ImageInfoService imageInfoService;
 
   @Override
   public PageResult<ImageCategoryVO> pageList(ImageCategoryPageReq req) {
@@ -105,6 +109,12 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
 
   @Override
   public ApiResp<String> delete(Long surrogateId) {
+    Long imageCateCount = imageInfoService.countByImageCategoryId(surrogateId);
+
+    if (imageCateCount >= 1) {
+      return ApiResp.failure(DEL_ERROR);
+    }
+
     QueryWrapper queryWrapper = new QueryWrapper();
     queryWrapper.eq("surrogate_id", surrogateId);
     int delete = imageCategoryMapper.delete(queryWrapper);

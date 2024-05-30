@@ -328,6 +328,7 @@ const BlogTopic = () => {
           }}
         />
         <BaseModal
+          innerComponent={'all-input'}
           mRef={topicRef}
           update={() => {
             getTopicPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })

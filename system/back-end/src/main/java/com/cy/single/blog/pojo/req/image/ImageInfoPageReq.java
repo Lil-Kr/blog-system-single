@@ -25,4 +25,5 @@ public class ImageInfoPageReq extends BasePageReq {
 
   private String remark;
 
+  private Long imageCategoryId;
 }

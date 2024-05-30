@@ -1,10 +1,11 @@
 import React, { useImperativeHandle, useState } from 'react'
 import Modal from 'antd/es/modal/Modal'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { Form, Input, message } from 'antd'
+import { Flex, Form, Input, Upload, message } from 'antd'
+import ImgCrop from 'antd-img-crop'
 
 const BaseModal = (props: ModalType.BaseModalType) => {
-  const { mRef, update } = props
+  const { mRef, innerComponent, update } = props
   const [baseModalForm] = Form.useForm()
   const [action, setAction] = useState('create')
   const [title, setTitle] = useState('')
@@ -101,14 +102,7 @@ const BaseModal = (props: ModalType.BaseModalType) => {
 
   return (
     <div className='baseModal'>
-      {/* <ConfigProvider>
-      </ConfigProvider> */}
       <Modal
-        // style={{
-        //   maxWidth: '50vw',
-        //   top: 0,
-        //   paddingBottom: 0
-        // }}
         style={modalStyle?.style}
         title={title}
         width={'100vw'}
@@ -127,11 +121,12 @@ const BaseModal = (props: ModalType.BaseModalType) => {
           <Form.Item name={'key'} hidden>
             <Input />
           </Form.Item>
-          {items.map((item, index) => (
-            <Form.Item key={index} name={item.name} label={item.label} rules={item.rules}>
-              <Input placeholder={item.textValue} style={item.style} />
-            </Form.Item>
-          ))}
+          {innerComponent === 'all-input' &&
+            items.map((item, index) => (
+              <Form.Item key={index} name={item.name} label={item.label} rules={item.rules}>
+                <Input placeholder={item.textValue} style={item.style} />
+              </Form.Item>
+            ))}
         </Form>
       </Modal>
     </div>
