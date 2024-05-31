@@ -4,6 +4,8 @@ import { Card, Image } from 'antd'
 const { Meta } = Card
 import React from 'react'
 
+const env = import.meta.env
+
 const CardAction = (props: { cardItem: CardActionProps }) => {
   const { cardItem } = props
 
@@ -27,7 +29,9 @@ const CardAction = (props: { cardItem: CardActionProps }) => {
     <Card
       // title={'abc'}
       // style={{ width: 200, height: 230 }}
-      cover={<img height={150} style={{ objectFit: 'cover' }} src={cardItem.imageUrl} />}
+      cover={
+        <img style={{ height: 200, objectFit: 'contain' }} src={env.VITE_BACKEND_BASE_API + cardItem.imageUrl} />
+      }
       actions={[
         <PictureOutlined alt='设为封面' onClick={setFacePicture} />,
         <CopyOutlined onClick={copy} />,

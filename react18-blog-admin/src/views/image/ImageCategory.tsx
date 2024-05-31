@@ -11,6 +11,8 @@ import { BaseModal } from '@/components/modal'
 // api
 import imageCategoryApi from '@/apis/image'
 
+const env = import.meta.env
+
 const ImageCategory = () => {
   const columns: ColumnsType<any> = [
     {
@@ -209,14 +211,14 @@ const ImageCategory = () => {
     }
 
     const datas = data.list.map(({ surrogateId, number, name, imageUrl, status, createTime, updateTime, remark }) => ({
-      key: surrogateId,
-      number,
-      name,
-      imageUrl,
-      status,
-      createTime,
-      updateTime,
-      remark
+      key: surrogateId ? surrogateId : '',
+      number: number ? number : '',
+      name: name ? name : '',
+      imageUrl: env.VITE_BACKEND_BASE_API + imageUrl,
+      status: status ? status : 0,
+      createTime: createTime ? createTime : '',
+      updateTime: updateTime ? updateTime : '',
+      remark: remark ? remark : ''
     }))
     setDataSource(datas)
     setPageInfo({ totalSize: data.total, pageSize: params.pageSize })

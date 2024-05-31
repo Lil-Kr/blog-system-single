@@ -1,6 +1,5 @@
 package com.cy.single.blog.pojo.vo.image;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
@@ -10,7 +9,6 @@ import lombok.ToString;
  * @Description:
  */
 @ToString
-@Builder
 @Data
 public class ImageUploadVO {
 
@@ -18,4 +16,5 @@ public class ImageUploadVO {
   private String name;
   private String status;
   private String url;
+  private String message;
 }

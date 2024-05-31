@@ -12,18 +12,18 @@ const axiosInstance: AxiosInstance = axios.create({
   },
   timeoutErrorMessage: '请求超时',
   // 设置超时时间(10s)
-  timeout: 10000,
+  timeout: 30000,
   // 跨域时候允许携带凭证
   withCredentials: true
 })
 
 axiosInstance.interceptors.request.use(
   (config: any) => {
-    console.log('--> request intercept:', config)
+    // console.log('--> request intercept:', config)
     return config
   },
   (error: AxiosError) => {
-    console.log('--> request intercept error:', error)
+    // console.log('--> request intercept error:', error)
     message.error(error.message)
     return Promise.reject(error)
   }
@@ -31,7 +31,7 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
-    console.log('--> response interceptors response:', response)
+    // console.log('--> response interceptors response:', response)
 
     const { data, config, headers, request, status, statusText } = response
     if (status === 200) {
@@ -52,8 +52,8 @@ axiosInstance.interceptors.response.use(
   // 请求 -> 响应失败
   (error: AxiosError) => {
     const { response } = error
-    console.log('--> error:', error)
-    console.log('--> error.response:', response)
+    // console.log('--> error:', error)
+    // console.log('--> error.response:', response)
     if (response) {
       // 请求已发出, 但是不在2xx的范围
       // console.log('--> 请求已发出, 但是不在2xx的范围 -> response.code:', response.data.status)
@@ -76,8 +76,8 @@ const baseAxiosRequest = {
   post<T>(url: string, body?: object): Promise<T> {
     return axiosInstance.post(url, body)
   },
-  postUpload<T>(url: string, body?: object, header?: object): Promise<T> {
-    return axiosInstance.post(url, body, header)
+  postUpload<T>(url: string, body?: object, config?: object | {}): Promise<T> {
+    return axiosInstance.post(url, body, config)
   },
   put<T>(url: string, body?: object): Promise<T> {
     return axiosInstance.put(url, body)

@@ -4,17 +4,22 @@ import { TabType } from '@/types/common'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Divider, Flex, Tabs } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
-import React, { useEffect, useRef, useState } from 'react'
-import type { Tab, TabPosition } from 'node_modules/rc-tabs/lib/interface'
-import { ImageCategoryReqParams, ImageCategoryVO, ImageInfoVO } from '@/types/apis/image/image'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
+import type { Tab } from 'node_modules/rc-tabs/lib/interface'
+import { GetImageCategoryReq, ImageCategoryReqParams, ImageCategoryType, ImageCategoryVO } from '@/types/apis/image/image'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 
 // api
 import imageCategoryApi from '@/apis/image'
-import imageInfoApi, { ImageInfoPageReqParams, ImageInfoUploadParams } from '@/apis/image/imageInfo'
+import imageInfoApi, {
+  ImageInfoListReqParams,
+  ImageInfoPageListReqParams,
+  ImageInfoUploadParams,
+  ImageInfoVO
+} from '@/apis/image/imageInfo'
 import { CardActionProps } from '@/types/component/card'
-import { PageData } from '@/types/base/response'
-import { ImageUploadModal } from '@/components/modal'
+import { PageData, ResultPage } from '@/types/base/response'
+import ImageUploadModal from './ImageUploadModal'
 
 const ImageManage = () => {
   const [btnSize] = useState<SizeType>('middle')
@@ -44,6 +49,28 @@ const ImageManage = () => {
   const deleteBatch = () => {}
 
   /**
+   *
+   */
+  const fetchData = useCallback(async (key: string) => {
+    const imageCategory = await imageCategoryDetial({ surrogateId: key })
+    const cardActionList: CardActionProps[] = (imageCategory.imageInfo?.list ?? []).map(
+      ({ surrogateId, imageCategoryId, imageCategoryName, number, name, imageOriginalName, imageType, imageUrl }) => ({
+        id: surrogateId,
+        imageName: name,
+        imageUrl
+      })
+    )
+    const ListCardPageItem: PageData<CardActionProps> = {
+      list: cardActionList,
+      total: imageCategory.imageInfo?.total ?? 0
+    }
+
+    setTabsItem(pre =>
+      pre.map(item => (item.key === key ? { ...item, children: <ListCardPage data={ListCardPageItem} /> } : item))
+    )
+  }, [])
+
+  /**
    * click tabs change
    * @param activeKey
    * @param e
@@ -51,71 +78,21 @@ const ImageManage = () => {
   const tabClick = (activeKey: string, e: React.KeyboardEvent<Element> | React.MouseEvent<Element, MouseEvent>) => {
     // 处理 tab 点击事件, 这里可以根据 activeKey 和事件类型 e 进行相应逻辑处理
     setActiveKey(activeKey)
-    const fetchData = async () => {
-      const imageInfo = await getImageInfo({ imageCategoryId: activeKey, currentPageNum: 1, pageSize: 10 })
-      const cardActionList: CardActionProps[] = imageInfo.list.map(
-        ({
-          surrogateId,
-          imageCategoryId,
-          imageCategoryName,
-          number,
-          name,
-          imageOriginalName,
-          imageType,
-          imageUrl
-        }) => ({
-          imageName: name,
-          imageUrl
-        })
-      )
-
-      const updatedTabsItem = tabsItem?.map((item, index) => {
-        if (item.key === activeKey) {
-          return { ...item, children: <ListCardPage data={cardActionList} /> }
-        } else {
-          return item
-        }
-      })
-      setTabsItem(updatedTabsItem)
-    }
-
-    fetchData()
+    fetchData(activeKey)
   }
 
   useEffect(() => {
-    const fetchData = async () => {
-      const tabs = await imageCategoryList({})
-      setActiveKey(tabs[0].key)
-      const imageInfo = await getImageInfo({ imageCategoryId: tabs[0].key, currentPageNum: 1, pageSize: 10 })
-
-      const cardActionList: CardActionProps[] = imageInfo.list.map(
-        ({
-          surrogateId,
-          imageCategoryId,
-          imageCategoryName,
-          number,
-          name,
-          imageOriginalName,
-          imageType,
-          imageUrl
-        }) => ({
-          imageName: name,
-          imageUrl
-        })
-      )
-
-      const updatedTabsItem = await tabs.map((item, index) => {
-        if (item.key === tabs[0].key) {
-          return { ...item, children: <ListCardPage data={cardActionList} /> }
-        } else {
-          return item
-        }
-      })
-      setTabsItem(updatedTabsItem)
+    if (activeKey) {
+      fetchData(activeKey)
+    } else {
+      const fristFetch = async () => {
+        const tabs = await imageCategoryList({})
+        setTabsItem(tabs)
+        setActiveKey(tabs[0].key)
+      }
+      fristFetch()
     }
-
-    fetchData()
-  }, [])
+  }, [activeKey, fetchData])
 
   const imageCategoryList = async (params: ImageCategoryReqParams): Promise<Tab[]> => {
     const imageCategoryList = await imageCategoryApi.imageCategoryList({ ...params })
@@ -126,7 +103,7 @@ const ImageManage = () => {
 
     const tabsData: Tab[] = data.list.map(
       ({ surrogateId, number, name, imageUrl, status, createTime, updateTime, remark }) => ({
-        key: surrogateId,
+        key: surrogateId ? surrogateId : '',
         label: name
         // number,
         // name,
@@ -140,12 +117,12 @@ const ImageManage = () => {
     return tabsData
   }
 
-  const getImageInfo = async (params: ImageInfoPageReqParams): Promise<PageData<ImageInfoVO>> => {
-    const imageInfo = await imageInfoApi.imageInfoPageList({ ...params })
-    const { code, data, msg } = imageInfo
+  const imageCategoryDetial = async (params: GetImageCategoryReq): Promise<ImageCategoryVO> => {
+    const imageCategoryDetial = await imageCategoryApi.get({ ...params })
+    const { code, data, msg } = imageCategoryDetial
 
     if (code !== 200) {
-      return { list: [], total: 0 }
+      return { } as ImageCategoryType
     } else {
       return data
     }
@@ -164,7 +141,12 @@ const ImageManage = () => {
         </Flex>
         <Tabs activeKey={activeKey} type='card' tabPosition={'left'} onTabClick={tabClick} items={tabsItem} />
       </Flex>
-      <ImageUploadModal mRef={uploadImageRef} update={() => {}} />
+      <ImageUploadModal
+        mRef={uploadImageRef}
+        update={() => {
+          fetchData(activeKey)
+        }}
+      />
     </>
   )
 }

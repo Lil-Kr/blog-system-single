@@ -10,7 +10,9 @@ import com.cy.single.blog.pojo.dto.image.ImageDTO;
 import com.cy.single.blog.pojo.entity.image.ImageCategory;
 import com.cy.single.blog.pojo.req.image.ImageCategoryPageReq;
 import com.cy.single.blog.pojo.req.image.ImageCategoryReq;
+import com.cy.single.blog.pojo.req.image.ImageInfoPageReq;
 import com.cy.single.blog.pojo.vo.image.ImageCategoryVO;
+import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
 import com.cy.single.blog.service.ImageCategoryService;
 import com.cy.single.blog.service.ImageInfoService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
@@ -18,13 +20,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -64,11 +64,18 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
 
   @Override
   public ApiResp<ImageCategoryVO> get(Long surrogateId) {
-    ImageCategoryVO imageCategoryVO1 = imageCategoryMapper.get(surrogateId);
-    if (Objects.isNull(imageCategoryVO1)) {
+    ImageCategoryVO imageCategoryVO = imageCategoryMapper.get(surrogateId);
+    if (Objects.isNull(imageCategoryVO)) {
       return ApiResp.failure();
     }
-    return ApiResp.success(imageCategoryVO1);
+
+    ImageInfoPageReq req = new ImageInfoPageReq();
+    req.setImageCategoryId(imageCategoryVO.getSurrogateId());
+    PageResult<ImageInfoVO> imageInfoVOPageResult = imageInfoService.imageInfoList(req);
+
+    imageCategoryVO.setImageInfo(imageInfoVOPageResult);
+
+    return ApiResp.success(imageCategoryVO);
   }
 
   @Override

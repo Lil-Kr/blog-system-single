@@ -1,26 +1,30 @@
 import { baseAxiosRequest } from '@/utils/http/request'
-import { Result, ResultList, ResultPage } from '@/types/base/response'
+import { Result, ResultPage } from '@/types/base/response'
 import { PREFIX_URL_IMAGE_CATEGORY, PREFIX_URL_IMAGE_INFO } from '@/config'
-import { ImageCategoryVO, ImageInfoVO } from '@/types/apis/image/image'
 import { BaseApi } from '@/types/apis'
-import { BaseEntityPageType } from '@/types/base'
+import { BaseEntityPageType, BaseEntityRequiredType } from '@/types/base'
+import { AxiosRequestConfig } from 'axios'
 
 export interface ImageInfoApi extends BaseApi {
-  imageInfoPageList(params: ImageInfoPageReqParams): Promise<ResultPage<ImageInfoVO>>
+  imageInfoPageList(params: ImageInfoPageListReqParams): Promise<ResultPage<ImageInfoVO>>
+  imageInfoList(params?: ImageInfoListReqParams): Promise<ResultPage<ImageInfoVO>>
   get(params: ImageInfoReqParams): Promise<Result<ImageInfoVO>>
   // iamgeUpload(params: ImageUploadReqParams): Promise<Result<ImageInfoVO>>
-  imageUpload(params: ImageUploadReqParams): Promise<any>
+  imageUpload(params: ImageUploadReqParams): Promise<Result<ImageUploadResp>>
 }
 
 const imageInfoApi: ImageInfoApi = {
-  imageInfoPageList(params: ImageInfoPageReqParams) {
+  imageInfoPageList(params: ImageInfoPageListReqParams) {
     return baseAxiosRequest.post<ResultPage<ImageInfoVO>>(PREFIX_URL_IMAGE_INFO + '/pageList', params)
+  },
+  imageInfoList(params: ImageInfoListReqParams) {
+    return baseAxiosRequest.post<ResultPage<ImageInfoVO>>(PREFIX_URL_IMAGE_INFO + '/list', params)
   },
   get(params: ImageInfoReqParams) {
     return baseAxiosRequest.get<Result<ImageInfoVO>>(PREFIX_URL_IMAGE_INFO + '/get', params)
   },
   imageUpload(params: ImageUploadReqParams) {
-    return baseAxiosRequest.postUpload<any>(
+    return baseAxiosRequest.postUpload<Result<ImageUploadResp>>(
       PREFIX_URL_IMAGE_INFO + '/upload',
       params.formData,
       params.config
@@ -31,9 +35,15 @@ const imageInfoApi: ImageInfoApi = {
 export default imageInfoApi
 
 /** ============== ImageInfo req params ===============  **/
-export interface ImageInfoPageReqParams extends BaseEntityPageType {
+export interface ImageInfoPageListReqParams extends BaseEntityPageType {
   imageCategoryId?: string
 }
+
+export interface ImageInfoListReqParams {
+  imageCategoryId?: string
+  keyWords?: string
+}
+
 export interface ImageInfoReqParams {
   surrogateId: string
 }
@@ -44,5 +54,29 @@ export interface ImageInfoUploadParams {
 
 export interface ImageUploadReqParams {
   formData: FormData
-  config: object
+  config?: AxiosRequestConfig
+}
+
+/** ==================== image info ====================  */
+export interface ImageInfoType extends BaseEntityRequiredType {
+  id: string
+  surrogateId: string
+  imageCategoryId: string
+  number: string
+  name: string
+  imageOriginalName: string
+  imageType: string
+  imageUrl: string
+  imageBase64: string
+}
+
+export interface ImageInfoVO extends ImageInfoType {
+  imageCategoryName?: string
+}
+
+export interface ImageUploadResp {
+  uid: string
+  name: string
+  status: string
+  url: string
 }

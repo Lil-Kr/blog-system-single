@@ -1,9 +1,9 @@
 spring:
   servlet:
     multipart:
-      max-file-size: 50MB
-      max-request-size: 50MB
       enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource      # 当前数据源操作类型  useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     driver-class-name: com.mysql.cj.jdbc.Driver # mysql驱动包

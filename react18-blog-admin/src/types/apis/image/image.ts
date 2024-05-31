@@ -1,12 +1,13 @@
-import { Result, ResultList, ResultPage } from '@/types/base/response'
+import { PageData, Result, ResultPage } from '@/types/base/response'
 import { BaseApi } from '..'
 import { BaseDelReq, BaseEntityPageType, BaseEntityRequiredType, BaseEntityType } from '@/types/base'
+import { ImageInfoVO } from '@/apis/image/imageInfo'
 
 export interface ImageCategoryApi extends BaseApi {
   imageCategoryPageList(params: ImageCategoryPageReqParams): Promise<ResultPage<ImageCategoryVO>>
-  imageCategoryList(params: ImageCategoryReqParams): Promise<ResultList<ImageCategoryVO>>
+  imageCategoryList(params: ImageCategoryReqParams): Promise<ResultPage<ImageCategoryVO>>
   save(params: CreactImageCategoryReq): Promise<Result<string>>
-  // get(params: ImageInfoReqParams): Promise<Result<ImageInfoVO>>
+  get(params: GetImageCategoryReq): Promise<Result<ImageCategoryVO>>
   // edit(params: EditLabelReq): Promise<Result<string>>
   delete(params: BaseDelReq): Promise<Result<string>>
   // deleteBatch(params: DelLabelReq): Promise<Result<string>>
@@ -15,7 +16,7 @@ export interface ImageCategoryApi extends BaseApi {
 /**
  * image category entity
  */
-export interface ImageCategoryType extends BaseEntityRequiredType {
+export interface ImageCategoryType extends BaseEntityType {
   id: string
   surrogateId: string
   number: string
@@ -50,6 +51,10 @@ export interface CreactImageCategoryReq {
   remark: string
 }
 
+export interface GetImageCategoryReq {
+  surrogateId: string
+}
+
 export interface DelImageCategoryReq {
   surrogateId: string
 }
@@ -69,21 +74,6 @@ export interface ImageCategoryDTO {
 }
 
 /** ==================== mapping back-end data ====================  */
-export interface ImageCategoryVO extends ImageCategoryType {}
-
-/** ==================== image info  ====================  */
-export interface ImageInfoType extends BaseEntityRequiredType {
-  id: string
-  surrogateId: string
-  imageCategoryId: string
-  number: string
-  name: string
-  imageOriginalName: string
-  imageType: string
-  imageUrl: string
-  imageBase64: string
-}
-
-export interface ImageInfoVO extends ImageInfoType {
-  imageCategoryName: string
+export interface ImageCategoryVO extends ImageCategoryType {
+  imageInfo?: PageData<ImageInfoVO>
 }

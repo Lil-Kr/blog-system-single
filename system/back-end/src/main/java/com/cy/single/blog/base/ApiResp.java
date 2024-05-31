@@ -136,6 +136,15 @@ public final class ApiResp<T> {
     }
 
     /**
+     *
+     * @return
+     * @param <T>
+     */
+    public static <T> ApiResp<T> failure(T data) {
+        return create(SYSTEM_ERROR.getCode(), SYSTEM_ERROR.getMessage(),data);
+    }
+
+    /**
      * 错误响应体
      * @param msg
      * @param data

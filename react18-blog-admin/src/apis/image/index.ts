@@ -1,13 +1,13 @@
 import { baseAxiosRequest } from '@/utils/http/request'
-import { Result, ResultList, ResultPage } from '@/types/base/response'
+import { Result, ResultPage } from '@/types/base/response'
 import { PREFIX_URL_IMAGE_CATEGORY } from '@/config'
 import {
   CreactImageCategoryReq,
+  GetImageCategoryReq,
   ImageCategoryApi,
   ImageCategoryPageReqParams,
   ImageCategoryReqParams,
-  ImageCategoryVO,
-  ImageInfoVO
+  ImageCategoryVO
 } from '@/types/apis/image/image'
 import { BaseDelReq } from '@/types/base'
 
@@ -17,6 +17,9 @@ const imageCategoryApi: ImageCategoryApi = {
   },
   imageCategoryList(params: ImageCategoryReqParams) {
     return baseAxiosRequest.post<ResultPage<ImageCategoryVO>>(PREFIX_URL_IMAGE_CATEGORY + '/list', params)
+  },
+  get(params: GetImageCategoryReq) {
+    return baseAxiosRequest.get<Result<ImageCategoryVO>>(PREFIX_URL_IMAGE_CATEGORY + '/get', params)
   },
   save(params: CreactImageCategoryReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_IMAGE_CATEGORY + '/save', params)

@@ -7,13 +7,14 @@ import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.image.ImageInfoPageReq;
 import com.cy.single.blog.pojo.req.image.ImageInfoReq;
+import com.cy.single.blog.pojo.req.image.ImageUploadReq;
 import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
+import com.cy.single.blog.pojo.vo.image.ImageUploadVO;
 import com.cy.single.blog.service.ImageInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -44,7 +45,7 @@ public class ImageInfoApi {
   @RecordLogger
   @CheckAuth
   @PostMapping("/list")
-  public ApiResp<PageResult<ImageInfoVO>> list(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) ImageInfoPageReq req) {
+  public ApiResp<PageResult<ImageInfoVO>> list(@RequestBody @Validated ImageInfoPageReq req) {
     PageResult<ImageInfoVO> imageInfoVOPageResult = imageInfoService.imageInfoList(req);
     return ApiResp.success(imageInfoVOPageResult);
   }
@@ -79,16 +80,15 @@ public class ImageInfoApi {
 
   /**
    * TODO: check image size(2M)
-   * @param imageFile
+   * @param
    * @return
    * @throws IOException
    */
   @RecordLogger
   @CheckAuth
   @PostMapping("/upload")
-  public ApiResp<String> upload(@RequestParam("image") MultipartFile imageFile, @RequestParam("imageCategoryId") Long imageCategoryId) throws IOException {
-
-    return imageInfoService.imageUpload(imageFile);
+  public ApiResp<ImageUploadVO> upload(@ModelAttribute ImageUploadReq req) throws IOException {
+    return imageInfoService.imageUpload(req);
   }
 
 }

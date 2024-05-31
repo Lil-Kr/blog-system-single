@@ -114,6 +114,9 @@
       <if test="param.surrogateId != null and param.surrogateId != ''">
         and surrogate_id = #{param.surrogateId}
       </if>
+      <if test="param.imageCategoryId != null and param.imageCategoryId != ''">
+        and image_category_id = #{param.imageCategoryId}
+      </if>
       <if test="param.keyWords != null and param.keyWords != ''">
         and (
         `number` like concat('%',#{param.keyWords},'%')

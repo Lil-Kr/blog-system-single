@@ -58,4 +58,22 @@ public class ImageDTO {
     imageInfoVO.setImageCategoryName(imageCategoryName);
     return imageInfoVO;
   }
+
+  public static ImageInfo buildImageInfo(Long imageCategoryId, String imageReName, String imageTypeSuffix, String imageOriginalFullName,
+                                       String imageUrl) {
+    ImageInfo imageInfo = new ImageInfo();
+    imageInfo.setSurrogateId(IdWorker.getSnowFlakeId());
+    imageInfo.setImageCategoryId(imageCategoryId);
+    imageInfo.setName(imageReName);
+    imageInfo.setImageType(imageTypeSuffix);
+    imageInfo.setImageOriginalName(imageOriginalFullName);
+    imageInfo.setImageUrl(imageUrl);
+    imageInfo.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
+    imageInfo.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+    Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
+    imageInfo.setCreateTime(nowDateTime);
+    imageInfo.setUpdateTime(nowDateTime);
+
+    return imageInfo;
+  }
 }

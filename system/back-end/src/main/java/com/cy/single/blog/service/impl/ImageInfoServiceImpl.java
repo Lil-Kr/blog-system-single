@@ -9,7 +9,9 @@ import com.cy.single.blog.pojo.dto.image.ImageDTO;
 import com.cy.single.blog.pojo.entity.image.ImageInfo;
 import com.cy.single.blog.pojo.req.image.ImageInfoPageReq;
 import com.cy.single.blog.pojo.req.image.ImageInfoReq;
+import com.cy.single.blog.pojo.req.image.ImageUploadReq;
 import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
+import com.cy.single.blog.pojo.vo.image.ImageUploadVO;
 import com.cy.single.blog.service.ImageInfoService;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import lombok.extern.slf4j.Slf4j;
@@ -121,9 +123,10 @@ public class ImageInfoServiceImpl implements ImageInfoService {
   }
 
   @Override
-  public ApiResp<String> imageUpload(MultipartFile imageFile) throws IOException {
-    String imageFullName = imageFile.getOriginalFilename();
-    String[] imageFileNames = imageFullName.split("\\.");
+  public ApiResp<ImageUploadVO> imageUpload(ImageUploadReq req) throws IOException {
+    MultipartFile imageFile = req.getImage();
+    String imageOriginalFullName = imageFile.getOriginalFilename();
+    String[] imageFileNames = imageOriginalFullName.split("\\.");
     String imageName = imageFileNames[0];
     String imageTypeSuffix = imageFileNames[1];
 
@@ -139,6 +142,8 @@ public class ImageInfoServiceImpl implements ImageInfoService {
     String imageReName = imageName + "_" + IdWorker.getSnowFlakeId() + "." + imageTypeSuffix;
     resourcePath.append(moduleImagePath + "/" + imageReName);
 
+    ImageUploadVO imageUploadVO = new ImageUploadVO();
+
     try(InputStream inputStream = imageFile.getInputStream()) {
       Files.copy(inputStream, Paths.get(resourcePath.toString()), StandardCopyOption.REPLACE_EXISTING);
       String imageUrl = uploadDir + moduleImagePath + "/" + imageReName;
@@ -146,19 +151,28 @@ public class ImageInfoServiceImpl implements ImageInfoService {
 //      System.out.println(imageUrl);
 
       /**
-       * TODO: insert DB
+       * insert into DB
        * splice name, image_url, type ...
        */
-      ImageInfo imageInfo = new ImageInfo();
-      imageInfo.setSurrogateId(IdWorker.getSnowFlakeId());
-//      imageInfo.setImageCategoryId();
+      ImageInfo imageInfo = ImageDTO.buildImageInfo(req.getImageCategoryId(), imageReName, imageTypeSuffix, imageOriginalFullName, imageUrl);
+      int insert = imageInfoMapper.insert(imageInfo);
 
-
+      imageUploadVO.setName(imageInfo.getName());
+      imageUploadVO.setUid(String.valueOf(imageInfo.getSurrogateId()));
+      imageUploadVO.setUrl(imageUrl);
+      if (insert > 0) {
+        imageUploadVO.setStatus("done");
+        return ApiResp.success(imageUploadVO);
+      }else {
+        imageUploadVO.setStatus("error");
+        return ApiResp.failure(imageUploadVO);
+      }
     } catch (Exception e) {
       log.info("upload image error: {}", e.getMessage());
-      return ApiResp.failure(e.getMessage());
+      imageUploadVO.setMessage(e.getMessage());
+      imageUploadVO.setStatus("error");
+      return ApiResp.failure(imageUploadVO);
     }
-    return ApiResp.success("upload " + imageFullName + " success");
   }
 
 }

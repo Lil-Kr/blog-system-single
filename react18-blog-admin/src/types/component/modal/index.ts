@@ -107,6 +107,6 @@ export namespace ModalType {
       | undefined
     >
 
-    update?: () => void
+    update: () => void
   }
 }
