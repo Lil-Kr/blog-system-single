@@ -54,7 +54,15 @@ export interface LabelDTO {
   remark: string
 }
 
+export interface LabelMapped {
+  key: string
+  label: string
+  value: string
+}
+
 /**
  * mapping back-end data
  */
-export interface LabelVO extends LabelType {}
+export interface LabelVO extends LabelType {
+  key?: string
+}

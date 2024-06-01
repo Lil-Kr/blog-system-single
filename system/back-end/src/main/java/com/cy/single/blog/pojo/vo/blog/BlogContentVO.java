@@ -19,12 +19,15 @@ public class BlogContentVO extends BlogContent implements Serializable {
   /**
    * label names, ","号分隔
    */
-  private List<String> labelNames;
+  private List<BlogLabelVO> blogLabelList;
+
+  private BlogCategoryVO blogCategoryVO;
+
+  private BlogTopicVO blogTopicVO;
 
   /**
    * content text
    */
   private String contentText;
 
-  private Integer count;
 }

@@ -8,8 +8,9 @@ export interface BlogContentType extends BaseEntityRequiredType {
   surrogateId: string
   number: number | string
   recommend: number
-  original: string
+  original: number
   title: string
+  introduction: string
   imgUrl: string
   paragraph: string
   publishTime: string

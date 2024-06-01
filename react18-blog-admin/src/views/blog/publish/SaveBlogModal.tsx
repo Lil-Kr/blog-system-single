@@ -4,21 +4,30 @@ import { BaseApi } from '@/types/apis'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { Col, ConfigProvider, Form, Input, Modal, Radio, Row, Select, SelectProps, Tag, Upload, message } from 'antd'
-import blogContentApi from '@/apis/blog/content'
+import blogContentApi, { BlogContentVO, MappedBlogContentDTO } from '@/apis/blog/content'
 import { createStyles, useTheme } from 'antd-style'
-import { useImperativeHandle, useState } from 'react'
+import { useEffect, useImperativeHandle, useState } from 'react'
+import { LabelVO } from '@/types/apis/blog/label'
+import { BlogCategoryVO } from '@/types/apis/blog/category'
+import { BlogTopicVO } from '@/types/apis/blog/topic'
+
+import labelApi from '@/apis/blog/label'
+import blogTopicApi from '@/apis/blog/topic'
+import blogCategoryApi from '@/apis/blog/category'
+import BlogTinymce from '../tinymce/BlogTinymce'
 
 const useStyle = createStyles(({ token }) => ({
   'blog-modal-body': {}
 }))
 
-const options: SelectProps['options'] = [
+const optionsCategory: SelectProps['options'] = [
   { value: '100', label: '随笔' },
   { value: '200', label: 'Java后端' },
   { value: '300', label: 'ReactJS' }
 ]
 
 type TagRender = SelectProps['tagRender']
+
 const tagRender: TagRender = props => {
   const { label, value, closable, onClose } = props
   const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
@@ -53,31 +62,25 @@ const optionsTopic: SelectProps['options'] = [
 
 const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
   const { styles } = useStyle()
-  const { contents, setContents } = useTinymceStore()
-  const [saveBlogForm] = Form.useForm()
-  const [modal, contextHolder] = Modal.useModal()
   const modalStyles = {
     body: {
       height: 'calc(100vh - 120px)',
       overflowy: 'auto'
     }
   }
-
   const classNames = {
     body: styles['blog-modal-body']
   }
 
+  const { contents, setContents } = useTinymceStore()
+  const [saveBlogForm] = Form.useForm()
   const { mRef } = props
-  // const [action, setAction] = useState('create')
-  const [title, setTitle] = useState('')
+  const [title, setTitle] = useState<string>('')
   const [openModal, setOpenModal] = useState(false)
-  // const [modalStyle, setModalStyle] = useState<IModalStyle>()
-  // const [items, setItems] = useState<ModalType.InputType[]>([])
   const [inputDisabled, setInputDisabled] = useState<boolean>(false)
-
-  const [requestParams, setRequestParams] = useState<IModalRequestAction>({
-    api: {}
-  })
+  const [selectedLabelValues, setSelectedLabelValues] = useState<SelectProps['options']>([])
+  const [selectCategory, setSelectCategory] = useState<SelectProps['options']>([])
+  const [selectTopic, setSelectTopic] = useState<SelectProps['options']>([])
 
   useImperativeHandle(mRef, () => ({
     form: saveBlogForm,
@@ -87,53 +90,98 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
   const open = (
     requestParams: IModalRequestAction,
     params: IModalParams,
-    type: IAction
+    type: IAction,
     // items?: ModalType.InputType[],
-    // data?: any
+    data?: { blog: MappedBlogContentDTO }
   ) => {
     const { action, open } = type
     const { title } = params
 
     if (action === 'create') {
     } else if (action === 'edit') {
-      // saveBlogForm.setFieldsValue(data)
+      const { blog } = data as { blog: MappedBlogContentDTO }
+      // setBlogContent(blog.contentText ?? '')
+      // console.log('--> useTinymceStore: ', blog.contentText ?? '')
+      setContents(blog.contentText ?? '')
+      saveBlogForm.setFieldsValue(blog)
     } else {
       // saveBlogForm.setFieldsValue(data)
       setInputDisabled(true)
     }
 
     setOpenModal(open)
-    // setAction(action)
     setTitle(title)
-    setRequestParams(requestParams)
-    // setModalStyle(modalStyle)
-    // setItems(items)
   }
 
-  const confirm = () => {
-    modal.confirm({
-      title: 'Confirm',
-      icon: <ExclamationCircleOutlined />,
-      content: 'Bla bla ...',
-      okText: '确认',
-      cancelText: '取消'
-    })
+  useEffect(() => {
+    const fetchLabels = async () => {
+      const labels = await getLabels()
+      const selectLabels = labels.map(({ surrogateId, name, color }, index) => ({
+        key: surrogateId,
+        value: color,
+        label: name
+      }))
+      setSelectedLabelValues(selectLabels)
+
+      const selectBlogCategory = await getCategorys()
+      const categorys = selectBlogCategory.map(({ surrogateId, name }, index) => ({
+        key: surrogateId,
+        value: name,
+        label: name
+      }))
+      setSelectCategory(categorys)
+
+      const selectBlogTopic = await getTopics()
+      const blogTopics = selectBlogTopic.map(({ surrogateId, name }, index) => ({
+        key: surrogateId,
+        value: name,
+        label: name
+      }))
+      setSelectTopic(blogTopics)
+    }
+
+    fetchLabels()
+  }, [])
+
+  const getLabels = async (): Promise<LabelVO[]> => {
+    const labels = await labelApi.getLabelList({})
+    if (labels.code !== 200) {
+      return []
+    }
+    return labels.data.list
+  }
+
+  const getCategorys = async (): Promise<BlogCategoryVO[]> => {
+    const blogCategory = await blogCategoryApi.getCategoryList({})
+    if (blogCategory.code !== 200) {
+      return [] as BlogCategoryVO[]
+    }
+    return blogCategory.data.list
+  }
+
+  const getTopics = async (): Promise<BlogTopicVO[]> => {
+    const blogTopics = await blogTopicApi.getTopicList({})
+
+    if (blogTopics.code !== 200) {
+      return [] as BlogTopicVO[]
+    }
+    return blogTopics.data.list
   }
 
   const handleCancel = () => {
     setOpenModal(false)
-    if (contents !== '') {
-      // todo: 富文本编辑器中有内容时, 弹出提示是否关闭当前模态框
-      // console.log('contents 不为空')
-      // confirm()
-      // return
-    } else {
-      // console.log('content 为空')
-    }
+    // if (contents !== '') {
+    //   // todo: 富文本编辑器中有内容时, 弹出提示是否关闭当前模态框
+    //   console.log('contents 不为空')
+    //   confirm()
+    //   return
+    // } else {
+    //   console.log('content 为空')
+    // }
 
     // clear data
     saveBlogForm.resetFields()
-    setContents('')
+    // setContents('')
   }
 
   const handleOk = async () => {
@@ -189,60 +237,35 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
           <Form form={saveBlogForm} disabled={inputDisabled} labelCol={{ flex: '100px' }} preserve={false}>
             <Row gutter={16} justify={'start'}>
               <Col span={12}>
-                <Form.Item
-                  key={1}
-                  name={'title'}
-                  label={'标题'}
-                  rules={[{ required: true, message: '博客标题不能为空' }]}
-                >
+                <Form.Item name={'title'} label={'标题'} rules={[{ required: true, message: '博客标题不能为空' }]}>
                   <Input placeholder={'blog title...'} style={{ width: '100%' }} />
                 </Form.Item>
-                <Form.Item
-                  key={1}
-                  name={'introduction'}
-                  label={'简介'}
-                  rules={[{ required: true, message: '简介不能为空' }]}
-                >
+                <Form.Item name={'introduction'} label={'简介'} rules={[{ required: true, message: '简介不能为空' }]}>
                   <Input placeholder={'blog introduction...'} style={{ width: '100%' }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item key={1} name={'blogImage'} label={'博客封面'}>
-                  <Upload action='/upload.do' listType='picture-card'>
+                <Form.Item name={'blogImage'} label={'博客封面'}>
+                  {/* <Upload listType='picture-card'>
                     <button style={{ border: 0, background: 'none' }} type='button'>
                       <PlusOutlined />
-                      <div style={{ marginTop: 8 }}>Upload</div>
+                      <div style={{ marginTop: 8 }}>Choose</div>
                     </button>
-                  </Upload>
+                  </Upload> */}
                 </Form.Item>
               </Col>
             </Row>
 
             <Row gutter={16} justify={'start'}>
               <Col span={12}>
-                <Form.Item
-                  key={1}
-                  name={'labelIds'}
-                  label={'标签'}
-                  rules={[{ required: true, message: '标签不能为空' }]}
-                >
-                  <Select
-                    mode='multiple'
-                    tagRender={tagRender}
-                    // defaultValue={['gold', 'cyan']}
-                    style={{ width: '100%' }}
-                    options={optionsLabls}
-                  />
+                <Form.Item name={'blogLabelList'} label={'标签'} rules={[{ required: true, message: '标签不能为空' }]}>
+                  <Select mode='multiple' tagRender={tagRender} options={selectedLabelValues} maxCount={4} />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  key={1}
-                  name={'categoryId'}
-                  label={'分类'}
-                  rules={[{ required: true, message: '分类不能为空' }]}
-                >
+                <Form.Item name={'categoryName'} label={'分类'} rules={[{ required: true, message: '分类不能为空' }]}>
                   <Select
+                    key={1}
                     showSearch
                     placeholder='select category'
                     optionFilterProp='children'
@@ -250,13 +273,14 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
                     // onChange={onChange}
                     // onSearch={onSearch}
                     // filterOption={filterOption}
-                    options={options} // 请求后端接口获取数据
+                    options={selectCategory}
                   />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item key={1} name={'topicId'} label={'所属专题'}>
+                <Form.Item name={'topicName'} label={'所属专题'}>
                   <Select
+                    key={2}
                     showSearch
                     placeholder='select category'
                     optionFilterProp='children'
@@ -264,7 +288,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
                     // onChange={onChange}
                     // onSearch={onSearch}
                     // filterOption={filterOption}
-                    options={optionsTopic} // 请求后端接口获取数据
+                    options={selectTopic}
                   />
                 </Form.Item>
               </Col>
@@ -273,7 +297,6 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
             <Row gutter={16} justify={'start'}>
               <Col span={6}>
                 <Form.Item
-                  key={1}
                   name={'original'}
                   label={'是否原创'}
                   rules={[{ required: true, message: '原创类型不能为空' }]}
@@ -287,7 +310,6 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
               </Col>
               <Col span={6}>
                 <Form.Item
-                  key={1}
                   name={'recommend'}
                   label={'是否推荐'}
                   rules={[{ required: true, message: '是否推荐不能为空' }]}
@@ -300,12 +322,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  key={1}
-                  name={'status'}
-                  label={'发布状态'}
-                  rules={[{ required: true, message: '发布状态不能为空' }]}
-                >
+                <Form.Item name={'status'} label={'发布状态'} rules={[{ required: true, message: '发布状态不能为空' }]}>
                   <Radio.Group>
                     <Radio value={0}>草稿</Radio>
                     <Radio value={1}>发布</Radio>
@@ -319,12 +336,11 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
             <Row gutter={16} justify={'start'}>
               <Col span={24}>
                 <Form.Item
-                  key={1}
                   name={'contentText'}
                   label={'内容'}
                   // rules={[{ required: true, message: '博客内容不能为空' }]}
                 >
-                  <TinymceLocal />
+                  <BlogTinymce />
                 </Form.Item>
               </Col>
             </Row>

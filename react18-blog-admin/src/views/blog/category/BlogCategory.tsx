@@ -5,7 +5,7 @@ import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { BlogCategoryReqParams, CategoryDTO } from '@/types/apis/blog/category'
+import { BlogCategoryPageReqParams, BlogCategoryReqParams, CategoryDTO } from '@/types/apis/blog/category'
 import { BaseModal } from '@/components/modal'
 
 // api
@@ -266,7 +266,7 @@ const BlogCategory = () => {
   /**
    * 获取标签列表, 不分页
    */
-  const getCategoryPageList = async (params: BlogCategoryReqParams) => {
+  const getCategoryPageList = async (params: BlogCategoryPageReqParams) => {
     const values = form.getFieldsValue()
     const blogTypesRes = await blogCategoryApi.getCategoryPageList({ ...params, ...values })
     const { code, data, msg } = blogTypesRes

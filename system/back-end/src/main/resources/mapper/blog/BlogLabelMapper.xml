@@ -9,7 +9,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,surrogate_id, `number`, `name`, color, color_text, remark, deleted, creator_id,modifier_id,create_time,update_time
+        id,surrogate_id, `number`, `name`, color, color_text, `status`, remark, deleted, creator_id,modifier_id,create_time,update_time
     </sql>
 
 

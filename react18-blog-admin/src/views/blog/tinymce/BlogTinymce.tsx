@@ -9,14 +9,6 @@ const TinymceLocal = () => {
   const { contents, setContents } = useTinymceStore()
   const [isEditorReady, setIsEditorReady] = useState(false)
 
-  const getEditorContent = () => {}
-
-  const onSetContentHandler = () => {
-    if (editorRef.current !== null) {
-      editorRef.current?.setContent(contents)
-    }
-  }
-
   useEffect(() => {
     if (isEditorReady && editorRef.current !== null) {
       editorRef.current?.setContent(contents)
@@ -117,10 +109,6 @@ const TinymceLocal = () => {
           setContents(editor.getContent())
         }}
       />
-      <Button onClick={getEditorContent}>获取编辑器内容</Button>
-      <Button onClick={onSetContentHandler}>回显数据到编辑框</Button>
-
-      {/* <p dangerouslySetInnerHTML={{ __html: contents }} /> */}
     </div>
   )
 }

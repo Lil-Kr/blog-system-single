@@ -4,6 +4,7 @@ import com.cy.single.blog.pojo.entity.blog.BlogCategory;
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
 import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
+import com.cy.single.blog.pojo.vo.blog.BlogTopicVO;
 import com.cy.single.blog.pojo.vo.image.ImageCategoryVO;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -26,19 +27,28 @@ public class CacheManager {
   /**
    * ====================== blog label cache, long live catch ======================
    */
-  private static Cache<String, List<BlogLabelVO>> blogLabelCache = CacheBuilder.newBuilder().build();
+  private static Cache<String, List<BlogLabelVO>> blogLabelListCache = CacheBuilder.newBuilder().build();
+  private static Cache<String, Map<Long, BlogLabelVO>> blogLabelMapCache = CacheBuilder.newBuilder().build();
 
-  public static void setBlogLabelListCache(List<BlogLabelVO> blogLabels) {
-    blogLabelCache.put(CACHE_KEY_BLOG_LABEL_LIST, blogLabels);
+  public static void setBlogLabelInfoCache(List<BlogLabelVO> blogLabels) {
+    blogLabelListCache.put(CACHE_KEY_BLOG_LABEL_LIST, blogLabels);
+
+    Map<Long, BlogLabelVO> labelMap = blogLabels.stream()
+      .collect(Collectors.toMap(BlogLabelVO::getSurrogateId, blogLabelVO -> blogLabelVO));
+    blogLabelMapCache.put(CACHE_KEY_BLOG_LABEL_MAP, labelMap);
   }
 
   public static List<BlogLabelVO> getBlogLabelListCache() {
-    List<BlogLabelVO> list = blogLabelCache.getIfPresent(CACHE_KEY_BLOG_LABEL_LIST);
+    List<BlogLabelVO> list = blogLabelListCache.getIfPresent(CACHE_KEY_BLOG_LABEL_LIST);
     if (CollectionUtils.isEmpty(list)) {
       return new ArrayList<>();
     }else {
       return list;
     }
+  }
+
+  public static Map<Long, BlogLabelVO> getBlogLabelMapCache() {
+    return blogLabelMapCache.getIfPresent(CACHE_KEY_BLOG_LABEL_MAP);
   }
 
   public static List<String> getBlogLabelNameListCache(String labelIds) {
@@ -55,7 +65,20 @@ public class CacheManager {
     return res;
   }
 
-  public static void setBlogLabelCache(BlogLabel blogLabel) {
+  public static List<BlogLabelVO> getBlogLabelListCache(String labelIds) {
+    if (StringUtils.isBlank(labelIds)) {
+      return null;
+    }
+    List<String> labelIdList = Arrays.asList(labelIds.split(",")).stream()
+      .collect(Collectors.toList());
+
+    List<BlogLabelVO> labelVOList = getBlogLabelListCache().stream()
+      .filter(item -> labelIdList.contains(item.getSurrogateId().toString()))
+      .collect(Collectors.toList());
+    return labelVOList;
+  }
+
+  public static void setBlogLabelListCache(BlogLabel blogLabel) {
     List<BlogLabelVO> blogLabelListCache = getBlogLabelListCache();
     blogLabelListCache.stream()
       .filter(item -> blogLabel.getSurrogateId().equals(item.getSurrogateId()))
@@ -65,27 +88,16 @@ public class CacheManager {
       });
   }
 
-  public static Map<Long, String> getBlogLabelAllMapCache() {
-    return blogLabelCache.getIfPresent(CACHE_KEY_BLOG_LABEL_LIST)
-      .stream()
-      .collect(Collectors.toMap(BlogLabelVO::getSurrogateId, BlogLabelVO::getName));
-  }
-
-
   /**
    * ====================== blog category cache, long live catch ======================
    */
-
-  /**
-   * ====================== blog label cache, long live catch ======================
-   */
   private static Cache<String, List<BlogCategoryVO>> blogCategoryCache = CacheBuilder.newBuilder().build();
-  private static Cache<String, Map<Long, String>> blogCategoryCacheMap = CacheBuilder.newBuilder().build();
+  private static Cache<String, Map<Long, BlogCategoryVO>> blogCategoryCacheMap = CacheBuilder.newBuilder().build();
 
   public static void setBlogCategoryAllListCache(List<BlogCategoryVO> blogCategoryVOList) {
     blogCategoryCache.put(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryVOList);
-    Map<Long, String> map = blogCategoryVOList.stream()
-      .collect(Collectors.toMap(BlogCategoryVO::getSurrogateId, BlogCategoryVO::getName));
+    Map<Long, BlogCategoryVO> map = blogCategoryVOList.stream()
+      .collect(Collectors.toMap(BlogCategoryVO::getSurrogateId, blogCategoryVO -> blogCategoryVO));
     blogCategoryCacheMap.put(CACHE_KEY_BLOG_CATEGORY_MAP, map);
   }
 
@@ -98,7 +110,7 @@ public class CacheManager {
     }
   }
 
-  public static Map<Long, String> getBlogCategoryAllMapCache() {
+  public static Map<Long, BlogCategoryVO> getBlogCategoryAllMapCache() {
     return blogCategoryCacheMap.getIfPresent(CACHE_KEY_BLOG_CATEGORY_MAP);
   }
 
@@ -124,7 +136,29 @@ public class CacheManager {
 
 
   /**
-   * ========================= Image category
+   * ========================= Blog topic =========================
+   */
+  private static Cache<String, List<BlogTopicVO>> blogTopicCacheList = CacheBuilder.newBuilder().build();
+
+  private static Cache<String, Map<Long, BlogTopicVO>> blogTopicCacheMap = CacheBuilder.newBuilder().build();
+
+  public static void setBlogTopicInfoCacheList(List<BlogTopicVO> blogTopicVOS) {
+    blogTopicCacheList.put(CACHE_KEY_TOPIC_LIST, blogTopicVOS);
+
+    Map<Long, BlogTopicVO> map = blogTopicVOS.stream().collect(Collectors.toMap(BlogTopicVO::getSurrogateId, blogTopicVO -> blogTopicVO));
+    blogTopicCacheMap.put(CACHE_KEY_TOPIC_MAP, map);
+  }
+
+  public static List<BlogTopicVO> getBlogTopicInfoCacheList() {
+    return blogTopicCacheList.getIfPresent(CACHE_KEY_TOPIC_LIST);
+  }
+
+  public static Map<Long, BlogTopicVO> getBlogTopicInfoCacheMap() {
+    return blogTopicCacheMap.getIfPresent(CACHE_KEY_TOPIC_MAP);
+  }
+
+  /**
+   * ========================= Image category =========================
    */
   private static Cache<String, List<ImageCategoryVO>> imageCategoryCache = CacheBuilder.newBuilder().build();
 

@@ -7,12 +7,16 @@ import {
   BlogCategoryVO,
   CreateCategoryReq,
   EditCategoryReq,
-  DelCategoryReq
+  DelCategoryReq,
+  BlogCategoryPageReqParams
 } from '@/types/apis/blog/category'
 
 const blogCategoryApi: BlogCategoryApi = {
-  getCategoryPageList(params: BlogCategoryReqParams) {
+  getCategoryPageList(params: BlogCategoryPageReqParams) {
     return baseAxiosRequest.post<ResultPage<BlogCategoryVO>>(PREFIX_URL_BLOG_CATEGORY + '/pageCategoryList', params)
+  },
+  getCategoryList(params: BlogCategoryReqParams) {
+    return baseAxiosRequest.post<ResultPage<BlogCategoryVO>>(PREFIX_URL_BLOG_CATEGORY + '/list', params)
   },
   save(params: CreateCategoryReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CATEGORY + '/save', params)

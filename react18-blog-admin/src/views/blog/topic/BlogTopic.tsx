@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { BaseModal } from '@/components/modal'
-import { BlogTopicReqParams, TopicDTO } from '@/types/apis/blog/topic'
+import { BlogTopicPageReqParams, BlogTopicReqParams, TopicDTO } from '@/types/apis/blog/topic'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, message } from 'antd'
@@ -141,7 +141,7 @@ const BlogTopic = () => {
     getTopicPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
   }, [])
 
-  const getTopicPageList = async (params: BlogTopicReqParams) => {
+  const getTopicPageList = async (params: BlogTopicPageReqParams) => {
     const values = form.getFieldsValue()
     const blogTopicRes = await blogTopicApi.getTopicPageList({ ...params, ...values })
     const { code, data, msg } = blogTopicRes

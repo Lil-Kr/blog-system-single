@@ -2,13 +2,13 @@
  *
  */
 export interface BaseEntityType {
-  deleted?: number | 0
+  deleted?: number
   status?: number // 未使用
   remark?: string
-  creatorId?: string | ''
-  modifierId?: string | ''
-  createTime?: string | ''
-  updateTime?: string | ''
+  creatorId?: string
+  modifierId?: string
+  createTime?: string
+  updateTime?: string
   isOrder?: number
 }
 

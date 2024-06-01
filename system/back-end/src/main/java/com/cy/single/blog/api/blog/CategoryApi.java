@@ -17,12 +17,10 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
-
 import static com.cy.single.blog.utils.checkUtil.ParamValidator.checkSurrogateIds;
 
 /**
@@ -93,9 +91,10 @@ public class CategoryApi {
     public ApiResp<List<BlogContentGroupVO>> frontCategoryCountList() {
         List<BlogContentGroupVO> blogContentGroupList = blogContentService.frontContentByGroupCategory();
 
-        Map<Long, String> blogCategoryAllMapCache = CacheManager.getBlogCategoryAllMapCache();
-
-        blogContentGroupList.forEach(item -> item.setCategoryName(blogCategoryAllMapCache.getOrDefault(item.getCategoryId(), "")));
+        Map<Long, BlogCategoryVO> blogCategoryAllMapCache = CacheManager.getBlogCategoryAllMapCache();
+        blogContentGroupList.forEach(item -> {
+            item.setCategoryName(blogCategoryAllMapCache.getOrDefault(item.getCategoryId(), new BlogCategoryVO()).getName());
+        });
         return ApiResp.success(blogContentGroupList);
     }
 

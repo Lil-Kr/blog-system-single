@@ -1,19 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Flex, PaginationProps, Popconfirm, Space, Table, Tag } from 'antd'
+import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table, Tag } from 'antd'
 import { IAction, IModalParams, IModalRequestAction } from '@/types/component/modal'
 import SaveBlogModal from './SaveBlogModal'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
-import {
-  BlogContentDTO,
-  BlogContentReqParams,
-  BlogContentVO,
-  CreateBlogContentReq
-} from '@/types/apis/blog/blogContent'
 import { useForm } from 'antd/es/form/Form'
 
 // api
-import blogContentApi from '@/apis/blog/content'
+import blogContentApi, {
+  BlogContent,
+  BlogContentDTO,
+  BlogContentReqParams,
+  MappedBlogContentDTO
+} from '@/apis/blog/content'
 
 const Blogs = () => {
   const columns: ColumnsType<any> = [
@@ -24,10 +23,16 @@ const Blogs = () => {
       width: 100
     },
     {
-      key: 'labelNames',
-      dataIndex: 'labelNames',
+      key: 'blogLabelList',
+      dataIndex: 'blogLabelList',
       title: '博客标签',
-      width: 100
+      width: 100,
+      render: (_: object, record: BlogContentDTO) =>
+        record.blogLabelList.map((item, index) => (
+          <Tag key={item.surrogateId} color={item.color}>
+            {item.name}
+          </Tag>
+        ))
     },
     {
       key: 'categoryName',
@@ -39,19 +44,22 @@ const Blogs = () => {
       key: 'original',
       dataIndex: 'original',
       title: '是否原创',
-      width: 100
+      width: 50,
+      render: (_: object, record: BlogContentDTO) => (record.original === 1 ? '是' : '否')
     },
     {
       key: 'recommend',
       dataIndex: 'recommend',
       title: '是否推荐',
-      width: 100
+      width: 50,
+      render: (_: object, record: BlogContentDTO) => (record.recommend === 1 ? '是' : '否')
     },
     {
       key: 'status',
       dataIndex: 'status',
       title: '发布状态',
-      width: 100
+      width: 100,
+      render: (_: object, record: BlogContentDTO) => (record.status === 1 ? '已发布' : '未发布')
     },
     {
       key: 'publishTime',
@@ -69,44 +77,44 @@ const Blogs = () => {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
-      width: 150
-      // render: (_: object, record: BlogContentDTO) => (
-      //   <Space size='middle'>
-      //     <Button
-      //       name='look'
-      //       type='primary'
-      //       shape='circle'
-      //       icon={<SearchOutlined />}
-      //       // onClick={() => lookItem(record.key, record)}
-      //     />
-      //     <Button
-      //       name='edit'
-      //       type='primary'
-      //       shape='circle'
-      //       icon={<EditOutlined />}
-      //       // onClick={() => editItem(record.key, record)}
-      //     />
-      //     <Popconfirm
-      //       title='删除标签'
-      //       description={`确定要删除 [${record.name}] 这个标签吗?`}
-      //       // onConfirm={() => deleteItemConfirm(record)}
-      //       onCancel={() => {}}
-      //       okText='确定'
-      //       cancelText='取消'
-      //     >
-      //       <Button name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
-      //     </Popconfirm>
-      //   </Space>
-      // )
+      width: 150,
+      render: (_: object, record: BlogContentDTO) => (
+        <Space size='middle'>
+          {/* <Button
+            name='look'
+            type='primary'
+            shape='circle'
+            icon={<SearchOutlined />}
+            // onClick={() => lookItem(record.key, record)}
+          /> */}
+          <Button
+            name='edit'
+            type='primary'
+            shape='circle'
+            icon={<EditOutlined />}
+            onClick={() => editBlog(record.key as string, record)}
+          />
+          <Popconfirm
+            title='删除博客'
+            description={`确定要删除 [${record.title}] 这篇博客吗?`}
+            // onConfirm={() => deleteItemConfirm(record)}
+            onCancel={() => {}}
+            okText='确定'
+            cancelText='取消'
+          >
+            <Button name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
+          </Popconfirm>
+        </Space>
+      )
     }
   ]
   const blogsRef = useRef<{
     open: (
       requestParams: IModalRequestAction,
       params: IModalParams,
-      type: IAction
+      type: IAction,
       // items: ModalType.InputType[],
-      // data?: any
+      data?: { blog: MappedBlogContentDTO }
     ) => void
   }>()
 
@@ -125,10 +133,7 @@ const Blogs = () => {
       // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
       setRowKeys(selectedRowKeys)
     },
-    getCheckboxProps: (record: BlogContentDTO) => ({
-      // disabled: record.name === 'Disabled User', // Column configuration not to be checked
-      // name: record.name
-    })
+    getCheckboxProps: (record: BlogContentDTO) => ({})
   }
   /**
    * 页码或 pageSize 改变的回调，参数是改变后的页码及每页条数
@@ -154,6 +159,29 @@ const Blogs = () => {
     let param = blogsRef.current?.open({ api: blogContentApi }, { title: '创建博客' }, { action: 'create', open: true })
   }
 
+  /**
+   * 编辑博客
+   */
+  const editBlog = async (blogId: string, recode: BlogContentDTO) => {
+    const content = await getBlogContent({ blogId })
+    blogsRef.current?.open(
+      { api: blogContentApi },
+      { title: '编辑博客' },
+      { action: 'edit', open: true },
+      {
+        blog: {
+          ...recode,
+          contentText: content.contentText,
+          blogLabelList: recode.blogLabelList.map(({ surrogateId, name, color }, index) => ({
+            key: surrogateId,
+            label: name,
+            value: color
+          }))
+        }
+      }
+    )
+  }
+
   const deleteBlog = () => {}
 
   /**
@@ -165,31 +193,71 @@ const Blogs = () => {
 
   const getBlogContentPageList = async (params: BlogContentReqParams) => {
     const values = form.getFieldsValue()
-    const blogTypesRes = await blogContentApi.getBlogContentPageList({ ...params, ...values })
-    const { code, data, msg } = blogTypesRes
+    const blogContent = await blogContentApi.getBlogContentPageList({ ...params, ...values })
+    const { code, data, msg } = blogContent
     if (code === 200) {
       const dataMapping = data.list.map(
-        ({ surrogateId, title, original, recommend, labelNames, categoryName, status, publishTime, remark }) => ({
+        ({
+          surrogateId,
+          title,
+          introduction,
+          original,
+          recommend,
+          status,
+          publishTime,
+          remark,
+          blogLabelList,
+          blogCategoryVO,
+          blogTopicVO
+        }) => ({
           key: surrogateId,
           title,
+          introduction,
           original,
-          recommend: recommend === 1 ? '是' : '否',
-          labelNames,
-          categoryName,
-          status: status === 1 ? '已发布' : '未发布',
+          recommend,
+          status,
           publishTime,
-          remark
+          remark,
+          categoryName: blogCategoryVO.name,
+          topicName: blogTopicVO.name,
+          blogLabelList: blogLabelList.map((item, index) => {
+            return {
+              ...item,
+              key: item.surrogateId
+            }
+          })
         })
       )
+      console.log('--> dataMapping: ', dataMapping)
       setDataSource(dataMapping)
       setTotalSize(data.total)
       setTableLoading(false)
     }
   }
 
+  const getBlogContent = async (param: { blogId: string }): Promise<BlogContent> => {
+    const blogContent = await blogContentApi.getContent({ blogId: param.blogId })
+    if (blogContent.code !== 200) {
+      return {} as BlogContent
+    }
+    return blogContent.data as BlogContent
+  }
+
+  const search = () => {}
+
   return (
     <div className='blogs-publish-index-warpper'>
       <Flex gap='middle' vertical={true}>
+        <Form form={form}>
+          <Flex gap='small'>
+            <Form.Item name={'keyWords'} label='搜索关键字'>
+              <Input placeholder='搜索关键字' />
+            </Form.Item>
+            <Form.Item>
+              <Button icon={<SearchOutlined />} type='primary' onClick={search} />
+            </Form.Item>
+          </Flex>
+        </Form>
         <Flex gap='small'>
           <Button type='primary' onClick={createBlog}>
             {'创建博客'}

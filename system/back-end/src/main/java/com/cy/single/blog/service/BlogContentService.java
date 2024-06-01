@@ -24,8 +24,6 @@ public interface BlogContentService {
 
   BlogContentMongo saveBlogContentMongo(BlogContentMongo entity);
 
-  BlogContentMongo getBlogContentMongo(Long surrogateId);
-
   PageResult<BlogContentVO> pageContentList(BlogContentPageReq req);
 
   PageResult<BlogContentVO> contentList(BlogContentPageReq req);
@@ -36,9 +34,12 @@ public interface BlogContentService {
 
   ApiResp<String> publishBlog(BlogContentReq req);
 
+  ApiResp<BlogContentVO> getContent(Long blogId);
+
   ApiResp<List<BlogContentVO>> frontContentList();
 
   List<BlogContentGroupVO> frontContentByGroupCategory();
 
   PageResult<BlogContentVO> frontContentPageList(BlogContentPageReq req);
+
 }

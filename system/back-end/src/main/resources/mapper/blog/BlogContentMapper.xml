@@ -12,6 +12,7 @@
         <result column="original" jdbcType="INTEGER" property="original" />
         <result column="recommend" jdbcType="INTEGER" property="recommend" />
         <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="introduction" jdbcType="VARCHAR" property="introduction" />
         <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
         <result column="paragraph" jdbcType="VARCHAR" property="paragraph" />
         <result column="word_count" jdbcType="BIGINT" property="wordCount" />
@@ -31,7 +32,7 @@
 
     <sql id="Base_Column_List">
         id, surrogate_id, category_id, label_ids, topic_id, `number`, original, recommend,
-    title, img_url, paragraph, word_count, publish_time, `status`, remark, deleted, creator_id,
+    title, introduction, img_url, paragraph, word_count, publish_time, `status`, remark, deleted, creator_id,
     modifier_id, create_time, update_time
     </sql>
 
@@ -71,6 +72,44 @@
             </if>
         </if>
     </select>
+
+    <select id="pageContentCount" resultType="java.lang.Integer">
+        select count(1)
+        from <include refid="Table_Name" />
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.original != null and param.original != ''">
+                and original = #{param.original}
+            </if>
+            <if test="param.recommend != null and param.recommend != ''">
+                and recommend = #{param.recommend}
+            </if>
+            <if test="param.status != null and param.status != ''">
+                and status = #{param.status}
+            </if>
+            <if test="param.keyWords != null and param.keyWords != ''">
+                and (
+                `number` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+        <if test="param.isOrder != null and param.isOrder != ''">
+            order by create_time
+            <if test="param.isOrder == 0">
+                asc
+            </if>
+            <if test="param.isOrder == 1">
+                desc
+            </if>
+        </if>
+    </select>
+
 
     <select id="contentList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">
         select <include refid="Base_Column_List" />

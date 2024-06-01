@@ -54,6 +54,8 @@ public class BlogContent extends BaseEntity implements Serializable {
      */
     private String title;
 
+    private String introduction;
+
     private String imgUrl;
 
     private String paragraph;

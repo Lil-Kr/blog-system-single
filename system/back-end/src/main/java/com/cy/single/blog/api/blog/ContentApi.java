@@ -33,7 +33,7 @@ public class ContentApi {
 
   @RecordLogger
   @CheckAuth
-  @PostMapping("/pageContentList")
+  @PostMapping("/pageList")
   public ApiResp<PageResult<BlogContentVO>> pageContentList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogContentPageReq req) {
     PageResult<BlogContentVO> list = blogContentService.pageContentList(req);
     return ApiResp.success(list);
@@ -59,6 +59,14 @@ public class ContentApi {
   @GetMapping("/get")
   public ApiResp<BlogContentVO> get(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
     return blogContentService.get(surrogateId);
+  }
+
+  @RecordLogger
+  @CheckAuth
+  @GetMapping("/getContent/{blogId}")
+  public ApiResp<BlogContentVO> getContent(@PathVariable("blogId") @Valid @NotNull(message = "blogId是必须的") Long blogId) {
+//    return null;
+    return blogContentService.getContent(blogId);
   }
 
   @RecordLogger

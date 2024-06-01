@@ -1,4 +1,4 @@
-import { BaseEntityPageType, BasePageReq } from '@/types/base'
+import { BaseEntityPageType, BaseEntityType, BasePageReq } from '@/types/base'
 import { BaseApi } from '..'
 import { ResultPage } from '@/types/base/response'
 import { BlogCategoryType } from '@/types/entity/blog/categoryType'
@@ -7,7 +7,8 @@ import { BlogCategoryType } from '@/types/entity/blog/categoryType'
  * blog label request API type
  */
 export interface BlogCategoryApi extends BaseApi {
-  getCategoryPageList(params: BlogCategoryReqParams): Promise<ResultPage<BlogCategoryVO>>
+  getCategoryPageList(params: BlogCategoryPageReqParams): Promise<ResultPage<BlogCategoryVO>>
+  getCategoryList(params: BlogCategoryReqParams): Promise<ResultPage<BlogCategoryVO>>
   // save(params: CreateLabelReq): Promise<Result<string>>
   // edit(params: EditLabelReq): Promise<Result<string>>
   // delete(params: DelLabelReq): Promise<Result<string>>
@@ -15,7 +16,11 @@ export interface BlogCategoryApi extends BaseApi {
 }
 
 /** ==================== blog type request ====================  */
-export interface BlogCategoryReqParams extends BaseEntityPageType {
+export interface BlogCategoryReqParams extends BaseEntityType {
+  keyWords?: string | number
+}
+
+export interface BlogCategoryPageReqParams extends BaseEntityPageType {
   keyWords?: string | number
 }
 

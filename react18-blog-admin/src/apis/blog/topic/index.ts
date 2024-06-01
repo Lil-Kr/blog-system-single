@@ -3,6 +3,7 @@ import { Result, ResultPage } from '@/types/base/response'
 import { PREFIX_URL_BLOG_TOPIC } from '@/config'
 import {
   BlogTopicApi,
+  BlogTopicPageReqParams,
   BlogTopicReqParams,
   BlogTopicVO,
   CreateTopicReq,
@@ -11,8 +12,11 @@ import {
 } from '@/types/apis/blog/topic'
 
 const blogTopicApi: BlogTopicApi = {
-  getTopicPageList(params: BlogTopicReqParams) {
+  getTopicPageList(params: BlogTopicPageReqParams) {
     return baseAxiosRequest.post<ResultPage<BlogTopicVO>>(PREFIX_URL_BLOG_TOPIC + '/pageTopicList', params)
+  },
+  getTopicList(params: BlogTopicReqParams) {
+    return baseAxiosRequest.post<ResultPage<BlogTopicVO>>(PREFIX_URL_BLOG_TOPIC + '/list', params)
   },
   save(params: CreateTopicReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_TOPIC + '/save', params)

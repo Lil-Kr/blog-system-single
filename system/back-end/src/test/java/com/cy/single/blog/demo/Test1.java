@@ -65,11 +65,11 @@ public class Test1 {
         List<BlogLabelVO> blogLabels = new ArrayList<>();
         blogLabels.add(blogLabel);
 
-        CacheManager.setBlogLabelListCache(blogLabels);
+        CacheManager.setBlogLabelInfoCache(blogLabels);
         log.info("blogLabelListCache1 -> : {}", JSONArray.toJSONString(CacheManager.getBlogLabelListCache()));
 
         blogLabel.setName("修改Name");
-        CacheManager.setBlogLabelCache(blogLabel);
+        CacheManager.setBlogLabelListCache(blogLabel);
         log.info("blogLabelListCache2 -> : {}", JSONArray.toJSONString(CacheManager.getBlogLabelListCache()));
     }
 
