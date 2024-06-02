@@ -261,9 +261,8 @@ const Main = () => {
     const contentData = data.map(({ id, surrogateId, number, title, original, recommend }) => ({
       id: surrogateId,
       text: title,
-      url: `/blog/${surrogateId}`
+      url: `/blog-detail/${surrogateId}`
     }))
-    // setLabel(contentData)
     setContents(contentData)
   }
 

@@ -1,64 +1,25 @@
 import { TinymceLocal } from '@/components/tinymce'
-import { useTinymceStore } from '@/store/richTextEditor/reactQuillStore'
-import { BaseApi } from '@/types/apis'
-import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
+import { IAction, IModalParams, IModalRequestAction, ModalType } from '@/types/component/modal'
+import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
 import { Col, ConfigProvider, Form, Input, Modal, Radio, Row, Select, SelectProps, Tag, Upload, message } from 'antd'
-import blogContentApi, { BlogContentVO, MappedBlogContentDTO } from '@/apis/blog/content'
-import { createStyles, useTheme } from 'antd-style'
-import { useEffect, useImperativeHandle, useState } from 'react'
+const { confirm } = Modal
+import blogContentApi, { CreateBlogContentReq, MappedBlogContentDTO } from '@/apis/blog/content'
+import { createStyles } from 'antd-style'
+import { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { LabelVO } from '@/types/apis/blog/label'
 import { BlogCategoryVO } from '@/types/apis/blog/category'
 import { BlogTopicVO } from '@/types/apis/blog/topic'
-
 import labelApi from '@/apis/blog/label'
 import blogTopicApi from '@/apis/blog/topic'
 import blogCategoryApi from '@/apis/blog/category'
-import BlogTinymce from '../tinymce/BlogTinymce'
+import { Editor } from '@tinymce/tinymce-react'
+import { Editor as EditorInstance, EditorEvent } from 'node_modules/tinymce/tinymce'
+import { Result } from '@/types/base/response'
 
 const useStyle = createStyles(({ token }) => ({
   'blog-modal-body': {}
 }))
-
-const optionsCategory: SelectProps['options'] = [
-  { value: '100', label: '随笔' },
-  { value: '200', label: 'Java后端' },
-  { value: '300', label: 'ReactJS' }
-]
-
-type TagRender = SelectProps['tagRender']
-
-const tagRender: TagRender = props => {
-  const { label, value, closable, onClose } = props
-  const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
-    event.preventDefault()
-    event.stopPropagation()
-  }
-  return (
-    <Tag
-      color={value}
-      onMouseDown={onPreventMouseDown}
-      closable={closable}
-      onClose={onClose}
-      style={{ marginInlineEnd: 4 }}
-    >
-      {label}
-    </Tag>
-  )
-}
-
-const optionsLabls: SelectProps['options'] = [
-  { value: 'gold', label: 'Java' },
-  { value: 'lime', label: 'Golang' },
-  { value: 'green', label: '算法' },
-  { value: 'cyan', label: '操作系统' }
-]
-
-const optionsTopic: SelectProps['options'] = [
-  { value: '1', label: '默认' },
-  { value: '2', label: 'MIT CS.618' },
-  { value: '3', label: 'ReactJS' }
-]
 
 const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
   const { styles } = useStyle()
@@ -72,16 +33,34 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
     body: styles['blog-modal-body']
   }
 
-  const { contents, setContents } = useTinymceStore()
+  const { mRef, update } = props
   const [saveBlogForm] = Form.useForm()
-  const { mRef } = props
+  const editorRef = useRef<EditorInstance | null>(null)
+  const { tinyMceContents, tinymecStatus, setTinyMCEContents, setTinymecStatus, setTinymceEditorReady } =
+    useTinymceStore()
   const [title, setTitle] = useState<string>('')
   const [openModal, setOpenModal] = useState(false)
+  const [modalAction, setModalAction] = useState<string>('create')
   const [inputDisabled, setInputDisabled] = useState<boolean>(false)
   const [selectedLabelValues, setSelectedLabelValues] = useState<SelectProps['options']>([])
   const [selectCategory, setSelectCategory] = useState<SelectProps['options']>([])
   const [selectTopic, setSelectTopic] = useState<SelectProps['options']>([])
 
+  type TagRender = SelectProps['tagRender']
+  const tagRender: TagRender = props => {
+    const { label, value, closable, onClose } = props
+    const option = selectedLabelValues?.find(opt => opt.value === value)
+
+    return (
+      <Tag color={option?.color} closable={closable} onClose={onClose} style={{ marginRight: 1 }}>
+        {label}
+      </Tag>
+    )
+  }
+
+  /**
+   *
+   */
   useImperativeHandle(mRef, () => ({
     form: saveBlogForm,
     open
@@ -97,15 +76,16 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
     const { action, open } = type
     const { title } = params
 
+    setModalAction(action)
+
     if (action === 'create') {
+      setTinymecStatus(0, '') // create blog
     } else if (action === 'edit') {
       const { blog } = data as { blog: MappedBlogContentDTO }
-      // setBlogContent(blog.contentText ?? '')
-      // console.log('--> useTinymceStore: ', blog.contentText ?? '')
-      setContents(blog.contentText ?? '')
+
+      setTinymecStatus(1, blog.contentText ?? '') // edit blog
       saveBlogForm.setFieldsValue(blog)
     } else {
-      // saveBlogForm.setFieldsValue(data)
       setInputDisabled(true)
     }
 
@@ -118,26 +98,30 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
       const labels = await getLabels()
       const selectLabels = labels.map(({ surrogateId, name, color }, index) => ({
         key: surrogateId,
-        value: color,
-        label: name
+        value: surrogateId,
+        label: name,
+        color
       }))
+      console.log('--> selectLabels', selectLabels)
       setSelectedLabelValues(selectLabels)
 
       const selectBlogCategory = await getCategorys()
       const categorys = selectBlogCategory.map(({ surrogateId, name }, index) => ({
         key: surrogateId,
-        value: name,
+        value: surrogateId,
         label: name
       }))
+      console.log('--> categorys', categorys)
       setSelectCategory(categorys)
 
       const selectBlogTopic = await getTopics()
       const blogTopics = selectBlogTopic.map(({ surrogateId, name }, index) => ({
         key: surrogateId,
-        value: name,
+        value: surrogateId,
         label: name
       }))
       setSelectTopic(blogTopics)
+      console.log('--> blogTopics', blogTopics)
     }
 
     fetchLabels()
@@ -168,41 +152,54 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
     return blogTopics.data.list
   }
 
-  const handleCancel = () => {
-    setOpenModal(false)
-    // if (contents !== '') {
-    //   // todo: 富文本编辑器中有内容时, 弹出提示是否关闭当前模态框
-    //   console.log('contents 不为空')
-    //   confirm()
-    //   return
-    // } else {
-    //   console.log('content 为空')
-    // }
+  const showConfirm = () => {
+    confirm({
+      title: '已编辑的文章内容为保存, 确定要退出吗？',
+      icon: <ExclamationCircleFilled />,
+      content: '文章尚未保存',
+      onOk() {
+        saveBlogForm.resetFields()
+        setOpenModal(false)
+        setTinyMCEContents('')
+      },
+      onCancel() {}
+    })
+  }
 
-    // clear data
-    saveBlogForm.resetFields()
-    // setContents('')
+  const handleCancel = () => {
+    if (tinyMceContents !== '' || tinyMceContents.length > 0) {
+      showConfirm()
+    } else {
+      saveBlogForm.resetFields()
+      setOpenModal(false)
+    }
   }
 
   const handleOk = async () => {
-    // const { api } = requestParams
     const valid = await saveBlogForm.validateFields()
     if (valid) {
       const params = saveBlogForm.getFieldsValue()
-      params.contentText = contents
-      console.log({ ...params })
-      const res = await blogContentApi.save(params)
+      params.contentText = tinyMceContents
+
+      params.labelIds = params.blogLabelList.map((item: any, index: any) => item.value)
+
+      let res = {} as Result<string>
+      if (modalAction === 'create') {
+        res = await blogContentApi.save(params)
+      } else {
+        params.surrogateId = params.key
+        res = await blogContentApi.edit(params)
+      }
+
       if (res.code === 200) {
         message.success('操作成功')
-        handleCancel()
-        // props.update()
+        saveBlogForm.resetFields()
+        setOpenModal(false)
+        update()
       } else {
         message.error('操作失败')
         return
       }
-    } else {
-      message.error('操作失败')
-      return
     }
   }
 
@@ -237,6 +234,9 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
           <Form form={saveBlogForm} disabled={inputDisabled} labelCol={{ flex: '100px' }} preserve={false}>
             <Row gutter={16} justify={'start'}>
               <Col span={12}>
+                <Form.Item name={'key'} hidden>
+                  <Input />
+                </Form.Item>
                 <Form.Item name={'title'} label={'标题'} rules={[{ required: true, message: '博客标题不能为空' }]}>
                   <Input placeholder={'blog title...'} style={{ width: '100%' }} />
                 </Form.Item>
@@ -246,12 +246,16 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
               </Col>
               <Col span={12}>
                 <Form.Item name={'blogImage'} label={'博客封面'}>
-                  {/* <Upload listType='picture-card'>
-                    <button style={{ border: 0, background: 'none' }} type='button'>
-                      <PlusOutlined />
-                      <div style={{ marginTop: 8 }}>Choose</div>
-                    </button>
-                  </Upload> */}
+                  {modalAction === 'create' ? (
+                    <Upload listType='picture-card'>
+                      <button style={{ border: 0, background: 'none' }} type='button'>
+                        <PlusOutlined />
+                        <div style={{ marginTop: 8 }}>Choose</div>
+                      </button>
+                    </Upload>
+                  ) : (
+                    <img src={``} />
+                  )}
                 </Form.Item>
               </Col>
             </Row>
@@ -259,35 +263,33 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
             <Row gutter={16} justify={'start'}>
               <Col span={12}>
                 <Form.Item name={'blogLabelList'} label={'标签'} rules={[{ required: true, message: '标签不能为空' }]}>
-                  <Select mode='multiple' tagRender={tagRender} options={selectedLabelValues} maxCount={4} />
+                  <Select
+                    mode='multiple'
+                    labelInValue={true}
+                    tagRender={tagRender}
+                    options={selectedLabelValues}
+                    maxCount={4}
+                  />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item name={'categoryName'} label={'分类'} rules={[{ required: true, message: '分类不能为空' }]}>
+                <Form.Item name={'categoryId'} label={'分类'} rules={[{ required: true, message: '分类不能为空' }]}>
                   <Select
                     key={1}
                     showSearch
                     placeholder='select category'
                     optionFilterProp='children'
-                    // defaultValue={options[0]}
-                    // onChange={onChange}
-                    // onSearch={onSearch}
-                    // filterOption={filterOption}
                     options={selectCategory}
                   />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item name={'topicName'} label={'所属专题'}>
+                <Form.Item name={'topicId'} label={'所属专题'}>
                   <Select
                     key={2}
                     showSearch
                     placeholder='select category'
                     optionFilterProp='children'
-                    // defaultValue={optionsTopic[0]}
-                    // onChange={onChange}
-                    // onSearch={onSearch}
-                    // filterOption={filterOption}
                     options={selectTopic}
                   />
                 </Form.Item>
@@ -314,7 +316,6 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
                   label={'是否推荐'}
                   rules={[{ required: true, message: '是否推荐不能为空' }]}
                 >
-                  {/* <Radio.Group onChange={onChange} value={value}> */}
                   <Radio.Group>
                     <Radio value={0}>否</Radio>
                     <Radio value={1}>是</Radio>
@@ -335,12 +336,101 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
             <Row gutter={16} justify={'start'}></Row>
             <Row gutter={16} justify={'start'}>
               <Col span={24}>
-                <Form.Item
-                  name={'contentText'}
-                  label={'内容'}
-                  // rules={[{ required: true, message: '博客内容不能为空' }]}
-                >
-                  <BlogTinymce />
+                <Form.Item name={'contentText'} label={'内容'}>
+                  {/* <BlogTinymce /> */}
+
+                  <Editor
+                    id={'editor-local'}
+                    tinymceScriptSrc={'/public/tinymce/tinymce.min.js'}
+                    onInit={(_evt, editor) => {
+                      editorRef.current = editor
+                    }}
+                    init={{
+                      // placeholder: tinymecStatus === 0 ? '写点什么...' : '请点击上面按钮获取内容',
+                      height: 500,
+                      menubar: true, // menu bar
+                      statusbar: false, // status bar
+                      promotion: false, // upgrade the pro version
+                      branding: false, // remove the branding
+                      // end_container_on_empty_block: true,
+                      plugins: [
+                        'lists',
+                        'advlist',
+                        'link',
+                        'code',
+                        'preview',
+                        'codesample',
+                        // 'codemirror',
+                        'image',
+                        'imagetools',
+                        'searchreplace',
+                        'fullscreen',
+                        'emoticons',
+                        'insertdatetime',
+                        'anchor'
+                      ],
+                      toolbar:
+                        'undo redo |' +
+                        'styleselect |' +
+                        // 'blocks |' +
+                        'bold italic underline strikethrough forecolor backcolor |' +
+                        'alignleft aligncenter alignright alignjustify |' +
+                        'bullist numlist outdent indent |' +
+                        // 'code codesample |' +
+                        'code preview  codesample |' +
+                        'link image |' +
+                        'searchreplace fullscreen |' +
+                        'emoticons anchor insertdatetime |' +
+                        'removeformat',
+                      advlist_bullet_styles: 'square',
+                      paste_data_images: true,
+                      image_advtab: true, // add advanced image tab
+                      image_title: true,
+                      image_caption: true, // image caption
+                      file_picker_callback: (callback, value, meta) => {
+                        // Provide image and alt text for the image dialog
+                        if (meta.filetype == 'image') {
+                          const input = document.createElement('input')
+                          input.setAttribute('type', 'file')
+                          input.setAttribute('accpet', 'image/*') // 只接受图片文件
+
+                          input.addEventListener('change', (e: Event) => {
+                            const target = e.target as HTMLInputElement
+                            const files = target.files
+                            if (!files || files.length === 0) {
+                              return
+                            }
+
+                            const file = files[0]
+                            // 在这里可以对选中的文件进行处理, 例如上传到服务器等操作
+                            if (!file.type.startsWith('image/')) {
+                              return
+                            }
+
+                            const reader = new FileReader()
+                            reader.addEventListener('load', () => {
+                              const id = 'blobid' + new Date().getTime()
+                              const blobCache = editorRef.current?.editorUpload.blobCache
+                              const base64 = (reader.result as string).split(',')[1]
+                              const blobInfo = blobCache?.create(id, file, base64)
+                              blobCache?.add(blobInfo!)
+                              callback(blobInfo?.blobUri()!, { title: file.name })
+                            })
+                            reader.readAsDataURL(file)
+                          })
+                          input.click()
+                        }
+                      },
+                      insertdatetime_formats: ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d', '%Y/%m/%d', '%H:%M:%S', '%D'],
+                      insertdatetime_element: true, // insert time/date plugin
+                      content_style: 'body { font-family:Helvetica, Arial, sans-serif; font-size: 16px }'
+                      // skin: 'oxide-dark',
+                      // content_css: 'dark'
+                    }}
+                    onEditorChange={(newValue, editor) => {
+                      setTinyMCEContents(editor.getContent())
+                    }}
+                  />
                 </Form.Item>
               </Col>
             </Row>

@@ -2,24 +2,24 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { Editor as EditorInstance, EditorEvent } from 'node_modules/tinymce/tinymce'
 import { Button } from 'antd'
-import { useTinymceStore } from '@/store/richTextEditor/reactQuillStore'
+import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
 
 const TinymceLocal = () => {
   const editorRef = useRef<EditorInstance | null>(null)
-  const { contents, setContents } = useTinymceStore()
+  const { tinyMceContents, setTinyMCEContents } = useTinymceStore()
   const [isEditorReady, setIsEditorReady] = useState(false)
 
   const getEditorContent = () => {}
 
   const onSetContentHandler = () => {
     if (editorRef.current !== null) {
-      editorRef.current?.setContent(contents)
+      editorRef.current?.setContent(tinyMceContents)
     }
   }
 
   useEffect(() => {
     if (isEditorReady && editorRef.current !== null) {
-      editorRef.current?.setContent(contents)
+      editorRef.current?.setContent(tinyMceContents)
     }
   }, [isEditorReady])
 
@@ -114,7 +114,7 @@ const TinymceLocal = () => {
           // content_css: 'dark'
         }}
         onEditorChange={(newValue, editor) => {
-          setContents(editor.getContent())
+          setTinyMCEContents(editor.getContent())
         }}
       />
       <Button onClick={getEditorContent}>获取编辑器内容</Button>

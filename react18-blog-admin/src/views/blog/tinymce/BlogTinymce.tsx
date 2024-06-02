@@ -1,30 +1,32 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { Editor as EditorInstance, EditorEvent } from 'node_modules/tinymce/tinymce'
-import { Button } from 'antd'
-import { useTinymceStore } from '@/store/richTextEditor/reactQuillStore'
+import { Button, Flex } from 'antd'
+import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
 
 const TinymceLocal = () => {
+  // const { contentText, action } = props
   const editorRef = useRef<EditorInstance | null>(null)
-  const { contents, setContents } = useTinymceStore()
-  const [isEditorReady, setIsEditorReady] = useState(false)
+  const { tinyMceContents, tinymecStatus, setTinyMCEContents } = useTinymceStore()
 
-  useEffect(() => {
-    if (isEditorReady && editorRef.current !== null) {
-      editorRef.current?.setContent(contents)
+  const onSetContentHandler = () => {
+    if (editorRef.current !== null) {
+      editorRef.current?.setContent(tinyMceContents)
     }
-  }, [isEditorReady])
-
+  }
   return (
-    <div>
+    <Flex className='text-editor' vertical={true} gap='small'>
+      <Button style={{ width: '10%' }} type='primary' onClick={onSetContentHandler}>
+        编辑状态下获取内容
+      </Button>
       <Editor
         id={'editor-local'}
         tinymceScriptSrc={'/public/tinymce/tinymce.min.js'}
         onInit={(_evt, editor) => {
           editorRef.current = editor
-          setIsEditorReady(true)
         }}
         init={{
+          placeholder: tinymecStatus === 0 ? '写点什么...' : '请点击上面按钮获取内容',
           height: 500,
           menubar: true, // menu bar
           statusbar: false, // status bar
@@ -106,10 +108,10 @@ const TinymceLocal = () => {
           // content_css: 'dark'
         }}
         onEditorChange={(newValue, editor) => {
-          setContents(editor.getContent())
+          setTinyMCEContents(editor.getContent())
         }}
       />
-    </div>
+    </Flex>
   )
 }
 

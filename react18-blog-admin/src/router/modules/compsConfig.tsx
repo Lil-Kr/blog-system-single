@@ -57,6 +57,16 @@ const compsConfig: RouterItemType[] = [
         },
         path: 'image-uploader',
         element: LazyLoad(lazy(() => import('@/views/comps/imageupload/ImageUploda')))
+      },
+      {
+        meta: {
+          key: '/select',
+          title: '下拉选择框',
+          layout: false,
+          icon: <SlidersOutlined />
+        },
+        path: 'select',
+        element: LazyLoad(lazy(() => import('@/views/comps/select/SelectDemo')))
       }
     ]
   }

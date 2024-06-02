@@ -162,7 +162,7 @@ const Blogs = () => {
   /**
    * 编辑博客
    */
-  const editBlog = async (blogId: string, recode: BlogContentDTO) => {
+  const editBlog = async (blogId: string, record: BlogContentDTO) => {
     const content = await getBlogContent({ blogId })
     blogsRef.current?.open(
       { api: blogContentApi },
@@ -170,12 +170,13 @@ const Blogs = () => {
       { action: 'edit', open: true },
       {
         blog: {
-          ...recode,
+          ...record,
           contentText: content.contentText,
-          blogLabelList: recode.blogLabelList.map(({ surrogateId, name, color }, index) => ({
+          blogLabelList: record.blogLabelList.map(({ surrogateId, name, color }, index) => ({
             key: surrogateId,
             label: name,
-            value: color
+            value: surrogateId,
+            color
           }))
         }
       }
@@ -218,7 +219,9 @@ const Blogs = () => {
           status,
           publishTime,
           remark,
+          categoryId: blogCategoryVO.surrogateId,
           categoryName: blogCategoryVO.name,
+          topicId: blogTopicVO.surrogateId,
           topicName: blogTopicVO.name,
           blogLabelList: blogLabelList.map((item, index) => {
             return {
@@ -228,7 +231,6 @@ const Blogs = () => {
           })
         })
       )
-      console.log('--> dataMapping: ', dataMapping)
       setDataSource(dataMapping)
       setTotalSize(data.total)
       setTableLoading(false)
@@ -265,9 +267,9 @@ const Blogs = () => {
           <Button type='primary' onClick={createBlog}>
             {'发布博客'}
           </Button>
-          <Button type='primary' danger onClick={deleteBlog}>
+          {/* <Button type='primary' danger onClick={deleteBlog}>
             {'删除'}
-          </Button>
+          </Button> */}
         </Flex>
         <div>
           <Table
@@ -292,7 +294,10 @@ const Blogs = () => {
           />
         </div>
       </Flex>
-      <SaveBlogModal mRef={blogsRef} update={() => {}} />
+      <SaveBlogModal
+        mRef={blogsRef}
+        update={() => getBlogContentPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })}
+      />
     </div>
   )
 }

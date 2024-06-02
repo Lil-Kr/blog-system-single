@@ -2,20 +2,20 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { Editor as EditorInstance, EditorEvent } from 'node_modules/tinymce/tinymce'
 import { Button } from 'antd'
-import { useTinymceStore } from '@/store/richTextEditor/reactQuillStore'
+import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
 
 const TinymceLocal = () => {
   const editorRef = useRef<EditorInstance | null>(null)
-  const { contents, setContents } = useTinymceStore()
+  const { tinyMceContents, setTinyMCEContents } = useTinymceStore()
 
   const getEditorContent = () => {
-    console.log('--> contents: ', contents)
+    console.log('--> contents: ', tinyMceContents)
   }
 
   const onSetContentHandler = () => {
     if (editorRef.current !== null) {
       console.log('--> onSetContentHandler editorRef.current not null')
-      editorRef.current?.setContent(contents)
+      editorRef.current?.setContent(tinyMceContents)
     }
   }
 
@@ -107,18 +107,18 @@ const TinymceLocal = () => {
           },
           insertdatetime_formats: ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d', '%Y/%m/%d', '%H:%M:%S', '%D'],
           insertdatetime_element: true, // insert time/date plugin
-          content_style: 'body { font-family:Helvetica, Arial, sans-serif; font-size: 16px }',
+          content_style: 'body { font-family:Helvetica, Arial, sans-serif; font-size: 16px }'
           // skin: 'oxide-dark',
           // content_css: 'dark'
         }}
         onEditorChange={(newValue, editor) => {
-          setContents(editor.getContent())
+          setTinyMCEContents(editor.getContent())
         }}
       />
       <Button onClick={getEditorContent}>获取编辑器内容</Button>
       <Button onClick={onSetContentHandler}>回显数据到编辑框</Button>
 
-      <p dangerouslySetInnerHTML={{ __html: contents }} />
+      <p dangerouslySetInnerHTML={{ __html: tinyMceContents }} />
     </div>
   )
 }

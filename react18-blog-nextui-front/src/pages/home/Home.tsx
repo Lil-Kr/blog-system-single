@@ -6,78 +6,78 @@ import { Carousel, CarouselBase } from '@/components/imageCarousel'
 
 import contentApi, { BlogContentReqParams } from '@/apis/contentApi'
 
-const blogItems: BlogItemsType[] = [
-  {
-    key: 1,
-    image: {
-      alt: 'test image',
-      url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
-    },
-    tags: ['Java后台开发', '微服务', 'TS'],
-    blogTitle: 'React8 hook 学习经验分享',
-    publishTime: '2022-02-22'
-  },
-  {
-    key: 2,
-    image: {
-      alt: 'test image',
-      url: 'http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg'
-    },
-    tags: ['Java后台开发', '微服务', 'TS'],
-    blogTitle: '操作系统中的线程与进程',
-    publishTime: '2022-09-22'
-  },
-  {
-    key: 3,
-    image: {
-      alt: 'test image',
-      url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
-    },
-    tags: ['编译原理', '计算机基础'],
-    blogTitle: '操作系统中的线程与进程',
-    publishTime: '2024-04-22'
-  },
-  {
-    key: 4,
-    image: {
-      alt: 'test image',
-      url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
-    },
-    tags: ['编译原理', '计算机基础'],
-    blogTitle: '操作系统中的线程与进程',
-    publishTime: '2024-04-22'
-  },
-  {
-    key: 5,
-    image: {
-      alt: 'test image',
-      url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
-    },
-    tags: ['编译原理', '计算机基础'],
-    blogTitle: '操作系统中的线程与进程',
-    publishTime: '2024-04-22'
-  },
-  {
-    key: 6,
-    image: {
-      alt: 'test image',
-      url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
-    },
-    tags: ['编译原理', '计算机基础'],
-    blogTitle: '操作系统中的线程与进程',
-    publishTime: '2024-04-22'
-  },
-  {
-    key: 7,
-    image: {
-      alt: 'test image',
-      url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
-    },
-    tags: ['编译原理', '计算机基础'],
-    blogTitle: '操作系统中的线程与进程',
-    publishTime: '2024-04-22'
-  }
-]
+// const blogItems: BlogItemsType[] = [
+//   {
+//     key: 1,
+//     image: {
+//       alt: 'test image',
+//       url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
+//     },
+//     tags: ['Java后台开发', '微服务', 'TS'],
+//     blogTitle: 'React8 hook 学习经验分享',
+//     publishTime: '2022-02-22'
+//   },
+//   {
+//     key: 2,
+//     image: {
+//       alt: 'test image',
+//       url: 'http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg'
+//     },
+//     tags: ['Java后台开发', '微服务', 'TS'],
+//     blogTitle: '操作系统中的线程与进程',
+//     publishTime: '2022-09-22'
+//   },
+//   {
+//     key: 3,
+//     image: {
+//       alt: 'test image',
+//       url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
+//     },
+//     tags: ['编译原理', '计算机基础'],
+//     blogTitle: '操作系统中的线程与进程',
+//     publishTime: '2024-04-22'
+//   },
+//   {
+//     key: 4,
+//     image: {
+//       alt: 'test image',
+//       url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
+//     },
+//     tags: ['编译原理', '计算机基础'],
+//     blogTitle: '操作系统中的线程与进程',
+//     publishTime: '2024-04-22'
+//   },
+//   {
+//     key: 5,
+//     image: {
+//       alt: 'test image',
+//       url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
+//     },
+//     tags: ['编译原理', '计算机基础'],
+//     blogTitle: '操作系统中的线程与进程',
+//     publishTime: '2024-04-22'
+//   },
+//   {
+//     key: 6,
+//     image: {
+//       alt: 'test image',
+//       url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
+//     },
+//     tags: ['编译原理', '计算机基础'],
+//     blogTitle: '操作系统中的线程与进程',
+//     publishTime: '2024-04-22'
+//   },
+//   {
+//     key: 7,
+//     image: {
+//       alt: 'test image',
+//       url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
+//     },
+//     tags: ['编译原理', '计算机基础'],
+//     blogTitle: '操作系统中的线程与进程',
+//     publishTime: '2024-04-22'
+//   }
+// ]
 
 const images = [
   { url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png' },

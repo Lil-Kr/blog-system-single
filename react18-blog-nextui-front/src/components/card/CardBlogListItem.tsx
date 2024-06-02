@@ -2,9 +2,11 @@ import React from 'react'
 import { Card, CardBody, Image, Link } from '@nextui-org/react'
 import { BlogItemsType } from '@/types/blog'
 
+
+const env = import.meta.env
+
 const CardBlogListItem = (props: { blogItem: BlogItemsType }) => {
   const { blogItem } = props
-
   return (
     <Card key={blogItem.key} className='flex flex-col gap-y-2' shadow='sm' radius='sm' fullWidth={true}>
       <a href='#' className='flex px-1 py-1'>
@@ -13,12 +15,12 @@ const CardBlogListItem = (props: { blogItem: BlogItemsType }) => {
           isZoomed
           className='w-full aspect-[4/3]'
           alt={blogItem.image.alt}
-          src={blogItem.image.url}
+          src={env.VITE_BACKEND_BASE_API + blogItem.image.url}
         />
       </a>
       <div className='flex flex-col'>
         <div className='flex flex-row blog-tags px-1 py-1 gap-x-2'>
-          {blogItem.tags.map((tag, index) => (
+          {(blogItem.tags || []).map((tag, index) => (
             <div key={index} className='flex flex-col gap-y-1'>
               <Link className='text-sm font-bold text-violet-700' href='#' underline='hover' isExternal={true}>
                 {tag}

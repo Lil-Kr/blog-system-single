@@ -78,7 +78,7 @@ public class CacheManager {
     return labelVOList;
   }
 
-  public static void setBlogLabelListCache(BlogLabel blogLabel) {
+  public static void setBlogLabelCache(BlogLabel blogLabel) {
     List<BlogLabelVO> blogLabelListCache = getBlogLabelListCache();
     blogLabelListCache.stream()
       .filter(item -> blogLabel.getSurrogateId().equals(item.getSurrogateId()))
@@ -86,6 +86,15 @@ public class CacheManager {
       .ifPresent(item -> {
         BeanUtils.copyProperties(blogLabel, item);
       });
+  }
+
+  public static List<BlogLabelVO> removeBlogLabelCache(Long surrogateId) {
+    List<BlogLabelVO> blogLabelListCache = getBlogLabelListCache();
+    List<BlogLabelVO> collect = blogLabelListCache.stream()
+      .filter(item -> !surrogateId.equals(item.getSurrogateId()))
+      .collect(Collectors.toList());
+    setBlogLabelInfoCache(collect);
+    return collect;
   }
 
   /**

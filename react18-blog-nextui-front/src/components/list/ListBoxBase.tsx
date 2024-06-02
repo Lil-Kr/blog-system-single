@@ -16,7 +16,7 @@ const ListBoxBase = (props: { items: ListBoxItemType[]; type: compType }) => {
       <Listbox aria-label='actions' color='primary' onAction={key => console.log(key)}>
         {type === 'link'
           ? items.map((item, index) => (
-              <ListboxItem key={index} href={item.url} textValue={item.text} target='_blank'>
+              <ListboxItem key={index} href={item.url} textValue={item.text} target='www.baidu.com'>
                 <div className='flex justify-between text-medium'>
                   <span>
                     {item.text.length > textLength ? item.text.substring(0, textLength) + ' ....' : item.text}

@@ -7,14 +7,15 @@ import { LabelMapped, LabelVO } from '@/types/apis/blog/label'
 import { BlogCategoryVO } from '@/types/apis/blog/category'
 import { BaseEntityPageType } from '@/types/base'
 import { BlogTopicVO } from '@/types/apis/blog/topic'
+import exp from 'constants'
 /**
  * blog label request API type
  */
 export interface BlogContentApi extends BaseApi {
   getBlogContentPageList(params: BlogContentReqParams): Promise<ResultPage<BlogContentVO>>
-  save(params: CreateBlogContentReq): Promise<Result<string>>
   getContent(params: GetBlogContentReq): Promise<Result<BlogContent>>
-  // edit(params: EditLabelReq): Promise<Result<string>>
+  save(params: CreateBlogContentReq): Promise<Result<string>>
+  edit(params: EditeBlogContentReq): Promise<Result<string>>
   // delete(params: DelLabelReq): Promise<Result<string>>
   // deleteBatch(params: DelLabelReq): Promise<Result<string>>
 }
@@ -26,12 +27,12 @@ const blogContentApi: BlogContentApi = {
   save(params: CreateBlogContentReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CONTENT + '/save', params)
   },
+  edit(params: EditeBlogContentReq) {
+    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CONTENT + '/edit', params)
+  },
   getContent(params: GetBlogContentReq) {
     return baseAxiosRequest.get<Result<BlogContent>>(PREFIX_URL_BLOG_CONTENT + `/getContent/${params.blogId}`, params)
   }
-  // edit(params: EditLabelReq) {
-  //   return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_LABEL + '/edit', params)
-  // },
   // delete(params: DelLabelReq) {
   //   return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_LABEL + '/delete', params)
   // },
@@ -62,6 +63,20 @@ export interface CreateBlogContentReq extends BaseEntityPageType {
   contentText: string
 }
 
+export interface EditeBlogContentReq extends BaseEntityPageType {
+  surrogateId: string
+  number: string
+  original: string
+  recommend: string
+  title: string
+  categoryId: string
+  categoryName: string
+  labelIds: string[]
+  topicId?: string
+  topicName?: string
+  contentText: string
+}
+
 export interface GetBlogContentReq {
   blogId: string
 }
@@ -74,6 +89,7 @@ export interface BlogContentDTO {
   title: string
   original: number
   recommend: number
+  categoryId: string
   categoryName: string
   topicName: string
   introduction: string

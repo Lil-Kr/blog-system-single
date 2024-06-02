@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.cy.single.blog.common.cache.CacheManager.getBlogLabelListCache;
 import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_EXIST;
@@ -147,6 +148,7 @@ public class BlogContentServiceImpl implements BlogContentService {
     BeanUtils.copyProperties(req, blogContent);
     blogContent.setUpdateTime(DateUtil.localDateTimeToDate(LocalDateTime.now()));
     blogContent.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+    blogContent.setLabelIds(req.getLabelIds().stream().collect(Collectors.joining(",")));
 
     UpdateWrapper<BlogContent> updateWrapper = new UpdateWrapper<>();
     updateWrapper.eq("surrogate_id", req.getSurrogateId());

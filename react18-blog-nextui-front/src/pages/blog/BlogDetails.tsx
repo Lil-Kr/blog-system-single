@@ -14,10 +14,11 @@ const cardItem: CardBaseDataType = {
 
 const BlogDetails = () => {
   const { blogId } = useParams()
-  // console.log(blogId)
+  console.log(blogId)
   return (
     <>
       <div className='col-span-3 flex flex-col gap-y-4'>
+        {/* 文章目录 */}
         <CardSimple cardItem={cardItem} />
       </div>
       <div className='col-span-9'>

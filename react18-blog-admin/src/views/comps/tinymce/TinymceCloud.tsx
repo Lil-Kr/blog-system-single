@@ -2,20 +2,20 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { Editor as EditorInstance, EditorEvent } from 'node_modules/tinymce/tinymce'
 import { Button } from 'antd'
-import { useTinymceStore } from '@/store/richTextEditor/reactQuillStore'
+import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
 
 const TinymceCloud = () => {
   const editorRef = useRef<EditorInstance | null>(null)
-  const { contents, setContents } = useTinymceStore()
+  const { tinyMceContents, setTinyMCEContents } = useTinymceStore()
 
   const getEditorContent = () => {
-    console.log('--> contents: ', contents)
+    console.log('--> contents: ', tinyMceContents)
   }
 
   const onSetContentHandler = () => {
     if (editorRef.current !== null) {
       console.log('--> onSetContentHandler editorRef.current not null')
-      editorRef.current?.setContent(contents)
+      editorRef.current?.setContent(tinyMceContents)
     }
   }
 
@@ -159,7 +159,7 @@ const TinymceCloud = () => {
       <Button onClick={getEditorContent}>获取编辑器内容</Button>
       <Button onClick={onSetContentHandler}>回显数据到编辑框</Button>
 
-      <p dangerouslySetInnerHTML={{ __html: contents }} />
+      <p dangerouslySetInnerHTML={{ __html: tinyMceContents }} />
     </div>
   )
 }

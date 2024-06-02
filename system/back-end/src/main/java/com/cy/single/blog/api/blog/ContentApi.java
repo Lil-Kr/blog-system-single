@@ -65,7 +65,6 @@ public class ContentApi {
   @CheckAuth
   @GetMapping("/getContent/{blogId}")
   public ApiResp<BlogContentVO> getContent(@PathVariable("blogId") @Valid @NotNull(message = "blogId是必须的") Long blogId) {
-//    return null;
     return blogContentService.getContent(blogId);
   }
 
@@ -80,8 +79,7 @@ public class ContentApi {
   @CheckAuth
   @PostMapping("/edit")
   public ApiResp<String> edit(@RequestBody @Validated({BlogContentReq.GroupBlogContentEdit.class}) BlogContentReq req) {
-    ApiResp<String> res = blogContentService.edit(req);
-    return ApiResp.success();
+    return blogContentService.edit(req);
   }
 
   @RecordLogger

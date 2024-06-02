@@ -69,7 +69,7 @@ public class Test1 {
         log.info("blogLabelListCache1 -> : {}", JSONArray.toJSONString(CacheManager.getBlogLabelListCache()));
 
         blogLabel.setName("修改Name");
-        CacheManager.setBlogLabelListCache(blogLabel);
+        CacheManager.setBlogLabelCache(blogLabel);
         log.info("blogLabelListCache2 -> : {}", JSONArray.toJSONString(CacheManager.getBlogLabelListCache()));
     }
 

@@ -91,7 +91,7 @@ export namespace ModalType {
       | undefined
     >
 
-    update?: () => void
+    update: () => void
   }
 
   export interface ImageUploadModal<T = any> {
