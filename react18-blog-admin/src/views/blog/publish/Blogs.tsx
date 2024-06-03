@@ -136,7 +136,7 @@ const Blogs = () => {
     getCheckboxProps: (record: BlogContentDTO) => ({})
   }
   /**
-   * 页码或 pageSize 改变的回调，参数是改变后的页码及每页条数
+   * 页码或 pageSize 改变的回调, 参数是改变后的页码及每页条数
    * @param page
    * @param pageSize
    */
@@ -204,6 +204,7 @@ const Blogs = () => {
           introduction,
           original,
           recommend,
+          imgUrl,
           status,
           publishTime,
           remark,
@@ -216,6 +217,7 @@ const Blogs = () => {
           introduction,
           original,
           recommend,
+          imgUrl,
           status,
           publishTime,
           remark,
@@ -283,6 +285,7 @@ const Blogs = () => {
             columns={columns}
             dataSource={dataSource}
             pagination={{
+              position: ['bottomLeft'],
               hideOnSinglePage: false, // only one pageSize then hidden Paginator
               pageSizeOptions: [10, 20, 50], // specify how many items can be displayed on each page
               onChange: onChange,

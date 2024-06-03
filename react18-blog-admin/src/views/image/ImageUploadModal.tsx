@@ -4,7 +4,7 @@ import React, { useImperativeHandle, useState } from 'react'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { ImageInfoUploadParams } from '@/apis/image/imageInfo'
 import { RcFile, UploadRequestOption } from 'rc-upload/lib/interface'
-import imageInfoApi from '@/apis/image/imageInfo'
+import { imageInfoApi } from '@/apis/image/imageInfo'
 import { AxiosProgressEvent, AxiosRequestConfig } from 'axios'
 import { FileImageOutlined } from '@ant-design/icons'
 
@@ -115,13 +115,18 @@ const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
     imgWindow?.document.write(image.outerHTML)
   }
 
+  /**
+   * 自定义上传图片
+   * @param options
+   * @param params
+   * @returns
+   */
   const handleCustomRequest = async (options: UploadRequestOption<any>, params: ImageInfoUploadParams) => {
     const { onSuccess, onError, file, filename, onProgress } = options
 
     const formData = new FormData()
     formData.append('image', file)
     formData.append('imageCategoryId', params.imageCategoryId)
-    console.log('--> file: ', (file as RcFile).name)
 
     const getImageUploadInfo = (progress: number): UploadImageType => {
       return {
@@ -135,6 +140,7 @@ const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
       headers: { 'content-type': 'multipart/form-data' },
       onUploadProgress(event: AxiosProgressEvent) {
         if (event.total) {
+          // 进图条值的计算
           const percentCompleted = Math.floor((event.loaded / event.total) * 100)
           setUploadFiles(prevFiles => [...prevFiles, getImageUploadInfo(percentCompleted)])
         }

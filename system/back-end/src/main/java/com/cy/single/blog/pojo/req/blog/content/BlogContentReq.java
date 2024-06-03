@@ -47,6 +47,8 @@ public class BlogContentReq {
 //  @NotNull(groups = {GroupBlogContentSave.class}, message = "topicId是必须的")
   private Long topicId;
 
+  private String imgUrl;
+
   @NotNull(groups = {GroupBlogContentSave.class, GroupBlogContentEdit.class}, message = "contentText是必须的")
   private String contentText;
 

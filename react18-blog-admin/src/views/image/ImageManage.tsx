@@ -1,24 +1,22 @@
-import { CardAction } from '@/components/card'
 import { ListCardPage } from '@/components/list'
-import { TabType } from '@/types/common'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Divider, Flex, Tabs } from 'antd'
+import { Button, Flex, Tabs } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import type { Tab } from 'node_modules/rc-tabs/lib/interface'
-import { GetImageCategoryReq, ImageCategoryReqParams, ImageCategoryType, ImageCategoryVO } from '@/types/apis/image/image'
-import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
+import {
+  GetImageCategoryReq,
+  ImageCategoryReqParams,
+  ImageCategoryType,
+  ImageCategoryVO
+} from '@/types/apis/image/image'
+import { IAction, IModalParams, IModalRequestAction } from '@/types/component/modal'
 
 // api
 import imageCategoryApi from '@/apis/image'
-import imageInfoApi, {
-  ImageInfoListReqParams,
-  ImageInfoPageListReqParams,
-  ImageInfoUploadParams,
-  ImageInfoVO
-} from '@/apis/image/imageInfo'
+import { imageInfoApi, ImageInfoUploadParams, ImageInfoVO } from '@/apis/image/imageInfo'
 import { CardActionProps } from '@/types/component/card'
-import { PageData, ResultPage } from '@/types/base/response'
+import { PageData } from '@/types/base/response'
 import ImageUploadModal from './ImageUploadModal'
 
 const ImageManage = () => {
@@ -122,7 +120,7 @@ const ImageManage = () => {
     const { code, data, msg } = imageCategoryDetial
 
     if (code !== 200) {
-      return { } as ImageCategoryType
+      return {} as ImageCategoryType
     } else {
       return data
     }

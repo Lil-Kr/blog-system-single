@@ -73,6 +73,7 @@ export interface EditeBlogContentReq extends BaseEntityPageType {
   categoryName: string
   labelIds: string[]
   topicId?: string
+  imgUrl?: string
   topicName?: string
   contentText: string
 }
@@ -89,6 +90,7 @@ export interface BlogContentDTO {
   title: string
   original: number
   recommend: number
+  imgUrl: string
   categoryId: string
   categoryName: string
   topicName: string

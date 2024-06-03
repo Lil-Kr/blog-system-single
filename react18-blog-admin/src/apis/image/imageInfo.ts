@@ -13,7 +13,7 @@ export interface ImageInfoApi extends BaseApi {
   imageUpload(params: ImageUploadReqParams): Promise<Result<ImageUploadResp>>
 }
 
-const imageInfoApi: ImageInfoApi = {
+export const imageInfoApi: ImageInfoApi = {
   imageInfoPageList(params: ImageInfoPageListReqParams) {
     return baseAxiosRequest.post<ResultPage<ImageInfoVO>>(PREFIX_URL_IMAGE_INFO + '/pageList', params)
   },
@@ -31,8 +31,6 @@ const imageInfoApi: ImageInfoApi = {
     )
   }
 }
-
-export default imageInfoApi
 
 /** ============== ImageInfo req params ===============  **/
 export interface ImageInfoPageListReqParams extends BaseEntityPageType {
