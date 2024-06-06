@@ -1,4 +1,3 @@
-import { TinymceLocal } from '@/components/tinymce'
 import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
 import { IAction, IModalParams, IModalRequestAction, ModalType } from '@/types/component/modal'
 import { DeleteOutlined, ExclamationCircleFilled, EyeOutlined } from '@ant-design/icons'
@@ -13,17 +12,10 @@ import {
   Select,
   SelectProps,
   Tag,
-  Upload,
   message,
   Image,
-  UploadFile,
   Button,
-  Checkbox,
-  GetProp,
-  Card,
-  Flex,
   List,
-  CheckboxProps,
   RadioChangeEvent,
   Space
 } from 'antd'
@@ -573,7 +565,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
                 position: 'bottom',
                 align: 'start',
                 pageSize: 16,
-                total: 12
+                total: 12 // todo: 修改为真实的值
               }}
             />
           </Radio.Group>
