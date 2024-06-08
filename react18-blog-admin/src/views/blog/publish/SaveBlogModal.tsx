@@ -180,17 +180,27 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
     )
   }
 
-  const handleBlogOk = () => {
-    if (tinyMceContents !== '' || tinyMceContents.length > 0) {
-      showBlogCancelConfirm()
-    } else {
-      saveBlogForm.resetFields()
-      setRadioValue('')
-      setOpenModal(false)
-    }
+  /**
+   * 退出编辑框时的提示
+   */
+  const showBlogCancelConfirm = () => {
+    confirm({
+      title: '提示',
+      icon: <ExclamationCircleFilled />,
+      content: '是否退出编辑模式？',
+      onOk() {
+        saveBlogForm.resetFields()
+        setOpenModal(false)
+        setTinyMCEContents('')
+        setRadioValue('')
+      },
+      onCancel() {
+        message.warning('取消成功')
+      }
+    })
   }
 
-  const handleBlogCancel = async () => {
+  const handleBlogOk = async () => {
     const valid = await saveBlogForm.validateFields()
     if (valid) {
       const params = saveBlogForm.getFieldsValue()
@@ -218,24 +228,14 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
     }
   }
 
-  /**
-   * 退出编辑框时的提示
-   */
-  const showBlogCancelConfirm = () => {
-    confirm({
-      title: '提示',
-      icon: <ExclamationCircleFilled />,
-      content: '是否退出编辑框？',
-      onOk() {
-        saveBlogForm.resetFields()
-        setOpenModal(false)
-        setTinyMCEContents('')
-        setRadioValue('')
-      },
-      onCancel() {
-        message.warning('取消成功')
-      }
-    })
+  const handleBlogCancel = () => {
+    if (tinyMceContents !== '' || tinyMceContents.length > 0) {
+      showBlogCancelConfirm()
+    } else {
+      saveBlogForm.resetFields()
+      setRadioValue('')
+      setOpenModal(false)
+    }
   }
 
   /**
@@ -260,16 +260,11 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
     setImageInfoList(imageInfoMapping)
   }
 
-  const cancelImageListModal = () => {
-    setIsOpenUploadImage(false)
-    setImageInfoList([])
-    setRadioValue('')
-  }
-
   /**
    * 选择图片
    */
   const [radioValue, setRadioValue] = useState<string>('')
+
   const imageRadioOnChange = (e: RadioChangeEvent) => {
     setRadioValue(e.target.value)
   }
@@ -279,6 +274,12 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
   }
 
   const handleRemoveImage = () => {
+    setRadioValue('')
+  }
+
+  const cancelImageListModal = () => {
+    setIsOpenUploadImage(false)
+    setImageInfoList([])
     setRadioValue('')
   }
 
@@ -533,6 +534,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
             </Row>
           </Form>
         </Modal>
+        {/* select image modal */}
         <Modal
           title={'请选择文章封面图片'}
           style={{ top: 0, paddingBottom: 0 }}

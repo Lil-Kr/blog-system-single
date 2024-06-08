@@ -2,8 +2,6 @@ server:
   port: 8089
   tomcat:
     uri-encoding: UTF-8
-  profiles:
-    active: dev
 
 ## spring config
 spring:

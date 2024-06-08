@@ -7,14 +7,16 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource      # 当前数据源操作类型  useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     driver-class-name: com.mysql.cj.jdbc.Driver # mysql驱动包
-    url: jdbc:mysql://localhost:3306/single_blog_system?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://mysql_main:3306/single_blog_system?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: 123456
-
+  data:
+    mongodb:
+      uri: mongodb://admin:123456@192.168.9.135:27017/blog?authSource=admin
 
 ## upload config
 upload:
-  ## change to linux file path
+  ## todo change to linux file path
   rootDir: D:/project/mine/java-project
   uploadDir: /upload
   requestMappingPath: /upload/**
