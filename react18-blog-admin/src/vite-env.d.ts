@@ -6,6 +6,7 @@ interface ImportMetaEnv {
 
   // 自定义内容...
   readonly VITE_BACKEND_BASE_API: string
+  readonly VITE_BACKEND_IMAGE_BASE_API: string
   readonly APP_PROXY_API: string
 }
 

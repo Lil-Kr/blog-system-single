@@ -1,14 +1,12 @@
 import Router from 'oh-router'
-import { LoginCheckMiddleware } from '@/router/middleware/authCheck'
 import LazyLoad from '@/components/router/LazyLoad'
 import { lazy } from 'react'
 import { UserOutlined } from '@ant-design/icons'
 import { busConfig } from './modules'
-import { RouterItemType, RouterMetaType } from '@/types/router/routeType'
+import { RouterItemType } from '@/types/router/routeType'
 import { getBreadCrumbItems, getRouterMenuItems, getTabsMap } from '@/utils/common'
 import { BreadcrumbType } from '@/types/common/breadcrumbType'
 
-// antd
 
 const rootConfig: RouterItemType[] = [
   {
@@ -73,17 +71,17 @@ const rootRouterConfig: Router<{}> = new Router({
 })
 
 const menuItems = getRouterMenuItems(rootConfig)
-console.log('--> oh-router 处理后的路由信息, 提供菜单使用: ', menuItems)
+// console.log('--> oh-router 处理后的路由信息, 提供菜单使用: ', menuItems)
 
 /**
  * // todo: 通过导出的方式发现, get(key) => 得到的value变少, 比如: 应该得到 ['a',b',c'], 却得到 ['a','b']
  * 通过到处
  */
 const breadcrumbMap: Map<string, BreadcrumbType[]> = getBreadCrumbItems(rootConfig)
-console.log('--> oh-router 处理后的面包屑结构: ', breadcrumbMap)
+// console.log('--> oh-router 处理后的面包屑结构: ', breadcrumbMap)
 
 const tabMap = getTabsMap(breadcrumbMap)
-console.log('--> oh-router 处理后的Tab结构:', tabMap)
+// console.log('--> oh-router 处理后的Tab结构:', tabMap)
 
 export { rootRouterConfig, rootConfig }
 export { menuItems, breadcrumbMap, tabMap }

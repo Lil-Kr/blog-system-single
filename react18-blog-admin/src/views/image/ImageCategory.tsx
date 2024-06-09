@@ -214,7 +214,7 @@ const ImageCategory = () => {
       key: surrogateId ? surrogateId : '',
       number: number ? number : '',
       name: name ? name : '',
-      imageUrl: env.VITE_BACKEND_BASE_API + imageUrl,
+      imageUrl: env.VITE_BACKEND_IMAGE_BASE_API + imageUrl,
       status: status ? status : 0,
       createTime: createTime ? createTime : '',
       updateTime: updateTime ? updateTime : '',

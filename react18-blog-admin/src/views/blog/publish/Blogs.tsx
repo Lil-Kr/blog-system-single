@@ -269,9 +269,9 @@ const Blogs = () => {
           <Button type='primary' onClick={createBlog}>
             {'发布博客'}
           </Button>
-          {/* <Button type='primary' danger onClick={deleteBlog}>
+          <Button type='primary' danger onClick={deleteBlog}>
             {'删除'}
-          </Button> */}
+          </Button>
         </Flex>
         <div>
           <Table

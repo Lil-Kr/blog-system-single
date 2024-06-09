@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   cyan,
   green,
@@ -19,7 +18,6 @@ import {
 } from '@ant-design/colors'
 import { Col, ColorPicker, ColorPickerProps, Divider, Row, theme } from 'antd'
 import { useColorStore } from '@/store/blog/colorStore'
-import { Color } from 'antd/lib/color-picker'
 
 type Presets = Required<ColorPickerProps>['presets'][number]
 

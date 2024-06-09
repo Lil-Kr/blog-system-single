@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
-import { Editor as EditorInstance, EditorEvent } from 'node_modules/tinymce/tinymce'
+import { Editor as EditorInstance } from 'node_modules/tinymce/tinymce'
 import { Button } from 'antd'
 import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
 
@@ -9,12 +9,12 @@ const TinymceLocal = () => {
   const { tinyMceContents, setTinyMCEContents } = useTinymceStore()
 
   const getEditorContent = () => {
-    console.log('--> contents: ', tinyMceContents)
+    // console.log('--> contents: ', tinyMceContents)
   }
 
   const onSetContentHandler = () => {
     if (editorRef.current !== null) {
-      console.log('--> onSetContentHandler editorRef.current not null')
+      // console.log('--> onSetContentHandler editorRef.current not null')
       editorRef.current?.setContent(tinyMceContents)
     }
   }
@@ -27,8 +27,7 @@ const TinymceLocal = () => {
     <div>
       <Editor
         id={'editor-local'}
-        // apiKey='o314r7s4fxi7oxfsyq2rm8yoz5exstotuzvrn2qka59zix5v'
-        tinymceScriptSrc={'/public/tinymce/tinymce.min.js'}
+        tinymceScriptSrc={'/admin/tinymce/tinymce.min.js'}
         onInit={(_evt, editor) => (editorRef.current = editor)}
         init={{
           height: 500,

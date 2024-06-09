@@ -349,7 +349,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
                             </Space>
                           )
                         }}
-                        src={`${env.VITE_BACKEND_BASE_API}${radioValue}`}
+                        src={`${env.VITE_BACKEND_IMAGE_BASE_API}${radioValue}`}
                       />
                     </div>
                   ) : (
@@ -440,7 +440,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
                 <Form.Item name={'contentText'} label={'内容'}>
                   <Editor
                     id={'editor-local'}
-                    tinymceScriptSrc={'/public/tinymce/tinymce.min.js'}
+                    tinymceScriptSrc={'/admin/tinymce/tinymce.min.js'}
                     onInit={(_evt, editor) => {
                       editorRef.current = editor
                     }}
@@ -558,7 +558,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
               renderItem={item => (
                 <List.Item>
                   <Radio key={item.key} value={item.value}>
-                    <Image preview={true} src={`${env.VITE_BACKEND_BASE_API}${item.imgUrl}`} />
+                    <Image preview={true} src={`${env.VITE_BACKEND_IMAGE_BASE_API}${item.imgUrl}`} />
                   </Radio>
                 </List.Item>
               )}

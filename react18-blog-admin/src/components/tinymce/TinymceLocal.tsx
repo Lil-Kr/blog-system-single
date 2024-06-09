@@ -27,7 +27,7 @@ const TinymceLocal = () => {
     <div>
       <Editor
         id={'editor-local'}
-        tinymceScriptSrc={'/public/tinymce/tinymce.min.js'}
+        tinymceScriptSrc={'/admin/tinymce/tinymce.min.js'}
         onInit={(_evt, editor) => {
           editorRef.current = editor
           setIsEditorReady(true)

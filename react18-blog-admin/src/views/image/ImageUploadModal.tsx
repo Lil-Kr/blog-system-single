@@ -160,7 +160,7 @@ const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
       message.error('上传失败')
       return
     }
-    data.url = env.VITE_BACKEND_BASE_API + data.url
+    data.url = env.VITE_BACKEND_IMAGE_BASE_API + data.url
 
     console.log('--> 上传成功: ', data)
     setFileList(prevFiles => [...prevFiles, data as UploadFile])
