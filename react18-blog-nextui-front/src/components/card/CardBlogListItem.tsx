@@ -15,7 +15,7 @@ const CardBlogListItem = (props: { blogItem: BlogItemsType }) => {
           isZoomed
           className='w-full aspect-[4/3]'
           alt={blogItem.image.alt}
-          src={env.VITE_BACKEND_BASE_API + blogItem.image.url}
+          src={env.VITE_BACKEND_IMAGE_BASE_API + blogItem.image.url}
         />
       </a>
       <div className='flex flex-col'>
