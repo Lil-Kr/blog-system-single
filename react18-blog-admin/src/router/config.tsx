@@ -21,12 +21,12 @@ const rootConfig: RouterItemType[] = [
   },
   {
     meta: {
-      key: '/login',
+      key: '/admin/login',
       title: '登录',
       layout: false,
       icon: ''
     },
-    path: '/login',
+    path: '/admin/login',
     element: LazyLoad(lazy(() => import('@/views/login/Login')))
   },
   {

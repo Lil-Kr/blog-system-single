@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import screenfull from 'screenfull'
 
 import Screen from '@/assets/images/svg/fullscreen.svg'

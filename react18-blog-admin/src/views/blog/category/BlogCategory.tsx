@@ -17,7 +17,7 @@ const BlogCategory = () => {
       key: 'number',
       dataIndex: 'number',
       title: '编号',
-      width: 100
+      width: 50
     },
     {
       key: 'name',

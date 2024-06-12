@@ -1,17 +1,15 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import md5 from 'js-md5'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import useLoginAdminStore from '@/store/login'
 import { LoginTpye } from '@/types/user'
 import userApi from '@/apis/user'
-
-import { Form, Input, Button, message } from 'antd'
-// scss
-import styles from './css/index.module.scss'
+import { Form, Input, Button, message, Flex } from 'antd'
 import { useNavigate } from 'oh-router-react'
-import { useMenuStore, useTabsStore } from '@/store/global'
-import { HOME_NAME, HOME_ROUTER_URL } from '@/config'
+import { useTabsStore } from '@/store/global'
+
+import './css/login.css'
 
 const Login = () => {
   const [btnSize, setSize] = useState<SizeType>('large')
@@ -31,30 +29,27 @@ const Login = () => {
       const path = '/admin/home'
       // 跳转
       navigateTo(path)
-      // const tabActive = { key: HOME_ROUTER_URL, path: HOME_ROUTER_URL, label: HOME_NAME, closable: false }
-      // const historyOpenTabs = [{ key: HOME_ROUTER_URL, path: HOME_ROUTER_URL, label: HOME_NAME, closable: false }]
-      // setTabActive(tabActive, historyOpenTabs)
-      // setSelectedKeys([path])
     } else {
       message.error('登陆失败')
-      navigateTo('/login')
+      navigateTo('/admin/login')
       resetTabs()
     }
   }
 
   const onFinishFailed = () => {}
 
-  const handle = () => {
-    let token = { token: '卧槽, 还能这么用' }
-    setToken('卧槽, 还能这么用')
-  }
-
   return (
-    <div className='loginWarpper'>
-      {/* <p>token: {token}</p>
-      <Button onClick={handle}>zustand</Button> */}
+    <Flex
+      className='login-warrper'
+      vertical={true}
+      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}
+    >
+      {/*
+        <p>token: {token}</p>
+        <Button onClick={handle}>zustand</Button>
+      */}
       <Form
-        className='loginForm'
+        className='login-form'
         name='basic'
         layout='horizontal'
         initialValues={{ remember: true }}
@@ -62,34 +57,61 @@ const Login = () => {
         onFinishFailed={onFinishFailed}
         autoComplete='off'
       >
-        <Form.Item name={'account'} rules={[{ required: true, message: '不能为空' }]}>
-          <Input prefix={<UserOutlined className='site-form-item-icon' />} placeholder={'用户名'} />
-        </Form.Item>
+        <Flex vertical={true} gap={4}>
+          <div className='login-title'>博客后台管理系统</div>
+          <Form.Item name={'account'} rules={[{ required: true, message: '不能为空' }]}>
+            <Input prefix={<UserOutlined className='site-form-item-icon' />} placeholder={'用户名'} />
+          </Form.Item>
 
-        <Form.Item name={'password'} rules={[{ required: true, message: '密码不能为空' }]}>
-          <Input.Password
-            prefix={<LockOutlined className='site-form-item-icon' />}
-            type='password'
-            placeholder={'密码'}
-          />
-        </Form.Item>
+          <Form.Item name={'password'} rules={[{ required: true, message: '密码不能为空' }]}>
+            <Input.Password
+              prefix={<LockOutlined className='site-form-item-icon' />}
+              type='password'
+              placeholder={'密码'}
+            />
+          </Form.Item>
 
-        <Form.Item>
-          <Button type='primary' loading={loading} htmlType='submit' className='login-form-button'>
-            登陆
-          </Button>
-        </Form.Item>
+          <Form.Item>
+            <Button type='primary' loading={loading} htmlType='submit' className='login-form-button'>
+              登陆
+            </Button>
+          </Form.Item>
 
-        <Form.Item>
-          <Button type='link' size={btnSize}>
-            注册
-          </Button>
-          <Button type='link' size={btnSize}>
-            忘记密码?
-          </Button>
-        </Form.Item>
+          <Form.Item>
+            <Button type='link' size={btnSize}>
+              注册
+            </Button>
+            <Button type='link' size={btnSize}>
+              忘记密码?
+            </Button>
+          </Form.Item>
+        </Flex>
       </Form>
-    </div>
+    </Flex>
+
+    // <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    //   <Form name='login' onFinish={onFinish} onFinishFailed={onFinishFailed}>
+    //     <Form.Item name='username' rules={[{ required: true, message: '请输入账号!' }]}>
+    //       <Input placeholder='账号' />
+    //     </Form.Item>
+    //     <Form.Item name='password' rules={[{ required: true, message: '请输入密码!' }]}>
+    //       <Input.Password placeholder='密码' />
+    //     </Form.Item>
+    //     <Form.Item>
+    //       <Button type='primary' htmlType='submit'>
+    //         登录
+    //       </Button>
+    //     </Form.Item>
+    //     <Form.Item>
+    //       <Button type='link' size={btnSize}>
+    //         {'注册'}
+    //       </Button>
+    //       <Button type='link' size={btnSize}>
+    //         {'忘记密码'}
+    //       </Button>
+    //     </Form.Item>
+    //   </Form>
+    // </div>
   )
 }
 

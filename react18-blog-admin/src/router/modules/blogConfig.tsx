@@ -1,6 +1,6 @@
 import LazyLoad from '@/components/router/LazyLoad'
 import { RouterItemType } from '@/types/router/routeType'
-import { BookOutlined, SendOutlined, SnippetsOutlined } from '@ant-design/icons'
+import { BookOutlined, UnorderedListOutlined, TagsOutlined, SnippetsOutlined, SlidersOutlined } from '@ant-design/icons'
 import { lazy } from 'react'
 
 const blogConfig: RouterItemType[] = [
@@ -16,24 +16,24 @@ const blogConfig: RouterItemType[] = [
       {
         meta: { key: 'blog-index', title: 'blog-index' },
         index: true,
-        element: LazyLoad(lazy(() => import('@/views/blog/publish/Blogs')))
+        element: LazyLoad(lazy(() => import('@/views/blog/publish/BlogList')))
       },
       {
         meta: {
           key: '/index',
           title: '博客列表',
           layout: false,
-          icon: <SendOutlined />
+          icon: <UnorderedListOutlined />
         },
         path: 'index',
-        element: LazyLoad(lazy(() => import('@/views/blog/publish/Blogs')))
+        element: LazyLoad(lazy(() => import('@/views/blog/publish/BlogList')))
       },
       {
         meta: {
           key: '/label',
           title: '标签管理',
           layout: false,
-          icon: <SnippetsOutlined />
+          icon: <TagsOutlined />
         },
         path: 'label',
         element: LazyLoad(lazy(() => import('@/views/blog//label/BlogLabel')))
@@ -53,7 +53,7 @@ const blogConfig: RouterItemType[] = [
           key: '/topic',
           title: '专题管理',
           layout: false,
-          icon: <SnippetsOutlined />
+          icon: <SlidersOutlined />
         },
         path: 'topic',
         element: LazyLoad(lazy(() => import('@/views/blog/topic/BlogTopic')))

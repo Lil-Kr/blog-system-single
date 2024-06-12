@@ -10,7 +10,7 @@ export const CLL = 'cll'
  * router
  */
 export const HOME_NAME = '首页'
-export const HOME_ROUTER_URL: string = '/admin/home'
+export const HOME_ROUTER_URL = '/admin/home'
 
 /**
  * constants

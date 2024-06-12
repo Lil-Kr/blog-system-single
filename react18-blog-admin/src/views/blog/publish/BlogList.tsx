@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table, Tag } from 'antd'
+import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table, Tag, Typography } from 'antd'
+const { Title } = Typography
 import { IAction, IModalParams, IModalRequestAction } from '@/types/component/modal'
 import SaveBlogModal from './SaveBlogModal'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
@@ -14,13 +15,14 @@ import blogContentApi, {
   MappedBlogContentDTO
 } from '@/apis/blog/content'
 
-const Blogs = () => {
+const BlogList = () => {
   const columns: ColumnsType<any> = [
     {
       key: 'title',
       dataIndex: 'title',
       title: '博客标题',
-      width: 100
+      width: 100,
+      render: (_: object, record: BlogContentDTO) => <Title level={5}>{record.title}</Title>
     },
     {
       key: 'blogLabelList',
@@ -45,21 +47,48 @@ const Blogs = () => {
       dataIndex: 'original',
       title: '是否原创',
       width: 50,
-      render: (_: object, record: BlogContentDTO) => (record.original === 1 ? '是' : '否')
+      render: (_: object, record: BlogContentDTO) =>
+        record.original === 1 ? (
+          <Tag key={record.key} color={`volcano`}>
+            {`是`}
+          </Tag>
+        ) : (
+          <Tag key={record.key} color={`default`}>
+            {`否`}
+          </Tag>
+        )
     },
     {
       key: 'recommend',
       dataIndex: 'recommend',
       title: '是否推荐',
       width: 50,
-      render: (_: object, record: BlogContentDTO) => (record.recommend === 1 ? '是' : '否')
+      render: (_: object, record: BlogContentDTO) =>
+        record.recommend === 1 ? (
+          <Tag key={record.key} color={`volcano`}>
+            {`是`}
+          </Tag>
+        ) : (
+          <Tag key={record.key} color={`default`}>
+            {`否`}
+          </Tag>
+        )
     },
     {
       key: 'status',
       dataIndex: 'status',
       title: '发布状态',
       width: 100,
-      render: (_: object, record: BlogContentDTO) => (record.status === 1 ? '已发布' : '未发布')
+      render: (_: object, record: BlogContentDTO) =>
+        record.status === 1 ? (
+          <Tag key={record.key} color={`green`}>
+            {`已发布`}
+          </Tag>
+        ) : (
+          <Tag key={record.key} color={`geekblue`}>
+            {`未发布`}
+          </Tag>
+        )
     },
     {
       key: 'publishTime',
@@ -305,4 +334,4 @@ const Blogs = () => {
   )
 }
 
-export default Blogs
+export default BlogList

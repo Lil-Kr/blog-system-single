@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #a78bfa, #6d28d9); /* 设置渐变背景颜色 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* 使body占据整个视口高度 */
+}
+
+
+.login-form {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* 给form区域添加阴影效果 */
+  width: '80%';
+  padding: 20px; /* 可选，添加一些内边距 */
+  border-radius: 8px; /* 可选，添加圆角 */
+  background-color: #fff; /* 设置form区域的背景颜色为白色，以更好地显示阴影效果 */
+}
+
+.login-title {
+  margin-bottom: '20px';
+}

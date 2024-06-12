@@ -16,7 +16,7 @@ const BlogTopic = () => {
       key: 'number',
       dataIndex: 'number',
       title: '编号',
-      width: 100
+      width: 50
     },
     {
       key: 'name',
@@ -299,10 +299,10 @@ const BlogTopic = () => {
 
       <Flex className='blog-topic-operation' gap='small'>
         <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createTopic}>
-          创建主题
+          创建
         </Button>
         <Button size={btnSize} type='primary' icon={<DeleteOutlined />} danger>
-          删除主题
+          删除
         </Button>
       </Flex>
 

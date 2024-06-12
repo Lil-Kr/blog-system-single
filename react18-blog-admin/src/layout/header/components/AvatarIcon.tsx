@@ -36,7 +36,7 @@ const AvatarIcon = () => {
     removeToken()
     resetTabs()
     restMenuState()
-    navigateTo('/login')
+    navigateTo('/admin/login')
   }
 
   const handleMenuClick: MenuProps['onClick'] = event => {

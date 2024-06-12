@@ -1,8 +1,4 @@
 import { defineConfig, ConfigEnv } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-import checker from 'vite-plugin-checker'
-import vitePluginImp from 'vite-plugin-imp'
-import path from 'path'
 
 // 引入三个环境配置文件
 import ViteBaseConfig from './environment/vite.base.config'
