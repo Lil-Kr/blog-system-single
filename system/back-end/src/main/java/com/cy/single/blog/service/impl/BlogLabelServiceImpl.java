@@ -50,11 +50,11 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 
     @Override
     public PageResult<BlogLabelVO> list(BlogLabelListReq req) {
-        List<BlogLabelVO> blogLabelListCache = CacheManager.getBlogLabelListCache();
-        if (CollectionUtils.isEmpty(blogLabelListCache)) {
+        List<BlogLabelVO> labelList = blogLabelMapper.getLabelList(req);
+        if (CollectionUtils.isEmpty(labelList)) {
             return new PageResult<>(new ArrayList<>(0), 0);
         }else {
-            return new PageResult<>(blogLabelListCache, blogLabelListCache.size());
+            return new PageResult<>(labelList, labelList.size());
         }
     }
 
@@ -79,7 +79,6 @@ public class BlogLabelServiceImpl implements BlogLabelService {
         Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
         req.setUpdateTime(nowDateTime);
         req.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
-
         Integer count = blogLabelMapper.editBySurrogateId(req);
 
         if (count >= 1) {
