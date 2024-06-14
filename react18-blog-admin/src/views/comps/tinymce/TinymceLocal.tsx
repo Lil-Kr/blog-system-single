@@ -1,12 +1,20 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { Editor as EditorInstance } from 'node_modules/tinymce/tinymce'
 import { Button } from 'antd'
 import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
 
+interface Anchor {
+  id: string | null
+  text: string
+  url?: string
+  children: Anchor[]
+}
+
 const TinymceLocal = () => {
   const editorRef = useRef<EditorInstance | null>(null)
   const { tinyMceContents, setTinyMCEContents } = useTinymceStore()
+  const [anchors, setAnchors] = useState<{ name: string | null; text: string }[]>([])
 
   const getEditorContent = () => {
     // console.log('--> contents: ', tinyMceContents)
@@ -19,9 +27,46 @@ const TinymceLocal = () => {
     }
   }
 
-  // const handleUploadImage = (blobInfo, success, failure, progress) => {
+  const buildTree = (elements: Element[]): Anchor[] => {
+    const tree: Anchor[] = []
+    const stack: Anchor[] = []
 
-  // }
+    elements.forEach((element, index) => {
+      const level = parseInt(element.tagName.charAt(1), 10)
+      const id = element.id || `heading-${index}`
+      if (!element.id) {
+        element.id = id // 如果没有id，分配一个唯一id
+      }
+      const newNode: Anchor = {
+        id,
+        text: element.textContent || '',
+        children: []
+      }
+
+      while (stack.length > 0 && level <= parseInt(stack[stack.length - 1].text.charAt(1), 10)) {
+        stack.pop()
+      }
+
+      if (stack.length === 0) {
+        tree.push(newNode)
+      } else {
+        stack[stack.length - 1].children.push(newNode)
+      }
+
+      stack.push(newNode)
+    })
+
+    return tree
+  }
+
+  const getAnchorHandler = () => {
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(tinyMceContents, 'text/html')
+    const headingElements = Array.from(doc.querySelectorAll('h1, h2, h3, h4, h5, h6'))
+    console.log('--> headingElements ', headingElements[0].tagName)
+    // const tree = buildTree(headingElements)
+    // console.log(JSON.stringify(tree))
+  }
 
   return (
     <div>
@@ -116,8 +161,11 @@ const TinymceLocal = () => {
       />
       <Button onClick={getEditorContent}>获取编辑器内容</Button>
       <Button onClick={onSetContentHandler}>回显数据到编辑框</Button>
+      <Button onClick={getAnchorHandler}>获取锚点数据</Button>
 
-      <p dangerouslySetInnerHTML={{ __html: tinyMceContents }} />
+      <div dangerouslySetInnerHTML={{ __html: tinyMceContents }} />
+
+      <div dangerouslySetInnerHTML={{ __html: anchors }} />
     </div>
   )
 }

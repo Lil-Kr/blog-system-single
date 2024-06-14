@@ -68,6 +68,15 @@
                 )
             </if>
         </where>
+        <if test="param.isOrder != null and param.isOrder != ''">
+            order by update_time
+            <if test="param.isOrder == 0">
+                asc
+            </if>
+            <if test="param.isOrder == 1">
+                desc
+            </if>
+        </if>
     </select>
 
     <delete id="deleteBatch">

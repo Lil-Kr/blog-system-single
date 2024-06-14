@@ -5,7 +5,6 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.common.cache.CacheManager;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
@@ -86,7 +85,8 @@ public class LabelApi {
     @RecordLogger
     @GetMapping("/frontLabelList")
     public ApiResp<List<BlogLabelVO>> frontLabelList() {
-        return ApiResp.success(CacheManager.getBlogLabelListCache());
+        PageResult<BlogLabelVO> list = blogLabelService.list(new BlogLabelListReq());
+        return ApiResp.success(list.getList());
     }
 
 }

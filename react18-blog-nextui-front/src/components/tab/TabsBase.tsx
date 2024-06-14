@@ -10,7 +10,20 @@ const blogItem: BlogItemsType = {
     alt: 'test image',
     url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
   },
-  tags: ['Java后台开发', '微服务', 'TS'],
+  tags: [
+    {
+      surrogateId: '1',
+      name: 'Java后台开发'
+    },
+    {
+      surrogateId: '2',
+      name: '微服务'
+    },
+    {
+      surrogateId: '3',
+      name: 'TS'
+    }
+  ],
   blogTitle: 'React8 hook 学习经验分享',
   publishTime: '2022-02-22'
 }

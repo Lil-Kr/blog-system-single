@@ -2,7 +2,7 @@ import React from 'react'
 
 const BlogList = () => {
   return (
-    <div>BlogList</div>
+    <div>加载博客列表</div>
   )
 }
 

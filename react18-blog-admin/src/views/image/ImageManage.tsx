@@ -14,7 +14,7 @@ import { IAction, IModalParams, IModalRequestAction } from '@/types/component/mo
 
 // api
 import imageCategoryApi from '@/apis/image'
-import { imageInfoApi, ImageInfoUploadParams, ImageInfoVO } from '@/apis/image/imageInfo'
+import { ImageInfoUploadParams } from '@/apis/image/imageInfo'
 import { CardActionProps } from '@/types/component/card'
 import { PageData } from '@/types/base/response'
 import ImageUploadModal from './ImageUploadModal'

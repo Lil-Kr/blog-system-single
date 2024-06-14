@@ -3,42 +3,43 @@ import { Card } from '@nextui-org/react'
 import { MenuIncludePageSub } from '@/components/menu'
 import { NavBarSubMenuItem } from '@/types/components/MenuType'
 import { Outlet, useParams } from 'oh-router-react'
+import { baseUrl } from '@/constant'
 
 const navbarItems: NavBarSubMenuItem[] = [
   {
     id: '0',
     title: '随笔',
-    link: '/blog/category/default'
+    link: `${baseUrl}/main/category/default`
   },
   {
     id: '1',
     title: 'Java后端',
-    link: '/blog/category/java'
+    link: `${baseUrl}/main/category/java`
   },
   {
     id: '2',
     title: '前端',
-    link: '/blog/category/front'
+    link: `${baseUrl}/main/category/front`
   },
   {
     id: '3',
     title: '数据库',
-    link: '/blog/category/database'
+    link: `${baseUrl}/main/category/database`
   },
   {
     id: '4',
     title: '编译原理',
-    link: '/blog/category/compile'
+    link: `${baseUrl}/main/category/compile`
   },
   {
     id: '5',
     title: '计算机网络',
-    link: '/blog/category/networking'
+    link: `${baseUrl}/main/category/networking`
   },
   {
     id: '6',
     title: '数据结构',
-    link: '/blog/category/datastructure'
+    link: `${baseUrl}/main/category/datastructure`
   }
 ]
 

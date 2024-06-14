@@ -45,7 +45,7 @@ const ListItemBase = (props: { blogItem: BlogItemsType }) => {
           {blogItem.tags.map((tag, index) => (
             <div key={index} className='flex flex-col gap-y-1'>
               <Link className='text-sm font-bold text-violet-700' href='#' underline='hover' isExternal={true}>
-                {tag}
+                {tag.name}
               </Link>
             </div>
           ))}

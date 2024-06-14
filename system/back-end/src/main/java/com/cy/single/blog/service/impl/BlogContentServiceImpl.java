@@ -130,8 +130,8 @@ public class BlogContentServiceImpl implements BlogContentService {
     }
 
     BlogContentVO res = new BlogContentVO();
-    res.setContentText(blogContentMongo.getContentText());
     BeanUtils.copyProperties(blogContent, res);
+    res.setContentText(blogContentMongo.getContentText());
 
     return ApiResp.success(res);
   }

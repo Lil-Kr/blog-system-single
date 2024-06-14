@@ -7,12 +7,11 @@ import { RouterItemType } from '@/types/router/routeType'
 import { getBreadCrumbItems, getRouterMenuItems, getTabsMap } from '@/utils/common'
 import { BreadcrumbType } from '@/types/common/breadcrumbType'
 
-
 const rootConfig: RouterItemType[] = [
   {
     meta: {
       key: '/',
-      title: '重定向到登录页',
+      title: 'redirect to home',
       layout: false,
       icon: <UserOutlined />
     },

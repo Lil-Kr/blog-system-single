@@ -521,7 +521,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
                       },
                       insertdatetime_formats: ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d', '%Y/%m/%d', '%H:%M:%S', '%D'],
                       insertdatetime_element: true, // insert time/date plugin
-                      content_style: 'body { font-family:Helvetica, Arial, sans-serif; font-size: 16px }'
+                      // content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px } h2 { font-size:24px; font-weight:bold; margin:20px 0; }'
                       // skin: 'oxide-dark',
                       // content_css: 'dark'
                     }}

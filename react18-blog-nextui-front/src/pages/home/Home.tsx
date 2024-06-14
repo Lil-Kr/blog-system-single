@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { CardBlogListItem } from '@/components/card'
 import { BlogItemsType } from '@/types/blog'
 import { PaginationBase } from '@/components/pagination'
-import { Carousel, CarouselBase } from '@/components/imageCarousel'
+import { CarouselBase } from '@/components/imageCarousel'
 
-import contentApi, { BlogContentReqParams } from '@/apis/contentApi'
+import { blogContentApi, BlogContentReqParams } from '@/apis/contentApi'
 
 // const blogItems: BlogItemsType[] = [
 //   {
@@ -97,20 +97,20 @@ const Home = () => {
   }, [])
 
   const frontContentPageList = async (params: BlogContentReqParams) => {
-    const contentPageList = await contentApi.frontContentPageList({ ...params })
+    const contentPageList = await blogContentApi.frontContentPageList({ ...params })
     const { code, data, msg } = contentPageList
     if (code !== 200) {
       return []
     }
 
     const contentPageData = data.list.map(
-      ({ id, surrogateId, number, title, original, recommend, imgUrl, labelIds, labelNames, publishTime }) => ({
+      ({ id, surrogateId, number, title, original, recommend, imgUrl, labels, publishTime }) => ({
         key: surrogateId,
         image: {
           alt: '',
           url: imgUrl
         },
-        tags: labelNames,
+        tags: labels,
         blogTitle: title,
         publishTime,
         backendApi: `/get/${surrogateId}`

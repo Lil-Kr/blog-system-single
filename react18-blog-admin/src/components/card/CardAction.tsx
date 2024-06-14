@@ -27,10 +27,8 @@ const CardAction = (props: { cardItem: CardActionProps }) => {
 
   return (
     <Card
-      // title={'abc'}
-      // style={{ width: 200, height: 230 }}
       cover={
-        <img style={{ height: 200, objectFit: 'contain' }} src={env.VITE_BACKEND_IMAGE_BASE_API + cardItem.imageUrl} />
+        <img style={{ height: 250, objectFit: 'cover' }} src={env.VITE_BACKEND_IMAGE_BASE_API + cardItem.imageUrl} />
       }
       actions={[
         <PictureOutlined alt='设为封面' onClick={setFacePicture} />,

@@ -160,7 +160,7 @@
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         order by publish_time desc
-        limit 10
+        limit 50
     </select>
 
     <select id="frontContentByGroupCategory" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO">

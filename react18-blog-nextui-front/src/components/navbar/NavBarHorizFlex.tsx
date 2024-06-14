@@ -1,16 +1,25 @@
 import AcmeLogo from '@/components/navbar/icon/AcmeLogo'
 import SearchIcon from '@/components/navbar/icon/SearchIcon'
 import { ThemeSwitcher } from '@/components/themeSwitcher'
+import { baseUrl } from '@/constant'
 import { Input, Kbd, Link } from '@nextui-org/react'
 import { useTheme } from 'next-themes'
 import { useNavigate } from 'oh-router-react'
 
 type AboutMeProps = {
+  name: string
   url: string
 }
 
 const NavBarHorizFlex = () => {
-  const navItems = ['推荐文章', '系列文章', '精彩留言', '本站插件', '关于本站', '关于作者']
+  const navItems: AboutMeProps[] = [
+    { name: '推荐文章', url: '/recommend' },
+    { name: '系列文章', url: '/article' },
+    { name: '精彩留言', url: '/article' },
+    { name: '本站插件', url: '/plugins' },
+    { name: '关于本站', url: '/article' },
+    { name: '关于作者', url: '/about' }
+  ]
   const { theme, setTheme } = useTheme()
   const navigateTo = useNavigate()
 
@@ -27,7 +36,7 @@ const NavBarHorizFlex = () => {
     >
       <div className='flex flex-row w-full basis-5/6 justify-between'>
         <div className='flex flex-row w-auto h-auto items-center'>
-          <a className='font-bold hover:bg-success px-2 py-2 rounded-lg' href='/blog/home'>
+          <a className='font-bold hover:bg-success px-2 py-2 rounded-lg' href={`${baseUrl}/main/home`}>
             HOME
           </a>
           {/* <Link className='font-bold hover:bg-success  px-2 py-2 rounded-lg' href='#'>
@@ -46,9 +55,9 @@ const NavBarHorizFlex = () => {
                 className={`flex rounded-lg hover:bg-[#4757d5] w-auto px-2 py-2 ${
                   theme === 'purple-dark' ? 'text-[#ffffff]' : 'text-black hover:text-[#ffffff] cursor-pointer'
                 }`}
-                onClick={() => aboutMe({ url: '/about' })}
+                onClick={() => aboutMe({ ...item, url: `${baseUrl}${item.url}` })}
               >
-                {item}
+                {item.name}
               </div>
             )
           })}

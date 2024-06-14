@@ -17,7 +17,7 @@ import java.util.List;
 public class BlogContentVO extends BlogContent implements Serializable {
 
   /**
-   * label names, ","号分隔
+   * label
    */
   private List<BlogLabelVO> blogLabelList;
 

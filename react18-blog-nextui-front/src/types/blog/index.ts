@@ -7,7 +7,10 @@ export type BlogItemsType = {
     alt: string
     url: string
   }
-  tags: string[]
+  tags: {
+    surrogateId: string
+    name: string
+  }[]
   blogTitle: string
   publishTime: string
   backendApi?: string

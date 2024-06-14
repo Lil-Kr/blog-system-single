@@ -12,7 +12,20 @@ const blogItem: BlogItemsType = {
     alt: 'test image',
     url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
   },
-  tags: ['Java后台开发', '微服务', 'TS', 'a'],
+  tags: [
+    {
+      surrogateId: '1',
+      name: 'Java后台开发'
+    },
+    {
+      surrogateId: '2',
+      name: '微服务'
+    },
+    {
+      surrogateId: '3',
+      name: 'TS'
+    }
+  ],
   blogTitle: 'React8 hook 学习经验分享',
   publishTime: '2022-02-22'
 }
@@ -20,7 +33,7 @@ const blogItem: BlogItemsType = {
 const CategoryDetail = () => {
   const { id } = useParams()
   const { pathname } = useLocation()
-  console.log(id, pathname)
+  console.log('--> blog分类菜单', id, pathname)
 
   // todo: 发起http请求, 获取DB的数据
 
@@ -39,8 +52,8 @@ const CategoryDetail = () => {
                 url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
               },
               // todo: 删除id选项, 测试使用
-              tags: ['Java后台开发', '微服务', 'TS', `${id}`],
-              blogTitle: 'React8 hook 学习经验分享',
+              tags: blogItem.tags,
+              blogTitle: 'React18 hook 学习经验分享',
               publishTime: '2022-02-22'
             }}
           />

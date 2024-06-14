@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import { AnimatePresence, motion, useScroll } from 'framer-motion'
-import { Button, Divider, Image } from '@nextui-org/react'
+import { useEffect, useState } from 'react'
 import { CardSimple } from '@/components/card'
-import { BlogItemsType } from '@/types/blog'
 import CardMe from '@/components/card/CardMe'
 import { CardBaseDataType } from '@/types/components/CardType'
 import SvgIcon from '@/components/svg/SvgIcon'
 import { ListBoxBase } from '@/components/list'
 import { LinkListBase } from '@/components/link'
-import LinkListArchive from '@/components/link/LinkListArchive'
-import { LinkArchiveType, LinkBaseType } from '@/types/components/LinkType'
+import { LinkBaseType } from '@/types/components/LinkType'
 import { ListBoxItemType } from '@/types/components/ListBoxType'
 import { Outlet } from 'oh-router-react'
 import categoryApi from '@/apis/categoryApi'
 import labelApi from '@/apis/labelApi'
-import blogContentApi from '@/apis/contentApi'
+import { blogContentApi } from '@/apis/contentApi'
+import { baseUrl } from '@/constant'
+import { getFontRandomColorClass } from '@/utils/colors'
 
 // const blogItems: BlogItemsType[] = [
 //   {
@@ -113,50 +111,50 @@ import blogContentApi from '@/apis/contentApi'
 //   }
 // ]
 
-const archives: LinkArchiveType[] = [
-  {
-    key: 1,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  },
-  {
-    key: 2,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  },
-  {
-    key: 3,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  },
-  {
-    key: 4,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  },
-  {
-    key: 5,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  },
-  {
-    key: 6,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  },
-  {
-    key: 7,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  }
-]
+// const archives: LinkArchiveType[] = [
+//   {
+//     key: 1,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   },
+//   {
+//     key: 2,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   },
+//   {
+//     key: 3,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   },
+//   {
+//     key: 4,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   },
+//   {
+//     key: 5,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   },
+//   {
+//     key: 6,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   },
+//   {
+//     key: 7,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   }
+// ]
 
 // const categorys: ListBoxItemType[] = [
 //   { text: 'Java后端', url: '/category/java', extend: { node: <div>{'1'}</div> } },
@@ -175,7 +173,7 @@ const Main = () => {
       headTitle: '近期文章',
       headRightContent: {
         headMoreText: '更多',
-        moreUrl: ''
+        moreUrl: `${baseUrl}/main/blogs`
       },
       svgIcon: <SvgIcon name='book' />,
       content: <ListBoxBase type={'link'} items={contents} />
@@ -185,7 +183,7 @@ const Main = () => {
       headTitle: '分类',
       headRightContent: {
         headMoreText: '更多',
-        moreUrl: '/blog/category'
+        moreUrl: `${baseUrl}/main/category/default`
       },
       svgIcon: <SvgIcon name='category' />,
       content: <ListBoxBase type={'link'} items={categorys} />
@@ -195,7 +193,7 @@ const Main = () => {
       headTitle: '标签',
       svgIcon: <SvgIcon name='tag-1' />,
       content: <LinkListBase items={labels} />
-    },
+    }
     // {
     //   key: 4,
     //   headTitle: '归档',
@@ -244,7 +242,7 @@ const Main = () => {
     const labelData = data.map(({ id, surrogateId, number, name, color, colorText }) => ({
       key: surrogateId,
       text: name,
-      textColor: colorText,
+      textColor: getFontRandomColorClass(),
       url: `/label/${surrogateId}`
       // extend: <div>{'12'}</div>
     }))
@@ -261,7 +259,7 @@ const Main = () => {
     const contentData = data.map(({ id, surrogateId, number, title, original, recommend }) => ({
       id: surrogateId,
       text: title,
-      url: `/blog-detail/${surrogateId}`
+      url: `${baseUrl}/detail/${surrogateId}`
     }))
     setContents(contentData)
   }
