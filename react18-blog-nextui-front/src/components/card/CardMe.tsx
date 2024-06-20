@@ -7,7 +7,7 @@ const CardMe = () => {
     <Card
       className='flex flex-col items-center gap-y-4'
       isPressable={true}
-      onPress={() => console.log('ss')}
+      onPress={() => console.log('')}
       radius='sm'
       shadow='sm'
       fullWidth={true}

@@ -73,7 +73,7 @@
         </if>
     </select>
 
-    <select id="pageContentCount" resultType="java.lang.Integer">
+    <select id="contentCount" resultType="java.lang.Integer">
         select count(1)
         from <include refid="Table_Name" />
         <where>
@@ -93,6 +93,8 @@
                 and (
                 `number` like concat('%',#{param.keyWords},'%')
                 or
+                `title` like concat('%',#{param.keyWords},'%')
+                or
                 `name` like concat('%',#{param.keyWords},'%')
                 or
                 remark like concat('%',#{param.keyWords},'%')
@@ -109,7 +111,6 @@
             </if>
         </if>
     </select>
-
 
     <select id="contentList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">
         select <include refid="Base_Column_List" />

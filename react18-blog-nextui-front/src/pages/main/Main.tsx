@@ -5,7 +5,7 @@ import { CardBaseDataType } from '@/types/components/CardType'
 import SvgIcon from '@/components/svg/SvgIcon'
 import { ListBoxBase } from '@/components/list'
 import { LinkListBase } from '@/components/link'
-import { LinkBaseType } from '@/types/components/LinkType'
+import { LinkArchiveType, LinkBaseType } from '@/types/components/LinkType'
 import { ListBoxItemType } from '@/types/components/ListBoxType'
 import { Outlet } from 'oh-router-react'
 import categoryApi from '@/apis/categoryApi'
@@ -13,6 +13,7 @@ import labelApi from '@/apis/labelApi'
 import { blogContentApi } from '@/apis/contentApi'
 import { baseUrl } from '@/constant'
 import { getFontRandomColorClass } from '@/utils/colors'
+import LinkListArchive from '@/components/link/LinkListArchive'
 
 // const blogItems: BlogItemsType[] = [
 //   {
@@ -111,50 +112,50 @@ import { getFontRandomColorClass } from '@/utils/colors'
 //   }
 // ]
 
-// const archives: LinkArchiveType[] = [
-//   {
-//     key: 1,
-//     url: '#',
-//     date: 'Dec 21th 2021',
-//     depict: '9 篇文章'
-//   },
-//   {
-//     key: 2,
-//     url: '#',
-//     date: 'Dec 21th 2021',
-//     depict: '9 篇文章'
-//   },
-//   {
-//     key: 3,
-//     url: '#',
-//     date: 'Dec 21th 2021',
-//     depict: '9 篇文章'
-//   },
-//   {
-//     key: 4,
-//     url: '#',
-//     date: 'Dec 21th 2021',
-//     depict: '9 篇文章'
-//   },
-//   {
-//     key: 5,
-//     url: '#',
-//     date: 'Dec 21th 2021',
-//     depict: '9 篇文章'
-//   },
-//   {
-//     key: 6,
-//     url: '#',
-//     date: 'Dec 21th 2021',
-//     depict: '9 篇文章'
-//   },
-//   {
-//     key: 7,
-//     url: '#',
-//     date: 'Dec 21th 2021',
-//     depict: '9 篇文章'
-//   }
-// ]
+const archives: LinkArchiveType[] = [
+  {
+    key: 1,
+    url: '#',
+    date: 'Dec 21th 2021',
+    depict: '9 篇文章'
+  },
+  {
+    key: 2,
+    url: '#',
+    date: 'Dec 21th 2021',
+    depict: '9 篇文章'
+  },
+  {
+    key: 3,
+    url: '#',
+    date: 'Dec 21th 2021',
+    depict: '9 篇文章'
+  },
+  {
+    key: 4,
+    url: '#',
+    date: 'Dec 21th 2021',
+    depict: '9 篇文章'
+  },
+  {
+    key: 5,
+    url: '#',
+    date: 'Dec 21th 2021',
+    depict: '9 篇文章'
+  },
+  {
+    key: 6,
+    url: '#',
+    date: 'Dec 21th 2021',
+    depict: '9 篇文章'
+  },
+  {
+    key: 7,
+    url: '#',
+    date: 'Dec 21th 2021',
+    depict: '9 篇文章'
+  }
+]
 
 // const categorys: ListBoxItemType[] = [
 //   { text: 'Java后端', url: '/category/java', extend: { node: <div>{'1'}</div> } },
@@ -193,17 +194,17 @@ const Main = () => {
       headTitle: '标签',
       svgIcon: <SvgIcon name='tag-1' />,
       content: <LinkListBase items={labels} />
+    },
+    {
+      key: 4,
+      headTitle: '归档',
+      headRightContent: {
+        headMoreText: '更多',
+        moreUrl: ''
+      },
+      svgIcon: <SvgIcon name='calendar-1' />,
+      content: <LinkListArchive items={archives} />
     }
-    // {
-    //   key: 4,
-    //   headTitle: '归档',
-    //   headRightContent: {
-    //     headMoreText: '更多',
-    //     moreUrl: ''
-    //   },
-    //   svgIcon: <SvgIcon name='calendar-1' />,
-    //   content: <LinkListArchive items={archives} />
-    // }
   ]
 
   /**

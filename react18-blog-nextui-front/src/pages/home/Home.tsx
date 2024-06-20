@@ -3,81 +3,10 @@ import { CardBlogListItem } from '@/components/card'
 import { BlogItemsType } from '@/types/blog'
 import { PaginationBase } from '@/components/pagination'
 import { CarouselBase } from '@/components/imageCarousel'
-
+import { baseUrl } from '@/constant'
 import { blogContentApi, BlogContentReqParams } from '@/apis/contentApi'
-
-// const blogItems: BlogItemsType[] = [
-//   {
-//     key: 1,
-//     image: {
-//       alt: 'test image',
-//       url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
-//     },
-//     tags: ['Java后台开发', '微服务', 'TS'],
-//     blogTitle: 'React8 hook 学习经验分享',
-//     publishTime: '2022-02-22'
-//   },
-//   {
-//     key: 2,
-//     image: {
-//       alt: 'test image',
-//       url: 'http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg'
-//     },
-//     tags: ['Java后台开发', '微服务', 'TS'],
-//     blogTitle: '操作系统中的线程与进程',
-//     publishTime: '2022-09-22'
-//   },
-//   {
-//     key: 3,
-//     image: {
-//       alt: 'test image',
-//       url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
-//     },
-//     tags: ['编译原理', '计算机基础'],
-//     blogTitle: '操作系统中的线程与进程',
-//     publishTime: '2024-04-22'
-//   },
-//   {
-//     key: 4,
-//     image: {
-//       alt: 'test image',
-//       url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
-//     },
-//     tags: ['编译原理', '计算机基础'],
-//     blogTitle: '操作系统中的线程与进程',
-//     publishTime: '2024-04-22'
-//   },
-//   {
-//     key: 5,
-//     image: {
-//       alt: 'test image',
-//       url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
-//     },
-//     tags: ['编译原理', '计算机基础'],
-//     blogTitle: '操作系统中的线程与进程',
-//     publishTime: '2024-04-22'
-//   },
-//   {
-//     key: 6,
-//     image: {
-//       alt: 'test image',
-//       url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
-//     },
-//     tags: ['编译原理', '计算机基础'],
-//     blogTitle: '操作系统中的线程与进程',
-//     publishTime: '2024-04-22'
-//   },
-//   {
-//     key: 7,
-//     image: {
-//       alt: 'test image',
-//       url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
-//     },
-//     tags: ['编译原理', '计算机基础'],
-//     blogTitle: '操作系统中的线程与进程',
-//     publishTime: '2024-04-22'
-//   }
-// ]
+import { PageData, PaginationType } from '@/types/base/response'
+const env = import.meta.env
 
 const images = [
   { url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png' },
@@ -86,21 +15,68 @@ const images = [
   { url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg' }
 ]
 
+export type btnStatueProp = {
+  prevBtn: boolean
+  nextBtn: boolean
+}
+
 const Home = () => {
-  const [contents, setContents] = useState<BlogItemsType[]>([])
+  const [contents, setContents] = useState<PageData<BlogItemsType>>()
+  const [pagination, setPagination] = useState<PaginationType>({
+    currentPageNum: 1,
+    pageSize: 9,
+    total: 0,
+    totalPage: 0
+  })
+  const [btnDisable, setBtnDisable] = useState<btnStatueProp>({ prevBtn: false, nextBtn: false })
 
   /**
    * 初始化数据
    */
   useEffect(() => {
-    frontContentPageList({ keyWords: '', currentPageNum: 1, pageSize: 10 })
+    initContentPageList()
   }, [])
 
-  const frontContentPageList = async (params: BlogContentReqParams) => {
+  /**
+   * init data
+   */
+  const initContentPageList = async () => {
+    const param = {
+      keyWords: '',
+      currentPageNum: pagination.currentPageNum,
+      pageSize: pagination.pageSize
+    }
+    const resData = await frontContentPageList({ ...param })
+    setContents(resData)
+
+    const totalPage = calculateTotalPages(resData.total, pagination.pageSize)
+    setPagination({ ...param, total: resData.total, totalPage })
+
+    let newState = { ...btnDisable }
+    if (pagination.currentPageNum <= 1) {
+      newState.prevBtn = true
+    } else {
+      newState.prevBtn = false
+    }
+
+    if (pagination.currentPageNum === totalPage) {
+      newState.nextBtn = true
+    } else {
+      newState.nextBtn = false
+    }
+    setBtnDisable({ ...newState })
+  }
+
+  /**
+   * fetch content data list
+   * @param params
+   * @returns
+   */
+  const frontContentPageList = async (params: BlogContentReqParams): Promise<PageData<BlogItemsType>> => {
     const contentPageList = await blogContentApi.frontContentPageList({ ...params })
     const { code, data, msg } = contentPageList
     if (code !== 200) {
-      return []
+      return {} as PageData<BlogItemsType>
     }
 
     const contentPageData = data.list.map(
@@ -108,16 +84,51 @@ const Home = () => {
         key: surrogateId,
         image: {
           alt: '',
-          url: imgUrl
+          url: env.VITE_BACKEND_IMAGE_BASE_API + imgUrl
         },
         tags: labels,
         blogTitle: title,
         publishTime,
-        backendApi: `/get/${surrogateId}`
+        backendApi: `${baseUrl}/detail/${surrogateId}`
       })
     )
-    console.log('--> contentPageData: ', contentPageData)
-    setContents(contentPageData)
+
+    const resData: PageData<BlogItemsType> = {
+      list: contentPageData,
+      total: data.total
+    }
+    return resData
+  }
+
+  const pageChange = async (currentPageNum: number, pageSize: number) => {
+    setPagination({ ...pagination, currentPageNum, pageSize })
+    const resData = await frontContentPageList({ keyWords: '', currentPageNum, pageSize })
+    setContents(resData)
+  }
+
+  const calculateTotalPages = (totalItems: number, itemsPerPage: number): number => {
+    return Math.ceil(totalItems / itemsPerPage)
+  }
+
+  /**
+   * change page number
+   * @param currentPageNum
+   * @param pageSize
+   */
+  const handlePageChange = async (currentPageNum: number, pageSize: number) => {
+    if (currentPageNum <= 1) {
+      setBtnDisable({ prevBtn: true, nextBtn: false })
+    } else {
+      setBtnDisable({ ...btnDisable, prevBtn: false })
+    }
+
+    if (currentPageNum >= pagination.totalPage) {
+      setBtnDisable({ prevBtn: false, nextBtn: true })
+    }
+
+    setPagination({ ...pagination, currentPageNum, pageSize })
+    const resData = await frontContentPageList({ keyWords: '', currentPageNum, pageSize })
+    setContents(resData)
   }
 
   return (
@@ -125,16 +136,20 @@ const Home = () => {
       {/* 右侧主体内容 */}
       <div className='flex flex-col w-full gap-y-4'>
         <div className='flex w-full'>
-          {/* <Carousel images={images} /> */}
           <CarouselBase images={images} />
         </div>
         <div className='grid grid-cols-3 gap-4'>
-          {contents.map((blogItem, index) => (
+          {contents?.list.map((blogItem, index) => (
             <CardBlogListItem key={index} blogItem={blogItem} />
           ))}
         </div>
-        <div className='flex flex-row justify-center pt-6'>
-          <PaginationBase />
+        <div className='flex justify-center pt-6'>
+          <PaginationBase
+            pagination={pagination}
+            btnDisable={btnDisable}
+            setBtnDisable={setBtnDisable}
+            pageChange={(currentPageNum: number, pageSize: number) => pageChange(currentPageNum, pageSize)}
+          />
         </div>
       </div>
     </>

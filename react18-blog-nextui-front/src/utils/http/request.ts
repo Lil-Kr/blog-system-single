@@ -18,11 +18,11 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config: any) => {
-    console.log('--> request intercept:', config)
+    // console.log('--> request intercept:', config)
     return config
   },
   (error: AxiosError) => {
-    console.log('--> request intercept error:', error)
+    // console.log('--> request intercept error:', error)
     // message.error(error.message)
     return Promise.reject(error)
   }
@@ -30,7 +30,7 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
-    console.log('--> response interceptors response:', response)
+    // console.log('--> response interceptors response:', response)
 
     const { data, config, headers, request, status, statusText } = response
     if (status === 200) {
@@ -40,7 +40,7 @@ axiosInstance.interceptors.response.use(
       const { code, msg, token, userInfo } = data
 
       if (code !== 200) {
-        
+
         // message.error(msg)
       }
       return data
@@ -52,8 +52,8 @@ axiosInstance.interceptors.response.use(
   // 请求 -> 响应失败
   (error: AxiosError) => {
     const { response } = error
-    console.log('--> error:', error)
-    console.log('--> error.response:', response)
+    // console.log('--> error:', error)
+    // console.log('--> error.response:', response)
     if (response) {
       // 请求已发出, 但是不在2xx的范围
       // console.log('--> 请求已发出, 但是不在2xx的范围 -> response.code:', response.data.status)

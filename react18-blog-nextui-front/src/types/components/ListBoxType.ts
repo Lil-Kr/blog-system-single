@@ -9,4 +9,4 @@ export type ListBoxItemType = {
   }
 }
 
-export type compType = 'link' | 'other'
+export type CompType = 'link' | 'other'

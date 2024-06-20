@@ -13,7 +13,10 @@ import com.cy.single.blog.pojo.entity.blog.BlogContent;
 import com.cy.single.blog.pojo.entity.blog.BlogContentMongo;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
-import com.cy.single.blog.pojo.vo.blog.*;
+import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
+import com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO;
+import com.cy.single.blog.pojo.vo.blog.BlogContentVO;
+import com.cy.single.blog.pojo.vo.blog.BlogTopicVO;
 import com.cy.single.blog.service.BlogContentService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,11 +27,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.cy.single.blog.common.cache.CacheManager.getBlogLabelListCache;
 import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_EXIST;
 import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
 
@@ -83,13 +84,11 @@ public class BlogContentServiceImpl implements BlogContentService {
   @Override
   public PageResult<BlogContentVO> pageContentList(BlogContentPageReq req) {
     List<BlogContentVO> pageList = blogContentMapper.pageContentList(req);
-    Integer count = blogContentMapper.pageContentCount(req);
+    Integer count = blogContentMapper.contentCount(req);
     if (CollectionUtils.isEmpty(pageList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
-    /**
-     * 标签ids
-     */
+
     pageList.stream().forEach(item -> {
       item.setBlogLabelList(CacheManager.getBlogLabelListCache(item.getLabelIds()));
       item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
@@ -212,15 +211,15 @@ public class BlogContentServiceImpl implements BlogContentService {
     if (CollectionUtils.isEmpty(pageList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
+    Integer count = blogContentMapper.contentCount(req);
 
-    Map<Long, BlogLabelVO> blogLabelAllMapCache = CacheManager.getBlogLabelMapCache();
-    
     pageList.stream().forEach(item -> {
-      getBlogLabelListCache();
-//      item.setBlogLabelList(blogLabelAllMapCache.getOrDefault(item.getSurrogateId(), new BlogLabelVO()));
+      item.setBlogLabelList(CacheManager.getBlogLabelNameListCache(item.getLabelIds()));
+      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
+      item.setBlogTopicVO(CacheManager.getBlogTopicInfoCacheMap().getOrDefault(item.getTopicId(), new BlogTopicVO()));
     });
 
-    return new PageResult<>(new ArrayList<>(pageList), pageList.size());
+    return new PageResult<>(new ArrayList<>(pageList), count);
   }
 
 }

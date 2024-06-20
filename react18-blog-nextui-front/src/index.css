@@ -3,6 +3,14 @@
 @tailwind utilities;
 
 @layer base {
+  /* body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+      'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  } */
+
   h1,
   h2,
   h3,
@@ -89,6 +97,7 @@
     padding: 0.125rem 0.25rem; /* 2px 4px */
     background-color: rgba(0, 0, 0, 0.05);
     border-radius: 0.25rem; /* 4px */
+    /* font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace; */
   }
 
   pre {

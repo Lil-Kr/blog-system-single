@@ -60,7 +60,7 @@ const CategoryDetail = () => {
         ))}
       </div>
       <div className='flex flex-row justify-center pt-6'>
-        <PaginationBase />
+        {/* <PaginationBase /> */}
       </div>
     </div>
   )

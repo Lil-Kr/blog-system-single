@@ -51,16 +51,15 @@ public class CacheManager {
     return blogLabelMapCache.getIfPresent(CACHE_KEY_BLOG_LABEL_MAP);
   }
 
-  public static List<String> getBlogLabelNameListCache(String labelIds) {
+  public static List<BlogLabelVO> getBlogLabelNameListCache(String labelIds) {
     if (StringUtils.isBlank(labelIds)) {
       return null;
     }
     List<String> labelIdList = Arrays.asList(labelIds.split(",")).stream()
       .collect(Collectors.toList());
 
-    List<String> res = getBlogLabelListCache().stream()
+    List<BlogLabelVO> res = getBlogLabelListCache().stream()
       .filter(item -> labelIdList.contains(item.getSurrogateId().toString()))
-      .map(item -> item.getName())
       .collect(Collectors.toList());
     return res;
   }

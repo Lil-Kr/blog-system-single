@@ -22,7 +22,7 @@ public interface BlogContentMapper extends BaseMapper<BlogContent> {
 
   List<BlogContentVO> pageContentList(@Param("param") BlogContentPageReq req);
 
-  Integer pageContentCount(@Param("param") BlogContentPageReq req);
+  Integer contentCount(@Param("param") BlogContentPageReq req);
 
   List<BlogContentVO> contentList(@Param("param") BlogContentPageReq req);
 

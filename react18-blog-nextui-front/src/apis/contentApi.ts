@@ -13,26 +13,25 @@ export interface BlogContentApi {
   // deleteBatch(params: DelLabelReq): Promise<Result<string>>
 }
 
+export const blogContentApi: BlogContentApi = {
+  frontContentRecentList() {
+    return baseAxiosRequest.get<Result<BlogContentVO[]>>(PREFIX_URL_BLOG_CONTENT + '/frontContentList')
+  },
+  frontContentPageList(params: BlogContentReqParams) {
+    return baseAxiosRequest.post<ResultPage<BlogContentVO>>(PREFIX_URL_BLOG_CONTENT + '/frontContentPageList', params)
+  },
+  frontGet(params: BlogContentGetReqParams) {
+    return baseAxiosRequest.get<Result<BlogContentVO>>(PREFIX_URL_BLOG_CONTENT + '/frontGet', params)
+  }
+}
+
 export interface BlogContentReqParams extends BasePageReq {
-  keyWords?: string | number
+  keyWords: string | number
 }
 
 export interface BlogContentGetReqParams {
   surrogateId: string
 }
-
-// export interface BlogContentVO {
-//   id: string
-//   surrogateId: string
-//   number: string
-//   title: string
-//   original: number
-//   recommend: number
-//   imgUrl: string
-//   labelIds: string[]
-//   labelNames: string[]
-//   publishTime: string
-// }
 
 export interface BlogContentVO {
   id: string
@@ -57,17 +56,5 @@ export interface BlogContentVO {
   topic?: {
     surrogateId: string
     name: string
-  }
-}
-
-export const blogContentApi: BlogContentApi = {
-  frontContentRecentList() {
-    return baseAxiosRequest.get<Result<BlogContentVO[]>>(PREFIX_URL_BLOG_CONTENT + '/frontContentList')
-  },
-  frontContentPageList(params: BlogContentReqParams) {
-    return baseAxiosRequest.post<ResultPage<BlogContentVO>>(PREFIX_URL_BLOG_CONTENT + '/frontContentPageList', params)
-  },
-  frontGet(params: BlogContentGetReqParams) {
-    return baseAxiosRequest.get<Result<BlogContentVO>>(PREFIX_URL_BLOG_CONTENT + '/frontGet', params)
   }
 }

@@ -252,7 +252,6 @@ const BlogLabel = () => {
             }}
             loading={tableLoading}
             columns={columns}
-            // dataSource={dataSource}
             dataSource={dataSource}
             pagination={{
               hideOnSinglePage: false, // only one pageSize then hidden Paginator
@@ -264,7 +263,6 @@ const BlogLabel = () => {
               total: totalSize
             }}
           />
-          {/* <Pagination defaultCurrent={6} total={500} /> */}
         </Flex>
       </Flex>
       <LabelDetail

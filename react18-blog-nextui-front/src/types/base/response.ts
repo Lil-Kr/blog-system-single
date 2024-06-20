@@ -14,3 +14,10 @@ export interface PageData<T = any> {
   list: T[]
   total: number
 }
+
+export type PaginationType = {
+  currentPageNum: number
+  pageSize: number
+  total: number
+  totalPage: number
+}

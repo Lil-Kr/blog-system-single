@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, Listbox, ListboxItem } from '@nextui-org/react'
-import { ListBoxItemType, compType } from '@/types/components/ListBoxType'
+import { ListBoxItemType, CompType } from '@/types/components/ListBoxType'
 
 const textLength = 32
 
@@ -9,7 +9,7 @@ const textLength = 32
  * @param props
  * @returns
  */
-const ListBoxBase = (props: { items: ListBoxItemType[]; type: compType }) => {
+const ListBoxBase = (props: { items: ListBoxItemType[]; type: CompType }) => {
   const { items, type } = props
   return (
     <div className='grid grid-cols-1 w-full'>
