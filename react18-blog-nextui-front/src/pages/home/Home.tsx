@@ -5,14 +5,14 @@ import { PaginationBase } from '@/components/pagination'
 import { CarouselBase } from '@/components/imageCarousel'
 import { baseUrl } from '@/constant'
 import { blogContentApi, BlogContentReqParams } from '@/apis/contentApi'
-import { PageData, PaginationType } from '@/types/base/response'
+import { PageResult, PaginationType } from '@/types/base/response'
 const env = import.meta.env
 
 const images = [
-  { url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png' },
-  { url: 'http://localhost:8089/upload/image/bak.webp' },
-  { url: 'http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg' },
-  { url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg' }
+  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/Jay1_20240422212922.png' },
+  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/bak.webp' },
+  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/微信图片_20240424184905_1784582176919130112.jpg' },
+  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/微信图片_202404241849052.jpg' }
 ]
 
 export type btnStatueProp = {
@@ -21,7 +21,7 @@ export type btnStatueProp = {
 }
 
 const Home = () => {
-  const [contents, setContents] = useState<PageData<BlogItemsType>>()
+  const [contents, setContents] = useState<PageResult<BlogItemsType>>()
   const [pagination, setPagination] = useState<PaginationType>({
     currentPageNum: 1,
     pageSize: 9,
@@ -72,11 +72,11 @@ const Home = () => {
    * @param params
    * @returns
    */
-  const frontContentPageList = async (params: BlogContentReqParams): Promise<PageData<BlogItemsType>> => {
+  const frontContentPageList = async (params: BlogContentReqParams): Promise<PageResult<BlogItemsType>> => {
     const contentPageList = await blogContentApi.frontContentPageList({ ...params })
     const { code, data, msg } = contentPageList
     if (code !== 200) {
-      return {} as PageData<BlogItemsType>
+      return {} as PageResult<BlogItemsType>
     }
 
     const contentPageData = data.list.map(
@@ -93,7 +93,7 @@ const Home = () => {
       })
     )
 
-    const resData: PageData<BlogItemsType> = {
+    const resData: PageResult<BlogItemsType> = {
       list: contentPageData,
       total: data.total
     }

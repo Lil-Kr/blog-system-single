@@ -7,10 +7,10 @@ export interface Result<T = any> {
 export interface ResultPage<T = any> {
   code: number | string
   msg: string
-  data: PageData<T>
+  data: PageResult<T>
 }
 
-export interface PageData<T = any> {
+export interface PageResult<T = any> {
   list: T[]
   total: number
 }
