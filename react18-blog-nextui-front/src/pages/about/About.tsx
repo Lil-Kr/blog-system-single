@@ -2,7 +2,7 @@ import React from 'react'
 
 const About = () => {
   return (
-    <div>关于我</div>
+    <div>this is about me Page</div>
   )
 }
 

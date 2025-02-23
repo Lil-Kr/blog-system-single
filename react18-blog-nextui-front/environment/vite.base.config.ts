@@ -1,9 +1,8 @@
 import { defineConfig } from 'vite'
 import path from 'path'
 
-console.log('load base-config...')
 export default defineConfig({
-  base: '/blog/',
+  base: '/', // url: https://example.com/blog/
   resolve: {
     alias: {
       '~': path.resolve(__dirname, '../'), // root path

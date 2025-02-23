@@ -9,37 +9,37 @@ const navbarItems: NavBarSubMenuItem[] = [
   {
     id: '0',
     title: '随笔',
-    link: `${baseUrl}/main/category/default`
+    link: `${baseUrl}/category/default`
   },
   {
     id: '1',
     title: 'Java后端',
-    link: `${baseUrl}/main/category/java`
+    link: `${baseUrl}/category/java`
   },
   {
     id: '2',
     title: '前端',
-    link: `${baseUrl}/main/category/front`
+    link: `${baseUrl}/category/front`
   },
   {
     id: '3',
     title: '数据库',
-    link: `${baseUrl}/main/category/database`
+    link: `${baseUrl}/category/database`
   },
   {
     id: '4',
     title: '编译原理',
-    link: `${baseUrl}/main/category/compile`
+    link: `${baseUrl}/category/compile`
   },
   {
     id: '5',
     title: '计算机网络',
-    link: `${baseUrl}/main/category/networking`
+    link: `${baseUrl}/category/networking`
   },
   {
     id: '6',
     title: '数据结构',
-    link: `${baseUrl}/main/category/datastructure`
+    link: `${baseUrl}/category/datastructure`
   }
 ]
 

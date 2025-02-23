@@ -1,1 +1,1 @@
-export const baseUrl = '/blog'
+export const baseUrl = ''

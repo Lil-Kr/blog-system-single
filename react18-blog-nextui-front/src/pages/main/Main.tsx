@@ -174,7 +174,7 @@ const Main = () => {
       headTitle: '近期文章',
       headRightContent: {
         headMoreText: '更多',
-        moreUrl: `${baseUrl}/main/blogs`
+        moreUrl: `${baseUrl}/blogs`
       },
       svgIcon: <SvgIcon name='book' />,
       content: <ListBoxBase type={'link'} items={contents} />
@@ -184,7 +184,7 @@ const Main = () => {
       headTitle: '分类',
       headRightContent: {
         headMoreText: '更多',
-        moreUrl: `${baseUrl}/main/category/default`
+        moreUrl: `${baseUrl}/category/default`
       },
       svgIcon: <SvgIcon name='category' />,
       content: <ListBoxBase type={'link'} items={categorys} />

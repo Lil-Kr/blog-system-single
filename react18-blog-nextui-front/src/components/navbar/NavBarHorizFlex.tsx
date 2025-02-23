@@ -23,9 +23,16 @@ const NavBarHorizFlex = () => {
   const { theme, setTheme } = useTheme()
   const navigateTo = useNavigate()
 
+  /**
+   * skip to about me page
+   * @param param
+   */
   const aboutMe = (param: AboutMeProps) => {
-    console.log(param.url)
     navigateTo(param.url)
+  }
+
+  const backHome = () => {
+    navigateTo('')
   }
 
   return (
@@ -36,7 +43,8 @@ const NavBarHorizFlex = () => {
     >
       <div className='flex flex-row w-full basis-5/6 justify-between'>
         <div className='flex flex-row w-auto h-auto items-center'>
-          <a className='font-bold hover:bg-success px-2 py-2 rounded-lg' href={`${baseUrl}/main/home`}>
+          <a className='font-bold hover:bg-success px-2 py-2 rounded-lg cursor-pointer'
+            onClick={() => backHome()}>
             HOME
           </a>
           {/* <Link className='font-bold hover:bg-success  px-2 py-2 rounded-lg' href='#'>
@@ -52,8 +60,7 @@ const NavBarHorizFlex = () => {
                 // href='#'
                 // disableAnimation={false}
                 // color='primary'
-                className={`flex rounded-lg hover:bg-[#4757d5] w-auto px-2 py-2 ${
-                  theme === 'purple-dark' ? 'text-[#ffffff]' : 'text-black hover:text-[#ffffff] cursor-pointer'
+                className={`flex rounded-lg hover:bg-[#4757d5] cursor-pointer w-auto px-2 py-2 ${theme === 'purple-dark' ? 'text-[#ffffff]' : 'text-black hover:text-[#ffffff] cursor-pointer'
                 }`}
                 onClick={() => aboutMe({ ...item, url: `${baseUrl}${item.url}` })}
               >
