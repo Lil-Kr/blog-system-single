@@ -144,6 +144,11 @@
 			<artifactId>joda-time</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.sejda.imageio</groupId>
+			<artifactId>webp-imageio</artifactId>
+		</dependency>
+
 		<!-- test start -->
 		<dependency>
 			<groupId>junit</groupId>

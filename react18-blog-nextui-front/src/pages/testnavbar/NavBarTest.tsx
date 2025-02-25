@@ -1,7 +1,7 @@
 import AcmeLogo from '@/components/navbar/icon/AcmeLogo'
 import SearchIcon from '@/components/navbar/icon/SearchIcon'
 import { ThemeSwitcher } from '@/components/themeSwitcher'
-import { Input, Link } from '@nextui-org/react'
+import { Input, Link } from "@heroui/react"
 import { it } from 'node:test'
 
 type NavbarItem = {

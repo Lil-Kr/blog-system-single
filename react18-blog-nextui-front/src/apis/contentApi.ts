@@ -1,12 +1,12 @@
 import { baseAxiosRequest } from '@/utils/http/request'
-import { PREFIX_URL_BLOG_CONTENT, PREFIX_URL_BLOG_LABEL } from '@/config'
+import { PREFIX_URL_BLOG_CONTENT } from '@/config'
 import { Result, ResultPage } from '@/types/base/response'
 import { BasePageReq } from '@/types/base'
 
 export interface BlogContentApi {
   frontContentRecentList(): Promise<Result<BlogContentVO[]>>
   frontContentPageList(params: BlogContentReqParams): Promise<ResultPage<BlogContentVO>>
-  frontGet(params: BlogContentGetReqParams): Promise<Result<BlogContentVO>>
+  frontGetBlog(params: BlogContentGetReqParams): Promise<Result<BlogContentVO>>
   // save(params: CreateLabelReq): Promise<Result<string>>
   // edit(params: EditLabelReq): Promise<Result<string>>
   // delete(params: DelLabelReq): Promise<Result<string>>
@@ -20,8 +20,8 @@ export const blogContentApi: BlogContentApi = {
   frontContentPageList(params: BlogContentReqParams) {
     return baseAxiosRequest.post<ResultPage<BlogContentVO>>(PREFIX_URL_BLOG_CONTENT + '/frontContentPageList', params)
   },
-  frontGet(params: BlogContentGetReqParams) {
-    return baseAxiosRequest.get<Result<BlogContentVO>>(PREFIX_URL_BLOG_CONTENT + '/frontGet', params)
+  frontGetBlog(params: BlogContentGetReqParams) {
+    return baseAxiosRequest.get<Result<BlogContentVO>>(PREFIX_URL_BLOG_CONTENT + '/frontGetBlog', params)
   }
 }
 

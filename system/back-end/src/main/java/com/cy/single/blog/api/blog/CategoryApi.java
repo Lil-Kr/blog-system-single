@@ -92,9 +92,9 @@ public class CategoryApi {
         List<BlogContentGroupVO> blogContentGroupList = blogContentService.frontContentByGroupCategory();
 
         Map<Long, BlogCategoryVO> blogCategoryAllMapCache = CacheManager.getBlogCategoryAllMapCache();
-        blogContentGroupList.forEach(item -> {
-            item.setCategoryName(blogCategoryAllMapCache.getOrDefault(item.getCategoryId(), new BlogCategoryVO()).getName());
-        });
+//        blogContentGroupList.forEach(item -> {
+//            item.setCategoryName(blogCategoryAllMapCache.getOrDefault(item.getCategoryId(), new BlogCategoryVO()).getName());
+//        });
         return ApiResp.success(blogContentGroupList);
     }
 

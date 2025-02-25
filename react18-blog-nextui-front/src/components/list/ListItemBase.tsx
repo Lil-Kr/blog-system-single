@@ -1,18 +1,7 @@
 import { BlogItemsType } from '@/types/blog'
-import { Card, Image, Link } from '@nextui-org/react'
+import { Card, Image, Link } from "@heroui/react"
 import React from 'react'
 import SvgIcon from '../svg/SvgIcon'
-
-// const blogItem: BlogItemsType = {
-//   key: 1,
-//   image: {
-//     alt: 'test image',
-//     url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
-//   },
-//   tags: ['Java后台开发', '微服务', 'TS'],
-//   blogTitle: 'React8 hook 学习经验分享',
-//   publishDate: '2022-02-22'
-// }
 
 /**
  * List item display component

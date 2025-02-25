@@ -1,4 +1,4 @@
-import { Switch } from '@nextui-org/react'
+import { Switch } from "@heroui/react"
 import React from 'react'
 import SunIcon from './icon/SunIcon'
 import MoonIcon from './icon/MoonIcon'

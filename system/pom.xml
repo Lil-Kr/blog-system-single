@@ -52,6 +52,7 @@
 		<commons-io.version>2.11.0</commons-io.version>
 		<jwt.version>4.2.1</jwt.version>
 		<joda-time.version>2.12.2</joda-time.version>
+		<webp-imageio.version>0.1.6</webp-imageio.version>
 
 		<!--test-->
 		<junit.version>4.12</junit.version>
@@ -174,6 +175,13 @@
 				<groupId>joda-time</groupId>
 				<artifactId>joda-time</artifactId>
 				<version>${joda-time.version}</version>
+			</dependency>
+
+			<!-- image io -->
+			<dependency>
+				<groupId>org.sejda.imageio</groupId>
+				<artifactId>webp-imageio</artifactId>
+				<version>${webp-imageio.version}</version>
 			</dependency>
 
 			<!-- test start -->

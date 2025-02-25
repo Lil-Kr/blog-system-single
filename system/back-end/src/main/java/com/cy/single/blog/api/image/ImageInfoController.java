@@ -23,13 +23,13 @@ import java.io.IOException;
 /**
  * @Author: Lil-K
  * @Date: 2024/5/29
- * @Description:
+ * @Description: 图片相关
  */
 
 @Slf4j
 @RestController
 @RequestMapping("/image/info")
-public class ImageInfoApi {
+public class ImageInfoController {
 
   @Autowired
   private ImageInfoService imageInfoService;

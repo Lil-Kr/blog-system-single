@@ -1,5 +1,5 @@
 import { LinkBaseType } from '@/types/components/LinkType'
-import { Card, Divider } from '@nextui-org/react'
+import { Card, Divider } from "@heroui/react"
 import { LinkBase } from '../link'
 import SvgIcon from '../svg/SvgIcon'
 

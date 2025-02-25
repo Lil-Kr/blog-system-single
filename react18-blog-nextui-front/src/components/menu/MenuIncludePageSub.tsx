@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { NavBarSubMenuItem } from '@/types/components/MenuType'
-import { Link } from '@nextui-org/react'
+import { Link } from "@heroui/react"
 import { useLocation, useNavigate } from 'oh-router-react'
 
 /**

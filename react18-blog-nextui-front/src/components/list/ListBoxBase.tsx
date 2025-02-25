@@ -1,6 +1,7 @@
 import React from 'react'
-import { Link, Listbox, ListboxItem } from '@nextui-org/react'
+import { Link, Listbox, ListboxItem } from "@heroui/react"
 import { ListBoxItemType, CompType } from '@/types/components/ListBoxType'
+import { clearScreenDown } from 'readline'
 
 const textLength = 32
 
@@ -19,7 +20,7 @@ const ListBoxBase = (props: { items: ListBoxItemType[]; type: CompType }) => {
               <ListboxItem key={index} href={item.url} textValue={item.text}>
                 <div className='flex justify-between text-medium'>
                   <span>
-                    {item.text.length > textLength ? item.text.substring(0, textLength) + ' ....' : item.text}
+                    {item.text?.length > textLength ? item.text?.substring(0, textLength) + ' ....' : item.text}
                   </span>
                   <span>{item.extend?.node}</span>
                 </div>

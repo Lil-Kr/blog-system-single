@@ -10,7 +10,7 @@ const blogItem: BlogItemsType = {
   key: 1,
   image: {
     alt: 'test image',
-    url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
+    url: 'http://localhost:8089/upload/image/Jay1_20240422212922_1894388366645006336.webp'
   },
   tags: [
     {
@@ -49,7 +49,7 @@ const CategoryDetail = () => {
               key: 1,
               image: {
                 alt: 'test image',
-                url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
+                url: 'http://localhost:8089/upload/image/Jay1_20240422212922_1894388366645006336.webp'
               },
               // todo: 删除id选项, 测试使用
               tags: blogItem.tags,

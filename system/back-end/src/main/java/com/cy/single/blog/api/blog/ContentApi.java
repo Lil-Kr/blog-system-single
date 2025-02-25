@@ -105,7 +105,7 @@ public class ContentApi {
   }
 
   @RecordLogger
-  @GetMapping("/frontGet")
+  @GetMapping("/frontGetBlog")
   public ApiResp<BlogContentVO> frontGetBlog(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
     return blogContentService.get(surrogateId);
   }

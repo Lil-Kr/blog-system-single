@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion, Variants } from 'framer-motion'
-import { Image } from '@nextui-org/react'
+import { Image } from "@heroui/react"
 
 const variants: Variants = {
   hidden: { opacity: 0, x: -100 },
@@ -12,10 +12,11 @@ interface CarouselProps {
 }
 
 const images = [
-  'http://localhost:8089/upload/image/Jay1_20240422212922.png',
-  'http://localhost:8089/upload/image/bak.webp',
-  'http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg',
-  'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
+  'http://localhost:8089/upload/image/Jay1_20240422212922_1894388366645006336.webp',
+  'http://localhost:8089/upload/image/微信图片_20240424184905_1894389253811605504.webp',
+  'http://localhost:8089/upload/image/微信图片_202404241849051_1894389542744625152.webp',
+  'http://localhost:8089/upload/image/微信图片_202404241849052_1894389626563596288.webp',
+  'http://localhost:8089/upload/image/微信图片_202404241849053_1894389691717914624.webp',
 ]
 
 const Carousel = (props: CarouselProps) => {

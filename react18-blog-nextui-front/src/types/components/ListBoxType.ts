@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-export type ListBoxItemType = {
+export interface ListBoxItemType {
   id: string
   text: string
   url?: string

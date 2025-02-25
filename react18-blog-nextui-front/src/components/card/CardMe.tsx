@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardFooter, Image } from '@nextui-org/react'
+import { Card, CardFooter, Image } from '@heroui/react'
 import SvgIcon from '../svg/SvgIcon'
 
 const CardMe = () => {
@@ -7,7 +7,7 @@ const CardMe = () => {
     <Card
       className='flex flex-col items-center gap-y-4'
       isPressable={true}
-      onPress={() => console.log('')}
+      onPress={() => console.log('')} // 点击头像出发 action
       radius='sm'
       shadow='sm'
       fullWidth={true}
@@ -17,11 +17,11 @@ const CardMe = () => {
           alt='me'
           className='object-cover'
           isZoomed={true}
-          width={300}
+          width={200}
           height={200}
           // shadow='sm'
           radius='full'
-          src='http://localhost:8089/upload/image/Jay1_20240422212922.png'
+          src='http://localhost:8089/upload/image/11月的萧邦_109951167749320136_1894396375513305088.webp'
         />
       </div>
 

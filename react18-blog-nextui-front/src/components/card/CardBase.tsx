@@ -1,4 +1,4 @@
-import { Card, CardBody, CardFooter, CardHeader, Image } from '@nextui-org/react'
+import { Card, CardBody, CardFooter, CardHeader, Image } from "@heroui/react"
 import React from 'react'
 
 const CardBase = () => {
@@ -14,7 +14,7 @@ const CardBase = () => {
         height={200}
         shadow='sm'
         radius='full'
-        src='http://localhost:8089/upload/image/Jay1_20240422212922.png'
+        src='http://localhost:8089/upload/image/微信图片_20240424184905_1894389253811605504.webp'
       />
       <div>abc</div>
       <div>abc</div>

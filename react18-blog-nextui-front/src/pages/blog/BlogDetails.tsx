@@ -32,7 +32,7 @@ const BlogDetails = () => {
   }, [])
 
   const getBlogDetail = async (params: BlogContentGetReqParams): Promise<BlogContentVO> => {
-    const blogDetail = await blogContentApi.frontGet({ ...params })
+    const blogDetail = await blogContentApi.frontGetBlog({ ...params })
     const { code, data } = blogDetail
     if (code !== 200) {
       return {} as BlogContentVO

@@ -2,7 +2,7 @@ import AcmeLogo from '@/components/navbar/icon/AcmeLogo'
 import SearchIcon from '@/components/navbar/icon/SearchIcon'
 import { ThemeSwitcher } from '@/components/themeSwitcher'
 import { baseUrl } from '@/constant'
-import { Input, Kbd, Link } from '@nextui-org/react'
+import { Input, Kbd, Link } from "@heroui/react"
 import { useTheme } from 'next-themes'
 import { useNavigate } from 'oh-router-react'
 

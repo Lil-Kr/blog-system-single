@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTheme } from 'next-themes'
-import { Button } from '@nextui-org/react'
+import { Button } from "@heroui/react"
 
 const ThemeSwitcherDemo = () => {
   const { theme, setTheme } = useTheme()

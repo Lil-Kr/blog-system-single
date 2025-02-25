@@ -84,12 +84,12 @@ const rootConfig: RouterItemType[] = [
       },
       {
         meta: {
-          key: '/detail',
+          key: '/blog',
           title: '博客详情',
           layout: false,
           icon: ''
         },
-        path: 'detail',
+        path: 'blog',
         // element: LazyLoad(lazy(() => import('@/pages/blog/BlogDetails'))),
         children: [
           {

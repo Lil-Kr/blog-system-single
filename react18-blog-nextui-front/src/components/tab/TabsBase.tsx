@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Card, CardBody, Tab, Tabs, dataFocusVisibleClasses } from '@nextui-org/react'
+import { Card, CardBody, Tab, Tabs, dataFocusVisibleClasses } from "@heroui/react"
 import { ListItemBase } from '../list'
 import { Key } from '@react-types/shared'
 import { BlogItemsType } from '@/types/blog'
@@ -8,7 +8,7 @@ const blogItem: BlogItemsType = {
   key: 1,
   image: {
     alt: 'test image',
-    url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
+    url: 'http://localhost:8089/upload/image/Jay1_20240422212922_1894388366645006336.webp'
   },
   tags: [
     {

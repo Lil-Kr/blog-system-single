@@ -9,10 +9,10 @@ import { PageResult, PaginationType } from '@/types/base/response'
 const env = import.meta.env
 
 const images = [
-  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/Jay1_20240422212922.png' },
-  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/bak.webp' },
-  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/微信图片_20240424184905_1784582176919130112.jpg' },
-  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/微信图片_202404241849052.jpg' }
+  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/Jay1_20240422212922_1894388366645006336.webp' },
+  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/寻找周杰伦_109951165564941972_1894396427136798720.webp' },
+  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/微信图片_20240424184905_1894389253811605504.webp' },
+  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/微信图片_202404241849052_1894389626563596288.webp' }
 ]
 
 export type btnStatueProp = {
@@ -89,7 +89,7 @@ const Home = () => {
         tags: labels,
         blogTitle: title,
         publishTime,
-        backendApi: `${baseUrl}/detail/${surrogateId}`
+        backendApi: `${baseUrl}/blog/${surrogateId}`
       })
     )
 
@@ -138,7 +138,7 @@ const Home = () => {
         <div className='flex w-full'>
           <CarouselBase images={images} />
         </div>
-        <div className='grid grid-cols-3 gap-4'>
+        <div className='grid grid-cols-4 gap-2'>
           {contents?.list.map((blogItem, index) => (
             <CardBlogListItem key={index} blogItem={blogItem} />
           ))}

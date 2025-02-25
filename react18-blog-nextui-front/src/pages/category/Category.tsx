@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card } from '@nextui-org/react'
+import { Card } from "@heroui/react"
 import { MenuIncludePageSub } from '@/components/menu'
 import { NavBarSubMenuItem } from '@/types/components/MenuType'
 import { Outlet, useParams } from 'oh-router-react'

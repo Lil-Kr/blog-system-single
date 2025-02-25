@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Pagination } from '@nextui-org/react'
+import { Button, Pagination } from "@heroui/react"
 import { PaginationType } from '@/types/base/response'
 
 export type btnStatueProp = {

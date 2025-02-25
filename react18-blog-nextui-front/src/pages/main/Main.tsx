@@ -15,38 +15,6 @@ import { baseUrl } from '@/constant'
 import { getFontRandomColorClass } from '@/utils/colors'
 import LinkListArchive from '@/components/link/LinkListArchive'
 
-// const blogItems: BlogItemsType[] = [
-//   {
-//     key: 1,
-//     image: {
-//       alt: 'test image',
-//       url: 'http://localhost:8089/upload/image/Jay1_20240422212922.png'
-//     },
-//     tags: ['Java后台开发', '微服务', 'TS'],
-//     blogTitle: 'React8 hook 学习经验分享',
-//     publishTime: '2022-02-22'
-//   },
-//   {
-//     key: 2,
-//     image: {
-//       alt: 'test image',
-//       url: 'http://localhost:8089/upload/image/微信图片_20240424184905_1784582176919130112.jpg'
-//     },
-//     tags: ['Java后台开发', '微服务', 'TS'],
-//     blogTitle: '操作系统中的线程与进程',
-//     publishTime: '2022-09-22'
-//   },
-//   {
-//     key: 3,
-//     image: {
-//       alt: 'test image',
-//       url: 'http://localhost:8089/upload/image/微信图片_202404241849052.jpg'
-//     },
-//     tags: ['编译原理', '计算机基础'],
-//     blogTitle: '操作系统中的线程与进程',
-//     publishTime: '2024-04-22'
-//   }
-// ]
 
 // const newBlogs: ListBoxItemType[] = [
 //   { text: '聊一聊微服务架构与k8s的优劣势', url: '#' },
@@ -112,6 +80,12 @@ import LinkListArchive from '@/components/link/LinkListArchive'
 //   }
 // ]
 
+// const categorys: ListBoxItemType[] = [
+//   { text: 'Java后端', url: '/category/java', extend: { node: <div>{'1'}</div> } },
+//   { text: 'ReactJS', url: '#', extend: { node: <div>{'3'}</div> } },
+//   { text: '操作系统', url: '#', extend: { node: <div>{'4'}</div> } }
+// ]
+
 const archives: LinkArchiveType[] = [
   {
     key: 1,
@@ -157,12 +131,6 @@ const archives: LinkArchiveType[] = [
   }
 ]
 
-// const categorys: ListBoxItemType[] = [
-//   { text: 'Java后端', url: '/category/java', extend: { node: <div>{'1'}</div> } },
-//   { text: 'ReactJS', url: '#', extend: { node: <div>{'3'}</div> } },
-//   { text: '操作系统', url: '#', extend: { node: <div>{'4'}</div> } }
-// ]
-
 const Main = () => {
   const [categorys, setCategory] = useState<ListBoxItemType[]>([])
   const [labels, setLabel] = useState<LinkBaseType[]>([])
@@ -179,41 +147,46 @@ const Main = () => {
       svgIcon: <SvgIcon name='book' />,
       content: <ListBoxBase type={'link'} items={contents} />
     },
-    {
-      key: 2,
-      headTitle: '分类',
-      headRightContent: {
-        headMoreText: '更多',
-        moreUrl: `${baseUrl}/category/default`
-      },
-      svgIcon: <SvgIcon name='category' />,
-      content: <ListBoxBase type={'link'} items={categorys} />
-    },
-    {
-      key: 3,
-      headTitle: '标签',
-      svgIcon: <SvgIcon name='tag-1' />,
-      content: <LinkListBase items={labels} />
-    },
-    {
-      key: 4,
-      headTitle: '归档',
-      headRightContent: {
-        headMoreText: '更多',
-        moreUrl: ''
-      },
-      svgIcon: <SvgIcon name='calendar-1' />,
-      content: <LinkListArchive items={archives} />
-    }
+    // {
+    //   key: 2,
+    //   headTitle: '分类',
+    //   headRightContent: {
+    //     headMoreText: '更多',
+    //     moreUrl: `${baseUrl}/category/default`
+    //   },
+    //   svgIcon: <SvgIcon name='category' />,
+    //   content: <ListBoxBase type={'link'} items={categorys} />
+    // },
+    // {
+    //   key: 3,
+    //   headTitle: '标签',
+    //   svgIcon: <SvgIcon name='tag-1' />,
+    //   content: <LinkListBase items={labels} />
+    // },
+    // {
+    //   key: 4,
+    //   headTitle: '归档',
+    //   headRightContent: {
+    //     headMoreText: '更多',
+    //     moreUrl: ''
+    //   },
+    //   svgIcon: <SvgIcon name='calendar-1' />,
+    //   content: <LinkListArchive items={archives} />
+    // }
   ]
 
   /**
    * 初始化数据
    */
   useEffect(() => {
+    // 近期文章
     frontContentRecentList()
-    frontCategoryCountList()
-    frontLabelList()
+
+    // 分类列表
+    // frontCategoryCountList()
+
+    // 标签列表
+    // frontLabelList()
   }, [])
 
   const frontCategoryCountList = async () => {
@@ -250,6 +223,10 @@ const Main = () => {
     setLabel(labelData)
   }
 
+  /**
+   * 获取近期文章列表
+   * @returns
+   */
   const frontContentRecentList = async () => {
     const contents = await blogContentApi.frontContentRecentList()
     const { code, data, msg } = contents
@@ -260,7 +237,7 @@ const Main = () => {
     const contentData = data.map(({ id, surrogateId, number, title, original, recommend }) => ({
       id: surrogateId,
       text: title,
-      url: `${baseUrl}/detail/${surrogateId}`
+      url: `${baseUrl}/blog/${surrogateId}`
     }))
     setContents(contentData)
   }
@@ -268,7 +245,7 @@ const Main = () => {
   return (
     <>
       {/* 左侧侧边栏 */}
-      <div className='col-span-3'>
+      <div className='col-span-2'>
         <div className='sider-left-warpper flex-col hidden lg:basis-1/4 md:basis-1/4 lg:flex md:flex items-center gap-y-4'>
           <CardMe />
           {cardList.map(item => (
@@ -277,7 +254,7 @@ const Main = () => {
         </div>
       </div>
       {/* 右侧主体内容 */}
-      <div className='col-span-9'>
+      <div className='col-span-8'>
         <Outlet />
       </div>
     </>

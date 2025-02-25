@@ -14,6 +14,7 @@ import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
 import com.cy.single.blog.pojo.vo.image.ImageUploadVO;
 import com.cy.single.blog.service.ImageInfoService;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
+import com.luciad.imageio.webp.WebPWriteParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +22,24 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+import static com.cy.single.blog.constant.ResponseConstant.IMAGE_SIZE_ERROR;
+import static com.cy.single.blog.constant.ResponseConstant.RESPONSE_UPLOAD_IMAGE_ERROR_INFO;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -41,6 +50,9 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 @Service
 @Slf4j
 public class ImageInfoServiceImpl implements ImageInfoService {
+
+  private static final String UPLOAD_IMAGE_ERROR = "error";
+  private static final String UPLOAD_IMAGE_DONE = "done";
 
   @Value("${upload.rootDir}")
   private String rootDir;
@@ -114,9 +126,25 @@ public class ImageInfoServiceImpl implements ImageInfoService {
   public ApiResp<String> delete(Long surrogateId) {
     QueryWrapper<ImageInfo> queryWrapper = new QueryWrapper<>();
     queryWrapper.eq("surrogate_id", surrogateId);
+
+    ImageInfo imageInfo = imageInfoMapper.selectOne(queryWrapper);
+    if (Objects.isNull(imageInfo)) {
+      return ApiResp.failure(DEL_ERROR);
+    }
+
+    // delete from DB
     int delete = imageInfoMapper.delete(queryWrapper);
     if (delete >= 1) {
-      return ApiResp.success();
+      // delete from Disk
+      String filePath = rootDir + imageInfo.getImageUrl();
+      Path delPath = Paths.get(filePath);
+      try {
+        Files.delete(delPath);
+        return ApiResp.success();
+      } catch (IOException e) {
+        log.info("delete image error: {}", e.getMessage());
+        return ApiResp.failure(DEL_ERROR);
+      }
     } else {
       return ApiResp.failure(DEL_ERROR);
     }
@@ -125,15 +153,25 @@ public class ImageInfoServiceImpl implements ImageInfoService {
   @Override
   public ApiResp<ImageUploadVO> imageUpload(ImageUploadReq req) throws IOException {
     MultipartFile imageFile = req.getImage();
+    // 检查文件大小，限制为 15MB
+    long maxSizeInBytes = 10 * 1024 * 1024; // 15MB
+    if (imageFile.getSize() > maxSizeInBytes) {
+      return ApiResp.failure(IMAGE_SIZE_ERROR);
+    }
+
     String imageOriginalFullName = imageFile.getOriginalFilename();
     String[] imageFileNames = imageOriginalFullName.split("\\.");
+    if (imageFileNames.length > 2) {
+      return ApiResp.failure(RESPONSE_UPLOAD_IMAGE_ERROR_INFO);
+    }
+
     String imageName = imageFileNames[0];
-    String imageTypeSuffix = imageFileNames[1];
+    String imageTypeSuffix = "webp";
 
     StringBuffer resourcePath = new StringBuffer(rootDir);
     resourcePath.append(uploadDir);
 
-    // 创建Path对象
+    // create Path object
     Path rootPath = Paths.get(resourcePath.toString());
     if (!Files.exists(rootPath)) {
       Files.createDirectories(rootPath);
@@ -143,17 +181,37 @@ public class ImageInfoServiceImpl implements ImageInfoService {
     resourcePath.append(moduleImagePath + "/" + imageReName);
 
     ImageUploadVO imageUploadVO = new ImageUploadVO();
-
     try(InputStream inputStream = imageFile.getInputStream()) {
-      Files.copy(inputStream, Paths.get(resourcePath.toString()), StandardCopyOption.REPLACE_EXISTING);
-      String imageUrl = uploadDir + moduleImagePath + "/" + imageReName;
-      // /upload/imageJay1_20240422212922_1784458980102377472.png
-//      System.out.println(imageUrl);
+      /**
+       * write image to disk
+       */
+      BufferedImage originalImage = ImageIO.read(inputStream);
+      Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType("image/webp");
+      if (!writers.hasNext()) {
+        return ApiResp.failure("No writers found for format: webp");
+      }
+
+      ImageWriter writer = writers.next();
+      // writer webp to disk
+      try (ImageOutputStream ios = ImageIO.createImageOutputStream(Files.newOutputStream(Paths.get(resourcePath.toString())))) {
+        WebPWriteParam writeParam = new WebPWriteParam(writer.getLocale());
+        writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        writeParam.setCompressionType(writeParam.getCompressionTypes()[WebPWriteParam.LOSSY_COMPRESSION]); // lossy compression
+        writeParam.setCompressionQuality(0.75f);
+        writer.setOutput(ios);
+        writer.write(null, new IIOImage(originalImage, null, null), writeParam);
+      } catch (Exception e) {
+        log.info("image format webp error: {}", e.getMessage());
+        imageUploadVO.setMessage(e.getMessage());
+        imageUploadVO.setStatus(UPLOAD_IMAGE_ERROR);
+        return ApiResp.failure(imageUploadVO);
+      }
 
       /**
        * insert into DB
        * splice name, image_url, type ...
        */
+      String imageUrl = uploadDir + moduleImagePath + "/" + imageReName;
       ImageInfo imageInfo = ImageDTO.buildImageInfo(req.getImageCategoryId(), imageReName, imageTypeSuffix, imageOriginalFullName, imageUrl);
       int insert = imageInfoMapper.insert(imageInfo);
 
@@ -161,16 +219,16 @@ public class ImageInfoServiceImpl implements ImageInfoService {
       imageUploadVO.setUid(String.valueOf(imageInfo.getSurrogateId()));
       imageUploadVO.setUrl(imageUrl);
       if (insert > 0) {
-        imageUploadVO.setStatus("done");
+        imageUploadVO.setStatus(UPLOAD_IMAGE_DONE);
         return ApiResp.success(imageUploadVO);
       }else {
-        imageUploadVO.setStatus("error");
+        imageUploadVO.setStatus(UPLOAD_IMAGE_ERROR);
         return ApiResp.failure(imageUploadVO);
       }
     } catch (Exception e) {
       log.info("upload image error: {}", e.getMessage());
       imageUploadVO.setMessage(e.getMessage());
-      imageUploadVO.setStatus("error");
+      imageUploadVO.setStatus(UPLOAD_IMAGE_ERROR);
       return ApiResp.failure(imageUploadVO);
     }
   }

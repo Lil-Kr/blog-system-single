@@ -31,7 +31,7 @@ const CarouselBase = (props: { images: imageType[] }) => {
   }, [currentIndex])
 
   return (
-    <div className='flex flex-col w-full h-[55vh] m-auto relative group'>
+    <div className='flex flex-col w-full h-[40vh] m-auto relative group'>
       <div
         style={{
           backgroundImage: `url(${images[currentIndex].url})`

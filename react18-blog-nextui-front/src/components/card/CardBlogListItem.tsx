@@ -1,7 +1,6 @@
-import { Card, Image, Link } from '@nextui-org/react'
+import { Card, Image, Link } from "@heroui/react"
 import { BlogItemsType } from '@/types/blog'
 import { useNavigate } from 'oh-router-react'
-import { baseUrl } from '@/constant'
 
 const CardBlogListItem = (props: { blogItem: BlogItemsType }) => {
   const { blogItem } = props

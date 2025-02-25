@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardBody, CardHeader } from '@nextui-org/react'
+import { Card, CardBody, CardHeader } from "@heroui/react"
 import { CardBaseDataType } from '@/types/components/CardType'
 import { useNavigate } from 'oh-router-react'
 
