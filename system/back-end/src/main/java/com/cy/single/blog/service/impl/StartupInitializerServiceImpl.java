@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -42,14 +41,14 @@ public class StartupInitializerServiceImpl implements StartupInitializerService 
   @Autowired
   private BlogTopicMapper blogTopicMapper;
 
-  @PostConstruct
+//  // @PostConstruct
   @Override
   public void initBlogLabel() {
     List<BlogLabelVO> blogLabels = blogLabelMapper.getLabelList(new BlogLabelListReq());
     CacheManager.setBlogLabelInfoCache(blogLabels);
   }
 
-  @PostConstruct
+  // @PostConstruct
   @Override
   public void initBlogTopic() {
     List<BlogTopicVO> blogTopicVOS = blogTopicMapper.topicList(new BlogTopicReq());
@@ -57,14 +56,14 @@ public class StartupInitializerServiceImpl implements StartupInitializerService 
 
   }
 
-  @PostConstruct
+  // @PostConstruct
   @Override
   public void initBlogCategory() {
     List<BlogCategoryVO> blogCategoryVOS = blogCategoryMapper.categoryList(new BlogCategoryPageReq());
     CacheManager.setBlogCategoryAllListCache(blogCategoryVOS);
   }
 
-  @PostConstruct
+  // @PostConstruct
   @Override
   public void initImageCategory() {
     List<ImageCategoryVO> list = imageCategoryMapper.imageCategoryList(new ImageCategoryPageReq());

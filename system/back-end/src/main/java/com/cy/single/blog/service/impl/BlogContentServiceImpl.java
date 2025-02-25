@@ -213,11 +213,12 @@ public class BlogContentServiceImpl implements BlogContentService {
     }
     Integer count = blogContentMapper.contentCount(req);
 
-    pageList.stream().forEach(item -> {
-      item.setBlogLabelList(CacheManager.getBlogLabelNameListCache(item.getLabelIds()));
-      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
-      item.setBlogTopicVO(CacheManager.getBlogTopicInfoCacheMap().getOrDefault(item.getTopicId(), new BlogTopicVO()));
-    });
+      // 设置缓存--作废
+//    pageList.stream().forEach(item -> {
+//      item.setBlogLabelList(CacheManager.getBlogLabelNameListCache(item.getLabelIds()));
+//      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
+//      item.setBlogTopicVO(CacheManager.getBlogTopicInfoCacheMap().getOrDefault(item.getTopicId(), new BlogTopicVO()));
+//    });
 
     return new PageResult<>(new ArrayList<>(pageList), count);
   }
