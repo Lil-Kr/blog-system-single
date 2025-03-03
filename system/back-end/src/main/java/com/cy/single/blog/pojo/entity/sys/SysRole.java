@@ -3,8 +3,10 @@ package com.cy.single.blog.pojo.entity.sys;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.cy.single.blog.base.BaseEntity;
 import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -21,7 +23,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("sys_rol")
-public class SysRole extends Model<SysRole> {
+public class SysRole extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,11 +49,6 @@ public class SysRole extends Model<SysRole> {
     private Integer type;
 
     /**
-     * 状态, 0正常，1删除
-     */
-    private Integer deleted;
-
-    /**
      * 备注
      */
     private String remark;
@@ -65,16 +62,5 @@ public class SysRole extends Model<SysRole> {
      * 操作ip
      */
     private String operateIp;
-
-    /**
-     * 创建时间
-     */
-    private String createTime;
-
-    /**
-     * 更改时间
-     */
-    private String updateTime;
-
 
 }

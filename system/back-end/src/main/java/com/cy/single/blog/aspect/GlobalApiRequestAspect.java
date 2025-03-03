@@ -88,6 +88,9 @@ public class GlobalApiRequestAspect {
             RequestHolder.setCurrentUser(user);
             Object proceed = proceedingJoinPoint.proceed();
 
+            /**
+             * remove user info
+             */
             RequestHolder.remove();
             return proceed;
         }catch (Throwable e) {

@@ -67,7 +67,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
             BlogLabelVO cacheEntity = new BlogLabelVO();
             BeanUtils.copyProperties(saveEntity, cacheEntity);
             List<BlogLabelVO> blogLabelListCache = Stream.concat(CacheManager.getBlogLabelListCache().stream(), Stream.of(cacheEntity)).collect(Collectors.toList());
-            CacheManager.setBlogLabelInfoCache(blogLabelListCache);
+//            CacheManager.setBlogLabelInfoCache(blogLabelListCache);
             return ApiResp.success();
         }else {
             return ApiResp.failure(SAVE_ERROR);
@@ -96,7 +96,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
     public ApiResp<String> delete(BlogLabelReq req) {
         int count = blogLabelMapper.deleteBySurrogateId(req.getSurrogateId());
         if (count >= 1) {
-            CacheManager.removeBlogLabelCache(req.getSurrogateId());
+//            CacheManager.removeBlogLabelCache(req.getSurrogateId());
             return ApiResp.success();
         }else {
             return ApiResp.failure(OPERATE_ERROR);

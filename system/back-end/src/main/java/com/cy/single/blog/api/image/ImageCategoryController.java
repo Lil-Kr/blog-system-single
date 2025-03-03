@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
 @Slf4j
 @RestController
 @RequestMapping("/image/category")
-public class ImageCategoryAip {
+public class ImageCategoryController {
 
   @Autowired
   private ImageCategoryService imageCategoryService;

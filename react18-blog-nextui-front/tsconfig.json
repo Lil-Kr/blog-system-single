@@ -51,6 +51,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx", "src/components/themeSwitcher/LanguageSwitcher.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

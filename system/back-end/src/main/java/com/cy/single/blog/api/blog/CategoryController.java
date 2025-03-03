@@ -31,7 +31,7 @@ import static com.cy.single.blog.utils.checkUtil.ParamValidator.checkSurrogateId
 @Slf4j
 @RestController
 @RequestMapping("/blog/category")
-public class CategoryApi {
+public class CategoryController {
 
     @Autowired
     private BlogCategoryService blogCategoryService;

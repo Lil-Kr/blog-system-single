@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.single.blog.dao.SysOrgMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.sys.SysOrg">
+        <id column="id" property="id" />
+        <result column="surrogate_id" property="surrogateId" />
+        <result column="number" property="number" />
+        <result column="name" property="name" />
+        <result column="parent_id" property="parentId" />
+        <result column="level" property="level" />
+        <result column="seq" property="seq" />
+        <result column="remark" property="remark" />
+        <result column="operator" property="operator" />
+        <result column="operate_ip" property="operateIp" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+
+    <resultMap id="BaseResultVOMap" type="com.cy.single.blog.pojo.resp.org.SysOrgVO">
+        <id column="id" property="id" />
+        <result column="surrogate_id" property="surrogateId" />
+        <result column="number" property="number" />
+        <result column="name" property="name" />
+        <result column="parent_id" property="parentId" />
+        <result column="level" property="level" />
+        <result column="seq" property="seq" />
+        <result column="remark" property="remark" />
+        <result column="operator" property="operator" />
+        <result column="operate_ip" property="operateIp" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <sql id="Table_Name">
+        sys_org
+    </sql>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, surrogate_id, number, name, parent_id, level, seq, remark, operator, operate_ip, create_time, update_time
+    </sql>
+
+    <select id="selectChildOrgList" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+        from <include refid="Table_Name"/>
+        where level like concat(#{level},'.%')
+    </select>
+
+    <select id="selectChildOrgListByParentId" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from <include refid="Table_Name"/>
+        where parent_id = #{parentId}
+    </select>
+</mapper>

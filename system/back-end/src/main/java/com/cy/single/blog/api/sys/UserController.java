@@ -18,12 +18,12 @@ import javax.validation.Valid;
 /**
  * @Author: Lil-K
  * @Date: 2024/3/4
- * @Description:
+ * @Description: user api
  */
 @RestController
 @RequestMapping("/sys/user")
 @Slf4j
-public class UserApi {
+public class UserController {
 
     @Autowired
     private SysUserService userService;

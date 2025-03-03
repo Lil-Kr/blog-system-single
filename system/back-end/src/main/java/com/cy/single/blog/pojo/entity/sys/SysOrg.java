@@ -3,8 +3,11 @@ package com.cy.single.blog.pojo.entity.sys;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.cy.single.blog.base.BaseEntity;
 import lombok.*;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -21,7 +24,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("sys_org")
-public class SysOrg extends Model<SysOrg> {
+public class SysOrg extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -61,9 +64,6 @@ public class SysOrg extends Model<SysOrg> {
      */
     private Integer seq;
 
-    /**
-     * 备注
-     */
     private String remark;
 
     /**
@@ -76,14 +76,15 @@ public class SysOrg extends Model<SysOrg> {
      */
     private String operateIp;
 
+
     /**
      * 创建时间
      */
-    private String createTime;
+    private Date createTime;
 
     /**
      * 更改时间
      */
-    private String updateTime;
+    private Date updateTime;
 
 }

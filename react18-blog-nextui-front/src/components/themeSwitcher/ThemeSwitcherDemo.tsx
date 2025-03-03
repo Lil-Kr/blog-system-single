@@ -8,11 +8,11 @@ const ThemeSwitcherDemo = () => {
     <div>
       The current theme is: {theme}
       <br />
-      <Button onClick={() => setTheme('light')}>Light Mode</Button>
+      <Button onPress={() => setTheme('light')}>Light Mode</Button>
       <br />
-      <Button onClick={() => setTheme('dark')}>Dark Mode</Button>
+      <Button onPress={() => setTheme('dark')}>Dark Mode</Button>
       <br />
-      <Button onClick={() => setTheme('purple-dark')}>purple Dark Mode</Button>
+      <Button onPress={() => setTheme('purple-dark')}>purple Dark Mode</Button>
     </div>
   )
 }

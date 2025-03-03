@@ -38,8 +38,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-import static com.cy.single.blog.constant.ResponseConstant.IMAGE_SIZE_ERROR;
-import static com.cy.single.blog.constant.ResponseConstant.RESPONSE_UPLOAD_IMAGE_ERROR_INFO;
+import static com.cy.single.blog.common.constants.ResponseConstant.*;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**

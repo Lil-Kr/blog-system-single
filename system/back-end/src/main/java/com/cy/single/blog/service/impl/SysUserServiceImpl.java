@@ -24,7 +24,7 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.USER_INFO_ERROR;
  */
 @Service
 @Slf4j
-public class UserServiceImpl implements SysUserService {
+public class SysUserServiceImpl implements SysUserService {
 
     @Autowired
     private SysUserMapper sysUserMapper;

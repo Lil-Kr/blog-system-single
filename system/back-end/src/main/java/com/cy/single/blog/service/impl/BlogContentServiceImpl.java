@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.common.cache.CacheManager;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.BlogContentMapper;
 import com.cy.single.blog.dao.BlogContentMongoMapper;
@@ -13,10 +12,8 @@ import com.cy.single.blog.pojo.entity.blog.BlogContent;
 import com.cy.single.blog.pojo.entity.blog.BlogContentMongo;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
-import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
 import com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO;
 import com.cy.single.blog.pojo.vo.blog.BlogContentVO;
-import com.cy.single.blog.pojo.vo.blog.BlogTopicVO;
 import com.cy.single.blog.service.BlogContentService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -89,11 +86,11 @@ public class BlogContentServiceImpl implements BlogContentService {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
 
-    pageList.stream().forEach(item -> {
-      item.setBlogLabelList(CacheManager.getBlogLabelListCache(item.getLabelIds()));
-      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
-      item.setBlogTopicVO(CacheManager.getBlogTopicInfoCacheMap().getOrDefault(item.getTopicId(), new BlogTopicVO()));
-    });
+//    pageList.stream().forEach(item -> {
+//      item.setBlogLabelList(CacheManager.getBlogLabelListCache(item.getLabelIds()));
+//      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
+//      item.setBlogTopicVO(CacheManager.getBlogTopicInfoCacheMap().getOrDefault(item.getTopicId(), new BlogTopicVO()));
+//    });
 
     return new PageResult<>(pageList, count);
   }
@@ -105,10 +102,10 @@ public class BlogContentServiceImpl implements BlogContentService {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
 
-    list.stream().forEach(item -> {
-      item.setBlogLabelList(CacheManager.getBlogLabelListCache(item.getLabelIds()));
-      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
-    });
+//    list.stream().forEach(item -> {
+//      item.setBlogLabelList(CacheManager.getBlogLabelListCache(item.getLabelIds()));
+//      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
+//    });
 
     return new PageResult<>(list, list.size());
   }

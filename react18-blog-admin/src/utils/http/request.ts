@@ -41,6 +41,7 @@ axiosInstance.interceptors.response.use(
       const { code, msg, token, userInfo } = data
 
       if (code !== 200) {
+        console.log('--> aaaa:', msg)
         message.error(msg)
       }
       return data
