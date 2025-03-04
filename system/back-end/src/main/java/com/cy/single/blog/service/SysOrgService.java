@@ -2,11 +2,13 @@ package com.cy.single.blog.service;
 
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.pojo.req.org.OrgDeleteParam;
-import com.cy.single.blog.pojo.req.org.OrgGetChildrenParam;
-import com.cy.single.blog.pojo.req.org.OrgListAllParam;
-import com.cy.single.blog.pojo.req.org.OrgParam;
+import com.cy.single.blog.pojo.dto.org.OrgLevelDto;
+import com.cy.single.blog.pojo.entity.sys.SysOrg;
+import com.cy.single.blog.pojo.req.org.OrgGetChildrenReq;
+import com.cy.single.blog.pojo.req.org.OrgListAllReq;
+import com.cy.single.blog.pojo.req.org.OrgReq;
 import com.cy.single.blog.pojo.resp.org.SysOrgVO;
+import java.util.List;
 
 /**
  * @Author: Lil-K
@@ -15,18 +17,18 @@ import com.cy.single.blog.pojo.resp.org.SysOrgVO;
  */
 public interface SysOrgService {
 	
-	ApiResp<String> add(OrgParam param);
+	ApiResp<String> add(OrgReq param);
 
-	ApiResp<String> edit(OrgParam param);
+	ApiResp<String> edit(OrgReq param);
 
-	PageResult<SysOrgVO> pageList(OrgListAllParam param);
+	PageResult<SysOrg> list(OrgListAllReq param);
 
-	PageResult<SysOrgVO> list(OrgListAllParam param);
+	PageResult<SysOrgVO> getChildrenOrgList(OrgGetChildrenReq dto);
 
-	PageResult<SysOrgVO> getChildrenOrgList(OrgGetChildrenParam dto);
+	List<OrgLevelDto> orgTree();
 
-	ApiResp orgTree();
+	ApiResp<String> delete(Long surrogateId);
 
-	ApiResp<String> delete(OrgDeleteParam dto);
+	PageResult<SysOrgVO> pageOrgList(OrgListAllReq param);
 
 }

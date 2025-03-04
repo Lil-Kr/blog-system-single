@@ -2,14 +2,15 @@ package com.cy.single.blog.enums;
 
 public enum ReturnCodeEnum {
 
-    SUCCESS(200, "成功"),
+    SUCCESS(200, "操作成功"),
     USER_INFO_NO_EXIST(411, "用户不存在"),
     USER_INFO_ERROR(412, "用户名或密码错误"),
-    INFO_EXIST(413, "信息不存在"),
-    USER_OLD_PASSWORD_ERROR(414, "原密码错误"),
-    SAME_PASSWORD_ERROR(415, "不能与原密码一样"),
-    SEND_MAIL_ERROR(416, "调用邮件服务器错误"),
-    DATA_INFO_REPEAT(417, "数据重复"),
+    INFO_NOT_EXIST(413, "信息不存在, 操作失败"),
+    INFO_EXIST(414, "信息已存在, 操作失败"),
+    USER_OLD_PASSWORD_ERROR(415, "原密码错误"),
+    SAME_PASSWORD_ERROR(416, "不能与原密码一样"),
+    SEND_MAIL_ERROR(417, "调用邮件服务器错误"),
+    DATA_INFO_REPEAT(418, "数据重复"),
     SAVE_ERROR(421, "保存失败"),
     EDITE_ERROR(422, "修改失败"),
     DEL_ERROR(423, "删除失败"),

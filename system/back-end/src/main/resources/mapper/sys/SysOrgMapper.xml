@@ -18,22 +18,6 @@
         <result column="update_time" property="updateTime" />
     </resultMap>
 
-
-    <resultMap id="BaseResultVOMap" type="com.cy.single.blog.pojo.resp.org.SysOrgVO">
-        <id column="id" property="id" />
-        <result column="surrogate_id" property="surrogateId" />
-        <result column="number" property="number" />
-        <result column="name" property="name" />
-        <result column="parent_id" property="parentId" />
-        <result column="level" property="level" />
-        <result column="seq" property="seq" />
-        <result column="remark" property="remark" />
-        <result column="operator" property="operator" />
-        <result column="operate_ip" property="operateIp" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-    </resultMap>
-
     <sql id="Table_Name">
         sys_org
     </sql>
@@ -54,5 +38,55 @@
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         where parent_id = #{parentId}
+    </select>
+
+    <select id="pageList" resultType="com.cy.single.blog.pojo.resp.org.SysOrgVO">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name"/>
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.name != null and param.name != ''">
+                and `name` = #{param.name}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `number` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+        <if test="param.isOrder != null and param.isOrder != ''">
+            order by create_time
+            <if test="param.isOrder == 0">
+                asc
+            </if>
+            <if test="param.isOrder == 1">
+                desc
+            </if>
+        </if>
+    </select>
+
+    <select id="countByList" resultType="java.lang.Integer">
+        select count(1)
+        from <include refid="Table_Name"/>
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `number` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
     </select>
 </mapper>

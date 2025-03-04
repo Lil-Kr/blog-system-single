@@ -36,11 +36,11 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, surrogate_id, name, type, remark, deleted, operator, operate_ip, create_time, update_time
+        id, surrogate_id, `name`, `type`, remark, status, deleted, operate_ip, creator_id, operator, create_time, update_time
     </sql>
 
     <!--分页查询角色列表-->
-    <select id="selectRoleListPage" resultMap="BaseResultVoMap">
+    <!--<select id="selectRoleListPage" resultMap="BaseResultVoMap">
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         <where>
@@ -56,5 +56,61 @@
             and deleted = 0
         </where>
         order by create_time asc
+    </select>-->
+
+    <delete id="deleteBySurrogateId">
+        delete from <include refid="Table_Name"/>
+        where surrogate_id = #{surrogateId}
+    </delete>
+
+    <select id="pageRoleList" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from <include refid="Table_Name"/>
+        <where>
+            <if test="param.name != null">
+                and name = #{param.name}
+            </if>
+            <if test="param.type != null">
+                and `type` = #{param.type}
+            </if>
+            <if test="param.status != null">
+                and status = #{param.status}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `type` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="roleCount" resultType="java.lang.Integer">
+        select count(1)
+        from <include refid="Table_Name"/>
+        <where>
+            <if test="param.name != null">
+                and name = #{param.name}
+            </if>
+            <if test="param.type != null">
+                and `type` = #{param.type}
+            </if>
+            <if test="param.status != null">
+                and status = #{param.status}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `type` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                or
+                remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
     </select>
 </mapper>

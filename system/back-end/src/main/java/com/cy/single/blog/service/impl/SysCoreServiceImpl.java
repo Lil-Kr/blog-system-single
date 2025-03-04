@@ -107,12 +107,12 @@ public class SysCoreServiceImpl implements SysCoreService {
      */
     private boolean isSuperAdmin(long userSurrogateId) throws Exception {
         // todo 超级管理员逻辑代码
-        // 查询当前用户锁分配的角色中是否包含是超级管理员
+        // 查询当前用户分配的角色中是否包含是超级管理员
         List<Long> roleIdList = roleUserMapper.selectRoleIdListByUserId(userSurrogateId);
 
         // 根据 roleIdList 查询角色类型
         QueryWrapper<SysRole> query1 = new QueryWrapper<>();
-        query1.in("surrogate_id",roleIdList);
+        query1.in("surrogate_id", roleIdList);
         List<SysRole> roleList = roleMapper.selectList(query1);
         // 查看是否有超级管理员的角色
         Optional<SysRole> roleOptional = roleList.stream().filter(role -> role.getType() == 1).findFirst();

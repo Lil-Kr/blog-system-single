@@ -30,7 +30,7 @@ public class BlogContentDTO {
     blogContent.setDeleted(0);
 
     blogContent.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
-    blogContent.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+    blogContent.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
     Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
     blogContent.setPublishTime(nowDateTime);
     blogContent.setCreateTime(nowDateTime);

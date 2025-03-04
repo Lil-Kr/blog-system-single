@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+import static com.cy.single.blog.common.constants.ResponseConstant.LOGIN_SUCCESS;
+import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
 import static com.cy.single.blog.enums.ReturnCodeEnum.USER_INFO_ERROR;
 
 /**
@@ -48,7 +50,7 @@ public class SysUserServiceImpl implements SysUserService {
 
         user.setUpdateTime(DateUtil.getNowDateTime());
         sysUserMapper.updateUserById(user);
-        return ApiResp.success("登陆成功", user.getToken());
+        return ApiResp.success(LOGIN_SUCCESS, user.getToken());
     }
 
     /**
@@ -60,14 +62,14 @@ public class SysUserServiceImpl implements SysUserService {
     public ApiResp<Integer> registerAdmin(UserRegisterReq req) {
         SysUser admin = sysUserMapper.getUserByAccount(req.getAccount());
         if (Objects.nonNull(admin)) {
-            return ApiResp.failure(ReturnCodeEnum.INFO_EXIST);
+            return ApiResp.failure(ReturnCodeEnum.INFO_NOT_EXIST);
         }
 
         SysUser user = UserDTO.convertSaveAdminReq(req);
 
         int count = sysUserMapper.insert(user);
         if (count <= 0) {
-            return ApiResp.failure("新增用户失败");
+            return ApiResp.failure(SAVE_ERROR);
         }
 
         return ApiResp.success(ReturnCodeEnum.SUCCESS);

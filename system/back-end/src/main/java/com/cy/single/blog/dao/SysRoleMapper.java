@@ -1,12 +1,11 @@
 package com.cy.single.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cy.single.blog.pojo.entity.sys.SysRole;
-import com.cy.single.blog.pojo.req.role.RoleListPageParam;
-import com.cy.single.blog.pojo.resp.role.SysRoleVo;
+import com.cy.single.blog.pojo.req.role.RoleListPageReq;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,6 +16,9 @@ import org.apache.ibatis.annotations.Param;
  * @since 2020-11-24
  */
 public interface SysRoleMapper extends BaseMapper<SysRole> {
+    Integer deleteBySurrogateId(@Param("surrogateId") Long surrogateId);
 
-    IPage<SysRoleVo> selectRoleListPage(Page<SysRoleVo> page, @Param("param") RoleListPageParam param);
+    List<SysRole> pageRoleList(@Param("param") RoleListPageReq req);
+
+    Integer roleCount(@Param("param") RoleListPageReq req);
 }

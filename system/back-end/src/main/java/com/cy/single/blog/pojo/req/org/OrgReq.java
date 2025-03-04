@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @ToString
-public class OrgParam {
+public class OrgReq {
 
     public interface GroupEdit {}
 

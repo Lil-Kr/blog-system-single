@@ -27,7 +27,7 @@
     <select id="selectRoleIdListByUserId" resultType="java.lang.Long">
         select role_id
         from <include refid="Table_Name"/>
-        where user_id = #{userSurrogateId}
+        where user_id = #{userId}
     </select>
 
     <!--根据角色id查询被分配的用户id-->

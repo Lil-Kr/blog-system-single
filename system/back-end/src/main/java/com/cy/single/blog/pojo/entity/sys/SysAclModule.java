@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 /**
@@ -25,8 +27,7 @@ import lombok.*;
 @TableName("sys_acl_module")
 public class SysAclModule extends Model<SysAclModule> {
 
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = 1099503839184382674L;
     /**
      * 自增主键
      */
@@ -36,6 +37,7 @@ public class SysAclModule extends Model<SysAclModule> {
     /**
      * 权限模块id,唯一主键
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long surrogateId;
 
     /**
@@ -51,6 +53,7 @@ public class SysAclModule extends Model<SysAclModule> {
     /**
      * 父id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
     /**

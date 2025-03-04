@@ -12,9 +12,11 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @ToString
-public class RoleSaveParam {
+public class RoleSaveReq {
 
     public interface GroupTreeOrDel {};
+
+    public interface GroupFreeze {};
 
     /**
      * 角色自增id
@@ -24,7 +26,7 @@ public class RoleSaveParam {
     /**
      * 角色id唯一主键
      */
-    @NotNull(groups = {GroupTreeOrDel.class},message = "surrogateId不能为空")
+    @NotNull(groups = {GroupTreeOrDel.class, GroupFreeze.class}, message = "surrogateId不能为空")
     private Long surrogateId;
 
     /**
@@ -35,7 +37,7 @@ public class RoleSaveParam {
     private String name;
 
     /**
-     * 角色类型, 1超级管理员, 2管理员, 3.普通角色
+     * 角色类型, 1.超级管理员, 2.管理员, 3.普通角色
      */
     @NotNull(message = "角色类型不能为空")
     @Min(value = 1)
@@ -45,6 +47,12 @@ public class RoleSaveParam {
     /**
      * 备注
      */
-    @Length(min = 2,max = 200,message = "备注长度2~200个字符之间")
+    @Length(min = 2,max = 200, message = "备注长度2~200个字符之间")
     private String remark;
+
+    /**
+     * 冻结状态
+     */
+    @Max(value = 1, message = "冻结状态不能超过1", groups = {GroupFreeze.class})
+    private Integer status;
 }

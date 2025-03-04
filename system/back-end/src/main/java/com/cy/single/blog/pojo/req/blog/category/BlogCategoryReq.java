@@ -39,7 +39,7 @@ public class BlogCategoryReq extends BaseEntity {
     @Length(groups = {Default.class, GroupTypeSave.class, GroupTypeEdit.class}, max = 50, message = "标签类型名长度在50个字符以内")
     private String name;
 
-    @Length(groups = {Default.class, GroupTypeSave.class},max = 200, message = "备注长度必须在200个字符以内")
+    @Length(groups = {Default.class, GroupTypeSave.class}, max = 200, message = "备注长度必须在200个字符以内")
     private String remark;
 
 }

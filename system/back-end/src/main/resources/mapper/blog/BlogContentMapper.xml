@@ -21,7 +21,7 @@
         <result column="remark" jdbcType="VARCHAR" property="remark" />
         <result column="deleted" jdbcType="INTEGER" property="deleted" />
         <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
-        <result column="modifier_id" jdbcType="BIGINT" property="modifierId" />
+        <result column="operator" jdbcType="BIGINT" property="operator" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     </resultMap>
@@ -33,7 +33,7 @@
     <sql id="Base_Column_List">
         id, surrogate_id, category_id, label_ids, topic_id, `number`, original, recommend,
     title, introduction, img_url, paragraph, word_count, publish_time, `status`, remark, deleted, creator_id,
-    modifier_id, create_time, update_time
+    operator, create_time, update_time
     </sql>
 
     <select id="pageContentList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">

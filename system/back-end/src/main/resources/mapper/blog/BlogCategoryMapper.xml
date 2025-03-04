@@ -9,7 +9,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,surrogate_id, `number`, `name`, remark, deleted, creator_id,modifier_id,create_time,update_time
+        id,surrogate_id, `number`, `name`, remark, deleted, creator_id,operator,create_time,update_time
     </sql>
 
 
@@ -26,7 +26,7 @@
                 remark = #{param.remark},
             </if>
             <if test="param.modifierId != null and param.modifierId != ''">
-                modifier_id = #{param.modifierId},
+                operator = #{param.modifierId},
             </if>
             <if test="param.updateTime != null">
                 update_time = #{param.updateTime},

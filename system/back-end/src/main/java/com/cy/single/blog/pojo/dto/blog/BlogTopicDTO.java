@@ -25,7 +25,7 @@ public class BlogTopicDTO {
     Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
 
     blogTopic.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
-    blogTopic.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+    blogTopic.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
     blogTopic.setCreateTime(nowDateTime);
     blogTopic.setUpdateTime(nowDateTime);
 

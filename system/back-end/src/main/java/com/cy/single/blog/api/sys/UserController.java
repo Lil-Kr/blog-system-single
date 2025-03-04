@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static com.cy.single.blog.common.constants.ResponseConstant.LOGOUT_SUCCESS;
+
 /**
  * @Author: Lil-K
  * @Date: 2024/3/4
@@ -29,17 +31,19 @@ public class UserController {
     private SysUserService userService;
 
     @RecordLogger
+    @CheckAuth
     @PutMapping("/login")
     public ApiResp<String> login(@RequestBody @Valid UserLoginAdminReq req) {
         return userService.adminLogin(req);
     }
 
-    @DeleteMapping("/logout")
     @CheckAuth
+    @RecordLogger
+    @DeleteMapping("/logout")
     public ApiResp<Integer> logout() {
         // 移除用户
         RequestHolder.remove();
-        return ApiResp.success("用户已退出");
+        return ApiResp.success(LOGOUT_SUCCESS);
     }
 
     @PostMapping("/register")

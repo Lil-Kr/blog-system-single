@@ -85,7 +85,7 @@ public class ImageInfo extends BaseEntity implements Serializable {
     /**
      * 修改人
      */
-    private Long modifierId;
+    private Long operator;
 
     /**
      * 创建时间

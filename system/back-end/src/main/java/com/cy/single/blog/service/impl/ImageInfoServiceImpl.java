@@ -107,7 +107,7 @@ public class ImageInfoServiceImpl implements ImageInfoService {
     queryWrapper.eq("surrogate_id", surrogateId);
     ImageInfo imageInfo = imageInfoMapper.selectOne(queryWrapper);
     if (Objects.isNull(imageInfo)) {
-      return ApiResp.failure(INFO_EXIST);
+      return ApiResp.failure(INFO_NOT_EXIST);
     }
 
     ImageInfoVO imageInfoVO = ImageDTO.convertImageInfoVO(imageInfo);

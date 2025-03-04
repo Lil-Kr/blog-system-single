@@ -101,7 +101,7 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
     BeanUtils.copyProperties(req, imageCategory);
     Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
     imageCategory.setUpdateTime(nowDateTime);
-    imageCategory.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+    imageCategory.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
 
     UpdateWrapper<ImageCategory> updateWrapper = new UpdateWrapper<>();
     updateWrapper.eq("surrogate_id", imageCategory.getSurrogateId());

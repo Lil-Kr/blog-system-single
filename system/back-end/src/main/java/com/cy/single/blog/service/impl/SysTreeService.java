@@ -49,7 +49,7 @@ public class SysTreeService {
         List<SysOrg> orgList = sysOrgMapper.selectList(new QueryWrapper());
 
         // 实体集合转为Dto集合
-        List<OrgLevelDto> dtoList = orgList.stream().map(org -> OrgLevelDto.adapt(org)).collect(Collectors.toList());
+        List<OrgLevelDto> dtoList = orgList.stream().map(OrgLevelDto::adapt).collect(Collectors.toList());
         return orgListToTree(dtoList);
     }
 
@@ -59,7 +59,6 @@ public class SysTreeService {
      * @return
      */
     public List<OrgLevelDto> orgListToTree(List<OrgLevelDto> dtoList) {
-
         if (CollectionUtils.isEmpty(dtoList)) {
             return new ArrayList<>();
         }
@@ -111,8 +110,6 @@ public class SysTreeService {
             transformOrgTree(dtoNextTempList,nextLevel,levelOrgMap);
         });
     }
-
-    /** 获取权限模块树 ============================== **/
 
     /**
      * 获取权限模块树
@@ -173,7 +170,7 @@ public class SysTreeService {
             aclModuleDto.setAclModuleDtoList(dtoNextTempList);
 
             // 进入下一层进行递归处理
-            transformAclModuleTree(dtoNextTempList,nextLevel,levelAclModuleMap);
+            transformAclModuleTree(dtoNextTempList,nextLevel, levelAclModuleMap);
         });
     }
 
@@ -184,7 +181,7 @@ public class SysTreeService {
      * @return
      * @throws Exception
      */
-    public List<AclModuleDto> roleTree(Long roleSurrogateId) throws Exception {
+    public List<AclModuleDto> roleAclTree(Long roleSurrogateId) throws Exception {
         // 1. 拿到当前用户所属角色中已分配的的权限点(此处为用户所能支配的权限上限)
         List<SysAcl> userAclList = sysCoreService.getCurrentUserAclList();
 
@@ -241,7 +238,7 @@ public class SysTreeService {
                 .collect(Collectors.groupingBy(aclDto -> aclDto.getAclModuleId()));
 
         // 绑定权限点到权限模块下
-        this.bindAclsWithOrder(aclModuleDtoList,moduleIdAclMap);
+        this.bindAclsWithOrder(aclModuleDtoList, moduleIdAclMap);
         return aclModuleDtoList;
     }
 
@@ -269,7 +266,7 @@ public class SysTreeService {
         });
     }
 
-    /** ============ 用户权限树 **/
+    /** ============ 用户权限树  ============ **/
     public List<AclModuleDto> userAclTree(long userId) throws Exception{
         List<SysAcl> userAclList = sysCoreService.getUserAclList(userId);
         List<AclDto> aclDtoList = userAclList.stream()

@@ -3,7 +3,9 @@ package com.cy.single.blog.pojo.entity.sys;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.cy.single.blog.base.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 import java.io.Serializable;
@@ -23,20 +25,21 @@ import java.util.Date;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @TableName("sys_org")
-public class SysOrg extends BaseEntity implements Serializable {
+public class SysOrg implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = -7550398728976097181L;
     /**
      * 自增主键
      */
-      @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
      * 唯一主键
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long surrogateId;
 
     /**
@@ -64,18 +67,27 @@ public class SysOrg extends BaseEntity implements Serializable {
      */
     private Integer seq;
 
+    private Integer status;
+
     private String remark;
+
+    /**
+     * 默认 0
+     */
+    private Integer deleted = 0;
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long creatorId;
 
     /**
      * 操作人
      */
-    private String operator;
+    private Long operator;
 
     /**
      * 操作ip
      */
     private String operateIp;
-
 
     /**
      * 创建时间
@@ -86,5 +98,4 @@ public class SysOrg extends BaseEntity implements Serializable {
      * 更改时间
      */
     private Date updateTime;
-
 }

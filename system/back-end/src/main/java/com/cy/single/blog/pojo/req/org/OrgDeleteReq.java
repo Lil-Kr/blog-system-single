@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @ToString
-public class OrgDeleteParam {
+public class OrgDeleteReq {
 
     /**
      * 自增主键

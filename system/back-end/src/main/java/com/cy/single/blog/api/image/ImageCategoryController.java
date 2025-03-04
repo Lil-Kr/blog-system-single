@@ -75,5 +75,4 @@ public class ImageCategoryController {
     return imageCategoryService.delete(surrogateId);
   }
 
-
 }

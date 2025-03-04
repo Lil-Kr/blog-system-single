@@ -88,16 +88,16 @@ public class GlobalApiRequestAspect {
             RequestHolder.setCurrentUser(user);
             Object proceed = proceedingJoinPoint.proceed();
 
+            return proceed;
+        } catch (Throwable e) {
+            log.error("api request ERROR: {}", e.getMessage());
+            RequestHolder.remove();
+            return ApiResp.error(e.getMessage());
+        } finally {
             /**
              * remove user info
              */
             RequestHolder.remove();
-            return proceed;
-        }catch (Throwable e) {
-            log.error("api request ERROR: {}", e.getMessage());
-//            Object res = proceedingJoinPoint.proceed();
-            RequestHolder.remove();
-            return ApiResp.error(e.getMessage());
         }
     }
 }

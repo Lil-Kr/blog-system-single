@@ -30,7 +30,7 @@ public class ImageDTO {
     Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
     imageCategory.setDeleted(0);
     imageCategory.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
-    imageCategory.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+    imageCategory.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
     imageCategory.setCreateTime(nowDateTime);
     imageCategory.setUpdateTime(nowDateTime);
     return imageCategory;
@@ -44,7 +44,7 @@ public class ImageDTO {
     Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
     imageInfo.setDeleted(0);
     imageInfo.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
-    imageInfo.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+    imageInfo.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
     imageInfo.setCreateTime(nowDateTime);
     imageInfo.setUpdateTime(nowDateTime);
     return imageInfo;
@@ -69,7 +69,7 @@ public class ImageDTO {
     imageInfo.setImageOriginalName(imageOriginalFullName);
     imageInfo.setImageUrl(imageUrl);
     imageInfo.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
-    imageInfo.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+    imageInfo.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
     Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
     imageInfo.setCreateTime(nowDateTime);
     imageInfo.setUpdateTime(nowDateTime);

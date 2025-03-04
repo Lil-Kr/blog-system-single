@@ -77,6 +77,17 @@ public class DateUtil {
 
     /**
      * LocalDateTime 转化成 Date
+     *
+     * @return
+     */
+    public static Date localDateTimeNow() {
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zdt = LocalDateTime.now().atZone(zoneId);
+        return Date.from(zdt.toInstant());
+    }
+
+    /**
+     * LocalDateTime 转化成 Date
      * @param localDateTime
      * @return
      */

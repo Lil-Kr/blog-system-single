@@ -74,7 +74,7 @@ public class BlogTopicServiceImpl implements BlogTopicService {
     blogTopic.setCreateTime(nowDateTime);
     blogTopic.setUpdateTime(nowDateTime);
     blogTopic.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
-    blogTopic.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+    blogTopic.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
 
     int save = blogTopicMapper.insert(blogTopic);
     if (save >= 1) {
@@ -97,7 +97,7 @@ public class BlogTopicServiceImpl implements BlogTopicService {
     BeanUtils.copyProperties(req, blogTopic);
     Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
     blogTopic.setUpdateTime(nowDateTime);
-    blogTopic.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+    blogTopic.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
 
     UpdateWrapper<BlogTopic> updateWrapper = new UpdateWrapper<>();
     updateWrapper.eq("surrogate_id", blogTopic.getSurrogateId());

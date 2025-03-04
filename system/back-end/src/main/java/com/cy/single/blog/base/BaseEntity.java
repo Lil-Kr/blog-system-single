@@ -38,7 +38,7 @@ public class BaseEntity implements Serializable {
      * 修改人
      */
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long modifierId;
+    private Long operator;
 
     /**
      * 创建时间

@@ -63,10 +63,10 @@ public class BlogCategory extends BaseEntity implements Serializable {
     private Long creatorId;
 
     /**
-     * 修改人
+     * 操作人
      */
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long modifierId;
+    private Long operator;
 
     /**
      * 创建时间

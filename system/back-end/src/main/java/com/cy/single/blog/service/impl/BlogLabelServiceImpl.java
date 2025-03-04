@@ -78,7 +78,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
     public ApiResp<String> edit(BlogLabelReq req) {
         Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
         req.setUpdateTime(nowDateTime);
-        req.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+        req.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
         Integer count = blogLabelMapper.editBySurrogateId(req);
 
         if (count >= 1) {

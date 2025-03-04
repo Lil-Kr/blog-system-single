@@ -89,7 +89,7 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
       BeanUtils.copyProperties(req, blogCategoryRes);
       Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
       blogCategoryRes.setUpdateTime(nowDateTime);
-      blogCategoryRes.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+      blogCategoryRes.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
       Integer count = blogCategoryMapper.editBySurrogateId(blogCategoryRes);
       if (count >= 1) {
           return ApiResp.success();

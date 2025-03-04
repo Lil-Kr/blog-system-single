@@ -29,7 +29,7 @@ public class BlogCategoryDTO {
         Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
         blogCategory.setDeleted(0);
         blogCategory.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
-        blogCategory.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+        blogCategory.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
         blogCategory.setCreateTime(nowDateTime);
         blogCategory.setUpdateTime(nowDateTime);
         return blogCategory;

@@ -69,15 +69,11 @@ public class GlobalExceptionHandler {
     public ApiResp<String> validateException(HttpServletRequest request,
                                              MethodArgumentNotValidException exception) throws Exception {
         BindingResult bindingResult = exception.getBindingResult();
-        /*Map errorMesssageMap = Maps.newHashMap();
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            errorMesssageMap.put(fieldError.getField(), fieldError.getDefaultMessage());
-        }*/
 
         List<String> errorMsgList = new ArrayList<>();
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         for (int i = 0; i < fieldErrors.size(); i++) {
-            errorMsgList.add(fieldErrors.get(i).getDefaultMessage());
+            errorMsgList.add(fieldErrors.get(i).getField() + ": " + fieldErrors.get(i).getDefaultMessage());
         }
 
         return ApiResp.error(errorMsgList.toString());

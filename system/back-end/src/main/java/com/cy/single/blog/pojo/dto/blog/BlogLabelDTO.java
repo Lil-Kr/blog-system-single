@@ -30,7 +30,7 @@ public class BlogLabelDTO {
         Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
 
         req.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
-        req.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+        req.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
         req.setCreateTime(nowDateTime);
         req.setUpdateTime(nowDateTime);
         return req;
@@ -41,7 +41,7 @@ public class BlogLabelDTO {
         BeanUtils.copyProperties(baseReq, req);
 
         Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
-        req.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+        req.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
         req.setUpdateTime(nowDateTime);
         return req;
     }

@@ -16,18 +16,17 @@ import com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO;
 import com.cy.single.blog.pojo.vo.blog.BlogContentVO;
 import com.cy.single.blog.service.BlogContentService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_EXIST;
+import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
 import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
 
 /**
@@ -36,6 +35,7 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
  * @Description:
  */
 @Service
+@Slf4j
 public class BlogContentServiceImpl implements BlogContentService {
 
   @Autowired
@@ -116,13 +116,13 @@ public class BlogContentServiceImpl implements BlogContentService {
     queryWrapper.eq("surrogate_id", surrogateId);
     BlogContent blogContent = blogContentMapper.selectOne(queryWrapper);
     if (Objects.isNull(blogContent)) {
-      return ApiResp.failure(INFO_EXIST);
+      return ApiResp.failure(INFO_NOT_EXIST);
     }
 
     // get blog info from mongodb
     BlogContentMongo blogContentMongo = getBlogContentMongo(surrogateId);
     if (Objects.isNull(blogContentMongo) || !String.valueOf(blogContent.getSurrogateId()).equals(blogContentMongo.getId())) {
-      return ApiResp.failure(INFO_EXIST);
+      return ApiResp.failure(INFO_NOT_EXIST);
     }
 
     BlogContentVO res = new BlogContentVO();
@@ -143,7 +143,7 @@ public class BlogContentServiceImpl implements BlogContentService {
 
     BeanUtils.copyProperties(req, blogContent);
     blogContent.setUpdateTime(DateUtil.localDateTimeToDate(LocalDateTime.now()));
-    blogContent.setModifierId(RequestHolder.getCurrentUser().getSurrogateId());
+    blogContent.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
     blogContent.setLabelIds(req.getLabelIds().stream().collect(Collectors.joining(",")));
 
     UpdateWrapper<BlogContent> updateWrapper = new UpdateWrapper<>();
@@ -179,7 +179,7 @@ public class BlogContentServiceImpl implements BlogContentService {
   public ApiResp<BlogContentVO> getContent(Long blogId) {
     BlogContentMongo blogContentMongo = getBlogContentMongo(blogId);
     if (Objects.isNull(blogContentMongo)) {
-      return ApiResp.failure(INFO_EXIST);
+      return ApiResp.failure(INFO_NOT_EXIST);
     }
 
     BlogContentVO res = new BlogContentVO();

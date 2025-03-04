@@ -1,25 +1,14 @@
 package com.cy.single.blog.pojo.req.role;
 
+import com.cy.single.blog.base.BasePageReq;
 import lombok.Data;
 import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
-
 @Data
 @ToString
-public class RoleListPageParam {
+public class RoleListPageReq extends BasePageReq {
 
-    /**
-     * 当前页码数
-     */
-    @NotNull(message = "当前页码数不能为空")
-    private Long current;
-
-    /**
-     * 每页记录数
-     */
-    @NotNull(message = "每页记录数不能为空")
-    private Long size;
+    private Long surrogateId;
 
     /**
      * 角色名称
@@ -30,6 +19,8 @@ public class RoleListPageParam {
      * 角色类型, 1超级管理员, 2管理员, 3.普通角色
      */
     private Integer type;
+
+    private String remark;
 
     /**
      * 状态, 0正常，1冻结

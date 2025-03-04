@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 /**
@@ -23,8 +25,7 @@ import lombok.*;
 @TableName("sys_role_acl")
 public class SysRoleAcl extends Model<SysRoleAcl> {
 
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = 4016064140658055929L;
     /**
      * 自增主键
      */
@@ -34,16 +35,19 @@ public class SysRoleAcl extends Model<SysRoleAcl> {
     /**
      * 角色-权限id唯一主键
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long surrogateId;
 
     /**
      * 角色id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long roleId;
 
     /**
      * 权限id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long aclId;
 
     /**

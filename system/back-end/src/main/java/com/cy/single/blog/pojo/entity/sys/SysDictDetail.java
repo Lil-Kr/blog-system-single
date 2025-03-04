@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 /**
@@ -23,12 +25,12 @@ import lombok.*;
 @TableName("sys_dict_detail")
 public class SysDictDetail extends Model<SysDictDetail> {
 
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = -1734025655498001710L;
     /**
      * 数据字典id唯一主键
      */
     @TableId(value = "surrogate_id", type = IdType.AUTO)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long surrogateId;
 
     /**

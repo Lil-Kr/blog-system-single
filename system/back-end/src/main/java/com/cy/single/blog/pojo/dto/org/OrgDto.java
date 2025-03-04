@@ -1,7 +1,7 @@
 package com.cy.single.blog.pojo.dto.org;
 
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
-import com.cy.single.blog.pojo.req.org.OrgParam;
+import com.cy.single.blog.pojo.req.org.OrgReq;
 import lombok.Data;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ public class OrgDto extends SysOrg {
      * @param param
      * @return
      */
-    public static SysOrg paramToSysOrg(OrgParam param) {
+    public static SysOrg paramToSysOrg(OrgReq param) {
         SysOrg org = SysOrg.builder().build();
         BeanUtils.copyProperties(param,org);
         return org;

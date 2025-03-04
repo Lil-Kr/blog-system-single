@@ -68,7 +68,7 @@ public final class ApiResp<T> {
      * @param <T>
      */
     public static <T> ApiResp<T> success() {
-        return create(SUCCESS.getCode(), MSG_SUCCESS,null);
+        return create(SUCCESS.getCode(), SUCCESS.getMessage(),null);
     }
 
     /**
