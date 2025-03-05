@@ -9,20 +9,20 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @ToString
-public class RoleAclSaveParam {
+public class RoleAclSaveReq {
 
     public interface GroupUpdate {};
 
     public interface GroupChangeAcls {};
     /**
-     * 角色-权限id唯一主键
+     * 角色-权限id 唯一主键
      */
     private Long surrogateId;
 
     /**
      * 角色id
      */
-    @NotNull(groups = {GroupChangeAcls.class},message = "角色id不为空")
+    @NotNull(groups = {GroupChangeAcls.class}, message = "角色id不为空")
     private Long roleId;
 
     /**
@@ -34,7 +34,7 @@ public class RoleAclSaveParam {
     /**
      * 多个权限id,用,号分隔
      */
-    @NotBlank(groups = GroupChangeAcls.class,message = "权限aclIds不为空")
+    @NotBlank(groups = GroupChangeAcls.class, message = "权限aclIds不为空")
     private String aclIds;
 
 }

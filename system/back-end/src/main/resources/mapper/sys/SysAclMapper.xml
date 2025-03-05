@@ -21,7 +21,7 @@
     </resultMap>
 
     <!-- Vo查询映射结果 -->
-    <resultMap id="BaseResulVotMap" type="com.cy.single.blog.pojo.resp.acl.SysAclVo">
+    <resultMap id="BaseResulVotMap" type="com.cy.single.blog.pojo.vo.sys.acl.SysAclVo">
         <id column="id" property="id" />
         <result column="surrogate_id" property="surrogateId" />
         <result column="number" property="number" />

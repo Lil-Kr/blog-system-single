@@ -53,7 +53,7 @@ public class SysRoleAcl extends Model<SysRoleAcl> {
     /**
      * 操作人
      */
-    private String operator;
+    private Long operator;
 
     /**
      * 操作ip

@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @ToString
-public class AclParam {
+public class AclReq {
 
     public interface GroupAcls {}
 

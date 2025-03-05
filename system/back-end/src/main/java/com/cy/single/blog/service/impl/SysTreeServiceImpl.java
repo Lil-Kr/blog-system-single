@@ -11,6 +11,7 @@ import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
 import com.cy.single.blog.service.SysCoreService;
+import com.cy.single.blog.service.SysTreeService;
 import com.cy.single.blog.utils.acl.AclUtil;
 import com.cy.single.blog.utils.aclmodule.AclModuleUtil;
 import com.cy.single.blog.utils.orgUtil.LevelUtil;
@@ -24,9 +25,14 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @Author: Lil-K
+ * @Date: 2025/3/5
+ * @Description:
+ */
 @Service
 @Slf4j
-public class SysTreeService {
+public class SysTreeServiceImpl implements SysTreeService {
 
     @Autowired
     private SysOrgMapper sysOrgMapper;
@@ -44,6 +50,7 @@ public class SysTreeService {
      * 获取组织树
      * @return
      */
+    @Override
     public List<OrgLevelDto> orgTree() {
         // 查询所有组织信息
         List<SysOrg> orgList = sysOrgMapper.selectList(new QueryWrapper());
@@ -58,6 +65,7 @@ public class SysTreeService {
      * @param dtoList 数据库中的所有组织信息
      * @return
      */
+    @Override
     public List<OrgLevelDto> orgListToTree(List<OrgLevelDto> dtoList) {
         if (CollectionUtils.isEmpty(dtoList)) {
             return new ArrayList<>();
@@ -85,7 +93,7 @@ public class SysTreeService {
      * @param level
      * @param levelOrgMap
      */
-    public void transformOrgTree(List<OrgLevelDto> levelDtoList, String level, Map<String, List<OrgLevelDto>> levelOrgMap) {
+    private void transformOrgTree(List<OrgLevelDto> levelDtoList, String level, Map<String, List<OrgLevelDto>> levelOrgMap) {
 
         levelDtoList.forEach(orgLevelDto -> {
             /**
@@ -115,6 +123,7 @@ public class SysTreeService {
      * 获取权限模块树
      * @return
      */
+    @Override
     public List<AclModuleDto> aclModuleTree() {
         // 查询所有权限模块信息
         List<SysAclModule> aclModuleList = sysAclModuleMapper.selectList(new QueryWrapper());
@@ -181,7 +190,8 @@ public class SysTreeService {
      * @return
      * @throws Exception
      */
-    public List<AclModuleDto> roleAclTree(Long roleSurrogateId) throws Exception {
+    @Override
+    public List<AclModuleDto> roleAclTree(Long roleSurrogateId) {
         // 1. 拿到当前用户所属角色中已分配的的权限点(此处为用户所能支配的权限上限)
         List<SysAcl> userAclList = sysCoreService.getCurrentUserAclList();
 
@@ -247,7 +257,7 @@ public class SysTreeService {
      * @param aclModuleDtoList
      * @param moduleIdAclMap
      */
-    public void bindAclsWithOrder(List<AclModuleDto> aclModuleDtoList,Map<Long, List<AclDto>> moduleIdAclMap) {
+    private void bindAclsWithOrder(List<AclModuleDto> aclModuleDtoList,Map<Long, List<AclDto>> moduleIdAclMap) {
         if (CollectionUtils.isEmpty(aclModuleDtoList)) {
             return;
         }
@@ -267,7 +277,8 @@ public class SysTreeService {
     }
 
     /** ============ 用户权限树  ============ **/
-    public List<AclModuleDto> userAclTree(long userId) throws Exception{
+    @Override
+    public List<AclModuleDto> userAclTree(Long userId) {
         List<SysAcl> userAclList = sysCoreService.getUserAclList(userId);
         List<AclDto> aclDtoList = userAclList.stream()
                 .map(acl -> {

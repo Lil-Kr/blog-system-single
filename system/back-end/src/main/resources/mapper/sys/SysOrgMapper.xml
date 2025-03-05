@@ -40,7 +40,7 @@
         where parent_id = #{parentId}
     </select>
 
-    <select id="pageList" resultType="com.cy.single.blog.pojo.resp.org.SysOrgVO">
+    <select id="pageList" resultType="com.cy.single.blog.pojo.vo.sys.org.SysOrgVO">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name"/>
         <where>

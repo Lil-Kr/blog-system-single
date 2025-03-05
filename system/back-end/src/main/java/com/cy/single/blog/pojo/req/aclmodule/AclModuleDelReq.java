@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @ToString
-public class AclModuleDelParam {
+public class AclModuleDelReq {
 
     private Long id;
 

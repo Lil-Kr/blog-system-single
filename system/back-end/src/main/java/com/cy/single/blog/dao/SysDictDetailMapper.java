@@ -2,7 +2,7 @@ package com.cy.single.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
-import com.cy.single.blog.pojo.req.dict.DictListPageParam;
+import com.cy.single.blog.pojo.req.dict.DictListPageReq;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -17,5 +17,5 @@ import java.util.List;
  */
 public interface SysDictDetailMapper extends BaseMapper<SysDictDetail> {
 
-    List<SysDictDetail> listDetailPage(@Param("param") DictListPageParam param);
+    List<SysDictDetail> listDetailPage(@Param("param") DictListPageReq param);
 }

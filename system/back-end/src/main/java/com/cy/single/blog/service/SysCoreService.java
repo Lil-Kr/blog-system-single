@@ -14,7 +14,7 @@ public interface SysCoreService {
     /**
      * 获取当前用户所拥有的权限列表
      */
-    List<SysAcl> getCurrentUserAclList() throws Exception;
+    List<SysAcl> getCurrentUserAclList();
 
     /**
      * 获取[角色-权限]列表
@@ -22,6 +22,6 @@ public interface SysCoreService {
     List<SysAcl> getRoleAclList(Long roleSurrogateId);
 
 
-    List<SysAcl> getUserAclList(Long userId) throws Exception;
+    List<SysAcl> getUserAclList(Long userId);
 
 }

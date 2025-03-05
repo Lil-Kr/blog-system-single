@@ -3,7 +3,7 @@ package com.cy.single.blog.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
-import com.cy.single.blog.pojo.resp.org.SysOrgVO;
+import com.cy.single.blog.pojo.vo.sys.org.SysOrgVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

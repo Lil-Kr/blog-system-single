@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @ToString
 @Data
-public class DictSaveDetailParam {
+public class DictSaveDetailReq {
 
     /**
      * 数据字典id唯一主键

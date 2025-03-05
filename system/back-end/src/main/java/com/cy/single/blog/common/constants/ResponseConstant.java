@@ -25,6 +25,9 @@ public class ResponseConstant {
 	/**
 	 * =================== role  ===================
 	 **/
-	public static final String ROLE_ROLE_TREE_INFO = "该角色下没有权限点明细";
+	public static final String ROLE_TREE_INFO = "该角色下没有权限点明细";
+	public static final String ROLE_ONLY_ADMIN_INFO = "超级管理员必须唯一";
+	public static final String ROLE_USED_INFO = "该角色已被使用, 无法删除";
+	public static final String ROLE_CANNOT_FREEZE = "超级管理员无法被冻结";
 
 }

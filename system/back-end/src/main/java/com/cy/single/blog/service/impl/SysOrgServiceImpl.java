@@ -11,7 +11,7 @@ import com.cy.single.blog.pojo.entity.sys.SysOrg;
 import com.cy.single.blog.pojo.req.org.OrgGetChildrenReq;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.org.OrgReq;
-import com.cy.single.blog.pojo.resp.org.SysOrgVO;
+import com.cy.single.blog.pojo.vo.sys.org.SysOrgVO;
 import com.cy.single.blog.service.SysOrgService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
@@ -41,7 +41,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 	private SysOrgMapper orgMapper;
 
 	@Autowired
-	private SysTreeService treeService;
+	private SysTreeServiceImpl treeService;
 
 	@Override
 	public ApiResp<String> add(OrgReq param) {

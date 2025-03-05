@@ -7,7 +7,7 @@ import com.cy.single.blog.pojo.entity.sys.SysOrg;
 import com.cy.single.blog.pojo.req.org.OrgGetChildrenReq;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.org.OrgReq;
-import com.cy.single.blog.pojo.resp.org.SysOrgVO;
+import com.cy.single.blog.pojo.vo.sys.org.SysOrgVO;
 import java.util.List;
 
 /**

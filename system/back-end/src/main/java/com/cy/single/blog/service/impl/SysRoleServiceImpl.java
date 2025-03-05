@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static com.cy.single.blog.common.constants.ResponseConstant.*;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -43,9 +44,27 @@ public class SysRoleServiceImpl implements SysRoleService {
 	private SysRoleAclMapper roleAclMapper;
 
 	@Override
+	public PageResult<SysRole> pageList(RoleListPageReq req) {
+		List<SysRole> roleList = roleMapper.pageRoleList(req);
+		Integer count = roleMapper.roleCount(req);
+		if (CollectionUtils.isEmpty(roleList)) {
+			return new PageResult<>(new ArrayList<>(0), 0);
+		}else {
+			return new PageResult<>(roleList, count);
+		}
+	}
+
+	@Override
 	public ApiResp<String> add(RoleSaveReq req) {
-		if (checkExit(req.getSurrogateId(), req.getName())) {
+		if (checkExit(req.getSurrogateId(), req.getName(), req.getType())) {
 			return ApiResp.failure(INFO_EXIST);
+		}
+
+		/**
+		 * check supper admin is or not exist
+		 */
+		if (checkSupperAdminExist() && req.getType() == 1) {
+			return ApiResp.failure(ROLE_ONLY_ADMIN_INFO);
 		}
 
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
@@ -77,18 +96,37 @@ public class SysRoleServiceImpl implements SysRoleService {
 	 * @param surrogateId 父id
 	 * @param name 角色名称
 	 */
-	protected boolean checkExit(Long surrogateId, String name) {
+	protected boolean checkExit(Long surrogateId, String name, Integer type) {
 		QueryWrapper<SysRole> query = new QueryWrapper<>();
 		if (Objects.nonNull(surrogateId)) {
 			query.eq("surrogate_id", surrogateId);
 		}
 		query.eq("name", name);
-		Long count = roleMapper.selectCount(query);
-		if (count >= 1) {
-			return true;
-		}else {
+		SysRole before = roleMapper.selectOne(query);
+		if (Objects.isNull(before)) {
 			return false;
+		} else {
+			return true;
 		}
+	}
+
+	/**
+	 * check supper admin is or not exist
+	 * @return
+	 */
+	@Override
+	public boolean checkSupperAdminExist() {
+		/**
+		 * supper admin must be only one
+		 */
+		QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("type", 1);
+		SysRole role = roleMapper.selectOne(queryWrapper);
+
+		if (Objects.isNull(role))
+			return false;
+		else
+			return true;
 	}
 
 	@Override
@@ -100,9 +138,20 @@ public class SysRoleServiceImpl implements SysRoleService {
 			return ApiResp.failure(INFO_NOT_EXIST);
 		}
 
+		/**
+		 * supper admin must be only one
+		 */
+		if (before.getType() == 1 && req.getType() != 1) {
+			return ApiResp.failure(ROLE_ONLY_ADMIN_INFO);
+		}
+
+		if (before.getType() != 1 && req.getType() == 1 && checkSupperAdminExist()) {
+			return ApiResp.failure(ROLE_ONLY_ADMIN_INFO);
+		}
+
 		SysRole after = SysRole.builder()
 			.id(before.getId())
-			.surrogateId(req.getSurrogateId())
+			.surrogateId(before.getSurrogateId())
 			.name(req.getName())
 			.type(req.getType())
 			.remark(req.getRemark())
@@ -127,11 +176,16 @@ public class SysRoleServiceImpl implements SysRoleService {
 	 */
 	@Override
 	public ApiResp<String> freeze(RoleSaveReq req) {
+		QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("surrogate_id", req.getSurrogateId());
+		SysRole before = roleMapper.selectOne(queryWrapper);
+		if (before.getType() == 1) {
+			return ApiResp.failure(ROLE_CANNOT_FREEZE);
+		}
+
 		UpdateWrapper<SysRole> updateWrapper = new UpdateWrapper<>();
 		updateWrapper.eq("surrogate_id", req.getSurrogateId());
-
 		SysRole build = SysRole.builder()
-			.surrogateId(req.getSurrogateId())
 			.status(req.getStatus())
 			.operateIp("127.0.0.1")
 			.operator(RequestHolder.getCurrentUser().getSurrogateId())
@@ -151,7 +205,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		QueryWrapper queryRoleUser = new QueryWrapper<>();
 		queryRoleUser.eq("role_id", surrogateId);
 		Long countRoleUser = roleUserMapper.selectCount(queryRoleUser);
-		if (countRoleUser >= 1) return ApiResp.failure(INFO_EXIST);
+		if (countRoleUser >= 1) return ApiResp.failure(ROLE_USED_INFO);
 
 		QueryWrapper queryRoleAcl = new QueryWrapper<>();
 		queryRoleAcl.eq("role_id", surrogateId);
@@ -163,17 +217,6 @@ public class SysRoleServiceImpl implements SysRoleService {
 			return ApiResp.success();
 		} else {
 			return ApiResp.failure(DEL_ERROR);
-		}
-	}
-
-	@Override
-	public PageResult<SysRole> pageList(RoleListPageReq req) {
-		List<SysRole> roleList = roleMapper.pageRoleList(req);
-		Integer count = roleMapper.roleCount(req);
-		if (CollectionUtils.isEmpty(roleList)) {
-			return new PageResult<>(new ArrayList<>(0), 0);
-		}else {
-			return new PageResult<>(roleList, count);
 		}
 	}
 

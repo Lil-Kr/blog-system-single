@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
+import java.util.Date;
+
 /**
  * <p>
  * 数据字典实体
@@ -56,7 +58,7 @@ public class SysDict extends Model<SysDict> {
     /**
      * 操作人
      */
-    private String operator;
+    private Long operator;
 
     /**
      * 操作ip
@@ -66,11 +68,11 @@ public class SysDict extends Model<SysDict> {
     /**
      * 创建时间
      */
-    private String createTime;
+    private Date createTime;
 
     /**
      * 更改时间
      */
-    private String  updateTime;
+    private Date  updateTime;
 
 }

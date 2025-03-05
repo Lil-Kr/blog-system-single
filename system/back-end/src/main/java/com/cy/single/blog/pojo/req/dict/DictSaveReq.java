@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @ToString
-public class DictSaveParam {
+public class DictSaveReq {
 
     /**
      * 自增主键

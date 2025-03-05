@@ -13,7 +13,7 @@ import javax.validation.groups.Default;
  */
 @Data
 @ToString
-public class RoleUserParam {
+public class RoleUserReq {
 
     public interface GroupChangeRoleUsers {};
 

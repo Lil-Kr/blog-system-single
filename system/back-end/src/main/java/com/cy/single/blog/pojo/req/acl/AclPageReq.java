@@ -1,10 +1,12 @@
 package com.cy.single.blog.pojo.req.acl;
 
+import lombok.Data;
 import lombok.ToString;
 import javax.validation.constraints.NotNull;
 
 @ToString
-public class AclPageParam {
+@Data
+public class AclPageReq {
 
     /**
      * 当前页码数

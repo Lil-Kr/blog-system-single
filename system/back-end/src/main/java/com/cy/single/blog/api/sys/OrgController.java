@@ -9,7 +9,7 @@ import com.cy.single.blog.pojo.dto.org.OrgLevelDto;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.org.OrgReq;
-import com.cy.single.blog.pojo.resp.org.SysOrgVO;
+import com.cy.single.blog.pojo.vo.sys.org.SysOrgVO;
 import com.cy.single.blog.service.SysOrgService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

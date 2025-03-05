@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @ToString
-public class DictListPageParam {
+public class DictListPageReq {
 
     /**
      * 当前页码数

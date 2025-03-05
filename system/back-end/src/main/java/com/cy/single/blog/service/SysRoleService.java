@@ -26,4 +26,6 @@ public interface SysRoleService {
 
     PageResult<SysRole> pageList(RoleListPageReq param);
 
+    boolean checkSupperAdminExist();
+
 }

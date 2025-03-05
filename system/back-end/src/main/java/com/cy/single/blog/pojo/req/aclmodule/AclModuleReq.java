@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @ToString
-public class AclModuleParam {
+public class AclModuleReq {
 
 
     /**

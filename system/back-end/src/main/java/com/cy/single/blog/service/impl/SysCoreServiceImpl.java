@@ -40,7 +40,7 @@ public class SysCoreServiceImpl implements SysCoreService {
      * @throws Exception
      */
     @Override
-    public List<SysAcl> getCurrentUserAclList() throws Exception {
+    public List<SysAcl> getCurrentUserAclList() {
         // 获取当前用户surrogateId
         Long surrogateId = RequestHolder.getCurrentUser().getSurrogateId();
         return getUserAclList(surrogateId);
@@ -53,7 +53,7 @@ public class SysCoreServiceImpl implements SysCoreService {
      * @throws Exception
      */
     @Override
-    public List<SysAcl> getUserAclList(Long userSurrogateId) throws Exception {
+    public List<SysAcl> getUserAclList(Long userSurrogateId) {
         // 如果当前用户是超级管理员, 返回所有的权限点列表
         if (isSuperAdmin(userSurrogateId)) {
             return aclMapper.selectList(new QueryWrapper<>());
@@ -105,8 +105,7 @@ public class SysCoreServiceImpl implements SysCoreService {
      * @return
      * @throws Exception
      */
-    private boolean isSuperAdmin(long userSurrogateId) throws Exception {
-        // todo 超级管理员逻辑代码
+    private boolean isSuperAdmin(long userSurrogateId) {
         // 查询当前用户分配的角色中是否包含是超级管理员
         List<Long> roleIdList = roleUserMapper.selectRoleIdListByUserId(userSurrogateId);
 
