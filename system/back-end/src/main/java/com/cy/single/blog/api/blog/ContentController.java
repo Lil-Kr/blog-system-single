@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/blog/content")
-public class ContentApi {
+public class ContentController {
 
   @Autowired
   private BlogContentService blogContentService;

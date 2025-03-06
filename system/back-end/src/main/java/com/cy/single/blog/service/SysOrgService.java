@@ -3,11 +3,11 @@ package com.cy.single.blog.service;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.dto.org.OrgLevelDto;
-import com.cy.single.blog.pojo.entity.sys.SysOrg;
-import com.cy.single.blog.pojo.req.org.OrgGetChildrenReq;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
+import com.cy.single.blog.pojo.req.org.OrgPageReq;
 import com.cy.single.blog.pojo.req.org.OrgReq;
 import com.cy.single.blog.pojo.vo.sys.org.SysOrgVO;
+
 import java.util.List;
 
 /**
@@ -21,14 +21,13 @@ public interface SysOrgService {
 
 	ApiResp<String> edit(OrgReq param);
 
-	PageResult<SysOrg> list(OrgListAllReq param);
-
-	PageResult<SysOrgVO> getChildrenOrgList(OrgGetChildrenReq dto);
+	PageResult<SysOrgVO> pageChildOrgList(OrgPageReq req);
 
 	List<OrgLevelDto> orgTree();
 
 	ApiResp<String> delete(Long surrogateId);
 
-	PageResult<SysOrgVO> pageOrgList(OrgListAllReq param);
+	PageResult<SysOrgVO> pageOrgList(OrgPageReq req);
 
+	List<SysOrgVO> list(OrgListAllReq req);
 }

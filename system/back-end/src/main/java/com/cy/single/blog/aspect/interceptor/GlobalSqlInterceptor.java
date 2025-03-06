@@ -51,7 +51,7 @@ public class GlobalSqlInterceptor implements Interceptor {
         /**
          * 获取参数
          */
-        Object[] args = invocation.getArgs();
+//        Object[] args = invocation.getArgs();
 
         /**
          * 获取执行方法的位置 -> 绝对路径

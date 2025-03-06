@@ -27,7 +27,7 @@ import static com.cy.single.blog.common.constants.ResponseConstant.ROLE_TREE_INF
 /**
  * @Author: Lil-K
  * @Date: 2025/3/5
- * @Description: 角色管理模块
+ * @Description: role api
  */
 @RestController
 @RequestMapping("/sys/role")
@@ -47,10 +47,9 @@ public class RoleController {
 	private SysRoleAclService roleAclService;
 
 	/**
-	 * 分页查询角色列表
+	 * page role info list
 	 * @param req
 	 * @return
-	 * @throws Exception
 	 */
 	@CheckAuth
 	@RecordLogger
@@ -61,7 +60,7 @@ public class RoleController {
 	}
 
 	/**
-	 * 保存角色信息
+	 * add role info
 	 * @param req
 	 * @return
 	 * @throws Exception
@@ -74,7 +73,7 @@ public class RoleController {
 	}
 
 	/**
-	 * 修改角色信息
+	 * edit role info
 	 * @param req
 	 * @return
 	 * @throws Exception
@@ -86,6 +85,11 @@ public class RoleController {
 		return roleService.edit(req);
 	}
 
+	/**
+	 * freeze role info
+	 * @param req
+	 * @return
+	 */
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/freeze")
@@ -94,7 +98,7 @@ public class RoleController {
 	}
 
 	/**
-	 * 删除角色信息
+	 * delete role info
 	 * @param surrogateId
 	 */
 	@CheckAuth
@@ -106,6 +110,7 @@ public class RoleController {
 
 	/**
 	 * 获取当前用户所拥有的[角色-权限]树
+	 * retrieve current user`s [role-acl] tree
 	 * @param req
 	 * @return
 	 * @throws Exception
@@ -124,7 +129,7 @@ public class RoleController {
 
 	/**
 	 * 修改角色对应的权限点
-	 * 维护[角色-权限]关系接口
+	 * update
 	 * @param req
 	 * @return
 	 * @throws Exception
@@ -158,7 +163,7 @@ public class RoleController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/updateRoleUsers")
-	public ApiResp updateRoleUsers(@RequestBody @Validated({RoleUserReq.GroupChangeRoleUsers.class}) RoleUserReq req) {
+	public ApiResp<String> updateRoleUsers(@RequestBody @Validated({RoleUserReq.GroupChangeRoleUsers.class}) RoleUserReq req) {
 		return roleUserService.updateRoleUsers(req);
 	}
 }

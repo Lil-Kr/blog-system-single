@@ -24,19 +24,17 @@ const MainLayout = () => {
   }, [pathname, collapsed])
 
   return (
-    <div className={styles.mainLayoutWarpper}>
+    <Layout className={styles.mainLayoutWarpper}>
+      <Sider className='sider-warpper' trigger={null} collapsible collapsed={collapsed}>
+        <MenuLayout />
+      </Sider>
       <Layout>
-        <Sider className='sider-warpper' trigger={null} collapsible collapsed={collapsed}>
-          <MenuLayout />
-        </Sider>
-        <Layout>
-          <HeaderLayout />
-          <TabsLayout />
-          <ContentLayout />
-          <FooterLayout />
-        </Layout>
+        <HeaderLayout />
+        <TabsLayout />
+        <ContentLayout />
+        <FooterLayout />
       </Layout>
-    </div>
+    </Layout>
   )
 }
 

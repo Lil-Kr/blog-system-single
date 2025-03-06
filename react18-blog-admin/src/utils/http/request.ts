@@ -31,8 +31,6 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
-    // console.log('--> response interceptors response:', response)
-
     const { data, config, headers, request, status, statusText } = response
     if (status === 200) {
       const { data } = response
@@ -41,7 +39,6 @@ axiosInstance.interceptors.response.use(
       const { code, msg, token, userInfo } = data
 
       if (code !== 200) {
-        console.log('--> aaaa:', msg)
         message.error(msg)
       }
       return data

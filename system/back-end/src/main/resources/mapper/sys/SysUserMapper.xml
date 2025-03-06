@@ -129,7 +129,7 @@
         </where>
     </select>
 
-    <update id="updateUserById">
+    <update id="updateUserBySurrogateId">
         update <include refid="Table_Name"/>
         <set>
             <if test="param.number != null and param.number != ''">
@@ -162,7 +162,7 @@
             <if test="param.remark != null and param.remark != ''">
                 remark = #{param.remark},
             </if>
-            <if test="param.updateTime != null and param.updateTime != ''">
+            <if test="param.updateTime != null">
                 update_time = #{param.updateTime}
             </if>
         </set>
@@ -170,4 +170,13 @@
             surrogate_id = #{param.surrogateId}
         </where>
     </update>
+
+    <select id="loginAdmin" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from <include refid="Table_Name"/>
+        <where>
+            account = #{param.account}
+            and password = #{param.password}
+        </where>
+    </select>
 </mapper>

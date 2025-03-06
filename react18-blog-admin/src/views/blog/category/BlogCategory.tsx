@@ -329,10 +329,10 @@ const BlogCategory = () => {
         <div className='operation-btn'>
           <Flex gap='small'>
             <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createType}>
-              创建分类
+              {'创建分类'}
             </Button>
             <Button size={btnSize} type='primary' icon={<DeleteOutlined />} danger onClick={deleteBatch}>
-              删除分类
+              {'删除分类'}
             </Button>
           </Flex>
         </div>

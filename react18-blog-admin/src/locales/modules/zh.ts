@@ -1,4 +1,8 @@
 export default {
+  system: {
+    errorMsg1: '网络异常',
+    errorMsg2: '网络连接异常, 请稍后再试!'
+  },
   test: {
     btn: '点我'
   },

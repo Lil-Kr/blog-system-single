@@ -38,6 +38,8 @@ export namespace ModalType {
     textValue: string
     style: object
     rules?: Rule[]
+    componentType?: string
+    disabled?: boolean
   }
 
   export interface FullScreenModalType<T = any> {
@@ -53,11 +55,12 @@ export namespace ModalType {
         }
       | undefined
     >
-
     update?: () => void
   }
 
-  export type innerComponentType = 'all-input' | 'image-upload'
+  export type innerComponentType = 'all-input' | 'image-upload' | 'custom'
+
+  export type componentType = 'base-input' | 'number-input' | 'select'
 
   export interface BaseModalType<T = any> {
     mRef: MutableRefObject<
@@ -97,16 +100,27 @@ export namespace ModalType {
   export interface ImageUploadModal<T = any> {
     mRef: MutableRefObject<
       | {
+          open: (requestParams: IModalRequestAction, params: IModalParams, type: IAction, data: T) => void
+        }
+      | undefined
+    >
+
+    update: () => void
+  }
+
+  export interface OrgModal<T = any> {
+    mRef: MutableRefObject<
+      | {
           open: (
             requestParams: IModalRequestAction,
             params: IModalParams,
             type: IAction,
+            modalStyle: IModalStyle,
             data: T
           ) => void
         }
       | undefined
     >
-
     update: () => void
   }
 }

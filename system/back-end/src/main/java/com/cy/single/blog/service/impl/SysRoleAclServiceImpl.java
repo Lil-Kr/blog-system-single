@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -88,12 +89,12 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 		if (CollectionUtils.isEmpty(aclIdList)) {
 			return;
 		}
-		// 删除
+		// delete role info
 		QueryWrapper<SysRoleAcl> wrapper = new QueryWrapper<>();
 		wrapper.eq("role_id",roleId);
 		roleAclMapper.delete(wrapper);
 
-		String currentTime = DateUtil.getNowDateTime();
+		Date currentTime = DateUtil.localDateTimeNow();
 		List<SysRoleAcl> roleAclList = aclIdList.stream()
 			.map(aclId -> {
 				return SysRoleAcl.builder()
@@ -107,7 +108,7 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 					.build();
 			})
 			.collect(Collectors.toList());
-		// 批量新增
+		// batch save role info
 		this.saveBatch(roleAclList);
 	}
 }

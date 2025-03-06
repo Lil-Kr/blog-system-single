@@ -13,11 +13,14 @@ import javax.validation.constraints.NotNull;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserLoginAdminReq {
 
+    public interface AdminLogin {};
+
     private String token;
 
+    @NotNull(groups = {AdminLogin.class}, message = "账号不能为空")
     private String account;
 
-    @NotNull(message = "密码不能为空")
+    @NotNull(groups = {AdminLogin.class}, message = "密码不能为空")
     private String password;
 
     private String email;

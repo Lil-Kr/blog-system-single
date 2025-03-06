@@ -11,6 +11,7 @@
         <result column="parent_id" property="parentId" />
         <result column="level" property="level" />
         <result column="seq" property="seq" />
+        <result column="status" property="status" />
         <result column="remark" property="remark" />
         <result column="operator" property="operator" />
         <result column="operate_ip" property="operateIp" />
@@ -24,7 +25,11 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, surrogate_id, number, name, parent_id, level, seq, remark, operator, operate_ip, create_time, update_time
+        id, surrogate_id, `number`, `name`, parent_id, `level`, seq, status, remark, operator, operate_ip, create_time, update_time
+    </sql>
+
+    <sql id="Base_Join_Column_List">
+        a.id, a.surrogate_id, a.`number`, a.`name`, a.parent_id, a.`level`, a.seq, a.status, a.remark, a.operator, a.operate_ip, a.create_time, a.update_time
     </sql>
 
     <select id="selectChildOrgList" resultMap="BaseResultMap">
@@ -41,7 +46,55 @@
     </select>
 
     <select id="pageList" resultType="com.cy.single.blog.pojo.vo.sys.org.SysOrgVO">
-        select <include refid="Base_Column_List" />
+        select
+            a.id,
+            a.surrogate_id,
+            a.`number`,
+            a.`name`,
+            a.parent_id,
+            a.`level`,
+            a.seq,
+            a.status,
+            a.remark,
+            a.operator,
+            a.operate_ip,
+            a.create_time,
+            a.update_time,
+            b.account as 'operator_name',
+            c.`name` as 'parent_name'
+        from sys_org as a
+        left join sys_org as c on (a.parent_id = c.surrogate_id)
+        left join sys_user as b on (a.operator = b.surrogate_id)
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and a.surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.name != null and param.name != ''">
+                and a.`name` = #{param.name}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                a.`number` like concat('%',#{param.keyWords},'%')
+                or
+                a.`name` like concat('%',#{param.keyWords},'%')
+                or
+                a.remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+        <if test="param.isOrder != null and param.isOrder != ''">
+            order by a.create_time
+            <if test="param.isOrder == 0">
+                asc
+            </if>
+            <if test="param.isOrder == 1">
+                desc
+            </if>
+        </if>
+    </select>
+
+    <select id="countByList" resultType="java.lang.Integer">
+        select count(1)
         from <include refid="Table_Name"/>
         <where>
             <if test="param.surrogateId != null and param.surrogateId != ''">
@@ -60,23 +113,46 @@
                 )
             </if>
         </where>
-        <if test="param.isOrder != null and param.isOrder != ''">
-            order by create_time
-            <if test="param.isOrder == 0">
-                asc
-            </if>
-            <if test="param.isOrder == 1">
-                desc
-            </if>
-        </if>
     </select>
 
-    <select id="countByList" resultType="java.lang.Integer">
+    <select id="pageChildOrgList" resultType="com.cy.single.blog.pojo.vo.sys.org.SysOrgVO">
+        select
+            a.id,
+            a.surrogate_id,
+            a.`number`,
+            a.`name`,
+            a.parent_id,
+            a.`level`,
+            a.seq,
+            a.status,
+            a.remark,
+            a.operator,
+            a.operate_ip,
+            a.create_time,
+            a.update_time,
+            b.account as 'operator_name',
+            c.`name` as 'parent_name'
+        from sys_org as a
+        left join sys_org as c on (a.parent_id = c.surrogate_id)
+        left join sys_user as b on (a.operator = b.surrogate_id)
+        where a.parent_id = #{param.surrogateId}
+    </select>
+
+    <select id="childOrgListCount" resultType="java.lang.Integer">
         select count(1)
+        from <include refid="Table_Name"/>
+        where parent_id = #{param.surrogateId}
+    </select>
+
+    <select id="retrieveAllList" resultType="com.cy.single.blog.pojo.vo.sys.org.SysOrgVO">
+        select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         <where>
             <if test="param.surrogateId != null and param.surrogateId != ''">
                 and surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.name != null and param.name != ''">
+                and `name` = #{param.name}
             </if>
             <if test="param.keyWords!=null and param.keyWords!=''">
                 and (

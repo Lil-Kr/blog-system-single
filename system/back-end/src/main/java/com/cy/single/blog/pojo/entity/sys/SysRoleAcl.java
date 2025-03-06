@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
+import java.util.Date;
+
 /**
  * <p>
  * 
@@ -63,11 +65,11 @@ public class SysRoleAcl extends Model<SysRoleAcl> {
     /**
      * 创建时间
      */
-    private String createTime;
+    private Date createTime;
 
     /**
      * 更改时间
      */
-    private String updateTime;
+    private Date updateTime;
 
 }

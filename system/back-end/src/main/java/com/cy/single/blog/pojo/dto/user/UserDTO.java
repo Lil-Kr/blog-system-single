@@ -1,10 +1,13 @@
 package com.cy.single.blog.pojo.dto.user;
 
+import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.user.UserRegisterReq;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import org.springframework.beans.BeanUtils;
+
+import java.util.Date;
 
 /**
  * @Author: Lil-K
@@ -23,9 +26,9 @@ public class UserDTO {
         BeanUtils.copyProperties(baseReq, req);
 
         req.setSurrogateId(IdWorker.getSnowFlakeId());
-        req.setOperator(baseReq.getAccount());
+        req.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
 
-        String nowDateTime = DateUtil.getNowDateTime();
+        Date nowDateTime = DateUtil.localDateTimeNow();
         req.setCreateTime(nowDateTime);
         req.setUpdateTime(nowDateTime);
         req.setToken(IdWorker.generateUUID());

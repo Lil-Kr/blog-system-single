@@ -18,4 +18,5 @@ public class OrgListAllReq extends BasePageReq {
 
     private Integer seq;
 
+    private String remark;
 }

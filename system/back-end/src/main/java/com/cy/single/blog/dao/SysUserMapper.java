@@ -24,5 +24,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
     SysUser getUserByAny(@Param("param") UserLoginAdminReq reqParam);
 
-    Integer updateUserById(@Param("param") SysUser user);
+    Integer updateUserBySurrogateId(@Param("param") SysUser user);
+
+    SysUser loginAdmin(@Param("param") UserLoginAdminReq req);
 }

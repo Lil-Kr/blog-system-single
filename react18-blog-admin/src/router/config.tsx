@@ -69,6 +69,9 @@ const rootRouterConfig: Router<{}> = new Router({
   routes: rootConfig
 })
 
+/**
+ * 处理路由
+ */
 const menuItems = getRouterMenuItems(rootConfig)
 // console.log('--> oh-router 处理后的路由信息, 提供菜单使用: ', menuItems)
 

@@ -6,7 +6,7 @@ export interface BaseEntityType {
   status?: number // 未使用
   remark?: string
   creatorId?: string
-  modifierId?: string
+  operator?: string
   createTime?: string
   updateTime?: string
   isOrder?: number
@@ -17,7 +17,7 @@ export interface BaseEntityRequiredType {
   remark: string
   deleted?: number // 未使用
   creatorId: string
-  modifierId: string
+  operator: string
   createTime: string
   updateTime: string
   isOrder?: number
@@ -28,7 +28,7 @@ export interface BaseEntityPageType extends BasePageReq {
   remark?: string
   deleted?: number
   creatorId?: string
-  modifierId?: string
+  operator?: string
   createTime?: string
   updateTime?: string
   isOrder?: number
@@ -39,7 +39,7 @@ export interface BaseEntityRequiredPageType extends BasePageReq {
   remark: string
   deleted?: number // 未使用
   creatorId: string
-  modifierId: string
+  operator: string
   createTime: string
   updateTime: string
   isOrder?: number

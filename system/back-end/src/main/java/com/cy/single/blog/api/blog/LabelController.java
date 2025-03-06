@@ -29,7 +29,7 @@ import static com.cy.single.blog.utils.checkUtil.ParamValidator.checkSurrogateId
 @Slf4j
 @RestController
 @RequestMapping("/blog/label")
-public class LabelApi {
+public class LabelController {
 
     @Autowired
     private BlogLabelService blogLabelService;

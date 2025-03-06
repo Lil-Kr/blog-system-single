@@ -6,8 +6,8 @@ import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.dto.org.OrgLevelDto;
-import com.cy.single.blog.pojo.entity.sys.SysOrg;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
+import com.cy.single.blog.pojo.req.org.OrgPageReq;
 import com.cy.single.blog.pojo.req.org.OrgReq;
 import com.cy.single.blog.pojo.vo.sys.org.SysOrgVO;
 import com.cy.single.blog.service.SysOrgService;
@@ -35,7 +35,7 @@ public class OrgController {
 	private SysOrgService sysOrgService;
 
 	/**
-	 * 保存组织
+	 * save org list
 	 * @param req
 	 * @return
 	 * @throws Exception
@@ -43,8 +43,8 @@ public class OrgController {
 	@RecordLogger
 	@CheckAuth
 	@PostMapping("save")
-	public ApiResp<String> save(@RequestBody @Valid OrgReq req) throws Exception {
-		if (Objects.nonNull(req.getId()) && Objects.nonNull(req.getSurrogateId())) {// update
+	public ApiResp<String> save(@RequestBody @Valid OrgReq req) {
+		if (Objects.nonNull(req.getSurrogateId())) {// update
 			return sysOrgService.edit(req);
 		}else { // insert
 			return sysOrgService.add(req);
@@ -52,7 +52,7 @@ public class OrgController {
 	}
 
 	/**
-	 * 新增组织信息
+	 * add org info
 	 * @param req
 	 * @return
 	 * @throws Exception
@@ -60,26 +60,30 @@ public class OrgController {
 	@RecordLogger
 	@CheckAuth
 	@PostMapping("add")
-	public ApiResp add(@RequestBody @Valid OrgReq req) throws Exception {
+	public ApiResp<String> add(@RequestBody @Validated({OrgReq.GroupAdd.class}) OrgReq req) {
 		return sysOrgService.add(req);
 	}
 
+	/**
+	 * edit org info
+	 * @param req
+	 * @return
+	 */
 	@RecordLogger
 	@CheckAuth
 	@PostMapping("edit")
-	public ApiResp edit(@RequestBody @Validated({OrgReq.GroupEdit.class}) OrgReq req) throws Exception {
+	public ApiResp<String> edit(@RequestBody @Validated({OrgReq.GroupEdit.class}) OrgReq req) {
 		return sysOrgService.edit(req);
 	}
 
 	/**
 	 * retrieve org info by tree struct
 	 * @return
-	 * @throws Exception
 	 */
 	@RecordLogger
 	@CheckAuth
 	@PostMapping("orgTreeList")
-	public ApiResp<List<OrgLevelDto>> orgTreeList() throws Exception {
+	public ApiResp<List<OrgLevelDto>> orgTreeList() {
 		List<OrgLevelDto> orgLevelList = sysOrgService.orgTree();
 		return ApiResp.success(orgLevelList);
 	}
@@ -91,23 +95,31 @@ public class OrgController {
 	@RecordLogger
 	@CheckAuth
 	@PostMapping("pageOrgList")
-	public ApiResp<PageResult<SysOrgVO>> pageOrgList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) OrgListAllReq req) {
+	public ApiResp<PageResult<SysOrgVO>> pageOrgList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) OrgPageReq req) {
 		PageResult<SysOrgVO> list = sysOrgService.pageOrgList(req);
 		return ApiResp.success(list);
 	}
 
-	/**
-	 * retrieve all org list
-	 * @return
-	 * @throws Exception
-	 */
 	@RecordLogger
 	@CheckAuth
 	@PostMapping("list")
-	public ApiResp<PageResult<SysOrg>> list(@RequestBody @Valid OrgListAllReq req) throws Exception {
-		PageResult<SysOrg> list = sysOrgService.list(req);
+	public ApiResp<List<SysOrgVO>> list(@RequestBody OrgListAllReq req) {
+		List<SysOrgVO> list = sysOrgService.list(req);
 		return ApiResp.success(list);
 	}
+
+	/**
+	 *
+	 * @return
+	 */
+	@RecordLogger
+	@CheckAuth
+	@PostMapping("pageChildOrgList")
+	public ApiResp<PageResult<SysOrgVO>> pageChildOrgList(@RequestBody @Validated({OrgPageReq.GroupChildOrgList.class, BasePageReq.GroupPageQuery.class}) OrgPageReq req) {
+		PageResult<SysOrgVO> list = sysOrgService.pageChildOrgList(req);
+		return ApiResp.success(list);
+	}
+
 
 	/**
 	 * delete org

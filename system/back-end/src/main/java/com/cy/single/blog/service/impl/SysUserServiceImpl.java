@@ -12,67 +12,66 @@ import com.cy.single.blog.utils.dateUtil.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Objects;
-
 import static com.cy.single.blog.common.constants.ResponseConstant.LOGIN_SUCCESS;
 import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
 import static com.cy.single.blog.enums.ReturnCodeEnum.USER_INFO_ERROR;
 
 /**
  * @Author: Lil-K
- * @Date: 2024/3/4
+ * @Date: 2025/3/6
  * @Description:
  */
 @Service
 @Slf4j
 public class SysUserServiceImpl implements SysUserService {
 
-    @Autowired
-    private SysUserMapper sysUserMapper;
+	@Autowired
+	private SysUserMapper sysUserMapper;
 
-    @Override
-    public SysUser getUserById(Long id) {
-        return sysUserMapper.getUserById(id);
-    }
+	@Override
+	public SysUser getUserById(Long id) {
+		return sysUserMapper.getUserById(id);
+	}
 
-    @Override
-    public SysUser getUserBySurrogateId(Long surrogateId) {
-        return sysUserMapper.getUserBySurrogateId(surrogateId);
-    }
+	@Override
+	public SysUser getUserBySurrogateId(Long surrogateId) {
+		return sysUserMapper.getUserBySurrogateId(surrogateId);
+	}
 
-    @Override
-    public ApiResp<String> adminLogin(UserLoginAdminReq reqParam) {
-        SysUser user = sysUserMapper.getUserByAccount(reqParam.getAccount());
-        if (Objects.isNull(user)){
-            return ApiResp.failure(USER_INFO_ERROR);
-        }
+	@Override
+	public ApiResp<String> adminLogin(UserLoginAdminReq req) {
+		SysUser user = sysUserMapper.loginAdmin(req);
+		if (Objects.isNull(user)) {
+			return ApiResp.failure(USER_INFO_ERROR);
+		}
 
-        user.setUpdateTime(DateUtil.getNowDateTime());
-        sysUserMapper.updateUserById(user);
-        return ApiResp.success(LOGIN_SUCCESS, user.getToken());
-    }
+		user.setUpdateTime(DateUtil.localDateTimeNow());
+		Integer update = sysUserMapper.updateUserBySurrogateId(user);
+		if (update >= 1)
+			return ApiResp.success(LOGIN_SUCCESS, user.getToken());
+		else
+			return ApiResp.failure();
+	}
 
-    /**
-     * register admin
-     * @param req
-     * @return
-     */
-    @Override
-    public ApiResp<Integer> registerAdmin(UserRegisterReq req) {
-        SysUser admin = sysUserMapper.getUserByAccount(req.getAccount());
-        if (Objects.nonNull(admin)) {
-            return ApiResp.failure(ReturnCodeEnum.INFO_NOT_EXIST);
-        }
+	/**
+	 * register admin
+	 * @param req
+	 * @return
+	 */
+	@Override
+	public ApiResp<Integer> registerAdmin(UserRegisterReq req) {
+		SysUser admin = sysUserMapper.getUserByAccount(req.getAccount());
+		if (Objects.nonNull(admin)) {
+			return ApiResp.failure(ReturnCodeEnum.INFO_NOT_EXIST);
+		}
 
-        SysUser user = UserDTO.convertSaveAdminReq(req);
+		SysUser user = UserDTO.convertSaveAdminReq(req);
+		int count = sysUserMapper.insert(user);
+		if (count <= 0) {
+			return ApiResp.failure(SAVE_ERROR);
+		}
 
-        int count = sysUserMapper.insert(user);
-        if (count <= 0) {
-            return ApiResp.failure(SAVE_ERROR);
-        }
-
-        return ApiResp.success(ReturnCodeEnum.SUCCESS);
-    }
-
+		return ApiResp.success(ReturnCodeEnum.SUCCESS);
+	}
 }

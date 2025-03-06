@@ -14,4 +14,7 @@ import lombok.ToString;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysOrgVO extends SysOrg {
 
+	private String parentName;
+
+	private String operatorName;
 }

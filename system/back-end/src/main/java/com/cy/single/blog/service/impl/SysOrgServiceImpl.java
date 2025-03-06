@@ -8,22 +8,24 @@ import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysOrgMapper;
 import com.cy.single.blog.pojo.dto.org.OrgLevelDto;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
-import com.cy.single.blog.pojo.req.org.OrgGetChildrenReq;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
+import com.cy.single.blog.pojo.req.org.OrgPageReq;
 import com.cy.single.blog.pojo.req.org.OrgReq;
 import com.cy.single.blog.pojo.vo.sys.org.SysOrgVO;
 import com.cy.single.blog.service.SysOrgService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.cy.single.blog.utils.orgUtil.LevelUtil;
-import com.cy.single.blog.utils.orgUtil.OrgUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 import static com.cy.single.blog.common.constants.ResponseConstant.ORG_DELETE_EXIST_INFO;
 import static com.cy.single.blog.common.constants.ResponseConstant.ORG_PREV_NUMBER_INFO;
@@ -44,11 +46,11 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 	private SysTreeServiceImpl treeService;
 
 	@Override
-	public ApiResp<String> add(OrgReq param) {
+	public ApiResp<String> add(OrgReq req) {
 		/**
 		 * check repeat org id
 		 */
-		if (checkOrgExist(param.getParentSurrogateId(), param.getName(), param.getSurrogateId())) {
+		if (checkOrgExist(req.getParentSurrogateId(), req.getName(), req.getSurrogateId())) {
 			return ApiResp.failure(DATA_INFO_REPEAT);
 		}
 
@@ -56,21 +58,24 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 		 * calculate level
 		 * first level is 0
 		 * **/
-		String level = LevelUtil.calculateLevel(getLevel(param.getParentSurrogateId()), param.getParentId());
+		SysOrg orgLevel = getLevel(req.getParentSurrogateId());
+		String level = LevelUtil.calculateLevel(Objects.isNull(orgLevel) ? null : orgLevel.getLevel(), orgLevel.getId());
 
 		/**
 		 * build entity for add
 		 */
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
-		Date currentTime = DateUtil.localDateTimeToDate(LocalDateTime.now());// 当前时间
+		Date currentTime = DateUtil.localDateTimeToDate(LocalDateTime.now());// current time
 		SysOrg org = SysOrg.builder()
 			.surrogateId(surrogateId)
 			.number(ORG_PREV_NUMBER_INFO + surrogateId)
-			.parentId(param.getParentSurrogateId())
-			.seq(param.getSeq())
+			.parentId(req.getParentSurrogateId())
+			.seq(req.getSeq())
 			.level(level)
-			.name(param.getName())
-			.remark(param.getRemark())
+			.name(req.getName())
+			.remark(req.getRemark())
+			.status(req.getStatus()) // default 0
+			.deleted(0) // default 0
 			.createTime(currentTime)
 			.updateTime(currentTime)
 			.operator(RequestHolder.getCurrentUser().getSurrogateId())
@@ -94,9 +99,9 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 	 */
 	private boolean checkOrgExist(Long parentId, String orgName, Long SurrogateId) {
 		QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("parent_id",parentId);
+		queryWrapper.eq("parent_id", parentId);
 		if (Objects.nonNull(orgName)) {
-			queryWrapper.eq("name",orgName);
+			queryWrapper.eq("name", orgName);
 		}
 		if (Objects.nonNull(SurrogateId)) {
 			queryWrapper.eq("surrogate_id", SurrogateId);
@@ -114,38 +119,45 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 	 * @param orgId
 	 * @return
 	 */
-	private String getLevel(Long orgId) {
+	private SysOrg getLevel(Long orgId) {
 		QueryWrapper<SysOrg> query = new QueryWrapper<>();
 		query.eq("surrogate_id", orgId);
 		SysOrg org = orgMapper.selectOne(query);
 		if (Objects.isNull(org)) {
 			return null;
-		}else {
-			return org.getLevel();
 		}
+		return org;
 	}
 
+	/**
+	 * edit org info
+	 * @param req
+	 * @return
+	 */
 	@Override
-	public ApiResp<String> edit(OrgReq param) {
-		if (checkOrgExist(param.getParentSurrogateId(),param.getName(),param.getSurrogateId())) {// 检查组织名是否重复
+	public ApiResp<String> edit(OrgReq req) {
+		if (checkOrgExist(req.getParentSurrogateId(), req.getName(), req.getSurrogateId())) {// 检查组织名是否重复
 			return ApiResp.failure(DATA_INFO_REPEAT);
 		}
 
 		// 检查待更新的组织是否存在
-		SysOrg before = orgMapper.selectById(param.getId());
+		QueryWrapper<SysOrg> wrapper = new QueryWrapper<>();
+		wrapper.eq("surrogate_id", req.getSurrogateId());
+		SysOrg before = orgMapper.selectOne(wrapper);
 		if (Objects.isNull(before)) {
 			return ApiResp.failure(INFO_NOT_EXIST);
 		}
 
+		SysOrg orgTemp = getLevel(req.getParentSurrogateId());
 		// 更新当前组织
 		SysOrg after = SysOrg.builder()
 			.id(before.getId())
 			.surrogateId(before.getSurrogateId())
-			.name(param.getName())
-			.parentId(param.getParentSurrogateId())// 上级组织id
-			.seq(param.getSeq())
-			.level(LevelUtil.calculateLevel(getLevel(param.getParentId()), param.getParentId()))
-			.remark(param.getRemark())
+			.name(req.getName())
+			.parentId(req.getParentSurrogateId())// 上级组织id
+			.seq(req.getSeq())
+			.level(LevelUtil.calculateLevel(Objects.isNull(orgTemp) ? null : orgTemp.getLevel(), orgTemp.getId()))
+			.remark(req.getRemark())
 			.updateTime(DateUtil.localDateTimeToDate(LocalDateTime.now()))
 			.operator(RequestHolder.getCurrentUser().getSurrogateId())
 			.operateIp("127.0.0.1")
@@ -156,6 +168,11 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 		return ApiResp.success();
 	}
 
+	/**
+	 * 更新当前组织的子组织信息
+	 * @param before 旧组织
+	 * @param after 新组织
+	 */
 	@Transactional
 	public void updateWithChildOrg(SysOrg before, SysOrg after) {
 		// 修改当前组织信息
@@ -189,38 +206,43 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 	}
 
 	@Override
-	public PageResult<SysOrgVO> pageOrgList(OrgListAllReq param) {
-		param.setIsOrder(1);
-		List<SysOrgVO> pageList = orgMapper.pageList(param);
-		Integer count = orgMapper.countByList(param);
-		if (CollectionUtils.isEmpty(pageList)) {
-			return new PageResult<>(new ArrayList<>(0), 0);
-		}else {
+	public PageResult<SysOrgVO> pageOrgList(OrgPageReq req) {
+		req.setIsOrder(1);
+		List<SysOrgVO> pageList = orgMapper.pageList(req);
+		Integer count = orgMapper.countByList(req);
+		if (CollectionUtils.isNotEmpty(pageList)) {
 			return new PageResult<>(pageList, count);
+		}else {
+			return new PageResult<>(new ArrayList<>(0), 0);
 		}
 	}
 
 	@Override
-	public PageResult<SysOrg> list(OrgListAllReq param) {
-		QueryWrapper<SysOrg> query = new QueryWrapper<>();
-		if (Objects.nonNull(param.getNumber())) {
-			query.like("number", param.getNumber());
-		}
-		if (Objects.nonNull(param.getName())) {
-			query.like("name", param.getName());
-		}
-		query.orderByAsc("surrogate_id");// 排序
-		List<SysOrg> orgList = orgMapper.selectList(query);
-
-		Collections.sort(orgList, OrgUtil.orgComparator);
-		return new PageResult<>(orgList, orgList.size());
+	public List<SysOrgVO> list(OrgListAllReq req) {
+		List<SysOrgVO> list = orgMapper.retrieveAllList(req);
+		return list;
 	}
 
+	/**
+	 * retrieve child org list by surrogateId
+	 * @param req
+	 * @return
+	 */
 	@Override
-	public PageResult<SysOrgVO> getChildrenOrgList(OrgGetChildrenReq req) {
-		return null;
+	public PageResult<SysOrgVO> pageChildOrgList(OrgPageReq req) {
+		List<SysOrgVO> pageList = orgMapper.pageChildOrgList(req);
+		Integer count = orgMapper.childOrgListCount(req);
+		if (CollectionUtils.isNotEmpty(pageList)) {
+			return new PageResult<>(pageList, count);
+		}else {
+			return new PageResult<>(new ArrayList<>(0), 0);
+		}
 	}
 
+	/**
+	 * retrieve org tree list
+	 * @return
+	 */
 	@Override
 	public List<OrgLevelDto> orgTree() {
 		List<OrgLevelDto> dtoList = treeService.orgTree();

@@ -5,12 +5,12 @@ body {
 
 .mainLayoutWarpper {
   display: flex;
-  // width: 100vw; /* viewport width */
-  // height: 100vh; /* viewport height */
+  width: 100vw; /* viewport width */
+  height: 100vh; /* viewport height */
   // margin: 0; /* 重置margin */
-  min-width: 100vw;
-  min-height: 100vh;
-  height: 100%;
+  // min-width: 100vw;
+  // min-height: 100vh;
+  // height: 100%;
 
   .sider-warpper {
     display: flex;

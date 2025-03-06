@@ -11,6 +11,7 @@ import com.cy.single.blog.pojo.req.user.UserSaveReq;
 import com.cy.single.blog.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import static com.cy.single.blog.common.constants.ResponseConstant.*;
@@ -28,10 +29,9 @@ public class UserController {
 	@Autowired
 	private SysUserService userService;
 
-	@CheckAuth
 	@RecordLogger
 	@PutMapping("/login")
-	public ApiResp<String> login(@RequestBody @Valid UserLoginAdminReq req) {
+	public ApiResp<String> login(@RequestBody @Validated({UserLoginAdminReq.AdminLogin.class}) UserLoginAdminReq req) {
 		return userService.adminLogin(req);
 	}
 

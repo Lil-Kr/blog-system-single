@@ -1,3 +1,5 @@
+import exp from "constants"
+
 /**
  *
  */
@@ -52,3 +54,9 @@ export const PREFIX_URL_BLOG_CONTENT = '/blog/content'
 export const PREFIX_URL_IMAGE_CATEGORY = '/image/category'
 
 export const PREFIX_URL_IMAGE_INFO = '/image/info'
+
+
+/**
+ * sys-org
+ */
+export const PREFIX_URL_SYS_ORG = '/sys/org'

@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 @Slf4j
 @RestController
 @RequestMapping("/blog/topic")
-public class TopicApi {
+public class TopicController {
 
   @Autowired
   private BlogTopicService blogTopicService;

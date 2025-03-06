@@ -55,6 +55,7 @@ public class SysOrg implements Serializable {
     /**
      * 父id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
     /**
@@ -67,6 +68,9 @@ public class SysOrg implements Serializable {
      */
     private Integer seq;
 
+    /**
+     * 0: 正常, 1: 异常, 2: 未知
+     */
     private Integer status;
 
     private String remark;
@@ -82,6 +86,7 @@ public class SysOrg implements Serializable {
     /**
      * 操作人
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long operator;
 
     /**

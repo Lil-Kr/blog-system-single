@@ -235,10 +235,10 @@ const BlogLabel = () => {
         <div className='operation-btn'>
           <Flex gap='small'>
             <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createLabel}>
-              新增标签
+              {'新增标签'}
             </Button>
             <Button size={btnSize} type='primary' icon={<DeleteOutlined />} danger onClick={deleteBatch}>
-              删除标签
+              {'删除标签'}
             </Button>
           </Flex>
         </div>

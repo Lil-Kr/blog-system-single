@@ -1,8 +1,7 @@
 import React, { useImperativeHandle, useState } from 'react'
-import Modal from 'antd/es/modal/Modal'
+import { Modal } from 'antd/lib'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { Flex, Form, Input, Upload, message } from 'antd'
-import ImgCrop from 'antd-img-crop'
+import { Form, Input, message } from 'antd'
 
 const BaseModal = (props: ModalType.BaseModalType) => {
   const { mRef, innerComponent, update } = props
@@ -13,7 +12,6 @@ const BaseModal = (props: ModalType.BaseModalType) => {
   const [modalStyle, setmdalStyle] = useState<IModalStyle>()
   const [items, setItems] = useState<ModalType.InputType[]>([])
   const [inputDisabled, setInputDisabled] = useState<boolean>(false)
-
   const [requestParams, setRequestParams] = useState<IModalRequestAction>({
     api: {}
   })
@@ -83,9 +81,8 @@ const BaseModal = (props: ModalType.BaseModalType) => {
       }
     } else if (action === 'edit') {
       const param = { surrogateId: params.key, ...params }
-      // console.log('--> param: ', { ...param })
       const res = await api.edit!(param)
-      const { code, msg, data } = res
+      const { code, msg } = res
       if (code === 200) {
         message.success(msg)
         handleCancel()
