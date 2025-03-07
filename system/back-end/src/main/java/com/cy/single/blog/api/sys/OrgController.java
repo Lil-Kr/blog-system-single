@@ -5,7 +5,7 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.pojo.dto.org.OrgLevelDto;
+import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.org.OrgPageReq;
 import com.cy.single.blog.pojo.req.org.OrgReq;
@@ -32,7 +32,7 @@ import java.util.Objects;
 public class OrgController {
 
 	@Autowired
-	private SysOrgService sysOrgService;
+	private SysOrgService orgService;
 
 	/**
 	 * save org list
@@ -45,9 +45,9 @@ public class OrgController {
 	@PostMapping("save")
 	public ApiResp<String> save(@RequestBody @Valid OrgReq req) {
 		if (Objects.nonNull(req.getSurrogateId())) {// update
-			return sysOrgService.edit(req);
+			return orgService.edit(req);
 		}else { // insert
-			return sysOrgService.add(req);
+			return orgService.add(req);
 		}
 	}
 
@@ -61,7 +61,7 @@ public class OrgController {
 	@CheckAuth
 	@PostMapping("add")
 	public ApiResp<String> add(@RequestBody @Validated({OrgReq.GroupAdd.class}) OrgReq req) {
-		return sysOrgService.add(req);
+		return orgService.add(req);
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class OrgController {
 	@CheckAuth
 	@PostMapping("edit")
 	public ApiResp<String> edit(@RequestBody @Validated({OrgReq.GroupEdit.class}) OrgReq req) {
-		return sysOrgService.edit(req);
+		return orgService.edit(req);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class OrgController {
 	@CheckAuth
 	@PostMapping("orgTreeList")
 	public ApiResp<List<OrgLevelDto>> orgTreeList() {
-		List<OrgLevelDto> orgLevelList = sysOrgService.orgTree();
+		List<OrgLevelDto> orgLevelList = orgService.orgTree();
 		return ApiResp.success(orgLevelList);
 	}
 
@@ -96,7 +96,7 @@ public class OrgController {
 	@CheckAuth
 	@PostMapping("pageOrgList")
 	public ApiResp<PageResult<SysOrgVO>> pageOrgList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) OrgPageReq req) {
-		PageResult<SysOrgVO> list = sysOrgService.pageOrgList(req);
+		PageResult<SysOrgVO> list = orgService.pageOrgList(req);
 		return ApiResp.success(list);
 	}
 
@@ -104,7 +104,7 @@ public class OrgController {
 	@CheckAuth
 	@PostMapping("list")
 	public ApiResp<List<SysOrgVO>> list(@RequestBody OrgListAllReq req) {
-		List<SysOrgVO> list = sysOrgService.list(req);
+		List<SysOrgVO> list = orgService.list(req);
 		return ApiResp.success(list);
 	}
 
@@ -116,7 +116,7 @@ public class OrgController {
 	@CheckAuth
 	@PostMapping("pageChildOrgList")
 	public ApiResp<PageResult<SysOrgVO>> pageChildOrgList(@RequestBody @Validated({OrgPageReq.GroupChildOrgList.class, BasePageReq.GroupPageQuery.class}) OrgPageReq req) {
-		PageResult<SysOrgVO> list = sysOrgService.pageChildOrgList(req);
+		PageResult<SysOrgVO> list = orgService.pageChildOrgList(req);
 		return ApiResp.success(list);
 	}
 
@@ -130,7 +130,7 @@ public class OrgController {
 	@RecordLogger
 	@CheckAuth
 	@DeleteMapping("delete")
-	public ApiResp delete(@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
-		return sysOrgService.delete(surrogateId);
+	public ApiResp<String> delete(@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+		return orgService.delete(surrogateId);
 	}
 }

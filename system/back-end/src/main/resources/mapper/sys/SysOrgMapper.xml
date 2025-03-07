@@ -136,6 +136,7 @@
         left join sys_org as c on (a.parent_id = c.surrogate_id)
         left join sys_user as b on (a.operator = b.surrogate_id)
         where a.parent_id = #{param.surrogateId}
+        order by a.seq asc
     </select>
 
     <select id="childOrgListCount" resultType="java.lang.Integer">

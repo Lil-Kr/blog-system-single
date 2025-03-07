@@ -21,7 +21,7 @@ const imageCategoryApi: ImageCategoryApi = {
   get(params: GetImageCategoryReq) {
     return baseAxiosRequest.get<Result<ImageCategoryVO>>(PREFIX_URL_IMAGE_CATEGORY + '/get', params)
   },
-  save(params: CreactImageCategoryReq) {
+  add(params: CreactImageCategoryReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_IMAGE_CATEGORY + '/save', params)
   },
   delete(params: BaseDelReq) {

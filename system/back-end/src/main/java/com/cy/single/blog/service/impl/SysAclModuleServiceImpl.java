@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysAclModuleMapper;
-import com.cy.single.blog.pojo.dto.aclmodule.AclModuleDto;
+import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleDelReq;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleReq;

@@ -6,7 +6,7 @@ import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysOrgMapper;
-import com.cy.single.blog.pojo.dto.org.OrgLevelDto;
+import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.org.OrgPageReq;
@@ -136,9 +136,10 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 	 */
 	@Override
 	public ApiResp<String> edit(OrgReq req) {
-		if (checkOrgExist(req.getParentSurrogateId(), req.getName(), req.getSurrogateId())) {// 检查组织名是否重复
-			return ApiResp.failure(DATA_INFO_REPEAT);
-		}
+		// 检查组织名是否重复
+//		if (checkOrgExist(req.getParentSurrogateId(), req.getName(), req.getSurrogateId())) {
+//			return ApiResp.failure(DATA_INFO_REPEAT);
+//		}
 
 		// 检查待更新的组织是否存在
 		QueryWrapper<SysOrg> wrapper = new QueryWrapper<>();
@@ -223,6 +224,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 		return list;
 	}
 
+
 	/**
 	 * retrieve child org list by surrogateId
 	 * @param req
@@ -280,4 +282,5 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 			return ApiResp.failure(OPERATE_ERROR);
 		}
 	}
+
 }

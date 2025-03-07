@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cy.single.blog.dao.SysAclMapper;
 import com.cy.single.blog.dao.SysAclModuleMapper;
 import com.cy.single.blog.dao.SysOrgMapper;
-import com.cy.single.blog.pojo.dto.acl.AclDto;
-import com.cy.single.blog.pojo.dto.aclmodule.AclModuleDto;
-import com.cy.single.blog.pojo.dto.org.OrgLevelDto;
+import com.cy.single.blog.pojo.dto.sys.acl.AclDto;
+import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
+import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
@@ -80,10 +80,10 @@ public class SysTreeServiceImpl implements SysTreeService {
         // 按照level分组
         Map<String, List<OrgLevelDto>> levelOrgMap = dtoList.stream()
                 .sorted(Comparator.comparing(SysOrg::getSeq)) // 按照seq字段升序排序
-                .collect(Collectors.groupingBy(org -> org.getLevel()));
+                .collect(Collectors.groupingBy(SysOrg::getLevel));
 
         // 从顶层开始递归生成组织树
-        transformOrgTree(rootList,LevelUtil.ROOT,levelOrgMap);
+        transformOrgTree(rootList, LevelUtil.ROOT, levelOrgMap);
         return rootList;
     }
 
@@ -103,7 +103,7 @@ public class SysTreeServiceImpl implements SysTreeService {
             String nextLevel = LevelUtil.calculateLevel(level, orgLevelDto.getId());// 0.1
 
             // 获得下一级的所有组织信息
-            List<OrgLevelDto> dtoNextTempList = levelOrgMap.get(nextLevel);// 大可 中台
+            List<OrgLevelDto> dtoNextTempList = levelOrgMap.get(nextLevel);//
 
             if (CollectionUtils.isEmpty(dtoNextTempList)) {// 没有下一级了
                 return;
@@ -183,7 +183,8 @@ public class SysTreeServiceImpl implements SysTreeService {
         });
     }
 
-    /** 获取权限模块与权限点组成的树 ============================== **/
+    /** ============================== 获取权限模块与权限点组成的树 ============================== **/
+
     /**
      * 获取角色对应的权限树
      * @param roleSurrogateId 角色id

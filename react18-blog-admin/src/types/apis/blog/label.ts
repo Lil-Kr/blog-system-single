@@ -11,7 +11,7 @@ import { BaseApi } from '..'
  */
 export interface LabelApi extends BaseApi {
   getLabelList(params: LabelReqParams): Promise<ResultPage<LabelVO>>
-  save(params: CreateLabelReq): Promise<Result<string>>
+  add(params: CreateLabelReq): Promise<Result<string>>
   edit(params: EditLabelReq): Promise<Result<string>>
   delete(params: DelLabelReq): Promise<Result<string>>
   deleteBatch(params: DelLabelReq): Promise<Result<string>>

@@ -69,7 +69,7 @@ const BaseModal = (props: ModalType.BaseModalType) => {
     }
 
     if (action == 'create') {
-      const res = await api.save!(params)
+      const res = await api.add!(params)
       const { code, msg, data } = res
       if (code === 200) {
         message.success(msg)

@@ -9,7 +9,7 @@ import { TopicType } from '@/types/entity/blog/topicType'
 export interface BlogTopicApi extends BaseApi {
   getTopicPageList(params: BlogTopicPageReqParams): Promise<ResultPage<BlogTopicVO>>
   getTopicList(params: BlogTopicReqParams): Promise<ResultPage<BlogTopicVO>>
-  save(params: CreateTopicReq): Promise<Result<string>>
+  add(params: CreateTopicReq): Promise<Result<string>>
   // edit(params: EditLabelReq): Promise<Result<string>>
   // delete(params: DelLabelReq): Promise<Result<string>>
   // deleteBatch(params: DelLabelReq): Promise<Result<string>>

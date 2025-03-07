@@ -1,12 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import {
-  CarryOutOutlined,
-  DeleteOutlined,
-  PlusOutlined,
-  SearchOutlined,
-  EditOutlined,
-  AntDesignOutlined
-} from '@ant-design/icons'
+import { DeleteOutlined, PlusOutlined, SearchOutlined, EditOutlined, AntDesignOutlined } from '@ant-design/icons'
 import {
   Tooltip,
   Button,
@@ -24,18 +17,17 @@ import {
   Popconfirm,
   Tag
 } from 'antd/lib'
-import { BaseModal } from '@/components/modal'
 import { SizeType } from 'antd/lib/config-provider/SizeContext'
 import { useForm } from 'antd/lib/form/Form'
 import { TableRowSelection } from 'antd/lib/table/interface'
-import { StringifyOptions } from 'querystring'
-import { SysOrg, SysOrgPageReq, SysOrgResp } from '@/types/apis/sys/org/org'
-import { EventDataNode } from 'antd/lib/tree'
+import { SysOrgPageReq } from '@/types/apis/sys/org/org'
 import { ColumnsType } from 'antd/es/table'
 import { message } from 'antd'
-import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
+import { IAction, IModalParams, IModalRequestAction, IModalStyle } from '@/types/component/modal'
 import OrgModal, { OptionType } from '@/components/modal/OrgModal'
-import sysOrgApi from '@/apis/sys/org'
+import sysOrgApi from '@/apis/sys/orgApi'
+import { TablePageInfoType } from '@/types/base'
+import { transformToTreeData } from '@/utils/sys/orgUtils'
 
 export interface OrgTableType {
   key: string
@@ -53,30 +45,11 @@ export interface OrgTableType {
   parentSurrogateId?: OptionType
 }
 
-const rowSelection: TableRowSelection<OrgTableType> = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-  },
-  onSelect: (record, selected, selectedRows) => {
-    console.log(record, selected, selectedRows)
-  },
-  onSelectAll: (selected, selectedRows, changeRows) => {
-    console.log(selected, selectedRows, changeRows)
-  }
-}
-const MemoTooltip = Tooltip || React.memo(Tooltip)
-
 /**
  * org page
  */
 const Org = () => {
   const columns: ColumnsType<any> = [
-    {
-      key: 'number',
-      dataIndex: 'number',
-      title: '编号',
-      width: '10%'
-    },
     {
       key: 'name',
       dataIndex: 'name',
@@ -86,8 +59,9 @@ const Org = () => {
     {
       key: 'parentName',
       dataIndex: 'parentName',
-      title: '上级组织',
-      width: 100
+      title: '组织',
+      width: 100,
+      render: (_, record: OrgTableType) => <Tag color='magenta'>{record.parentName}</Tag>
     },
     {
       key: 'seq',
@@ -186,11 +160,12 @@ const Org = () => {
     }
   ]
 
+  const MemoTooltip = Tooltip || React.memo(Tooltip)
   const [btnSize] = useState<SizeType>('middle')
+  const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [form] = useForm()
-  const [checkStrictly, setCheckStrictly] = useState(false)
-  const [pageSize, setPageSize] = useState<number>(10)
-  const [totalSize, setTotalSize] = useState<number>(0)
+  // 函数式更新值, 不能直接更新
+  const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({ pageSize: 5, totalSize: 0 })
   const [orgTree, setOrgTree] = useState<TreeDataNode[]>([] as TreeDataNode[])
   const [dataSource, setDataSource] = useState<OrgTableType[]>([] as OrgTableType[])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
@@ -205,60 +180,49 @@ const Org = () => {
   }>()
 
   /**
-   * 搜索
-   */
-  const search = () => {
-    let data = form.getFieldsValue()
-    const searchParam = { ...data, currentPageNum: 1, pageSize: pageSize }
-    retrievePageOrgList({ ...searchParam })
-  }
-
-  /**
-   *
-   */
-  const resetSearch = () => {
-    form.resetFields()
-    retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
-  }
-
-  const onChange: PaginationProps['onChange'] = (page, pageSize) => {
-    const values = form.getFieldsValue()
-  }
-
-  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
-    const values = form.getFieldsValue()
-  }
-
-  /**
    * 初始化数据
    */
   useEffect(() => {
     // load org info list
-    retrieveOrgList()
+    initOrg()
   }, [])
 
   /**
    * init
    */
-  const retrieveOrgList = async () => {
+  const initOrg = async () => {
+    setTableLoading(true)
+
     // 加载组织树
-    const orgList = await sysOrgApi.retrieveOrgList()
+    retrieveOrgTreeList()
+
+    // 加载全部组织信息, 分页
+    retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+
+    setTableLoading(false)
+  }
+
+  /**
+   *
+   * @returns
+   */
+  const retrieveOrgTreeList = async () => {
+    const orgList = await sysOrgApi.retrieveOrgTreeList()
     const { code, data, msg } = orgList
     if (code !== 200) {
       return
     }
     const res = transformToTreeData(data)
+    // 加载组织树
     setOrgTree(res)
 
     // 默认选中根节点
     setSelectedKeys([res[0].key.toString()])
-
-    // 加载全部组织信息, 分页
-    retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
   }
 
   /**
    * retrieve all org info list by page
+   * and set table data
    * @param keyWords
    * @param currentPageNum
    * @param pageSize
@@ -267,35 +231,23 @@ const Org = () => {
     const orgPageList = await sysOrgApi.pageOrgList({
       keyWords: req.keyWords,
       currentPageNum: req.currentPageNum,
-      pageSize: pageSize
+      pageSize: tablePageInfo.pageSize
     })
     const { code, data, msg } = orgPageList
     if (code !== 200) {
       setDataSource([])
-    } else {
-      const list: OrgTableType[] = data.list.map(({ surrogateId, ...rest }) => ({
-        key: surrogateId,
-        ...rest
-      }))
-      setDataSource(list)
+      return
     }
-  }
 
-  /**
-   * transform org tree data
-   * @param data
-   * @returns
-   */
-  const transformToTreeData = (data: SysOrgResp[]): TreeDataNode[] => {
-    return data.map(item => {
-      const children = item.orgList ? transformToTreeData(item.orgList) : [] // 递归处理子节点
-      return {
-        key: item.surrogateId, // 使用 surrogateId 作为 key
-        title: item.name, // 使用 name 作为 title
-        icon: <CarryOutOutlined />, // 使用 CarryOutOutlined 作为图标
-        children: children.length > 0 ? children : undefined // 如果没有子节点则不包含 children 属性
-      }
-    })
+    const list: OrgTableType[] = data.list.map(({ surrogateId, ...rest }) => ({
+      key: surrogateId,
+      ...rest
+    }))
+    setDataSource(list)
+    setTablePageInfo(prevState => ({
+      ...prevState,
+      totalSize: data.total
+    }))
   }
 
   /**
@@ -309,7 +261,7 @@ const Org = () => {
     const orgList = await sysOrgApi.pageChildOrgList({
       surrogateId: key,
       currentPageNum: 1,
-      pageSize: pageSize
+      pageSize: tablePageInfo.pageSize
     })
     const { code, data, msg } = orgList
     if (code !== 200) {
@@ -368,8 +320,18 @@ const Org = () => {
     )
   }
 
-  const deleteItemConfirm = (record: OrgTableType) => {}
+  const deleteItemConfirm = async (record: OrgTableType) => {
+    // message.info(record.key)
+    const res = await sysOrgApi.delete({ surrogateId: record.key.toString() })
+    if (res.code !== 200) {
+      return
+    }
+    retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+  }
 
+  /**
+   * create new org info
+   */
   const createOrg = () => {
     typeRef.current?.open(
       { api: sysOrgApi },
@@ -377,6 +339,50 @@ const Org = () => {
       { action: 'create', open: true }, // create | edit | look
       { style: { maxWidth: '40vw' } }
     )
+  }
+
+  /**
+   * 搜索
+   */
+  const search = () => {
+    let data = form.getFieldsValue()
+    const searchParam = { ...data, currentPageNum: 1, pageSize: tablePageInfo.pageSize }
+    retrievePageOrgList({ ...searchParam })
+  }
+
+  /**
+   * 重置btn
+   */
+  const resetSearch = () => {
+    form.resetFields()
+    retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+  }
+
+  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (currentPageNum, pageSize) => {
+    setTablePageInfo(prevState => ({
+      ...prevState,
+      pageSize
+    }))
+  }
+
+  const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
+    const values = form.getFieldsValue()
+    retrievePageOrgList({ ...values, currentPageNum, pageSize })
+  }
+
+  /**
+   * 表格为checkbox时启用
+   */
+  const rowSelection: TableRowSelection<OrgTableType> = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
+    },
+    onSelect: (record, selected, selectedRows) => {
+      // console.log(record, selected, selectedRows)
+    },
+    onSelectAll: (selected, selectedRows, changeRows) => {
+      // console.log(selected, selectedRows, changeRows)
+    }
   }
 
   return (
@@ -409,8 +415,11 @@ const Org = () => {
               />
             </Card>
           </Col>
-          <Col span={20}>
-            <Card bordered={true} style={{ textAlign: 'center', height: '100%' }}>
+          <Col span={20} style={{ width: '100%', height: '100%' }}>
+            <Card
+              bordered={false}
+              style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}
+            >
               <Flex vertical={true} gap={'small'}>
                 <div className='operation-btn'>
                   <Flex vertical={false} gap='small'>
@@ -436,7 +445,9 @@ const Org = () => {
                       type='dashed'
                       size={btnSize}
                       icon={<AntDesignOutlined />}
-                      onClick={() => retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize })}
+                      onClick={() =>
+                        retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+                      }
                     >
                       {'全部'}
                     </Button>
@@ -446,17 +457,22 @@ const Org = () => {
                 <div className='list'>
                   <Table
                     key={1}
+                    rowSelection={{
+                      type: 'checkbox',
+                      ...rowSelection
+                    }}
+                    loading={tableLoading}
                     columns={columns}
-                    rowSelection={{ ...rowSelection }}
                     dataSource={dataSource}
                     pagination={{
+                      showQuickJumper: false, // 跳转指定页面
+                      showSizeChanger: true,
                       hideOnSinglePage: false,
                       pageSizeOptions: [10, 20, 50],
-                      onChange: onChange,
+                      onChange: onChangePageInfo,
                       onShowSizeChange: onShowSizeChange,
-                      showSizeChanger: true,
-                      pageSize: pageSize,
-                      total: totalSize
+                      pageSize: tablePageInfo.pageSize, // 每页条数
+                      total: tablePageInfo.totalSize // 总条数
                     }}
                   />
                 </div>
@@ -467,7 +483,7 @@ const Org = () => {
         <OrgModal
           mRef={typeRef}
           update={() => {
-            retrieveOrgList()
+            initOrg()
           }}
         />
       </Flex>

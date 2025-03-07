@@ -51,7 +51,7 @@ const LabelDetail = (props: IModalProp<LabelDTO>) => {
       const params = labelForm.getFieldsValue()
       params.colorText = colorHex
       if (action === 'create') {
-        const res = await blogApi.save(params)
+        const res = await blogApi.add(params)
         if (res.code === 200) {
           message.success('操作成功')
           handleCancel()

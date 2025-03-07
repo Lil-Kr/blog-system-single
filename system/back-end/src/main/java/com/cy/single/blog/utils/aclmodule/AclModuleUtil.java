@@ -1,6 +1,6 @@
 package com.cy.single.blog.utils.aclmodule;
 
-import com.cy.single.blog.pojo.dto.aclmodule.AclModuleDto;
+import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 
 import java.util.Comparator;

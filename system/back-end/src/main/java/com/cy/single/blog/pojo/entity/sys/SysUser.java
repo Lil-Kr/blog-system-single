@@ -94,19 +94,26 @@ public class SysUser extends Model<SysUser> {
     private Integer deleted;
 
     /**
-     * 操作人
+     * 备注
      */
-    private Long operator;
+    private String remark;
 
     /**
      * 操作ip
      */
-    private String ip;
+    private String operateIp;
 
     /**
-     * 备注
+     * 创建人
      */
-    private String remark;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long creatorId;
+
+    /**
+     * 操作人
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long operator;
 
     /**
      * 创建时间

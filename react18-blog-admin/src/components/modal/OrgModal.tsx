@@ -2,7 +2,7 @@ import React, { useImperativeHandle, useState } from 'react'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { Modal, Form, Input, InputNumber, Select } from 'antd/lib'
 const { TextArea } = Input
-import sysOrgApi from '@/apis/sys/org'
+import sysOrgApi from '@/apis/sys/orgApi'
 import { SysOrgAllResp } from '@/types/apis/sys/org/org'
 import { OrgTableType } from '@/views/sys/Org'
 
@@ -23,7 +23,7 @@ const OrgModal = (props: ModalType.OrgModal) => {
     api: {}
   })
   const [orgList, setOrgList] = useState<OptionType[]>([])
-  const [selectedValue, setSelectedValue] = useState<OptionType[]>([])
+  const [selectedValue, setSelectedValue] = useState<string>('')
 
   useImperativeHandle(mRef, () => ({
     form: orgModalForm,
@@ -44,13 +44,14 @@ const OrgModal = (props: ModalType.OrgModal) => {
       orgModalForm.resetFields()
     } else if (action === 'edit') {
       orgModalForm.setFieldsValue(data)
+      setSelectedValue(data?.parentSurrogateId?.value ?? '')
     } else {
       orgModalForm.setFieldsValue(data)
       setInputDisabled(true)
     }
 
     // load all org list
-    orgAllList()
+    setSelectorComp()
     setOpenModal(open)
     setAction(action)
     setTitle(title)
@@ -62,7 +63,7 @@ const OrgModal = (props: ModalType.OrgModal) => {
    * load all org list
    * @returns
    */
-  const orgAllList = async () => {
+  const setSelectorComp = async () => {
     const res = await sysOrgApi.orgAllList({})
     const { code, data, msg } = res
     if (code !== 200) {
@@ -86,7 +87,7 @@ const OrgModal = (props: ModalType.OrgModal) => {
     }
 
     if (action === 'create') {
-      const res = await api.save!(params)
+      const res = await api.add!(params)
       const { code, msg } = res
       if (code !== 200) {
         return
@@ -95,13 +96,13 @@ const OrgModal = (props: ModalType.OrgModal) => {
       handleCancel()
       update()
     } else if (action === 'edit') {
-      console.log('--> edit:', params)
       const param = {
-        id: params.id,
         surrogateId: params.key,
-        parentId: params.parentId,
-        parentSurrogateId: params.parentId,
-        ...params
+        name: params.name,
+        parentSurrogateId: selectedValue,
+        remark: params.remark,
+        seq: params.seq,
+        status: params.status
       }
       const res = await api.edit!(param)
       const { code, msg } = res
@@ -119,6 +120,10 @@ const OrgModal = (props: ModalType.OrgModal) => {
     setOpenModal(false)
     setInputDisabled(false)
     orgModalForm.resetFields()
+  }
+
+  const handleChange = (value: string) => {
+    setSelectedValue(value)
   }
 
   return (
@@ -159,14 +164,13 @@ const OrgModal = (props: ModalType.OrgModal) => {
           <Form.Item
             key={4}
             name={'parentSurrogateId'}
-            label={'父级组织'}
-            rules={[{ required: true, message: '父级组织不能为空' }]}
+            label={'所属组织'}
+            rules={[{ required: true, message: '所属组织不能为空' }]}
           >
             <Select
-              value={selectedValue}
-              // onChange={() => handleChange(selectedValue)}
-              showSearch
-              placeholder={'父级组织必填'}
+              onChange={value => handleChange(value)}
+              showSearch={true}
+              placeholder={'所属组织必填'}
               optionFilterProp='children'
               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
               options={orgList}
@@ -178,7 +182,7 @@ const OrgModal = (props: ModalType.OrgModal) => {
             label={'备注'}
             rules={[{ required: false, message: '备注不超过200个字符' }]}
           >
-            <TextArea rows={4} placeholder='备注不超过200个字符' maxLength={6} style={{ width: '100%' }} />
+            <TextArea rows={4} placeholder='备注不超过200个字符' style={{ width: '100%' }} />
           </Form.Item>
         </Form>
       </Modal>

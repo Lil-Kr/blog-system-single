@@ -17,26 +17,7 @@
         <result column="status" property="status" />
         <result column="deleted" property="deleted" />
         <result column="operator" property="operator" />
-        <result column="ip" property="ip" />
-        <result column="remark" property="remark" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-    </resultMap>
-
-    <!-- 通用查询映射结果 -->
-    <resultMap id="SysUserVoResultMap" type="com.cy.single.blog.pojo.vo.sys.user.SysUserVo">
-        <id column="id" property="id" />
-        <result column="surrogate_id" property="surrogateId" />
-        <result column="token" property="token" />
-        <result column="number" property="number" />
-        <result column="account" property="account" />
-        <result column="user_name" property="userName" />
-        <result column="telephone" property="telephone" />
-        <result column="mail" property="email" />
-        <result column="password" property="password" />
-        <result column="org_id" property="orgId" />
-        <result column="status" property="status" />
-        <result column="deleted" property="deleted" />
+        <result column="operate_ip" property="operateIp" />
         <result column="remark" property="remark" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
@@ -48,7 +29,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, surrogate_id, token, `number`, account, password, user_name, telephone, email, org_id, status, deleted, operator, ip, remark, create_time, update_time
+        id, surrogate_id, token, `number`, account, password, user_name, telephone, email, org_id, status, deleted, remark, operate_ip, creator_id, operator, create_time, update_time
     </sql>
 
     <sql id="Column_1_List">
@@ -63,7 +44,7 @@
             and password = #{param.oldPassword}
     </update>
 
-    <select id="selectUserPage" resultMap="SysUserVoResultMap">
+    <select id="selectUserPage" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         <where>
@@ -101,7 +82,7 @@
         </where>
     </select>
 
-    <select id="getUserByKeyword" resultMap="BaseResultMap">
+    <select id="getUserByKeyword" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
         select <include refid="Column_1_List"/>
         from <include refid="Table_Name"/>
         <where>
@@ -156,8 +137,8 @@
             <if test="param.deleted != null and param.deleted != ''">
                 deleted = #{param.deleted},
             </if>
-            <if test="param.ip != null and param.ip != ''">
-                ip = #{param.ip},
+            <if test="param.operateIp != null and param.operateIp != ''">
+                operate_ip = #{param.operateIp},
             </if>
             <if test="param.remark != null and param.remark != ''">
                 remark = #{param.remark},
@@ -177,6 +158,125 @@
         <where>
             account = #{param.account}
             and password = #{param.password}
+        </where>
+    </select>
+
+    <select id="pageUserListByOrgId1" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+        select
+            a.id,
+            a.surrogate_id,
+            a.token,
+            a.`number`,
+            a.account,
+            a.password,
+            a.user_name,
+            a.telephone,
+            a.email,
+            a.org_id,
+            a.status,
+            a.deleted,
+            a.remark,
+            a.operate_ip,
+            a.creator_id,
+            a.operator,
+            a.create_time,
+            a.update_time,
+            b.name as 'orgName'
+        from sys_user as a
+        inner join sys_org as b on (a.org_id = b.surrogate_id)
+        <where>
+            a.org_id = #{param}
+        </where>
+    </select>
+
+    <select id="countUserListByOrgId1" resultType="java.lang.Integer">
+        select count(1)
+        from sys_user as a
+        inner join sys_org as b on (a.org_id = b.surrogate_id)
+        <where>
+            a.org_id = #{param}
+        </where>
+    </select>
+
+    <select id="pageUserList" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+        select
+            a.id,
+            a.surrogate_id,
+            a.token,
+            a.`number`,
+            a.account,
+            a.password,
+            a.user_name,
+            a.telephone,
+            a.email,
+            a.org_id,
+            a.status,
+            a.deleted,
+            a.remark,
+            a.operate_ip,
+            a.creator_id,
+            a.operator,
+            a.create_time,
+            a.update_time,
+            b.name as 'orgName',
+            c.user_name as 'creator_name',
+            d.operator as 'operatorName'
+        from sys_user as a
+        inner join sys_org as b on (a.org_id = b.surrogate_id)
+        inner join sys_user as c on (a.creator_id = c.surrogate_id)
+        inner join sys_user as d on (a.operator = d.surrogate_id)
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and a.org_id = #{param.surrogateId}
+            </if>
+            <if test="param.userName != null and param.userName != ''">
+                and a.user_name = #{param.userName}
+            </if>
+            <if test="param.telephone != null and param.telephone != ''">
+                and a.telephone = #{param.telephone}
+            </if>
+            <if test="param.keyWords != null and param.keyWords !='' ">
+                and (
+                    a.`number` like concat('%',#{param.keyWords},'%')
+                    or
+                    a.`user_name` like concat('%',#{param.keyWords},'%')
+                    or
+                    a.remark like concat('%',#{param.keyWords},'%')
+                    or
+                    b.name like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+        order by a.create_time desc
+    </select>
+
+    <select id="countUserList" resultType="java.lang.Integer">
+        select count(1)
+        from sys_user as a
+        inner join sys_org as b on (a.org_id = b.surrogate_id)
+        inner join sys_user as c on (a.creator_id = c.surrogate_id)
+        inner join sys_user as d on (a.operator = d.surrogate_id)
+        <where>
+            <if test="param.surrogateId != null and param.surrogateId != ''">
+                and a.org_id = #{param.surrogateId}
+            </if>
+            <if test="param.userName != null and param.userName != ''">
+                and a.user_name = #{param.userName}
+            </if>
+            <if test="param.telephone != null and param.telephone != ''">
+                and a.telephone = #{param.telephone}
+            </if>
+            <if test="param.keyWords != null and param.keyWords !='' ">
+                and (
+                    a.`number` like concat('%',#{param.keyWords},'%')
+                    or
+                    a.`user_name` like concat('%',#{param.keyWords},'%')
+                    or
+                    a.remark like concat('%',#{param.keyWords},'%')
+                    or
+                    b.name like concat('%',#{param.keyWords},'%')
+                )
+            </if>
         </where>
     </select>
 </mapper>

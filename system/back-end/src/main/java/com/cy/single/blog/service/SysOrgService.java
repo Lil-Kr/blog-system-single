@@ -2,7 +2,7 @@ package com.cy.single.blog.service;
 
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.pojo.dto.org.OrgLevelDto;
+import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.org.OrgPageReq;
 import com.cy.single.blog.pojo.req.org.OrgReq;
@@ -30,4 +30,5 @@ public interface SysOrgService {
 	PageResult<SysOrgVO> pageOrgList(OrgPageReq req);
 
 	List<SysOrgVO> list(OrgListAllReq req);
+
 }

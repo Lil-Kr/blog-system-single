@@ -14,7 +14,7 @@ import exp from 'constants'
 export interface BlogContentApi extends BaseApi {
   getBlogContentPageList(params: BlogContentReqParams): Promise<ResultPage<BlogContentVO>>
   getContent(params: GetBlogContentReq): Promise<Result<BlogContent>>
-  save(params: CreateBlogContentReq): Promise<Result<string>>
+  add(params: CreateBlogContentReq): Promise<Result<string>>
   edit(params: EditeBlogContentReq): Promise<Result<string>>
   // delete(params: DelLabelReq): Promise<Result<string>>
   // deleteBatch(params: DelLabelReq): Promise<Result<string>>
@@ -24,7 +24,7 @@ const blogContentApi: BlogContentApi = {
   getBlogContentPageList(params: BlogContentReqParams) {
     return baseAxiosRequest.post<ResultPage<BlogContentVO>>(PREFIX_URL_BLOG_CONTENT + '/pageList', params)
   },
-  save(params: CreateBlogContentReq) {
+  add(params: CreateBlogContentReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CONTENT + '/save', params)
   },
   edit(params: EditeBlogContentReq) {

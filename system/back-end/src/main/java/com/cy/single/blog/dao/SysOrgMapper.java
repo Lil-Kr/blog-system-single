@@ -6,7 +6,6 @@ import com.cy.single.blog.pojo.req.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.org.OrgPageReq;
 import com.cy.single.blog.pojo.vo.sys.org.SysOrgVO;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**

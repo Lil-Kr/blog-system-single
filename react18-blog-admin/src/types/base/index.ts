@@ -66,3 +66,11 @@ export interface BaseRequestBackEndType<T> {
   reqUrl: string | '/logout'
   api: T
 }
+
+/**
+ * 表格分页查询使用
+ */
+export interface TablePageInfoType {
+  pageSize: number // 每页记录数
+  totalSize: number // 总记录数
+}

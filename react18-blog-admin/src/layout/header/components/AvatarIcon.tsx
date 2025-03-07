@@ -2,7 +2,6 @@ import React from 'react'
 import { Avatar, Dropdown, MenuProps, message } from 'antd'
 import { useNavigate } from 'oh-router-react'
 import avatar from '@/assets/images/icons/avatar.png'
-import userApi from '@/apis/user'
 
 // zustand
 import useLoginAdminStore from '@/store/login'

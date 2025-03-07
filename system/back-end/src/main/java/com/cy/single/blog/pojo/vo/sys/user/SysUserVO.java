@@ -8,5 +8,12 @@ import lombok.ToString;
 @Data
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SysUserVo extends SysUser {
+public class SysUserVO extends SysUser {
+
+	private String orgName;
+
+	private String creatorName;
+
+	private String operatorName;
+
 }

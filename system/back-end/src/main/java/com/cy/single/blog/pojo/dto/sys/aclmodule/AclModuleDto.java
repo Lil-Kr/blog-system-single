@@ -1,6 +1,6 @@
-package com.cy.single.blog.pojo.dto.aclmodule;
+package com.cy.single.blog.pojo.dto.sys.aclmodule;
 
-import com.cy.single.blog.pojo.dto.acl.AclDto;
+import com.cy.single.blog.pojo.dto.sys.acl.AclDto;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Lists;

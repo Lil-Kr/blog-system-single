@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.dto.org;
+package com.cy.single.blog.pojo.dto.sys.org;
 
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
 import com.fasterxml.jackson.annotation.JsonInclude;

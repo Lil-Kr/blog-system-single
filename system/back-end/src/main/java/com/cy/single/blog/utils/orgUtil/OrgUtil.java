@@ -1,7 +1,7 @@
 package com.cy.single.blog.utils.orgUtil;
 
 
-import com.cy.single.blog.pojo.dto.org.OrgLevelDto;
+import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
 
 import java.util.Comparator;

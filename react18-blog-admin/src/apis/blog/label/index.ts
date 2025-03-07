@@ -8,7 +8,7 @@ const labelApi: LabelApi = {
   getLabelList(params: LabelReqParams) {
     return baseAxiosRequest.post<ResultPage<LabelVO>>(PREFIX_URL_BLOG_LABEL + '/list', { params })
   },
-  save(params: CreateLabelReq) {
+  add(params: CreateLabelReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_LABEL + '/save', params)
   },
   edit(params: EditLabelReq) {

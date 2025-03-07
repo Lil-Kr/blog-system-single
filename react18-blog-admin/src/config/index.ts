@@ -24,11 +24,6 @@ export const HOME_ROUTER_URL = '/admin/home'
 export const PREFIX_BASE_URL = '/api'
 
 /**
- * sys
- */
-export const PREFIX_URL_SYS_USER = '/sys/user'
-
-/**
  * blog-label
  */
 export const PREFIX_URL_BLOG_LABEL = '/blog/label'
@@ -60,3 +55,8 @@ export const PREFIX_URL_IMAGE_INFO = '/image/info'
  * sys-org
  */
 export const PREFIX_URL_SYS_ORG = '/sys/org'
+
+/**
+ * sys-user
+ */
+export const PREFIX_URL_SYS_USER = '/sys/user'

@@ -210,7 +210,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
 
       let res = {} as Result<string>
       if (modalAction === 'create') {
-        res = await blogContentApi.save(params)
+        res = await blogContentApi.add(params)
       } else {
         params.surrogateId = params.key
         params.imgUrl = radioValue

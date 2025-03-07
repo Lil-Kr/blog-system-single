@@ -43,7 +43,7 @@ public class SysCoreServiceImpl implements SysCoreService {
     public List<SysAcl> getCurrentUserAclList() {
         // 获取当前用户surrogateId
         Long surrogateId = RequestHolder.getCurrentUser().getSurrogateId();
-        return getUserAclList(surrogateId);
+        return this.getUserAclList(surrogateId);
     }
 
     /**

@@ -3,12 +3,11 @@ import md5 from 'js-md5'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { useState } from 'react'
 import useLoginAdminStore from '@/store/login'
-import { LoginTpye } from '@/types/user'
-import userApi from '@/apis/user'
-import { Form, Input, Button, message, Flex } from 'antd'
+import loginApi from '@/apis/sys/loginApi'
+import { Form, Input, Button, Flex } from 'antd'
 import { useNavigate } from 'oh-router-react'
 import { useTabsStore } from '@/store/global'
-
+import { LoginTpye } from '@/types/apis/sys/user/user'
 import './css/login.css'
 
 const Login = () => {
@@ -22,7 +21,7 @@ const Login = () => {
   const onFinish = async (loginInfo: LoginTpye.LoginFormType) => {
     let { password } = loginInfo
     loginInfo.password = md5.md5(password)
-    const loginRes = await userApi.login(loginInfo)
+    const loginRes = await loginApi.login(loginInfo)
     const { code, data: token, msg } = loginRes
     if (code === 200) {
       setToken(token)

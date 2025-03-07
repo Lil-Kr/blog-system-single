@@ -77,7 +77,6 @@ const FullScreenModal = (props: ModalType.FullScreenModalType) => {
       name: '分布式系统',
       remard: '分布式系统'
     }
-    // await api.save!(param)
   }
 
   return (

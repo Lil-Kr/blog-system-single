@@ -3,6 +3,7 @@ import { PREFIX_URL_SYS_ORG } from '@/config'
 import {
   SysOrgAllResp,
   SysOrgApi,
+  SysOrgDelReq,
   SysOrgEditReq,
   SysOrgListAllReq,
   SysOrgReq,
@@ -12,7 +13,7 @@ import {
 import { Result, ResultPage } from '@/types/base/response'
 
 const sysOrgApi: SysOrgApi = {
-  retrieveOrgList() {
+  retrieveOrgTreeList() {
     return baseAxiosRequest.post<Result<SysOrgResp[]>>(PREFIX_URL_SYS_ORG + '/orgTreeList', {})
   },
   pageChildOrgList(req: SysOrgReq) {
@@ -24,15 +25,15 @@ const sysOrgApi: SysOrgApi = {
   orgAllList(req: SysOrgListAllReq) {
     return baseAxiosRequest.post<Result<SysOrgAllResp[]>>(PREFIX_URL_SYS_ORG + '/list', req)
   },
-  save(params: SysOrgSaveReq) {
+  add(params: SysOrgSaveReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ORG + '/add', params)
   },
   edit(params: SysOrgEditReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ORG + '/edit', params)
   },
-  // delete(params: DelCategoryReq) {
-  //   return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_BLOG_CATEGORY + '/delete', params)
-  // }
+  delete(params: SysOrgDelReq) {
+    return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_SYS_ORG + '/delete', params)
+  }
 }
 
 export default sysOrgApi

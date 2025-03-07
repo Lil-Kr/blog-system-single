@@ -1,6 +1,6 @@
 import { Result, ResultPage } from '@/types/base/response'
-import { BaseApi } from '../..'
-import { BaseEntityPageType, BaseEntityRequiredType, BasePageReq } from '@/types/base'
+import { BaseApi } from '@/types/apis/'
+import { BaseEntityPageType } from '@/types/base'
 
 export interface SysOrg {
   id: string
@@ -66,13 +66,17 @@ export interface SysOrgVO extends SysOrg {
   isOrder?: number
 }
 
+export interface SysOrgDelReq {
+  surrogateId: string
+}
+
 export interface SysOrgApi extends BaseApi {
-  retrieveOrgList(): Promise<Result<SysOrgResp[]>>
+  retrieveOrgTreeList(): Promise<Result<SysOrgResp[]>>
   pageChildOrgList(req: SysOrgPageReq): Promise<ResultPage<SysOrgResp>>
   pageOrgList(req: SysOrgPageReq): Promise<ResultPage<SysOrgResp>>
   orgAllList(req: SysOrgListAllReq): Promise<Result<SysOrgAllResp[]>>
-  save(params: SysOrgSaveReq): Promise<Result<string>>
+  add(params: SysOrgSaveReq): Promise<Result<string>>
   edit(params: SysOrgEditReq): Promise<Result<string>>
-  // delete(params: DelLabelReq): Promise<Result<string>>
+  delete(params: SysOrgDelReq): Promise<Result<string>>
   // deleteBatch(params: DelLabelReq): Promise<Result<string>>
 }

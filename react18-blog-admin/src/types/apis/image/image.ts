@@ -6,7 +6,7 @@ import { ImageInfoVO } from '@/apis/image/imageInfo'
 export interface ImageCategoryApi extends BaseApi {
   imageCategoryPageList(params: ImageCategoryPageReqParams): Promise<ResultPage<ImageCategoryVO>>
   imageCategoryList(params: ImageCategoryReqParams): Promise<ResultPage<ImageCategoryVO>>
-  save(params: CreactImageCategoryReq): Promise<Result<string>>
+  add(params: CreactImageCategoryReq): Promise<Result<string>>
   get(params: GetImageCategoryReq): Promise<Result<ImageCategoryVO>>
   // edit(params: EditLabelReq): Promise<Result<string>>
   delete(params: BaseDelReq): Promise<Result<string>>

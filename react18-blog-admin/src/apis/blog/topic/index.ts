@@ -18,7 +18,7 @@ const blogTopicApi: BlogTopicApi = {
   getTopicList(params: BlogTopicReqParams) {
     return baseAxiosRequest.post<ResultPage<BlogTopicVO>>(PREFIX_URL_BLOG_TOPIC + '/list', params)
   },
-  save(params: CreateTopicReq) {
+  add(params: CreateTopicReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_TOPIC + '/save', params)
   },
   edit(params: EditTopicReq) {

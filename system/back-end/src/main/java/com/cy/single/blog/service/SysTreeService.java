@@ -1,7 +1,7 @@
 package com.cy.single.blog.service;
 
-import com.cy.single.blog.pojo.dto.aclmodule.AclModuleDto;
-import com.cy.single.blog.pojo.dto.org.OrgLevelDto;
+import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
+import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
 
 import java.util.List;
 

@@ -5,7 +5,7 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.pojo.dto.aclmodule.AclModuleDto;
+import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
 import com.cy.single.blog.pojo.entity.sys.SysRole;
 import com.cy.single.blog.pojo.req.role.RoleListPageReq;
 import com.cy.single.blog.pojo.req.role.RoleSaveReq;
@@ -117,8 +117,8 @@ public class RoleController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("/roleTree")
-	public ApiResp roleTree(@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
+	@PostMapping("/roleAclTree")
+	public ApiResp roleAclTree(@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
 		List<AclModuleDto> aclModuleDtoList = treeService.roleAclTree(req.getSurrogateId());
 		if (CollectionUtils.isNotEmpty(aclModuleDtoList)) {
 			return ApiResp.success(aclModuleDtoList);
