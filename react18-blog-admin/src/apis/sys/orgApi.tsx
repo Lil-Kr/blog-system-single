@@ -9,7 +9,7 @@ import {
   SysOrgReq,
   SysOrgResp,
   SysOrgSaveReq
-} from '@/types/apis/sys/org/org'
+} from '@/types/apis/sys/org/orgType'
 import { Result, ResultPage } from '@/types/base/response'
 
 const sysOrgApi: SysOrgApi = {

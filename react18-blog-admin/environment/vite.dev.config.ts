@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react-swc'
 import checker from 'vite-plugin-checker'
 import vitePluginImp from 'vite-plugin-imp'
 
-console.log('load dev-config...')
 export default defineConfig({
   plugins: [
     react(),

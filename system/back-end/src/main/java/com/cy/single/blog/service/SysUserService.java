@@ -18,7 +18,7 @@ public interface SysUserService {
 
 	SysUser getUserById(Long id);
 
-	SysUser getUserBySurrogateId(Long surrogateId);
+	SysUserVO getUserBySurrogateId(Long surrogateId);
 
 	ApiResp<String> adminLogin(UserLoginAdminReq reqParam);
 
@@ -27,4 +27,8 @@ public interface SysUserService {
 	ApiResp<String> add(UserSaveReq req);
 
 	PageResult<SysUserVO> pageUserList(UserListPageReq req);
+
+	ApiResp<String> edit(UserSaveReq req);
+
+	ApiResp<String> delete(Long surrogateId);
 }

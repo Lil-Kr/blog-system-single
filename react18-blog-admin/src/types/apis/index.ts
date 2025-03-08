@@ -7,3 +7,8 @@ export type BaseApi = {
   delete?(params: any): Promise<Result<any>>
   deleteBatch?(params: any): Promise<Result<any>>
 }
+
+export type OptionType = {
+  value?: string
+  label?: string
+}

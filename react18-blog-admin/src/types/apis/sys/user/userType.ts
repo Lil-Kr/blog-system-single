@@ -1,4 +1,4 @@
-import { BaseApi } from '@/types/apis/'
+import { BaseApi, OptionType } from '@/types/apis/'
 import { BaseEntityPageType } from '@/types/base'
 import { Result, ResultPage } from '@/types/base/response'
 import exp from 'constants'
@@ -38,6 +38,29 @@ export interface SysUser {
   updateTime: string
 }
 
+export interface UserTableType {
+  key?: string
+  id?: string
+  number?: string
+  account?: string
+  userName?: string
+  telephone?: string
+  email?: string
+  orgId?: string
+  status?: number
+  deleted?: number
+  remark?: string
+  operateIp?: string
+  creatorId?: string
+  operator?: string
+  createTime?: string
+  updateTime?: string
+  orgName?: string
+  creatorName?: string
+  operatorName?: string
+  orgInfo?: OptionType
+}
+
 export interface UserPageListByOrgIdResp extends SysUser {
   orgName: string
   creatorName: string
@@ -55,10 +78,13 @@ export interface UserAddReq {
 export interface UserEditReq {
   surrogateId: string
   account: string
+  userName: string
   email: string
   orgId: string
   status: number
   telephone: string
+  remark: string
+  operateIp?: string
 }
 
 export interface SysUserResp extends SysUser {
@@ -71,13 +97,17 @@ export interface UserListPageReq extends BaseEntityPageType {
   keyWords?: string | number
 }
 
+export interface SysUserDelReq {
+  surrogateId: string
+}
+
 export interface SysUserApi extends BaseApi {
   pageUserList(req: UserListPageReq): Promise<ResultPage<UserPageListByOrgIdResp>>
   // pageChildOrgList(req: SysOrgPageReq): Promise<ResultPage<SysOrgResp>>
   // pageOrgList(req: SysOrgPageReq): Promise<ResultPage<SysOrgResp>>
   // orgAllList(req: SysOrgListAllReq): Promise<Result<SysOrgAllResp[]>>
-  add(params: UserAddReq): Promise<Result<string>>
-  // edit(params: SysOrgEditReq): Promise<Result<string>>
-  // delete(params: SysOrgDelReq): Promise<Result<string>>
-  // deleteBatch(params: DelLabelReq): Promise<Result<string>>
+  add(req: UserAddReq): Promise<Result<string>>
+  edit(req: UserEditReq): Promise<Result<string>>
+  delete(req: SysUserDelReq): Promise<Result<string>>
+  // deleteBatch(req: DelLabelReq): Promise<Result<string>>
 }

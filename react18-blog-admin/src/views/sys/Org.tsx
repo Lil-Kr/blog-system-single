@@ -20,30 +20,16 @@ import {
 import { SizeType } from 'antd/lib/config-provider/SizeContext'
 import { useForm } from 'antd/lib/form/Form'
 import { TableRowSelection } from 'antd/lib/table/interface'
-import { SysOrgPageReq } from '@/types/apis/sys/org/org'
+import { OrgTableType, SysOrgPageReq } from '@/types/apis/sys/org/orgType'
 import { ColumnsType } from 'antd/es/table'
 import { message } from 'antd'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle } from '@/types/component/modal'
-import OrgModal, { OptionType } from '@/components/modal/OrgModal'
-import sysOrgApi from '@/apis/sys/orgApi'
+import OrgModal from '@/components/modal/OrgModal'
 import { TablePageInfoType } from '@/types/base'
 import { transformToTreeData } from '@/utils/sys/orgUtils'
-
-export interface OrgTableType {
-  key: string
-  id: string
-  number: string
-  name: string
-  seq: number
-  status: number
-  remark: string
-  createTime: string
-  updateTime: string
-  parentId: string
-  parentName: string
-  operatorName: string
-  parentSurrogateId?: OptionType
-}
+import { sysOrgApi } from '@/apis/sys'
+import { OptionType } from '@/types/apis'
+import DirectoryTree from 'antd/lib/tree/DirectoryTree'
 
 /**
  * org page
@@ -59,14 +45,14 @@ const Org = () => {
     {
       key: 'parentName',
       dataIndex: 'parentName',
-      title: '组织',
+      title: '上级组织',
       width: 100,
       render: (_, record: OrgTableType) => <Tag color='magenta'>{record.parentName}</Tag>
     },
     {
       key: 'seq',
       dataIndex: 'seq',
-      title: '位置',
+      title: '顺序',
       width: 50
     },
     {
@@ -136,14 +122,14 @@ const Org = () => {
             type='primary'
             shape='circle'
             icon={<SearchOutlined />}
-            onClick={() => lookItem(record.key, record)}
+            onClick={() => lookItem(record.key ?? '', record)}
           />
           <Button
             name='edit'
             type='primary'
             shape='circle'
             icon={<EditOutlined />}
-            onClick={() => editItem(record.key, record)}
+            onClick={() => editItem(record.key ?? '', record)}
           />
           <Popconfirm
             title='删除标签'
@@ -165,10 +151,11 @@ const Org = () => {
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [form] = useForm()
   // 函数式更新值, 不能直接更新
-  const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({ pageSize: 5, totalSize: 0 })
+  const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({ pageSize: 10, totalSize: 0 })
   const [orgTree, setOrgTree] = useState<TreeDataNode[]>([] as TreeDataNode[])
   const [dataSource, setDataSource] = useState<OrgTableType[]>([] as OrgTableType[])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+  const [selectedInfo, setSelectedInfo] = useState<OptionType>({} as OptionType)
   const typeRef = useRef<{
     open: (
       requestParams: IModalRequestAction,
@@ -253,13 +240,15 @@ const Org = () => {
   /**
    * retrieve org info children list by node key
    */
-  const pageChildOrgList = async (key: string) => {
+  const pageChildOrgList = async (node: any) => {
     // 选中当前key
-    setSelectedKeys([key])
+    setSelectedKeys([node.key])
+    // 设置选中的组织信息
+    setSelectedInfo({ label: node.title, value: node.key })
 
     // 加载当前组织下的子节点数据
     const orgList = await sysOrgApi.pageChildOrgList({
-      surrogateId: key,
+      surrogateId: node.key,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
@@ -274,6 +263,10 @@ const Org = () => {
       ...rest
     }))
     setDataSource(list)
+    setTablePageInfo(prevState => ({
+      ...prevState,
+      totalSize: data.total
+    }))
   }
 
   /**
@@ -283,7 +276,7 @@ const Org = () => {
    */
   const lookItem = (key: string, record: OrgTableType) => {
     const modalData: OrgTableType = {
-      parentSurrogateId: {
+      orgInfo: {
         label: record.parentName,
         value: record.parentId
       },
@@ -291,7 +284,7 @@ const Org = () => {
     }
     typeRef.current?.open(
       { api: sysOrgApi },
-      { title: '编辑' },
+      { title: '查看' },
       { action: 'look', open: true }, // create | edit | look
       { style: { maxWidth: '40vw' } },
       { ...modalData }
@@ -305,7 +298,7 @@ const Org = () => {
    */
   const editItem = (key: string, record: OrgTableType) => {
     const modalData: OrgTableType = {
-      parentSurrogateId: {
+      orgInfo: {
         label: record.parentName,
         value: record.parentId
       },
@@ -322,7 +315,7 @@ const Org = () => {
 
   const deleteItemConfirm = async (record: OrgTableType) => {
     // message.info(record.key)
-    const res = await sysOrgApi.delete({ surrogateId: record.key.toString() })
+    const res = await sysOrgApi.delete({ surrogateId: record.key?.toString() ?? '' })
     if (res.code !== 200) {
       return
     }
@@ -333,11 +326,15 @@ const Org = () => {
    * create new org info
    */
   const createOrg = () => {
+    const modalData = {
+      orgInfo: selectedInfo
+    }
     typeRef.current?.open(
       { api: sysOrgApi },
       { title: '添加' },
       { action: 'create', open: true }, // create | edit | look
-      { style: { maxWidth: '40vw' } }
+      { style: { maxWidth: '40vw' } },
+      { ...modalData }
     )
   }
 
@@ -395,13 +392,14 @@ const Org = () => {
               bordered={false}
               style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}
             >
-              <Tree
+              <DirectoryTree
                 showLine={true}
                 showIcon={false}
                 checkable={false}
                 blockNode={true} // 是否节点占据一行
                 treeData={orgTree}
                 selectedKeys={selectedKeys}
+                // autoExpandParent={false}
                 // defaultExpandAll={true}
                 // expandedKeys={expandedKeys} // （受控）展开指定的树节点
                 // defaultExpandedKeys={[]}
@@ -411,7 +409,7 @@ const Org = () => {
                   const title = item.title as React.ReactNode
                   return <MemoTooltip title={title}>{title}</MemoTooltip>
                 }}
-                onSelect={(key, info) => pageChildOrgList(info.node.key.toString())}
+                onSelect={(key, info) => pageChildOrgList(info.node)}
               />
             </Card>
           </Col>
@@ -441,14 +439,7 @@ const Org = () => {
                         </Form.Item>
                       </Flex>
                     </Form>
-                    <Button
-                      type='dashed'
-                      size={btnSize}
-                      icon={<AntDesignOutlined />}
-                      onClick={() =>
-                        retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
-                      }
-                    >
+                    <Button type='dashed' size={btnSize} icon={<AntDesignOutlined />} onClick={resetSearch}>
                       {'全部'}
                     </Button>
                   </Flex>

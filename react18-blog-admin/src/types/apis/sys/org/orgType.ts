@@ -1,5 +1,5 @@
 import { Result, ResultPage } from '@/types/base/response'
-import { BaseApi } from '@/types/apis/'
+import { BaseApi, OptionType } from '@/types/apis/'
 import { BaseEntityPageType } from '@/types/base'
 
 export interface SysOrg {
@@ -17,6 +17,22 @@ export interface SysOrg {
   operateIp: string
   createTime: string
   updateTime: string
+}
+
+export type OrgTableType = {
+  key?: string
+  id?: string
+  number?: string
+  name?: string
+  seq?: number
+  status?: number
+  remark?: string
+  createTime?: string
+  updateTime?: string
+  parentId?: string
+  parentName?: string
+  operatorName?: string
+  orgInfo?: OptionType
 }
 
 export interface SysOrgReq extends BaseEntityPageType {

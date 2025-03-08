@@ -2,14 +2,14 @@ import React, { useImperativeHandle, useState } from 'react'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { Modal, Form, Input, InputNumber, Select } from 'antd/lib'
 const { TextArea } = Input
-import { sysOrgApi } from '@/apis/sys'
-import { OrgTableType } from '@/types/apis/sys/org/orgType'
+import sysOrgApi from '@/apis/sys/orgApi'
+import { UserTableType } from '@/types/apis/sys/user/userType'
 import { OptionType } from '@/types/apis'
-import { clearScreenDown } from 'readline'
+import { message } from 'antd'
 
-const OrgModal = (props: ModalType.OrgModal) => {
+const UserModal = (props: ModalType.OrgModal) => {
   const { mRef, update } = props
-  const [orgModalForm] = Form.useForm()
+  const [modalForm] = Form.useForm()
   const [action, setAction] = useState('create')
   const [title, setTitle] = useState('')
   const [openModal, setOpenModal] = useState(false)
@@ -22,7 +22,7 @@ const OrgModal = (props: ModalType.OrgModal) => {
   const [selectedValue, setSelectedValue] = useState<string>('')
 
   useImperativeHandle(mRef, () => ({
-    form: orgModalForm,
+    form: modalForm,
     open
   }))
 
@@ -31,22 +31,22 @@ const OrgModal = (props: ModalType.OrgModal) => {
     params: IModalParams,
     type: IAction,
     modalStyle: IModalStyle,
-    data?: OrgTableType
+    data?: UserTableType
   ) => {
     const { action, open } = type
     const { title } = params
 
     if (action === 'create') {
-      orgModalForm.resetFields()
-      orgModalForm.setFieldsValue({
+      modalForm.resetFields()
+      modalForm.setFieldsValue({
         orgInfo: data?.orgInfo ?? {}
       })
       setSelectedValue(data?.orgInfo?.value ?? '')
     } else if (action === 'edit') {
-      orgModalForm.setFieldsValue(data)
-      setSelectedValue(data?.orgInfo?.value ?? '')
+      modalForm.setFieldsValue(data)
+      setSelectedValue(data?.orgId ?? '')
     } else {
-      orgModalForm.setFieldsValue(data)
+      modalForm.setFieldsValue(data)
       setInputDisabled(true)
     }
 
@@ -79,41 +79,39 @@ const OrgModal = (props: ModalType.OrgModal) => {
   }
 
   const handleOk = async () => {
-    const valid = await orgModalForm.validateFields()
+    const valid = await modalForm.validateFields()
     const { api } = requestParams
-    const params = orgModalForm.getFieldsValue()
+    const params = modalForm.getFieldsValue()
     if (!valid) {
       return
     }
 
     if (action === 'create') {
-      const param = {
-        surrogateId: params.key,
-        parentSurrogateId: selectedValue,
-        ...params
-      }
-      const res = await api.add!(param)
+      const res = await api.add!(params)
       const { code, msg } = res
       if (code !== 200) {
         return
       }
-
       handleCancel()
       update()
     } else if (action === 'edit') {
       const param = {
         surrogateId: params.key,
-        name: params.name,
-        parentSurrogateId: selectedValue,
-        remark: params.remark,
-        seq: params.seq,
-        status: params.status
+        orgId: selectedValue,
+        account: params.account,
+        userName: params.userName,
+        email: params.email,
+        telephone: params.telephone,
+        status: params.status,
+        remark: params.remark
       }
+      // console.log('--> param:', param)
       const res = await api.edit!(param)
       const { code, msg } = res
       if (code !== 200) {
         return
       }
+      message.info(msg)
       handleCancel()
       update()
     } else {
@@ -124,7 +122,7 @@ const OrgModal = (props: ModalType.OrgModal) => {
   const handleCancel = () => {
     setOpenModal(false)
     setInputDisabled(false)
-    orgModalForm.resetFields()
+    modalForm.resetFields()
   }
 
   const handleChange = (value: string) => {
@@ -148,26 +146,27 @@ const OrgModal = (props: ModalType.OrgModal) => {
         // forceRender={true} // 强制渲染
         maskClosable={false}
       >
-        <Form form={orgModalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
+        <Form form={modalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
           <Form.Item name={'key'} hidden>
             <Input />
           </Form.Item>
+          <Form.Item key={1} name={'account'} label={'账号'} rules={[{ required: true, message: '账号不能为空' }]}>
+            <Input placeholder={'账号必填'} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item key={2} name={'userName'} label={'昵称'} rules={[{ required: true, message: '昵称不能为空' }]}>
+            <Input placeholder={'昵称必填'} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item key={3} name={'email'} label={'邮箱'} rules={[{ required: true, message: '邮箱不能为空' }]}>
+            <Input placeholder={'邮箱必填'} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item key={4} name={'telephone'} label={'联系方式'}>
+            <Input placeholder={'联系方式'} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item key={5} name={'status'} label={'状态'} rules={[{ required: true, message: '状态不能为空' }]}>
+            <InputNumber placeholder={'状态必填, 0:正常, 1:冻结, 2: 其他'} style={{ width: '100%' }} min={0} max={2} />
+          </Form.Item>
           <Form.Item
-            key={1}
-            name={'name'}
-            label={'新组织名称'}
-            rules={[{ required: true, message: '组织名称不能为空' }]}
-          >
-            <Input placeholder={'组织名称必填'} style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item key={2} name={'status'} label={'状态'} rules={[{ required: true, message: '状态不能为空' }]}>
-            <InputNumber placeholder={'状态必填'} style={{ width: '100%' }} min={0} max={2} />
-          </Form.Item>
-          <Form.Item key={3} name={'seq'} label={'序号'} rules={[{ required: true, message: '序号不能为空' }]}>
-            <InputNumber placeholder={'序号必填'} style={{ width: '100%' }} min={1} max={10000} />
-          </Form.Item>
-          <Form.Item
-            key={4}
+            key={6}
             name={'orgInfo'}
             label={'所属组织'}
             rules={[{ required: true, message: '所属组织不能为空' }]}
@@ -182,7 +181,7 @@ const OrgModal = (props: ModalType.OrgModal) => {
             />
           </Form.Item>
           <Form.Item
-            key={5}
+            key={7}
             name={'remark'}
             label={'备注'}
             rules={[{ required: false, message: '备注不超过200个字符' }]}
@@ -195,4 +194,4 @@ const OrgModal = (props: ModalType.OrgModal) => {
   )
 }
 
-export default OrgModal
+export default UserModal

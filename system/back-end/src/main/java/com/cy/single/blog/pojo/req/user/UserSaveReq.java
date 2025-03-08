@@ -18,10 +18,11 @@ public class UserSaveReq {
     public interface GroupGetUserAcl {}
     public interface GroupAdminLogin {}
     public interface GroupAddUser {}
+    public interface GroupEditUser {}
 
     private Long id;
 
-    @NotNull(groups = {GroupGetUserAcl.class, Default.class},message = "获取用户权限点信息时surrogateId不能为空")
+    @NotNull(groups = {GroupGetUserAcl.class, Default.class, GroupEditUser.class}, message = "surrogateId不能为空")
     private Long surrogateId;
 
     /**
@@ -41,15 +42,15 @@ public class UserSaveReq {
     /**
      * 用户手机号
      */
-    @NotNull(groups = {Default.class, GroupAddUser.class},message = "用户名手机号不能为空")
-    @Length(groups = {Default.class, GroupAddUser.class}, min = 13, max = 13, message = "请输入正确的手机号")
+    @Length(groups = {Default.class, GroupAddUser.class}, min = 11, max = 11, message = "请输入正确的手机号")
+    @Pattern(groups = {Default.class, GroupAddUser.class}, regexp = "^\\d{11}$", message = "手机号必须是11位数字")
     private String telephone;
 
     /**
      * 邮箱
      */
     @NotNull(groups = {Default.class, GroupAddUser.class},message = "用户邮箱不能为空")
-    @Pattern(groups = {Default.class, GroupAddUser.class},regexp = CheckUtil.EMAIL_REGEXP,message = "邮箱格式不正确")
+    @Pattern(groups = {Default.class, GroupAddUser.class},regexp = CheckUtil.EMAIL_REGEXP, message = "邮箱格式不正确")
     private String email;
 
     /**

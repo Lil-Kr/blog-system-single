@@ -7,7 +7,7 @@ import loginApi from '@/apis/sys/loginApi'
 import { Form, Input, Button, Flex } from 'antd'
 import { useNavigate } from 'oh-router-react'
 import { useTabsStore } from '@/store/global'
-import { LoginTpye } from '@/types/apis/sys/user/user'
+import { LoginTpye } from '@/types/apis/sys/user/userType'
 import './css/login.css'
 
 const Login = () => {

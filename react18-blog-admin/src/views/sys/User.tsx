@@ -1,30 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { AntDesignOutlined, DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Card, Col, Flex, Row, Table, Tooltip, Tree } from 'antd/lib'
-import { Form, Input, message, PaginationProps, Popconfirm, Space, Tag, type TreeDataNode } from 'antd'
+import { Form, Input, PaginationProps, Popconfirm, Space, Tag, type TreeDataNode } from 'antd'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { TablePageInfoType } from '@/types/base'
 import { IModalRequestAction, IModalParams, IAction, IModalStyle } from '@/types/component/modal'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { useForm } from 'antd/es/form/Form'
-import sysOrgApi from '@/apis/sys/orgApi'
 import { transformToTreeData } from '@/utils/sys/orgUtils'
-import sysUserApi from '@/apis/sys/userApi'
-import { UserListPageReq } from '@/types/apis/sys/user/user'
-
-export interface UserTableType {
-  key: string
-  id: string
-  number: string
-  userName: string
-  creatorName: string
-  status: number
-  telephone: string
-  remark: string
-  createTime: string
-  updateTime: string
-  operatorName: string
-}
+import { UserListPageReq, UserTableType } from '@/types/apis/sys/user/userType'
+import UserModal from '@/components/modal/UserModal'
+import { sysOrgApi, sysUserApi } from '@/apis/sys'
+import { OptionType } from '@/types/apis'
+import DirectoryTree from 'antd/lib/tree/DirectoryTree'
 
 const User = () => {
   const columns: ColumnsType<any> = [
@@ -38,14 +26,14 @@ const User = () => {
       key: 'userName',
       dataIndex: 'userName',
       title: '昵称',
-      width: 100,
-      render: (_, record: UserTableType) => <Tag color='magenta'>{record.userName}</Tag>
+      width: 100
     },
     {
       key: 'orgName',
       dataIndex: 'orgName',
       title: '所属组织',
-      width: 50
+      width: 50,
+      render: (_, record: UserTableType) => <Tag color='geekblue'>{record.orgName}</Tag>
     },
     {
       key: 'telephone',
@@ -69,7 +57,7 @@ const User = () => {
             break
           case 1:
             tagColor = 'red'
-            statusText = '异常'
+            statusText = '冻结'
             break
           default:
             tagColor = 'gray'
@@ -120,14 +108,14 @@ const User = () => {
             type='primary'
             shape='circle'
             icon={<SearchOutlined />}
-            onClick={() => lookItem(record.key, record)}
+            onClick={() => lookItem(record.key ?? '', record)}
           />
           <Button
             name='edit'
             type='primary'
             shape='circle'
             icon={<EditOutlined />}
-            onClick={() => editItem(record.key, record)}
+            onClick={() => editItem(record.key ?? '', record)}
           />
           <Popconfirm
             title='删除标签'
@@ -153,6 +141,8 @@ const User = () => {
   const [orgTree, setOrgTree] = useState<TreeDataNode[]>([] as TreeDataNode[])
   const [dataSource, setDataSource] = useState<UserTableType[]>([] as UserTableType[])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+  const [selectedInfo, setSelectedInfo] = useState<OptionType>({} as OptionType)
+
   const typeRef = useRef<{
     open: (
       requestParams: IModalRequestAction,
@@ -163,12 +153,16 @@ const User = () => {
     ) => void
   }>()
 
-  const createOrg = () => {
+  const createUser = () => {
+    const modalData = {
+      orgInfo: selectedInfo
+    }
     typeRef.current?.open(
-      { api: sysOrgApi },
+      { api: sysUserApi },
       { title: '添加' },
       { action: 'create', open: true }, // create | edit | look
-      { style: { maxWidth: '40vw' } }
+      { style: { maxWidth: '40vw' } },
+      { ...modalData }
     )
   }
 
@@ -178,20 +172,20 @@ const User = () => {
    * @param record
    */
   const lookItem = (key: string, record: UserTableType) => {
-    // const modalData: UserTableType = {
-    //   parentSurrogateId: {
-    //     label: record.parentName,
-    //     value: record.parentId
-    //   },
-    //   ...record
-    // }
-    // typeRef.current?.open(
-    //   { api: sysOrgApi },
-    //   { title: '编辑' },
-    //   { action: 'look', open: true }, // create | edit | look
-    //   { style: { maxWidth: '40vw' } },
-    //   { ...modalData }
-    // )
+    const modalData: UserTableType = {
+      orgInfo: {
+        value: record.orgId,
+        label: record.orgName
+      },
+      ...record
+    }
+    typeRef.current?.open(
+      { api: sysUserApi },
+      { title: '查看' },
+      { action: 'look', open: true }, // create | edit | look
+      { style: { maxWidth: '40vw' } },
+      { ...modalData }
+    )
   }
 
   /**
@@ -200,29 +194,33 @@ const User = () => {
    * @param record
    */
   const editItem = (key: string, record: UserTableType) => {
-    // const modalData: UserTableType = {
-    //   parentSurrogateId: {
-    //     label: record.parentName,
-    //     value: record.parentId
-    //   },
-    //   ...record
-    // }
-    // typeRef.current?.open(
-    //   { api: sysOrgApi },
-    //   { title: '编辑' },
-    //   { action: 'edit', open: true }, // create | edit | look
-    //   { style: { maxWidth: '40vw' } },
-    //   { ...modalData }
-    // )
+    const modalData: UserTableType = {
+      orgInfo: {
+        value: record.orgId,
+        label: record.orgName
+      },
+      ...record
+    }
+    typeRef.current?.open(
+      { api: sysUserApi },
+      { title: '编辑' },
+      { action: 'edit', open: true }, // create | edit | look
+      { style: { maxWidth: '40vw' } },
+      { ...modalData }
+    )
   }
 
+  /**
+   * 删除用户
+   * @param record
+   * @returns
+   */
   const deleteItemConfirm = async (record: UserTableType) => {
-    // message.info(record.key)
-    const res = await sysOrgApi.delete({ surrogateId: record.key.toString() })
+    const res = await sysUserApi.delete({ surrogateId: record.key ?? '' })
     if (res.code !== 200) {
       return
     }
-    // retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    pageUserList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
   /**
    * 搜索
@@ -317,6 +315,10 @@ const User = () => {
       ...rest
     }))
     setDataSource(list)
+    setTablePageInfo(prevState => ({
+      ...prevState,
+      totalSize: data.total
+    }))
   }
 
   /**
@@ -340,13 +342,15 @@ const User = () => {
   /**
    * retrieve user info of children list by node key
    */
-  const pageUserListByOrgId = async (key: string) => {
+  const pageUserListByOrgId = async (node: any) => {
     // 选中当前key
-    setSelectedKeys([key])
+    setSelectedKeys([node.key])
+    // 设置选中的组织信息
+    setSelectedInfo({ label: node.title, value: node.key })
 
     // 加载当前组织下的子节点数据
     const userList = await sysUserApi.pageUserList({
-      surrogateId: key,
+      surrogateId: node.key,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
@@ -360,6 +364,10 @@ const User = () => {
       ...rest
     }))
     setDataSource(list)
+    setTablePageInfo(prevState => ({
+      ...prevState,
+      totalSize: data.total
+    }))
   }
 
   return (
@@ -372,7 +380,7 @@ const User = () => {
               bordered={false}
               style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}
             >
-              <Tree
+              <DirectoryTree
                 showLine={true}
                 showIcon={false}
                 checkable={false}
@@ -388,7 +396,7 @@ const User = () => {
                   const title = item.title as React.ReactNode
                   return <MemoTooltip title={title}>{title}</MemoTooltip>
                 }}
-                onSelect={(key, info) => pageUserListByOrgId(info.node.key.toString())}
+                onSelect={(key, info) => pageUserListByOrgId(info.node)}
               />
             </Card>
           </Col>
@@ -400,7 +408,7 @@ const User = () => {
               <Flex vertical={true} gap={'small'}>
                 <div className='operation-btn'>
                   <Flex vertical={false} gap='small'>
-                    <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createOrg}>
+                    <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createUser}>
                       {'新增'}
                     </Button>
                     <Form form={form}>
@@ -418,14 +426,7 @@ const User = () => {
                         </Form.Item>
                       </Flex>
                     </Form>
-                    <Button
-                      type='dashed'
-                      size={btnSize}
-                      icon={<AntDesignOutlined />}
-                      // onClick={() =>
-                      //   retrievePageUserList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
-                      // }
-                    >
+                    <Button type='dashed' size={btnSize} icon={<AntDesignOutlined />} onClick={resetSearch}>
                       {'全部'}
                     </Button>
                   </Flex>
@@ -457,12 +458,12 @@ const User = () => {
             </Card>
           </Col>
         </Row>
-        {/* <OrgModal
-      mRef={typeRef}
-      update={() => {
-        initOrg()
-      }}
-    /> */}
+        <UserModal
+          mRef={typeRef}
+          update={() => {
+            initInfo()
+          }}
+        />
       </Flex>
     </div>
   )

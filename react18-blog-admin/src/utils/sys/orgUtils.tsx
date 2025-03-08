@@ -1,4 +1,4 @@
-import { SysOrgResp } from '@/types/apis/sys/org/org'
+import { SysOrgResp } from '@/types/apis/sys/org/orgType'
 import { CarryOutOutlined } from '@ant-design/icons'
 import { TreeDataNode } from 'antd/lib'
 

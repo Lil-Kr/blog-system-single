@@ -6,8 +6,10 @@ import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysOrgMapper;
+import com.cy.single.blog.dao.SysUserMapper;
 import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
+import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.org.OrgPageReq;
 import com.cy.single.blog.pojo.req.org.OrgReq;
@@ -27,8 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static com.cy.single.blog.common.constants.ResponseConstant.ORG_DELETE_EXIST_INFO;
-import static com.cy.single.blog.common.constants.ResponseConstant.ORG_PREV_NUMBER_INFO;
+import static com.cy.single.blog.common.constants.SysOrgConstants.*;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -41,6 +42,9 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 
 	@Autowired
 	private SysOrgMapper orgMapper;
+
+	@Autowired
+	private SysUserMapper userMapper;
 
 	@Autowired
 	private SysTreeServiceImpl treeService;
@@ -263,6 +267,16 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 		SysOrg org = orgMapper.selectOne(query);
 		if (Objects.isNull(org)) {
 			return ApiResp.failure(INFO_NOT_EXIST);
+		}
+
+		/**
+		 * check will delete org include user
+		 */
+		QueryWrapper<SysUser> queryWrapperUser = new QueryWrapper<>();
+		queryWrapperUser.eq("org_id", surrogateId);
+		Long userCount = userMapper.selectCount(queryWrapperUser);
+		if (userCount >= 1) {
+			return ApiResp.failure(ORG_DELETE_ERROR_INFO);
 		}
 
 		/**

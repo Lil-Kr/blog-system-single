@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -114,11 +113,11 @@ public class SysCoreServiceImpl implements SysCoreService {
         query1.in("surrogate_id", roleIdList);
         List<SysRole> roleList = roleMapper.selectList(query1);
         // 查看是否有超级管理员的角色
-        Optional<SysRole> roleOptional = roleList.stream().filter(role -> role.getType() == 1).findFirst();
-        if (roleOptional.isPresent()) {
-            return true;
-        }else {
-            return false;
-        }
+        return roleList.stream().anyMatch(role -> role.getType() == 1);
+//        if (roleOptional.isPresent()) {
+//            return true;
+//        }else {
+//            return false;
+//        }
     }
 }

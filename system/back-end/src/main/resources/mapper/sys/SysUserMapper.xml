@@ -58,7 +58,7 @@
         </if>
     </select>
 
-    <select id="getUserById" resultMap="BaseResultMap">
+    <select id="getUserById" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         <where>
@@ -66,11 +66,31 @@
         </where>
     </select>
 
-    <select id="getUserBySurrogateId" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List"/>
-        from <include refid="Table_Name"/>
+    <select id="getUserBySurrogateId" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+        select
+            a.id,
+            a.surrogate_id,
+            a.token,
+            a.`number`,
+            a.account,
+            a.password,
+            a.user_name,
+            a.telephone,
+            a.email,
+            a.org_id,
+            a.status,
+            a.deleted,
+            a.remark,
+            a.operate_ip,
+            a.creator_id,
+            a.operator,
+            a.create_time,
+            a.update_time,
+            b.name as 'orgName'
+        from sys_user as a
+        left join sys_org as b on (a.org_id = b.surrogate_id)
         <where>
-            surrogate_id = #{surrogateId}
+            a.surrogate_id = #{surrogateId}
         </where>
     </select>
 
@@ -114,7 +134,7 @@
         update <include refid="Table_Name"/>
         <set>
             <if test="param.number != null and param.number != ''">
-                number = #{param.number},
+                `number` = #{param.number},
             </if>
             <if test="param.account != null and param.account != ''">
                 account = #{param.account},
@@ -131,8 +151,11 @@
             <if test="param.password != null and param.password != ''">
                 password = #{param.password},
             </if>
-            <if test="param.status != null and param.status != ''">
+            <if test="param.status != null">
                 status = #{param.status},
+            </if>
+            <if test="param.remark != null and param.remark != ''">
+                remark = #{param.remark},
             </if>
             <if test="param.deleted != null and param.deleted != ''">
                 deleted = #{param.deleted},
@@ -140,11 +163,17 @@
             <if test="param.operateIp != null and param.operateIp != ''">
                 operate_ip = #{param.operateIp},
             </if>
-            <if test="param.remark != null and param.remark != ''">
-                remark = #{param.remark},
+            <if test="param.creatorId != null and param.creatorId != ''">
+                creator_id = #{param.creatorId},
+            </if>
+            <if test="param.operator != null and param.operator != ''">
+                operator = #{param.operator},
+            </if>
+            <if test="param.createTime != null">
+                create_time = #{param.createTime},
             </if>
             <if test="param.updateTime != null">
-                update_time = #{param.updateTime}
+                update_time = #{param.updateTime},
             </if>
         </set>
         <where>
@@ -275,8 +304,23 @@
                     a.remark like concat('%',#{param.keyWords},'%')
                     or
                     b.name like concat('%',#{param.keyWords},'%')
+                    or
+                    a.user_name like concat('%',#{param.keyWords},'%')
                 )
             </if>
         </where>
+    </select>
+
+    <select id="selectUserInfoExist" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+        SELECT
+            account,
+            email,
+            user_name,
+            COUNT(1) as 'count'
+        FROM sys_user
+        WHERE
+            account = #{param.account} OR email = #{param.email} OR user_name = #{param.userName}
+        GROUP BY
+            account, email, user_name;
     </select>
 </mapper>

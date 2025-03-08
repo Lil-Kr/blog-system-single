@@ -3,7 +3,7 @@ import { create } from 'zustand'
 // cookie
 import cookie from 'react-cookies'
 import { CLT } from '@/config'
-import { LoginTpye } from '@/types/apis/sys/user/user'
+import { LoginTpye } from '@/types/apis/sys/user/userType'
 
 /**
  * create 函数中必须指定泛型类型, 这样组件中通过 hook 获取到的对象才能更新其中状态值

@@ -19,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import static com.cy.single.blog.common.constants.ResponseConstant.LOGOUT_SUCCESS;
 
@@ -60,9 +61,15 @@ public class UserController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/edit")
-	public ApiResp<String> edit(@RequestBody @Valid UserSaveReq req) {
-		System.out.println("editUser");
-		return ApiResp.success();
+	public ApiResp<String> edit(@RequestBody @Validated({UserSaveReq.GroupEditUser.class}) UserSaveReq req) {
+		return userService.edit(req);
+	}
+
+	@CheckAuth
+	@RecordLogger
+	@DeleteMapping("/delete")
+	public ApiResp<String> delete(@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+		return userService.delete(surrogateId);
 	}
 
 	@CheckAuth

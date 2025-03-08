@@ -34,12 +34,12 @@ axiosInstance.interceptors.response.use(
     const { data, config, headers, request, status, statusText } = response
     if (status === 200) {
       const { data } = response
-
       // todo: 每次请求成功都重新 set token cookie
-      const { code, msg, token, userInfo } = data
+      const { code, msg } = data
 
       if (code !== 200) {
         message.error(msg)
+        return response
       }
       return data
     } else {

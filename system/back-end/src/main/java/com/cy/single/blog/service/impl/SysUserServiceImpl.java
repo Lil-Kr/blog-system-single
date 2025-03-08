@@ -1,5 +1,6 @@
 package com.cy.single.blog.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
@@ -18,13 +19,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import static com.cy.single.blog.common.constants.ResponseConstant.LOGIN_SUCCESS;
-import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
-import static com.cy.single.blog.enums.ReturnCodeEnum.USER_INFO_ERROR;
+import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 import static com.cy.single.blog.pojo.dto.sys.user.UserDTO.convertAddUserReq;
+import static com.cy.single.blog.pojo.dto.sys.user.UserDTO.convertEditUserReq;
 
 /**
  * @Author: Lil-K
@@ -40,6 +43,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 	@Override
 	public ApiResp<String> add(UserSaveReq req) {
+		List<SysUserVO> checkRes = userMapper.selectUserInfoExist(req);
+		if (CollectionUtils.isNotEmpty(checkRes)) {
+			return ApiResp.failure(DATA_INFO_REPEAT);
+		}
+
 		SysUser user = convertAddUserReq(req);
 		int insert = userMapper.insert(user);
 		if (insert >= 1) {
@@ -49,6 +57,33 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		}
 	}
 
+	/**
+	 * 编辑用户
+	 * @param req
+	 * @return
+	 */
+	@Override
+	public ApiResp<String> edit(UserSaveReq req) {
+		SysUser user = convertEditUserReq(req);
+		int update = userMapper.updateUserBySurrogateId(user);
+		if (update >= 1) {
+			return ApiResp.success();
+		} else {
+			return ApiResp.failure(EDITE_ERROR);
+		}
+	}
+
+	@Override
+	public ApiResp<String> delete(Long surrogateId) {
+		QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
+		wrapper.eq("surrogate_id", surrogateId);
+		int delete = userMapper.delete(wrapper);
+		if (delete >= 1) {
+			return ApiResp.success();
+		} else {
+			return ApiResp.failure(DEL_ERROR);
+		}
+	}
 
 	@Override
 	public SysUser getUserById(Long id) {
@@ -56,7 +91,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	@Override
-	public SysUser getUserBySurrogateId(Long surrogateId) {
+	public SysUserVO getUserBySurrogateId(Long surrogateId) {
 		return userMapper.getUserBySurrogateId(surrogateId);
 	}
 

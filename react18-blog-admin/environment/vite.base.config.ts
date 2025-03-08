@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import path from 'path'
 
-console.log('load base-config...')
 export default defineConfig({
   base: '/admin',
   resolve: {

@@ -116,7 +116,7 @@ export namespace ModalType {
             params: IModalParams,
             type: IAction,
             modalStyle: IModalStyle,
-            data: T
+            data?: T | any
           ) => void
         }
       | undefined

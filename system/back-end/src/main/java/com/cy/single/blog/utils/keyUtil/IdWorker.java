@@ -2,6 +2,7 @@ package com.cy.single.blog.utils.keyUtil;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RandomUtil;
 
 public class IdWorker {
     //下面两个每个5位，加起来就是10位的工作机器id
@@ -126,6 +127,16 @@ public class IdWorker {
      */
     public static String generateUUID() {
         return IdUtil.randomUUID();
+    }
+
+    /**
+     * 生成随机字符串
+     * @param desiredLength 字符串长度
+     * @return
+     */
+    public static String generateRandomStr(int desiredLength) {
+        String randomString = RandomUtil.randomString(desiredLength);
+        return randomString;
     }
 
 }

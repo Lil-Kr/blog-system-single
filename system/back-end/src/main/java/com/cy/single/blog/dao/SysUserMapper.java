@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.user.UserListPageReq;
 import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
+import com.cy.single.blog.pojo.req.user.UserSaveReq;
 import com.cy.single.blog.pojo.vo.sys.user.SysUserVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,7 +21,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
 	SysUser getUserById(Long id);
 
-	SysUser getUserBySurrogateId(Long surrogateId);
+	SysUserVO getUserBySurrogateId(Long surrogateId);
 
 	SysUser getUserByToken(String token);
 
@@ -34,4 +35,5 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
 	Integer countUserList(@Param("param") UserListPageReq req);
 
+	List<SysUserVO> selectUserInfoExist(@Param("param") UserSaveReq req);
 }
