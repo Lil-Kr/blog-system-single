@@ -79,6 +79,11 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 		return ApiResp.success("修改角色对应权限点成功");
 	}
 
+	@Override
+	public ApiResp<String> delete(Long surrogateId) {
+		return null;
+	}
+
 	/**
 	 * 更新权限点
 	 * @param roleId

@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
+import com.cy.single.blog.pojo.req.dict.DictDetailReq;
 import com.cy.single.blog.pojo.req.dict.DictSaveReq;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictVo;
+import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;
 
 /**
  * @Author: Lil-K
@@ -18,5 +19,9 @@ public interface SysDictService extends IService<SysDict> {
 
 	ApiResp<String> edit(DictSaveReq param);
 
-	PageResult<SysDictVo> listAll();
+	PageResult<SysDictVO> listAll();
+
+	ApiResp<SysDictVO> dictDetail(DictDetailReq req);
+
+	SysDictVO getDict(Long surrogateId);
 }

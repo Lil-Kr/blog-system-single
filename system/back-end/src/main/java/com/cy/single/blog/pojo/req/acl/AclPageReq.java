@@ -1,24 +1,16 @@
 package com.cy.single.blog.pojo.req.acl;
 
+import com.cy.single.blog.base.BasePageReq;
 import lombok.Data;
 import lombok.ToString;
-import javax.validation.constraints.NotNull;
+
+import java.io.Serializable;
 
 @ToString
 @Data
-public class AclPageReq {
+public class AclPageReq extends BasePageReq implements Serializable {
 
-    /**
-     * 当前页码数
-     */
-    @NotNull(message = "当前页码数不能为空")
-    private Long current;
-
-    /**
-     * 每页记录数
-     */
-    @NotNull(message = "每页记录数不能为空")
-    private Long size;
+    private static final long serialVersionUID = -821631108601312173L;
 
     /**
      * 自增主键

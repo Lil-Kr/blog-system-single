@@ -2,33 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.SysAclModuleMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.sys.SysAclModule">
-        <id column="id" property="id" />
-        <result column="surrogate_id" property="surrogateId" />
-        <result column="name" property="name" />
-        <result column="parent_id" property="parentId" />
-        <result column="level" property="level" />
-        <result column="seq" property="seq" />
-        <result column="status" property="status" />
-        <result column="remark" property="remark" />
-        <result column="operator" property="operator" />
-        <result column="operate_ip" property="operateIp" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-    </resultMap>
-
     <sql id="Table_Name">
         sys_acl_module
     </sql>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, surrogate_id, name, parent_id, level, seq, status, remark, operator, operate_ip, create_time, update_time
+        id, surrogate_id, `name`, parent_id, parent_name, `level`, seq, status, remark, operate_ip, creator_id, operator, create_time, update_time
     </sql>
 
-    <select id="selectChildAclModuleListByParentId" resultMap="BaseResultMap">
+    <select id="selectChildAclModuleListByParentId" resultType="com.cy.single.blog.pojo.entity.sys.SysAclModule">
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         where parent_id = #{parentId}
+    </select>
+
+    <select id="selectAclModuleList" resultType="com.cy.single.blog.pojo.vo.sys.aclmodule.SysAclModuleVO">
+        select <include refid="Base_Column_List"/>
+        from <include refid="Table_Name"/>
+        order by seq asc
     </select>
 </mapper>

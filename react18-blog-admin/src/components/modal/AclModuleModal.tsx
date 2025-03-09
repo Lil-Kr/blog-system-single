@@ -2,14 +2,14 @@ import React, { useImperativeHandle, useState } from 'react'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { Modal, Form, Input, InputNumber, Select } from 'antd/lib'
 const { TextArea } = Input
-import { sysOrgApi } from '@/apis/sys'
-import { OrgTableType } from '@/types/apis/sys/org/orgType'
-import { OptionType } from '@/types/apis'
-import { clearScreenDown } from 'readline'
+import { OptionType, SelectTreeNodeType } from '@/types/apis'
+import { message } from 'antd'
+import { AclModuleAddReq, AclModuleEditReq, AclModuleTableType } from '@/types/apis/sys/acl/aclType'
+import { aclModuleApi } from '@/apis/sys'
 
-const OrgModal = (props: ModalType.CustomModal) => {
+const AclModuleModal = (props: ModalType.CustomModal) => {
   const { mRef, update } = props
-  const [orgModalForm] = Form.useForm()
+  const [modalForm] = Form.useForm()
   const [action, setAction] = useState('create')
   const [title, setTitle] = useState('')
   const [openModal, setOpenModal] = useState(false)
@@ -18,56 +18,23 @@ const OrgModal = (props: ModalType.CustomModal) => {
   const [requestParams, setRequestParams] = useState<IModalRequestAction>({
     api: {}
   })
-  const [orgList, setOrgList] = useState<OptionType[]>([])
+  const [selectorList, setSelectorList] = useState<OptionType[]>([])
   const [selectedValue, setSelectedValue] = useState<string>('')
 
   useImperativeHandle(mRef, () => ({
-    form: orgModalForm,
+    form: modalForm,
     open
   }))
 
-  const open = (
-    requestParams: IModalRequestAction,
-    params: IModalParams,
-    type: IAction,
-    modalStyle: IModalStyle,
-    data?: OrgTableType
-  ) => {
-    const { action, open } = type
-    const { title } = params
-
-    if (action === 'create') {
-      orgModalForm.resetFields()
-      orgModalForm.setFieldsValue({
-        orgInfo: data?.orgInfo ?? {}
-      })
-      setSelectedValue(data?.orgInfo?.value ?? '')
-    } else if (action === 'edit') {
-      orgModalForm.setFieldsValue(data)
-      setSelectedValue(data?.orgInfo?.value ?? '')
-    } else {
-      orgModalForm.setFieldsValue(data)
-      setInputDisabled(true)
-    }
-
-    // load all org list
-    setSelectorComp()
-    setOpenModal(open)
-    setAction(action)
-    setTitle(title)
-    setRequestParams(requestParams)
-    setmdalStyle(modalStyle)
-  }
-
   /**
-   * load all org list
+   * load all list
    * @returns
    */
-  const setSelectorComp = async () => {
-    const res = await sysOrgApi.orgAllList({})
-    const { code, data, msg } = res
+  const setSelectorValueComp = async () => {
+    const res = await aclModuleApi.aclModuleList({})
+    const { code, data } = res
     if (code !== 200) {
-      setOrgList([])
+      setSelectorList([])
       return
     }
 
@@ -75,44 +42,95 @@ const OrgModal = (props: ModalType.CustomModal) => {
       value: surrogateId,
       label: name
     }))
-    setOrgList(list)
+    list.push({
+      value: '0',
+      label: '顶级'
+    })
+    setSelectorList(list)
+  }
+
+  const open = (
+    requestParams: IModalRequestAction,
+    params: IModalParams,
+    type: IAction,
+    modalStyle: IModalStyle,
+    data?: AclModuleTableType
+  ) => {
+    const { action, open } = type
+    const { title } = params
+
+    if (action === 'create') {
+      modalForm.resetFields()
+      const parentAclModuleInfo: OptionType = {
+        label: data?.name ?? '',
+        value: data?.surrogateId ?? ''
+      }
+      // 绑定当前选中的树节点的值
+      modalForm.setFieldsValue({
+        parentAclModuleInfo: parentAclModuleInfo
+      })
+
+      // 新打开页面时默认加载当前选中树节点的信息
+      setSelectedValue(parentAclModuleInfo.value ?? '')
+    } else if (action === 'edit') {
+      modalForm.setFieldsValue(data)
+
+      setSelectedValue(data?.parentAclModuleInfo?.value ?? '')
+    } else {
+      modalForm.setFieldsValue(data)
+      setInputDisabled(true)
+    }
+
+    // load all org list
+    setSelectorValueComp()
+    setOpenModal(open)
+    setAction(action)
+    setTitle(title)
+    setRequestParams(requestParams)
+    setmdalStyle(modalStyle)
   }
 
   const handleOk = async () => {
-    const valid = await orgModalForm.validateFields()
+    const valid = await modalForm.validateFields()
     const { api } = requestParams
-    const params = orgModalForm.getFieldsValue()
+    const params = modalForm.getFieldsValue()
     if (!valid) {
       return
     }
 
     if (action === 'create') {
-      const addReq = {
+      const addReq: AclModuleAddReq = {
+        name: params.name,
         parentSurrogateId: selectedValue,
-        ...params
+        seq: params.seq,
+        status: params.status,
+        remark: params.remark
       }
       const res = await api.add!(addReq)
       const { code, msg } = res
       if (code !== 200) {
+        message.error(msg)
         return
       }
 
+      message.info(msg)
       handleCancel()
       update()
     } else if (action === 'edit') {
-      const editReq = {
+      const editReq: AclModuleEditReq = {
         surrogateId: params.key,
         name: params.name,
         parentSurrogateId: selectedValue,
-        remark: params.remark,
         seq: params.seq,
-        status: params.status
+        status: params.status,
+        remark: params.remark
       }
       const res = await api.edit!(editReq)
       const { code, msg } = res
       if (code !== 200) {
         return
       }
+      message.info(msg)
       handleCancel()
       update()
     } else {
@@ -123,7 +141,7 @@ const OrgModal = (props: ModalType.CustomModal) => {
   const handleCancel = () => {
     setOpenModal(false)
     setInputDisabled(false)
-    orgModalForm.resetFields()
+    modalForm.resetFields()
   }
 
   const handleChange = (value: string) => {
@@ -147,38 +165,38 @@ const OrgModal = (props: ModalType.CustomModal) => {
         // forceRender={true} // 强制渲染
         maskClosable={false}
       >
-        <Form form={orgModalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
+        <Form form={modalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
           <Form.Item name={'key'} hidden>
             <Input />
           </Form.Item>
           <Form.Item
-            key={1}
-            name={'name'}
-            label={'新组织名称'}
-            rules={[{ required: true, message: '组织名称不能为空' }]}
-          >
-            <Input placeholder={'组织名称必填'} style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item key={2} name={'status'} label={'状态'} rules={[{ required: true, message: '状态不能为空' }]}>
-            <InputNumber placeholder={'状态必填'} style={{ width: '100%' }} min={0} max={2} />
-          </Form.Item>
-          <Form.Item key={3} name={'seq'} label={'序号'} rules={[{ required: true, message: '序号不能为空' }]}>
-            <InputNumber placeholder={'序号必填'} style={{ width: '100%' }} min={1} max={10000} />
-          </Form.Item>
-          <Form.Item
-            key={4}
-            name={'orgInfo'}
-            label={'所属组织'}
-            rules={[{ required: true, message: '所属组织不能为空' }]}
+            key={2}
+            name={'parentAclModuleInfo'}
+            label={'父级权限模块'}
+            rules={[{ required: true, message: '权限模块不能为空' }]}
           >
             <Select
               onChange={value => handleChange(value)}
               showSearch={true}
-              placeholder={'所属组织必填'}
+              placeholder={'父级权限模块必填'}
               optionFilterProp='children'
               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-              options={orgList}
+              options={selectorList}
             />
+          </Form.Item>
+          <Form.Item
+            key={1}
+            name={'name'}
+            label={'权限模块名称'}
+            rules={[{ required: true, message: '权限模块名称不能为空' }]}
+          >
+            <Input placeholder={'权限模块名称必填'} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item key={3} name={'seq'} label={'顺序'} rules={[{ required: true, message: '顺序不能为空' }]}>
+            <InputNumber placeholder={'顺序必填'} style={{ width: '100%' }} min={0} max={10000} />
+          </Form.Item>
+          <Form.Item key={4} name={'status'} label={'状态'} rules={[{ required: true, message: '状态不能为空' }]}>
+            <InputNumber placeholder={'状态必填, 0:正常, 1:冻结, 2: 其他'} style={{ width: '100%' }} min={0} max={2} />
           </Form.Item>
           <Form.Item
             key={5}
@@ -194,4 +212,4 @@ const OrgModal = (props: ModalType.CustomModal) => {
   )
 }
 
-export default OrgModal
+export default AclModuleModal

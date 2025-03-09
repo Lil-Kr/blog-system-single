@@ -23,7 +23,7 @@ public class AclReq {
     /**
      * 权限id唯一主键
      */
-    @NotNull(groups = {GroupAcls.class},message = "surrogateId不能为空")
+    @NotNull(groups = {GroupAcls.class}, message = "surrogateId不能为空")
     private Long surrogateId;
 
     /**
@@ -36,7 +36,7 @@ public class AclReq {
     /**
      * 权限模块id
      */
-    @NotNull(message = "权限模块surrogate_id不能为空")
+    @NotNull(message = "aclModuleId不能为空")
     private Long aclModuleId;
 
     /**
@@ -48,15 +48,15 @@ public class AclReq {
     /**
      * 1:菜单权限, 2按钮权限, 3其他
      */
-    @NotNull(message = "type权限点类型不能为空")
-    private Integer type;
+    @NotNull(message = "aclTypeId权限点类型不能为空")
+    private Long aclTypeId;
 
     /**
      * 状态 0 正常 ,1 冻结
      */
     @NotNull(message = "status状态不能为空")
-    @Max(value = 1)
-    @Min(value = 0)
+    @Max(value = 2, message = "状态范围在0~2之间")
+    @Min(value = 0, message = "状态范围在0~2之间")
     private Integer status;
 
     /**

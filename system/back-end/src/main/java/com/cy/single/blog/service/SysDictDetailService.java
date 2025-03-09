@@ -6,7 +6,7 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.req.dict.DictListPageReq;
 import com.cy.single.blog.pojo.req.dict.DictSaveDetailReq;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVo;
+import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
 
 /**
  * @Author: Lil-K
@@ -21,5 +21,5 @@ public interface SysDictDetailService extends IService<SysDictDetail> {
 
 	ApiResp<String> deleteDetail(Long surrogateId);
 
-	PageResult<SysDictDetailVo> pageDictList(DictListPageReq param);
+	PageResult<SysDictDetailVO> pageDictList(DictListPageReq param);
 }

@@ -1,4 +1,4 @@
-import exp from "constants"
+import exp from 'constants'
 
 /**
  *
@@ -50,7 +50,6 @@ export const PREFIX_URL_IMAGE_CATEGORY = '/image/category'
 
 export const PREFIX_URL_IMAGE_INFO = '/image/info'
 
-
 /**
  * sys-org
  */
@@ -60,3 +59,15 @@ export const PREFIX_URL_SYS_ORG = '/sys/org'
  * sys-user
  */
 export const PREFIX_URL_SYS_USER = '/sys/user'
+
+/**
+ * sys-acl-*
+ */
+export const PREFIX_URL_SYS_ACL_MODULE = '/sys/aclModule'
+
+export const PREFIX_URL_SYS_ACL = '/sys/acl'
+
+/**
+ * sys-dict
+ */
+export const PREFIX_URL_SYS_DICT = '/sys/dict'

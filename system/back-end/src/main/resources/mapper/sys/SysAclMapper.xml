@@ -2,73 +2,122 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.SysAclMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.sys.SysAcl">
-        <id column="id" property="id" />
-        <result column="surrogate_id" property="surrogateId" />
-        <result column="number" property="number" />
-        <result column="name" property="name" />
-        <result column="acl_module_id" property="aclModuleId" />
-        <result column="url" property="url" />
-        <result column="type" property="type" />
-        <result column="status" property="status" />
-        <result column="seq" property="seq" />
-        <result column="remark" property="remark" />
-        <result column="operator" property="operator" />
-        <result column="operate_ip" property="operateIp" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-    </resultMap>
-
-    <!-- Vo查询映射结果 -->
-    <resultMap id="BaseResulVotMap" type="com.cy.single.blog.pojo.vo.sys.acl.SysAclVo">
-        <id column="id" property="id" />
-        <result column="surrogate_id" property="surrogateId" />
-        <result column="number" property="number" />
-        <result column="name" property="name" />
-        <result column="acl_module_id" property="aclModuleId" />
-        <result column="url" property="url" />
-        <result column="type" property="type" />
-        <result column="status" property="status" />
-        <result column="seq" property="seq" />
-        <result column="remark" property="remark" />
-        <result column="operator" property="operator" />
-        <result column="operate_ip" property="operateIp" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-    </resultMap>
-
     <sql id="Table_Name">
         sys_acl
     </sql>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, surrogate_id, number, name, acl_module_id, url, type, status, seq, remark, operator, operate_ip, create_time, update_time
+        id, surrogate_id, `number`, `name`, acl_module_id, url, acl_type_id, status, seq, remark, operate_ip, creator_id, operator, create_time, update_time
     </sql>
 
+    <!--根据权限id列表查询权限点列表-->
+    <select id="selectAclListByAclIdList" resultType="com.cy.single.blog.pojo.vo.sys.acl.SysAclVO">
+        select
+            a.id,
+            a.surrogate_id,
+            a.`number`,
+            a.`name`,
+            a.acl_module_id,
+            a.url,
+            a.acl_type_id,
+            a.status,
+            a.seq,
+            a.remark,
+            a.operate_ip,
+            a.creator_id,
+            a.operator,
+            a.create_time,
+            a.update_time,
+            d.name as 'acl_module_name',
+            b.user_name as 'creator_name',
+            c.operator as 'operator_name'
+        from sys_acl as a
+        left join sys_acl_module as d on (a.acl_module_id = d.surrogate_id)
+        left join sys_user as b on (a.creator_id = b.surrogate_id)
+        left join sys_user as c on (a.operator = c.surrogate_id)
+        left join sys_dict_detail as e on (a.acl_type_id = e.surrogate_id)
+        <where>
+            a.surrogate_id in (
+            <foreach collection="userAclIdList" index="index" item="aclId" separator=",">
+                #{aclId}
+            </foreach>
+            )
+        </where>
+    </select>
+
     <!-- 分页查询权限点 -->
-    <select id="selectAclListPage" resultMap="BaseResulVotMap">
-        select <include refid="Base_Column_List"/>
-        from <include refid="Table_Name"/>
+    <select id="pageAclList" resultType="com.cy.single.blog.pojo.vo.sys.acl.SysAclVO">
+        select
+            a.id,
+            a.surrogate_id,
+            a.`number`,
+            a.`name`,
+            a.acl_module_id,
+            a.url,
+            a.acl_type_id,
+            a.status,
+            a.seq,
+            a.remark,
+            a.operate_ip,
+            a.creator_id,
+            a.operator,
+            a.create_time,
+            a.update_time,
+            b.name as 'acl_module_name',
+            c.account as 'creator_name',
+            d.account as 'operator_name',
+            d.user_name as 'nick_name',
+            e.type,
+            e.name as 'acl_type_name'
+        from sys_acl as a
+        left join sys_acl_module as b on (a.acl_module_id = b.surrogate_id)
+        left join sys_user as c on (a.creator_id = c.surrogate_id)
+        left join sys_user as d on (a.operator = d.surrogate_id)
+        left join sys_dict_detail as e on (a.acl_type_id = e.surrogate_id)
         <where>
             <if test="param.aclModuleId != null">
-                acl_module_id = #{param.aclModuleId}
+                a.acl_module_id = #{param.aclModuleId}
+            </if>
+            <if test="param.status != null">
+                a.status = #{param.status}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                    a.`number` like concat('%',#{param.keyWords},'%')
+                    or
+                    a.`name` like concat('%',#{param.keyWords},'%')
+                    or
+                    a.remark like concat('%',#{param.keyWords},'%')
+                )
             </if>
         </where>
         order by seq asc
     </select>
 
-    <!--根据权限id列表查询权限点列表-->
-    <select id="selectAclListByAclIdList" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List"/>
-        from <include refid="Table_Name"/>
+    <select id="countPageAclList" resultType="java.lang.Integer">
+        select
+            count(1)
+        from sys_acl as a
+        left join sys_acl_module as d on (a.acl_module_id = d.surrogate_id)
+        left join sys_user as b on (a.creator_id = b.surrogate_id)
+        left join sys_user as c on (a.operator = c.surrogate_id)
         <where>
-            surrogate_id in (
-            <foreach collection="userAclIdList" index="index" item="aclId" separator=",">
-                #{aclId}
-            </foreach>
-            )
+            <if test="param.aclModuleId != null">
+                a.acl_module_id = #{param.aclModuleId}
+            </if>
+            <if test="param.status != null">
+                a.status = #{param.status}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                a.`number` like concat('%',#{param.keyWords},'%')
+                or
+                a.`name` like concat('%',#{param.keyWords},'%')
+                or
+                a.remark like concat('%',#{param.keyWords},'%')
+                )
+            </if>
         </where>
     </select>
 </mapper>

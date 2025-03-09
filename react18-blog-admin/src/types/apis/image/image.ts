@@ -29,7 +29,6 @@ export interface ImageCategoryType extends BaseEntityType {
  */
 export interface ImageCategoryPageReqParams extends BaseEntityPageType {
   imageCategoryId?: string
-  keyWords?: string | number
 }
 
 export interface ImageCategoryReqParams extends BaseEntityType {

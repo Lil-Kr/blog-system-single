@@ -108,7 +108,7 @@ export namespace ModalType {
     update: () => void
   }
 
-  export interface OrgModal<T = any> {
+  export interface CustomModal<T = any> {
     mRef: MutableRefObject<
       | {
           open: (
@@ -116,7 +116,7 @@ export namespace ModalType {
             params: IModalParams,
             type: IAction,
             modalStyle: IModalStyle,
-            data?: T | any
+            data?: T | any // 传入 modal 组件的 props
           ) => void
         }
       | undefined

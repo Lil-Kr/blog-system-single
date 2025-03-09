@@ -12,4 +12,5 @@ public interface SysRoleAclService {
 
     ApiResp<String> changeRoleAcls(RoleAclSaveReq param);
 
+    ApiResp<String> delete(Long surrogateId);
 }

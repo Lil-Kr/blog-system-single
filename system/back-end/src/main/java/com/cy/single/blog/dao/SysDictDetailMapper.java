@@ -2,20 +2,19 @@ package com.cy.single.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
-import com.cy.single.blog.pojo.req.dict.DictListPageReq;
+import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
- * <p>
- *  Mapper 接口
- * </p>
- *
- * @author Lil-Kr
- * @since 2020-11-29
+ * @Author: Lil-K
+ * @Date: 2025/3/9
+ * @Description:
  */
 public interface SysDictDetailMapper extends BaseMapper<SysDictDetail> {
 
-    List<SysDictDetail> listDetailPage(@Param("param") DictListPageReq param);
+//	List<SysDictDetail> listDetailPage(@Param("param") DictListPageReq param);
+
+	List<SysDictDetailVO> getDictDetailListByParentId(@Param("dictSurrogateId") Long dictSurrogateId);
 }

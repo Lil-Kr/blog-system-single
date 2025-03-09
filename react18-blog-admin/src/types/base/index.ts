@@ -32,6 +32,7 @@ export interface BaseEntityPageType extends BasePageReq {
   createTime?: string
   updateTime?: string
   isOrder?: number
+  keyWords?: string
 }
 
 export interface BaseEntityRequiredPageType extends BasePageReq {

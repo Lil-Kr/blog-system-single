@@ -20,9 +20,7 @@ export interface BlogCategoryReqParams extends BaseEntityType {
   keyWords?: string | number
 }
 
-export interface BlogCategoryPageReqParams extends BaseEntityPageType {
-  keyWords?: string | number
-}
+export interface BlogCategoryPageReqParams extends BaseEntityPageType {}
 
 export interface CreateCategoryReq {
   number: string

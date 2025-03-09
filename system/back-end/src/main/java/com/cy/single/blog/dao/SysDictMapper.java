@@ -2,6 +2,8 @@ package com.cy.single.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
+import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.cy.single.blog.pojo.entity.sys.SysDict;
  */
 public interface SysDictMapper extends BaseMapper<SysDict> {
 
+	SysDictVO getDict(@Param("surrogateId") Long surrogateId);
 }

@@ -128,7 +128,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 		query.eq("surrogate_id", orgId);
 		SysOrg org = orgMapper.selectOne(query);
 		if (Objects.isNull(org)) {
-			return null;
+			return new SysOrg();
 		}
 		return org;
 	}

@@ -12,3 +12,14 @@ export type OptionType = {
   value?: string
   label?: string
 }
+
+export interface SelectOptionType {
+  selectKeys: string[]
+  value?: string
+  label?: string
+}
+
+export type SelectTreeNodeType = {
+  key: string
+  name: string
+}

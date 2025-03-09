@@ -5,20 +5,27 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.common.holder.RequestHolder;
+import com.cy.single.blog.dao.SysDictDetailMapper;
 import com.cy.single.blog.dao.SysDictMapper;
 import com.cy.single.blog.pojo.SysDictService;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
+import com.cy.single.blog.pojo.req.dict.DictDetailReq;
 import com.cy.single.blog.pojo.req.dict.DictSaveReq;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictVo;
+import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
+import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+
+import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
 
 /**
  * @Author: Lil-K
@@ -31,6 +38,9 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 
 	@Autowired
 	private SysDictMapper dictMapper;
+
+	@Autowired
+	private SysDictDetailMapper dictDetailMapper;
 
 	/**
 	 * 新增数据字典分类
@@ -118,11 +128,38 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	 * @throws Exception
 	 */
 	@Override
-	public PageResult<SysDictVo> listAll() {
+	public PageResult<SysDictVO> listAll() {
 //		QueryWrapper<SysDict> query = new QueryWrapper<>();
 //		query.orderByAsc("create_time");
 //		List<SysDict> sysDicts = sysDictMapper1.selectList(query);
 //		return ApiResp.success(sysDicts);
 		return null;
+	}
+
+	/**
+	 *
+	 * @param req
+	 * @return
+	 */
+	@Override
+	public ApiResp<SysDictVO> dictDetail(DictDetailReq req) {
+		SysDictVO dict = this.getDict(req.getDictSurrogateId());
+		if (Objects.isNull(dict)) {
+			return ApiResp.failure(INFO_NOT_EXIST);
+		}
+
+		List<SysDictDetailVO> dictDetailList = dictDetailMapper.getDictDetailListByParentId(req.getDictSurrogateId());
+		if (CollectionUtils.isEmpty(dictDetailList)) {
+			return ApiResp.failure(INFO_NOT_EXIST);
+		}
+
+		dict.setDictDetailVOList(dictDetailList);
+		return ApiResp.success(dict);
+	}
+
+	@Override
+	public SysDictVO getDict(Long surrogateId) {
+		SysDictVO dictVO = dictMapper.getDict(surrogateId);
+		return dictVO;
 	}
 }

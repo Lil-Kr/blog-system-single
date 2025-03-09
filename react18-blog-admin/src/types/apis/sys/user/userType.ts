@@ -94,7 +94,7 @@ export interface SysUserResp extends SysUser {
 
 export interface UserListPageReq extends BaseEntityPageType {
   surrogateId?: string
-  keyWords?: string | number
+  keyWords?: string
 }
 
 export interface SysUserDelReq {

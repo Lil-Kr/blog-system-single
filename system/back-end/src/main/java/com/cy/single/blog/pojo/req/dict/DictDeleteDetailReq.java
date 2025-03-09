@@ -5,6 +5,6 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class DictDeleteDetailParam {
+public class DictDeleteDetailReq {
 
 }

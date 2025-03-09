@@ -26,7 +26,7 @@ import { message } from 'antd'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle } from '@/types/component/modal'
 import OrgModal from '@/components/modal/OrgModal'
 import { TablePageInfoType } from '@/types/base'
-import { transformToTreeData } from '@/utils/sys/orgUtils'
+import { transformToTreeData } from '@/utils/sys/treeUtils'
 import { sysOrgApi } from '@/apis/sys'
 import { OptionType } from '@/types/apis'
 import DirectoryTree from 'antd/lib/tree/DirectoryTree'
@@ -171,13 +171,13 @@ const Org = () => {
    */
   useEffect(() => {
     // load org info list
-    initOrg()
+    initInfo()
   }, [])
 
   /**
    * init
    */
-  const initOrg = async () => {
+  const initInfo = async () => {
     setTableLoading(true)
 
     // 加载组织树
@@ -355,6 +355,7 @@ const Org = () => {
     retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
 
+  /** ===================== 分页 ===================== */
   const onShowSizeChange: PaginationProps['onShowSizeChange'] = (currentPageNum, pageSize) => {
     setTablePageInfo(prevState => ({
       ...prevState,
@@ -383,15 +384,12 @@ const Org = () => {
   }
 
   return (
-    <div className='blog-category-warpper' style={{ height: '100%', width: '100%' }}>
+    <div className='sys-org-warpper' style={{ height: '100%', width: '100%' }}>
       <Flex gap='middle' vertical={true} style={{ height: '100%', width: '100%' }}>
         <Row gutter={4} style={{ height: '100%' }}>
           <Col span={4} style={{ width: '100%', height: '100%' }}>
             {/* 当Tree向右展开超出右边界时, 出现水平滚动条 */}
-            <Card
-              bordered={false}
-              style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}
-            >
+            <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
               <DirectoryTree
                 showLine={true}
                 showIcon={false}
@@ -414,10 +412,7 @@ const Org = () => {
             </Card>
           </Col>
           <Col span={20} style={{ width: '100%', height: '100%' }}>
-            <Card
-              bordered={false}
-              style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}
-            >
+            <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
               <Flex vertical={true} gap={'small'}>
                 <div className='operation-btn'>
                   <Flex vertical={false} gap='small'>
@@ -474,7 +469,7 @@ const Org = () => {
         <OrgModal
           mRef={typeRef}
           update={() => {
-            initOrg()
+            initInfo()
           }}
         />
       </Flex>

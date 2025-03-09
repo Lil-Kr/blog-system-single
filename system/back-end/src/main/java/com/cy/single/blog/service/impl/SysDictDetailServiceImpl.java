@@ -8,7 +8,7 @@ import com.cy.single.blog.dao.SysDictDetailMapper;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.req.dict.DictListPageReq;
 import com.cy.single.blog.pojo.req.dict.DictSaveDetailReq;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVo;
+import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
 import com.cy.single.blog.service.SysDictDetailService;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.google.common.base.Preconditions;
@@ -122,7 +122,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 	 * @throws Exception
 	 */
 	@Override
-	public PageResult<SysDictDetailVo> pageDictList(DictListPageReq param) {
+	public PageResult<SysDictDetailVO> pageDictList(DictListPageReq param) {
 //		Page<SysDictDetail> page = new Page<>();
 //		page.setCurrent(param.getCurrent());
 //		page.setSize(param.getSize());

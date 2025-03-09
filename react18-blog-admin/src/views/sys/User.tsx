@@ -7,7 +7,7 @@ import { TablePageInfoType } from '@/types/base'
 import { IModalRequestAction, IModalParams, IAction, IModalStyle } from '@/types/component/modal'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { useForm } from 'antd/es/form/Form'
-import { transformToTreeData } from '@/utils/sys/orgUtils'
+import { transformToTreeData } from '@/utils/sys/treeUtils'
 import { UserListPageReq, UserTableType } from '@/types/apis/sys/user/userType'
 import UserModal from '@/components/modal/UserModal'
 import { sysOrgApi, sysUserApi } from '@/apis/sys'
@@ -371,13 +371,12 @@ const User = () => {
   }
 
   return (
-    <div className='blog-category-warpper' style={{ height: '100%', width: '100%' }}>
+    <div className='sys-user-warpper' style={{ height: '100%', width: '100%' }}>
       <Flex gap='middle' vertical={true} style={{ height: '100%', width: '100%' }}>
         <Row gutter={4} style={{ height: '100%' }}>
           <Col span={4} style={{ width: '100%', height: '100%' }}>
             {/* 当Tree向右展开超出右边界时, 出现水平滚动条 */}
             <Card
-              bordered={false}
               style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}
             >
               <DirectoryTree
@@ -402,7 +401,6 @@ const User = () => {
           </Col>
           <Col span={20} style={{ width: '100%', height: '100%' }}>
             <Card
-              bordered={false}
               style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}
             >
               <Flex vertical={true} gap={'small'}>

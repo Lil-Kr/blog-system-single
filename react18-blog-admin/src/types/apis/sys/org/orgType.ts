@@ -8,7 +8,7 @@ export interface SysOrg {
   number: string
   name: string
   parentId: string
-  level: number
+  level: string
   seq: number
   remark: string
   status: number

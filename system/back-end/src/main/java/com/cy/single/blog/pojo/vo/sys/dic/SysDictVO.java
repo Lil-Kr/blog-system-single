@@ -4,6 +4,8 @@ import com.cy.single.blog.pojo.entity.sys.SysDict;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * @Author: Lil-K
  * @Date: 2025/3/5
@@ -11,7 +13,6 @@ import lombok.ToString;
  */
 @ToString
 @Data
-public class SysDictVo extends SysDict {
-
-
+public class SysDictVO extends SysDict {
+	private List<SysDictDetailVO> dictDetailVOList;
 }

@@ -58,6 +58,7 @@ public class SysDict extends Model<SysDict> {
     /**
      * 操作人
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long operator;
 
     /**

@@ -7,7 +7,7 @@ import { UserTableType } from '@/types/apis/sys/user/userType'
 import { OptionType } from '@/types/apis'
 import { message } from 'antd'
 
-const UserModal = (props: ModalType.OrgModal) => {
+const UserModal = (props: ModalType.CustomModal) => {
   const { mRef, update } = props
   const [modalForm] = Form.useForm()
   const [action, setAction] = useState('create')
@@ -105,7 +105,6 @@ const UserModal = (props: ModalType.OrgModal) => {
         status: params.status,
         remark: params.remark
       }
-      // console.log('--> param:', param)
       const res = await api.edit!(param)
       const { code, msg } = res
       if (code !== 200) {

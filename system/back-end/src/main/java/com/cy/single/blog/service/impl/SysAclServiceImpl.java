@@ -1,6 +1,7 @@
 package com.cy.single.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
@@ -9,7 +10,7 @@ import com.cy.single.blog.dao.*;
 import com.cy.single.blog.pojo.entity.sys.*;
 import com.cy.single.blog.pojo.req.acl.AclPageReq;
 import com.cy.single.blog.pojo.req.acl.AclReq;
-import com.cy.single.blog.pojo.vo.sys.acl.SysAclVo;
+import com.cy.single.blog.pojo.vo.sys.acl.SysAclVO;
 import com.cy.single.blog.service.SysAclService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
@@ -19,12 +20,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
  * @Author: Lil-K
@@ -58,9 +58,13 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 	 */
 	@Override
 	public ApiResp<String> addAcl(AclReq req) {
-		if (checkAclExist(req.getAclModuleId(),req.getName(),req.getSurrogateId())) {
-			return ApiResp.failure("待添加的权限点名不能重复");
+		QueryWrapper<SysAcl> query = new QueryWrapper<>();
+		query.eq("name", req.getName());
+		query.eq("acl_module_id", req.getAclModuleId());
+		if (aclMapper.selectCount(query) < 1) {
+			return ApiResp.failure(DATA_INFO_REPEAT);
 		}
+
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
 		Date currentTime = DateUtil.localDateTimeNow();// 当前时间
 		SysAcl acl = SysAcl.builder()
@@ -69,10 +73,11 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			.name(req.getName())
 			.aclModuleId(req.getAclModuleId())
 			.url(req.getUrl())
-			.type(req.getType())
+			.aclTypeId(req.getAclTypeId())
 			.status(req.getStatus())
 			.seq(req.getSeq())
 			.remark(req.getRemark())
+			.creatorId(RequestHolder.getCurrentUser().getSurrogateId())
 			.operator(RequestHolder.getCurrentUser().getSurrogateId())
 			.operateIp("127.0.0.1")
 			.createTime(currentTime)
@@ -91,18 +96,18 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 	 */
 	@Override
 	public ApiResp<String> editAcl(AclReq req) {
-		if (checkAclExist(req.getAclModuleId(),req.getName(),req.getSurrogateId())) {
-			return ApiResp.failure("待添加的权限点名不能重复");
+		QueryWrapper<SysAcl> query = new QueryWrapper<>();
+		query.eq("surrogate_id", req.getSurrogateId());
+		if (aclMapper.selectCount(query) < 1) {
+			return ApiResp.failure(INFO_EXIST);
 		}
-		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
+
 		Date currentTime = DateUtil.localDateTimeNow();// 当前时间
 		SysAcl acl = SysAcl.builder()
-			.surrogateId(surrogateId)
-			.number("ACL" + surrogateId)
 			.name(req.getName())
 			.aclModuleId(req.getAclModuleId())
 			.url(req.getUrl())
-			.type(req.getType())
+			.aclTypeId(req.getAclTypeId())
 			.status(req.getStatus())
 			.seq(req.getSeq())
 			.remark(req.getRemark())
@@ -112,33 +117,17 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			.updateTime(currentTime)
 			.build();
 
-		aclMapper.insert(acl);
-		return ApiResp.success("添加权限点成功");
-	}
-
-
-	/**
-	 * 判断同一个权限模块下是否存在相同的名称的权限点
-	 * @param aclModuleId
-	 * @param name
-	 * @param surrogateId
-	 * @return
-	 */
-	protected boolean checkAclExist(Long aclModuleId,String name,Long surrogateId) {
-		QueryWrapper<SysAcl> query = new QueryWrapper<>();
-		if (Objects.nonNull(surrogateId)) {
-			query.eq("surrogate_id", surrogateId);
-		}
-		query.eq("acl_module_id", aclModuleId);
-		query.eq("name", name);
-		Long count = aclMapper.selectCount(query);
-
-		if (count >= 1) {
-			return true;
-		}else {
-			return false;
+		UpdateWrapper<SysAcl> updateWrapper = new UpdateWrapper<>();
+		updateWrapper.eq("surrogate_id", req.getSurrogateId());
+		int update = aclMapper.update(acl, updateWrapper);
+		if (update >= 1) {
+			return ApiResp.success(SUCCESS);
+		} else {
+			return ApiResp.failure(EDITE_ERROR);
 		}
 	}
+
+
 
 	/**
 	 * 分页查询权限点列表
@@ -147,14 +136,14 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 	 * @throws Exception
 	 */
 	@Override
-	public PageResult<SysAclVo> pageList(AclPageReq req) {
-//		Page<SysAclVo> page = new Page<>(req.getCurrent(), req.getSize());
-//		page.setCurrent(req.getCurrent());
-//		page.setSize(req.getSize());
-//		IPage<SysAclVo> iPage = aclMapper.selectAclListPage(page, req);
-//		aclMapper.pageList();
-//		return ApiResp.success(iPage);
-		return null;
+	public PageResult<SysAclVO> pageList(AclPageReq req) {
+		List<SysAclVO> list = aclMapper.pageAclList(req);
+		Integer count = aclMapper.countPageAclList(req);
+		if (CollectionUtils.isNotEmpty(list)) {
+			return new PageResult<>(list, count);
+		}else {
+			return new PageResult<>(new ArrayList<>(0), 0);
+		}
 	}
 
 	/**
@@ -200,5 +189,25 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 		map.put("users", userList);
 		map.put("roles",roleList);
 		return ApiResp.success(map);
+	}
+
+	@Override
+	public ApiResp<String> delete(Long surrogateId) {
+		QueryWrapper<SysAcl> wrapper = new QueryWrapper<>();
+		wrapper.eq("surrogate_id", surrogateId);
+		int delete = aclMapper.delete(wrapper);
+		if (delete >= 1) {
+			return ApiResp.success();
+		} else {
+			return ApiResp.failure(DEL_ERROR);
+		}
+	}
+
+	@Override
+	public Long getAclCount(Long aclModuleId) {
+		QueryWrapper<SysAcl> wrapper = new QueryWrapper<>();
+		wrapper.eq("acl_module_id", aclModuleId);
+		Long count = aclMapper.selectCount(wrapper);
+		return count;
 	}
 }

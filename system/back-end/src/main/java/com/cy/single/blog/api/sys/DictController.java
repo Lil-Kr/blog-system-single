@@ -1,16 +1,20 @@
 package com.cy.single.blog.api.sys;
 
+import com.cy.single.blog.aspect.annotations.CheckAuth;
+import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.SysDictService;
+import com.cy.single.blog.pojo.req.dict.DictDetailReq;
 import com.cy.single.blog.pojo.req.dict.DictListPageReq;
 import com.cy.single.blog.pojo.req.dict.DictSaveDetailReq;
 import com.cy.single.blog.pojo.req.dict.DictSaveReq;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVo;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictVo;
+import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
+import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;
 import com.cy.single.blog.service.SysDictDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +46,8 @@ public class DictController {
 	 * @return
 	 * @throws Exception
 	 */
+	@CheckAuth
+	@RecordLogger
 	@PostMapping("save")
 	public ApiResp<String> save (@RequestBody @Valid DictSaveReq req) {
 		if (Objects.isNull(req.getSurrogateId())) {
@@ -51,11 +57,15 @@ public class DictController {
 		}
 	}
 
+	@CheckAuth
+	@RecordLogger
 	@PostMapping("add")
 	public ApiResp add (@RequestBody @Valid DictSaveReq req) {
 		return dictService.add(req);
 	}
 
+	@CheckAuth
+	@RecordLogger
 	@PostMapping("edit")
 	public ApiResp edit (@RequestBody @Valid DictSaveReq req) {
 		return dictService.edit(req);
@@ -66,9 +76,11 @@ public class DictController {
 	 * @return
 	 * @throws Exception
 	 */
+	@CheckAuth
+	@RecordLogger
 	@PostMapping("listAll")
-	public ApiResp<PageResult<SysDictVo>> listAll () {
-		PageResult<SysDictVo> res = dictService.listAll();
+	public ApiResp<PageResult<SysDictVO>> listAll () {
+		PageResult<SysDictVO> res = dictService.listAll();
 		return ApiResp.success(res);
 	}
 
@@ -78,9 +90,11 @@ public class DictController {
 	 * @return
 	 * @throws Exception
 	 */
+	@CheckAuth
+	@RecordLogger
 	@PostMapping("pageDictList")
-	public ApiResp<PageResult<SysDictDetailVo>> pageDictList (@RequestBody @Valid DictListPageReq req) {
-		PageResult<SysDictDetailVo> res = dictDetailService.pageDictList(req);
+	public ApiResp<PageResult<SysDictDetailVO>> pageDictList (@RequestBody @Valid DictListPageReq req) {
+		PageResult<SysDictDetailVO> res = dictDetailService.pageDictList(req);
 		return ApiResp.success(res);
 	}
 
@@ -90,6 +104,8 @@ public class DictController {
 	 * @return
 	 * @throws Exception
 	 */
+	@CheckAuth
+	@RecordLogger
 	@PostMapping("addDetail")
 	public ApiResp addDetail (@RequestBody @Valid DictSaveDetailReq req) {
 		return dictDetailService.addDetail(req);
@@ -101,6 +117,8 @@ public class DictController {
 	 * @return
 	 * @throws Exception
 	 */
+	@CheckAuth
+	@RecordLogger
 	@PostMapping("editDetail")
 	public ApiResp editDetail (@RequestBody @Valid DictSaveDetailReq req) {
 		return dictDetailService.editDetail(req);
@@ -112,8 +130,17 @@ public class DictController {
 	 * @return
 	 * @throws Exception
 	 */
+	@CheckAuth
+	@RecordLogger
 	@PostMapping("deleteDetail")
-	public ApiResp deleteDetail (@Valid @NotNull(message = "surrogateId不能为空") Long surrogateId) {
+	public ApiResp<String> deleteDetail (@Valid @NotNull(message = "surrogateId不能为空") Long surrogateId) {
 		return dictDetailService.deleteDetail(surrogateId);
+	}
+
+	@CheckAuth
+	@RecordLogger
+	@PostMapping("dictDetail")
+	public ApiResp<SysDictVO> dictDetail(@RequestBody @Validated({DictDetailReq.GroupGetDictDetail.class}) DictDetailReq req) {
+		return dictService.dictDetail(req);
 	}
 }

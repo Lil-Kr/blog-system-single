@@ -1,3 +1,4 @@
+import { AclModuleTreeResp } from '@/types/apis/sys/acl/aclType'
 import { SysOrgResp } from '@/types/apis/sys/org/orgType'
 import { CarryOutOutlined } from '@ant-design/icons'
 import { TreeDataNode } from 'antd/lib'
@@ -10,6 +11,23 @@ import { TreeDataNode } from 'antd/lib'
 export const transformToTreeData = (data: SysOrgResp[]): TreeDataNode[] => {
   return data.map(item => {
     const children = item.orgList ? transformToTreeData(item.orgList) : [] // 递归处理子节点
+    return {
+      key: item.surrogateId, // 使用 surrogateId 作为 key
+      title: item.name, // 使用 name 作为 title
+      icon: <CarryOutOutlined />, // 使用 CarryOutOutlined 作为图标
+      children: children.length > 0 ? children : undefined // 如果没有子节点则不包含 children 属性
+    }
+  })
+}
+
+/**
+ * 权限模块 转换为 antd Tree 组件数据结构
+ * @param data
+ * @returns
+ */
+export const transformToAclModuleTreeData = (data: AclModuleTreeResp[]): TreeDataNode[] => {
+  return data.map(item => {
+    const children = item.aclModuleDtoList ? transformToAclModuleTreeData(item.aclModuleDtoList) : [] // 递归处理子节点
     return {
       key: item.surrogateId, // 使用 surrogateId 作为 key
       title: item.name, // 使用 name 作为 title

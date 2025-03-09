@@ -16,9 +16,7 @@ export interface BlogTopicApi extends BaseApi {
 }
 
 /** ==================== blog topic request ====================  */
-export interface BlogTopicPageReqParams extends BaseEntityPageType {
-  keyWords?: string | number
-}
+export interface BlogTopicPageReqParams extends BaseEntityPageType {}
 
 export interface BlogTopicReqParams extends BaseEntityType {
   keyWords?: string | number

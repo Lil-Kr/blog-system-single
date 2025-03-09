@@ -46,9 +46,7 @@ export default blogContentApi
 /**
  * ==================== blog-content request ====================
  */
-export interface BlogContentReqParams extends BaseEntityPageType {
-  keyWords?: string | number
-}
+export interface BlogContentReqParams extends BaseEntityPageType {}
 
 export interface CreateBlogContentReq extends BaseEntityPageType {
   number: string

@@ -104,7 +104,7 @@ public class RoleController {
 	@CheckAuth
 	@RecordLogger
 	@DeleteMapping("/delete")
-	public ApiResp delete (@RequestParam("/surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+	public ApiResp delete (@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
 		return roleService.delete(surrogateId);
 	}
 
@@ -118,7 +118,7 @@ public class RoleController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/roleAclTree")
-	public ApiResp roleAclTree(@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
+	public ApiResp<List<AclModuleDto>> roleAclTree(@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
 		List<AclModuleDto> aclModuleDtoList = treeService.roleAclTree(req.getSurrogateId());
 		if (CollectionUtils.isNotEmpty(aclModuleDtoList)) {
 			return ApiResp.success(aclModuleDtoList);

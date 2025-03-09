@@ -1,6 +1,5 @@
 package com.cy.single.blog.pojo.entity.sys;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -29,19 +28,22 @@ public class SysDictDetail extends Model<SysDictDetail> {
     /**
      * 数据字典id唯一主键
      */
-    @TableId(value = "surrogate_id", type = IdType.AUTO)
+    @TableId(value = "surrogate_id")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long surrogateId;
 
     /**
      * 数据字典主表id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
     /**
      * 数据字典明细名称
      */
     private String name;
+
+    private String type;
 
     /**
      * 备注

@@ -11,12 +11,9 @@ import lombok.*;
 import java.util.Date;
 
 /**
- * <p>
- * 
- * </p>
- *
- * @author Lil-Kr
- * @since 2020-11-26
+ * @Author: Lil-K
+ * @Date: 2025/3/8
+ * @Description:
  */
 @Data
 @EqualsAndHashCode(of = {"surrogateId"})
@@ -25,80 +22,83 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @TableName("sys_acl")
-public class SysAcl extends Model<SysAcl> {
+public class SysAcl extends Model<SysAcl>  {
+	private static final long serialVersionUID = 4265979647827463721L;
+	/**
+	 * 自增主键
+	 */
+	@TableId(value = "id", type = IdType.AUTO)
+	private Long id;
 
-    private static final long serialVersionUID = 4265979647827463721L;
-    /**
-     * 自增主键
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+	/**
+	 * 权限id唯一主键
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long surrogateId;
 
-    /**
-     * 权限id唯一主键
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long surrogateId;
+	/**
+	 * 权限编码
+	 */
+	private String number;
 
-    /**
-     * 权限编码
-     */
-    private String number;
+	/**
+	 * 权限名
+	 */
+	private String name;
 
-    /**
-     * 权限名
-     */
-    private String name;
+	/**
+	 * 权限模块id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long aclModuleId;
 
-    /**
-     * 权限模块id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long aclModuleId;
+	/**
+	 * 请求的url
+	 */
+	private String url;
 
-    /**
-     * 请求的url
-     */
-    private String url;
+	/**
+	 * 1:菜单权限, 2按钮, 3其他
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long aclTypeId;
 
-    /**
-     * 1:菜单权限, 2按钮, 3其他
-     */
-    private Integer type;
+	/**
+	 * 状态
+	 */
+	private Integer status;
 
-    /**
-     * 状态
-     */
-    private Integer status;
+	/**
+	 * 排序
+	 */
+	private Integer seq;
 
-    /**
-     * 排序
-     */
-    private Integer seq;
+	/**
+	 * 备注
+	 */
+	private String remark;
 
-    /**
-     * 备注
-     */
-    private String remark;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long creatorId;
 
-    /**
-     * 操作人
-     */
-    private Long operator;
+	/**
+	 * 操作人
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long operator;
 
-    /**
-     * 操作ip
-     */
-    private String operateIp;
+	/**
+	 * 操作ip
+	 */
+	private String operateIp;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
 
-    /**
-     * 更改时间
-     */
-    private Date updateTime;
-
+	/**
+	 * 更改时间
+	 */
+	private Date updateTime;
 }

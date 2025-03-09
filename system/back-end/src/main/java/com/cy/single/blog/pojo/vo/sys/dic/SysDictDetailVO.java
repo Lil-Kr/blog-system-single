@@ -11,5 +11,5 @@ import lombok.ToString;
  */
 @ToString
 @Data
-public class SysDictDetailVo extends SysDictDetail {
+public class SysDictDetailVO extends SysDictDetail {
 }
