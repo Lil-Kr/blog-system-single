@@ -27,9 +27,4 @@ public class LevelUtil {
 			return StringUtils.join(parentLevel, SEPARATOR, id);
 		}
 	}
-
-	public static void main(String[] args) {
-		String res1 = calculateLevel("0", -1l);
-		System.out.println(res1);
-	}
 }

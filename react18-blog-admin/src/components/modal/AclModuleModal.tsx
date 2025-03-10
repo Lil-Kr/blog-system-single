@@ -73,7 +73,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
       // 新打开页面时默认加载当前选中树节点的信息
       setSelectedValue(parentAclModuleInfo.value ?? '')
     } else if (action === 'edit') {
-      modalForm.setFieldsValue(data)
+      modalForm.setFieldsValue({ ...data })
 
       setSelectedValue(data?.parentAclModuleInfo?.value ?? '')
     } else {

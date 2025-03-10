@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { DeleteOutlined, EditOutlined, FolderAddOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import {
   Button,
   Card,
@@ -27,11 +27,11 @@ import { IAction, IModalParams, IModalRequestAction, IModalStyle } from '@/types
 import { AclModalType, AclModuleTableType, AclPageListReq, TableAclListType } from '@/types/apis/sys/acl/aclType'
 import { SelectOptionType, SelectTreeNodeType } from '@/types/apis'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
-import { useForm } from 'antd/lib/form/Form'
 import { TableRowSelection } from 'antd/es/table/interface'
 import { ColumnsType } from 'antd/lib/table'
 import { message } from 'antd'
 import AclModal from '@/components/modal/AclModal'
+import { useForm } from 'antd/lib/form/Form'
 
 const Acl = () => {
   const columns: ColumnsType<TableAclListType> = [
@@ -200,12 +200,30 @@ const Acl = () => {
     setTableLoading(true)
 
     // 加载权限模块树
-    retrieveAclModuleTreeList()
+    // retrieveAclModuleTreeList()
+    initAclModuleTreeList()
 
     // // 加载全部权限模块, 分页
     retrieveAclPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
 
     setTableLoading(false)
+  }
+
+  const initAclModuleTreeList = async () => {
+    const aclModuleTreePromise: Promise<TreeDataNode[]> = retrieveAclModuleTreeList()
+    const aclModuleTree = await aclModuleTreePromise
+    const selectKey = aclModuleTree.length > 0 ? aclModuleTree[0].key.toString() : ''
+    const label = aclModuleTree.length > 0 ? aclModuleTree[0].title ?? '' : ''
+    /**
+     * 首次渲染设置
+     */
+    setSelectedInfo({ value: selectKey, label: label.toString(), selectKeys: [selectKey] })
+
+    retrieveAclPageList({
+      aclModuleId: selectKey,
+      currentPageNum: 1,
+      pageSize: tablePageInfo.pageSize
+    })
   }
 
   /**
@@ -216,38 +234,30 @@ const Acl = () => {
     const aclModuleList = await aclModuleApi.aclModuleTree()
     const { code, data, msg } = aclModuleList
     if (code !== 200) {
-      return
+      return []
     }
-    const res = transformToAclModuleTreeData(data)
-
+    const res: TreeDataNode[] = transformToAclModuleTreeData(data)
     // 加载权限模块树
     setAclModuleTree(res)
-
-    // 默认选中Tree组件的根节点
-    const selectKey = res.length > 0 ? res[0].key.toString() : ''
-    const label = res.length > 0 ? res[0].title ?? '' : ''
-    setSelectedInfo({ value: selectKey, label: label.toString(), selectKeys: [selectKey] })
-
-    // 加载权限点列表
-    retrieveAclPageList({
-      aclModuleId: selectKey,
-      currentPageNum: 1,
-      pageSize: tablePageInfo.pageSize
-    })
+    /**
+     * 选中当前点击的树节点
+     */
+    setSelectedInfo(prevState => ({
+      ...prevState
+    }))
+    return res
   }
 
   /**
    * create new acl module info
    */
   const createAclModule = async () => {
-    const aclModule = await aclModuleApi.getAclModule({ surrogateId: selectedInfo.value ?? '' })
-    const { data } = aclModule
     aclModuleRef.current?.open(
       { api: aclModuleApi },
       { title: '添加权限模块' },
       { action: 'create', open: true }, // create | edit | look
       { style: { maxWidth: '50vw' } },
-      { surrogateId: data.surrogateId, name: data.name }
+      { surrogateId: selectedInfo.value, name: selectedInfo.label }
     )
   }
 
@@ -359,6 +369,9 @@ const Acl = () => {
     form.resetFields()
   }
 
+  /**
+   * 查询全部权限点信息列表
+   */
   const allSearch = () => {
     form.resetFields()
     retrieveAclPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
@@ -475,7 +488,7 @@ const Acl = () => {
                     size={'small'}
                     color='primary'
                     variant='solid'
-                    icon={<FolderAddOutlined />}
+                    icon={<PlusOutlined />}
                     onClick={createAclModule}
                   />
                   <Button size={'small'} color='pink' variant='solid' icon={<EditOutlined />} onClick={editAclModule} />
@@ -585,7 +598,7 @@ const Acl = () => {
         <AclModuleModal
           mRef={aclModuleRef}
           update={() => {
-            initInfo()
+            retrieveAclModuleTreeList()
           }}
         />
         <AclModal
