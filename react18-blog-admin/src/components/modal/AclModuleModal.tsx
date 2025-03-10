@@ -2,7 +2,7 @@ import React, { useImperativeHandle, useState } from 'react'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { Modal, Form, Input, InputNumber, Select } from 'antd/lib'
 const { TextArea } = Input
-import { OptionType, SelectTreeNodeType } from '@/types/apis'
+import { OptionType } from '@/types/apis'
 import { message } from 'antd'
 import { AclModuleAddReq, AclModuleEditReq, AclModuleTableType } from '@/types/apis/sys/acl/aclType'
 import { aclModuleApi } from '@/apis/sys'
@@ -44,7 +44,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
     }))
     list.push({
       value: '0',
-      label: '顶级'
+      label: '-'
     })
     setSelectorList(list)
   }
@@ -109,11 +109,9 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
       const res = await api.add!(addReq)
       const { code, msg } = res
       if (code !== 200) {
-        message.error(msg)
         return
       }
-
-      message.info(msg)
+      message.success(msg)
       handleCancel()
       update()
     } else if (action === 'edit') {
@@ -125,12 +123,13 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
         status: params.status,
         remark: params.remark
       }
+      // console.log('--> editReq:', editReq)
       const res = await api.edit!(editReq)
       const { code, msg } = res
       if (code !== 200) {
         return
       }
-      message.info(msg)
+      message.success(msg)
       handleCancel()
       update()
     } else {
@@ -187,7 +186,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
           <Form.Item
             key={1}
             name={'name'}
-            label={'权限模块名称'}
+            label={'权限模块名'}
             rules={[{ required: true, message: '权限模块名称不能为空' }]}
           >
             <Input placeholder={'权限模块名称必填'} style={{ width: '100%' }} />

@@ -3,7 +3,6 @@ package com.cy.single.blog.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.common.cache.CacheManager;
 import com.cy.single.blog.dao.ImageInfoMapper;
 import com.cy.single.blog.pojo.dto.image.ImageDTO;
 import com.cy.single.blog.pojo.entity.image.ImageInfo;
@@ -13,6 +12,7 @@ import com.cy.single.blog.pojo.req.image.ImageUploadReq;
 import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
 import com.cy.single.blog.pojo.vo.image.ImageUploadVO;
 import com.cy.single.blog.service.ImageInfoService;
+import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.luciad.imageio.webp.WebPWriteParam;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
@@ -38,7 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-import static com.cy.single.blog.common.constants.ResponseConstant.*;
+import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -65,12 +64,15 @@ public class ImageInfoServiceImpl implements ImageInfoService {
   @Autowired
   private ImageInfoMapper imageInfoMapper;
 
+  @Autowired
+  private MessageLangService msgService;
+
   @Override
   public PageResult<ImageInfoVO> pageImageInfoList(ImageInfoPageReq req) {
     List<ImageInfoVO> pageList = imageInfoMapper.pageImageInfoList(req);
     Integer count = imageInfoMapper.pageImageInfoListCount(req);
 
-    pageList.forEach(item -> item.setImageCategoryName(CacheManager.getImageCategoryCacheMap().getOrDefault(item.getImageCategoryId(),"")));
+//    pageList.forEach(item -> item.setImageCategoryName(CacheManager.getImageCategoryCacheMap().getOrDefault(item.getImageCategoryId(),"")));
 
     if (CollectionUtils.isEmpty(pageList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
@@ -155,13 +157,13 @@ public class ImageInfoServiceImpl implements ImageInfoService {
     // 检查文件大小，限制为 15MB
     long maxSizeInBytes = 10 * 1024 * 1024; // 15MB
     if (imageFile.getSize() > maxSizeInBytes) {
-      return ApiResp.failure(IMAGE_SIZE_ERROR);
+      return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "image.upload.size.error"));
     }
 
     String imageOriginalFullName = imageFile.getOriginalFilename();
     String[] imageFileNames = imageOriginalFullName.split("\\.");
     if (imageFileNames.length > 2) {
-      return ApiResp.failure(RESPONSE_UPLOAD_IMAGE_ERROR_INFO);
+      return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "image.upload.error.info"));
     }
 
     String imageName = imageFileNames[0];

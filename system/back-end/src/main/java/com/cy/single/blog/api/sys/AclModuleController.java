@@ -4,7 +4,6 @@ package com.cy.single.blog.api.sys;
 import com.cy.single.blog.aspect.annotations.CheckAuth;
 import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
-import com.cy.single.blog.pojo.req.aclmodule.AclModuleDelReq;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleListReq;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleReq;
 import com.cy.single.blog.pojo.vo.sys.aclmodule.SysAclModuleVO;
@@ -39,7 +38,7 @@ public class AclModuleController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("save")
-	public ApiResp<String> save(@RequestBody @Valid AclModuleReq req) {
+	public ApiResp<String> save(@RequestBody @Valid AclModuleReq req) throws Exception {
 		if (Objects.isNull(req.getSurrogateId())) { // insert
 			return aclModuleService.addAclModule(req);
 		}else { // update
@@ -93,15 +92,14 @@ public class AclModuleController {
 
 	/**
 	 * 删除权限模块功能
-	 * @param req
 	 * @return
 	 * @throws Exception
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("delete")
-	public ApiResp delete(@RequestBody @Valid AclModuleDelReq req) {
-		return aclModuleService.delete(req);
+	@DeleteMapping("delete")
+	public ApiResp delete(@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+		return aclModuleService.delete(surrogateId);
 	}
 
 	/**

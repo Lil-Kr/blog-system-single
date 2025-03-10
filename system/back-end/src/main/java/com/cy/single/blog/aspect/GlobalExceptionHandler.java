@@ -1,6 +1,5 @@
 package com.cy.single.blog.aspect;
 
-import com.cy.single.blog.aspect.exceptions.BusinessException;
 import com.cy.single.blog.base.ApiResp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -96,30 +95,32 @@ public class GlobalExceptionHandler {
         return ApiResp.error(message);
     }
 
-    /**
-     * 捕捉Controller全局异常
-     * @param req
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(Exception.class)
-    @ResponseBody
-    public ApiResp<String> defaultExceptionHandler(HttpServletRequest req, Exception e) throws Exception {
-        log.error("global exception msg: {}", e.getLocalizedMessage());
-        e.printStackTrace();
-        return ApiResp.error( "网络异常", e.getLocalizedMessage());
-    }
-
-    /**
-     * 捕捉Controller全局自定义异常
-     * @param req
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(BusinessException.class)
-    @ResponseBody
-    public ApiResp<String> businessExceptionHandler(HttpServletRequest req, BusinessException e) throws Exception {
-        log.warn("business exception msg: {}", e.getLocalizedMessage());
-        return ApiResp.error(e.getReturnCodeEnum().getCode() , e.getReturnCodeEnum().getMessage());
-    }
+//    /**
+//     * 目前不生效, 使用AOP解决
+//     * 捕捉Controller全局异常
+//     * @param req
+//     * @param e
+//     * @return
+//     */
+//    @ExceptionHandler(Exception.class)
+//    @ResponseBody
+//    public ApiResp<String> defaultExceptionHandler(HttpServletRequest req, Exception e) throws Exception {
+//        log.error("global exception msg: {}", e.getLocalizedMessage());
+//        e.printStackTrace();
+//        return ApiResp.error( e.getLocalizedMessage());
+//    }
+//
+//    /**
+//     * 目前不生效, 使用AOP解决
+//     * 捕捉Controller全局自定义异常
+//     * @param req
+//     * @param e
+//     * @return
+//     */
+//    @ExceptionHandler(BusinessException.class)
+//    @ResponseBody
+//    public ApiResp<String> businessExceptionHandler(HttpServletRequest req, BusinessException e) throws Exception {
+//        log.warn("business exception msg: {}", e.getLocalizedMessage());
+//        return ApiResp.error(e.getReturnCodeEnum().getCode() , e.getReturnCodeEnum().getMessage());
+//    }
 }

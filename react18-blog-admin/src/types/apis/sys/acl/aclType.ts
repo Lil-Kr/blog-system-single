@@ -147,6 +147,7 @@ export interface AclModuleApi extends BaseApi {
   aclModuleList(req: AclModuleListReq): Promise<Result<SysAclModuleListResp[]>>
   add(req: AclModuleAddReq): Promise<Result<string>>
   edit(req: AclModuleEditReq): Promise<Result<string>>
+  delete(req: AclDeletReq): Promise<Result<string>>
 }
 
 /** =========================== acl =================================== */
@@ -207,5 +208,5 @@ export interface AclApi extends BaseApi {
   add(req: AclAddReq): Promise<Result<string>>
   pageList(req: AclPageListReq): Promise<ResultPage<AclPageListResp>>
   edit(req: AclEditReq): Promise<Result<string>>
-  delete(params: AclDeletReq): Promise<Result<string>>
+  delete(req: AclDeletReq): Promise<Result<string>>
 }

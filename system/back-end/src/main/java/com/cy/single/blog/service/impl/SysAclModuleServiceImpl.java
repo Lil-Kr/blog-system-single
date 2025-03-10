@@ -7,17 +7,16 @@ import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysAclModuleMapper;
 import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
-import com.cy.single.blog.pojo.req.aclmodule.AclModuleDelReq;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleListReq;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleReq;
 import com.cy.single.blog.pojo.vo.sys.aclmodule.SysAclModuleVO;
+import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysAclModuleService;
 import com.cy.single.blog.service.SysAclService;
 import com.cy.single.blog.service.SysTreeService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.cy.single.blog.utils.orgUtil.LevelUtil;
-import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -29,8 +28,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static com.cy.single.blog.enums.ReturnCodeEnum.DATA_INFO_UNUSUAL;
-import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
+import static com.cy.single.blog.common.constants.CommonConstants.*;
+import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
  * @Author: Lil-K
@@ -40,6 +39,9 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
 @Service
 @Slf4j
 public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, SysAclModule> implements SysAclModuleService {
+
+	@Autowired
+	private MessageLangService msgService;
 
 	@Autowired
 	private SysAclModuleMapper aclModuleMapper;
@@ -60,24 +62,29 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 		/**
 		 * 检查权限模块名是否相同
 		 */
-		if (checkAclModuleExist(req.getParentSurrogateId(),req.getName(),req.getSurrogateId())) {
-			return ApiResp.failure("待添加的权限模块名不能重复");
+		if (checkAclModuleExist(req.getParentSurrogateId(), req.getName(), req.getSurrogateId())) {
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg2"));
 		}
 
-		/**计算层级**/
+		/** 计算层级 **/
 		SysAclModule parentAclModule = getParentAclModule(req.getParentSurrogateId());
-		if (Objects.isNull(parentAclModule)) {
-			return ApiResp.failure(DATA_INFO_UNUSUAL);
-		}
-		String level = LevelUtil.calculateLevel(Objects.isNull(parentAclModule) ? null : parentAclModule.getLevel(), parentAclModule.getId());
+		String parentLevel = Objects.isNull(parentAclModule) ? null : parentAclModule.getLevel();
+		Long parentId = Objects.isNull(parentAclModule) ? null : parentAclModule.getId();
+		String level = LevelUtil.calculateLevel(parentLevel, parentId);
+
+		/**
+		 * 设置存入的参数
+		 */
+		parentId = LevelUtil.ROOT.equals(level) ? Long.valueOf(LevelUtil.ROOT) : parentAclModule.getSurrogateId();
+		String parentName = LevelUtil.ROOT.equals(level) ? "0" : parentAclModule.getName();
 
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
 		Date currentTime = DateUtil.localDateTimeNow();// 当前时间
 		SysAclModule aclModule = SysAclModule.builder()
 			.surrogateId(surrogateId)
-			.number("ACLM"+ surrogateId)
-			.parentId(parentAclModule.getSurrogateId())
-			.parentName(parentAclModule.getName())
+			.number(ACLM_PREV_NUMBER_INFO + surrogateId)
+			.parentId(parentId)
+			.parentName(parentName)
 			.name(req.getName())
 			.level(level)
 			.seq(req.getSeq())
@@ -88,8 +95,12 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 			.creatorId(RequestHolder.getCurrentUser().getSurrogateId())
 			.operateIp("127.0.0.1")
 			.build();
-		aclModuleMapper.insert(aclModule);
-		return ApiResp.success("添加权限模块成功");
+		int insert = aclModuleMapper.insert(aclModule);
+		if (insert >= 1) {
+			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.success.msg1"));
+		} else {
+			return ApiResp.failure(SAVE_ERROR);
+		}
 	}
 
 	/**
@@ -141,30 +152,36 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 		/**
 		 * 检查权限模块名是否相同
 		 */
-//		if (checkAclModuleExist(req.getParentSurrogateId(), req.getName(), req.getSurrogateId())) {
-//			return ApiResp.failure("待修改的权限模块名不能重复");
-//		}
-
-		SysAclModule parentAclModule = getParentAclModule(req.getParentSurrogateId());
-		if (Objects.isNull(parentAclModule)) {
-			return ApiResp.failure(DATA_INFO_UNUSUAL);
+		QueryWrapper<SysAclModule> query1 = new QueryWrapper<>();
+		query1.eq("parent_id", req.getParentSurrogateId());
+		query1.eq("name", req.getName());
+		query1.eq("surrogate_id", req.getSurrogateId());
+		SysAclModule parentAclModule = aclModuleMapper.selectOne(query1);
+		if (Objects.nonNull(parentAclModule)) {
+			return ApiResp.failure(DATA_INFO_REPEAT);
 		}
 
 		// 检查待更新的权限模块是否存在
-		QueryWrapper<SysAclModule> query1 = new QueryWrapper();
-		query1.eq("surrogate_id",req.getSurrogateId());
-		SysAclModule before = aclModuleMapper.selectOne(query1);
-		Preconditions.checkNotNull(before, "待更新的权限模块不存在");
+		QueryWrapper<SysAclModule> query2 = new QueryWrapper();
+		query2.eq("surrogate_id",req.getSurrogateId());
+		SysAclModule before = aclModuleMapper.selectOne(query2);
+		if (Objects.isNull(before)) {
+			return ApiResp.failure(INFO_NOT_EXIST);
+		}
+
+		parentAclModule = getParentAclModule(req.getParentSurrogateId());
+		String parentLevel = Objects.isNull(parentAclModule) ? "" : parentAclModule.getLevel();
+		Long parentId = Objects.isNull(parentAclModule) ? 0 : parentAclModule.getId();
 
 		// 更新当前的权限模块
 		SysAclModule after = SysAclModule.builder()
 			.id(before.getId())
 			.surrogateId(before.getSurrogateId())
 			.name(req.getName())
-			.parentId(parentAclModule.getSurrogateId())
+			.parentId(req.getParentSurrogateId())
 			.parentName(parentAclModule.getName())
 			.seq(req.getSeq())
-			.level(LevelUtil.calculateLevel(parentAclModule.getLevel(), parentAclModule.getId()))
+			.level(LevelUtil.calculateLevel(parentLevel, parentId))
 			.remark(req.getRemark())
 			.updateTime(DateUtil.localDateTimeNow())
 			.operator(RequestHolder.getCurrentUser().getSurrogateId())
@@ -172,8 +189,8 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 			.build();
 
 		// 更新子组织信息
-		this.updateWithChildAclModule(before,after);
-		return ApiResp.success("更新权限模块成功");
+		this.updateWithChildAclModule(before, after);
+		return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg3"));
 	}
 
 
@@ -208,6 +225,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 		}
 
 		aclModuleList.forEach(aclModule -> {
+//			aclModule.setParentName(aclModule.getParentName());
 			aclModule.setLevel(LevelUtil.calculateLevel(afterAclModule.getLevel(),afterAclModule.getId()));
 			aclModule.setUpdateTime(DateUtil.localDateTimeNow());
 			updateChildAclModuleTree(aclModule);
@@ -228,33 +246,32 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 
 	/**
 	 * 删除权限模块信息
-	 * @param req
 	 * @return
 	 */
 	@Override
-	public ApiResp delete(AclModuleDelReq req) {
+	public ApiResp delete(Long surrogateId) {
 		QueryWrapper<SysAclModule> query = new QueryWrapper<>();
-		query.eq("surrogate_id",req.getSurrogateId());
+		query.eq("surrogate_id", surrogateId);
 		SysAclModule aclModule = aclModuleMapper.selectOne(query);
 		if (Objects.isNull(aclModule)) {
-			return ApiResp.failure("待删除的权限模块不存在");
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg4"));
 		}
 
 		// 检查要删除的权限模块下是否还有子权限模块
 		QueryWrapper<SysAclModule> query1 = new QueryWrapper<>();
-		query1.eq("parent_id", req.getSurrogateId());
+		query1.eq("parent_id", surrogateId);
 		Long count = aclModuleMapper.selectCount(query1);
 		if (count >= 1) {
-			return ApiResp.failure("待删除的权限模块还存在子权限模块, 无法删除");
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg5"));
 		}
 
-		Long aclCount = aclService.getAclCount(req.getSurrogateId());
+		Long aclCount = aclService.getAclCountByAclModuleId(surrogateId);
 		if (aclCount >= 1) {
-			return ApiResp.failure("待删除的权限模块下还存在权限点, 无法删除");
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg6"));
 		}
 
 		aclModuleMapper.deleteById(aclModule.getId());
-		return ApiResp.success("删除权限模块成功");
+		return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg7"));
 	}
 
 	/**

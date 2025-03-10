@@ -13,6 +13,7 @@ import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
 import com.cy.single.blog.pojo.req.user.UserRegisterReq;
 import com.cy.single.blog.pojo.req.user.UserSaveReq;
 import com.cy.single.blog.pojo.vo.sys.user.SysUserVO;
+import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysUserService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.cy.single.blog.common.constants.ResponseConstant.LOGIN_SUCCESS;
+import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 import static com.cy.single.blog.pojo.dto.sys.user.UserDTO.convertAddUserReq;
 import static com.cy.single.blog.pojo.dto.sys.user.UserDTO.convertEditUserReq;
@@ -37,6 +38,9 @@ import static com.cy.single.blog.pojo.dto.sys.user.UserDTO.convertEditUserReq;
 @Service
 @Slf4j
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
+
+	@Autowired
+	private MessageLangService msgService;
 
 	@Autowired
 	private SysUserMapper userMapper;
@@ -105,7 +109,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		user.setUpdateTime(DateUtil.localDateTimeNow());
 		Integer update = userMapper.updateUserBySurrogateId(user);
 		if (update >= 1)
-			return ApiResp.success(LOGIN_SUCCESS, user.getToken());
+			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "admin.login.success"), user.getToken());
 		else
 			return ApiResp.failure();
 	}

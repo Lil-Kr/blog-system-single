@@ -10,6 +10,7 @@ import {
   Input,
   PaginationProps,
   Popconfirm,
+  PopconfirmProps,
   Row,
   Space,
   Table,
@@ -245,7 +246,7 @@ const Acl = () => {
       { api: aclModuleApi },
       { title: '添加权限模块' },
       { action: 'create', open: true }, // create | edit | look
-      { style: { maxWidth: '40vw' } },
+      { style: { maxWidth: '50vw' } },
       { surrogateId: data.surrogateId, name: data.name }
     )
   }
@@ -278,6 +279,28 @@ const Acl = () => {
       { style: { maxWidth: '40vw' } },
       { ...req }
     )
+  }
+
+  /**
+   * 删除权限模块
+   */
+  const deleteAclModule = async () => {
+    // console.log('--> selectedInfo: ', { ...selectedInfo })
+    // const res = await aclModuleApi.delete({ surrogateId: selectedInfo.value?.toString() ?? '' })
+    // const { code, msg } = res
+  }
+
+  const deleteAclModuleConfirm: PopconfirmProps['onConfirm'] = async e => {
+    const res = await aclModuleApi.delete({ surrogateId: selectedInfo.value?.toString() ?? '' })
+    const { code, msg } = res
+    if (code !== 200) {
+      return
+    }
+    retrieveAclModuleTreeList()
+  }
+
+  const cancel: PopconfirmProps['onCancel'] = e => {
+    // message.error('Click on No')
   }
 
   /**
@@ -456,6 +479,23 @@ const Acl = () => {
                     onClick={createAclModule}
                   />
                   <Button size={'small'} color='pink' variant='solid' icon={<EditOutlined />} onClick={editAclModule} />
+
+                  <Popconfirm
+                    title='删除权限模块'
+                    description={`确定要删除 [ ${selectedInfo.label} ] 模块么`}
+                    onConfirm={deleteAclModuleConfirm}
+                    onCancel={cancel}
+                    okText='确定'
+                    cancelText='取消'
+                  >
+                    <Button
+                      size={'small'}
+                      color='red'
+                      variant='solid'
+                      icon={<DeleteOutlined />}
+                      onClick={deleteAclModule}
+                    />
+                  </Popconfirm>
                 </Flex>
                 <Divider plain>{'权限模块'}</Divider>
                 <DirectoryTree

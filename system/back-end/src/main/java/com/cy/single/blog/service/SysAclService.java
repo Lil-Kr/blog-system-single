@@ -27,5 +27,5 @@ public interface SysAclService extends IService<SysAcl> {
 
 	ApiResp<String> delete(Long surrogateId);
 
-	Long getAclCount(Long aclModuleId);
+	Long getAclCountByAclModuleId(Long aclModuleId);
 }

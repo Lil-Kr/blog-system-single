@@ -2,7 +2,6 @@ package com.cy.single.blog.service.impl;
 
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.common.cache.CacheManager;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.BlogLabelMapper;
 import com.cy.single.blog.pojo.dto.blog.BlogLabelDTO;
@@ -22,10 +21,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static com.cy.single.blog.enums.ReturnCodeEnum.*;
+import static com.cy.single.blog.enums.ReturnCodeEnum.OPERATE_ERROR;
+import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
 
 /**
  * @author Lil-K
@@ -66,7 +64,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
             // update cache
             BlogLabelVO cacheEntity = new BlogLabelVO();
             BeanUtils.copyProperties(saveEntity, cacheEntity);
-            List<BlogLabelVO> blogLabelListCache = Stream.concat(CacheManager.getBlogLabelListCache().stream(), Stream.of(cacheEntity)).collect(Collectors.toList());
+//            List<BlogLabelVO> blogLabelListCache = Stream.concat(CacheManager.getBlogLabelListCache().stream(), Stream.of(cacheEntity)).collect(Collectors.toList());
 //            CacheManager.setBlogLabelInfoCache(blogLabelListCache);
             return ApiResp.success();
         }else {
@@ -85,7 +83,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
             // update cache
             BlogLabel blogLabel = new BlogLabel();
             BeanUtils.copyProperties(req,blogLabel);
-            CacheManager.setBlogLabelCache(blogLabel);
+//            CacheManager.setBlogLabelCache(blogLabel);
             return ApiResp.success();
         }else {
             return ApiResp.failure(SAVE_ERROR);

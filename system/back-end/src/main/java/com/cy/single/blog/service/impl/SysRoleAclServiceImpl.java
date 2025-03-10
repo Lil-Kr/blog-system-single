@@ -8,6 +8,7 @@ import com.cy.single.blog.dao.SysRoleAclMapper;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysRoleAcl;
 import com.cy.single.blog.pojo.req.roleacl.RoleAclSaveReq;
+import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysCoreService;
 import com.cy.single.blog.service.SysRoleAclService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
@@ -39,6 +40,9 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 
 	@Autowired
 	private SysRoleAclMapper roleAclMapper;
+
+	@Autowired
+	private MessageLangService msgService;
 
 	/**
 	 * 更新角色对应的权限点信息

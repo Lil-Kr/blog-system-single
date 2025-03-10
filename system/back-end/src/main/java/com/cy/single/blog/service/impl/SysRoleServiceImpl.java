@@ -11,6 +11,7 @@ import com.cy.single.blog.dao.SysRoleUserMapper;
 import com.cy.single.blog.pojo.entity.sys.SysRole;
 import com.cy.single.blog.pojo.req.role.RoleListPageReq;
 import com.cy.single.blog.pojo.req.role.RoleSaveReq;
+import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysRoleService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
@@ -23,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static com.cy.single.blog.common.constants.ResponseConstant.*;
+import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -33,6 +34,9 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.*;
  */
 @Service
 public class SysRoleServiceImpl implements SysRoleService {
+
+	@Autowired
+	private MessageLangService msgService;
 
 	@Autowired
 	private SysRoleMapper roleMapper;
@@ -64,7 +68,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		 * check supper admin is or not exist
 		 */
 		if (checkSupperAdminExist() && req.getType() == 1) {
-			return ApiResp.failure(ROLE_ONLY_ADMIN_INFO);
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.message2"));
 		}
 
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
@@ -142,11 +146,11 @@ public class SysRoleServiceImpl implements SysRoleService {
 		 * supper admin must be only one
 		 */
 		if (before.getType() == 1 && req.getType() != 1) {
-			return ApiResp.failure(ROLE_ONLY_ADMIN_INFO);
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.message2"));
 		}
 
 		if (before.getType() != 1 && req.getType() == 1 && checkSupperAdminExist()) {
-			return ApiResp.failure(ROLE_ONLY_ADMIN_INFO);
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.message2"));
 		}
 
 		SysRole after = SysRole.builder()
@@ -180,7 +184,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		queryWrapper.eq("surrogate_id", req.getSurrogateId());
 		SysRole before = roleMapper.selectOne(queryWrapper);
 		if (before.getType() == 1) {
-			return ApiResp.failure(ROLE_CANNOT_FREEZE);
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.message4"));
 		}
 
 		UpdateWrapper<SysRole> updateWrapper = new UpdateWrapper<>();
@@ -205,7 +209,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		QueryWrapper queryRoleUser = new QueryWrapper<>();
 		queryRoleUser.eq("role_id", surrogateId);
 		Long countRoleUser = roleUserMapper.selectCount(queryRoleUser);
-		if (countRoleUser >= 1) return ApiResp.failure(ROLE_USED_INFO);
+		if (countRoleUser >= 1) return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.message3"));
 
 		QueryWrapper queryRoleAcl = new QueryWrapper<>();
 		queryRoleAcl.eq("role_id", surrogateId);

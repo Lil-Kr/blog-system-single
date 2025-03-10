@@ -1,16 +1,11 @@
 package com.cy.single.blog.demo;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.cy.single.blog.common.cache.CacheManager;
-import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -53,24 +48,6 @@ public class Test1 {
         log.info("过3秒之后访问 k2");
         Object k22 = cache.getIfPresent("k2");
         log.info("k2: {}", k22);
-    }
-
-
-    @Test
-    public void test3() {
-        BlogLabelVO blogLabel = new BlogLabelVO();
-        blogLabel.setSurrogateId(592255189127168l);
-        blogLabel.setName("abc");
-
-        List<BlogLabelVO> blogLabels = new ArrayList<>();
-        blogLabels.add(blogLabel);
-
-        CacheManager.setBlogLabelInfoCache(blogLabels);
-        log.info("blogLabelListCache1 -> : {}", JSONArray.toJSONString(CacheManager.getBlogLabelListCache()));
-
-        blogLabel.setName("修改Name");
-        CacheManager.setBlogLabelCache(blogLabel);
-        log.info("blogLabelListCache2 -> : {}", JSONArray.toJSONString(CacheManager.getBlogLabelListCache()));
     }
 
     @Test

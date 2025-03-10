@@ -33,6 +33,9 @@ const aclModuleApi: AclModuleApi = {
   },
   aclModuleList(req: AclModuleListReq) {
     return baseAxiosRequest.post<Result<SysAclModuleListResp[]>>(PREFIX_URL_SYS_ACL_MODULE + '/aclModuleList', req)
+  },
+  delete(req: AclDeletReq) {
+    return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_SYS_ACL_MODULE + '/delete', req)
   }
 }
 

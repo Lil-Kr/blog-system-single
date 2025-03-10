@@ -17,9 +17,9 @@ import java.util.List;
  */
 public interface SysOrgService {
 	
-	ApiResp<String> add(OrgReq param);
+	ApiResp<String> add(OrgReq req);
 
-	ApiResp<String> edit(OrgReq param);
+	ApiResp<String> edit(OrgReq req);
 
 	PageResult<SysOrgVO> pageChildOrgList(OrgPageReq req);
 

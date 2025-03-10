@@ -69,6 +69,9 @@ const rootRouterConfig: Router<{}> = new Router({
   routes: rootConfig
 })
 
+
+// console.log('--> 这里需要后端动态生成菜单数据:')
+
 /**
  * 处理路由
  */

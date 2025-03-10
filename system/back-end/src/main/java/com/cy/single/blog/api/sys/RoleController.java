@@ -11,18 +11,17 @@ import com.cy.single.blog.pojo.req.role.RoleListPageReq;
 import com.cy.single.blog.pojo.req.role.RoleSaveReq;
 import com.cy.single.blog.pojo.req.roleacl.RoleAclSaveReq;
 import com.cy.single.blog.pojo.req.roleuser.RoleUserReq;
-import com.cy.single.blog.service.SysRoleAclService;
-import com.cy.single.blog.service.SysRoleService;
-import com.cy.single.blog.service.SysRoleUserService;
-import com.cy.single.blog.service.SysTreeService;
+import com.cy.single.blog.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import static com.cy.single.blog.common.constants.ResponseConstant.ROLE_TREE_INFO;
+
+import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 
 /**
  * @Author: Lil-K
@@ -45,6 +44,9 @@ public class RoleController {
 
 	@Autowired
 	private SysRoleAclService roleAclService;
+
+	@Autowired
+	private MessageLangService messageLangService;
 
 	/**
 	 * page role info list
@@ -123,7 +125,7 @@ public class RoleController {
 		if (CollectionUtils.isNotEmpty(aclModuleDtoList)) {
 			return ApiResp.success(aclModuleDtoList);
 		}else {
-			return ApiResp.failure(ROLE_TREE_INFO);
+			return ApiResp.failure(messageLangService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.message1"));
 		}
 	}
 

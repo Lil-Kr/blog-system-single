@@ -14,6 +14,7 @@ import com.cy.single.blog.pojo.req.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.org.OrgPageReq;
 import com.cy.single.blog.pojo.req.org.OrgReq;
 import com.cy.single.blog.pojo.vo.sys.org.SysOrgVO;
+import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysOrgService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
@@ -22,14 +23,12 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
-import static com.cy.single.blog.common.constants.SysOrgConstants.*;
+import static com.cy.single.blog.common.constants.CommonConstants.*;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -39,6 +38,9 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.*;
  */
 @Service
 public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> implements SysOrgService {
+
+	@Autowired
+	private MessageLangService msgService;
 
 	@Autowired
 	private SysOrgMapper orgMapper;
@@ -276,7 +278,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 		queryWrapperUser.eq("org_id", surrogateId);
 		Long userCount = userMapper.selectCount(queryWrapperUser);
 		if (userCount >= 1) {
-			return ApiResp.failure(ORG_DELETE_ERROR_INFO);
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.org.api.resp.msg1"));
 		}
 
 		/**
@@ -286,7 +288,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 		query2.eq("parent_id", surrogateId);
 		Long count = orgMapper.selectCount(query2);
 		if (count >= 1) {
-			return ApiResp.failure(ORG_DELETE_EXIST_INFO);
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.org.api.resp.msg2"));
 		}
 
 		int delete = orgMapper.deleteById(org.getId());

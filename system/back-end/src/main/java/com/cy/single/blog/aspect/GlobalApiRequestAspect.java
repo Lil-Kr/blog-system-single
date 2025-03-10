@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static com.cy.single.blog.enums.ReturnCodeEnum.SYSTEM_ERROR;
+
 /**
  * @Author: Lil-K
  * @Date: 2024/3/14
@@ -90,7 +92,7 @@ public class GlobalApiRequestAspect {
 		} catch (Throwable e) {
 			log.error("api request ERROR: {}", e.getMessage());
 			RequestHolder.remove();
-			return ApiResp.error(e.getMessage());
+			return ApiResp.error(SYSTEM_ERROR.getCode(), SYSTEM_ERROR.getMessage() + ": " + e.getMessage());
 		} finally {
 			/**
 			 * remove user info

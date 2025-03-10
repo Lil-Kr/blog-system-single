@@ -74,7 +74,7 @@ const AclModal = (props: ModalType.CustomModal) => {
     }))
     aclModuleList.push({
       value: '0',
-      label: '顶级'
+      label: '顶层'
     })
     setAclModuleList(aclModuleList)
   }
@@ -179,10 +179,9 @@ const AclModal = (props: ModalType.CustomModal) => {
       const res = await api.add!(addReq)
       const { code, msg } = res
       if (code !== 200) {
-        message.error(msg)
         return
       }
-      message.info(msg)
+      message.success(msg)
     } else if (action === 'edit') {
       const editReq: AclEditReq = {
         surrogateId: params.key,

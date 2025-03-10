@@ -144,16 +144,9 @@ public final class ApiResp<T> {
         return create(SYSTEM_ERROR.getCode(), SYSTEM_ERROR.getMessage(),data);
     }
 
-    /**
-     * 错误响应体
-     * @param msg
-     * @param data
-     * @return
-     */
-    public static <T> ApiResp<T> error(String msg, T data) {
-        return create(SYSTEM_ERROR.getCode(), msg, data);
+    public static <T> ApiResp<T> error(int code, String msg) {
+        return create(code, msg, null);
     }
-
     /**
      *
      * @param code
@@ -181,10 +174,6 @@ public final class ApiResp<T> {
      */
     public static <T> ApiResp<T> error() {
         return create(SYSTEM_ERROR.getCode(), SYSTEM_ERROR.getMessage(), null);
-    }
-
-    public static <T> ApiResp<T> error(int code, String msg) {
-        return create(code, msg, null);
     }
 
     /**

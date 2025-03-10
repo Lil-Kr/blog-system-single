@@ -204,7 +204,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 	}
 
 	@Override
-	public Long getAclCount(Long aclModuleId) {
+	public Long getAclCountByAclModuleId(Long aclModuleId) {
 		QueryWrapper<SysAcl> wrapper = new QueryWrapper<>();
 		wrapper.eq("acl_module_id", aclModuleId);
 		Long count = aclMapper.selectCount(wrapper);

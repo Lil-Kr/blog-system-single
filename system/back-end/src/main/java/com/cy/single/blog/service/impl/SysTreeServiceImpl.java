@@ -10,6 +10,7 @@ import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
+import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysCoreService;
 import com.cy.single.blog.service.SysTreeService;
 import com.cy.single.blog.utils.acl.AclUtil;
@@ -45,6 +46,9 @@ public class SysTreeServiceImpl implements SysTreeService {
 
 	@Autowired
 	private SysCoreService coreService;
+
+	@Autowired
+	private MessageLangService msgService;
 
 	/**
 	 * 获取组织树

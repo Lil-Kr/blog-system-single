@@ -5,7 +5,6 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.common.cache.CacheManager;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryPageReq;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryReq;
 import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
@@ -17,10 +16,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Map;
+
 import static com.cy.single.blog.utils.checkUtil.ParamValidator.checkSurrogateIds;
 
 /**
@@ -91,7 +91,7 @@ public class CategoryController {
     public ApiResp<List<BlogContentGroupVO>> frontCategoryCountList() {
         List<BlogContentGroupVO> blogContentGroupList = blogContentService.frontContentByGroupCategory();
 
-        Map<Long, BlogCategoryVO> blogCategoryAllMapCache = CacheManager.getBlogCategoryAllMapCache();
+//        Map<Long, BlogCategoryVO> blogCategoryAllMapCache = CacheManager.getBlogCategoryAllMapCache();
 //        blogContentGroupList.forEach(item -> {
 //            item.setCategoryName(blogCategoryAllMapCache.getOrDefault(item.getCategoryId(), new BlogCategoryVO()).getName());
 //        });

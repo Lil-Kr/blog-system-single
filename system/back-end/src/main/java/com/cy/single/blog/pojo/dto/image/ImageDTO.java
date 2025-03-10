@@ -1,6 +1,5 @@
 package com.cy.single.blog.pojo.dto.image;
 
-import com.cy.single.blog.common.cache.CacheManager;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.pojo.entity.image.ImageCategory;
 import com.cy.single.blog.pojo.entity.image.ImageInfo;
@@ -51,12 +50,12 @@ public class ImageDTO {
   }
 
   public static ImageInfoVO convertImageInfoVO(ImageInfo imageInfo) {
-    String imageCategoryName = CacheManager.getImageCategoryCacheMap().getOrDefault(imageInfo.getImageCategoryId(), "");
-
-    ImageInfoVO imageInfoVO = new ImageInfoVO();
-    BeanUtils.copyProperties(imageInfo, imageInfoVO);
-    imageInfoVO.setImageCategoryName(imageCategoryName);
-    return imageInfoVO;
+//    String imageCategoryName = CacheManager.getImageCategoryCacheMap().getOrDefault(imageInfo.getImageCategoryId(), "");
+//
+//    ImageInfoVO imageInfoVO = new ImageInfoVO();
+//    BeanUtils.copyProperties(imageInfo, imageInfoVO);
+//    imageInfoVO.setImageCategoryName(imageCategoryName);
+    return new ImageInfoVO();
   }
 
   public static ImageInfo buildImageInfo(Long imageCategoryId, String imageReName, String imageTypeSuffix, String imageOriginalFullName,

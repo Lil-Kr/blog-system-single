@@ -9,6 +9,7 @@ import com.cy.single.blog.dao.SysUserMapper;
 import com.cy.single.blog.pojo.entity.sys.SysRoleUser;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.roleuser.RoleUserReq;
+import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysRoleUserService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
@@ -35,21 +36,24 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
 public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRoleUser> implements SysRoleUserService {
 
 	@Autowired
+	private MessageLangService msgService;
+
+	@Autowired
 	private SysRoleUserMapper roleUserMapper;
 
 	@Autowired
 	private SysUserMapper userMapper;
 
 	@Override
-	public ApiResp<String> updateRoleUsers(RoleUserReq param) {
+	public ApiResp<String> updateRoleUsers(RoleUserReq req) {
 		// 根据角色id查询分配的用户id
-		List<Long> originUserIdList = new ArrayList<>(roleUserMapper.selectUserIdListByRoleId(param.getRoleId()));
+		List<Long> originUserIdList = new ArrayList<>(roleUserMapper.selectUserIdListByRoleId(req.getRoleId()));
 		if (CollectionUtils.isEmpty(originUserIdList)) {
 			return ApiResp.failure("当前角色未分配用户");
 		}
 
 		// 将需要修改的角色id转为 -> list
-		List<Long> userIdList = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(param.getUserIds())
+		List<Long> userIdList = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(req.getUserIds())
 			.stream()
 			.map(roleId -> Long.valueOf(roleId))
 			.collect(Collectors.toList());
@@ -67,7 +71,7 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 		}
 
 		// 更新角色-用户信息
-		updateRoleUsers(param.getRoleId(), userIdList);
+		updateRoleUsers(req.getRoleId(), userIdList);
 		return ApiResp.success("更新用户角色信息成功");
 	}
 

@@ -7,13 +7,21 @@ package com.cy.single.blog.common.constants;
  */
 public class CommonConstants {
 
-	public static final String msg = "msg";
+	/**
+	 * lang
+	 */
+	public static final String LANG_ZH = "zh";
+	public static final String LANG_EN = "en";
 
 	/**
-	 * request exception message
+	 * org
 	 */
-	public static final String REQMSG_ID_NOT_NULL = "surrogateId是必须的";
+	public static final String ORG_PREV_NUMBER_INFO = "ORG";
 
+	/**
+	 * acl ACLM
+	 */
+	public static final String ACLM_PREV_NUMBER_INFO = "ACLM";
 
 	/**
 	 * cache manager key
@@ -30,4 +38,6 @@ public class CommonConstants {
 
 	public static final String CACHE_KEY_IMAGE_CATEGORY_LIST = "image-category-list";
 	public static final String CACHE_KEY_IMAGE_CATEGORY_MAP = "image-category-map";
+
+
 }

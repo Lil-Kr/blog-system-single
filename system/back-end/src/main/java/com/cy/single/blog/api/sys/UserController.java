@@ -12,6 +12,7 @@ import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
 import com.cy.single.blog.pojo.req.user.UserRegisterReq;
 import com.cy.single.blog.pojo.req.user.UserSaveReq;
 import com.cy.single.blog.pojo.vo.sys.user.SysUserVO;
+import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import static com.cy.single.blog.common.constants.ResponseConstant.LOGOUT_SUCCESS;
+import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 
 /**
  * @Author: Lil-K
@@ -32,6 +33,9 @@ import static com.cy.single.blog.common.constants.ResponseConstant.LOGOUT_SUCCES
 @RequestMapping("/sys/user")
 @Slf4j
 public class UserController {
+
+	@Autowired
+	private MessageLangService messageLangService;
 
 	@Autowired
 	private SysUserService userService;
@@ -48,7 +52,7 @@ public class UserController {
 	public ApiResp<Integer> logout() {
 		// 移除用户
 		RequestHolder.remove();
-		return ApiResp.success(LOGOUT_SUCCESS);
+		return ApiResp.success(messageLangService.getGreetingMessage(LANG_ZH, "admin.logout.success"));
 	}
 
 	@CheckAuth

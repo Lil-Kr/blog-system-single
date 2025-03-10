@@ -15,9 +15,9 @@ import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;
  */
 public interface SysDictService extends IService<SysDict> {
 
-	ApiResp<String> add(DictSaveReq param);
+	ApiResp<String> add(DictSaveReq req);
 
-	ApiResp<String> edit(DictSaveReq param);
+	ApiResp<String> edit(DictSaveReq req);
 
 	PageResult<SysDictVO> listAll();
 
