@@ -9,7 +9,7 @@ import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysRoleAcl;
 import com.cy.single.blog.pojo.req.roleacl.RoleAclSaveReq;
 import com.cy.single.blog.service.MessageLangService;
-import com.cy.single.blog.service.SysCoreService;
+import com.cy.single.blog.service.SysAclCoreService;
 import com.cy.single.blog.service.SysRoleAclService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRoleAcl> implements SysRoleAclService {
 
 	@Autowired
-	private SysCoreService coreService;
+	private SysAclCoreService coreService;
 
 	@Autowired
 	private SysRoleAclMapper roleAclMapper;

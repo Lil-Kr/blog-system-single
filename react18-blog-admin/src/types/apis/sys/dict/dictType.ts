@@ -1,7 +1,10 @@
 import { Result, ResultPage } from '@/types/base/response'
 import { BaseApi, OptionType } from '@/types/apis/'
 import { BaseEntityPageType } from '@/types/base'
-import { ExpandOutlined } from '@ant-design/icons'
+
+export interface TableDictType extends Dict {
+  key?: string
+}
 
 export interface Dict {
   id: string
@@ -19,11 +22,50 @@ export interface DictDetail {
   surrogateId: string
   parentId: string
   name: string
-  type: string
+  type: number
   remark: string
 }
 
+/** ==================== dict req resp ================= */
+
+export interface DictAddReq {
+  name: string
+}
+
+export interface DictEditReq {
+  surrogateId: string
+  name: string
+  remark?: string
+}
+
+export interface DictDelReq {
+  surrogateId: string
+}
+
+export interface DictPageListReq extends BaseEntityPageType {
+  name?: string
+}
+
+export interface DictPageListResp extends Dict {}
+
 /** ==================== dict detail ================= */
+
+export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+  editing: boolean
+  dataIndex: string
+  title: any
+  inputType: 'number' | 'text'
+  record: TableDictDetailType
+  index: number
+}
+
+export interface TableDictDetailType {
+  key: string
+  parentId: string
+  name: string
+  type: number
+  remark: string
+}
 
 export interface DictDetailListReq {
   dictSurrogateId: string
@@ -44,8 +86,30 @@ export interface DictDetailResp {
   dictDetailVOList: DictDetail[]
 }
 
+export interface PageDictDetailReq extends BaseEntityPageType {
+  dictId: string
+  name?: string
+  type?: number
+}
+
+export interface PageDictDetailResp extends DictDetail {}
+
+export interface DictDetailAddReq {}
+
+export interface DictDetailEditReq {}
+
+export interface DictDetailDeleteReq {
+  surrogateId: string
+}
+
 export interface DictApi extends BaseApi {
-  // add(req: AclAddReq): Promise<Result<string>>
+  add(req: DictAddReq): Promise<Result<string>>
+  edit(req: DictEditReq): Promise<Result<string>>
+  delete(req: DictDelReq): Promise<Result<string>>
+  retrieveDictPageList(req: DictPageListReq): Promise<ResultPage<DictPageListResp>>
   dictDetail(req: DictDetailListReq): Promise<Result<DictDetailResp>>
-  // edit(req: AclModuleEditReq): Promise<Result<string>>
+  retrievePageDictDetailList(req: PageDictDetailReq): Promise<ResultPage<PageDictDetailResp>>
+  addDictDetail(req: DictDetailAddReq): Promise<Result<string>>
+  editDictDetail(req: DictDetailEditReq): Promise<Result<string>>
+  deleteDictDetail(req: DictDetailDeleteReq): Promise<Result<string>>
 }

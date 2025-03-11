@@ -6,5 +6,5 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class SysRoleVo extends SysRole {
+public class SysRoleVO extends SysRole {
 }

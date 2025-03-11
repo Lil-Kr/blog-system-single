@@ -2,6 +2,7 @@ package com.cy.single.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cy.single.blog.aspect.exceptions.BusinessException;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.common.holder.RequestHolder;
@@ -9,23 +10,25 @@ import com.cy.single.blog.dao.SysDictDetailMapper;
 import com.cy.single.blog.dao.SysDictMapper;
 import com.cy.single.blog.pojo.SysDictService;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
+import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.req.dict.DictDetailReq;
+import com.cy.single.blog.pojo.req.dict.DictListPageReq;
 import com.cy.single.blog.pojo.req.dict.DictSaveReq;
 import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
 import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
-import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
+import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
  * @Author: Lil-K
@@ -44,14 +47,14 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 
 	/**
 	 * 新增数据字典分类
-	 * @param param
+	 * @param req
 	 * @return
 	 * @throws Exception
 	 */
 	@Override
-	public ApiResp<String> add(DictSaveReq param) {
-		if (checkExist(param.getSurrogateId(),param.getType(),param.getName())) {
-			ApiResp.failure("待新增的字典类型或类型名已存在");
+	public ApiResp<String> add(DictSaveReq req) {
+		if (checkExist(req.getSurrogateId(), req.getName())) {
+			return ApiResp.failure(INFO_EXIST);
 		}
 
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
@@ -59,31 +62,36 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 
 		SysDict dict = SysDict.builder()
 			.surrogateId(surrogateId)
-			.name(param.getName())
-			.remark(param.getRemark())
-			.deleted(0)
+			.name(req.getName())
+			.remark(req.getRemark())
+			.deleted(0) // default 0
 			.operator(RequestHolder.getCurrentUser().getSurrogateId())
 			.operateIp("127.0.0.1")
 			.createTime(currentTime)
 			.updateTime(currentTime)
 			.build();
 
-		dictMapper.insert(dict);
-		return ApiResp.success("添加数据字典信息成功");
+		int insert = dictMapper.insert(dict);
+		if (insert >= 1) {
+			return ApiResp.success();
+		} else {
+			return ApiResp.failure(SAVE_ERROR);
+		}
 	}
 
 	/**
 	 * 检查是否有相同类型的数据字典类别
 	 * @param surrogateId
-	 * @param type
 	 * @param name
 	 */
-	protected boolean checkExist(Long surrogateId,Integer type,String name) {
+	protected boolean checkExist(Long surrogateId, String name) {
 		QueryWrapper<SysDict> query = new QueryWrapper<>();
 		if (Objects.nonNull(surrogateId)) {
-			query.eq("surrogate_id",surrogateId);
+			query.eq("surrogate_id", surrogateId);
 		}
-		query.eq("name",name);
+		if (Objects.nonNull(surrogateId)) {
+			query.eq("name", name);
+		}
 		Long count = dictMapper.selectCount(query);
 		if (count >= 1) {
 			return true;
@@ -93,32 +101,33 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	}
 
 	@Override
-	public ApiResp<String> edit(DictSaveReq param) {
-		if (checkExist(param.getSurrogateId(),param.getType(),param.getName())) {
-			ApiResp.failure("待新增的字典类型或类型名已存在");
-		}
-
+	public ApiResp<String> edit(DictSaveReq req) {
 		QueryWrapper<SysDict> query = new QueryWrapper<>();
-		query.eq("surrogate_id",param.getSurrogateId());
+		query.eq("surrogate_id", req.getSurrogateId());
 		SysDict before = dictMapper.selectOne(query);
-		Preconditions.checkNotNull(before, "待更新的数据字典信息不存在");
+		if (Objects.isNull(before)) {
+			return ApiResp.failure("待更新的数据字典信息不存在");
+		}
 
 		SysDict after = SysDict.builder()
 			.surrogateId(before.getSurrogateId())
-			.operator(RequestHolder.getCurrentUser().getSurrogateId())
-			.name(param.getName())
-			.remark(param.getRemark())
+			.name(req.getName())
+			.remark(req.getRemark())
 			.deleted(0)
 			.operateIp("127.0.0.1")
 			.operator(RequestHolder.getCurrentUser().getSurrogateId())
 			.updateTime(DateUtil.localDateTimeNow())
 			.build();
 
-		int update = dictMapper.update(after, query);
-		if (update >= 1) {
-			return ApiResp.success("修改数据字典信息成功");
-		}else {
-			return ApiResp.failure("修改数据字典信息失败");
+		try {
+			int update = dictMapper.update(after, query);
+			if (update >= 1) {
+				return ApiResp.success("修改数据字典信息成功");
+			}else {
+				return ApiResp.failure("修改数据字典信息失败");
+			}
+		} catch (Exception e) {
+			throw new BusinessException(INFO_EXIST);
 		}
 	}
 
@@ -161,5 +170,39 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	public SysDictVO getDict(Long surrogateId) {
 		SysDictVO dictVO = dictMapper.getDict(surrogateId);
 		return dictVO;
+	}
+
+	/**
+	 * 分页查询字典列表
+	 * @param req
+	 * @return
+	 */
+	@Override
+	public PageResult<SysDictVO> pageDictList(DictListPageReq req) {
+		List<SysDictVO> pageList = dictMapper.pageDictList(req);
+		Integer count = dictMapper.countPageDict(req);
+		if (CollectionUtils.isNotEmpty(pageList)) {
+			return new PageResult<>(pageList, count);
+		}else {
+			return new PageResult<>(new ArrayList<>(0), 0);
+		}
+	}
+
+	@Override
+	public ApiResp<String> delete(Long surrogateId) {
+		QueryWrapper<SysDictDetail> wrapper = new QueryWrapper<>();
+		wrapper.eq("parent_id", surrogateId);
+		Long count = dictDetailMapper.selectCount(wrapper);
+		if (count >= 1) {
+			return ApiResp.failure("该字典下存在明细, 删除失败");
+		}
+
+		QueryWrapper<SysDict> deleteWrapper = new QueryWrapper<>();
+		deleteWrapper.eq("surrogate_id", surrogateId);
+		int delete = dictMapper.delete(deleteWrapper);
+		if (delete >= 1) {
+			return ApiResp.success();
+		}
+		return ApiResp.failure(DEL_ERROR);
 	}
 }

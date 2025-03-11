@@ -8,7 +8,8 @@ import {
   UnorderedListOutlined,
   ApartmentOutlined,
   UserSwitchOutlined,
-  MergeCellsOutlined
+  MergeCellsOutlined,
+  SlidersOutlined
 } from '@ant-design/icons'
 import { lazy } from 'react'
 
@@ -77,15 +78,25 @@ const aclConfig: RouterItemType[] = [
         path: 'acl',
         element: LazyLoad(lazy(() => import('@/views/sys/Acl')))
       },
+      // {
+      //   meta: {
+      //     key: '/acldata',
+      //     title: '数据权限',
+      //     layout: false,
+      //     icon: <DatabaseOutlined />
+      //   },
+      //   path: 'acldata',
+      //   element: LazyLoad(lazy(() => import('@/views/sys/AclData')))
+      // },
       {
         meta: {
-          key: '/acldata',
-          title: '数据权限',
+          key: '/dict',
+          title: '数据字典',
           layout: false,
-          icon: <DatabaseOutlined />
+          icon: <SlidersOutlined />
         },
-        path: 'acldata',
-        element: LazyLoad(lazy(() => import('@/views/sys/AclData')))
+        path: 'dict',
+        element: LazyLoad(lazy(() => import('@/views/sys/Dict')))
       }
     ]
   }

@@ -161,7 +161,11 @@ const Acl = () => {
   const [btnSize] = useState<SizeType>('middle')
   const [form] = useForm()
   const [tableLoading, setTableLoading] = useState<boolean>(true)
-  const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({ pageSize: 10, totalSize: 0 })
+  const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
+    currentPageNum: 1,
+    pageSize: 10,
+    totalSize: 0
+  })
   const [selectedInfo, setSelectedInfo] = useState<SelectOptionType>({} as SelectOptionType)
   const [aclModuleTree, setAclModuleTree] = useState<TreeDataNode[]>([] as TreeDataNode[])
   const [dataSource, setDataSource] = useState<TableAclListType[]>([] as TableAclListType[])
@@ -572,6 +576,7 @@ const Acl = () => {
                 <div className='list'>
                   <Table
                     key={1}
+                    bordered={true}
                     rowSelection={{
                       type: 'checkbox',
                       ...rowSelection

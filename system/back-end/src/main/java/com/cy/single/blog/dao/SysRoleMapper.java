@@ -8,17 +8,15 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * <p>
- *  Mapper 接口
- * </p>
- *
- * @author Lil-Kr
- * @since 2020-11-24
+ * @Author: Lil-K
+ * @Date: 2025/3/11
+ * @Description:
  */
 public interface SysRoleMapper extends BaseMapper<SysRole> {
-    Integer deleteBySurrogateId(@Param("surrogateId") Long surrogateId);
 
-    List<SysRole> pageRoleList(@Param("param") RoleListPageReq req);
+	Integer deleteBySurrogateId(@Param("surrogateId") Long surrogateId);
 
-    Integer roleCount(@Param("param") RoleListPageReq req);
+	List<SysRole> pageRoleList(@Param("param") RoleListPageReq req);
+
+	Integer roleCount(@Param("param") RoleListPageReq req);
 }

@@ -7,16 +7,15 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * <p>
- *  Mapper 接口
- * </p>
- *
- * @author Lil-Kr
- * @since 2020-11-24
+ * @Author: Lil-K
+ * @Date: 2025/3/11
+ * @Description:
  */
 public interface SysRoleAclMapper extends BaseMapper<SysRoleAcl> {
 
-    List<Long> selectAclIdListByRoleIdList(@Param("userRoleIdList") List<Long> userRoleIdList);
+	List<Long> selectAclIdListByRoleIdList(@Param("userRoleIdList") List<Long> userRoleIdList);
 
-    List<Long> selectAclIdListByRoleId(@Param("roleSurrogateId") Long roleSurrogateId);
+	List<Long> selectAclIdListByRoleId(@Param("roleSurrogateId") Long roleSurrogateId);
+
 }
+

@@ -10,7 +10,7 @@ import {
 import { Result, ResultPage } from '@/types/base/response'
 import { baseAxiosRequest } from '@/utils/http/request'
 
-const sysUserApi: SysUserApi = {
+const userApi: SysUserApi = {
   pageUserList(req: UserListPageReq) {
     return baseAxiosRequest.post<ResultPage<UserPageListByOrgIdResp>>(PREFIX_URL_SYS_USER + '/pageUserList', req)
   },
@@ -34,4 +34,4 @@ const sysUserApi: SysUserApi = {
   }
 }
 
-export default sysUserApi
+export default userApi

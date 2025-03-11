@@ -7,6 +7,7 @@ import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
 import com.cy.single.blog.pojo.entity.sys.SysRole;
+import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.role.RoleListPageReq;
 import com.cy.single.blog.pojo.req.role.RoleSaveReq;
 import com.cy.single.blog.pojo.req.roleacl.RoleAclSaveReq;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 
@@ -46,7 +48,7 @@ public class RoleController {
 	private SysRoleAclService roleAclService;
 
 	@Autowired
-	private MessageLangService messageLangService;
+	private MessageLangService msgLangService;
 
 	/**
 	 * page role info list
@@ -106,7 +108,7 @@ public class RoleController {
 	@CheckAuth
 	@RecordLogger
 	@DeleteMapping("/delete")
-	public ApiResp delete (@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+	public ApiResp<String> delete (@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
 		return roleService.delete(surrogateId);
 	}
 
@@ -125,7 +127,7 @@ public class RoleController {
 		if (CollectionUtils.isNotEmpty(aclModuleDtoList)) {
 			return ApiResp.success(aclModuleDtoList);
 		}else {
-			return ApiResp.failure(messageLangService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.message1"));
+			return ApiResp.failure(msgLangService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg1"));
 		}
 	}
 
@@ -139,7 +141,7 @@ public class RoleController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/changeRoleAcls")
-	public ApiResp changeRoleAcls(@RequestBody @Validated({RoleAclSaveReq.GroupChangeAcls.class}) RoleAclSaveReq req) {
+	public ApiResp<String> changeRoleAcls(@RequestBody @Validated({RoleAclSaveReq.GroupChangeAcls.class}) RoleAclSaveReq req) {
 		return roleAclService.changeRoleAcls(req);
 	}
 
@@ -152,7 +154,7 @@ public class RoleController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/roleUserList")
-	public ApiResp roleUserList(@RequestBody @Validated({RoleUserReq.GroupRoleUserPageList.class}) RoleUserReq req) {
+	public ApiResp<Map<String, List<SysUser>>> roleUserList(@RequestBody @Validated({RoleUserReq.GroupRoleUserPageList.class}) RoleUserReq req) {
 		return roleUserService.roleUserList(req);
 	}
 

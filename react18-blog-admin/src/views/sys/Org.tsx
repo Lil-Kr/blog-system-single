@@ -151,12 +151,16 @@ const Org = () => {
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [form] = useForm()
   // 函数式更新值, 不能直接更新
-  const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({ pageSize: 10, totalSize: 0 })
+  const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
+    currentPageNum: 1,
+    pageSize: 10,
+    totalSize: 0
+  })
   const [orgTree, setOrgTree] = useState<TreeDataNode[]>([] as TreeDataNode[])
   const [dataSource, setDataSource] = useState<OrgTableType[]>([] as OrgTableType[])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   const [selectedInfo, setSelectedInfo] = useState<OptionType>({} as OptionType)
-  const typeRef = useRef<{
+  const orgRef = useRef<{
     open: (
       requestParams: IModalRequestAction,
       params: IModalParams,
@@ -282,7 +286,7 @@ const Org = () => {
       },
       ...record
     }
-    typeRef.current?.open(
+    orgRef.current?.open(
       { api: sysOrgApi },
       { title: '查看' },
       { action: 'look', open: true }, // create | edit | look
@@ -304,7 +308,7 @@ const Org = () => {
       },
       ...record
     }
-    typeRef.current?.open(
+    orgRef.current?.open(
       { api: sysOrgApi },
       { title: '编辑' },
       { action: 'edit', open: true }, // create | edit | look
@@ -329,7 +333,7 @@ const Org = () => {
     const modalData = {
       orgInfo: selectedInfo
     }
-    typeRef.current?.open(
+    orgRef.current?.open(
       { api: sysOrgApi },
       { title: '添加' },
       { action: 'create', open: true }, // create | edit | look
@@ -443,6 +447,7 @@ const Org = () => {
                 <div className='list'>
                   <Table
                     key={1}
+                    bordered={true}
                     rowSelection={{
                       type: 'checkbox',
                       ...rowSelection
@@ -467,7 +472,7 @@ const Org = () => {
           </Col>
         </Row>
         <OrgModal
-          mRef={typeRef}
+          mRef={orgRef}
           update={() => {
             initInfo()
           }}

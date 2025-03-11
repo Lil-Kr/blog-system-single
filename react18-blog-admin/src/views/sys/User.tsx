@@ -10,7 +10,7 @@ import { useForm } from 'antd/es/form/Form'
 import { transformToTreeData } from '@/utils/sys/treeUtils'
 import { UserListPageReq, UserTableType } from '@/types/apis/sys/user/userType'
 import UserModal from '@/components/modal/UserModal'
-import { sysOrgApi, sysUserApi } from '@/apis/sys'
+import { sysOrgApi, userApi } from '@/apis/sys'
 import { OptionType } from '@/types/apis'
 import DirectoryTree from 'antd/lib/tree/DirectoryTree'
 
@@ -137,13 +137,17 @@ const User = () => {
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [form] = useForm()
   // 函数式更新值, 不能直接更新
-  const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({ pageSize: 10, totalSize: 0 })
+  const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
+    currentPageNum: 1,
+    pageSize: 10,
+    totalSize: 0
+  })
   const [orgTree, setOrgTree] = useState<TreeDataNode[]>([] as TreeDataNode[])
   const [dataSource, setDataSource] = useState<UserTableType[]>([] as UserTableType[])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   const [selectedInfo, setSelectedInfo] = useState<OptionType>({} as OptionType)
 
-  const typeRef = useRef<{
+  const userRef = useRef<{
     open: (
       requestParams: IModalRequestAction,
       params: IModalParams,
@@ -157,8 +161,8 @@ const User = () => {
     const modalData = {
       orgInfo: selectedInfo
     }
-    typeRef.current?.open(
-      { api: sysUserApi },
+    userRef.current?.open(
+      { api: userApi },
       { title: '添加' },
       { action: 'create', open: true }, // create | edit | look
       { style: { maxWidth: '40vw' } },
@@ -179,8 +183,8 @@ const User = () => {
       },
       ...record
     }
-    typeRef.current?.open(
-      { api: sysUserApi },
+    userRef.current?.open(
+      { api: userApi },
       { title: '查看' },
       { action: 'look', open: true }, // create | edit | look
       { style: { maxWidth: '40vw' } },
@@ -201,8 +205,8 @@ const User = () => {
       },
       ...record
     }
-    typeRef.current?.open(
-      { api: sysUserApi },
+    userRef.current?.open(
+      { api: userApi },
       { title: '编辑' },
       { action: 'edit', open: true }, // create | edit | look
       { style: { maxWidth: '40vw' } },
@@ -216,7 +220,7 @@ const User = () => {
    * @returns
    */
   const deleteItemConfirm = async (record: UserTableType) => {
-    const res = await sysUserApi.delete({ surrogateId: record.key ?? '' })
+    const res = await userApi.delete({ surrogateId: record.key ?? '' })
     if (res.code !== 200) {
       return
     }
@@ -300,7 +304,7 @@ const User = () => {
    */
   const pageUserList = async (req: UserListPageReq) => {
     // 加载当前组织下的子节点数据
-    const userList = await sysUserApi.pageUserList({
+    const userList = await userApi.pageUserList({
       keyWords: req.keyWords || '',
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
@@ -349,7 +353,7 @@ const User = () => {
     setSelectedInfo({ label: node.title, value: node.key })
 
     // 加载当前组织下的子节点数据
-    const userList = await sysUserApi.pageUserList({
+    const userList = await userApi.pageUserList({
       surrogateId: node.key,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
@@ -376,9 +380,7 @@ const User = () => {
         <Row gutter={4} style={{ height: '100%' }}>
           <Col span={4} style={{ width: '100%', height: '100%' }}>
             {/* 当Tree向右展开超出右边界时, 出现水平滚动条 */}
-            <Card
-              style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}
-            >
+            <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
               <DirectoryTree
                 showLine={true}
                 showIcon={false}
@@ -400,9 +402,7 @@ const User = () => {
             </Card>
           </Col>
           <Col span={20} style={{ width: '100%', height: '100%' }}>
-            <Card
-              style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}
-            >
+            <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
               <Flex vertical={true} gap={'small'}>
                 <div className='operation-btn'>
                   <Flex vertical={false} gap='small'>
@@ -433,6 +433,7 @@ const User = () => {
                 <div className='list'>
                   <Table
                     key={1}
+                    bordered={true}
                     rowSelection={{
                       type: 'checkbox',
                       ...rowSelection
@@ -457,7 +458,7 @@ const User = () => {
           </Col>
         </Row>
         <UserModal
-          mRef={typeRef}
+          mRef={userRef}
           update={() => {
             initInfo()
           }}

@@ -72,6 +72,7 @@ export interface BaseRequestBackEndType<T> {
  * 表格分页查询使用
  */
 export interface TablePageInfoType {
+  currentPageNum: number
   pageSize: number // 每页记录数
   totalSize: number // 总记录数
 }

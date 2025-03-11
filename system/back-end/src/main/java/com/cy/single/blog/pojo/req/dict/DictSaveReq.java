@@ -11,6 +11,10 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class DictSaveReq {
 
+    public interface DictAddGroup {};
+    public interface DictEditGroup {};
+    public interface DictDeleteGroup {};
+
     /**
      * 自增主键
      */
@@ -19,24 +23,19 @@ public class DictSaveReq {
     /**
      * 数据字典id唯一主键
      */
+    @NotNull(groups = {DictEditGroup.class}, message = "字典名不能为空")
     private Long surrogateId;
 
     /**
      * 数据字典名称
      */
-    @NotBlank(message = "字典名不能为空")
-    @Length(min = 2,max = 20,message = "数据字典名长度必须在2~20个字符之间")
+    @NotBlank(groups = {DictAddGroup.class, DictEditGroup.class}, message = "字典名不能为空")
+    @Length(groups = {DictAddGroup.class, DictEditGroup.class}, min = 2, max = 20, message = "数据字典名长度必须在2~20个字符之间")
     private String name;
-
-    /**
-     * 数据字典类型, 从0开始递增
-     */
-    @NotNull(message = "数据字典类型不能为空")
-    private Integer type;
 
     /**
      * 备注
      */
-    @Length(min = 0,max = 100,message = "数据字典备注长度必须在100个字符以内")
+    @Length(max = 100, message = "数据字典备注长度必须在100个字符以内")
     private String remark;
 }

@@ -11,7 +11,7 @@ import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
 import com.cy.single.blog.service.MessageLangService;
-import com.cy.single.blog.service.SysCoreService;
+import com.cy.single.blog.service.SysAclCoreService;
 import com.cy.single.blog.service.SysTreeService;
 import com.cy.single.blog.utils.acl.AclUtil;
 import com.cy.single.blog.utils.aclmodule.AclModuleUtil;
@@ -45,7 +45,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 	private SysAclMapper aclMapper;
 
 	@Autowired
-	private SysCoreService coreService;
+	private SysAclCoreService coreService;
 
 	@Autowired
 	private MessageLangService msgService;
@@ -190,23 +190,23 @@ public class SysTreeServiceImpl implements SysTreeService {
 
 	/**
 	 * 获取角色对应的权限树
-	 * @param roleSurrogateId 角色id
+	 * @param roleId 角色id
 	 * @return
 	 * @throws Exception
 	 */
 	@Override
-	public List<AclModuleDto> roleAclTree(Long roleSurrogateId) {
+	public List<AclModuleDto> roleAclTree(Long roleId) {
 		// 1. 拿到当前用户所属角色中已分配的的权限点(此处为用户所能支配的权限上限)
 		List<SysAcl> userAclList = coreService.getCurrentUserAclList();
 
 		// 2. 获取用户所属角色的已分配的权限id(AclId), [去重, 比较时性能优于list]
-		Set<Long> userAclIdSet = userAclList.stream().map(acl -> acl.getSurrogateId()).collect(Collectors.toSet());
+		Set<Long> userAclIdSet = userAclList.stream().map(SysAcl::getSurrogateId).collect(Collectors.toSet());
 
 		// 3. 获取当前角色分配过的权限点(此处为当前)
-		List<SysAcl> roleAclList = coreService.getRoleAclList(roleSurrogateId);
+		List<SysAcl> roleAclList = coreService.getRoleAclList(roleId);
 
 		// 4. 当前角色已分配的权限id集合, [此处转为set是为了比较时的性能考虑, 比较时性能优于list]
-		Set<Long> roleAclIdSet = roleAclList.stream().map(roleAcl -> roleAcl.getSurrogateId()).collect(Collectors.toSet());
+		Set<Long> roleAclIdSet = roleAclList.stream().map(SysAcl::getSurrogateId).collect(Collectors.toSet());
 
 		// 5. 获取所有的权限点列表, list
 		QueryWrapper<SysAcl> query2 = new QueryWrapper<>();
@@ -216,7 +216,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 		// 将权限点列表为当前用户标记出访问权限
 		List<AclDto> aclDtoList = Lists.newArrayList();
 		aclAllList.stream()
-			.map(acl -> AclDto.adapt(acl))
+			.map(AclDto::adapt)
 			.forEach(aclDto -> {
 				// 用户已分配的权限点, 可操作
 				if (userAclIdSet.contains(aclDto.getSurrogateId())) {

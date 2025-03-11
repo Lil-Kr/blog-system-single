@@ -60,15 +60,15 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 	@Override
 	public ApiResp<String> add(RoleSaveReq req) {
-		if (checkExit(req.getSurrogateId(), req.getName(), req.getType())) {
+		if (checkExit(req.getSurrogateId(), req.getName(), req.getRoleTypeId())) {
 			return ApiResp.failure(INFO_EXIST);
 		}
 
 		/**
 		 * check supper admin is or not exist
 		 */
-		if (checkSupperAdminExist() && req.getType() == 1) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.message2"));
+		if (checkSupperAdminExist() && req.getRoleTypeId() == 1) {
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg2"));
 		}
 
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
@@ -76,7 +76,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		SysRole role = SysRole.builder()
 			.surrogateId(surrogateId)
 			.name(req.getName())
-			.type(req.getType())
+			.roleTypeId(req.getRoleTypeId())
 			.remark(req.getRemark())
 			.deleted(0)
 			.status(0)
@@ -100,7 +100,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 	 * @param surrogateId 父id
 	 * @param name 角色名称
 	 */
-	protected boolean checkExit(Long surrogateId, String name, Integer type) {
+	protected boolean checkExit(Long surrogateId, String name, Long roleTypeId) {
 		QueryWrapper<SysRole> query = new QueryWrapper<>();
 		if (Objects.nonNull(surrogateId)) {
 			query.eq("surrogate_id", surrogateId);
@@ -145,19 +145,19 @@ public class SysRoleServiceImpl implements SysRoleService {
 		/**
 		 * supper admin must be only one
 		 */
-		if (before.getType() == 1 && req.getType() != 1) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.message2"));
+		if (before.getRoleTypeId() == 1 && req.getRoleTypeId() != 1) {
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg2"));
 		}
 
-		if (before.getType() != 1 && req.getType() == 1 && checkSupperAdminExist()) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.message2"));
+		if (before.getRoleTypeId() != 1 && req.getRoleTypeId() == 1 && checkSupperAdminExist()) {
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg2"));
 		}
 
 		SysRole after = SysRole.builder()
 			.id(before.getId())
 			.surrogateId(before.getSurrogateId())
 			.name(req.getName())
-			.type(req.getType())
+			.roleTypeId(req.getRoleTypeId())
 			.remark(req.getRemark())
 			.status(req.getStatus())
 			.operateIp("127.0.0.1")
@@ -183,8 +183,8 @@ public class SysRoleServiceImpl implements SysRoleService {
 		QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("surrogate_id", req.getSurrogateId());
 		SysRole before = roleMapper.selectOne(queryWrapper);
-		if (before.getType() == 1) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.message4"));
+		if (before.getRoleTypeId() == 1) {
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg4"));
 		}
 
 		UpdateWrapper<SysRole> updateWrapper = new UpdateWrapper<>();
@@ -209,7 +209,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		QueryWrapper queryRoleUser = new QueryWrapper<>();
 		queryRoleUser.eq("role_id", surrogateId);
 		Long countRoleUser = roleUserMapper.selectCount(queryRoleUser);
-		if (countRoleUser >= 1) return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.message3"));
+		if (countRoleUser >= 1) return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg3"));
 
 		QueryWrapper queryRoleAcl = new QueryWrapper<>();
 		queryRoleAcl.eq("role_id", surrogateId);

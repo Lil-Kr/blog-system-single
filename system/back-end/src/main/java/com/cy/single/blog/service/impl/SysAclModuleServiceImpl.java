@@ -122,7 +122,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 		Long count = aclModuleMapper.selectCount(query1);
 		if (count >= 1) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}

@@ -43,7 +43,7 @@ public class RoleSaveReq {
     @NotNull(groups = {GroupAdd.class, GroupEdite.class}, message = "角色类型不能为空")
     @Min(groups = {GroupAdd.class, GroupEdite.class}, value = 1, message = "角色类型范围1~3")
     @Max(groups = {GroupAdd.class, GroupEdite.class}, value = 3, message = "角色类型范围1~3")
-    private Integer type;
+    private Long roleTypeId;
 
     /**
      * 冻结状态

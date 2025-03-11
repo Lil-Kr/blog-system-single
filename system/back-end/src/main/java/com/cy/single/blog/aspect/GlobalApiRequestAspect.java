@@ -91,8 +91,7 @@ public class GlobalApiRequestAspect {
 			return proceed;
 		} catch (Throwable e) {
 			log.error("api request ERROR: {}", e.getMessage());
-			RequestHolder.remove();
-			return ApiResp.error(SYSTEM_ERROR.getCode(), SYSTEM_ERROR.getMessage() + ": " + e.getMessage());
+			return ApiResp.error(SYSTEM_ERROR.getCode(), e.getMessage());
 		} finally {
 			/**
 			 * remove user info

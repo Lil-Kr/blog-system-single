@@ -9,7 +9,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        surrogate_id, parent_id, `type`, `name`, remark
+        surrogate_id, parent_id, `name`, `type`, remark
     </sql>
 
     <!--分页查询字典明细-->
@@ -23,5 +23,52 @@
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         where parent_id = #{dictSurrogateId}
+    </select>
+
+    <!--  -->
+    <select id="pageDictDetailListById" resultType="com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO">
+        select <include refid="Base_Column_List"/>
+        from <include refid="Table_Name"/>
+        <where>
+            <if test="param.name != null and param.name != ''">
+                and name = #{param.name}
+            </if>
+            <if test="param.type != null">
+                and `type` = #{param.type}
+            </if>
+            <if test="param.dictId != null">
+                and parent_id = #{param.dictId}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `type` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="countPageDictDetail" resultType="java.lang.Integer">
+        select count(1)
+        from <include refid="Table_Name"/>
+        <where>
+            <if test="param.name != null and param.name != ''">
+                and name = #{param.name}
+            </if>
+            <if test="param.type != null">
+                and `type` = #{param.type}
+            </if>
+            <if test="param.dictId != null">
+                and parent_id = #{param.dictId}
+            </if>
+            <if test="param.keyWords!=null and param.keyWords!=''">
+                and (
+                `type` like concat('%',#{param.keyWords},'%')
+                or
+                `name` like concat('%',#{param.keyWords},'%')
+                )
+            </if>
+        </where>
     </select>
 </mapper>

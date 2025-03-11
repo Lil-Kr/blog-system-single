@@ -1,6 +1,6 @@
 import LazyLoad from '@/components/router/LazyLoad'
 import { RouterItemType } from '@/types/router/routeType'
-import { SlidersOutlined, DotChartOutlined, AreaChartOutlined } from '@ant-design/icons'
+import { SlidersOutlined, DotChartOutlined } from '@ant-design/icons'
 import { lazy } from 'react'
 
 const compsConfig: RouterItemType[] = [

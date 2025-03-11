@@ -40,8 +40,9 @@ axiosInstance.interceptors.response.use(
       if (code !== 200) {
         message.error(msg)
         return response
+      } else {
+        return data
       }
-      return data
     } else {
       message.error('网络异常')
       return response

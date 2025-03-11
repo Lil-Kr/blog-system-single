@@ -2,68 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.SysRoleMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.sys.SysRole">
-        <id column="id" property="id" />
-        <result column="surrogate_id" property="surrogateId" />
-        <result column="name" property="name" />
-        <result column="type" property="type" />
-        <result column="deleted" property="deleted" />
-        <result column="remark" property="remark" />
-        <result column="operator" property="operator" />
-        <result column="operate_ip" property="operateIp" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-    </resultMap>
-
-    <!-- 通用查询映射结果Vo -->
-    <resultMap id="BaseResultVoMap" type="com.cy.single.blog.pojo.vo.sys.role.SysRoleVo">
-        <id column="id" property="id" />
-        <result column="surrogate_id" property="surrogateId" />
-        <result column="name" property="name" />
-        <result column="type" property="type" />
-        <result column="deleted" property="deleted" />
-        <result column="remark" property="remark" />
-        <result column="operator" property="operator" />
-        <result column="operate_ip" property="operateIp" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-    </resultMap>
-
     <sql id="Table_Name">
         sys_role
     </sql>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, surrogate_id, `name`, `type`, remark, status, deleted, operate_ip, creator_id, operator, create_time, update_time
+        id, surrogate_id, `name`, role_type_id, remark, status, deleted, operate_ip, creator_id, operator, create_time, update_time
     </sql>
-
-    <!--分页查询角色列表-->
-    <!--<select id="selectRoleListPage" resultMap="BaseResultVoMap">
-        select <include refid="Base_Column_List"/>
-        from <include refid="Table_Name"/>
-        <where>
-            <if test="param.name != null">
-                name = #{param.name}
-            </if>
-            <if test="param.type != null">
-                and type = #{param.type}
-            </if>
-            <if test="param.status != null">
-                and status = #{param.status}
-            </if>
-            and deleted = 0
-        </where>
-        order by create_time asc
-    </select>-->
 
     <delete id="deleteBySurrogateId">
         delete from <include refid="Table_Name"/>
         where surrogate_id = #{surrogateId}
     </delete>
 
-    <select id="pageRoleList" resultMap="BaseResultMap">
+    <select id="pageRoleList" resultType="com.cy.single.blog.pojo.entity.sys.SysRole">
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         <where>

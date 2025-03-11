@@ -5,6 +5,7 @@ import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
 import com.cy.single.blog.pojo.req.dict.DictDetailReq;
+import com.cy.single.blog.pojo.req.dict.DictListPageReq;
 import com.cy.single.blog.pojo.req.dict.DictSaveReq;
 import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;
 
@@ -24,4 +25,8 @@ public interface SysDictService extends IService<SysDict> {
 	ApiResp<SysDictVO> dictDetail(DictDetailReq req);
 
 	SysDictVO getDict(Long surrogateId);
+
+	PageResult<SysDictVO> pageDictList(DictListPageReq req);
+
+	ApiResp<String> delete(Long surrogateId);
 }

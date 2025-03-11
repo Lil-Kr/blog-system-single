@@ -6,16 +6,19 @@ import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.dao.SysDictDetailMapper;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
-import com.cy.single.blog.pojo.req.dict.DictListPageReq;
-import com.cy.single.blog.pojo.req.dict.DictSaveDetailReq;
+import com.cy.single.blog.pojo.req.dict.DictDetailPageListReq;
+import com.cy.single.blog.pojo.req.dict.SaveDictDetailReq;
 import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
 import com.cy.single.blog.service.SysDictDetailService;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -28,22 +31,22 @@ import java.util.Objects;
 public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, SysDictDetail> implements SysDictDetailService {
 
 	@Autowired
-	private SysDictDetailMapper sysDictDetailMapper1;
+	private SysDictDetailMapper dictDetailMapper;
 
 	@Override
-	public ApiResp<String> addDetail(DictSaveDetailReq param) {
-		if (checkDetailExist(param.getSurrogateId(),param.getName())) {
+	public ApiResp<String> addDetail(SaveDictDetailReq req) {
+		if (checkDetailExist(req.getSurrogateId(),req.getName())) {
 			ApiResp.failure("待新增的字典类型明细已存在");
 		}
 
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
 		SysDictDetail dictDetail = SysDictDetail.builder()
 			.surrogateId(surrogateId)
-			.parentId(param.getParentId())
-			.name(param.getName())
-			.remark(param.getRemark())
+			.parentId(req.getParentId())
+			.name(req.getName())
+			.remark(req.getRemark())
 			.build();
-		sysDictDetailMapper1.insert(dictDetail);
+		int insert = dictDetailMapper.insert(dictDetail);
 		return ApiResp.success("新增字典明细成功");
 	}
 
@@ -59,7 +62,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 			query.eq("surrogate_id",surrogateId);
 		}
 		query.eq("name",name);
-		Long count = sysDictDetailMapper1.selectCount(query);
+		Long count = dictDetailMapper.selectCount(query);
 		if (count >= 1) {
 			return true;
 		}else {
@@ -74,22 +77,23 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 	 * @throws Exception
 	 */
 	@Override
-	public ApiResp<String> editDetail(DictSaveDetailReq req) {
+	public ApiResp<String> editDetail(SaveDictDetailReq req) {
 		if (checkDetailExist(req.getSurrogateId(),req.getName())) {
 			ApiResp.failure("待新增的字典类型明细已存在");
 		}
 		QueryWrapper<SysDictDetail> query = new QueryWrapper<>();
-		query.eq("surrogate_id",req.getSurrogateId());
-		SysDictDetail before = sysDictDetailMapper1.selectOne(query);
+		query.eq("surrogate_id", req.getSurrogateId());
+		SysDictDetail before = dictDetailMapper.selectOne(query);
 		Preconditions.checkNotNull(before, "待更新的字典明细信息不存在");
 
 		SysDictDetail after = SysDictDetail.builder()
 			.surrogateId(req.getSurrogateId())
 			.parentId(req.getParentId())
+			.type(req.getType())
 			.name(req.getName())
 			.remark(req.getRemark())
 			.build();
-		int update = sysDictDetailMapper1.update(after, query);
+		int update = dictDetailMapper.update(after, query);
 		if (update >= 1) {
 			return ApiResp.success("修改字典明细信息成功");
 		}else {
@@ -107,7 +111,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 	public ApiResp<String> deleteDetail(Long surrogateId) {
 		QueryWrapper<SysDictDetail> query = new QueryWrapper<>();
 		query.eq("surrogate_id",surrogateId);
-		int delete = sysDictDetailMapper1.delete(query);
+		int delete = dictDetailMapper.delete(query);
 		if (delete >= 1) {
 			return ApiResp.success("删除字典明细信息成功");
 		}else {
@@ -117,18 +121,17 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 
 	/**
 	 * 根据字典主表分页查询字典明细数据
-	 * @param param
+	 * @param req
 	 * @return
-	 * @throws Exception
 	 */
 	@Override
-	public PageResult<SysDictDetailVO> pageDictList(DictListPageReq param) {
-//		Page<SysDictDetail> page = new Page<>();
-//		page.setCurrent(param.getCurrent());
-//		page.setSize(param.getSize());
-//		IPage<SysDictDetail> iPage = sysDictDetailMapper1.listDetailPage(page,param);
-//
-//		return ApiResp.success(iPage);
-		return null;
+	public PageResult<SysDictDetailVO> pageDictDetailList(DictDetailPageListReq req) {
+		List<SysDictDetailVO> pageList = dictDetailMapper.pageDictDetailListById(req);
+		Integer count = dictDetailMapper.countPageDictDetail(req);
+		if (CollectionUtils.isEmpty(pageList)) {
+			return new PageResult<>(new ArrayList<>(0), 0);
+		}else {
+			return new PageResult<>(pageList, count);
+		}
 	}
 }

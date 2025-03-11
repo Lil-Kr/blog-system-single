@@ -43,7 +43,7 @@ public class SysDictDetail extends Model<SysDictDetail> {
      */
     private String name;
 
-    private String type;
+    private Integer type;
 
     /**
      * 备注
