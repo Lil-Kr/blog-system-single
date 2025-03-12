@@ -249,7 +249,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 		// 根据[权限模块id]分组
 		Map<Long, List<AclDto>> moduleIdAclMap = aclDtoList.stream()
 			.filter(aclDto -> aclDto.getStatus() == 0) // 获取正常的权限点
-			.collect(Collectors.groupingBy(aclDto -> aclDto.getAclModuleId()));
+			.collect(Collectors.groupingBy(SysAcl::getAclModuleId));
 
 		// 绑定权限点到权限模块下
 		this.bindAclsWithOrder(aclModuleDtoList, moduleIdAclMap);
@@ -261,7 +261,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 	 * @param aclModuleDtoList
 	 * @param moduleIdAclMap
 	 */
-	private void bindAclsWithOrder(List<AclModuleDto> aclModuleDtoList,Map<Long, List<AclDto>> moduleIdAclMap) {
+	private void bindAclsWithOrder(List<AclModuleDto> aclModuleDtoList, Map<Long, List<AclDto>> moduleIdAclMap) {
 		if (CollectionUtils.isEmpty(aclModuleDtoList)) {
 			return;
 		}
@@ -276,7 +276,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 				aclModuleDto.setAclDtoList(aclDtoList);
 			}
 			// 递归下一级的权限点和权限模块
-			bindAclsWithOrder(aclModuleDto.getAclModuleDtoList(),moduleIdAclMap);
+			bindAclsWithOrder(aclModuleDto.getAclModuleDtoList(), moduleIdAclMap);
 		});
 	}
 

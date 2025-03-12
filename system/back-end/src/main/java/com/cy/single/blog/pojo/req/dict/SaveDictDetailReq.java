@@ -36,7 +36,7 @@ public class SaveDictDetailReq {
     /**
      * 字典类型
      */
-    @NotNull(groups = {EditDictDetail.class}, message = "type不能为空")
+    @NotNull(groups = {AddDictDetail.class, EditDictDetail.class}, message = "type不能为空")
     private Integer type;
 
     /**

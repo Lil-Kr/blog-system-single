@@ -6,12 +6,12 @@ import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
-import com.cy.single.blog.pojo.entity.sys.SysRole;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.role.RoleListPageReq;
 import com.cy.single.blog.pojo.req.role.RoleSaveReq;
 import com.cy.single.blog.pojo.req.roleacl.RoleAclSaveReq;
 import com.cy.single.blog.pojo.req.roleuser.RoleUserReq;
+import com.cy.single.blog.pojo.vo.sys.role.SysRoleVO;
 import com.cy.single.blog.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -58,8 +58,8 @@ public class RoleController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/pageList")
-	public ApiResp<PageResult<SysRole>> pageList (@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) RoleListPageReq req) {
-		PageResult<SysRole> res = roleService.pageList(req);
+	public ApiResp<PageResult<SysRoleVO>> pageList (@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) RoleListPageReq req) {
+		PageResult<SysRoleVO> res = roleService.pageList(req);
 		return ApiResp.success(res);
 	}
 

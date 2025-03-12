@@ -89,7 +89,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 		if (Objects.nonNull(surrogateId)) {
 			query.eq("surrogate_id", surrogateId);
 		}
-		if (Objects.nonNull(surrogateId)) {
+		if (Objects.nonNull(name)) {
 			query.eq("name", name);
 		}
 		Long count = dictMapper.selectCount(query);
@@ -173,7 +173,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	}
 
 	/**
-	 * 分页查询字典列表
+	 * 分页查询字典主信息
 	 * @param req
 	 * @return
 	 */

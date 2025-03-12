@@ -35,8 +35,8 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 
 	@Override
 	public ApiResp<String> addDetail(SaveDictDetailReq req) {
-		if (checkDetailExist(req.getSurrogateId(),req.getName())) {
-			ApiResp.failure("待新增的字典类型明细已存在");
+		if (checkDetailExist(req.getSurrogateId(), req.getName(), req.getType())) {
+			return ApiResp.failure("待新增的字典类型明细已存在");
 		}
 
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
@@ -44,10 +44,15 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 			.surrogateId(surrogateId)
 			.parentId(req.getParentId())
 			.name(req.getName())
+			.type(req.getType())
 			.remark(req.getRemark())
 			.build();
 		int insert = dictDetailMapper.insert(dictDetail);
-		return ApiResp.success("新增字典明细成功");
+		if (insert >= 1) {
+			return ApiResp.success("新增字典明细成功");
+		} else {
+			return ApiResp.failure("新增字典明细失败");
+		}
 	}
 
 	/**
@@ -56,12 +61,13 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 	 * @param name
 	 * @return
 	 */
-	protected boolean checkDetailExist(Long surrogateId, String name) {
+	protected boolean checkDetailExist(Long surrogateId, String name, Integer type) {
 		QueryWrapper<SysDictDetail> query = new QueryWrapper<>();
 		if (Objects.nonNull(surrogateId)) {
 			query.eq("surrogate_id",surrogateId);
 		}
-		query.eq("name",name);
+		query.eq("name", name);
+		query.eq("type", type);
 		Long count = dictDetailMapper.selectCount(query);
 		if (count >= 1) {
 			return true;
@@ -78,8 +84,8 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 	 */
 	@Override
 	public ApiResp<String> editDetail(SaveDictDetailReq req) {
-		if (checkDetailExist(req.getSurrogateId(),req.getName())) {
-			ApiResp.failure("待新增的字典类型明细已存在");
+		if (checkDetailExist(req.getSurrogateId(), req.getName(), req.getType())) {
+			return ApiResp.failure("待新增的字典类型明细已存在");
 		}
 		QueryWrapper<SysDictDetail> query = new QueryWrapper<>();
 		query.eq("surrogate_id", req.getSurrogateId());

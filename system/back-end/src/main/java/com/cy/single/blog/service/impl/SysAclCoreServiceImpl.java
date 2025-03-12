@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.*;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
-import com.cy.single.blog.pojo.entity.sys.SysRole;
+import com.cy.single.blog.pojo.vo.sys.role.SysRoleVO;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysAclCoreService;
 import com.google.common.collect.Lists;
@@ -116,11 +116,8 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 			return false;
 		}
 
-		// 根据 roleIdList 查询角色类型
-		QueryWrapper<SysRole> query1 = new QueryWrapper<>();
-		query1.in("surrogate_id", roleIdList);
-		List<SysRole> roleList = roleMapper.selectList(query1);
+		List<SysRoleVO> roleList = roleMapper.selectRoleLIstByIds(roleIdList);
 		// 查看是否有超级管理员的角色
-		return roleList.stream().anyMatch(role -> role.getRoleTypeId() == 1);
+		return roleList.stream().anyMatch(role -> role.getType() == 1);
 	}
 }

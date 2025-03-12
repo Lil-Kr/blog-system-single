@@ -48,8 +48,7 @@ public class SysRole implements Serializable {
     /**
      * 角色类型, 1超级管理员, 2管理员, 3.普通角色
      */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long roleTypeId;
+    private Integer type;
 
     /**
      * 备注

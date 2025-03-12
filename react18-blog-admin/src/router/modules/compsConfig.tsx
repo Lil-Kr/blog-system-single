@@ -67,6 +67,16 @@ const compsConfig: RouterItemType[] = [
         },
         path: 'select',
         element: LazyLoad(lazy(() => import('@/views/comps/select/SelectDemo')))
+      },
+      {
+        meta: {
+          key: '/table-pro',
+          title: 'ProTable组件',
+          layout: false,
+          icon: <SlidersOutlined />
+        },
+        path: 'table-pro',
+        element: LazyLoad(lazy(() => import('@/views/comps/protable/ProTableDemo')))
       }
     ]
   }

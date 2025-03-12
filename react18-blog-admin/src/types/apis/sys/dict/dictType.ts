@@ -94,9 +94,20 @@ export interface PageDictDetailReq extends BaseEntityPageType {
 
 export interface PageDictDetailResp extends DictDetail {}
 
-export interface DictDetailAddReq {}
+export interface DictDetailAddReq {
+  parentId: string
+  name: string
+  type: number
+  remark?: string
+}
 
-export interface DictDetailEditReq {}
+export interface DictDetailEditReq {
+  surrogateId: string
+  parentId: string
+  name: string
+  type: number
+  remark?: string
+}
 
 export interface DictDetailDeleteReq {
   surrogateId: string

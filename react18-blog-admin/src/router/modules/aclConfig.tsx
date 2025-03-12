@@ -48,16 +48,16 @@ const aclConfig: RouterItemType[] = [
         path: 'org',
         element: LazyLoad(lazy(() => import('@/views/sys/Org')))
       },
-      {
-        meta: {
-          key: '/menu',
-          title: '菜单管理',
-          layout: false,
-          icon: <MenuOutlined />
-        },
-        path: 'menu',
-        element: LazyLoad(lazy(() => import('@/views/sys/Menu')))
-      },
+      // {
+      //   meta: {
+      //     key: '/menu',
+      //     title: '菜单管理',
+      //     layout: false,
+      //     icon: <MenuOutlined />
+      //   },
+      //   path: 'menu',
+      //   element: LazyLoad(lazy(() => import('@/views/sys/Menu')))
+      // },
       {
         meta: {
           key: '/role',
@@ -66,7 +66,7 @@ const aclConfig: RouterItemType[] = [
           icon: <UserSwitchOutlined />
         },
         path: 'role',
-        element: LazyLoad(lazy(() => import('@/views/sys/Role')))
+        element: LazyLoad(lazy(() => import('@/views/sys/role/RoleDemo')))
       },
       {
         meta: {

@@ -71,3 +71,8 @@ export const PREFIX_URL_SYS_ACL = '/sys/acl'
  * sys-dict
  */
 export const PREFIX_URL_SYS_DICT = '/sys/dict'
+
+/**
+ * sys-role
+ */
+export const PREFIX_URL_SYS_ROLE = '/sys/role'

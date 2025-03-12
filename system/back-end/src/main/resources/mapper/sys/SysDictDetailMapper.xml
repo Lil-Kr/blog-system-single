@@ -12,13 +12,6 @@
         surrogate_id, parent_id, `name`, `type`, remark
     </sql>
 
-    <!--分页查询字典明细-->
-<!--    <select id="listDetailPage" resultMap="BaseResultMap">-->
-<!--        select <include refid="Base_Column_List"/>-->
-<!--        from <include refid="Table_Name"/>-->
-<!--        where parent_id = #{param.sysDictId}-->
-<!--    </select>-->
-
     <select id="getDictDetailListByParentId" resultType="com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO">
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>

@@ -1,82 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons/lib/icons'
-import {
-  Button,
-  Card,
-  Col,
-  Divider,
-  Flex,
-  Form,
-  Input,
-  PaginationProps,
-  Popconfirm,
-  Row,
-  Space,
-  Splitter,
-  Table,
-  Tag,
-  Tooltip,
-  Typography
-} from 'antd/lib'
-import DirectoryTree from 'antd/lib/tree/DirectoryTree'
+import { Button, Divider, Flex, PaginationProps, Popconfirm, Space, Splitter, Table, Tag, Tooltip } from 'antd/lib'
 import { SelectOptionType, SelectTreeNodeType } from '@/types/apis'
 import { SizeType } from 'antd/lib/config-provider/SizeContext'
 import { useForm } from 'antd/lib/form/Form'
 import { ColumnsType, TableRowSelection } from 'antd/lib/table/interface'
 import { TablePageInfoType } from '@/types/base'
-import { createStyles } from 'antd-style'
-
-// const useStyle = createStyles(({ css, token }) => {
-// const { antCls } = token
-//   const antCls = token['antCls'] || ''
-//   return {
-//     customTable: css`
-//       ${antCls}-table {
-//         ${antCls}-table-container {
-//           ${antCls}-table-body,
-//           ${antCls}-table-content {
-//             scrollbar-width: thin;
-//             scrollbar-color: #eaeaea transparent;
-//             scrollbar-gutter: stable;
-//           }
-//         }
-//       }
-//     `
-//   }
-// })
-
-const Desc: React.FC<Readonly<{ text?: string | number }>> = props => (
-  <Flex justify='center' align='center' style={{ height: '100%' }}>
-    <Typography.Title type='secondary' level={5} style={{ whiteSpace: 'nowrap' }}>
-      {props.text}
-    </Typography.Title>
-  </Flex>
-)
-
-type RoleItem = {
-  key: string
-  aclType: string
-  name: string
-  status: number
-  remark: string
-}
-const generateAclArray = (count: number): RoleItem[] => {
-  return Array.from({ length: count }).reduce<RoleItem[]>((acc, _, i) => {
-    acc.push({
-      key: (i + 1).toString(),
-      name: `Role ${i + 1}`,
-      aclType: `User ${i + 1}`,
-      status: (i + 1) % 2 === 0 ? 1 : 0,
-      remark: `Remark for item ${i + 1}`
-    })
-    return acc
-  }, [])
-}
-
-const dataSource: any[] = generateAclArray(40)
+import { RoleListPageReq, SysRoleVO, TableRoleType } from '@/types/apis/sys/role/roleType'
+import roleApi from '@/apis/sys/roleApi'
 
 const Role = () => {
-  const columns: ColumnsType<any> = [
+  const columns: ColumnsType<TableRoleType> = [
     {
       key: 'name',
       dataIndex: 'name',
@@ -85,18 +19,24 @@ const Role = () => {
       fixed: 'left'
     },
     {
-      key: 'aclType',
-      dataIndex: 'aclType',
+      key: 'roleTypeName',
+      dataIndex: 'roleTypeName',
       title: '权限类型',
       width: '20%',
-      render: (_, record: any) => <Tag color='volcano'>{record.aclType}</Tag>
+      render: (_, record: TableRoleType) => {
+        if (record.type === 1) {
+          return <Tag color='red'>{record.type}</Tag>
+        } else {
+          return <Tag color='geekblue'>{record.type}</Tag>
+        }
+      }
     },
     {
       key: 'status',
       dataIndex: 'status',
       title: '状态',
       width: '10%',
-      render: (_, record: any) => {
+      render: (_, record: TableRoleType) => {
         let tagColor = 'green' // 默认颜色
         let statusText = '正常' // 默认文本
         // 根据状态设置不同的颜色和文本
@@ -127,7 +67,7 @@ const Role = () => {
       title: '操作',
       width: '10%',
       fixed: 'right',
-      render: (_: object, record: any) => (
+      render: (_: object, record: TableRoleType) => (
         <Space size={roleStyle}>
           <Button
             size={roleStyle}
@@ -154,31 +94,79 @@ const Role = () => {
 
   const MemoTooltip = Tooltip || React.memo(Tooltip)
   const [roleStyle, setRoleStyle] = useState<SizeType>('small')
-  const [form] = useForm()
+  // const [form] = useForm()
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
     currentPageNum: 1,
     pageSize: 10,
     totalSize: 0
   })
+  const [dataSource, setDataSource] = useState<TableRoleType[]>([] as TableRoleType[])
+  // 用于存储选中行的 key
+  const [selectedRowKey, setSelectedRowKey] = useState<string>('')
 
-  const rowSelection: TableRowSelection<any> = {
-    onChange: (selectedRowKeys, selectedRows) => {},
-    onSelect: (record, selected, selectedRows) => {},
-    onSelectAll: (selected, selectedRows, changeRows) => {}
+  /**
+   * 初始化数据
+   */
+  useEffect(() => {
+    // load org info list
+    initData()
+  }, [])
+
+  const initData = async () => {
+    setTableLoading(true)
+
+    // // 分页查询绝嗣信息
+    try {
+      const roleList = await retrievePageRoleList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+      const roleTableList = transformRoleList(roleList) // 这里传入的是 SysRoleVO[] 类型
+      // 处理 roleTableList，例如设置到状态中
+      setDataSource(roleTableList)
+    } catch (error) {
+      console.error('Failed to retrieve role list:', error)
+    } finally {
+      setTableLoading(false)
+    }
   }
 
-  const selectTreeNode = async (node: SelectTreeNodeType) => {
-    // setSelectedInfo(prevState => ({
-    //   value: node.key.toString(),
-    //   label: node.name,
-    //   selectKeys: [node.key.toString()]
-    // }))
-    // retrieveAclPageList({
-    //   aclModuleId: node.key.toString(),
-    //   currentPageNum: 1,
-    //   pageSize: tablePageInfo.pageSize
-    // })
+  /**
+   * 分页查询角色信息列表
+   * @param req
+   * @returns
+   */
+  const retrievePageRoleList = async (req: RoleListPageReq): Promise<SysRoleVO[]> => {
+    const res = await roleApi.retrievePageRoleList({ ...req })
+    const { code, data } = res
+    if (code !== 200) {
+      return []
+    }
+    return data.list as SysRoleVO[]
+  }
+
+  /**
+   * 转换角色信息列表, 用于table展示
+   * @param list
+   * @returns
+   */
+  const transformRoleList = (list: SysRoleVO[]): TableRoleType[] => {
+    const mappingList = list.map(({ surrogateId, ...rest }) => ({
+      key: surrogateId,
+      surrogateId,
+      ...rest
+    }))
+
+    return mappingList
+  }
+
+  /**
+   * 选中列表行时出发
+   * @param record
+   * @param index
+   */
+  const selectRoleRow = (record?: any, index?: number) => {
+    console.log('--> record:', { ...record })
+    console.log('--> index:', index)
+    setSelectedRowKey(record.key)
   }
 
   /**
@@ -187,7 +175,7 @@ const Role = () => {
    * @param pageSize
    */
   const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
-    const values = form.getFieldsValue()
+    // const values = form.getFieldsValue()
     // retrieveAclPageList({ ...values, currentPageNum, pageSize })
   }
 
@@ -203,28 +191,39 @@ const Role = () => {
     }))
   }
 
+  /**
+   * 选中行时改变选中样式
+   * @param record
+   * @param index
+   * @returns
+   */
+  const rowClassName = (record: any, index?: number) => {
+    return record.key === selectedRowKey ? 'selected-row' : '' // 根据选中状态返回类名
+  }
+
   return (
     <div className='sys-role-warpper' style={{ height: '100%', width: '100%' }}>
       <Flex gap='middle' vertical={true} style={{ height: '100%', width: '100%' }}>
-        {/* <Row gutter={4} style={{ height: '100%' }}>
-        </Row> */}
-
         <Splitter style={{ height: '100%', width: '100%', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', flex: 'auto' }}>
           <Splitter.Panel defaultSize='20%' min='20%' max='70%'>
-            <Divider orientation='left'>{'角色信息'}</Divider>
+            <Button icon={<PlusOutlined />} />
+            <Divider orientation='center'>
+              <div>{'角色信息'}</div>
+            </Divider>
             <Table
               key={1}
               bordered={true}
-              rowSelection={{
-                type: 'checkbox',
-                ...rowSelection
-              }}
-              loading={false}
+              loading={tableLoading}
               columns={columns}
               dataSource={dataSource}
               size={roleStyle}
+              onRow={(record, index) => ({
+                onClick: event => selectRoleRow(record, index)
+              })}
+              rowClassName={rowClassName} // 设置行的样式
               pagination={{
                 size: 'small',
+                position: ['bottomLeft'],
                 showQuickJumper: false, // 跳转指定页面
                 showSizeChanger: true,
                 hideOnSinglePage: false,
@@ -236,23 +235,8 @@ const Role = () => {
               }}
             />
           </Splitter.Panel>
-          <Splitter.Panel>
-            <Desc text='Second' />
-          </Splitter.Panel>
+          <Splitter.Panel>{'abababa'}</Splitter.Panel>
         </Splitter>
-        {/* <AclModuleModal
-          mRef={aclModuleRef}
-          update={() => {
-            retrieveAclModuleTreeList()
-          }}
-        />
-        <AclModal
-          mRef={aclRef}
-          update={() => {
-            // 只需要渲染权限点列表即可
-            retrieveAclPageList({ currentPageNum: 1, pageSize: tablePageInfo.pageSize })
-          }}
-        /> */}
       </Flex>
     </div>
   )
