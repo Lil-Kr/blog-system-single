@@ -20,4 +20,6 @@ public interface SysDictDetailMapper extends BaseMapper<SysDictDetail> {
 	List<SysDictDetailVO> pageDictDetailListById(@Param("param") DictDetailPageListReq req);
 
 	Integer countPageDictDetail(@Param("param") DictDetailPageListReq req);
+
+	List<SysDictDetailVO> dictDetailTree();
 }

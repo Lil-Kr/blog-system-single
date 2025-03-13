@@ -6,8 +6,8 @@ import { useMenuStore, useTabsStore } from '@/store/global/globalStore'
 import Logo from './logo/Logo'
 
 const MenuLayout = () => {
-  const { setTabActive, removeTab } = useTabsStore()
-  const { selectedKeys, openKeys, setSelectedKeys, setOpenMenuKeys } = useMenuStore()
+  const { setTabActive } = useTabsStore()
+  const { selectedKeys, openKeys, setOpenMenuKeys } = useMenuStore()
   const navigateTo = useNavigate()
 
   /**

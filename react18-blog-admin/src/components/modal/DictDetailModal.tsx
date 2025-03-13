@@ -63,8 +63,6 @@ const DictDetailModal = (props: ModalType.CustomModal) => {
         return
       }
       message.success(msg)
-      handleCancel()
-      update()
     } else if (action === 'edit') {
       const req = {
         surrogateId: params.key,
@@ -75,12 +73,13 @@ const DictDetailModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      message.info(msg)
-      handleCancel()
-      update()
+      message.success(msg)
     } else {
       return
     }
+
+    handleCancel()
+    update()
   }
 
   const handleCancel = () => {

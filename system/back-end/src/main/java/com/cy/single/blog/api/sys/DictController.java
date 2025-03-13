@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -87,6 +89,17 @@ public class DictController {
 	}
 
 	/**
+	 * 获取字典明细树
+	 * @return
+	 */
+	@CheckAuth
+	@RecordLogger
+	@GetMapping("/dictDetailTree")
+	public ApiResp<Map<String, List<SysDictDetailVO>>> dictDetailTree() {
+		return dictService.dictDetailTree();
+	}
+
+	/**
 	 * 字典明细分页查询
 	 * @param req
 	 * @return
@@ -139,6 +152,11 @@ public class DictController {
 		return dictDetailService.deleteDetail(surrogateId);
 	}
 
+	/**
+	 *
+	 * @param req
+	 * @return
+	 */
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("dictDetail")

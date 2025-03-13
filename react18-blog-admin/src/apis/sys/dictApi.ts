@@ -9,6 +9,7 @@ import {
   DictDetailListReq,
   DictDetailResp,
   DictEditReq,
+  DictMapType,
   DictPageListReq,
   DictPageListResp,
   PageDictDetailReq,
@@ -44,7 +45,10 @@ const dictApi: DictApi = {
   },
   deleteDictDetail(req: DictDetailDeleteReq) {
     return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_SYS_DICT + '/deleteDetail', req)
+  },
+  dictDetailTree() {
+    return baseAxiosRequest.get<Result<Map<string, DictMapType[]>>>(PREFIX_URL_SYS_DICT + '/dictDetailTree', {})
   }
 }
-//   editDictDetail(req: DictDetailEditReq): Promise<Result<string>>
+
 export { dictApi }

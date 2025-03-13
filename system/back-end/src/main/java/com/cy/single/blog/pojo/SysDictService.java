@@ -7,7 +7,11 @@ import com.cy.single.blog.pojo.entity.sys.SysDict;
 import com.cy.single.blog.pojo.req.dict.DictDetailReq;
 import com.cy.single.blog.pojo.req.dict.DictListPageReq;
 import com.cy.single.blog.pojo.req.dict.DictSaveReq;
+import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
 import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Lil-K
@@ -29,4 +33,6 @@ public interface SysDictService extends IService<SysDict> {
 	PageResult<SysDictVO> pageDictList(DictListPageReq req);
 
 	ApiResp<String> delete(Long surrogateId);
+
+	ApiResp<Map<String, List<SysDictDetailVO>>> dictDetailTree();
 }

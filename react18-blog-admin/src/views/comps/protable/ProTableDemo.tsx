@@ -164,6 +164,11 @@ const ProTableDemo = () => {
     return res
   }
 
+  /**
+   * 删除动作
+   * @param id
+   * @returns
+   */
   const deleteDetailConfirm = async (id: string) => {
     const res = await dictApi.deleteDictDetail({ surrogateId: id })
     const { code, msg, data } = res
@@ -174,7 +179,10 @@ const ProTableDemo = () => {
     initData()
   }
 
-  const abc = () => {
+  /**
+   * 修改完明细之后刷新
+   */
+  const refreash = () => {
     // message.info('测试')
     initData()
   }
@@ -188,6 +196,7 @@ const ProTableDemo = () => {
         // maxLength={5} // 最大的行数, 到达最大行数新建按钮会自动消失
         recordCreatorProps={{
           position: 'bottom',
+          creatorButtonText: '新增字典明细',
           record: () => ({
             key: (Math.random() * 10).toFixed(0), // 生成唯一的 key
             parentId: '',
@@ -200,41 +209,38 @@ const ProTableDemo = () => {
         size={roleStyle}
         columns={columns}
         value={dictDetailDataSource}
-        onChange={abc}
+        onChange={refreash}
         editable={{
           type: 'multiple',
           editableKeys,
           onSave: async (rowKey, rowData, row) => {
-            console.log('--> data:', { ...rowData })
-            // console.log('--> row:', { ...row })
-            // 这里可以添加保存逻辑, 例如发送请求到服务器
-
-            if (rowData.key.length < 3) {
+            // console.log('--> data:', { ...rowData })
+            if (rowData.key.length < 2) {
               // 新增
-              const res = await dictApi.addDictDetail({
-                parentId: '1334038283956654080',
-                type: rowData.type,
-                name: rowData.name,
-                remark: rowData.remark
-              })
-              const { code, msg, data } = res
-              if (code !== 200) {
-                return
-              }
-              message.success(msg)
+              // const res = await dictApi.addDictDetail({
+              //   parentId: '1334038283956654080',
+              //   type: rowData.type,
+              //   name: rowData.name,
+              //   remark: rowData.remark
+              // })
+              // const { code, msg, data } = res
+              // if (code !== 200) {
+              //   return
+              // }
+              // message.success(msg)
             } else {
-              const res = await dictApi.editDictDetail({
-                surrogateId: rowData.key,
-                parentId: '1334038283956654080',
-                type: rowData.type,
-                name: rowData.name,
-                remark: rowData.remark
-              })
-              const { code, msg, data } = res
-              if (code !== 200) {
-                return
-              }
-              message.success(msg)
+              // const res = await dictApi.editDictDetail({
+              //   surrogateId: rowData.key,
+              //   parentId: 'abc',
+              //   type: rowData.type,
+              //   name: rowData.name,
+              //   remark: rowData.remark
+              // })
+              // const { code, msg, data } = res
+              // if (code !== 200) {
+              //   return
+              // }
+              // message.success(msg)
             }
           },
           onChange: setEditableRowKeys // 更新可编辑行的函数

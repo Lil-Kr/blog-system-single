@@ -2,10 +2,12 @@ import React, { useImperativeHandle, useState } from 'react'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { Modal, Form, Input, InputNumber, Select } from 'antd/lib'
 const { TextArea } = Input
-import { OptionType } from '@/types/apis'
+import { OptionType, transformTypeToSeletor } from '@/types/apis'
 import { message } from 'antd'
 import { AclModuleAddReq, AclModuleEditReq, AclModuleTableType } from '@/types/apis/sys/acl/aclType'
 import { aclModuleApi } from '@/apis/sys'
+import useDictDetailStore from '@/store/global/dictStore'
+import { DictMapType } from '@/types/apis/sys/dict/dictType'
 
 const AclModuleModal = (props: ModalType.CustomModal) => {
   const { mRef, update } = props
@@ -18,8 +20,13 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
   const [requestParams, setRequestParams] = useState<IModalRequestAction>({
     api: {}
   })
+  const { setDictMap, dictMap } = useDictDetailStore()
   const [selectorList, setSelectorList] = useState<OptionType[]>([])
-  const [selectedValue, setSelectedValue] = useState<string>('')
+  const [status, setStatus] = useState<OptionType[]>([])
+  const [selectedValue, setSelectedValue] = useState<{
+    parentAclModuleInfo: OptionType
+    statusInfo: OptionType
+  }>({ parentAclModuleInfo: { label: '', value: '' }, statusInfo: { label: '', value: '' } })
 
   useImperativeHandle(mRef, () => ({
     form: modalForm,
@@ -47,6 +54,15 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
       label: '-'
     })
     setSelectorList(list)
+
+    // 初始化数据
+    initData()
+  }
+
+  const initData = () => {
+    const statusTypes: DictMapType[] = dictMap.get('状态类型') ?? []
+    const statusTypeSelecor = transformTypeToSeletor(statusTypes)
+    setStatus(statusTypeSelecor)
   }
 
   const open = (
@@ -56,6 +72,8 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
     modalStyle: IModalStyle,
     data?: AclModuleTableType
   ) => {
+    // load all org list
+    setSelectorValueComp()
     const { action, open } = type
     const { title } = params
 
@@ -65,24 +83,37 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
         label: data?.name ?? '',
         value: data?.surrogateId ?? ''
       }
+
+      const statusInfo: OptionType = {
+        value: status[0]?.value ?? '',
+        label: status[0]?.label ?? ''
+      }
       // 绑定当前选中的树节点的值
       modalForm.setFieldsValue({
-        parentAclModuleInfo: parentAclModuleInfo
+        parentAclModuleInfo: parentAclModuleInfo,
+        statusInfo: status[0]?.value ?? ''
       })
 
       // 新打开页面时默认加载当前选中树节点的信息
-      setSelectedValue(parentAclModuleInfo.value ?? '')
+      setSelectedValue({ parentAclModuleInfo, statusInfo })
     } else if (action === 'edit') {
-      modalForm.setFieldsValue({ ...data })
+      const parentAclModuleInfo: OptionType = {
+        label: data?.name ?? '',
+        value: data?.surrogateId ?? ''
+      }
+      const statusInfo: OptionType = {
+        value: data?.status?.toString() ?? '',
+        label: status.find(item => item.value === data?.status?.toString())?.label ?? ''
+      }
 
-      setSelectedValue(data?.parentAclModuleInfo?.value ?? '')
+      // 绑定当前数据
+      modalForm.setFieldsValue({ parentAclModuleInfo, statusInfo, ...data })
+      setSelectedValue({ parentAclModuleInfo, statusInfo })
     } else {
       modalForm.setFieldsValue(data)
       setInputDisabled(true)
     }
 
-    // load all org list
-    setSelectorValueComp()
     setOpenModal(open)
     setAction(action)
     setTitle(title)
@@ -90,6 +121,10 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
     setmdalStyle(modalStyle)
   }
 
+  /**
+   * 点击保存按钮事件
+   * @returns
+   */
   const handleOk = async () => {
     const valid = await modalForm.validateFields()
     const { api } = requestParams
@@ -101,7 +136,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
     if (action === 'create') {
       const addReq: AclModuleAddReq = {
         name: params.name,
-        parentSurrogateId: selectedValue,
+        parentSurrogateId: selectedValue?.parentAclModuleInfo?.value ?? '0',
         seq: params.seq,
         status: params.status,
         remark: params.remark
@@ -112,29 +147,38 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
         return
       }
       message.success(msg)
-      handleCancel()
-      update()
     } else if (action === 'edit') {
       const editReq: AclModuleEditReq = {
         surrogateId: params.key,
         name: params.name,
-        parentSurrogateId: selectedValue,
+        parentSurrogateId: selectedValue?.parentAclModuleInfo?.value ?? '0',
         seq: params.seq,
         status: params.status,
         remark: params.remark
       }
-      // console.log('--> editReq:', editReq)
       const res = await api.edit!(editReq)
       const { code, msg } = res
       if (code !== 200) {
         return
       }
       message.success(msg)
-      handleCancel()
-      update()
     } else {
       return
     }
+    handleCancel()
+    update()
+  }
+
+  const handleChangeStatus = (value: string) => {
+    const statusInfo = status.find(item => item.value === value) ?? {
+      value: '',
+      label: ''
+    }
+
+    setSelectedValue(prevState => ({
+      ...prevState,
+      statusInfo: statusInfo
+    }))
   }
 
   const handleCancel = () => {
@@ -144,7 +188,10 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
   }
 
   const handleChange = (value: string) => {
-    setSelectedValue(value)
+    setSelectedValue(prevState => ({
+      ...prevState,
+      parentAclModuleInfo: { label: prevState.parentAclModuleInfo.label, value: value }
+    }))
   }
 
   return (
@@ -194,8 +241,15 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
           <Form.Item key={3} name={'seq'} label={'顺序'} rules={[{ required: true, message: '顺序不能为空' }]}>
             <InputNumber placeholder={'顺序必填'} style={{ width: '100%' }} min={0} max={10000} />
           </Form.Item>
-          <Form.Item key={4} name={'status'} label={'状态'} rules={[{ required: true, message: '状态不能为空' }]}>
-            <InputNumber placeholder={'状态必填, 0:正常, 1:冻结, 2: 其他'} style={{ width: '100%' }} min={0} max={2} />
+          <Form.Item key={4} name={'statusInfo'} label={'状态'} rules={[{ required: true, message: '状态不能为空' }]}>
+            <Select
+              onChange={value => handleChangeStatus(value)}
+              showSearch={true}
+              placeholder={'状态'}
+              optionFilterProp='children'
+              filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              options={status}
+            />
           </Form.Item>
           <Form.Item
             key={5}

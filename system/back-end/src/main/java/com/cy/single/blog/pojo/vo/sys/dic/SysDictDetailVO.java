@@ -12,4 +12,6 @@ import lombok.ToString;
 @ToString
 @Data
 public class SysDictDetailVO extends SysDictDetail {
+
+	private String parentName;
 }

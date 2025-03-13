@@ -1,11 +1,16 @@
 import React, { useImperativeHandle, useState } from 'react'
-import { OptionType } from '@/types/apis'
+import { OptionType, transformTypeToSeletor } from '@/types/apis'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import TextArea from 'antd/es/input/TextArea'
 import { Form, Input, InputNumber, message, Modal, Select } from 'antd/lib'
+const { TextArea } = Input
 import { aclModuleApi } from '@/apis/sys'
 import { AclAddReq, AclEditReq, AclModalType } from '@/types/apis/sys/acl/aclType'
-import { dictApi } from '@/apis/sys/dictApi'
+import { DictMapType } from '@/types/apis/sys/dict/dictType'
+import useDictDetailStore from '@/store/global/dictStore'
+
+type CallBackType = {
+  aclModuleId: string
+}
 
 const AclModal = (props: ModalType.CustomModal) => {
   const { mRef, update } = props
@@ -14,10 +19,12 @@ const AclModal = (props: ModalType.CustomModal) => {
   const [title, setTitle] = useState('')
   const [openModal, setOpenModal] = useState(false)
   const [inputDisabled, setInputDisabled] = useState<boolean>(false)
-  const [modalStyle, setmdalStyle] = useState<IModalStyle>()
   const [requestParams, setRequestParams] = useState<IModalRequestAction>({
     api: {}
   })
+
+  // 设置回调参数
+  const [callBack, setCallBack] = useState<CallBackType>({ aclModuleId: '' })
   const [aclModuleList, setAclModuleList] = useState<OptionType[]>([])
   const [aclTypeList, setAclTypeList] = useState<OptionType[]>([])
   const [selectedValue, setSelectedValue] = useState<{
@@ -25,11 +32,8 @@ const AclModal = (props: ModalType.CustomModal) => {
     status?: OptionType
     aclType?: OptionType
   }>()
-  const [status, setStatus] = useState<OptionType[]>([
-    { label: '正常', value: '0' },
-    { label: '冻结', value: '1' },
-    { label: '其他', value: '2' }
-  ])
+  const [status, setStatus] = useState<OptionType[]>([])
+  const { setDictMap, dictMap } = useDictDetailStore()
 
   useImperativeHandle(mRef, () => ({
     form: modalForm,
@@ -42,24 +46,25 @@ const AclModal = (props: ModalType.CustomModal) => {
    */
   const setSelectorValueComp = async () => {
     retrieveAclModuleList()
-    retrieveDictDetail()
+    /**
+     * 初始化[权限点类型]下拉列表数据
+     */
+    const aclTypes: DictMapType[] = dictMap.get('权限点类型') ?? []
+    const aclTypeSelecor = transformTypeToSeletor(aclTypes)
+    setAclTypeList(aclTypeSelecor)
+
+    /**
+     * 初始化[状态类型]下拉列表数据
+     */
+    const statusTypes: DictMapType[] = dictMap.get('状态类型') ?? []
+    const statusTypeSelecor = transformTypeToSeletor(statusTypes)
+    setStatus(statusTypeSelecor)
   }
 
-  const retrieveDictDetail = async () => {
-    const res = await dictApi.dictDetail({ dictSurrogateId: '1334038283956654080' })
-    const { code, data } = res
-    if (code !== 200) {
-      setAclTypeList([])
-      return
-    }
-
-    let dictDetails: OptionType[] = data.dictDetailVOList.map(({ surrogateId, name }) => ({
-      value: surrogateId,
-      label: name
-    }))
-    setAclTypeList(dictDetails)
-  }
-
+  /**
+   *
+   * @returns
+   */
   const retrieveAclModuleList = async () => {
     const aclModules = await aclModuleApi.aclModuleList({})
     const { code, data } = aclModules
@@ -98,55 +103,56 @@ const AclModal = (props: ModalType.CustomModal) => {
         value: data?.aclModuleId ?? '',
         label: data?.aclModuleName ?? ''
       }
+      // 打开modal是绑定第一个
+      const statusTypes: DictMapType[] = dictMap.get('状态类型') ?? []
       const statusInfo: OptionType = {
-        value: data?.status?.toString() ?? '',
-        label: status[0].label ?? ''
+        value: statusTypes[0]?.type.toString() ?? '',
+        label: statusTypes[0]?.name
       }
+
+      const aclTypes: DictMapType[] = dictMap.get('权限点类型') ?? []
+      const aclTypeInfo: OptionType = {
+        value: aclTypes[0]?.type.toString() ?? '',
+        label: aclTypes[0]?.name
+      }
+
       // 绑定当前选中的树节点的值
       modalForm.setFieldsValue({
-        aclModuleInfo,
-        statusInfo
+        aclModuleInfo: data?.aclModuleId ?? '',
+        statusInfo: statusTypes[0]?.type.toString() ?? '',
+        aclTypeInfo: aclTypes[0]?.type.toString() ?? ''
       })
 
-      setSelectedValue({ aclModuleInfo: aclModuleInfo, status: statusInfo })
+      setSelectedValue({ aclModuleInfo: aclModuleInfo, status: statusInfo, aclType: aclTypeInfo })
     } else if (action === 'edit') {
       const aclModuleInfo: OptionType = {
         value: data?.aclModuleId ?? '',
         label: data?.aclModuleName ?? ''
       }
+      const aclTypes = dictMap.get('权限点类型') ?? []
       const aclTypeInfo: OptionType = {
-        value: data?.aclTypeId ?? '',
-        label: data?.aclTypeName ?? ''
+        value: data?.type?.toString() ?? '',
+        label: aclTypes?.find(item => item.type === data?.type)?.name ?? ''
       }
+
+      const statusTypes = dictMap.get('状态类型') ?? []
       const statusInfo: OptionType = {
         value: data?.status?.toString() ?? '',
-        label: status.find(item => item.value === data?.status?.toString())?.label ?? ''
+        label: statusTypes.find(item => item.type === data?.type)?.name ?? ''
       }
       modalForm.setFieldsValue({
-        aclModuleInfo,
-        aclTypeInfo,
-        statusInfo,
+        aclModuleInfo: data?.aclModuleId ?? '',
+        aclTypeInfo: data?.type?.toString() ?? '',
+        statusInfo: data?.status?.toString() ?? '',
         ...data
       })
 
       setSelectedValue({ aclModuleInfo: aclModuleInfo, status: statusInfo, aclType: aclTypeInfo })
     } else {
-      const aclModuleInfo: OptionType = {
-        value: data?.aclModuleId ?? '',
-        label: data?.aclModuleName ?? ''
-      }
-      const aclTypeInfo: OptionType = {
-        value: data?.aclTypeId ?? '',
-        label: data?.aclTypeName ?? ''
-      }
-      const statusInfo: OptionType = {
-        value: data?.status?.toString() ?? '',
-        label: status.find(item => item.value === data?.status?.toString())?.label ?? ''
-      }
       modalForm.setFieldsValue({
-        aclModuleInfo,
-        aclTypeInfo,
-        statusInfo,
+        aclModuleInfo: data?.aclModuleId ?? '',
+        aclTypeInfo: data?.type?.toString() ?? '',
+        statusInfo: data?.status?.toString() ?? '',
         ...data
       })
       setInputDisabled(true)
@@ -156,7 +162,9 @@ const AclModal = (props: ModalType.CustomModal) => {
     setAction(action)
     setTitle(title)
     setRequestParams(requestParams)
-    setmdalStyle(modalStyle)
+
+    const { aclModuleSurrogateId } = data ?? {}
+    setCallBack({ aclModuleId: aclModuleSurrogateId ?? '' })
   }
 
   /**
@@ -170,10 +178,11 @@ const AclModal = (props: ModalType.CustomModal) => {
     if (!valid) {
       return
     }
-
     if (action === 'create') {
       const addReq: AclAddReq = {
         aclModuleId: params.aclModuleInfo.value,
+        status: selectedValue?.status?.value,
+        type: selectedValue?.aclType?.value,
         ...params
       }
       const res = await api.add!(addReq)
@@ -187,7 +196,7 @@ const AclModal = (props: ModalType.CustomModal) => {
         surrogateId: params.key,
         aclModuleId: selectedValue?.aclModuleInfo?.value,
         status: selectedValue?.status?.value,
-        aclTypeId: selectedValue?.aclType?.value,
+        type: selectedValue?.aclType?.value,
         ...params
       }
       const res = await api.edit!(editReq)
@@ -195,11 +204,11 @@ const AclModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      message.info(msg)
+      message.success(msg)
     }
 
     handleCancel()
-    update()
+    update({ ...callBack })
   }
 
   const handleCancel = () => {
@@ -215,12 +224,17 @@ const AclModal = (props: ModalType.CustomModal) => {
     }))
   }
 
+  /**
+   * 选择状态时更新
+   * @param value
+   */
   const handleChangeStatus = (value: string) => {
     setSelectedValue(prevState => ({
       ...prevState,
-      status: { label: prevState?.status?.label, value: value }
+      status: { ...prevState?.status, value: value }
     }))
   }
+
   const handleChangeAcl = (value: string) => {
     setSelectedValue(prevState => ({
       ...prevState,
@@ -285,7 +299,7 @@ const AclModal = (props: ModalType.CustomModal) => {
           </Form.Item>
           <Form.Item
             key={6}
-            name={'aclTypeId'}
+            name={'aclTypeInfo'}
             label={'权限类型'}
             rules={[{ required: true, message: '权限类型不能为空' }]}
           >

@@ -28,7 +28,7 @@ export interface SysAcl {
   number: string
   name: string
   aclModuleId: string
-  aclTypeId: string
+  type: number
   url: string
   status: number
   seq: number
@@ -137,7 +137,6 @@ export interface TableAclListType extends SysAcl {
   creatorName: string
   operatorName: string
   nickName: string
-  type: string
   aclTypeName: string
 }
 
@@ -154,8 +153,9 @@ export interface AclModuleApi extends BaseApi {
 export interface AclModalType {
   key?: string
   aclModuleId?: string
+  aclModuleSurrogateId?: string | '' // 用户添加和编辑之后回调函数, 存储当前选中的权限树节点
   aclModuleName?: string
-  aclTypeId?: string
+  type?: number
   aclTypeName?: string
   name?: string
   url?: string
@@ -173,14 +173,14 @@ export interface AclPageListResp extends SysAcl {
   creatorName: string
   operatorName: string
   nickName: string
-  type: string
+  type: number
   aclTypeName: string
 }
 
 export interface AclAddReq {
   name: string
   aclModuleId: string
-  aclTypeId: string
+  type: string
   url: string
   status: number
   seq: number

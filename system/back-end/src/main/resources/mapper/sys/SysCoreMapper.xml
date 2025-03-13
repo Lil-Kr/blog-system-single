@@ -10,7 +10,7 @@
         <result column="name" property="name" />
         <result column="acl_module_id" property="aclModuleId" />
         <result column="url" property="url" />
-        <result column="type" property="aclTypeId" />
+        <result column="type" property="type" />
         <result column="status" property="status" />
         <result column="seq" property="seq" />
         <result column="remark" property="remark" />
@@ -28,7 +28,7 @@
         <result column="name" property="name" />
         <result column="acl_module_id" property="aclModuleId" />
         <result column="url" property="url" />
-        <result column="type" property="aclTypeId" />
+        <result column="type" property="type" />
         <result column="status" property="status" />
         <result column="seq" property="seq" />
         <result column="remark" property="remark" />

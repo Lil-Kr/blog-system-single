@@ -8,7 +8,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, surrogate_id, `number`, `name`, acl_module_id, url, acl_type_id, status, seq, remark, operate_ip, creator_id, operator, create_time, update_time
+        id, surrogate_id, `number`, `name`, acl_module_id, url, `type`, status, seq, remark, operate_ip, creator_id, operator, create_time, update_time
     </sql>
 
     <!--根据权限id列表查询权限点列表-->
@@ -20,7 +20,7 @@
             a.`name`,
             a.acl_module_id,
             a.url,
-            a.acl_type_id,
+            a.type,
             a.status,
             a.seq,
             a.remark,
@@ -36,7 +36,6 @@
         left join sys_acl_module as d on (a.acl_module_id = d.surrogate_id)
         left join sys_user as b on (a.creator_id = b.surrogate_id)
         left join sys_user as c on (a.operator = c.surrogate_id)
-        left join sys_dict_detail as e on (a.acl_type_id = e.surrogate_id)
         <where>
             a.surrogate_id in (
             <foreach collection="userAclIdList" index="index" item="aclId" separator=",">
@@ -55,7 +54,7 @@
             a.`name`,
             a.acl_module_id,
             a.url,
-            a.acl_type_id,
+            a.type,
             a.status,
             a.seq,
             a.remark,
@@ -67,14 +66,11 @@
             b.name as 'acl_module_name',
             c.account as 'creator_name',
             d.account as 'operator_name',
-            d.user_name as 'nick_name',
-            e.type,
-            e.name as 'acl_type_name'
+            d.user_name as 'nick_name'
         from sys_acl as a
         left join sys_acl_module as b on (a.acl_module_id = b.surrogate_id)
         left join sys_user as c on (a.creator_id = c.surrogate_id)
         left join sys_user as d on (a.operator = d.surrogate_id)
-        left join sys_dict_detail as e on (a.acl_type_id = e.surrogate_id)
         <where>
             <if test="param.aclModuleId != null">
                 a.acl_module_id = #{param.aclModuleId}

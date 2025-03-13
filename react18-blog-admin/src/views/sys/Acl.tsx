@@ -16,7 +16,8 @@ import {
   Table,
   Tag,
   Tooltip,
-  TreeDataNode
+  TreeDataNode,
+  Typography
 } from 'antd/lib'
 import DirectoryTree from 'antd/lib/tree/DirectoryTree'
 import { TablePageInfoType } from '@/types/base'
@@ -32,67 +33,74 @@ import { ColumnsType } from 'antd/lib/table'
 import { message } from 'antd'
 import AclModal from '@/components/modal/AclModal'
 import { useForm } from 'antd/lib/form/Form'
+import useDictDetailStore from '@/store/global/dictStore'
+const { Title, Paragraph, Text, Link } = Typography
 
 const Acl = () => {
-  const columns: ColumnsType<TableAclListType> = [
+  const columnAcl: ColumnsType<TableAclListType> = [
     {
       key: 'name',
       dataIndex: 'name',
       title: '权限点名',
-      width: 100
+      width: '10%',
+      render: (_, record: TableAclListType) => <Tag color='purple'>{record.name}</Tag>
     },
     {
       key: 'aclModuleName',
       dataIndex: 'aclModuleName',
       title: '所属权限模块',
-      width: 100,
+      width: '10%',
       render: (_, record: TableAclListType) => <Tag color='magenta'>{record.aclModuleName}</Tag>
     },
     {
       key: 'url',
       dataIndex: 'url',
       title: 'url',
-      width: 50
+      width: '10%'
     },
     {
       key: 'type',
       dataIndex: 'type',
-      title: '权限类型',
-      width: 50,
-      render: (_, record: TableAclListType) => <Tag color='volcano'>{record.aclTypeName}</Tag>
+      title: '权限点类型',
+      width: '10%',
+      render: (_, record: TableAclListType) => {
+        const aclTypes = dictMap.get('权限点类型')
+        const value = aclTypes?.find(item => item.type === record.type)
+        return <Tag color='volcano'>{value?.name}</Tag>
+      }
     },
     {
       key: 'seq',
       dataIndex: 'seq',
       title: '顺序',
-      width: 50
+      width: '5%'
     },
     {
       key: 'status',
       dataIndex: 'status',
       title: '状态',
-      width: 50,
+      width: '5%',
       render: (_, record: TableAclListType) => {
         let tagColor = 'green' // 默认颜色
-        let statusText = '正常' // 默认文本
+
+        const statusTyps = dictMap.get('状态类型')
+        // console.log('--> record.status:', record.status)
+        const statusType = statusTyps?.find(item => item.type === record.status)
         // 根据状态设置不同的颜色和文本
-        switch (record.status) {
+        switch (statusType?.type) {
           case 0:
             tagColor = 'green'
-            statusText = '正常'
             break
           case 1:
             tagColor = 'red'
-            statusText = '冻结'
             break
           default:
             tagColor = 'gray'
-            statusText = '未知'
             break
         }
         return (
           <Tag key={record.key} color={tagColor}>
-            {statusText}
+            {statusType?.name}
           </Tag>
         )
       }
@@ -101,43 +109,37 @@ const Acl = () => {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: 100
+      width: '20%'
     },
     {
       key: 'createTime',
       dataIndex: 'createTime',
       title: '创建时间',
-      width: 50
+      width: '10%'
     },
     {
       key: 'updateTime',
       dataIndex: 'updateTime',
       title: '修改时间',
-      width: 50
+      width: '10%'
     },
     {
       key: 'operatorName',
       dataIndex: 'operatorName',
       title: '操作人',
-      width: 50
+      width: '5%'
     },
     {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
-      width: 150,
+      width: '5%',
       render: (_: object, record: TableAclListType) => (
-        <Space size='middle'>
+        <Space size={aclTableSize}>
           <Button
-            name='look'
-            type='primary'
-            shape='circle'
-            icon={<SearchOutlined />}
-            onClick={() => lookItem(record.key ?? '', record)}
-          />
-          <Button
+            size={btnSize}
             name='edit'
-            type='primary'
+            type='link'
             shape='circle'
             icon={<EditOutlined />}
             onClick={() => editItem(record.key ?? '', record)}
@@ -150,7 +152,7 @@ const Acl = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
+            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
       )
@@ -158,7 +160,8 @@ const Acl = () => {
   ]
 
   const MemoTooltip = Tooltip || React.memo(Tooltip)
-  const [btnSize] = useState<SizeType>('middle')
+  const [btnSize] = useState<SizeType>('small')
+  const [aclTableSize] = useState<SizeType>('small')
   const [form] = useForm()
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
@@ -169,6 +172,7 @@ const Acl = () => {
   const [selectedInfo, setSelectedInfo] = useState<SelectOptionType>({} as SelectOptionType)
   const [aclModuleTree, setAclModuleTree] = useState<TreeDataNode[]>([] as TreeDataNode[])
   const [dataSource, setDataSource] = useState<TableAclListType[]>([] as TableAclListType[])
+  const { setDictMap, dictMap } = useDictDetailStore()
   const aclModuleRef = useRef<{
     open: (
       requestParams: IModalRequestAction,
@@ -204,10 +208,9 @@ const Acl = () => {
     setTableLoading(true)
 
     // 加载权限模块树
-    // retrieveAclModuleTreeList()
     initAclModuleTreeList()
 
-    // // 加载全部权限模块, 分页
+    // 加载全部权限模块, 分页
     retrieveAclPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
 
     setTableLoading(false)
@@ -221,7 +224,7 @@ const Acl = () => {
     /**
      * 首次渲染设置
      */
-    setSelectedInfo({ value: selectKey, label: label.toString(), selectKeys: [selectKey] })
+    setSelectedInfo({ value: selectKey, label: label.toString(), selectKeys: [selectKey], aclModuleId: selectKey })
 
     retrieveAclPageList({
       aclModuleId: selectKey,
@@ -325,7 +328,8 @@ const Acl = () => {
     setSelectedInfo(prevState => ({
       value: node.key.toString(),
       label: node.name,
-      selectKeys: [node.key.toString()]
+      selectKeys: [node.key.toString()],
+      aclModuleId: node.key.toString()
     }))
 
     retrieveAclPageList({
@@ -371,14 +375,7 @@ const Acl = () => {
    */
   const resetSearch = () => {
     form.resetFields()
-  }
-
-  /**
-   * 查询全部权限点信息列表
-   */
-  const allSearch = () => {
-    form.resetFields()
-    retrieveAclPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    retrieveAclPageList({ aclModuleId: selectedInfo.aclModuleId, currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
 
   /**
@@ -416,7 +413,11 @@ const Acl = () => {
       { title: '添加权限点' },
       { action: 'create', open: true }, // create | edit | look
       { style: { maxWidth: '40vw' } },
-      { aclModuleId: selectedInfo.value, aclModuleName: selectedInfo.label }
+      {
+        aclModuleId: selectedInfo.value,
+        aclModuleName: selectedInfo.label,
+        aclModuleSurrogateId: selectedInfo.aclModuleId
+      }
     )
   }
 
@@ -429,8 +430,9 @@ const Acl = () => {
       {
         key,
         aclModuleId: selectedInfo.value,
+        aclModuleSurrogateId: selectedInfo.aclModuleId,
         aclModuleName: selectedInfo.label,
-        aclTypeId: record.aclTypeId,
+        type: record.type,
         aclTypeName: record.aclTypeName,
         name: record.name,
         url: record.url,
@@ -441,33 +443,38 @@ const Acl = () => {
     )
   }
 
-  const lookItem = (key: string, record: TableAclListType) => {
-    aclRef.current?.open(
-      { api: aclApi },
-      { title: '查看权限点' },
-      { action: 'look', open: true }, // create | edit | look
-      { style: { maxWidth: '40vw' } },
-      {
-        key,
-        aclModuleId: selectedInfo.value,
-        aclModuleName: selectedInfo.label,
-        aclTypeId: record.aclTypeId,
-        aclTypeName: record.aclTypeName,
-        name: record.name,
-        url: record.url,
-        seq: record.seq,
-        status: record.status,
-        remark: record.remark
-      }
-    )
-  }
+  // const lookItem = (key: string, record: TableAclListType) => {
+  //   aclRef.current?.open(
+  //     { api: aclApi },
+  //     { title: '查看权限点' },
+  //     { action: 'look', open: true }, // create | edit | look
+  //     { style: { maxWidth: '40vw' } },
+  //     {
+  //       key,
+  //       aclModuleId: selectedInfo.value,
+  //       aclModuleName: selectedInfo.label,
+  //       type: record.type,
+  //       aclTypeName: record.aclTypeName,
+  //       name: record.name,
+  //       url: record.url,
+  //       seq: record.seq,
+  //       status: record.status,
+  //       remark: record.remark
+  //     }
+  //   )
+  // }
 
   const deleteItemConfirm = async (record: TableAclListType) => {
     const res = await aclApi.delete({ surrogateId: record.key?.toString() ?? '' })
     if (res.code !== 200) {
       return
     }
-    retrieveAclPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    retrieveAclPageList({
+      keyWords: '',
+      aclModuleId: selectedInfo.aclModuleId,
+      currentPageNum: 1,
+      pageSize: tablePageInfo.pageSize
+    })
   }
 
   /**
@@ -475,7 +482,12 @@ const Acl = () => {
    */
   const search = () => {
     let data = form.getFieldsValue()
-    const searchParam = { ...data, currentPageNum: 1, pageSize: tablePageInfo.pageSize }
+    const searchParam = {
+      ...data,
+      currentPageNum: 1,
+      pageSize: tablePageInfo.pageSize,
+      aclModuleId: selectedInfo.aclModuleId
+    }
     retrieveAclPageList({ ...searchParam })
   }
 
@@ -489,13 +501,19 @@ const Acl = () => {
               <Flex vertical gap={'small'}>
                 <Flex vertical={false} gap={'middle'}>
                   <Button
-                    size={'small'}
+                    size={btnSize}
                     color='primary'
                     variant='solid'
                     icon={<PlusOutlined />}
                     onClick={createAclModule}
                   />
-                  <Button size={'small'} color='pink' variant='solid' icon={<EditOutlined />} onClick={editAclModule} />
+                  <Button
+                    size={btnSize}
+                    color='primary'
+                    variant='solid'
+                    icon={<EditOutlined />}
+                    onClick={editAclModule}
+                  />
 
                   <Popconfirm
                     title='删除权限模块'
@@ -506,7 +524,7 @@ const Acl = () => {
                     cancelText='取消'
                   >
                     <Button
-                      size={'small'}
+                      size={btnSize}
                       color='red'
                       variant='solid'
                       icon={<DeleteOutlined />}
@@ -514,6 +532,7 @@ const Acl = () => {
                     />
                   </Popconfirm>
                 </Flex>
+                {/* <Divider plain><Title level={5}>{'权限模块'}</Title></Divider> */}
                 <Divider plain>{'权限模块'}</Divider>
                 <DirectoryTree
                   showLine={true}
@@ -548,7 +567,7 @@ const Acl = () => {
                 <div className='operation-btn'>
                   <Flex vertical={false} gap='small'>
                     <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createAcl}>
-                      {'新增'}
+                      {'添加'}
                     </Button>
                     <Form form={form}>
                       <Flex gap='small'>
@@ -556,16 +575,11 @@ const Acl = () => {
                           <Input placeholder={'搜索关键字'} />
                         </Form.Item>
                         <Form.Item>
-                          <Button icon={<SearchOutlined />} type='primary' onClick={search} />
+                          <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
                         </Form.Item>
                         <Form.Item>
-                          <Button type='primary' onClick={resetSearch}>
+                          <Button size={btnSize} type='primary' onClick={resetSearch}>
                             {'置空'}
-                          </Button>
-                        </Form.Item>
-                        <Form.Item>
-                          <Button type='primary' onClick={allSearch}>
-                            {'全部'}
                           </Button>
                         </Form.Item>
                       </Flex>
@@ -574,15 +588,17 @@ const Acl = () => {
                 </div>
                 {/* show table info */}
                 <div className='list'>
-                  <Table
+                  <Table<TableAclListType>
                     key={1}
+                    size={aclTableSize}
+                    title={() => <Title level={5}>{'权限点列表'}</Title>}
                     bordered={true}
                     rowSelection={{
                       type: 'checkbox',
                       ...rowSelection
                     }}
                     loading={tableLoading}
-                    columns={columns}
+                    columns={columnAcl}
                     dataSource={dataSource}
                     pagination={{
                       showQuickJumper: false, // 跳转指定页面
@@ -608,9 +624,9 @@ const Acl = () => {
         />
         <AclModal
           mRef={aclRef}
-          update={() => {
+          update={({ aclModuleId }) => {
             // 只需要渲染权限点列表即可
-            retrieveAclPageList({ currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+            retrieveAclPageList({ aclModuleId, currentPageNum: 1, pageSize: tablePageInfo.pageSize })
           }}
         />
       </Flex>

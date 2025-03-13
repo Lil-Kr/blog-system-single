@@ -63,8 +63,6 @@ const DictModal = (props: ModalType.CustomModal) => {
         return
       }
       message.success(msg)
-      handleCancel()
-      update()
     } else if (action === 'edit') {
       const req = {
         surrogateId: params.key,
@@ -75,12 +73,13 @@ const DictModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      message.info(msg)
-      handleCancel()
-      update()
+      message.success(msg)
     } else {
       return
     }
+
+    handleCancel()
+    update()
   }
 
   const handleCancel = () => {
@@ -108,7 +107,7 @@ const DictModal = (props: ModalType.CustomModal) => {
         // forceRender={true} // 强制渲染
         maskClosable={false}
       >
-        <Form form={modalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
+        <Form form={modalForm} disabled={inputDisabled}>
           <Form.Item name={'key'} hidden>
             <Input />
           </Form.Item>

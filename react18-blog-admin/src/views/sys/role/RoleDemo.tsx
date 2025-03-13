@@ -11,7 +11,6 @@ import roleApi from '@/apis/sys/roleApi'
 import { EditableProTable, ProColumns } from '@ant-design/pro-components'
 import { dictApi } from '@/apis/sys/dictApi'
 import { DictDetailListReq } from '@/types/apis/sys/dict/dictType'
-import { message } from 'antd'
 
 const RoleDemo = () => {
   const MemoTooltip = Tooltip || React.memo(Tooltip)
@@ -59,7 +58,7 @@ const RoleDemo = () => {
       title: '字典类型',
       dataIndex: 'type',
       valueType: 'select',
-      width: '20%',
+      width: '30%',
       formItemProps: (form, { rowIndex }) => ({
         rules: rowIndex > 1 ? [{ required: true, message: '此项为必填项' }] : []
       }),
@@ -76,7 +75,7 @@ const RoleDemo = () => {
       title: '操作',
       dataIndex: 'oparet',
       valueType: 'option',
-      width: '20%',
+      width: '30%',
       render: (text, record, _, action) => [
         <Space key={`edit-${record.key}`} size={roleStyle}>
           <Button
@@ -257,7 +256,7 @@ const RoleDemo = () => {
     <div className='sys-role-warpper' style={{ height: '100%', width: '100%' }}>
       <Flex gap='middle' vertical={true} style={{ height: '100%', width: '100%' }}>
         <Splitter style={{ height: '100%', width: '100%', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', flex: 'auto' }}>
-          <Splitter.Panel defaultSize='25%' min='20%' max='70%'>
+          <Splitter.Panel defaultSize='20%' min='20%' max='30%'>
             <Divider orientation='center'>
               <div>{'角色信息'}</div>
             </Divider>
@@ -265,7 +264,7 @@ const RoleDemo = () => {
               rowKey='key'
               // headerTitle='角色管理'
               bordered={true}
-              // maxLength={5} // 最大的行数，到达最大行数新建按钮会自动消失
+              // maxLength={5} // 最大的行数, 到达最大行数新建按钮会自动消失
               // rowSelection={{
               //   type: 'checkbox',
               //   ...rowSelection
@@ -283,7 +282,8 @@ const RoleDemo = () => {
                   type: 0,
                   status: 0,
                   remark: ''
-                })
+                }),
+                creatorButtonText: '新增角色'
               }}
               loading={tableLoading}
               size={roleStyle}

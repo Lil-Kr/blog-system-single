@@ -12,7 +12,6 @@ public class SysAclVO extends SysAcl {
 	private String creatorName;
 	private String operatorName;
 	private String nickName;
-	private String type;
 	private String aclTypeName;
 
 }

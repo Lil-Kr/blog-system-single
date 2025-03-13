@@ -18,15 +18,15 @@ import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
 import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
@@ -204,5 +204,13 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 			return ApiResp.success();
 		}
 		return ApiResp.failure(DEL_ERROR);
+	}
+
+	@Override
+	public ApiResp<Map<String, List<SysDictDetailVO>>> dictDetailTree() {
+		List<SysDictDetailVO> dictDetailTree = dictDetailMapper.dictDetailTree();
+		Map<String, List<SysDictDetailVO>> collect = dictDetailTree.stream().collect(Collectors.groupingBy(SysDictDetailVO::getParentName));
+
+		return ApiResp.success(MapUtils.isEmpty(collect) ? Maps.newHashMap() : collect);
 	}
 }

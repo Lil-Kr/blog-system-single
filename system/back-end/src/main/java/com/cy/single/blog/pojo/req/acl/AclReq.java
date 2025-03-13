@@ -42,21 +42,21 @@ public class AclReq {
     /**
      * 请求的url
      */
-    @Length(min = 5,max = 20,message = "权限点的url长度为5~100个字符之间")
+    @Length(min = 1,max = 100,message = "权限点的url长度为1~100个字符之间")
     private String url;
 
     /**
      * 1:菜单权限, 2按钮权限, 3其他
      */
     @NotNull(message = "aclTypeId权限点类型不能为空")
-    private Long aclTypeId;
+    private Integer type;
 
     /**
      * 状态 0 正常 ,1 冻结
      */
     @NotNull(message = "status状态不能为空")
-    @Max(value = 2, message = "状态范围在0~2之间")
-    @Min(value = 0, message = "状态范围在0~2之间")
+    @Min(value = 0, message = "状态范围在0~10之间")
+    @Max(value = 10, message = "状态范围在0~10之间")
     private Integer status;
 
     /**

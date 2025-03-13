@@ -60,8 +60,7 @@ public class SysAcl extends Model<SysAcl>  {
 	/**
 	 * 1:菜单权限, 2按钮, 3其他
 	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long aclTypeId;
+	private Integer type;
 
 	/**
 	 * 状态

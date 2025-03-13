@@ -26,6 +26,11 @@ export interface DictDetail {
   remark: string
 }
 
+/** ==================== dict map type ================= */
+export interface DictMapType extends DictDetail {
+  parentName: string
+}
+
 /** ==================== dict req resp ================= */
 
 export interface DictAddReq {
@@ -123,4 +128,5 @@ export interface DictApi extends BaseApi {
   addDictDetail(req: DictDetailAddReq): Promise<Result<string>>
   editDictDetail(req: DictDetailEditReq): Promise<Result<string>>
   deleteDictDetail(req: DictDetailDeleteReq): Promise<Result<string>>
+  dictDetailTree(): Promise<Result<Map<string, DictMapType[]>>>
 }

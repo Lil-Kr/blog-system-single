@@ -61,7 +61,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 		QueryWrapper<SysAcl> query = new QueryWrapper<>();
 		query.eq("name", req.getName());
 		query.eq("acl_module_id", req.getAclModuleId());
-		if (aclMapper.selectCount(query) < 1) {
+		if (aclMapper.selectCount(query) > 1) {
 			return ApiResp.failure(DATA_INFO_REPEAT);
 		}
 
@@ -73,7 +73,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			.name(req.getName())
 			.aclModuleId(req.getAclModuleId())
 			.url(req.getUrl())
-			.aclTypeId(req.getAclTypeId())
+			.type(req.getType())
 			.status(req.getStatus())
 			.seq(req.getSeq())
 			.remark(req.getRemark())
@@ -107,7 +107,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			.name(req.getName())
 			.aclModuleId(req.getAclModuleId())
 			.url(req.getUrl())
-			.aclTypeId(req.getAclTypeId())
+			.type(req.getType())
 			.status(req.getStatus())
 			.seq(req.getSeq())
 			.remark(req.getRemark())

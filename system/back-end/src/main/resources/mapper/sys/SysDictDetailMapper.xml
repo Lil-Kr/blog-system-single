@@ -64,4 +64,16 @@
             </if>
         </where>
     </select>
+
+    <select id="dictDetailTree" resultType="com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO">
+        select
+            a.name as 'parentName',
+            b.surrogate_id,
+            b.parent_id,
+            b.`name`,
+            b.`type`,
+            b.remark
+        from sys_dict as a
+        inner join sys_dict_detail as b on (a.surrogate_id = b.parent_id)
+    </select>
 </mapper>
