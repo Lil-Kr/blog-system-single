@@ -48,7 +48,7 @@ public class AclReq {
     /**
      * 1:菜单权限, 2按钮权限, 3其他
      */
-    @NotNull(message = "aclTypeId权限点类型不能为空")
+    @NotNull(message = "type权限点类型不能为空")
     private Integer type;
 
     /**

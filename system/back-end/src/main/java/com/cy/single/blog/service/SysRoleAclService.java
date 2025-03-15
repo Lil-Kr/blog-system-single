@@ -1,16 +1,15 @@
 package com.cy.single.blog.service;
 
-
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.pojo.req.roleacl.RoleAclSaveReq;
 
-
 /**
- * role-acl service
+ * @Author: Lil-K
+ * @Date: 2025/3/15
+ * @Description: SysRoleAclService
  */
 public interface SysRoleAclService {
 
-    ApiResp<String> changeRoleAcls(RoleAclSaveReq param);
+	ApiResp<String> updateRoleAcls(RoleAclSaveReq param);
 
-    ApiResp<String> delete(Long surrogateId);
 }

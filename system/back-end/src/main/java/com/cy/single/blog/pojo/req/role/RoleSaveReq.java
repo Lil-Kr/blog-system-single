@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -27,7 +28,7 @@ public class RoleSaveReq {
      * 角色id 唯一主键
      */
     @NotNull(groups = {GroupTreeOrDel.class, GroupFreeze.class, GroupEdite.class}, message = "角色id不能为空")
-    private Long surrogateId;
+    private Long roleId;
 
     /**
      * 角色名称
@@ -43,9 +44,11 @@ public class RoleSaveReq {
     private Integer type;
 
     /**
-     * 冻结状态
+     * 状态
      */
-    @Max(groups = {GroupAdd.class, GroupEdite.class, GroupFreeze.class}, value = 1, message = "冻结状态不能超过1")
+    @NotNull(groups = {GroupAdd.class, GroupEdite.class}, message = "角色类型不能为空")
+    @Min(groups = {GroupAdd.class, GroupEdite.class, GroupFreeze.class}, value = 0, message = "状态范围再0~9之间")
+    @Max(groups = {GroupAdd.class, GroupEdite.class, GroupFreeze.class}, value = 9, message = "状态范围再0~9之间")
     private Integer status;
 
     /**

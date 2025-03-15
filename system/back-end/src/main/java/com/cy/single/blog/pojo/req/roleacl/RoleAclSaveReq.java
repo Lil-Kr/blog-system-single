@@ -3,9 +3,10 @@ package com.cy.single.blog.pojo.req.roleacl;
 
 import lombok.Data;
 import lombok.ToString;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @ToString
@@ -13,7 +14,7 @@ public class RoleAclSaveReq {
 
     public interface GroupUpdate {};
 
-    public interface GroupChangeAcls {};
+    public interface GroupUpdateRoleAcls {};
     /**
      * 角色-权限id 唯一主键
      */
@@ -22,7 +23,7 @@ public class RoleAclSaveReq {
     /**
      * 角色id
      */
-    @NotNull(groups = {GroupChangeAcls.class}, message = "角色id不为空")
+    @NotNull(groups = {GroupUpdateRoleAcls.class}, message = "角色id不为空")
     private Long roleId;
 
     /**
@@ -32,9 +33,9 @@ public class RoleAclSaveReq {
     private Long aclId;
 
     /**
-     * 多个权限id,用,号分隔
+     * 待更新的权限点id list
+     *
      */
-    @NotBlank(groups = GroupChangeAcls.class, message = "权限aclIds不为空")
-    private String aclIds;
-
+    @NotEmpty(groups = GroupUpdateRoleAcls.class, message = "aclIdList不能为空")
+    private List<Long> aclIdList;
 }

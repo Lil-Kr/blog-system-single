@@ -59,9 +59,14 @@ public class SysRoleServiceImpl implements SysRoleService {
 		}
 	}
 
+	/**
+	 * 添加
+	 * @param req
+	 * @return
+	 */
 	@Override
 	public ApiResp<String> add(RoleSaveReq req) {
-		if (checkExit(req.getSurrogateId(), req.getName(), req.getType())) {
+		if (checkExit(req.getRoleId(), req.getName(), req.getType())) {
 			return ApiResp.failure(INFO_EXIST);
 		}
 
@@ -80,7 +85,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 			.type(req.getType())
 			.remark(req.getRemark())
 			.deleted(0)
-			.status(0)
+			.status(req.getStatus())
 			.creatorId(RequestHolder.getCurrentUser().getSurrogateId())
 			.operator(RequestHolder.getCurrentUser().getSurrogateId())
 			.operateIp("127.0.0.1")
@@ -92,7 +97,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		if (insert >= 1) {
 			return ApiResp.success();
 		} else {
-			return ApiResp.success(SAVE_ERROR);
+			return ApiResp.failure(SAVE_ERROR);
 		}
 	}
 
@@ -107,6 +112,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 			query.eq("surrogate_id", surrogateId);
 		}
 		query.eq("name", name);
+		query.eq("type", type);
 		SysRole before = roleMapper.selectOne(query);
 		if (Objects.isNull(before)) {
 			return false;
@@ -127,17 +133,21 @@ public class SysRoleServiceImpl implements SysRoleService {
 		QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("type", 1);
 		SysRole role = roleMapper.selectOne(queryWrapper);
-
 		if (Objects.isNull(role))
 			return false;
 		else
 			return true;
 	}
 
+	/**
+	 * 编辑角色信息
+	 * @param req
+	 * @return
+	 */
 	@Override
 	public ApiResp<String> edit(RoleSaveReq req) {
 		QueryWrapper<SysRole> query = new QueryWrapper<>();
-		query.eq("surrogate_id",req.getSurrogateId());
+		query.eq("surrogate_id", req.getRoleId());
 		SysRole before = roleMapper.selectOne(query);
 		if (Objects.isNull(before)) {
 			return ApiResp.failure(INFO_NOT_EXIST);
@@ -182,14 +192,14 @@ public class SysRoleServiceImpl implements SysRoleService {
 	@Override
 	public ApiResp<String> freeze(RoleSaveReq req) {
 		QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("surrogate_id", req.getSurrogateId());
+		queryWrapper.eq("surrogate_id", req.getRoleId());
 		SysRole before = roleMapper.selectOne(queryWrapper);
 		if (before.getType() == 1) {
 			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg4"));
 		}
 
 		UpdateWrapper<SysRole> updateWrapper = new UpdateWrapper<>();
-		updateWrapper.eq("surrogate_id", req.getSurrogateId());
+		updateWrapper.eq("surrogate_id", req.getRoleId());
 		SysRole build = SysRole.builder()
 			.status(req.getStatus())
 			.operateIp("127.0.0.1")

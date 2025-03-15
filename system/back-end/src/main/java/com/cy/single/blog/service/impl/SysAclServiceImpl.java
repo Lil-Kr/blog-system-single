@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import static com.cy.single.blog.common.constants.CommonConstants.ACLM_PREV_INFO;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -61,7 +62,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 		QueryWrapper<SysAcl> query = new QueryWrapper<>();
 		query.eq("name", req.getName());
 		query.eq("acl_module_id", req.getAclModuleId());
-		if (aclMapper.selectCount(query) > 1) {
+		if (aclMapper.selectCount(query) >= 1) {
 			return ApiResp.failure(DATA_INFO_REPEAT);
 		}
 
@@ -69,7 +70,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 		Date currentTime = DateUtil.localDateTimeNow();// 当前时间
 		SysAcl acl = SysAcl.builder()
 			.surrogateId(surrogateId)
-			.number("ACL" + surrogateId)
+			.number(ACLM_PREV_INFO + surrogateId)
 			.name(req.getName())
 			.aclModuleId(req.getAclModuleId())
 			.url(req.getUrl())

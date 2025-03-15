@@ -14,7 +14,6 @@ const Login = () => {
   const [btnSize, setSize] = useState<SizeType>('large')
   const [loading, setLoading] = useState<boolean>(false)
   const { resetTabs } = useTabsStore()
-  // const { setSelectedKeys } = useMenuStore()
   const { setToken } = useLoginAdminStore()
   const navigateTo = useNavigate()
 

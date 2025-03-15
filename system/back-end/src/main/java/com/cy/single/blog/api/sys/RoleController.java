@@ -6,11 +6,11 @@ import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
-import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.role.RoleListPageReq;
 import com.cy.single.blog.pojo.req.role.RoleSaveReq;
 import com.cy.single.blog.pojo.req.roleacl.RoleAclSaveReq;
 import com.cy.single.blog.pojo.req.roleuser.RoleUserReq;
+import com.cy.single.blog.pojo.vo.sys.role.RoleUserVO;
 import com.cy.single.blog.pojo.vo.sys.role.SysRoleVO;
 import com.cy.single.blog.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Map;
 
 import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 
@@ -123,7 +122,7 @@ public class RoleController {
 	@RecordLogger
 	@PostMapping("/roleAclTree")
 	public ApiResp<List<AclModuleDto>> roleAclTree(@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
-		List<AclModuleDto> aclModuleDtoList = treeService.roleAclTree(req.getSurrogateId());
+		List<AclModuleDto> aclModuleDtoList = treeService.roleAclTree(req.getRoleId());
 		if (CollectionUtils.isNotEmpty(aclModuleDtoList)) {
 			return ApiResp.success(aclModuleDtoList);
 		}else {
@@ -140,9 +139,9 @@ public class RoleController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("/changeRoleAcls")
-	public ApiResp<String> changeRoleAcls(@RequestBody @Validated({RoleAclSaveReq.GroupChangeAcls.class}) RoleAclSaveReq req) {
-		return roleAclService.changeRoleAcls(req);
+	@PostMapping("/updateRoleAcls")
+	public ApiResp<String> updateRoleAcls(@RequestBody @Validated({RoleAclSaveReq.GroupUpdateRoleAcls.class}) RoleAclSaveReq req) {
+		return roleAclService.updateRoleAcls(req);
 	}
 
 	/**
@@ -154,12 +153,12 @@ public class RoleController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/roleUserList")
-	public ApiResp<Map<String, List<SysUser>>> roleUserList(@RequestBody @Validated({RoleUserReq.GroupRoleUserPageList.class}) RoleUserReq req) {
+	public ApiResp<RoleUserVO> roleUserList(@RequestBody @Validated({RoleUserReq.GroupRoleUserPageList.class}) RoleUserReq req) {
 		return roleUserService.roleUserList(req);
 	}
 
 	/**
-	 * 维护[角色-用户]关系接口
+	 * 修改[角色-用户]关系接口
 	 * @param req
 	 * @return
 	 * @throws Exception

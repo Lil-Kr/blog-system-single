@@ -7,6 +7,7 @@ import { message } from 'antd'
 
 const DictDetailModal = (props: ModalType.CustomModal) => {
   const { mRef, update } = props
+  const [messageApi, contextHolder] = message.useMessage()
   const [modalForm] = Form.useForm()
   const [action, setAction] = useState('create')
   const [title, setTitle] = useState('')
@@ -62,7 +63,7 @@ const DictDetailModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      message.success(msg)
+      messageApi.success(msg)
     } else if (action === 'edit') {
       const req = {
         surrogateId: params.key,
@@ -73,7 +74,7 @@ const DictDetailModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      message.success(msg)
+      messageApi.success(msg)
     } else {
       return
     }

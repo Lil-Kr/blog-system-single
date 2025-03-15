@@ -66,7 +66,7 @@ const aclConfig: RouterItemType[] = [
           icon: <UserSwitchOutlined />
         },
         path: 'role',
-        element: LazyLoad(lazy(() => import('@/views/sys/role/RoleDemo')))
+        element: LazyLoad(lazy(() => import('@/views/sys/role/Role')))
       },
       {
         meta: {
@@ -78,16 +78,6 @@ const aclConfig: RouterItemType[] = [
         path: 'acl',
         element: LazyLoad(lazy(() => import('@/views/sys/Acl')))
       },
-      // {
-      //   meta: {
-      //     key: '/acldata',
-      //     title: '数据权限',
-      //     layout: false,
-      //     icon: <DatabaseOutlined />
-      //   },
-      //   path: 'acldata',
-      //   element: LazyLoad(lazy(() => import('@/views/sys/AclData')))
-      // },
       {
         meta: {
           key: '/dict',

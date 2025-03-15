@@ -2,6 +2,8 @@ import { PREFIX_BASE_URL } from '@/config'
 import { message } from 'antd'
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 
+// const [messageApi, contextHolder] = message.useMessage()
+
 // 创建axios实例
 const axiosInstance: AxiosInstance = axios.create({
   // baseURL: import.meta.env.VITE_APP_PROXY_API,

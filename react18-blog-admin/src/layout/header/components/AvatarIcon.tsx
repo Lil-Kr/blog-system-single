@@ -8,6 +8,7 @@ import useLoginAdminStore from '@/store/login'
 import { useMenuStore, useTabsStore } from '@/store/global'
 
 const AvatarIcon = () => {
+  const [messageApi, contextHolder] = message.useMessage()
   const { removeToken } = useLoginAdminStore()
   const { resetTabs } = useTabsStore()
   const { restMenuState } = useMenuStore()
@@ -42,20 +43,20 @@ const AvatarIcon = () => {
     let key = event.key
     switch (key) {
       case '1':
-        message.info(key)
+        messageApi.info(key)
         break
       case '2': // 关于我
-        message.info(key)
+        messageApi.info(key)
         break
       case '3':
-        message.info(key)
+        messageApi.info(key)
         break
       case '4':
         loginoutFunc()
-        // message.success('')
+        // messageApi.success('')
         break
       default:
-        message.info(key)
+        messageApi.info(key)
         break
     }
   }

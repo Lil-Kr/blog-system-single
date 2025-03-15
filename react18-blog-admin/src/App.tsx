@@ -14,6 +14,7 @@ import { dictApi } from './apis/sys/dictApi'
 import { DictMapType } from '@/types/apis/sys/dict/dictType'
 
 function App() {
+  const [messageApi, contextHolder] = message.useMessage()
   const { language, assemblySize, setLanguage } = useSystemStore()
   const { setBreadcrumbMap } = useBreadcrumbStore()
   const [i18nLocale, setI18nLocale] = useState(zhCN)
@@ -91,6 +92,7 @@ function App() {
           //   }
         }}
       >
+        {contextHolder}
         <RouterView router={rootRouterConfig} />
       </ConfigProvider>
     </>

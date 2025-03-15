@@ -22,6 +22,7 @@ public class CommonConstants {
 	 * acl ACLM
 	 */
 	public static final String ACLM_PREV_NUMBER_INFO = "ACLM";
+	public static final String ACLM_PREV_INFO = "ACL";
 
 	/**
 	 * cache manager key

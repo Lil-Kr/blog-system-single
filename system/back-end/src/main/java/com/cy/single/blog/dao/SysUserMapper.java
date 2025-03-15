@@ -36,4 +36,8 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 	Integer countUserList(@Param("param") UserListPageReq req);
 
 	List<SysUserVO> selectUserInfoExist(@Param("param") UserSaveReq req);
+
+	List<SysUserVO> selectUserListByIds(@Param("userIdList") List<Long> userIdList);
+
+	List<SysUserVO> selectUserList();
 }

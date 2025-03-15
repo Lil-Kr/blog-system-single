@@ -9,6 +9,7 @@ import { message } from 'antd'
 
 const UserModal = (props: ModalType.CustomModal) => {
   const { mRef, update } = props
+  const [messageApi, contextHolder] = message.useMessage()
   const [modalForm] = Form.useForm()
   const [action, setAction] = useState('create')
   const [title, setTitle] = useState('')
@@ -110,7 +111,7 @@ const UserModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      message.info(msg)
+      messageApi.info(msg)
       handleCancel()
       update()
     } else {

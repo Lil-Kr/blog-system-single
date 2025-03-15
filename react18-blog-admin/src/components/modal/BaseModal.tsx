@@ -4,6 +4,7 @@ import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } fr
 import { Form, Input, message } from 'antd'
 
 const BaseModal = (props: ModalType.BaseModalType) => {
+  const [messageApi, contextHolder] = message.useMessage()
   const { mRef, innerComponent, update } = props
   const [baseModalForm] = Form.useForm()
   const [action, setAction] = useState('create')
@@ -72,11 +73,11 @@ const BaseModal = (props: ModalType.BaseModalType) => {
       const res = await api.add!(params)
       const { code, msg, data } = res
       if (code === 200) {
-        message.success(msg)
+        messageApi.success(msg)
         handleCancel()
         update()
       } else {
-        message.error(msg)
+        messageApi.error(msg)
         return
       }
     } else if (action === 'edit') {
@@ -84,15 +85,15 @@ const BaseModal = (props: ModalType.BaseModalType) => {
       const res = await api.edit!(param)
       const { code, msg } = res
       if (code === 200) {
-        message.success(msg)
+        messageApi.success(msg)
         handleCancel()
         update()
       } else {
-        message.error(msg)
+        messageApi.error(msg)
         return
       }
     } else {
-      message.error('操作失败')
+      messageApi.error('操作失败')
       return
     }
   }

@@ -192,8 +192,8 @@ export interface AclEditReq {
   surrogateId: string
   name: string
   aclModuleId: string
-  aclTypeId: string
   url: string
+  type: number
   status: number
   seq: number
   remark: string

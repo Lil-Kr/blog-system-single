@@ -116,4 +116,14 @@
             </if>
         </where>
     </select>
+
+    <!-- 查询所有有效的权限点id -->
+    <select id="selectAclIdAllList" resultType="java.lang.Long">
+        select surrogate_id
+        from sys_acl
+        <where>
+            status = #{param.status}
+        </where>
+    </select>
+
 </mapper>

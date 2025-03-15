@@ -6,7 +6,6 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.acl.AclPageReq;
 import com.cy.single.blog.pojo.req.acl.AclReq;
 import com.cy.single.blog.pojo.req.roleacl.RoleAclSaveReq;
@@ -22,8 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -92,19 +89,19 @@ public class AclController {
 	public ApiResp<ConcurrentHashMap<String, Object>> acls(@RequestBody @Validated({AclReq.GroupAcls.class}) AclReq req) {
 		return aclService.acls(req);
 	}
-
-	/**
-	 * 获取角色分配的用户列表
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/roleUserList")
-	public ApiResp<Map<String, List<SysUser>>> roleUserList(@RequestBody @Validated({RoleUserReq.GroupRoleUserPageList.class}) RoleUserReq req) {
-		return roleUserService.roleUserList(req);
-	}
+//
+//	/**
+//	 * 获取角色分配的用户列表
+//	 * @param req
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	@CheckAuth
+//	@RecordLogger
+//	@PostMapping("/roleUserList")
+//	public ApiResp<Map<String, List<SysUserVO>>> roleUserList(@RequestBody @Validated({RoleUserReq.GroupRoleUserPageList.class}) RoleUserReq req) {
+//		return roleUserService.roleUserList(req);
+//	}
 
 	/**
 	 * 维护[角色-用户]关系接口
@@ -128,8 +125,8 @@ public class AclController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/changeRoleAcls")
-	public ApiResp<String> changeRoleAcls(@RequestBody @Validated({RoleAclSaveReq.GroupChangeAcls.class}) RoleAclSaveReq req) {
-		return roleAclService.changeRoleAcls(req);
+	public ApiResp<String> changeRoleAcls(@RequestBody @Validated({RoleAclSaveReq.GroupUpdateRoleAcls.class}) RoleAclSaveReq req) {
+		return roleAclService.updateRoleAcls(req);
 	}
 
 	/**

@@ -10,6 +10,7 @@ import useDictDetailStore from '@/store/global/dictStore'
 import { DictMapType } from '@/types/apis/sys/dict/dictType'
 
 const AclModuleModal = (props: ModalType.CustomModal) => {
+  const [messageApi, contextHolder] = message.useMessage()
   const { mRef, update } = props
   const [modalForm] = Form.useForm()
   const [action, setAction] = useState('create')
@@ -146,7 +147,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      message.success(msg)
+      messageApi.success(msg)
     } else if (action === 'edit') {
       const editReq: AclModuleEditReq = {
         surrogateId: params.key,
@@ -161,7 +162,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      message.success(msg)
+      messageApi.success(msg)
     } else {
       return
     }

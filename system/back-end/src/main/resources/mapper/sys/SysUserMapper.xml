@@ -32,6 +32,10 @@
         id, surrogate_id, token, `number`, account, password, user_name, telephone, email, org_id, status, deleted, remark, operate_ip, creator_id, operator, create_time, update_time
     </sql>
 
+    <sql id="Base_Join_Column_List">
+        a.id, a.surrogate_id, a.token, a.`number`, a.account, a.password, a.user_name, a.telephone, a.email, a.org_id, a.status, a.deleted, a.remark, a.operate_ip, a.creator_id, a.operator, a.create_time, a.update_time
+    </sql>
+
     <sql id="Column_1_List">
         id, surrogate_id, token, account, user_name, email
     </sql>
@@ -322,5 +326,43 @@
             account = #{param.account} OR email = #{param.email} OR user_name = #{param.userName}
         GROUP BY
             account, email, user_name;
+    </select>
+
+    <!--  根据userIds, 查询用户列表  -->
+    <select id="selectUserListByIds" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+        select
+            a.surrogate_id,
+            a.account,
+            a.user_name,
+            a.remark,
+            a.create_time,
+            a.update_time
+        from sys_user as a
+        <where>
+            a.status = 0
+            and
+            a.surrogate_id in (
+                <foreach collection="userIdList" index="index" item="userId" separator=",">
+                    #{userId}
+                </foreach>
+            )
+        </where>
+        order by a.create_time desc
+    </select>
+
+    <!--  查询所有用户列表, 与上一条sql一起使用  -->
+    <select id="selectUserList" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+        select
+            a.surrogate_id,
+            a.account,
+            a.user_name,
+            a.remark,
+            a.create_time,
+            a.update_time
+        from sys_user as a
+        <where>
+            a.status = 0
+        </where>
+        order by a.create_time desc
     </select>
 </mapper>

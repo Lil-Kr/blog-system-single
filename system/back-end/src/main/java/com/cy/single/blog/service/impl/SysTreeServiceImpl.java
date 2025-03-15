@@ -20,6 +20,7 @@ import com.cy.single.blog.utils.orgUtil.OrgUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -218,7 +219,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 		aclAllList.stream()
 			.map(AclDto::adapt)
 			.forEach(aclDto -> {
-				// 用户已分配的权限点, 可操作
+				// 当前用户已拥有的权限点, 可操作
 				if (userAclIdSet.contains(aclDto.getSurrogateId())) {
 					aclDto.setHasAcl(true);
 				}
@@ -231,7 +232,47 @@ public class SysTreeServiceImpl implements SysTreeService {
 			});
 
 		// 将权限点与权限模块组装为树结构
-		return aclListToTree(aclDtoList);
+		List<AclModuleDto> aclModuleDtoList = aclListToTree(aclDtoList);
+		return aclModuleDtoList;
+	}
+
+	/**
+	 *
+	 * @param aclModules
+	 * @return
+	 */
+	private static List<AclModuleDto> filterAclModules(List<AclModuleDto> aclModules) {
+		List<AclModuleDto> result = new ArrayList<>();
+		for (AclModuleDto module : aclModules) {
+			AclModuleDto filteredModule = filterModule(module);
+			if (filteredModule != null) {
+				result.add(filteredModule);
+			}
+		}
+		return result;
+	}
+
+	private static AclModuleDto filterModule(AclModuleDto module) {
+		List<AclModuleDto> filteredChildren = new ArrayList<>();
+		for (AclModuleDto child : module.getAclModuleDtoList()) {
+			AclModuleDto filteredChild = filterModule(child);
+			if (filteredChild != null) {
+				filteredChildren.add(filteredChild);
+			}
+		}
+
+		List<AclDto> filteredAcls = module.getAclDtoList().stream()
+			.filter(AclDto::isHasAcl)
+			.collect(Collectors.toList());
+
+		if (!filteredChildren.isEmpty() || !filteredAcls.isEmpty()) {
+			AclModuleDto newModule = new AclModuleDto();
+			BeanUtils.copyProperties(module, newModule);
+			newModule.setAclModuleDtoList(filteredChildren);
+			newModule.setAclDtoList(filteredAcls);
+			return newModule;
+		}
+		return null;
 	}
 
 	/**

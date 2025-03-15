@@ -45,25 +45,25 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 	@Override
 	public List<SysAcl> getCurrentUserAclList() {
 		// 获取当前用户surrogateId
-		Long surrogateId = RequestHolder.getCurrentUser().getSurrogateId();
-		return this.getUserAclList(surrogateId);
+		Long userId = RequestHolder.getCurrentUser().getSurrogateId();
+		return this.getUserAclList(userId);
 	}
 
 	/**
 	 * 获取[用户-权限]列表
-	 * @param userSurrogateId 用户id
+	 * @param userId 用户id
 	 * @return
 	 * @throws Exception
 	 */
 	@Override
-	public List<SysAcl> getUserAclList(Long userSurrogateId) {
+	public List<SysAcl> getUserAclList(Long userId) {
 		// 如果当前用户是超级管理员, 返回所有的权限点列表
-		if (isSuperAdmin(userSurrogateId)) {
+		if (isSuperAdmin(userId)) {
 			return aclMapper.selectList(new QueryWrapper<>());
 		}
 
 		// 1. 如果不是超级管理员, 就取出当前用户已经分配的角色id列表, 一个用户可以被分配到多个角色, 最后权限取多个角色的并集
-		List<Long> userRoleIdList = roleUserMapper.selectRoleIdListByUserId(userSurrogateId);
+		List<Long> userRoleIdList = roleUserMapper.selectRoleIdListByUserId(userId);
 		if (CollectionUtils.isEmpty(userRoleIdList)) {
 			return Lists.newArrayList();
 		}

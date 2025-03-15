@@ -13,6 +13,7 @@ type CallBackType = {
 }
 
 const AclModal = (props: ModalType.CustomModal) => {
+  const [messageApi, contextHolder] = message.useMessage()
   const { mRef, update } = props
   const [modalForm] = Form.useForm()
   const [action, setAction] = useState('create')
@@ -180,7 +181,7 @@ const AclModal = (props: ModalType.CustomModal) => {
     }
     if (action === 'create') {
       const addReq: AclAddReq = {
-        aclModuleId: params.aclModuleInfo.value,
+        aclModuleId: params.aclModuleInfo,
         status: selectedValue?.status?.value,
         type: selectedValue?.aclType?.value,
         ...params
@@ -190,7 +191,7 @@ const AclModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      message.success(msg)
+      messageApi.success(msg)
     } else if (action === 'edit') {
       const editReq: AclEditReq = {
         surrogateId: params.key,
@@ -204,7 +205,7 @@ const AclModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      message.success(msg)
+      messageApi.success(msg)
     }
 
     handleCancel()
