@@ -2,10 +2,12 @@ package com.cy.single.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cy.single.blog.common.holder.RequestHolder;
-import com.cy.single.blog.dao.*;
+import com.cy.single.blog.dao.SysAclMapper;
+import com.cy.single.blog.dao.SysRoleAclMapper;
+import com.cy.single.blog.dao.SysRoleMapper;
+import com.cy.single.blog.dao.SysRoleUserMapper;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.vo.sys.role.SysRoleVO;
-import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysAclCoreService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +22,6 @@ import java.util.List;
 public class SysAclCoreServiceImpl implements SysAclCoreService {
 
 	@Autowired
-	private SysCoreMapper coreMapper;
-
-	@Autowired
 	private SysAclMapper aclMapper;
 
 	@Autowired
@@ -33,9 +32,6 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 
 	@Autowired
 	private SysRoleAclMapper roleAclMapper;
-
-	@Autowired
-	private MessageLangService msgLangService;
 
 	/**
 	 * 获取当前用户所拥有的权限列表

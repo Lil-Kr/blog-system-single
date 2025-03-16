@@ -7,6 +7,7 @@ import { useForm } from 'antd/es/form/Form'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { BlogCategoryPageReqParams, BlogCategoryReqParams, CategoryDTO } from '@/types/apis/blog/category'
 import { BaseModal } from '@/components/modal'
+import { useMessage } from '@/components/message/MessageProvider'
 
 // api
 import blogCategoryApi from '@/apis/blog/category'
@@ -67,6 +68,7 @@ const BlogCategory = () => {
     }
   ]
 
+  const messageApi = useMessage()
   const [form] = useForm()
   // const labelRef = useRef<{ open: (type: IAction, data?: TypeDTO) => void }>()
   const typeRef = useRef<{
@@ -94,10 +96,10 @@ const BlogCategory = () => {
   const deleteItemConfirm = async (record: CategoryDTO) => {
     const res = await blogCategoryApi.delete!({ surrogateId: record.key })
     if (res.code === 200) {
-      message.success(res.msg)
+      messageApi?.success(res.msg)
       getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
     } else {
-      message.error(res.msg)
+      messageApi?.error(res.msg)
     }
   }
 
@@ -106,7 +108,6 @@ const BlogCategory = () => {
    */
   const rowSelection: TableRowSelection<CategoryDTO> = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: CategoryDTO[]) => {
-      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
       setRowKeys(selectedRowKeys)
     },
     getCheckboxProps: (record: CategoryDTO) => ({
@@ -228,18 +229,9 @@ const BlogCategory = () => {
    */
   const deleteBatch = async () => {
     if (!rowKeys || rowKeys.length < 1) {
-      message.warning('请选择待删除项')
+      messageApi?.warning('请选择待删除项')
       return
     }
-
-    // const ids = rowKeys.join(',')
-    // const res = await blogApi.deleteBatch({ surrogateId: ids })
-    // if (res.code === 200) {
-    //   message.success(res.msg)
-    //   getLabelList({ keyWord: '' })
-    // } else {
-    //   message.error(res.msg)
-    // }
   }
 
   /**

@@ -12,10 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 权限模块管理
@@ -28,23 +26,6 @@ public class AclModuleController {
 
 	@Autowired
 	private SysAclModuleService aclModuleService;
-
-	/**
-	 * 保存权限模块信息
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("save")
-	public ApiResp<String> save(@RequestBody @Valid AclModuleReq req) throws Exception {
-		if (Objects.isNull(req.getSurrogateId())) { // insert
-			return aclModuleService.addAclModule(req);
-		}else { // update
-			return aclModuleService.editAclModule(req);
-		}
-	}
 
 	/**
 	 * 新增权限模块
@@ -72,6 +53,11 @@ public class AclModuleController {
 		return aclModuleService.editAclModule(req);
 	}
 
+	/**
+	 * 获取单个权限模块信息
+	 * @param surrogateId
+	 * @return
+	 */
 	@CheckAuth
 	@RecordLogger
 	@GetMapping("getAclModule")
@@ -103,7 +89,7 @@ public class AclModuleController {
 	}
 
 	/**
-	 *
+	 * 查询权限模块列表
 	 * @return
 	 */
 	@CheckAuth

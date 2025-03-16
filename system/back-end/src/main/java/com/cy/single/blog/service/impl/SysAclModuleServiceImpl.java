@@ -27,9 +27,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
-import static com.cy.single.blog.common.constants.CommonConstants.*;
-import static com.cy.single.blog.enums.ReturnCodeEnum.*;
+import static com.cy.single.blog.common.constants.CommonConstants.ACLM_PREV_NUMBER_INFO;
+import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
+import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
+import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
 
 /**
  * @Author: Lil-K
@@ -110,7 +113,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 	 * @param surrogateId
 	 * @return true/false
 	 */
-	protected boolean checkAclModuleExist(Long parentId, String aclModuleName, Long surrogateId){
+	protected boolean checkAclModuleExist(Long parentId, String aclModuleName, Long surrogateId) {
 		QueryWrapper<SysAclModule> query1 = new QueryWrapper<>();
 		query1.eq("parent_id",parentId);
 		if (Objects.nonNull(aclModuleName)) {
@@ -152,26 +155,28 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 		/**
 		 * 检查权限模块名是否相同
 		 */
-		QueryWrapper<SysAclModule> query1 = new QueryWrapper<>();
-		query1.eq("parent_id", req.getParentSurrogateId());
-		query1.eq("name", req.getName());
-		query1.eq("surrogate_id", req.getSurrogateId());
-		SysAclModule parentAclModule = aclModuleMapper.selectOne(query1);
-		if (Objects.nonNull(parentAclModule)) {
-			return ApiResp.failure(DATA_INFO_REPEAT);
-		}
-
 		// 检查待更新的权限模块是否存在
-		QueryWrapper<SysAclModule> query2 = new QueryWrapper();
-		query2.eq("surrogate_id",req.getSurrogateId());
+		QueryWrapper<SysAclModule> query2 = new QueryWrapper<>();
+		query2.eq("surrogate_id", req.getSurrogateId());
 		SysAclModule before = aclModuleMapper.selectOne(query2);
 		if (Objects.isNull(before)) {
 			return ApiResp.failure(INFO_NOT_EXIST);
 		}
 
-		parentAclModule = getParentAclModule(req.getParentSurrogateId());
-		String parentLevel = Objects.isNull(parentAclModule) ? "" : parentAclModule.getLevel();
-		Long parentId = Objects.isNull(parentAclModule) ? 0 : parentAclModule.getId();
+		String parentLevel = "";
+		String parentName = "0";
+		Long parentId = 0l;
+		if (req.getParentSurrogateId() != 0) {
+			Optional<SysAclModule> optionalSysAclModule = Optional.ofNullable(this.getParentAclModule(req.getParentSurrogateId()));
+			if (!optionalSysAclModule.isPresent()) {
+				return ApiResp.failure("父级权限模块不存在");
+			}
+			SysAclModule parentAclModule = optionalSysAclModule.get();
+			parentLevel = parentAclModule.getLevel();
+			parentId = parentAclModule.getId();
+			parentName = parentAclModule.getName();
+		}
+
 
 		// 更新当前的权限模块
 		SysAclModule after = SysAclModule.builder()
@@ -179,7 +184,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 			.surrogateId(before.getSurrogateId())
 			.name(req.getName())
 			.parentId(req.getParentSurrogateId())
-			.parentName(parentAclModule.getName())
+			.parentName(parentName)
 			.seq(req.getSeq())
 			.level(LevelUtil.calculateLevel(parentLevel, parentId))
 			.remark(req.getRemark())

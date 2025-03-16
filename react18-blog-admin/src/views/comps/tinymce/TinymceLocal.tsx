@@ -17,12 +17,10 @@ const TinymceLocal = () => {
   const [anchors, setAnchors] = useState<{ name: string | null; text: string }[]>([])
 
   const getEditorContent = () => {
-    // console.log('--> contents: ', tinyMceContents)
   }
 
   const onSetContentHandler = () => {
     if (editorRef.current !== null) {
-      // console.log('--> onSetContentHandler editorRef.current not null')
       editorRef.current?.setContent(tinyMceContents)
     }
   }
@@ -63,16 +61,13 @@ const TinymceLocal = () => {
     const parser = new DOMParser()
     const doc = parser.parseFromString(tinyMceContents, 'text/html')
     const headingElements = Array.from(doc.querySelectorAll('h1, h2, h3, h4, h5, h6'))
-    console.log('--> headingElements ', headingElements[0].tagName)
-    // const tree = buildTree(headingElements)
-    // console.log(JSON.stringify(tree))
   }
 
   return (
     <div>
       <Editor
         id={'editor-local'}
-        tinymceScriptSrc={'/admin/tinymce/tinymce.min.js'}
+        tinymceScriptSrc={import.meta.env.BASE_URL + 'tinymce/tinymce.min.js'}
         onInit={(_evt, editor) => (editorRef.current = editor)}
         init={{
           height: 500,

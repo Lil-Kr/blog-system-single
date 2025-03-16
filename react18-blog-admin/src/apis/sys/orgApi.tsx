@@ -12,7 +12,7 @@ import {
 } from '@/types/apis/sys/org/orgType'
 import { Result, ResultPage } from '@/types/base/response'
 
-const sysOrgApi: SysOrgApi = {
+const orgApi: SysOrgApi = {
   retrieveOrgTreeList() {
     return baseAxiosRequest.post<Result<SysOrgResp[]>>(PREFIX_URL_SYS_ORG + '/orgTreeList', {})
   },
@@ -36,4 +36,4 @@ const sysOrgApi: SysOrgApi = {
   }
 }
 
-export default sysOrgApi
+export default orgApi

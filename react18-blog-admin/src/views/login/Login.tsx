@@ -25,10 +25,10 @@ const Login = () => {
     if (code === 200) {
       setToken(token)
       const path = '/admin/home'
-      // 跳转
+      // 跳转主页面
       navigateTo(path)
     } else {
-      navigateTo('/admin/login')
+      navigateTo('/login')
       resetTabs()
     }
   }
@@ -57,15 +57,15 @@ const Login = () => {
         <Flex vertical={true} gap={4}>
           <div className='login-title'>博客后台管理系统</div>
           <Form.Item name={'account'} rules={[{ required: true, message: '不能为空' }]}>
-            <Input prefix={<UserOutlined className='site-form-item-icon' />} placeholder={'用户名'} />
+            <Input
+              autoComplete='username'
+              prefix={<UserOutlined className='site-form-item-icon' />}
+              placeholder={'用户名'}
+            />
           </Form.Item>
 
           <Form.Item name={'password'} rules={[{ required: true, message: '密码不能为空' }]}>
-            <Input.Password
-              prefix={<LockOutlined className='site-form-item-icon' />}
-              type='password'
-              placeholder={'密码'}
-            />
+            <Input.Password autoComplete='current-password' type='password' placeholder={'密码'} />
           </Form.Item>
 
           <Form.Item>

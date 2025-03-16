@@ -9,9 +9,9 @@ import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.req.dict.DictDetailPageListReq;
 import com.cy.single.blog.pojo.req.dict.SaveDictDetailReq;
 import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
+import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysDictDetailService;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
-import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 
 /**
  * @Author: Lil-K
@@ -33,10 +35,13 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 	@Autowired
 	private SysDictDetailMapper dictDetailMapper;
 
+	@Autowired
+	private MessageLangService msgService;
+
 	@Override
 	public ApiResp<String> addDetail(SaveDictDetailReq req) {
 		if (checkDetailExist(req.getSurrogateId(), req.getName(), req.getType())) {
-			return ApiResp.failure("待新增的字典类型明细已存在");
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg1"));
 		}
 
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
@@ -49,9 +54,9 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 			.build();
 		int insert = dictDetailMapper.insert(dictDetail);
 		if (insert >= 1) {
-			return ApiResp.success("新增字典明细成功");
+			return ApiResp.warning(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg2"));
 		} else {
-			return ApiResp.failure("新增字典明细失败");
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg3"));
 		}
 	}
 
@@ -85,12 +90,14 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 	@Override
 	public ApiResp<String> editDetail(SaveDictDetailReq req) {
 		if (checkDetailExist(req.getSurrogateId(), req.getName(), req.getType())) {
-			return ApiResp.failure("待新增的字典类型明细已存在");
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg1"));
 		}
 		QueryWrapper<SysDictDetail> query = new QueryWrapper<>();
 		query.eq("surrogate_id", req.getSurrogateId());
 		SysDictDetail before = dictDetailMapper.selectOne(query);
-		Preconditions.checkNotNull(before, "待更新的字典明细信息不存在");
+		if (Objects.isNull(before)) {
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg4"));
+		}
 
 		SysDictDetail after = SysDictDetail.builder()
 			.surrogateId(req.getSurrogateId())
@@ -101,9 +108,9 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 			.build();
 		int update = dictDetailMapper.update(after, query);
 		if (update >= 1) {
-			return ApiResp.success("修改字典明细信息成功");
+			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg5"));
 		}else {
-			return ApiResp.failure("修改字典明细信息失败");
+			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg6"));
 		}
 	}
 

@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     public ApiResp<String> validateParameterException(HttpServletRequest request,
                                                       MissingServletRequestParameterException exception) {
         String message = exception.getMessage();
-        return ApiResp.error(message);
+        return ApiResp.warning(message);
     }
 
     /**
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
     public ApiResp<String> validateNumberFormatException(HttpServletRequest request,
                                                          MethodArgumentTypeMismatchException exception) {
         String message = exception.getMessage();
-        return ApiResp.error(message);
+        return ApiResp.warning(message);
     }
 
 
@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
             errorMsgList.add(fieldErrors.get(i).getField() + ": " + fieldErrors.get(i).getDefaultMessage());
         }
 
-        return ApiResp.error(errorMsgList.toString());
+        return ApiResp.warning(errorMsgList.toString());
     }
 
     /**
@@ -92,7 +92,7 @@ public class GlobalExceptionHandler {
         String message = exception.getMessage();
         /*Map errorMesssageMap = Maps.newHashMap();
         errorMesssageMap.put(msg, message);*/
-        return ApiResp.error(message);
+        return ApiResp.warning(message);
     }
 
 //    /**

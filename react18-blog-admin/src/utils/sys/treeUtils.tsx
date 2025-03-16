@@ -23,6 +23,22 @@ export const transformToTreeData = (data: SysOrgResp[]): TreeDataNode[] => {
 }
 
 /**
+ * 获取所有的组织id, 作为默认展开所有组织节点
+ * @param data
+ * @returns
+ */
+export const transformOrgTreeExpandeKeys = (data: SysOrgResp[]): string[] => {
+  let surrogateIds: string[] = []
+  data.forEach(item => {
+    surrogateIds.push(item.surrogateId) // 获取当前节点的 surrogateId
+    if (item.orgList && item.orgList.length) {
+      surrogateIds = [...surrogateIds, ...transformOrgTreeExpandeKeys(item.orgList)] // 递归获取子节点的 surrogateId
+    }
+  })
+  return surrogateIds
+}
+
+/**
  * 权限模块 转换为 antd Tree 组件数据结构
  * @param data
  * @returns
@@ -59,6 +75,20 @@ export const transformRoleAclTreeToAntdTree = (aclModules: AclModuleTreeResp[]):
       ...transformRoleAclTreeToAntdTree(module.aclModuleDtoList)
     ]
   }))
+}
+
+/**
+ * 收集所有的权限模块id, 作为默认展开所有节点用
+ */
+export const transformAclModuleTreeExpandeKeys = (data: AclModuleTreeResp[]): string[] => {
+  let surrogateIds: string[] = []
+  data.forEach(item => {
+    surrogateIds.push(item.surrogateId) // 获取当前节点的 surrogateId
+    if (item.aclModuleDtoList && item.aclModuleDtoList.length) {
+      surrogateIds = [...surrogateIds, ...transformAclModuleTreeExpandeKeys(item.aclModuleDtoList)] // 递归获取子节点的 surrogateId
+    }
+  })
+  return surrogateIds
 }
 
 /**

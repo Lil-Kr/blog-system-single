@@ -13,7 +13,7 @@ import {
 } from '@ant-design/icons'
 import { lazy } from 'react'
 
-const aclConfig: RouterItemType[] = [
+const sysConfig: RouterItemType[] = [
   {
     meta: {
       key: '/sys',
@@ -92,4 +92,4 @@ const aclConfig: RouterItemType[] = [
   }
 ]
 
-export { aclConfig }
+export { sysConfig }

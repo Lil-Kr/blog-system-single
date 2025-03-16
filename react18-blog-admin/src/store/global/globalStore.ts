@@ -7,10 +7,10 @@ import { persist } from 'zustand/middleware'
 
 interface GlobaMenuState {
   collapsed: boolean
-  selectedKeys: string[]
-  openKeys: string[]
   setMenuStyleCollapsed: (collapsed: boolean) => void
-  setSelectedKeys: (selectedKeys: string[]) => void
+  selectedKeys: string[]
+  setSelectedMenusKeys: (selectedKeys: string[]) => void
+  openKeys: string[]
   setOpenMenuKeys: (openKeys: string[]) => void
   restMenuState: () => void
 }
@@ -21,12 +21,15 @@ const menuInitialState = {
   openKeys: []
 }
 
+/**
+ * 菜单全局store, 用于控制菜单的折叠状态, 选中项等全局状态
+ */
 const useMenuStore = create<GlobaMenuState>()(
   persist(
     (set, get) => ({
       ...menuInitialState,
       setMenuStyleCollapsed: (collapsed: boolean) => set(state => ({ collapsed: (state.collapsed = collapsed) })),
-      setSelectedKeys: (selectedKeys: string[]) =>
+      setSelectedMenusKeys: (selectedKeys: string[]) =>
         set(state => ({ selectedKeys: (state.selectedKeys = selectedKeys) })),
       setOpenMenuKeys: (openKeys: string[]) => set(state => ({ openKeys: (state.openKeys = openKeys) })),
       restMenuState: () => {

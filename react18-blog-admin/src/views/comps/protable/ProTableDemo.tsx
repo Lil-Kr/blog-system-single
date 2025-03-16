@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { EditableProTable, ProColumns } from '@ant-design/pro-components'
-import { Button, message, Tag } from 'antd'
-import { RoleListPageReq, SysRoleVO, TableRoleType } from '@/types/apis/sys/role/roleType'
+import { Button } from 'antd'
+import { TableRoleType } from '@/types/apis/sys/role/roleType'
 import { TablePageInfoType } from '@/types/base'
 import { PaginationProps, Popconfirm, Space } from 'antd/lib'
 import { SizeType } from 'antd/lib/config-provider/SizeContext'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons/lib/icons'
 import { TableRowSelection } from 'antd/lib/table/interface'
 import { PageDictDetailReq, PageDictDetailResp, TableDictDetailType } from '@/types/apis/sys/dict/dictType'
+import { useMessage } from '@/components/message/MessageProvider'
 import { dictApi } from '@/apis/sys/dictApi'
 
 const ProTableDemo = () => {
+  const messageApi = useMessage()
   const [roleStyle, setRoleStyle] = useState<SizeType>('small')
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
   const [dictDetailDataSource, setDictDetailDataSource] = useState<readonly TableDictDetailType[]>([])
@@ -175,7 +177,7 @@ const ProTableDemo = () => {
     if (code !== 200) {
       return
     }
-    message.success(msg)
+    messageApi?.success(msg)
     initData()
   }
 
@@ -183,7 +185,6 @@ const ProTableDemo = () => {
    * 修改完明细之后刷新
    */
   const refreash = () => {
-    // message.info('测试')
     initData()
   }
 
@@ -227,7 +228,6 @@ const ProTableDemo = () => {
               // if (code !== 200) {
               //   return
               // }
-              // message.success(msg)
             } else {
               // const res = await dictApi.editDictDetail({
               //   surrogateId: rowData.key,
@@ -240,7 +240,6 @@ const ProTableDemo = () => {
               // if (code !== 200) {
               //   return
               // }
-              // message.success(msg)
             }
           },
           onChange: setEditableRowKeys // 更新可编辑行的函数

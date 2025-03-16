@@ -9,6 +9,7 @@ import { useForm } from 'antd/es/form/Form'
 import Table, { ColumnsType } from 'antd/es/table'
 import { TableRowSelection } from 'antd/es/table/interface'
 import blogTopicApi from '@/apis/blog/topic'
+import { useMessage } from '@/components/message/MessageProvider'
 
 const BlogTopic = () => {
   const columns: ColumnsType<any> = [
@@ -75,6 +76,7 @@ const BlogTopic = () => {
       data?: any
     ) => void
   }>()
+  const messageApi = useMessage()
   const [form] = useForm()
   const [pageSize, setPageSize] = useState<number>(10)
   const [btnSize] = useState<SizeType>('middle')
@@ -86,7 +88,6 @@ const BlogTopic = () => {
 
   const rowSelection: TableRowSelection<TopicDTO> = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: TopicDTO[]) => {
-      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
       setRowKeys(selectedRowKeys)
     },
     getCheckboxProps: (record: TopicDTO) => ({
@@ -272,10 +273,10 @@ const BlogTopic = () => {
   const deleteItemConfirm = async (record: TopicDTO) => {
     const res = await blogTopicApi.delete!({ surrogateId: record.key })
     if (res.code === 200) {
-      message.success(res.msg)
+      messageApi?.success(res.msg)
       getTopicPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
     } else {
-      message.error(res.msg)
+      messageApi?.error(res.msg)
     }
   }
 

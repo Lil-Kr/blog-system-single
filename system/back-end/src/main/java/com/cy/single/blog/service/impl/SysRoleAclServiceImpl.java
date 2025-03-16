@@ -94,7 +94,7 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 		Set<Long> originAclIdSet = Sets.newTreeSet(roleAclMapper.selectAclIdListByRoleId(req.getRoleId()));
 		Set<Long> aclIdSet = Sets.newTreeSet(aclIdList);
 		if (CollectionUtils.isEqualCollection(originAclIdSet, aclIdSet)) {
-			return ApiResp.failure("没有需要更新的权限点");
+			return ApiResp.warning("没有需要更新的权限点");
 		}
 		originAclIdSet.removeAll(aclIdSet);
 		/**
@@ -102,11 +102,13 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 		 */
 		if (originAclIdSet.size() == aclIdSet.size()) {
 			if (CollectionUtils.isEmpty(originAclIdSet)) {
-				return ApiResp.failure("没有需要更新的权限点");
+				return ApiResp.warning("没有需要更新的权限点");
 			}
 		}
 
-		// 修改需要更新的权限点
+		/**
+		 * 修改需要更新的权限点
+		 */
 		this.updateRoleAcls(req.getRoleId(), updateIdList);
 		return ApiResp.success("修改角色对应权限点成功");
 	}

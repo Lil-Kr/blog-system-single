@@ -4,7 +4,6 @@ import checker from 'vite-plugin-checker'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import path from 'path'
 
-console.log('load prod-config...')
 export default defineConfig({
   plugins: [
     react(),

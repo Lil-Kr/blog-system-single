@@ -7,6 +7,7 @@ import { RcFile, UploadRequestOption } from 'rc-upload/lib/interface'
 import { imageInfoApi } from '@/apis/image/imageInfo'
 import { AxiosProgressEvent, AxiosRequestConfig } from 'axios'
 import { FileImageOutlined } from '@ant-design/icons'
+import { useMessage } from '@/components/message/MessageProvider'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 const fileMaxSize = 1024 * 1024 * 2 // 2M
@@ -21,6 +22,7 @@ const env = import.meta.env
 
 const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
   const { mRef, update } = props
+  const messageApi = useMessage()
   const [action, setAction] = useState('create')
   const [imageUploadForm] = Form.useForm()
   const [openModal, setOpenModal] = useState(false)
@@ -72,7 +74,7 @@ const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
        * then re-set fileList
        */
       if (code !== 200) {
-        message.error(msg)
+        messageApi?.error(msg)
         // filter success image
         const newFileList = fileList.filter(item => item.response.code === 200)
         setFileList(newFileList)
@@ -157,12 +159,12 @@ const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
 
     const { code, msg, data } = resp
     if (code !== 200) {
-      message.error('上传失败')
+      messageApi?.error('上传失败')
       return
     }
     data.url = env.VITE_BACKEND_IMAGE_BASE_API + data.url
 
-    console.log('--> 上传成功: ', data)
+    messageApi?.success(msg)
     setFileList(prevFiles => [...prevFiles, data as UploadFile])
   }
 

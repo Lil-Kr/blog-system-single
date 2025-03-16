@@ -1,10 +1,11 @@
 import React, { useImperativeHandle, useState } from 'react'
 import { Modal } from 'antd/lib'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { Form, Input, message } from 'antd'
+import { Form, Input } from 'antd'
+import { useMessage } from '@/components/message/MessageProvider'
 
 const BaseModal = (props: ModalType.BaseModalType) => {
-  const [messageApi, contextHolder] = message.useMessage()
+  const messageApi = useMessage()
   const { mRef, innerComponent, update } = props
   const [baseModalForm] = Form.useForm()
   const [action, setAction] = useState('create')
@@ -73,11 +74,11 @@ const BaseModal = (props: ModalType.BaseModalType) => {
       const res = await api.add!(params)
       const { code, msg, data } = res
       if (code === 200) {
-        messageApi.success(msg)
+        messageApi?.success(msg)
         handleCancel()
         update()
       } else {
-        messageApi.error(msg)
+        messageApi?.error(msg)
         return
       }
     } else if (action === 'edit') {
@@ -85,15 +86,15 @@ const BaseModal = (props: ModalType.BaseModalType) => {
       const res = await api.edit!(param)
       const { code, msg } = res
       if (code === 200) {
-        messageApi.success(msg)
+        messageApi?.success(msg)
         handleCancel()
         update()
       } else {
-        messageApi.error(msg)
+        messageApi?.error(msg)
         return
       }
     } else {
-      messageApi.error('操作失败')
+      messageApi?.error('操作失败')
       return
     }
   }

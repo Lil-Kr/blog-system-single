@@ -3,11 +3,11 @@ import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } fr
 import { Modal, Form, Input } from 'antd/lib'
 const { TextArea } = Input
 import { UserTableType } from '@/types/apis/sys/user/userType'
-import { message } from 'antd'
+import { useMessage } from '@/components/message/MessageProvider'
 
 const DictModal = (props: ModalType.CustomModal) => {
+  const messageApi = useMessage()
   const { mRef, update } = props
-  const [messageApi, contextHolder] = message.useMessage()
   const [modalForm] = Form.useForm()
   const [action, setAction] = useState('create')
   const [title, setTitle] = useState('')
@@ -63,7 +63,7 @@ const DictModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      messageApi.success(msg)
+      messageApi?.success(msg)
     } else if (action === 'edit') {
       const req = {
         surrogateId: params.key,
@@ -74,7 +74,7 @@ const DictModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      messageApi.success(msg)
+      messageApi?.success(msg)
     } else {
       return
     }

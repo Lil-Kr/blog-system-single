@@ -21,7 +21,7 @@ const TinymceLocal = () => {
       </Button>
       <Editor
         id={'editor-local'}
-        tinymceScriptSrc={'/admin/tinymce/tinymce.min.js'}
+        tinymceScriptSrc={import.meta.env.BASE_URL + 'tinymce/tinymce.min.js'}
         onInit={(_evt, editor) => {
           editorRef.current = editor
         }}

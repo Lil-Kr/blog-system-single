@@ -1,25 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons/lib/icons'
-import {
-  Button,
-  Divider,
-  Flex,
-  message,
-  PaginationProps,
-  Popconfirm,
-  Select,
-  Space,
-  Splitter,
-  Table,
-  Tabs,
-  TabsProps,
-  Tag,
-  Tooltip
-} from 'antd/lib'
+import { Button, Flex, PaginationProps, Popconfirm, Space, Splitter, Tabs, TabsProps, Tag, Tooltip } from 'antd/lib'
 import { OptionType, transformTypeToSeletor } from '@/types/apis'
 import { SizeType } from 'antd/lib/config-provider/SizeContext'
-import { useForm } from 'antd/lib/form/Form'
-import { ColumnsType, TableRowSelection } from 'antd/lib/table/interface'
+import { TableRowSelection } from 'antd/lib/table/interface'
 import { TablePageInfoType } from '@/types/base'
 import { RoleAddReq, RoleEditReq, RoleListPageReq, SysRoleVO, TableRoleType } from '@/types/apis/sys/role/roleType'
 import roleApi from '@/apis/sys/roleApi'
@@ -28,8 +12,10 @@ import useDictDetailStore from '@/store/global/dictStore'
 import RoleAcl from './RoleAcl'
 import RoleUser from './RoleUser'
 import { useRoleAclStore } from '@/store/sys/roleStore'
+import { useMessage } from '@/components/message/MessageProvider'
 
 const Role = () => {
+  const messageApi = useMessage()
   const MemoTooltip = Tooltip || React.memo(Tooltip)
   const [roleStyle] = useState<SizeType>('small')
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
@@ -64,7 +50,13 @@ const Role = () => {
       width: '20%',
       formItemProps: (form, { rowIndex }) => ({
         rules: rowIndex > 1 ? [{ required: true, message: '此项为必填项' }] : []
-      })
+      }),
+      render: (_, record: TableRoleType) => {
+        if (record.type === 1) {
+          return <Tag color={'red'}>{record.name}</Tag>
+        }
+        return record.name
+      }
     },
     {
       key: 'type',
@@ -89,7 +81,7 @@ const Role = () => {
         return roleType.find(item => item.value === value.toString())?.label || value
       },
       render: (_, record: TableRoleType) => {
-        return <Tag color={record.type === 1 ? 'red' : 'geekblue'}>{record.name}</Tag>
+        return <Tag color={record.type === 1 ? 'red' : 'blue'}>{record.name}</Tag>
       }
     },
     {
@@ -108,7 +100,6 @@ const Role = () => {
         options: statuType, // 绑定下拉框选项
         defaultValue: statuType.length > 0 ? statuType[0].value : 0, // 确保默认选中普通用户
         onChange: (value: number, option: any) => {
-          // console.log('选中的值:', value, '对应的文字:', option?.label)
         },
         fieldNames: { label: 'label', value: 'value' } // 显式绑定 value 和 label
       },
@@ -122,7 +113,7 @@ const Role = () => {
         let statusText = statuType.find(item => item.value === status.toString())?.label || ''
         switch (status) {
           case 0:
-            colorText = 'blue'
+            colorText = 'green'
             break
           case 1:
             colorText = 'red'
@@ -321,7 +312,7 @@ const Role = () => {
     if (code !== 200) {
       return
     }
-    message.success(msg)
+    messageApi?.success(msg)
     initRoleList()
   }
 
@@ -375,7 +366,7 @@ const Role = () => {
                     if (code !== 200) {
                       return
                     }
-                    message.success(msg)
+                    messageApi?.success(msg)
                   } else {
                     // update
                     const req: RoleEditReq = {
@@ -390,7 +381,7 @@ const Role = () => {
                     if (code !== 200) {
                       return
                     }
-                    message.success(msg)
+                    messageApi?.success(msg)
                   }
                   initRoleList()
                 },
@@ -412,7 +403,6 @@ const Role = () => {
           </Splitter.Panel>
           <Splitter.Panel>
             <Tabs
-              // onChange={onChange}
               style={{ height: '100%', width: '100%' }}
               type='card'
               items={tabsItem}

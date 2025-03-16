@@ -3,14 +3,14 @@ import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } fr
 import { Modal, Form, Input, InputNumber, Select } from 'antd/lib'
 const { TextArea } = Input
 import { OptionType, transformTypeToSeletor } from '@/types/apis'
-import { message } from 'antd'
 import { AclModuleAddReq, AclModuleEditReq, AclModuleTableType } from '@/types/apis/sys/acl/aclType'
 import { aclModuleApi } from '@/apis/sys'
 import useDictDetailStore from '@/store/global/dictStore'
 import { DictMapType } from '@/types/apis/sys/dict/dictType'
+import { useMessage } from '@/components/message/MessageProvider'
 
 const AclModuleModal = (props: ModalType.CustomModal) => {
-  const [messageApi, contextHolder] = message.useMessage()
+  const messageApi = useMessage()
   const { mRef, update } = props
   const [modalForm] = Form.useForm()
   const [action, setAction] = useState('create')
@@ -21,7 +21,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
   const [requestParams, setRequestParams] = useState<IModalRequestAction>({
     api: {}
   })
-  const { setDictMap, dictMap } = useDictDetailStore()
+  const { dictMap } = useDictDetailStore()
   const [selectorList, setSelectorList] = useState<OptionType[]>([])
   const [status, setStatus] = useState<OptionType[]>([])
   const [selectedValue, setSelectedValue] = useState<{
@@ -54,6 +54,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
       value: '0',
       label: '-'
     })
+    // 存储待选的权限模块
     setSelectorList(list)
 
     // 初始化数据
@@ -99,8 +100,8 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
       setSelectedValue({ parentAclModuleInfo, statusInfo })
     } else if (action === 'edit') {
       const parentAclModuleInfo: OptionType = {
-        label: data?.name ?? '',
-        value: data?.surrogateId ?? ''
+        label: data?.parentAclModuleInfo?.label ?? '',
+        value: data?.parentAclModuleInfo?.value ?? ''
       }
       const statusInfo: OptionType = {
         value: data?.status?.toString() ?? '',
@@ -139,7 +140,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
         name: params.name,
         parentSurrogateId: selectedValue?.parentAclModuleInfo?.value ?? '0',
         seq: params.seq,
-        status: params.status,
+        status: params.statusInfo?.toString() ?? '0',
         remark: params.remark
       }
       const res = await api.add!(addReq)
@@ -147,14 +148,14 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      messageApi.success(msg)
+      messageApi?.success(msg)
     } else if (action === 'edit') {
       const editReq: AclModuleEditReq = {
         surrogateId: params.key,
         name: params.name,
         parentSurrogateId: selectedValue?.parentAclModuleInfo?.value ?? '0',
         seq: params.seq,
-        status: params.status,
+        status: Number.parseInt(selectedValue.statusInfo.value ?? '0'),
         remark: params.remark
       }
       const res = await api.edit!(editReq)
@@ -162,7 +163,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      messageApi.success(msg)
+      messageApi?.success(msg)
     } else {
       return
     }

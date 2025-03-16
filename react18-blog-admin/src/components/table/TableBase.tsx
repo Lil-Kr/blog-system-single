@@ -5,10 +5,10 @@ import React, { useState } from 'react'
 const TableBase = (props: TableBaseParames) => {
   const { tableId, style, rowSelection, loading, columns, dataSource, pagination } = props
 
-  const [pageSize, setPageSize] = useState<number>(5)
+  // const [pageSize, setPageSize] = useState<number>(5)
 
-  const onChange: PaginationProps['onChange'] = (page, pageSize) => {
-  }
+  // const onChange: PaginationProps['onChange'] = (page, pageSize) => {
+  // }
 
   /**
    * change pageSize
@@ -16,9 +16,9 @@ const TableBase = (props: TableBaseParames) => {
    * @param current
    * @param pageSize
    */
-  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
-    setPageSize(pageSize)
-  }
+  // const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
+  //   setPageSize(pageSize)
+  // }
 
   return (
     <div className='table-base-component-customize'>

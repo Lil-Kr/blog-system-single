@@ -1,4 +1,5 @@
 import { Result } from '../base/response'
+import { SysAclModule } from './sys/acl/aclType'
 import { DictMapType } from './sys/dict/dictType'
 
 export type BaseApi = {
@@ -16,7 +17,7 @@ export type OptionType = {
 
 export interface SelectOptionType {
   selectKeys: string[]
-  aclModuleId: string
+  aclModule: SysAclModule
   value?: string
   label?: string
 }

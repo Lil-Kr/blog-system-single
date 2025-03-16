@@ -10,7 +10,7 @@ import { compsConfig } from './compsConfig'
 import { aideToolsConfig } from './aideToolsConfig'
 import { portalConfig } from './portalConfig'
 import { imageToolsConfig } from './imageToolsConfig'
-import { aclConfig } from './aclConfig'
+import { sysConfig } from './aclConfig'
 
 const busConfig: RouterItemType[] = [
   {
@@ -29,7 +29,7 @@ const busConfig: RouterItemType[] = [
       ...portalConfig,
       ...compsConfig,
       ...aideToolsConfig,
-      ...aclConfig
+      ...sysConfig
     ]
   }
 ]

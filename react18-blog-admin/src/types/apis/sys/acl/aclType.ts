@@ -64,6 +64,10 @@ export type AclModuleTableType = {
   updateTime?: string
 }
 
+export type CallBackType = {
+  aclModuleId: string
+}
+
 /** ================ req ================ */
 export interface AclModuleReq {
   surrogateId: string

@@ -2,14 +2,14 @@ import React, { useImperativeHandle, useState } from 'react'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { Modal, Form, Input, InputNumber, Select } from 'antd/lib'
 const { TextArea } = Input
-import sysOrgApi from '@/apis/sys/orgApi'
+import orgApi from '@/apis/sys/orgApi'
 import { UserTableType } from '@/types/apis/sys/user/userType'
 import { OptionType } from '@/types/apis'
-import { message } from 'antd'
+import { useMessage } from '@/components/message/MessageProvider'
 
 const UserModal = (props: ModalType.CustomModal) => {
+  const messageApi = useMessage()
   const { mRef, update } = props
-  const [messageApi, contextHolder] = message.useMessage()
   const [modalForm] = Form.useForm()
   const [action, setAction] = useState('create')
   const [title, setTitle] = useState('')
@@ -65,7 +65,7 @@ const UserModal = (props: ModalType.CustomModal) => {
    * @returns
    */
   const setSelectorComp = async () => {
-    const res = await sysOrgApi.orgAllList({})
+    const res = await orgApi.orgAllList({})
     const { code, data, msg } = res
     if (code !== 200) {
       setOrgList([])
@@ -111,7 +111,7 @@ const UserModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      messageApi.info(msg)
+      messageApi?.info(msg)
       handleCancel()
       update()
     } else {

@@ -10,7 +10,6 @@ import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
-import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysAclCoreService;
 import com.cy.single.blog.service.SysTreeService;
 import com.cy.single.blog.utils.acl.AclUtil;
@@ -20,7 +19,6 @@ import com.cy.single.blog.utils.orgUtil.OrgUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,9 +45,6 @@ public class SysTreeServiceImpl implements SysTreeService {
 
 	@Autowired
 	private SysAclCoreService coreService;
-
-	@Autowired
-	private MessageLangService msgService;
 
 	/**
 	 * 获取组织树
@@ -134,7 +129,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 		List<SysAclModule> aclModuleList = aclModuleMapper.selectList(new QueryWrapper());
 
 		// 实体集合转为Dto集合
-		List<AclModuleDto> dtoList = aclModuleList.stream().map(aclModule -> AclModuleDto.adapt(aclModule)).collect(Collectors.toList());
+		List<AclModuleDto> dtoList = aclModuleList.stream().map(AclModuleDto::adapt).collect(Collectors.toList());
 
 		return aclModuleListToTree(dtoList);
 	}
@@ -156,7 +151,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 			.collect(Collectors.groupingBy(SysAclModule::getLevel));
 
 		// 从顶层开始递归生成权限模块树
-		transformAclModuleTree(rootList,LevelUtil.ROOT,levelAclModuleMap);
+		this.transformAclModuleTree(rootList, LevelUtil.ROOT, levelAclModuleMap);
 		return rootList;
 	}
 
@@ -234,45 +229,6 @@ public class SysTreeServiceImpl implements SysTreeService {
 		// 将权限点与权限模块组装为树结构
 		List<AclModuleDto> aclModuleDtoList = aclListToTree(aclDtoList);
 		return aclModuleDtoList;
-	}
-
-	/**
-	 *
-	 * @param aclModules
-	 * @return
-	 */
-	private static List<AclModuleDto> filterAclModules(List<AclModuleDto> aclModules) {
-		List<AclModuleDto> result = new ArrayList<>();
-		for (AclModuleDto module : aclModules) {
-			AclModuleDto filteredModule = filterModule(module);
-			if (filteredModule != null) {
-				result.add(filteredModule);
-			}
-		}
-		return result;
-	}
-
-	private static AclModuleDto filterModule(AclModuleDto module) {
-		List<AclModuleDto> filteredChildren = new ArrayList<>();
-		for (AclModuleDto child : module.getAclModuleDtoList()) {
-			AclModuleDto filteredChild = filterModule(child);
-			if (filteredChild != null) {
-				filteredChildren.add(filteredChild);
-			}
-		}
-
-		List<AclDto> filteredAcls = module.getAclDtoList().stream()
-			.filter(AclDto::isHasAcl)
-			.collect(Collectors.toList());
-
-		if (!filteredChildren.isEmpty() || !filteredAcls.isEmpty()) {
-			AclModuleDto newModule = new AclModuleDto();
-			BeanUtils.copyProperties(module, newModule);
-			newModule.setAclModuleDtoList(filteredChildren);
-			newModule.setAclDtoList(filteredAcls);
-			return newModule;
-		}
-		return null;
 	}
 
 	/**

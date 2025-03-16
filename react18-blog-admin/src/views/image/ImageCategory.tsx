@@ -7,6 +7,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { ImageCategoryDTO, ImageCategoryPageReqParams } from '@/types/apis/image/image'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { BaseModal } from '@/components/modal'
+import { useMessage } from '@/components/message/MessageProvider'
 
 // api
 import imageCategoryApi from '@/apis/image'
@@ -82,6 +83,7 @@ const ImageCategory = () => {
     }
   ]
 
+  const messageApi = useMessage()
   const [form] = useForm()
   const imageCategoryRef = useRef<{
     open: (
@@ -151,11 +153,11 @@ const ImageCategory = () => {
     const delRes = await imageCategoryApi.delete({ surrogateId: record.key })
     const { code } = delRes
     if (code !== 200) {
-      message.warning('删除失败')
+      messageApi?.warning('删除失败')
       return
     }
     imageCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageInfo.pageSize })
-    message.success('删除成功')
+    messageApi?.success('删除成功')
   }
 
   const delItem = async (key: string) => {

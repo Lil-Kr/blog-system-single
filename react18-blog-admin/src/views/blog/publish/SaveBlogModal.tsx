@@ -33,6 +33,7 @@ import { Editor } from '@tinymce/tinymce-react'
 import { Editor as EditorInstance } from 'node_modules/tinymce/tinymce'
 import { Result } from '@/types/base/response'
 import { imageInfoApi } from '@/apis/image/imageInfo'
+import { useMessage } from '@/components/message/MessageProvider'
 
 const env = import.meta.env
 const useStyle = createStyles(({ token }) => ({
@@ -61,6 +62,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
     body: styles['blog-modal-body']
   }
 
+  const messageApi = useMessage()
   const { mRef, update } = props
   const [saveBlogForm] = Form.useForm()
   const editorRef = useRef<EditorInstance | null>(null)
@@ -195,7 +197,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
         setRadioValue('')
       },
       onCancel() {
-        message.warning('取消成功')
+        messageApi?.warning('取消成功')
       }
     })
   }
@@ -218,12 +220,12 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
       }
 
       if (res.code === 200) {
-        message.success('操作成功')
+        messageApi?.success('操作成功')
         saveBlogForm.resetFields()
         setOpenModal(false)
         update()
       } else {
-        message.error('操作失败')
+        messageApi?.error('操作失败')
       }
     }
   }
@@ -440,7 +442,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
                 <Form.Item name={'contentText'} label={'内容'}>
                   <Editor
                     id={'editor-local'}
-                    tinymceScriptSrc={'/admin/tinymce/tinymce.min.js'}
+                    tinymceScriptSrc={import.meta.env.BASE_URL + 'tinymce/tinymce.min.js'}
                     onInit={(_evt, editor) => {
                       editorRef.current = editor
                     }}
@@ -520,7 +522,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
                         }
                       },
                       insertdatetime_formats: ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d', '%Y/%m/%d', '%H:%M:%S', '%D'],
-                      insertdatetime_element: true, // insert time/date plugin
+                      insertdatetime_element: true // insert time/date plugin
                       // content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px } h2 { font-size:24px; font-weight:bold; margin:20px 0; }'
                       // skin: 'oxide-dark',
                       // content_css: 'dark'

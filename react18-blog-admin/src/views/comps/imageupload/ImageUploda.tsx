@@ -2,6 +2,7 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Divider, Flex, GetProp, Upload, Image as ImageUpload, UploadFile, UploadProps, message } from 'antd'
 import React, { useState } from 'react'
 import ImgCrop from 'antd-img-crop'
+import { useMessage } from '@/components/message/MessageProvider'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 const fileMaxSize = 1024 * 1024 * 2 // 2M
@@ -15,6 +16,7 @@ const getBase64 = (file: FileType): Promise<string> =>
   })
 
 const ImageUploda = () => {
+  const messageApi = useMessage()
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState<string>()
   const [fileList1, setFileList1] = useState<UploadFile[]>([])
@@ -34,12 +36,12 @@ const ImageUploda = () => {
     const isJpgOrPng = type === 'image/jpeg' || type === 'image/png' || type === 'image/jpg'
 
     if (!isJpgOrPng) {
-      message.error('you can only upload JPG/PNG file!')
+      messageApi?.error('you can only upload JPG/PNG file!')
       return Upload.LIST_IGNORE
     }
 
     if (size! > fileMaxSize) {
-      message.error('Image must smaller than 2MB!')
+      messageApi?.error('Image must smaller than 2MB!')
       return Upload.LIST_IGNORE
     }
 
@@ -63,7 +65,6 @@ const ImageUploda = () => {
     // if (!checkImage(file)) return
 
     setFileList1([...fileList])
-    console.log('--> handleChange fileList: ', fileList)
 
     if (file.status === 'done') {
       const { code, msg } = file.response
@@ -72,7 +73,7 @@ const ImageUploda = () => {
        * then re-set fileList
        */
       if (code !== 200) {
-        message.error(msg)
+        messageApi?.error(msg)
         // filter success image
         const newFileList = fileList.filter(item => item.response.code === 200)
         // const newFileList = reSetFileList(file, fileList)

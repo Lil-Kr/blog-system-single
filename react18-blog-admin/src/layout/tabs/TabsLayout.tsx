@@ -18,7 +18,7 @@ const TabsLayout = () => {
    * 从 zustand 读取最后一次打开的所有 tab, 并初始化展开的 tab
    */
   const { historyOpenTabs, tabActive, setTabActive, removeTab } = useTabsStore()
-  const { setSelectedKeys, setOpenMenuKeys } = useMenuStore()
+  const { setSelectedMenusKeys: setSelectedKeys, setOpenMenuKeys } = useMenuStore()
 
   /**
    * onChange
@@ -36,7 +36,7 @@ const TabsLayout = () => {
   }
 
   /**
-   *
+   * 关闭 tab 页签时触发
    * @param targetKey
    * @returns
    */

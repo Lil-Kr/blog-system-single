@@ -3,6 +3,10 @@ import { RouterItemType } from '@/types/router/routeType'
 import { HomeOutlined } from '@ant-design/icons'
 import { lazy } from 'react'
 
+const componentMap = {
+  HomeOutlined: lazy(() => import('@/views/home'))
+}
+
 const homeConfig: RouterItemType[] = [
   {
     meta: {
@@ -12,7 +16,7 @@ const homeConfig: RouterItemType[] = [
       icon: <HomeOutlined />
     },
     path: 'home',
-    element: LazyLoad(lazy(() => import('@/views/home')))
+    element: LazyLoad(componentMap['HomeOutlined'])
   }
 ]
 

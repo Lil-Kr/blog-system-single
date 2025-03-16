@@ -60,6 +60,7 @@ const TableTransfer: React.FC<TableTransferProps> = props => {
           <Table
             size={transferStyle}
             rowSelection={{ type: 'checkbox', ...rowSelection }}
+            bordered={true}
             columns={columns}
             dataSource={filteredItems}
             style={{ pointerEvents: listDisabled ? 'none' : undefined }}

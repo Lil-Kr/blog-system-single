@@ -7,15 +7,16 @@ import { TablePageInfoType } from '@/types/base'
 import { IModalRequestAction, IModalParams, IAction, IModalStyle } from '@/types/component/modal'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { useForm } from 'antd/es/form/Form'
-import { transformToTreeData } from '@/utils/sys/treeUtils'
+import { transformOrgTreeExpandeKeys, transformToTreeData } from '@/utils/sys/treeUtils'
 import { UserListPageReq, UserTableType } from '@/types/apis/sys/user/userType'
 import UserModal from '@/components/modal/UserModal'
-import { sysOrgApi, userApi } from '@/apis/sys'
+import { orgApi, userApi } from '@/apis/sys'
 import { OptionType } from '@/types/apis'
 import DirectoryTree from 'antd/lib/tree/DirectoryTree'
+import { Key } from 'antd/lib/table/interface'
 
 const User = () => {
-  const columns: ColumnsType<any> = [
+  const userColumns: ColumnsType<any> = [
     {
       key: 'number',
       dataIndex: 'number',
@@ -104,15 +105,17 @@ const User = () => {
       render: (_: object, record: UserTableType) => (
         <Space size='middle'>
           <Button
+            size={btnSize}
             name='look'
-            type='primary'
+            type='link'
             shape='circle'
             icon={<SearchOutlined />}
             onClick={() => lookItem(record.key ?? '', record)}
           />
           <Button
+            size={btnSize}
             name='edit'
-            type='primary'
+            type='link'
             shape='circle'
             icon={<EditOutlined />}
             onClick={() => editItem(record.key ?? '', record)}
@@ -125,7 +128,7 @@ const User = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
+            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
       )
@@ -133,7 +136,8 @@ const User = () => {
   ]
 
   const MemoTooltip = Tooltip || React.memo(Tooltip)
-  const [btnSize] = useState<SizeType>('middle')
+  const [btnSize] = useState<SizeType>('small')
+  const [userTableSize] = useState<SizeType>('small')
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [form] = useForm()
   // 函数式更新值, 不能直接更新
@@ -145,6 +149,8 @@ const User = () => {
   const [orgTree, setOrgTree] = useState<TreeDataNode[]>([] as TreeDataNode[])
   const [dataSource, setDataSource] = useState<UserTableType[]>([] as UserTableType[])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+  // 默认展开所有节点
+  const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
   const [selectedInfo, setSelectedInfo] = useState<OptionType>({} as OptionType)
 
   const userRef = useRef<{
@@ -264,15 +270,9 @@ const User = () => {
    * 表格为checkbox时启用
    */
   const rowSelection: TableRowSelection<UserTableType> = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-    },
-    onSelect: (record, selected, selectedRows) => {
-      // console.log(record, selected, selectedRows)
-    },
-    onSelectAll: (selected, selectedRows, changeRows) => {
-      // console.log(selected, selectedRows, changeRows)
-    }
+    onChange: (selectedRowKeys, selectedRows) => {},
+    onSelect: (record, selected, selectedRows) => {},
+    onSelectAll: (selected, selectedRows, changeRows) => {}
   }
 
   /**
@@ -330,7 +330,7 @@ const User = () => {
    * @returns
    */
   const retrieveOrgTreeList = async () => {
-    const orgList = await sysOrgApi.retrieveOrgTreeList()
+    const orgList = await orgApi.retrieveOrgTreeList()
     const { code, data, msg } = orgList
     if (code !== 200) {
       return
@@ -338,6 +338,10 @@ const User = () => {
     const res = transformToTreeData(data)
     // 加载组织树
     setOrgTree(res)
+
+    // 默认展开根节点
+    const expandeKeys: string[] = transformOrgTreeExpandeKeys(data)
+    setExpandedKeys(expandeKeys)
 
     // 默认选中根节点
     setSelectedKeys([res[0].key.toString()])
@@ -374,6 +378,10 @@ const User = () => {
     }))
   }
 
+  const onExpand = (expandedKeysValue: Key[]) => {
+    setExpandedKeys(expandedKeysValue) // 更新展开的节点
+  }
+
   return (
     <div className='sys-user-warpper' style={{ height: '100%', width: '100%' }}>
       <Flex gap='middle' vertical={true} style={{ height: '100%', width: '100%' }}>
@@ -388,11 +396,11 @@ const User = () => {
                 blockNode={true} // 是否节点占据一行
                 treeData={orgTree}
                 selectedKeys={selectedKeys}
+                expandedKeys={expandedKeys} // （受控）展开指定的树节点
+                onExpand={onExpand}
                 // defaultExpandAll={true}
-                // expandedKeys={expandedKeys} // （受控）展开指定的树节点
                 // defaultExpandedKeys={[]}
                 // defaultExpandParent={true}
-                // onExpand={onExpand}
                 titleRender={item => {
                   const title = item.title as React.ReactNode
                   return <MemoTooltip title={title}>{title}</MemoTooltip>
@@ -415,33 +423,38 @@ const User = () => {
                           <Input placeholder={'搜索关键字'} />
                         </Form.Item>
                         <Form.Item>
-                          <Button icon={<SearchOutlined />} type='primary' onClick={search} />
+                          <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
                         </Form.Item>
                         <Form.Item>
-                          <Button type='primary' onClick={resetSearch}>
+                          <Button size={btnSize} type='primary' onClick={resetSearch}>
                             {'置空'}
+                          </Button>
+                        </Form.Item>
+                        <Form.Item>
+                          <Button type='dashed' size={btnSize} icon={<AntDesignOutlined />} onClick={resetSearch}>
+                            {'全部'}
                           </Button>
                         </Form.Item>
                       </Flex>
                     </Form>
-                    <Button type='dashed' size={btnSize} icon={<AntDesignOutlined />} onClick={resetSearch}>
-                      {'全部'}
-                    </Button>
                   </Flex>
                 </div>
                 {/* show table info */}
                 <div className='list'>
                   <Table
                     key={1}
+                    size={userTableSize}
                     bordered={true}
+                    title={() => '管理员列表'}
                     rowSelection={{
                       type: 'checkbox',
                       ...rowSelection
                     }}
                     loading={tableLoading}
-                    columns={columns}
+                    columns={userColumns}
                     dataSource={dataSource}
                     pagination={{
+                      position: ['bottomLeft'],
                       showQuickJumper: false, // 跳转指定页面
                       showSizeChanger: true,
                       hideOnSinglePage: false,

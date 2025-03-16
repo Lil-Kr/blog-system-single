@@ -38,6 +38,7 @@ import {
 } from '@/types/apis/sys/dict/dictType'
 import { message } from 'antd'
 import { EditableProTable, ProColumns } from '@ant-design/pro-components'
+import { useMessage } from '@/components/message/MessageProvider'
 
 const Dict = () => {
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
@@ -51,6 +52,7 @@ const Dict = () => {
     totalSize: 0
   })
 
+  const messageApi = useMessage()
   const [form] = useForm()
   const [formDetail] = useForm()
   const [btnSize] = useState<SizeType>('middle')
@@ -124,7 +126,7 @@ const Dict = () => {
       )
     }
   ]
-  
+
   // 字典明细 table
   const columnsDetail: ProColumns<TableDictDetailType>[] = [
     {
@@ -456,7 +458,7 @@ const Dict = () => {
     if (code !== 200) {
       return
     }
-    message.success(msg)
+    messageApi?.success(msg)
     initDetailData()
   }
 
@@ -600,7 +602,7 @@ const Dict = () => {
                   if (code !== 200) {
                     return
                   }
-                  message.success(msg)
+                  messageApi?.success(msg)
                 } else {
                   const res = await dictApi.editDictDetail({
                     surrogateId: rowData.key,
@@ -613,7 +615,7 @@ const Dict = () => {
                   if (code !== 200) {
                     return
                   }
-                  message.success(msg)
+                  messageApi?.success(msg)
                 }
               },
               onChange: setEditableRowKeys // 更新可编辑行的函数

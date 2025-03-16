@@ -14,6 +14,7 @@ import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysRoleUserService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
+import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 
 /**
  * @Author: Lil-K
@@ -51,7 +52,7 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 		 */
 		List<Long> originUserIdList = new ArrayList<>(roleUserMapper.selectUserIdListByRoleId(req.getRoleId()));
 		if (CollectionUtils.isEmpty(originUserIdList)) {
-			return ApiResp.failure("当前角色未分配用户");
+			return ApiResp.warning(msgService.getGreetingMessage(LANG_ZH, "sys.role.user.resp.msg1"));
 		}
 
 		/**
@@ -59,7 +60,7 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 		 */
 		List<Long> userIdList = req.getUserIdList();
 		if (CollectionUtils.isEmpty(userIdList)) {
-			return ApiResp.failure("待更新的用户id为空");
+			return ApiResp.warning(msgService.getGreetingMessage(LANG_ZH, "sys.role.user.resp.msg2"));
 		}
 
 		/**
@@ -70,13 +71,13 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 			Set<Long> userIdSet = Sets.newHashSet(userIdList);
 			originUserIdSet.removeAll(userIdSet);
 			if (CollectionUtils.isEmpty(originUserIdSet)) {
-				return ApiResp.failure("待更新的用户信息与原来一致");
+				return ApiResp.warning(msgService.getGreetingMessage(LANG_ZH, "sys.role.user.resp.msg3"));
 			}
 		}
 
 		// 更新角色-用户信息
 		this.updateRoleUsers(req.getRoleId(), userIdList);
-		return ApiResp.success("更新用户角色信息成功");
+		return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.role.user.resp.msg4"));
 	}
 
 	/**
@@ -120,21 +121,20 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 		 */
 		List<Long> userIdList = roleUserMapper.selectUserIdListByRoleId(req.getRoleId());
 
-		if (CollectionUtils.isEmpty(userIdList)) {
-			return ApiResp.failure(INFO_NOT_EXIST);
-		}
-
 		/**
 		 * 查询角色对应分配的用户信息
 		 * 用于已选列表
 		 */
-		List<SysUserVO> roleUserSelectList = userMapper.selectUserListByIds(userIdList);
+		List<SysUserVO> roleUserSelectList = CollectionUtils.isEmpty(userIdList) ? Lists.newArrayList() : userMapper.selectUserListByIds(userIdList);
 
 		/**
 		 * 查询所有用户信息, 与 已选列表互斥
+		 * 当前角色从未分配用户时, 返回整个用户列表
 		 */
 		List<SysUserVO> roleUserAllList = userMapper.selectUserList();
-		roleUserAllList.removeIf(item -> roleUserSelectList.stream().anyMatch(i -> Objects.equals(i.getSurrogateId(), item.getSurrogateId())));
+		if (CollectionUtils.isEmpty(userIdList)) {
+			roleUserAllList.removeIf(item -> roleUserSelectList.stream().anyMatch(i -> Objects.equals(i.getSurrogateId(), item.getSurrogateId())));
+		}
 
 		RoleUserVO build = RoleUserVO.builder()
 			.selectedUserList(roleUserSelectList)

@@ -2,13 +2,13 @@ import React from 'react'
 import { Avatar, Dropdown, MenuProps, message } from 'antd'
 import { useNavigate } from 'oh-router-react'
 import avatar from '@/assets/images/icons/avatar.png'
-
 // zustand
 import useLoginAdminStore from '@/store/login'
 import { useMenuStore, useTabsStore } from '@/store/global'
+import { useMessage } from '@/components/message/MessageProvider'
 
 const AvatarIcon = () => {
-  const [messageApi, contextHolder] = message.useMessage()
+  const messageApi = useMessage()
   const { removeToken } = useLoginAdminStore()
   const { resetTabs } = useTabsStore()
   const { restMenuState } = useMenuStore()
@@ -36,27 +36,26 @@ const AvatarIcon = () => {
     removeToken()
     resetTabs()
     restMenuState()
-    navigateTo('/admin/login')
+    navigateTo('/login')
   }
 
   const handleMenuClick: MenuProps['onClick'] = event => {
     let key = event.key
     switch (key) {
       case '1':
-        messageApi.info(key)
+        messageApi?.info(key)
         break
       case '2': // 关于我
-        messageApi.info(key)
+        messageApi?.info(key)
         break
       case '3':
-        messageApi.info(key)
+        messageApi?.info(key)
         break
       case '4':
         loginoutFunc()
-        // messageApi.success('')
         break
       default:
-        messageApi.info(key)
+        messageApi?.info(key)
         break
     }
   }

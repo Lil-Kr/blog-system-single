@@ -126,7 +126,6 @@ public final class ApiResp<T> {
 	}
 
 	/**
-	 *
 	 * @param returnCodeEnum
 	 * @return
 	 * @param <T>
@@ -144,7 +143,7 @@ public final class ApiResp<T> {
 		return create(SYSTEM_ERROR.getCode(), SYSTEM_ERROR.getMessage(),data);
 	}
 
-	public static <T> ApiResp<T> error(int code, String msg) {
+	public static <T> ApiResp<T> warning(int code, String msg) {
 		return create(code, msg, null);
 	}
 	/**
@@ -155,7 +154,7 @@ public final class ApiResp<T> {
 	 * @return
 	 * @param <T>
 	 */
-	public static <T> ApiResp<T> error(int code, String msg, T data) {
+	public static <T> ApiResp<T> warning(int code, String msg, T data) {
 		return create(code, msg, data);
 	}
 
@@ -164,15 +163,15 @@ public final class ApiResp<T> {
 	 * @param msg
 	 * @return
 	 */
-	public static <T> ApiResp<T> error(String msg) {
-		return create(SYSTEM_ERROR.getCode(), msg, null);
+	public static <T> ApiResp<T> warning(String msg) {
+		return create(401, msg, null);
 	}
 
 	/**
 	 * 错误
 	 * @return
 	 */
-	public static <T> ApiResp<T> error() {
+	public static <T> ApiResp<T> warning() {
 		return create(SYSTEM_ERROR.getCode(), SYSTEM_ERROR.getMessage(), null);
 	}
 
@@ -182,7 +181,7 @@ public final class ApiResp<T> {
 	 * @return
 	 * @param <T>
 	 */
-	public static <T> ApiResp<T> error(ReturnCodeEnum returnCodeEnum) {
+	public static <T> ApiResp<T> warning(ReturnCodeEnum returnCodeEnum) {
 		return create(returnCodeEnum.getCode(), returnCodeEnum.getMessage(),null);
 	}
 }

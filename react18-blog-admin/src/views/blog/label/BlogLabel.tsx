@@ -7,6 +7,7 @@ import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
 import LabelDetail from './LabelDetail'
 import { IAction } from '@/types/component/modal'
+import { useMessage } from '@/components/message/MessageProvider'
 
 // api
 import blogLabelApi from '@/apis/blog/label'
@@ -85,6 +86,7 @@ const BlogLabel = () => {
     }
   ]
 
+  const messageApi = useMessage()
   const [form] = useForm()
   const labelRef = useRef<{ open: (type: IAction, data?: LabelDTO) => void }>()
   const [btnSize] = useState<SizeType>('middle')
@@ -102,10 +104,10 @@ const BlogLabel = () => {
   const deleteItemConfirm = async (record: LabelDTO) => {
     const res = await blogLabelApi.delete({ surrogateId: record.key })
     if (res.code === 200) {
-      message.success('操作成功')
+      messageApi?.success('操作成功')
       getLabelList({ keyWord: '' })
     } else {
-      message.warning('操作失败')
+      messageApi?.warning('操作失败')
     }
   }
 
@@ -114,7 +116,6 @@ const BlogLabel = () => {
    */
   const rowSelection: TableRowSelection<LabelDTO> = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: LabelDTO[]) => {
-      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
       setRowKeys(selectedRowKeys)
     },
     getCheckboxProps: (record: LabelDTO) => ({
@@ -153,17 +154,17 @@ const BlogLabel = () => {
    */
   const deleteBatch = async () => {
     if (!rowKeys || rowKeys.length < 1) {
-      message.warning('请选择待删除项')
+      messageApi?.warning('请选择待删除项')
       return
     }
 
     const ids = rowKeys.join(',')
     const res = await blogLabelApi.deleteBatch({ surrogateId: ids })
     if (res.code === 200) {
-      message.success(res.msg)
+      messageApi?.success(res.msg)
       getLabelList({ keyWord: '' })
     } else {
-      message.error(res.msg)
+      messageApi?.error(res.msg)
     }
   }
 

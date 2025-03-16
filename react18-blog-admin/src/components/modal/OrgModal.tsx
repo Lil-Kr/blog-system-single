@@ -2,7 +2,7 @@ import React, { useImperativeHandle, useState } from 'react'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { Modal, Form, Input, InputNumber, Select } from 'antd/lib'
 const { TextArea } = Input
-import { sysOrgApi } from '@/apis/sys'
+import { orgApi } from '@/apis/sys'
 import { OrgTableType } from '@/types/apis/sys/org/orgType'
 import { OptionType } from '@/types/apis'
 import { clearScreenDown } from 'readline'
@@ -64,7 +64,7 @@ const OrgModal = (props: ModalType.CustomModal) => {
    * @returns
    */
   const setSelectorComp = async () => {
-    const res = await sysOrgApi.orgAllList({})
+    const res = await orgApi.orgAllList({})
     const { code, data, msg } = res
     if (code !== 200) {
       setOrgList([])

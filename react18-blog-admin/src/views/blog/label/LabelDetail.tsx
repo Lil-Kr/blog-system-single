@@ -7,8 +7,10 @@ import blogApi from '@/apis/blog/label'
 import { ColorHorizontalLayout } from '@/components/color'
 import { useColorStore } from '@/store/blog/colorStore'
 import { colorsOptions } from '@/components/color/color'
+import { useMessage } from '@/components/message/MessageProvider'
 
 const LabelDetail = (props: IModalProp<LabelDTO>) => {
+  const messageApi = useMessage()
   const [labelForm] = Form.useForm()
   const [openModal, setOpenModal] = useState(false)
   const [action, setAction] = useState('create')
@@ -28,7 +30,6 @@ const LabelDetail = (props: IModalProp<LabelDTO>) => {
     setAction(action)
 
     if (action == 'edit') {
-      console.log('--> open edit', { ...data })
       labelForm.setFieldsValue(data)
       setSelectColor(data.colorText)
     } else if (action == 'look') {
@@ -53,11 +54,11 @@ const LabelDetail = (props: IModalProp<LabelDTO>) => {
       if (action === 'create') {
         const res = await blogApi.add(params)
         if (res.code === 200) {
-          message.success('操作成功')
+          messageApi?.success('操作成功')
           handleCancel()
           props.update()
         } else {
-          message.error('操作失败')
+          messageApi?.error('操作失败')
           return
         }
       } else if (action === 'edit') {
@@ -65,16 +66,16 @@ const LabelDetail = (props: IModalProp<LabelDTO>) => {
         // setSelectColor(param.colorText)
         const res = await blogApi.edit(param)
         if (res.code === 200) {
-          message.success('操作成功')
+          messageApi?.success('操作成功')
           handleCancel()
           props.update()
         } else {
-          message.error('操作失败')
+          messageApi?.error('操作失败')
           return
         }
       }
     } else {
-      message.error('操作失败')
+      messageApi?.error('操作失败')
       return
     }
   }

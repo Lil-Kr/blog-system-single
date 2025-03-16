@@ -16,25 +16,33 @@ import {
   Table,
   Tag,
   Tooltip,
+  Tree,
   TreeDataNode,
   Typography
 } from 'antd/lib'
-import DirectoryTree from 'antd/lib/tree/DirectoryTree'
 import { TablePageInfoType } from '@/types/base'
 import { aclApi, aclModuleApi } from '@/apis/sys'
-import { transformToAclModuleTreeData } from '@/utils/sys/treeUtils'
+import { transformAclModuleTreeExpandeKeys, transformToAclModuleTreeData } from '@/utils/sys/treeUtils'
 import { AclModuleModal } from '@/components/modal'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle } from '@/types/component/modal'
-import { AclModalType, AclModuleTableType, AclPageListReq, TableAclListType } from '@/types/apis/sys/acl/aclType'
+import {
+  AclModalType,
+  AclModuleReq,
+  AclModuleTableType,
+  AclPageListReq,
+  SysAclModule,
+  TableAclListType
+} from '@/types/apis/sys/acl/aclType'
 import { SelectOptionType, SelectTreeNodeType } from '@/types/apis'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { TableRowSelection } from 'antd/es/table/interface'
 import { ColumnsType } from 'antd/lib/table'
-import { message } from 'antd'
 import AclModal from '@/components/modal/AclModal'
 import { useForm } from 'antd/lib/form/Form'
 import useDictDetailStore from '@/store/global/dictStore'
-const { Title, Paragraph, Text, Link } = Typography
+const { Title } = Typography
+import { useMessage } from '@/components/message/MessageProvider'
+import { Key } from 'antd/lib/table/interface'
 
 const Acl = () => {
   const columnAcl: ColumnsType<TableAclListType> = [
@@ -84,7 +92,6 @@ const Acl = () => {
         let tagColor = 'green' // 默认颜色
 
         const statusTyps = dictMap.get('状态类型')
-        // console.log('--> record.status:', record.status)
         const statusType = statusTyps?.find(item => item.type === record.status)
         // 根据状态设置不同的颜色和文本
         switch (statusType?.type) {
@@ -159,6 +166,7 @@ const Acl = () => {
     }
   ]
 
+  const messageApi = useMessage()
   const MemoTooltip = Tooltip || React.memo(Tooltip)
   const [btnSize] = useState<SizeType>('small')
   const [aclTableSize] = useState<SizeType>('small')
@@ -171,8 +179,16 @@ const Acl = () => {
   })
   const [selectedInfo, setSelectedInfo] = useState<SelectOptionType>({} as SelectOptionType)
   const [aclModuleTree, setAclModuleTree] = useState<TreeDataNode[]>([] as TreeDataNode[])
-  const [dataSource, setDataSource] = useState<TableAclListType[]>([] as TableAclListType[])
+  // 存放权限点列表数据
+  const [aclDataSource, setAclDataSource] = useState<TableAclListType[]>([] as TableAclListType[])
+  // 设置展开所有树节点
+  const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
+
   const { setDictMap, dictMap } = useDictDetailStore()
+
+  /**
+   * 打开权限模块弹窗
+   */
   const aclModuleRef = useRef<{
     open: (
       requestParams: IModalRequestAction,
@@ -211,26 +227,37 @@ const Acl = () => {
     initAclModuleTreeList()
 
     // 加载全部权限模块, 分页
-    retrieveAclPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    // const aclList = retrieveAclPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    // setDataSource(await aclList)
 
     setTableLoading(false)
   }
 
+  /**
+   * 首次渲染权限模块树
+   */
   const initAclModuleTreeList = async () => {
-    const aclModuleTreePromise: Promise<TreeDataNode[]> = retrieveAclModuleTreeList()
-    const aclModuleTree = await aclModuleTreePromise
+    const aclModuleTreeData: Promise<TreeDataNode[]> = retrieveAclModuleTreeList()
+    const aclModuleTree = await aclModuleTreeData
     const selectKey = aclModuleTree.length > 0 ? aclModuleTree[0].key.toString() : ''
     const label = aclModuleTree.length > 0 ? aclModuleTree[0].title ?? '' : ''
-    /**
-     * 首次渲染设置
-     */
-    setSelectedInfo({ value: selectKey, label: label.toString(), selectKeys: [selectKey], aclModuleId: selectKey })
 
-    retrieveAclPageList({
+    const aclList = await retrieveAclPageList({
       aclModuleId: selectKey,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
+    setAclDataSource(aclList)
+
+    /**
+     * 加载当前选中的权限模块信息, 并保存到状态中
+     */
+    const aclModule = await getAclModule({ surrogateId: selectKey })
+
+    /**
+     * 首次渲染设置
+     */
+    setSelectedInfo({ value: selectKey, label: label.toString(), selectKeys: [selectKey], aclModule: aclModule })
   }
 
   /**
@@ -244,14 +271,12 @@ const Acl = () => {
       return []
     }
     const res: TreeDataNode[] = transformToAclModuleTreeData(data)
-    // 加载权限模块树
+    // 存入权限模块树状态
     setAclModuleTree(res)
-    /**
-     * 选中当前点击的树节点
-     */
-    setSelectedInfo(prevState => ({
-      ...prevState
-    }))
+
+    // 设置展开所有树节点
+    const expandeKeys: string[] = transformAclModuleTreeExpandeKeys(data)
+    setExpandedKeys(expandeKeys)
     return res
   }
 
@@ -272,22 +297,20 @@ const Acl = () => {
    * edit
    */
   const editAclModule = async () => {
-    const aclModule = await aclModuleApi.getAclModule({ surrogateId: selectedInfo.value ?? '' })
-    const { data } = aclModule
-
+    const aclModule = selectedInfo.aclModule
     const req: AclModuleTableType = {
-      key: data.surrogateId,
-      surrogateId: data.surrogateId,
-      name: data.name,
-      parentId: data.parentId,
-      parentName: data.parentName,
+      key: aclModule.surrogateId,
+      surrogateId: aclModule.surrogateId,
+      name: aclModule.name,
+      parentId: aclModule.parentId,
+      parentName: aclModule.parentName,
       parentAclModuleInfo: {
-        value: data.parentId,
-        label: data.parentId === '0' ? '-' : data.parentName
+        value: aclModule.parentId,
+        label: aclModule.parentId === '0' ? '-' : aclModule.parentName
       },
-      seq: data.seq,
-      status: data.status,
-      remark: data.remark
+      seq: aclModule.seq,
+      status: aclModule.status,
+      remark: aclModule.remark
     }
     aclModuleRef.current?.open(
       { api: aclModuleApi },
@@ -302,9 +325,6 @@ const Acl = () => {
    * 删除权限模块
    */
   const deleteAclModule = async () => {
-    // console.log('--> selectedInfo: ', { ...selectedInfo })
-    // const res = await aclModuleApi.delete({ surrogateId: selectedInfo.value?.toString() ?? '' })
-    // const { code, msg } = res
   }
 
   const deleteAclModuleConfirm: PopconfirmProps['onConfirm'] = async e => {
@@ -316,38 +336,60 @@ const Acl = () => {
     retrieveAclModuleTreeList()
   }
 
-  const cancel: PopconfirmProps['onCancel'] = e => {
-    // message.error('Click on No')
-  }
+  const cancel: PopconfirmProps['onCancel'] = e => {}
 
   /**
    * 选择树节点时触发
    * @param node
    */
   const selectTreeNode = async (node: SelectTreeNodeType) => {
-    setSelectedInfo(prevState => ({
-      value: node.key.toString(),
-      label: node.name,
-      selectKeys: [node.key.toString()],
-      aclModuleId: node.key.toString()
-    }))
+    const selectKeys = node.key.toString()
 
-    retrieveAclPageList({
-      aclModuleId: node.key.toString(),
+    const aclTableList = retrieveAclPageList({
+      aclModuleId: selectKeys,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
+    /**
+     * 加载权限点列表数据, 并设置到表格中显示
+     */
+    setAclDataSource(await aclTableList)
+
+    /**
+     * 加载当前选中的权限模块信息, 并保存到状态中
+     */
+    const aclModule = await getAclModule({ surrogateId: selectKeys })
+
+    setSelectedInfo(prevState => ({
+      value: node.key.toString(),
+      label: node.name,
+      selectKeys: [selectKeys],
+      aclModule: aclModule
+    }))
+  }
+
+  /**
+   * 获取单挑权限模块信息
+   * @param req
+   */
+  const getAclModule = async (req: AclModuleReq): Promise<SysAclModule> => {
+    const aclModule = await aclModuleApi.getAclModule({ ...req })
+    const { code, msg, data } = aclModule
+    if (code !== 200) {
+      return {} as SysAclModule
+    }
+    return data
   }
 
   /**
    * 分页查询权限点列表
    */
-  const retrieveAclPageList = async (req: AclPageListReq) => {
+  const retrieveAclPageList = async (req: AclPageListReq): Promise<TableAclListType[]> => {
     const aclPageList = await aclApi.pageList(req)
     const { code, data, msg } = aclPageList
     if (code !== 200) {
-      message.error(msg)
-      return
+      messageApi?.error(msg)
+      return []
     }
 
     const aclList: TableAclListType[] = data.list.map(
@@ -363,19 +405,25 @@ const Acl = () => {
         ...rest
       })
     )
-    setDataSource(aclList)
+    // 设置分页信息
     setTablePageInfo(prevState => ({
       ...prevState,
       totalSize: data.total
     }))
+    return aclList
   }
 
   /**
    * 重置btn
    */
-  const resetSearch = () => {
+  const resetSearch = async () => {
     form.resetFields()
-    retrieveAclPageList({ aclModuleId: selectedInfo.aclModuleId, currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    const aclList = retrieveAclPageList({
+      aclModuleId: selectedInfo.aclModule.surrogateId,
+      currentPageNum: 1,
+      pageSize: tablePageInfo.pageSize
+    })
+    setAclDataSource(await aclList)
   }
 
   /**
@@ -399,9 +447,10 @@ const Acl = () => {
     }))
   }
 
-  const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
+  const onChangePageInfo: PaginationProps['onChange'] = async (currentPageNum, pageSize) => {
     const values = form.getFieldsValue()
-    retrieveAclPageList({ ...values, currentPageNum, pageSize })
+    const aclList = retrieveAclPageList({ ...values, currentPageNum, pageSize })
+    setAclDataSource(await aclList)
   }
 
   /**
@@ -416,7 +465,7 @@ const Acl = () => {
       {
         aclModuleId: selectedInfo.value,
         aclModuleName: selectedInfo.label,
-        aclModuleSurrogateId: selectedInfo.aclModuleId
+        aclModuleSurrogateId: selectedInfo.aclModule.surrogateId
       }
     )
   }
@@ -430,7 +479,7 @@ const Acl = () => {
       {
         key,
         aclModuleId: selectedInfo.value,
-        aclModuleSurrogateId: selectedInfo.aclModuleId,
+        aclModuleSurrogateId: selectedInfo.aclModule.surrogateId,
         aclModuleName: selectedInfo.label,
         type: record.type,
         aclTypeName: record.aclTypeName,
@@ -443,52 +492,41 @@ const Acl = () => {
     )
   }
 
-  // const lookItem = (key: string, record: TableAclListType) => {
-  //   aclRef.current?.open(
-  //     { api: aclApi },
-  //     { title: '查看权限点' },
-  //     { action: 'look', open: true }, // create | edit | look
-  //     { style: { maxWidth: '40vw' } },
-  //     {
-  //       key,
-  //       aclModuleId: selectedInfo.value,
-  //       aclModuleName: selectedInfo.label,
-  //       type: record.type,
-  //       aclTypeName: record.aclTypeName,
-  //       name: record.name,
-  //       url: record.url,
-  //       seq: record.seq,
-  //       status: record.status,
-  //       remark: record.remark
-  //     }
-  //   )
-  // }
-
   const deleteItemConfirm = async (record: TableAclListType) => {
     const res = await aclApi.delete({ surrogateId: record.key?.toString() ?? '' })
     if (res.code !== 200) {
       return
     }
-    retrieveAclPageList({
+    const aclList = retrieveAclPageList({
       keyWords: '',
-      aclModuleId: selectedInfo.aclModuleId,
+      aclModuleId: selectedInfo.aclModule.surrogateId,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
+    setAclDataSource(await aclList)
   }
 
   /**
    * 搜索
    */
-  const search = () => {
+  const search = async () => {
     let data = form.getFieldsValue()
     const searchParam = {
       ...data,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize,
-      aclModuleId: selectedInfo.aclModuleId
+      aclModuleId: selectedInfo.aclModule
     }
-    retrieveAclPageList({ ...searchParam })
+    const aclList = retrieveAclPageList({ ...searchParam })
+    setAclDataSource(await aclList)
+  }
+
+  /**
+   * 控制展开后收缩树节点
+   * @param expandedKeysValue
+   */
+  const handleExpand = (expandedKeysValue: Key[]) => {
+    setExpandedKeys(expandedKeysValue) // 更新展开的节点
   }
 
   return (
@@ -532,9 +570,8 @@ const Acl = () => {
                     />
                   </Popconfirm>
                 </Flex>
-                {/* <Divider plain><Title level={5}>{'权限模块'}</Title></Divider> */}
                 <Divider plain>{'权限模块'}</Divider>
-                <DirectoryTree
+                <Tree
                   showLine={true}
                   showIcon={false}
                   checkable={false}
@@ -543,10 +580,10 @@ const Acl = () => {
                   selectedKeys={selectedInfo.selectKeys}
                   // autoExpandParent={false}
                   // defaultExpandAll={true}
-                  // expandedKeys={expandedKeys} // （受控）展开指定的树节点
+                  expandedKeys={expandedKeys} // （受控）展开指定的树节点
                   // defaultExpandedKeys={[]}
                   // defaultExpandParent={true}
-                  // onExpand={onExpand}
+                  onExpand={handleExpand} // 控制展开后收缩树节点
                   titleRender={item => {
                     const title = item.title as React.ReactNode
                     return <MemoTooltip title={title}>{title}</MemoTooltip>
@@ -599,8 +636,9 @@ const Acl = () => {
                     }}
                     loading={tableLoading}
                     columns={columnAcl}
-                    dataSource={dataSource}
+                    dataSource={aclDataSource}
                     pagination={{
+                      position: ['bottomLeft'],
                       showQuickJumper: false, // 跳转指定页面
                       showSizeChanger: true,
                       hideOnSinglePage: false,
@@ -624,9 +662,10 @@ const Acl = () => {
         />
         <AclModal
           mRef={aclRef}
-          update={({ aclModuleId }) => {
+          update={async ({ aclModuleId }) => {
             // 只需要渲染权限点列表即可
-            retrieveAclPageList({ aclModuleId, currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+            const aclList = retrieveAclPageList({ aclModuleId, currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+            setAclDataSource(await aclList)
           }}
         />
       </Flex>

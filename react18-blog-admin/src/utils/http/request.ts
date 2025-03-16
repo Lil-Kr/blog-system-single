@@ -1,8 +1,6 @@
 import { PREFIX_BASE_URL } from '@/config'
-import { message } from 'antd'
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
-
-// const [messageApi, contextHolder] = message.useMessage()
+import { getGlobalMessage } from '@/components/message/MessageProvider'
 
 // 创建axios实例
 const axiosInstance: AxiosInstance = axios.create({
@@ -21,12 +19,11 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config: any) => {
-    // console.log('--> request intercept:', config)
     return config
   },
   (error: AxiosError) => {
-    // console.log('--> request intercept error:', error)
-    message.error(error.message)
+    const messageApi = getGlobalMessage()
+    messageApi?.error(error.message)
     return Promise.reject(error)
   }
 )
@@ -34,38 +31,40 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
     const { data, config, headers, request, status, statusText } = response
+    const messageApi = getGlobalMessage()
     if (status === 200) {
       const { data } = response
       // todo: 每次请求成功都重新 set token cookie
       const { code, msg } = data
 
-      if (code !== 200) {
-        message.error(msg)
+      if (code >= 500) {
+        messageApi?.error(msg)
+        return response
+      } else if (code >= 400 && code < 500) {
+        messageApi?.warning(msg)
         return response
       } else {
         return data
       }
     } else {
-      message.error('网络异常')
+      messageApi?.error('网络异常')
       return response
     }
   },
   // 请求 -> 响应失败
   (error: AxiosError) => {
     const { response } = error
-    // console.log('--> error:', error)
-    // console.log('--> error.response:', response)
+    const messageApi = getGlobalMessage()
     if (response) {
       // 请求已发出, 但是不在2xx的范围
-      // console.log('--> 请求已发出, 但是不在2xx的范围 -> response.code:', response.data.status)
-      message.error(`${response.status} ->  ${response.statusText}`)
-
+      // 请求已发出, 但是不在2xx的范围 -> response.code:', response.data.status
       // const errorResp = Promise.reject(response.data)
-      // console.log('--> errorResp:', errorResp)
+      messageApi?.error(`${response.status} ->  ${response.statusText}`)
+
       const respData = { code: response.status, msg: response.statusText, data: '' }
       return respData
     } else {
-      message.error('网络连接异常, 请稍后再试!')
+      messageApi?.error('网络连接异常, 请稍后再试!')
     }
   }
 )

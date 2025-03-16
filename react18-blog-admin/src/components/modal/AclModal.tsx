@@ -1,19 +1,16 @@
 import React, { useImperativeHandle, useState } from 'react'
 import { OptionType, transformTypeToSeletor } from '@/types/apis'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { Form, Input, InputNumber, message, Modal, Select } from 'antd/lib'
+import { Form, Input, InputNumber, Modal, Select } from 'antd/lib'
 const { TextArea } = Input
 import { aclModuleApi } from '@/apis/sys'
-import { AclAddReq, AclEditReq, AclModalType } from '@/types/apis/sys/acl/aclType'
+import { AclAddReq, AclEditReq, AclModalType, CallBackType } from '@/types/apis/sys/acl/aclType'
 import { DictMapType } from '@/types/apis/sys/dict/dictType'
 import useDictDetailStore from '@/store/global/dictStore'
-
-type CallBackType = {
-  aclModuleId: string
-}
+import { useMessage } from '@/components/message/MessageProvider'
 
 const AclModal = (props: ModalType.CustomModal) => {
-  const [messageApi, contextHolder] = message.useMessage()
+  const messageApi = useMessage()
   const { mRef, update } = props
   const [modalForm] = Form.useForm()
   const [action, setAction] = useState('create')
@@ -191,7 +188,7 @@ const AclModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      messageApi.success(msg)
+      messageApi?.success(msg)
     } else if (action === 'edit') {
       const editReq: AclEditReq = {
         surrogateId: params.key,
@@ -205,7 +202,7 @@ const AclModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-      messageApi.success(msg)
+      messageApi?.success(msg)
     }
 
     handleCancel()

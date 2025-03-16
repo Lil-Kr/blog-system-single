@@ -5,19 +5,22 @@ import { RoleUserTableType, TableTransferProps } from '@/types/apis/sys/role/rol
 import TableTransfer from './TableTransfer'
 import { useRoleAclStore } from '@/store/sys/roleStore'
 import roleApi from '@/apis/sys/roleApi'
+import { useMessage } from '@/components/message/MessageProvider'
 
 const columns: TableColumnsType<RoleUserTableType> = [
   {
     key: 'account',
     dataIndex: 'account',
     title: '账号',
-    width: '10%'
+    width: '10%',
+    render: (_, record) => <Tag color='orange'>{record.account}</Tag>
   },
   {
     key: 'userName',
     dataIndex: 'userName',
     title: '昵称',
-    width: '20%'
+    width: '20%',
+    render: (_, record) => <Tag color='purple'>{record.account}</Tag>
   },
   {
     key: 'remark',
@@ -40,21 +43,25 @@ const columns: TableColumnsType<RoleUserTableType> = [
 ]
 
 const RoleUser = () => {
-  const [messageApi, contextHolder] = message.useMessage()
+  const { roleId, transferTargetKeys, setTransferTargetKeys, roleUserList, setRoleUserList } = useRoleAclStore()
+  const messageApi = useMessage()
+
+  /**
+   * 控制穿梭框的搜索功能
+   */
+  const filterOption = (inputValue: string, item: RoleUserTableType, direction: 'left' | 'right'): boolean => {
+    const searchText = inputValue.toLowerCase()
+
+    const accountMatch = item.account ? item.account.toLowerCase().includes(searchText) : false
+    const userNameMatch = item.userName ? item.userName.toLowerCase().includes(searchText) : false
+    const remarkMatch = item.remark ? item.remark.toLowerCase().includes(searchText) : false
+
+    return accountMatch || userNameMatch || remarkMatch
+  }
+
   const onChange: TableTransferProps['onChange'] = nextTargetKeys => {
     setTransferTargetKeys(nextTargetKeys)
   }
-
-  const {
-    roleId,
-    transferTargetKeys,
-    setTransferTargetKeys,
-    roleUserList,
-    setRoleUserList: setRroleUserList
-  } = useRoleAclStore()
-
-  const filterOption = (input: string, item: RoleUserTableType) =>
-    item.key?.includes(input) || item.surrogateId?.includes(input)
 
   useEffect(() => {
     if (roleId) {
@@ -70,7 +77,7 @@ const RoleUser = () => {
     const res = await roleApi.roleUserList({ roleId })
     const { code, data, msg } = res
     if (code !== 200) {
-      setRroleUserList([])
+      setRoleUserList([])
       setTransferTargetKeys([])
       return
     }
@@ -90,7 +97,7 @@ const RoleUser = () => {
      * 将已选和待选的数据都合并到一起
      * 只需要控制未选的就行
      */
-    setRroleUserList([...selectedUserList, ...unSelectedUserList])
+    setRoleUserList([...selectedUserList, ...unSelectedUserList])
     setTransferTargetKeys(selectedUserList.map(item => item.key?.toString() ?? ''))
   }
 
@@ -103,9 +110,8 @@ const RoleUser = () => {
     if (code !== 200) {
       return
     }
-
-    messageApi.success('abbabab')
     loadRoleUserList()
+    messageApi?.success(msg)
   }
 
   return (

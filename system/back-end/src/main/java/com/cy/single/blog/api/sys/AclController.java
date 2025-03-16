@@ -89,19 +89,6 @@ public class AclController {
 	public ApiResp<ConcurrentHashMap<String, Object>> acls(@RequestBody @Validated({AclReq.GroupAcls.class}) AclReq req) {
 		return aclService.acls(req);
 	}
-//
-//	/**
-//	 * 获取角色分配的用户列表
-//	 * @param req
-//	 * @return
-//	 * @throws Exception
-//	 */
-//	@CheckAuth
-//	@RecordLogger
-//	@PostMapping("/roleUserList")
-//	public ApiResp<Map<String, List<SysUserVO>>> roleUserList(@RequestBody @Validated({RoleUserReq.GroupRoleUserPageList.class}) RoleUserReq req) {
-//		return roleUserService.roleUserList(req);
-//	}
 
 	/**
 	 * 维护[角色-用户]关系接口
@@ -140,5 +127,7 @@ public class AclController {
 	public ApiResp<String> delete(@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
 		return aclService.delete(surrogateId);
 	}
+
+
 }
 

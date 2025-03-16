@@ -12,16 +12,41 @@ import { getMenuOpenKeysUtil } from '@/utils/common'
 
 // css
 import styles from '@/layout/css/index.module.scss'
+import { DictMapType } from '@/types/apis/sys/dict/dictType'
+import { dictApi } from '@/apis/sys/dictApi'
+import useDictDetailStore from '@/store/global/dictStore'
 
 const MainLayout = () => {
   const { pathname } = useLocation()
-  const { collapsed, setSelectedKeys, setOpenMenuKeys } = useMenuStore()
-
+  const { collapsed, setSelectedMenusKeys, setOpenMenuKeys } = useMenuStore()
   const keys: string[] = getMenuOpenKeysUtil(pathname)
+  // 初始化字典数据状态
+  const { setDictMap } = useDictDetailStore()
+
   useEffect(() => {
-    setSelectedKeys([pathname])
-    collapsed ? null : setOpenMenuKeys(keys)
+    const initData = async () => {
+      setSelectedMenusKeys([pathname])
+      collapsed ? null : setOpenMenuKeys(keys)
+      /**
+       * 初始化字典表
+       */
+      const dictMap: Map<string, DictMapType[]> = await initDictList()
+      setDictMap(dictMap)
+    }
+    initData()
   }, [pathname, collapsed])
+
+  /**
+   * 初始化字典数据
+   */
+  const initDictList = async (): Promise<Map<string, DictMapType[]>> => {
+    const dictTree = await dictApi.dictDetailTree()
+    const { code, data } = dictTree
+    if (code !== 200) {
+      return new Map<string, DictMapType[]>()
+    }
+    return new Map(Object.entries(data))
+  }
 
   return (
     <Layout className={styles.mainLayoutWarpper}>

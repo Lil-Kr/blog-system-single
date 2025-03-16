@@ -11,7 +11,6 @@ import {
   PaginationProps,
   Row,
   Table,
-  Tree,
   TreeDataNode,
   Space,
   Popconfirm,
@@ -19,23 +18,23 @@ import {
 } from 'antd/lib'
 import { SizeType } from 'antd/lib/config-provider/SizeContext'
 import { useForm } from 'antd/lib/form/Form'
-import { TableRowSelection } from 'antd/lib/table/interface'
+import { Key, TableRowSelection } from 'antd/lib/table/interface'
 import { OrgTableType, SysOrgPageReq } from '@/types/apis/sys/org/orgType'
 import { ColumnsType } from 'antd/es/table'
-import { message } from 'antd'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle } from '@/types/component/modal'
 import OrgModal from '@/components/modal/OrgModal'
 import { TablePageInfoType } from '@/types/base'
-import { transformToTreeData } from '@/utils/sys/treeUtils'
-import { sysOrgApi } from '@/apis/sys'
+import { transformOrgTreeExpandeKeys, transformToTreeData } from '@/utils/sys/treeUtils'
+import { orgApi } from '@/apis/sys'
 import { OptionType } from '@/types/apis'
 import DirectoryTree from 'antd/lib/tree/DirectoryTree'
+import { useMessage } from '@/components/message/MessageProvider'
 
 /**
  * org page
  */
 const Org = () => {
-  const columns: ColumnsType<any> = [
+  const orgColumns: ColumnsType<any> = [
     {
       key: 'name',
       dataIndex: 'name',
@@ -118,15 +117,17 @@ const Org = () => {
       render: (_: object, record: OrgTableType) => (
         <Space size='middle'>
           <Button
+            size={btnSize}
             name='look'
-            type='primary'
+            type='link'
             shape='circle'
             icon={<SearchOutlined />}
             onClick={() => lookItem(record.key ?? '', record)}
           />
           <Button
+            size={btnSize}
             name='edit'
-            type='primary'
+            type='link'
             shape='circle'
             icon={<EditOutlined />}
             onClick={() => editItem(record.key ?? '', record)}
@@ -139,15 +140,17 @@ const Org = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
+            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
       )
     }
   ]
 
+  const messageApi = useMessage()
   const MemoTooltip = Tooltip || React.memo(Tooltip)
-  const [btnSize] = useState<SizeType>('middle')
+  const [btnSize] = useState<SizeType>('small')
+  const [tableSize] = useState<SizeType>('small')
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [form] = useForm()
   // 函数式更新值, 不能直接更新
@@ -156,6 +159,8 @@ const Org = () => {
     pageSize: 10,
     totalSize: 0
   })
+  // 默认展开所有节点
+  const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
   const [orgTree, setOrgTree] = useState<TreeDataNode[]>([] as TreeDataNode[])
   const [dataSource, setDataSource] = useState<OrgTableType[]>([] as OrgTableType[])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
@@ -198,7 +203,7 @@ const Org = () => {
    * @returns
    */
   const retrieveOrgTreeList = async () => {
-    const orgList = await sysOrgApi.retrieveOrgTreeList()
+    const orgList = await orgApi.retrieveOrgTreeList()
     const { code, data, msg } = orgList
     if (code !== 200) {
       return
@@ -206,6 +211,10 @@ const Org = () => {
     const res = transformToTreeData(data)
     // 加载组织树
     setOrgTree(res)
+
+    // 默认展开所有节点
+    const expandeKeys: string[] = transformOrgTreeExpandeKeys(data)
+    setExpandedKeys(expandeKeys)
 
     // 默认选中根节点
     setSelectedKeys([res[0].key.toString()])
@@ -219,7 +228,7 @@ const Org = () => {
    * @param pageSize
    */
   const retrievePageOrgList = async (req: SysOrgPageReq) => {
-    const orgPageList = await sysOrgApi.pageOrgList({
+    const orgPageList = await orgApi.pageOrgList({
       keyWords: req.keyWords,
       currentPageNum: req.currentPageNum,
       pageSize: tablePageInfo.pageSize
@@ -251,14 +260,13 @@ const Org = () => {
     setSelectedInfo({ label: node.title, value: node.key })
 
     // 加载当前组织下的子节点数据
-    const orgList = await sysOrgApi.pageChildOrgList({
+    const orgList = await orgApi.pageChildOrgList({
       surrogateId: node.key,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
     const { code, data, msg } = orgList
     if (code !== 200) {
-      message.info('没有数据')
       return
     }
 
@@ -287,7 +295,7 @@ const Org = () => {
       ...record
     }
     orgRef.current?.open(
-      { api: sysOrgApi },
+      { api: orgApi },
       { title: '查看' },
       { action: 'look', open: true }, // create | edit | look
       { style: { maxWidth: '40vw' } },
@@ -309,7 +317,7 @@ const Org = () => {
       ...record
     }
     orgRef.current?.open(
-      { api: sysOrgApi },
+      { api: orgApi },
       { title: '编辑' },
       { action: 'edit', open: true }, // create | edit | look
       { style: { maxWidth: '40vw' } },
@@ -318,8 +326,7 @@ const Org = () => {
   }
 
   const deleteItemConfirm = async (record: OrgTableType) => {
-    // message.info(record.key)
-    const res = await sysOrgApi.delete({ surrogateId: record.key?.toString() ?? '' })
+    const res = await orgApi.delete({ surrogateId: record.key?.toString() ?? '' })
     if (res.code !== 200) {
       return
     }
@@ -334,7 +341,7 @@ const Org = () => {
       orgInfo: selectedInfo
     }
     orgRef.current?.open(
-      { api: sysOrgApi },
+      { api: orgApi },
       { title: '添加' },
       { action: 'create', open: true }, // create | edit | look
       { style: { maxWidth: '40vw' } },
@@ -376,15 +383,13 @@ const Org = () => {
    * 表格为checkbox时启用
    */
   const rowSelection: TableRowSelection<OrgTableType> = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-    },
-    onSelect: (record, selected, selectedRows) => {
-      // console.log(record, selected, selectedRows)
-    },
-    onSelectAll: (selected, selectedRows, changeRows) => {
-      // console.log(selected, selectedRows, changeRows)
-    }
+    onChange: (selectedRowKeys, selectedRows) => {},
+    onSelect: (record, selected, selectedRows) => {},
+    onSelectAll: (selected, selectedRows, changeRows) => {}
+  }
+
+  const onExpand = (key: Key[]) => {
+    setExpandedKeys(key)
   }
 
   return (
@@ -401,12 +406,12 @@ const Org = () => {
                 blockNode={true} // 是否节点占据一行
                 treeData={orgTree}
                 selectedKeys={selectedKeys}
+                expandedKeys={expandedKeys} // （受控）展开指定的树节点
                 // autoExpandParent={false}
                 // defaultExpandAll={true}
-                // expandedKeys={expandedKeys} // （受控）展开指定的树节点
                 // defaultExpandedKeys={[]}
                 // defaultExpandParent={true}
-                // onExpand={onExpand}
+                onExpand={onExpand}
                 titleRender={item => {
                   const title = item.title as React.ReactNode
                   return <MemoTooltip title={title}>{title}</MemoTooltip>
@@ -429,23 +434,26 @@ const Org = () => {
                           <Input placeholder={'搜索关键字'} />
                         </Form.Item>
                         <Form.Item>
-                          <Button icon={<SearchOutlined />} type='primary' onClick={search} />
+                          <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
                         </Form.Item>
                         <Form.Item>
-                          <Button type='primary' onClick={resetSearch}>
+                          <Button size={btnSize} type='primary' onClick={resetSearch}>
                             {'置空'}
+                          </Button>
+                        </Form.Item>
+                        <Form.Item>
+                          <Button type='dashed' size={btnSize} icon={<AntDesignOutlined />} onClick={resetSearch}>
+                            {'全部'}
                           </Button>
                         </Form.Item>
                       </Flex>
                     </Form>
-                    <Button type='dashed' size={btnSize} icon={<AntDesignOutlined />} onClick={resetSearch}>
-                      {'全部'}
-                    </Button>
                   </Flex>
                 </div>
                 {/* show table info */}
                 <div className='list'>
                   <Table
+                    size={tableSize}
                     key={1}
                     bordered={true}
                     rowSelection={{
@@ -453,9 +461,10 @@ const Org = () => {
                       ...rowSelection
                     }}
                     loading={tableLoading}
-                    columns={columns}
+                    columns={orgColumns}
                     dataSource={dataSource}
                     pagination={{
+                      position: ['bottomLeft'],
                       showQuickJumper: false, // 跳转指定页面
                       showSizeChanger: true,
                       hideOnSinglePage: false,

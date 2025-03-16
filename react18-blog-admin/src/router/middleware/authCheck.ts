@@ -5,7 +5,6 @@ import { CLT } from '@/config'
 
 class LoginCheckMiddleware extends Middleware {
   async handler(ctx: MiddlewareContext<{}>, next: () => Promise<any>): Promise<void> {
-    // const isLogin = store.getState().auth.isLogin
     const token = cookie.load(CLT)
     if (!token || token == '') {
       rootRouterConfig.navigate('/login')
