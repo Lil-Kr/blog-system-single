@@ -11,7 +11,7 @@ const portalConfig: RouterItemType[] = [
       layout: false,
       icon: <BookOutlined />
     },
-    path: 'protal',
+    path: '/admin/protal',
     // element: LazyLoad(lazy(() => import('@/views/home')))
   }
 ]

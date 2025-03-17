@@ -11,7 +11,7 @@ const imageToolsConfig: RouterItemType[] = [
       layout: false,
       icon: <PictureOutlined />
     },
-    path: 'image',
+    path: '/admin/image',
     children: [
       {
         meta: { key: 'image-index', title: 'comps-index' },
@@ -25,7 +25,7 @@ const imageToolsConfig: RouterItemType[] = [
           layout: false,
           icon: <FileImageOutlined />
         },
-        path: 'category',
+        path: '/admin/image/category',
         element: LazyLoad(lazy(() => import('@/views/image/ImageCategory')))
       },
       {
@@ -35,7 +35,7 @@ const imageToolsConfig: RouterItemType[] = [
           layout: false,
           icon: <FileImageOutlined />
         },
-        path: 'pictures',
+        path: '/admin/image/pictures',
         element: LazyLoad(lazy(() => import('@/views/image/ImageManage')))
       }
     ]

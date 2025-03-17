@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.cy.single.blog.common.cache.CacheManager.setUserCache;
 import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 import static com.cy.single.blog.pojo.dto.sys.user.UserDTO.convertAddUserReq;
@@ -55,6 +56,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		SysUser user = convertAddUserReq(req);
 		int insert = userMapper.insert(user);
 		if (insert >= 1) {
+			// 更新缓存
+			setUserCache(user.getToken(), user);
 			return ApiResp.success();
 		} else {
 			return ApiResp.failure(SAVE_ERROR);
@@ -71,6 +74,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		SysUser user = convertEditUserReq(req);
 		int update = userMapper.updateUserBySurrogateId(user);
 		if (update >= 1) {
+			// 更新缓存
+			setUserCache(user.getToken(), user);
 			return ApiResp.success();
 		} else {
 			return ApiResp.failure(EDITE_ERROR);

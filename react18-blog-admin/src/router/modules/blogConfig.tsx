@@ -11,7 +11,7 @@ const blogConfig: RouterItemType[] = [
       layout: false,
       icon: <BookOutlined />
     },
-    path: 'blog',
+    path: '/admin/blog',
     children: [
       {
         meta: { key: 'blog-index', title: 'blog-index' },
@@ -25,7 +25,7 @@ const blogConfig: RouterItemType[] = [
           layout: false,
           icon: <UnorderedListOutlined />
         },
-        path: 'index',
+        path: '/admin/blog/index',
         element: LazyLoad(lazy(() => import('@/views/blog/publish/BlogList')))
       },
       {
@@ -35,7 +35,7 @@ const blogConfig: RouterItemType[] = [
           layout: false,
           icon: <TagsOutlined />
         },
-        path: 'label',
+        path: '/admin/blog/label',
         element: LazyLoad(lazy(() => import('@/views/blog//label/BlogLabel')))
       },
       {
@@ -45,7 +45,7 @@ const blogConfig: RouterItemType[] = [
           layout: false,
           icon: <SnippetsOutlined />
         },
-        path: 'category',
+        path: '/admin/blog/category',
         element: LazyLoad(lazy(() => import('@/views/blog/category/BlogCategory')))
       },
       {
@@ -55,7 +55,7 @@ const blogConfig: RouterItemType[] = [
           layout: false,
           icon: <SlidersOutlined />
         },
-        path: 'topic',
+        path: '/admin/blog/topic',
         element: LazyLoad(lazy(() => import('@/views/blog/topic/BlogTopic')))
       }
     ]

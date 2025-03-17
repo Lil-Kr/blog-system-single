@@ -63,12 +63,23 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 		query.eq("name", req.getName());
 		query.eq("acl_module_id", req.getAclModuleId());
 		if (aclMapper.selectCount(query) >= 1) {
-			return ApiResp.failure(DATA_INFO_REPEAT);
+			return ApiResp.warning(DATA_INFO_REPEAT);
+		}
+
+		/**
+		 * 每个权限模块下只能配置一个菜单类型的权限点
+		 */
+		QueryWrapper<SysAcl> query2 = new QueryWrapper<>();
+		query2.eq("type", req.getType());
+		query2.eq("acl_module_id", req.getAclModuleId());
+		SysAcl acl = aclMapper.selectOne(query2);
+		if (Objects.nonNull(acl) && acl.getType() == 1) {
+			return ApiResp.warning("权限模块只能有一个菜单类型的权限");
 		}
 
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
 		Date currentTime = DateUtil.localDateTimeNow();// 当前时间
-		SysAcl acl = SysAcl.builder()
+		SysAcl build = SysAcl.builder()
 			.surrogateId(surrogateId)
 			.number(ACLM_PREV_INFO + surrogateId)
 			.name(req.getName())
@@ -85,7 +96,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			.updateTime(currentTime)
 			.build();
 
-		aclMapper.insert(acl);
+		aclMapper.insert(build);
 		return ApiResp.success("添加权限点成功");
 	}
 
@@ -99,12 +110,21 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 	public ApiResp<String> editAcl(AclReq req) {
 		QueryWrapper<SysAcl> query = new QueryWrapper<>();
 		query.eq("surrogate_id", req.getSurrogateId());
-		if (aclMapper.selectCount(query) < 1) {
-			return ApiResp.failure(INFO_EXIST);
+		SysAcl before = aclMapper.selectOne(query);
+		if (Objects.isNull(before)) {
+			return ApiResp.warning(INFO_NOT_EXIST);
+		}
+
+		QueryWrapper<SysAcl> query1 = new QueryWrapper<>();
+		query1.eq("acl_module_id", req.getAclModuleId());
+		query1.eq("type", 1);
+		SysAcl acl = aclMapper.selectOne(query1);
+		if (Objects.nonNull(acl) && before.getType() != 1 && req.getType() == 1) {
+			return ApiResp.warning("权限模块只能有一个菜单类型的权限");
 		}
 
 		Date currentTime = DateUtil.localDateTimeNow();// 当前时间
-		SysAcl acl = SysAcl.builder()
+		SysAcl build = SysAcl.builder()
 			.name(req.getName())
 			.aclModuleId(req.getAclModuleId())
 			.url(req.getUrl())
@@ -120,11 +140,11 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 
 		UpdateWrapper<SysAcl> updateWrapper = new UpdateWrapper<>();
 		updateWrapper.eq("surrogate_id", req.getSurrogateId());
-		int update = aclMapper.update(acl, updateWrapper);
+		int update = aclMapper.update(build, updateWrapper);
 		if (update >= 1) {
 			return ApiResp.success(SUCCESS);
 		} else {
-			return ApiResp.failure(EDITE_ERROR);
+			return ApiResp.warning(EDITE_ERROR);
 		}
 	}
 

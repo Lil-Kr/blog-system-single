@@ -1,14 +1,14 @@
 import React from 'react'
-import useLoginAdminStore from '@/store/login'
+import { useTokenStore } from '@/store/login'
 import { Button, Result } from 'antd'
 import { useNavigate } from 'oh-router-react'
 import { HOME_ROUTER_URL } from '@/config'
 
 const Error403 = () => {
-  const { removeToken } = useLoginAdminStore()
+  const { clearToken } = useTokenStore()
   const navigateTo = useNavigate()
   const backHomePage = () => {
-    removeToken()
+    clearToken()
     navigateTo(HOME_ROUTER_URL)
   }
   return (

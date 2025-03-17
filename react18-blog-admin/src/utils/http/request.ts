@@ -1,10 +1,14 @@
 import { PREFIX_BASE_URL } from '@/config'
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import { getGlobalMessage } from '@/components/message/MessageProvider'
+import { useTokenStore } from '@/store/login'
+// import { useNavigate } from 'oh-router-react'
+
+const AUTO_LOGOUT_TIME = 30 * 60 * 1000 // 30 分钟
+// const AUTO_LOGOUT_TIME = 1 * 15 * 1000 // 30 分钟
 
 // 创建axios实例
 const axiosInstance: AxiosInstance = axios.create({
-  // baseURL: import.meta.env.VITE_APP_PROXY_API,
   baseURL: PREFIX_BASE_URL,
   headers: {
     Accept: 'application/json',
@@ -19,6 +23,18 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config: any) => {
+    const { token, lastActiveTime, loginStatue, clearToken } = useTokenStore.getState()
+    if (!loginStatue) {
+      config.headers['clt_token'] = token
+      return config
+    }
+
+    if (Date.now() - lastActiveTime > AUTO_LOGOUT_TIME) {
+      clearToken()
+      return Promise.reject(new Error('登录超时, 请重新登录'))
+    }
+
+    config.headers['clt_token'] = token
     return config
   },
   (error: AxiosError) => {
@@ -28,11 +44,16 @@ axiosInstance.interceptors.request.use(
   }
 )
 
+/**
+ * 统一拦截 response
+ */
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
     const { data, config, headers, request, status, statusText } = response
     const messageApi = getGlobalMessage()
+    const { token, lastActiveTime, loginStatue, clearToken, resetToken } = useTokenStore.getState()
     if (status === 200) {
+      resetToken()
       const { data } = response
       // todo: 每次请求成功都重新 set token cookie
       const { code, msg } = data

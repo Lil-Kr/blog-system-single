@@ -1,11 +1,7 @@
 import LazyLoad from '@/components/router/LazyLoad'
 import { RouterItemType } from '@/types/router/routeType'
-import { HomeOutlined } from '@ant-design/icons'
 import { lazy } from 'react'
-
-const componentMap = {
-  HomeOutlined: lazy(() => import('@/views/home'))
-}
+import { componentMap, iconMap } from '../config/configMappings'
 
 const homeConfig: RouterItemType[] = [
   {
@@ -13,10 +9,10 @@ const homeConfig: RouterItemType[] = [
       key: '/home',
       title: '首页',
       layout: false,
-      icon: <HomeOutlined />
+      icon: iconMap['home']
     },
-    path: 'home',
-    element: LazyLoad(componentMap['HomeOutlined'])
+    path: '/admin/home',
+    element: LazyLoad(componentMap['home_a'])
   }
 ]
 

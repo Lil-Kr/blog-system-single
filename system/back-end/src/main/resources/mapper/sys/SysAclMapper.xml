@@ -126,4 +126,23 @@
         </where>
     </select>
 
+    <!-- 查询单个对象 -->
+    <select id="getAcl" resultType="com.cy.single.blog.pojo.entity.sys.SysAcl">
+        select <include refid="Base_Column_List" />
+        from sys_acl
+        <where>
+            <if test="param.surrogateId != null">
+                surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.aclModuleId != null">
+                acl_module_id = #{param.aclModuleId}
+            </if>
+            <if test="param.name != null and param.name != ''">
+                `name` = #{param.name}
+            </if>
+            <if test="param.type != null">
+                `type` = #{param.type}
+            </if>
+        </where>
+    </select>
 </mapper>

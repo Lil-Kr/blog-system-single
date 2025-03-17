@@ -23,4 +23,6 @@ public interface SysAclMapper extends BaseMapper<SysAcl> {
 	Integer countPageAclList(@Param("param") AclPageReq req);
 
 	List<Long> selectAclIdAllList(@Param("param") AclReq req);
+
+	SysAcl getAcl(@Param("param") AclReq req);
 }

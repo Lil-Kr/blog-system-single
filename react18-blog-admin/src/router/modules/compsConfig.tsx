@@ -11,7 +11,7 @@ const compsConfig: RouterItemType[] = [
       layout: false,
       icon: <DotChartOutlined />
     },
-    path: 'comps',
+    path: '/admin/comps',
     children: [
       {
         meta: { key: 'comps-index', title: 'comps-index' },
@@ -25,7 +25,7 @@ const compsConfig: RouterItemType[] = [
           layout: false,
           icon: <SlidersOutlined />
         },
-        path: 'modal',
+        path: '/admin/comps/modal',
         element: LazyLoad(lazy(() => import('@/views/comps/modal/ModalTest')))
       },
       {
@@ -35,7 +35,7 @@ const compsConfig: RouterItemType[] = [
           layout: false,
           icon: <SlidersOutlined />
         },
-        path: 'tinymce-cloud',
+        path: '/admin/comps/tinymce-cloud',
         element: LazyLoad(lazy(() => import('@/views/comps/tinymce/TinymceCloud')))
       },
       {
@@ -45,7 +45,7 @@ const compsConfig: RouterItemType[] = [
           layout: false,
           icon: <SlidersOutlined />
         },
-        path: 'tinymce-local',
+        path: '/admin/comps/tinymce-local',
         element: LazyLoad(lazy(() => import('@/views/comps/tinymce/TinymceLocal')))
       },
       {
@@ -55,7 +55,7 @@ const compsConfig: RouterItemType[] = [
           layout: false,
           icon: <SlidersOutlined />
         },
-        path: 'image-uploader',
+        path: '/admin/comps/image-uploader',
         element: LazyLoad(lazy(() => import('@/views/comps/imageupload/ImageUploda')))
       },
       {
@@ -65,7 +65,7 @@ const compsConfig: RouterItemType[] = [
           layout: false,
           icon: <SlidersOutlined />
         },
-        path: 'select',
+        path: '/admin/comps/select',
         element: LazyLoad(lazy(() => import('@/views/comps/select/SelectDemo')))
       },
       {
@@ -75,7 +75,7 @@ const compsConfig: RouterItemType[] = [
           layout: false,
           icon: <SlidersOutlined />
         },
-        path: 'table-pro',
+        path: '/admin/comps/table-pro',
         element: LazyLoad(lazy(() => import('@/views/comps/protable/ProTableDemo')))
       }
     ]

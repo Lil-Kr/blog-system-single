@@ -21,7 +21,7 @@ const sysConfig: RouterItemType[] = [
       layout: false,
       icon: <ToolOutlined />
     },
-    path: 'sys',
+    path: '/admin/sys',
     children: [
       {
         meta: { key: 'sys-index', title: 'sys-index' },
@@ -35,7 +35,7 @@ const sysConfig: RouterItemType[] = [
           layout: false,
           icon: <UserOutlined />
         },
-        path: 'index',
+        path: '/admin/sys/index',
         element: LazyLoad(lazy(() => import('@/views/sys/User')))
       },
       {
@@ -45,7 +45,7 @@ const sysConfig: RouterItemType[] = [
           layout: false,
           icon: <ApartmentOutlined />
         },
-        path: 'org',
+        path: '/admin/sys/org',
         element: LazyLoad(lazy(() => import('@/views/sys/Org')))
       },
       // {
@@ -65,7 +65,7 @@ const sysConfig: RouterItemType[] = [
           layout: false,
           icon: <UserSwitchOutlined />
         },
-        path: 'role',
+        path: '/admin/sys/role',
         element: LazyLoad(lazy(() => import('@/views/sys/role/Role')))
       },
       {
@@ -75,7 +75,7 @@ const sysConfig: RouterItemType[] = [
           layout: false,
           icon: <MergeCellsOutlined />
         },
-        path: 'acl',
+        path: '/admin/sys/acl',
         element: LazyLoad(lazy(() => import('@/views/sys/Acl')))
       },
       {
@@ -85,7 +85,7 @@ const sysConfig: RouterItemType[] = [
           layout: false,
           icon: <SlidersOutlined />
         },
-        path: 'dict',
+        path: '/admin/sys/dict',
         element: LazyLoad(lazy(() => import('@/views/sys/Dict')))
       }
     ]

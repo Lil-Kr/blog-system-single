@@ -3,13 +3,13 @@ import { Avatar, Dropdown, MenuProps, message } from 'antd'
 import { useNavigate } from 'oh-router-react'
 import avatar from '@/assets/images/icons/avatar.png'
 // zustand
-import useLoginAdminStore from '@/store/login'
+import { useTokenStore } from '@/store/login'
 import { useMenuStore, useTabsStore } from '@/store/global'
 import { useMessage } from '@/components/message/MessageProvider'
 
 const AvatarIcon = () => {
   const messageApi = useMessage()
-  const { removeToken } = useLoginAdminStore()
+  const { clearToken } = useTokenStore()
   const { resetTabs } = useTabsStore()
   const { restMenuState } = useMenuStore()
   const navigateTo = useNavigate()
@@ -33,10 +33,7 @@ const AvatarIcon = () => {
     /**
      * remove token
      */
-    removeToken()
-    resetTabs()
-    restMenuState()
-    navigateTo('/login')
+    clearToken()
   }
 
   const handleMenuClick: MenuProps['onClick'] = event => {

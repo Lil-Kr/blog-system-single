@@ -1,7 +1,7 @@
 import Router from 'oh-router'
 import LazyLoad from '@/components/router/LazyLoad'
 import { lazy } from 'react'
-import { HomeOutlined, UserOutlined } from '@ant-design/icons'
+import { UserOutlined } from '@ant-design/icons'
 import { busConfig } from './modules'
 import { RouterItemType } from '@/types/router/routeType'
 import { getBreadCrumbItems, getRouterMenuItems, getTabsMap } from '@/utils/common'
@@ -142,8 +142,6 @@ const rootConfig: RouterItemType[] = [
     ]
   }
 ]
-
-console.log('--> 路由配置:', { ...rootConfig })
 
 /**
  * create router

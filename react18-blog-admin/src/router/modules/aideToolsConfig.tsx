@@ -11,7 +11,7 @@ const aideToolsConfig: RouterItemType[] = [
       layout: false,
       icon: <ToolOutlined />
     },
-    path: 'aide-tools',
+    path: '/admin/aide-tools',
     children: [
       {
         meta: { key: 'aide-tools-index', title: 'aide-tools-index' },
@@ -25,7 +25,7 @@ const aideToolsConfig: RouterItemType[] = [
           layout: false,
           icon: <CodepenOutlined />
         },
-        path: 'index',
+        path: '/admin/aide-tools/index',
         element: LazyLoad(lazy(() => import('@/views/aidetools/JavaCodeGenerator')))
       }
     ]

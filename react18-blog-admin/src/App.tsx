@@ -5,7 +5,6 @@ import { rootConfig, rootRouterConfig } from '@/router/config'
 import useTheme from './hooks/useTheme'
 import zhCN from 'antd/lib/locale/zh_CN'
 import enUS from 'antd/lib/locale/en_US'
-// import i18n from 'i18next'
 import { useBreadcrumbStore, useSystemStore } from './store/global'
 import { getBreadCrumbItems, getBrowserLang } from './utils/common'
 import { BreadcrumbType } from './types/common/breadcrumbType'
@@ -15,11 +14,8 @@ function App() {
   const { language, assemblySize, setLanguage } = useSystemStore()
   const { setBreadcrumbMap } = useBreadcrumbStore()
   const breadcrumbMap: Map<string, BreadcrumbType[]> = getBreadCrumbItems(rootConfig)
-
   const [i18nLocale, setI18nLocale] = useState(zhCN)
-
   useEffect(() => {
-  console.log('--> import.meta.env.BASE_URL:', import.meta.env.BASE_URL)
     const fetchDictList = async () => {
       try {
         // 全局使用国际化

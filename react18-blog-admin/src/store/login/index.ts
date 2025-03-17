@@ -3,7 +3,8 @@ import { create } from 'zustand'
 // cookie
 import cookie from 'react-cookies'
 import { CLT } from '@/config'
-import { LoginTpye } from '@/types/apis/sys/user/userType'
+import { LoginTpye as LoginState } from '@/types/apis/sys/user/userType'
+import { persist } from 'zustand/middleware'
 
 /**
  * create 函数中必须指定泛型类型, 这样组件中通过 hook 获取到的对象才能更新其中状态值
@@ -13,43 +14,96 @@ import { LoginTpye } from '@/types/apis/sys/user/userType'
  *
  *  // 拿到自定义的值
  *  const token = useLoginAdminStore(state => state.loginData.token)
+ */
+
+// type Actions = {
+//   setCookie: (token: string) => void
+//   removeToken: () => void
+// }
+
+// const useLoginAdminStore = create<LoginTpye.LoginRespType & Actions>(set => ({
+//   /**
+//    * init data
+//    */
+//   token: '',
+//   setCookie: (token: string) => set(state => setTokenFunc(state, token)),
+//   removeToken: () => set(state => removeTokenFunc(state))
+// }))
+
+/**
  *
  */
-
-type Actions = {
-  setToken: (token: string) => void
-  removeToken: () => void
+type TokenActions = {
+  setToken: (token: string, loginStatue: boolean) => void
+  clearToken: () => void
+  resetToken: () => void
 }
 
-const useLoginAdminStore = create<LoginTpye.LoginRespType & Actions>(set => ({
-  /**
-   * init data
-   */
+type LoginState = {
+  lastActiveTime: number
+  token: string
+  loginStatue: boolean
+}
+
+const initToken = {
+  lastActiveTime: Date.now(),
   token: '',
-  setToken: (token: string) => set(state => setTokenFunc(state, token)),
-  removeToken: () => set(state => removeTokenFunc(state))
-}))
-
-/**
- * set token to cookie {CLT}
- * @param state
- * @param token
- * @returns
- */
-const setTokenFunc = (state: LoginTpye.LoginRespType & Actions, token: string) => {
-  const expirationDate = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
-  cookie.save(CLT, token, { path: '/', expires: expirationDate })
-  return state
+  loginStatue: false
 }
 
-/**
- * remove token {CLT}
- * @param state
- * @returns
- */
-const removeTokenFunc = (state: LoginTpye.LoginRespType & Actions) => {
-  cookie.remove(CLT, { path: '/' })
-  return state
-}
+const useTokenStore = create<LoginState & TokenActions>()(
+  persist(
+    (set, get) => ({
+      ...initToken,
+      setToken: (token: string, loginStatue: boolean) =>
+        set(state => {
+          return {
+            ...state,
+            token,
+            loginStatue,
+            lastActiveTime: Date.now()
+          }
+        }),
+      clearToken: () =>
+        set(state => {
+          return {
+            ...state,
+            token: '',
+            loginStatue: false
+          }
+        }),
+      resetToken: () =>
+        set(state => {
+          return {
+            ...state,
+            lastActiveTime: Date.now()
+          }
+        })
+    }),
+    { name: 'auth-token' }
+  )
+)
 
-export default useLoginAdminStore
+// /**
+//  * set token to cookie {CLT}
+//  * @param state
+//  * @param token
+//  * @returns
+//  */
+// const setTokenFunc = (state: LoginTpye.LoginRespType & Actions, token: string) => {
+//   const expirationDate = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
+//   cookie.save(CLT, token, { path: '/', expires: expirationDate })
+//   return state
+// }
+
+// /**
+//  * remove token {CLT}
+//  * @param state
+//  * @returns
+//  */
+// const removeTokenFunc = (state: LoginTpye.LoginRespType & Actions) => {
+//   cookie.remove(CLT, { path: '/' })
+//   return state
+// }
+
+export { useTokenStore }

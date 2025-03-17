@@ -2,31 +2,34 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import md5 from 'js-md5'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { useState } from 'react'
-import useLoginAdminStore from '@/store/login'
+import { useTokenStore } from '@/store/login'
 import loginApi from '@/apis/sys/loginApi'
 import { Form, Input, Button, Flex } from 'antd'
 import { useNavigate } from 'oh-router-react'
 import { useTabsStore } from '@/store/global'
 import { LoginTpye } from '@/types/apis/sys/user/userType'
 import './css/login.css'
+import { useMessage } from '@/components/message/MessageProvider'
 
 const Login = () => {
   const [btnSize, setSize] = useState<SizeType>('large')
   const [loading, setLoading] = useState<boolean>(false)
+  const messageApi = useMessage()
   const { resetTabs } = useTabsStore()
-  const { setToken } = useLoginAdminStore()
+  const { setToken } = useTokenStore()
   const navigateTo = useNavigate()
 
   const onFinish = async (loginInfo: LoginTpye.LoginFormType) => {
     let { password } = loginInfo
     loginInfo.password = md5.md5(password)
-    const loginRes = await loginApi.login(loginInfo)
-    const { code, data: token, msg } = loginRes
+    const res = await loginApi.login({ ...loginInfo })
+    const { code, data: token, msg } = res
     if (code === 200) {
-      setToken(token)
+      setToken(token, true)
       const path = '/admin/home'
       // 跳转主页面
       navigateTo(path)
+      messageApi?.success(msg)
     } else {
       navigateTo('/login')
       resetTabs()
