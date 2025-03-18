@@ -63,6 +63,16 @@ public class SysAcl extends Model<SysAcl>  {
 	private Integer type;
 
 	/**
+	 * 菜单名
+	 */
+	private String menuName;
+
+	/**
+	 * 菜单url, 对应路由
+	 */
+	private String menuUrl;
+
+	/**
 	 * 状态
 	 */
 	private Integer status;
@@ -77,6 +87,9 @@ public class SysAcl extends Model<SysAcl>  {
 	 */
 	private String remark;
 
+	/**
+	 *
+	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long creatorId;
 

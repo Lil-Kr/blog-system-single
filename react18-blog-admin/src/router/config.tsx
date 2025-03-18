@@ -7,7 +7,7 @@ import { RouterItemType } from '@/types/router/routeType'
 import { getBreadCrumbItems, getRouterMenuItems, getTabsMap } from '@/utils/common'
 import { BreadcrumbType } from '@/types/common/breadcrumbType'
 import { homeConfig } from './modules/homeConfig'
-import { sysConfig } from './modules/aclConfig'
+import { sysConfig } from './modules/sysConfig'
 import { aideToolsConfig } from './modules/aideToolsConfig'
 import { blogConfig } from './modules/blogConfig'
 import { compsConfig } from './modules/compsConfig'
@@ -129,7 +129,7 @@ const rootConfig: RouterItemType[] = [
       layout: true,
       icon: ''
     },
-    path: 'admin',
+    path: '/admin',
     element: LazyLoad(lazy(() => import('@/layout/MainLayout'))),
     children: [
       ...homeConfig,
@@ -155,7 +155,7 @@ const rootRouterConfig: Router<{}> = new Router({
  * 处理路由
  */
 const menuItems = getRouterMenuItems(rootConfig)
-// console.log('--> oh-router 处理后的路由信息, 提供菜单使用: ', menuItems)
+console.log('--> oh-router 处理后的路由信息, 提供菜单使用: ', menuItems)
 
 /**
  * 通过导出的面包屑结构, 生成Tabs结构

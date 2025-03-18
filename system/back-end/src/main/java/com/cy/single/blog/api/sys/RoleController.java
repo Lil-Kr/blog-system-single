@@ -121,7 +121,7 @@ public class RoleController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/roleAclTree")
-	public ApiResp<List<AclModuleDto>> roleAclTree(@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
+	public ApiResp<List<AclModuleDto>> roleAclTree (@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
 		List<AclModuleDto> aclModuleDtoList = treeService.roleAclTree(req.getRoleId());
 		if (CollectionUtils.isNotEmpty(aclModuleDtoList)) {
 			return ApiResp.success(aclModuleDtoList);

@@ -19,6 +19,9 @@
     <select id="selectAclModuleList" resultType="com.cy.single.blog.pojo.vo.sys.aclmodule.SysAclModuleVO">
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
+        <where>
+            status = 0
+        </where>
         order by seq asc
     </select>
 </mapper>

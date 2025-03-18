@@ -14,11 +14,11 @@ import { getMenuOpenKeysUtil } from '@/utils/common'
 import styles from '@/layout/css/index.module.scss'
 import { DictMapType } from '@/types/apis/sys/dict/dictType'
 import { dictApi } from '@/apis/sys/dictApi'
-import useDictDetailStore from '@/store/global/dictStore'
+import { useDictDetailStore, useAclModuleStore } from '@/store/global/initDictStore'
 import { aclModuleApi } from '@/apis/sys'
-import { AclModuleTreeResp } from '@/types/apis/sys/acl/aclType'
 import { useTokenStore } from '@/store/login'
 import { LogoutAndRedirect } from '@/components/logout/LogoutAndRedirect'
+import { OptionType, transformTypeToSeletor } from '@/types/apis'
 
 const MainLayout = () => {
   const { pathname } = useLocation()
@@ -26,7 +26,8 @@ const MainLayout = () => {
   const keys: string[] = getMenuOpenKeysUtil(pathname)
   const { token } = useTokenStore()
   // 初始化字典数据状态
-  const { dictMap, setDictMap } = useDictDetailStore()
+  const { dictMap, setDictMap, dictStatues: statues, setDictStatueType, setAclType } = useDictDetailStore()
+  const { aclModuleSelector, setAclModuleSeletor } = useAclModuleStore()
 
   useEffect(() => {
     if (token !== '') {
@@ -43,6 +44,9 @@ const MainLayout = () => {
       initData()
     }
 
+    /**
+     * 初始化字典数据, 只在第一次加载时初始化一次
+     */
     if (dictMap.size === 0) {
       const initDictMap = async () => {
         /**
@@ -50,8 +54,33 @@ const MainLayout = () => {
          */
         const dictMap: Map<string, DictMapType[]> = await initDictList()
         setDictMap(dictMap)
+
+        /**
+         * 初始化数据字典[状态类型]
+         */
+        const statusTypes: DictMapType[] = dictMap.get('状态类型') ?? []
+        const statusTypeSelecor = transformTypeToSeletor(statusTypes)
+        setDictStatueType(statusTypeSelecor)
+
+        /**
+         * 初始化数据字典[权限类型]
+         */
+        const aclTypes: DictMapType[] = dictMap.get('权限点类型') ?? []
+        const aclTypeSelecor = transformTypeToSeletor(aclTypes)
+        setAclType(aclTypeSelecor)
       }
       initDictMap()
+    }
+
+    /**
+     * 初始化权限模块数据
+     */
+    if (aclModuleSelector.length <= 1) {
+      const initAclModule = async () => {
+        const aclModuleSelector = await initAclModuleList()
+        setAclModuleSeletor(aclModuleSelector)
+      }
+      initAclModule()
     }
   }, [pathname, collapsed])
 
@@ -69,13 +98,24 @@ const MainLayout = () => {
   }
 
   /**
-   * 初始化用户拥有的菜单
+   * 初始化权限模块数据
    */
-  // const initMenu = async (): Promise<AclModuleTreeResp[]> => {
-  //   const res = await aclModuleApi.aclModuleTree()
-  //   const { code, msg, data } = res
-  //   return data
-  // }
+  const initAclModuleList = async (): Promise<OptionType[]> => {
+    const aclModules = await aclModuleApi.aclModuleList({})
+    const { code, data } = aclModules
+    if (code !== 200) {
+      return []
+    }
+    let aclModuleList: OptionType[] = data.map(({ surrogateId, name }) => ({
+      value: surrogateId,
+      label: name
+    }))
+    aclModuleList.push({
+      value: '0',
+      label: '-'
+    })
+    return aclModuleList
+  }
 
   return (
     <Layout className={styles.mainLayoutWarpper}>

@@ -8,7 +8,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, surrogate_id, `number`, `name`, acl_module_id, url, `type`, status, seq, remark, operate_ip, creator_id, operator, create_time, update_time
+        id, surrogate_id, `number`, `name`, acl_module_id, url, `type`, menu_name, menu_url, status, seq, remark, operate_ip, creator_id, operator, create_time, update_time
     </sql>
 
     <!--根据权限id列表查询权限点列表-->
@@ -21,6 +21,8 @@
             a.acl_module_id,
             a.url,
             a.type,
+            a.menu_name,
+            a.menu_url,
             a.status,
             a.seq,
             a.remark,
@@ -55,6 +57,8 @@
             a.acl_module_id,
             a.url,
             a.type,
+            a.menu_name,
+            a.menu_url,
             a.status,
             a.seq,
             a.remark,

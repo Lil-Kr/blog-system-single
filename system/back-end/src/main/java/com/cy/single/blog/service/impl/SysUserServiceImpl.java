@@ -18,6 +18,7 @@ import com.cy.single.blog.service.SysUserService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.cy.single.blog.common.cache.CacheManager.removeCache;
 import static com.cy.single.blog.common.cache.CacheManager.setUserCache;
 import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
@@ -86,8 +88,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	public ApiResp<String> delete(Long surrogateId) {
 		QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
 		wrapper.eq("surrogate_id", surrogateId);
+		SysUser user = userMapper.selectOne(wrapper);
+		if (Objects.isNull(user)) {
+			return ApiResp.failure(INFO_NOT_EXIST);
+		}
 		int delete = userMapper.delete(wrapper);
 		if (delete >= 1) {
+			// 移除缓存
+			removeCache(StringUtils.isNotBlank(user.getToken()) ? user.getToken() : "");
 			return ApiResp.success();
 		} else {
 			return ApiResp.failure(DEL_ERROR);

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @Author: Lil-K
  * @Date: 2025/3/16
- * @Description:
+ * @Description: 菜单api
  */
 @RestController
 @RequestMapping("/sys/menu")
@@ -16,6 +16,5 @@ public class MenuController {
 
 	@Autowired
 	private SysAclModuleService aclModuleService;
-
 
 }

@@ -1,168 +1,109 @@
-import React, { useImperativeHandle, useState } from 'react'
-import { OptionType, transformTypeToSeletor } from '@/types/apis'
-import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
+import React, { useEffect, useState } from 'react'
+import { OptionType } from '@/types/apis'
+import { ModalType } from '@/types/component/modal'
 import { Form, Input, InputNumber, Modal, Select } from 'antd/lib'
 const { TextArea } = Input
-import { aclModuleApi } from '@/apis/sys'
-import { AclAddReq, AclEditReq, AclModalType, CallBackType } from '@/types/apis/sys/acl/aclType'
+import { AclAddReq, AclEditReq, CallBackType } from '@/types/apis/sys/acl/aclType'
 import { DictMapType } from '@/types/apis/sys/dict/dictType'
-import useDictDetailStore from '@/store/global/dictStore'
+import { useAclModuleStore, useDictDetailStore } from '@/store/global/initDictStore'
 import { useMessage } from '@/components/message/MessageProvider'
+import { useAclModalStore } from '@/store/sys/aclStore'
 
 const AclModal = (props: ModalType.CustomModal) => {
   const messageApi = useMessage()
-  const { mRef, update } = props
+  const { update } = props
   const [modalForm] = Form.useForm()
-  const [action, setAction] = useState('create')
-  const [title, setTitle] = useState('')
-  const [openModal, setOpenModal] = useState(false)
-  const [inputDisabled, setInputDisabled] = useState<boolean>(false)
-  const [requestParams, setRequestParams] = useState<IModalRequestAction>({
-    api: {}
-  })
 
-  // 设置回调参数
-  const [callBack, setCallBack] = useState<CallBackType>({ aclModuleId: '' })
-  const [aclModuleList, setAclModuleList] = useState<OptionType[]>([])
-  const [aclTypeList, setAclTypeList] = useState<OptionType[]>([])
-  const [selectedValue, setSelectedValue] = useState<{
-    aclModuleInfo?: OptionType
-    status?: OptionType
-    aclType?: OptionType
-  }>()
-  const [status, setStatus] = useState<OptionType[]>([])
-  const { setDictMap, dictMap } = useDictDetailStore()
+  const { dictStatues, aclTypes } = useDictDetailStore()
+  const { aclModuleSelector } = useAclModuleStore()
+  const {
+    title,
+    api,
+    action,
+    openModal,
+    setOpenModal,
+    modalSelector,
+    setModalSelector,
+    data,
+    inputDisabled,
+    setInputDisabled,
+    isMenu,
+    setIsMenu
+  } = useAclModalStore()
 
-  useImperativeHandle(mRef, () => ({
-    form: modalForm,
-    open
-  }))
-
-  /**
-   * load all list
-   * @returns
-   */
-  const setSelectorValueComp = async () => {
-    retrieveAclModuleList()
-    /**
-     * 初始化[权限点类型]下拉列表数据
-     */
-    const aclTypes: DictMapType[] = dictMap.get('权限点类型') ?? []
-    const aclTypeSelecor = transformTypeToSeletor(aclTypes)
-    setAclTypeList(aclTypeSelecor)
-
-    /**
-     * 初始化[状态类型]下拉列表数据
-     */
-    const statusTypes: DictMapType[] = dictMap.get('状态类型') ?? []
-    const statusTypeSelecor = transformTypeToSeletor(statusTypes)
-    setStatus(statusTypeSelecor)
-  }
-
-  /**
-   *
-   * @returns
-   */
-  const retrieveAclModuleList = async () => {
-    const aclModules = await aclModuleApi.aclModuleList({})
-    const { code, data } = aclModules
-    if (code !== 200) {
-      setAclModuleList([])
-      return
+  useEffect(() => {
+    if (openModal) {
+      initAclData()
     }
+  }, [openModal])
 
-    let aclModuleList: OptionType[] = data.map(({ surrogateId, name }) => ({
-      value: surrogateId,
-      label: name
-    }))
-    aclModuleList.push({
-      value: '0',
-      label: '顶层'
-    })
-    setAclModuleList(aclModuleList)
-  }
-
-  const open = (
-    requestParams: IModalRequestAction,
-    params: IModalParams,
-    type: IAction,
-    modalStyle: IModalStyle,
-    data?: AclModalType
-  ) => {
-    // load all org list
-    setSelectorValueComp()
-
-    const { action, open } = type
-    const { title } = params
-
+  /**
+   * 初始化数据
+   */
+  const initAclData = () => {
+    modalForm.resetFields()
     if (action === 'create') {
-      modalForm.resetFields()
+      // 绑定父级权限模块初始值
       const aclModuleInfo: OptionType = {
         value: data?.aclModuleId ?? '',
         label: data?.aclModuleName ?? ''
       }
-      // 打开modal是绑定第一个
-      const statusTypes: DictMapType[] = dictMap.get('状态类型') ?? []
+
+      // 绑定状态初始值, 默认 '正常'
+      const statues = dictStatues.find(item => item.label === '正常')
       const statusInfo: OptionType = {
-        value: statusTypes[0]?.type.toString() ?? '',
-        label: statusTypes[0]?.name
+        value: statues?.value ?? '',
+        label: statues?.label ?? ''
       }
 
-      const aclTypes: DictMapType[] = dictMap.get('权限点类型') ?? []
+      // 默认按钮类型
+      const aclType = aclTypes.find(item => item.label === '按钮')
       const aclTypeInfo: OptionType = {
-        value: aclTypes[0]?.type.toString() ?? '',
-        label: aclTypes[0]?.name
+        value: aclType?.value?.toString() ?? '',
+        label: aclType?.label ?? ''
       }
 
-      // 绑定当前选中的树节点的值
+      // 绑定初始值
       modalForm.setFieldsValue({
-        aclModuleInfo: data?.aclModuleId ?? '',
-        statusInfo: statusTypes[0]?.type.toString() ?? '',
-        aclTypeInfo: aclTypes[0]?.type.toString() ?? ''
+        aclModuleInfo,
+        statusInfo,
+        aclTypeInfo
       })
-
-      setSelectedValue({ aclModuleInfo: aclModuleInfo, status: statusInfo, aclType: aclTypeInfo })
+      setModalSelector(aclModuleInfo, statusInfo, aclTypeInfo)
     } else if (action === 'edit') {
       const aclModuleInfo: OptionType = {
         value: data?.aclModuleId ?? '',
         label: data?.aclModuleName ?? ''
       }
-      const aclTypes = dictMap.get('权限点类型') ?? []
+
       const aclTypeInfo: OptionType = {
         value: data?.type?.toString() ?? '',
-        label: aclTypes?.find(item => item.type === data?.type)?.name ?? ''
+        label: aclTypes.find(item => item.value === data?.type?.toString())?.label ?? ''
       }
 
-      const statusTypes = dictMap.get('状态类型') ?? []
+      /** 菜单类型需要显示明细 */
+      if (aclTypeInfo.label === '菜单') {
+        setIsMenu(true)
+        modalForm.setFieldsValue({
+          menuName: data?.menuName ?? '',
+          menuUrl: data?.menuUrl ?? ''
+        })
+      }
+
       const statusInfo: OptionType = {
         value: data?.status?.toString() ?? '',
-        label: statusTypes.find(item => item.type === data?.type)?.name ?? ''
+        label: dictStatues.find(item => item.value === data?.status?.toString())?.label ?? ''
       }
-      modalForm.setFieldsValue({
-        aclModuleInfo: data?.aclModuleId ?? '',
-        aclTypeInfo: data?.type?.toString() ?? '',
-        statusInfo: data?.status?.toString() ?? '',
-        ...data
-      })
 
-      setSelectedValue({ aclModuleInfo: aclModuleInfo, status: statusInfo, aclType: aclTypeInfo })
-    } else {
+      // 绑定初始值
       modalForm.setFieldsValue({
-        aclModuleInfo: data?.aclModuleId ?? '',
-        aclTypeInfo: data?.type?.toString() ?? '',
-        statusInfo: data?.status?.toString() ?? '',
+        aclModuleInfo: aclModuleInfo,
+        aclTypeInfo: aclTypeInfo,
+        statusInfo: statusInfo,
         ...data
       })
-      setInputDisabled(true)
+      setModalSelector(aclModuleInfo, statusInfo, aclTypeInfo)
     }
-
-    setOpenModal(open)
-    setAction(action)
-    setTitle(title)
-    setRequestParams(requestParams)
-
-    const { aclModuleSurrogateId } = data ?? {}
-    setCallBack({ aclModuleId: aclModuleSurrogateId ?? '' })
   }
 
   /**
@@ -171,19 +112,18 @@ const AclModal = (props: ModalType.CustomModal) => {
    */
   const handleOk = async () => {
     const valid = await modalForm.validateFields()
-    const { api } = requestParams
     const params = modalForm.getFieldsValue()
     if (!valid) {
       return
     }
     if (action === 'create') {
       const addReq: AclAddReq = {
-        aclModuleId: params.aclModuleInfo,
-        status: selectedValue?.status?.value,
-        type: selectedValue?.aclType?.value,
+        aclModuleId: modalSelector?.aclModuleInfo?.value,
+        status: modalSelector?.statusInfo?.value,
+        type: modalSelector?.aclTypeInfo?.value,
         ...params
       }
-      const res = await api.add!(addReq)
+      const res = await api.add(addReq)
       const { code, msg } = res
       if (code !== 200) {
         return
@@ -192,12 +132,12 @@ const AclModal = (props: ModalType.CustomModal) => {
     } else if (action === 'edit') {
       const editReq: AclEditReq = {
         surrogateId: params.key,
-        aclModuleId: selectedValue?.aclModuleInfo?.value,
-        status: selectedValue?.status?.value,
-        type: selectedValue?.aclType?.value,
+        aclModuleId: modalSelector?.aclModuleInfo?.value,
+        status: modalSelector?.statusInfo?.value,
+        type: modalSelector?.aclTypeInfo?.value,
         ...params
       }
-      const res = await api.edit!(editReq)
+      const res = await api.edit(editReq)
       const { code, msg } = res
       if (code !== 200) {
         return
@@ -205,21 +145,37 @@ const AclModal = (props: ModalType.CustomModal) => {
       messageApi?.success(msg)
     }
 
+    /**
+     * 回调
+     */
+    const aclModuleId = modalSelector?.aclModuleInfo?.value ?? ''
+    await update({ aclModuleId })
     handleCancel()
-    update({ ...callBack })
   }
 
+  /**
+   * 关闭Modal框执行
+   */
   const handleCancel = () => {
     setOpenModal(false)
     setInputDisabled(false)
     modalForm.resetFields()
   }
 
+  /**
+   * 选择权限模块时触发
+   * @param value
+   */
   const handleChangeAclModule = (value: string) => {
-    setSelectedValue(prevState => ({
-      ...prevState,
-      aclModuleInfo: { label: prevState?.aclModuleInfo?.label, value: value }
-    }))
+    const aclModuleInfo = aclModuleSelector.find(item => item.value === value) ?? {
+      value: '',
+      label: ''
+    }
+    setModalSelector(
+      aclModuleInfo,
+      modalSelector?.statusInfo ?? { value: '', label: '' },
+      modalSelector?.aclTypeInfo ?? { value: '', label: '' }
+    )
   }
 
   /**
@@ -227,25 +183,51 @@ const AclModal = (props: ModalType.CustomModal) => {
    * @param value
    */
   const handleChangeStatus = (value: string) => {
-    setSelectedValue(prevState => ({
-      ...prevState,
-      status: { ...prevState?.status, value: value }
-    }))
+    const statusInfo = dictStatues.find(item => item.value === value) ?? {
+      value: '',
+      label: ''
+    }
+    setModalSelector(
+      modalSelector?.statusInfo ?? { value: '', label: '' },
+      statusInfo,
+      modalSelector?.aclTypeInfo ?? { value: '', label: '' }
+    )
   }
 
+  /**
+   * 选择权限类型时触发
+   * @param value
+   */
   const handleChangeAcl = (value: string) => {
-    setSelectedValue(prevState => ({
-      ...prevState,
-      aclType: { label: prevState?.aclType?.label, value: value }
-    }))
+    const aclTypeInfo = aclTypes.find(item => item.value === value) ?? {
+      value: '',
+      label: ''
+    }
+    setModalSelector(
+      modalSelector?.aclModuleInfo ?? { value: '', label: '' },
+      modalSelector?.statusInfo ?? { value: '', label: '' },
+      aclTypeInfo
+    )
+
+    if (aclTypeInfo.label === '菜单') {
+      setIsMenu(true)
+    } else {
+      setIsMenu(false)
+      if (action === 'create') {
+        modalForm.setFieldsValue({
+          menuName: '',
+          menuUrl: ''
+        })
+      }
+    }
   }
 
   return (
     <div className='baseModal'>
       <Modal
-        style={{ maxWidth: '30vw' }}
+        // style={{ maxWidth: '100vw' }}
         title={title}
-        width={'100vw'}
+        width={'50vw'}
         okText={'确定'}
         cancelText={'取消'}
         open={openModal}
@@ -264,23 +246,23 @@ const AclModal = (props: ModalType.CustomModal) => {
           <Form.Item
             key={1}
             name={'aclModuleInfo'}
-            label={'所属权限模块'}
+            label={'权限模块'}
             rules={[{ required: true, message: '权限模块不能为空' }]}
           >
             <Select
               onChange={value => handleChangeAclModule(value)}
               showSearch={true}
-              placeholder={'所属权限模块必填'}
+              placeholder={'权限模块必填'}
               optionFilterProp='children'
               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-              options={aclModuleList}
+              options={aclModuleSelector}
             />
           </Form.Item>
           <Form.Item key={2} name={'name'} label={'权限名称'} rules={[{ required: true, message: '权限名称不能为空' }]}>
             <Input placeholder={'权限名称必填'} style={{ width: '100%' }} />
           </Form.Item>
-          <Form.Item key={3} name={'url'} label={'访问url'} rules={[{ required: true, message: '访问url不能为空' }]}>
-            <Input placeholder={'访问url必填'} style={{ width: '100%' }} />
+          <Form.Item key={3} name={'url'} label={'服务端API'} rules={[{ required: true, message: '访问url不能为空' }]}>
+            <Input placeholder={'服务端API必填'} style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item key={4} name={'seq'} label={'顺序'} rules={[{ required: true, message: '顺序不能为空' }]}>
             <InputNumber placeholder={'顺序必填'} style={{ width: '100%' }} min={0} max={10000} />
@@ -292,7 +274,7 @@ const AclModal = (props: ModalType.CustomModal) => {
               placeholder={'状态'}
               optionFilterProp='children'
               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-              options={status}
+              options={dictStatues}
             />
           </Form.Item>
           <Form.Item
@@ -307,10 +289,29 @@ const AclModal = (props: ModalType.CustomModal) => {
               placeholder={'权限类型'}
               optionFilterProp='children'
               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-              options={aclTypeList}
+              options={aclTypes}
             />
           </Form.Item>
-
+          {isMenu && (
+            <div>
+              <Form.Item
+                key={8}
+                name={'menuName'}
+                label={'菜单名'}
+                rules={[{ required: true, message: '菜单名不能为空' }]}
+              >
+                <Input placeholder={'菜单名必填'} style={{ width: '100%' }} />
+              </Form.Item>
+              <Form.Item
+                key={9}
+                name={'menuUrl'}
+                label={'路由url'}
+                rules={[{ required: true, message: '路由url不能为空' }]}
+              >
+                <Input placeholder={'路由url必填'} style={{ width: '100%' }} />
+              </Form.Item>
+            </div>
+          )}
           <Form.Item
             key={7}
             name={'remark'}

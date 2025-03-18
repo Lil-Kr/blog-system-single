@@ -109,7 +109,7 @@ export namespace ModalType {
   }
 
   export interface CustomModal<T = any> {
-    mRef: MutableRefObject<
+    mRef?: MutableRefObject<
       | {
           open: (
             requestParams: IModalRequestAction,

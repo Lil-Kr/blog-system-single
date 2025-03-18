@@ -17,6 +17,7 @@ import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -85,6 +86,8 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			.name(req.getName())
 			.aclModuleId(req.getAclModuleId())
 			.url(req.getUrl())
+			.menuName(StringUtils.isBlank(req.getMenuName()) ? "-" : req.getMenuName())
+			.menuUrl(StringUtils.isBlank(req.getMenuUrl()) ? "-" : req.getMenuUrl())
 			.type(req.getType())
 			.status(req.getStatus())
 			.seq(req.getSeq())
@@ -96,8 +99,12 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			.updateTime(currentTime)
 			.build();
 
-		aclMapper.insert(build);
-		return ApiResp.success("添加权限点成功");
+		int insert = aclMapper.insert(build);
+		if (insert >= 1) {
+			return ApiResp.success("添加权限点成功");
+		} else {
+			return ApiResp.failure(SAVE_ERROR);
+		}
 	}
 
 	/**
@@ -123,7 +130,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			return ApiResp.warning("权限模块只能有一个菜单类型的权限");
 		}
 
-		Date currentTime = DateUtil.localDateTimeNow();// 当前时间
+		Date currentTime = DateUtil.localDateTimeNow(); // 当前时间
 		SysAcl build = SysAcl.builder()
 			.name(req.getName())
 			.aclModuleId(req.getAclModuleId())
@@ -131,10 +138,11 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			.type(req.getType())
 			.status(req.getStatus())
 			.seq(req.getSeq())
+			.menuName(StringUtils.isBlank(req.getMenuName()) ? "-" : req.getMenuName())
+			.menuUrl(StringUtils.isBlank(req.getMenuUrl()) ? "-" : req.getMenuUrl())
 			.remark(req.getRemark())
 			.operator(RequestHolder.getCurrentUser().getSurrogateId())
 			.operateIp("127.0.0.1")
-			.createTime(currentTime)
 			.updateTime(currentTime)
 			.build();
 

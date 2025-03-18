@@ -30,6 +30,8 @@ export interface SysAcl {
   aclModuleId: string
   type: number
   url: string
+  menuName: string
+  menuUrl: string
   status: number
   seq: number
   remark: string
@@ -163,6 +165,8 @@ export interface AclModalType {
   aclTypeName?: string
   name?: string
   url?: string
+  menuName?: string
+  menuUrl?: string
   seq?: number
   status?: number
   remark?: string
@@ -188,6 +192,8 @@ export interface AclAddReq {
   url: string
   status: number
   seq: number
+  menuName?: string
+  menuUrl?: string
   remark: string
   operateIp?: string
 }
@@ -200,6 +206,8 @@ export interface AclEditReq {
   type: number
   status: number
   seq: number
+  menuName?: string
+  menuUrl?: string
   remark: string
   operateIp?: string
 }

@@ -23,9 +23,9 @@ const Login = () => {
     let { password } = loginInfo
     loginInfo.password = md5.md5(password)
     const res = await loginApi.login({ ...loginInfo })
-    const { code, data: token, msg } = res
+    const { code, data, msg } = res
     if (code === 200) {
-      setToken(token, true)
+      setToken(data, true)
       const path = '/admin/home'
       // 跳转主页面
       navigateTo(path)

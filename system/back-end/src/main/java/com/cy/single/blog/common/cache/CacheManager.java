@@ -21,4 +21,8 @@ public class CacheManager {
 		return userCache.getIfPresent(key);
 	}
 
+	public static void removeCache(String key) {
+		userCache.invalidate(key);
+	}
+
 }

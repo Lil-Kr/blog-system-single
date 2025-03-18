@@ -8,7 +8,7 @@ import { TablePageInfoType } from '@/types/base'
 import { RoleAddReq, RoleEditReq, RoleListPageReq, SysRoleVO, TableRoleType } from '@/types/apis/sys/role/roleType'
 import roleApi from '@/apis/sys/roleApi'
 import { EditableProTable, ProColumns } from '@ant-design/pro-components'
-import useDictDetailStore from '@/store/global/dictStore'
+import { useDictDetailStore } from '@/store/global/initDictStore'
 import RoleAcl from './RoleAcl'
 import RoleUser from './RoleUser'
 import { useRoleAclStore } from '@/store/sys/roleStore'
@@ -99,8 +99,7 @@ const Role = () => {
       fieldProps: {
         options: statuType, // 绑定下拉框选项
         defaultValue: statuType.length > 0 ? statuType[0].value : 0, // 确保默认选中普通用户
-        onChange: (value: number, option: any) => {
-        },
+        onChange: (value: number, option: any) => {},
         fieldNames: { label: 'label', value: 'value' } // 显式绑定 value 和 label
       },
       renderText: (value: number) => {
@@ -402,11 +401,7 @@ const Role = () => {
             />
           </Splitter.Panel>
           <Splitter.Panel>
-            <Tabs
-              style={{ height: '100%', width: '100%' }}
-              type='card'
-              items={tabsItem}
-            />
+            <Tabs style={{ height: '100%', width: '100%' }} type='card' items={tabsItem} />
           </Splitter.Panel>
         </Splitter>
       </Flex>

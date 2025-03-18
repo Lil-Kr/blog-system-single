@@ -48,16 +48,6 @@ const sysConfig: RouterItemType[] = [
         path: '/admin/sys/org',
         element: LazyLoad(lazy(() => import('@/views/sys/Org')))
       },
-      // {
-      //   meta: {
-      //     key: '/menu',
-      //     title: '菜单管理',
-      //     layout: false,
-      //     icon: <MenuOutlined />
-      //   },
-      //   path: 'menu',
-      //   element: LazyLoad(lazy(() => import('@/views/sys/Menu')))
-      // },
       {
         meta: {
           key: '/role',

@@ -134,6 +134,11 @@ public class SysTreeServiceImpl implements SysTreeService {
 		return aclModuleListToTree(dtoList);
 	}
 
+	/**
+	 *
+	 * @param dtoList
+	 * @return
+	 */
 	private List<AclModuleDto> aclModuleListToTree(List<AclModuleDto> dtoList) {
 		if (CollectionUtils.isEmpty(dtoList)) {
 			return new ArrayList<>();
@@ -155,6 +160,12 @@ public class SysTreeServiceImpl implements SysTreeService {
 		return rootList;
 	}
 
+	/**
+	 * 从顶层开始递归生成权限模块树
+	 * @param levelAclModuleList
+	 * @param level
+	 * @param levelAclModuleMap
+	 */
 	private void transformAclModuleTree(List<AclModuleDto> levelAclModuleList, String level, Map<String, List<AclModuleDto>> levelAclModuleMap) {
 
 		levelAclModuleList.forEach(aclModuleDto -> {

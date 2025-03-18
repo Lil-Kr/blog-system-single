@@ -4,8 +4,8 @@ import { PREFIX_URL_SYS_USER } from '@/config'
 import { LoginTpye } from '@/types/apis/sys/user/userType'
 
 const loginApi = {
-  login(params: LoginTpye.LoginFormType) {
-    return baseAxiosRequest.put<Result<string>>(PREFIX_URL_SYS_USER + '/login', params)
+  login(req: LoginTpye.LoginFormType) {
+    return baseAxiosRequest.put<Result<string>>(PREFIX_URL_SYS_USER + '/login', req)
   },
   logout() {
     return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_SYS_USER + '/logout', {})

@@ -91,6 +91,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 			.name(req.getName())
 			.level(level)
 			.seq(req.getSeq())
+			.status(0)
 			.remark(req.getRemark())
 			.createTime(currentTime)
 			.updateTime(currentTime)
@@ -100,7 +101,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 			.build();
 		int insert = aclModuleMapper.insert(aclModule);
 		if (insert >= 1) {
-			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.success.msg1"));
+			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg1"));
 		} else {
 			return ApiResp.failure(SAVE_ERROR);
 		}
@@ -177,7 +178,6 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 			parentName = parentAclModule.getName();
 		}
 
-
 		// 更新当前的权限模块
 		SysAclModule after = SysAclModule.builder()
 			.id(before.getId())
@@ -187,6 +187,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 			.parentName(parentName)
 			.seq(req.getSeq())
 			.level(LevelUtil.calculateLevel(parentLevel, parentId))
+			.status(req.getStatus())
 			.remark(req.getRemark())
 			.updateTime(DateUtil.localDateTimeNow())
 			.operator(RequestHolder.getCurrentUser().getSurrogateId())
@@ -210,8 +211,8 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 		aclModuleMapper.updateById(after);
 
 		// 更新当前权限模块的子权限模块
-		String newLevelPrefix = after.getLevel();// 0.1.3
 		String oldLevelPrefix = before.getLevel();// 0.1
+		String newLevelPrefix = after.getLevel();// 0.1.3
 		if (!newLevelPrefix.equals(oldLevelPrefix)) {// 不一致需要做子组织的更新
 			this.updateChildAclModuleTree(after);
 		}
