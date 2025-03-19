@@ -7,6 +7,7 @@ import com.cy.single.blog.pojo.vo.sys.aclmodule.SysAclModuleVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -22,4 +23,5 @@ public interface SysAclModuleMapper extends BaseMapper<SysAclModule> {
 
 	List<SysAclModuleVO> selectAclModuleList(@Param("param") AclModuleListReq req);
 
+	List<SysAclModule> selectAclModuleListByIds(@Param("aclModuleIds") Set<Long> aclModuleIds);
 }

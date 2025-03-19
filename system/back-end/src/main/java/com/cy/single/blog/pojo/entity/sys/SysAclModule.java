@@ -46,11 +46,14 @@ public class SysAclModule extends Model<SysAclModule> {
 	private String name;
 
 	/**
-	 * 父id
+	 * 上级id
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long parentId;
 
+	/**
+	 * 上级模块名称
+	 */
 	private String parentName;
 
 	/**

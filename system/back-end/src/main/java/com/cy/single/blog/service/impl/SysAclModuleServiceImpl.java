@@ -219,7 +219,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 	}
 
 	/**
-	 * 递归变更组织树层级, 并维护子组织的level
+	 * 递归变更组织树层级, 并维护子组织的 level
 	 * @param afterAclModule
 	 */
 	protected void updateChildAclModuleTree(SysAclModule afterAclModule) {

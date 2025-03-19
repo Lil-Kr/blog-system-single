@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo;
+package com.cy.single.blog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cy.single.blog.base.ApiResp;

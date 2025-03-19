@@ -36,7 +36,7 @@ public class AclModuleDto extends SysAclModule {
      */
     public static AclModuleDto adapt(SysAclModule aclModule){
         AclModuleDto dto = new AclModuleDto();
-        BeanUtils.copyProperties(aclModule,dto);
+        BeanUtils.copyProperties(aclModule, dto);
         return dto;
     }
 }

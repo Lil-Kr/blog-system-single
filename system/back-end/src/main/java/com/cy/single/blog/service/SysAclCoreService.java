@@ -21,6 +21,7 @@ public interface SysAclCoreService {
 	 */
 	List<SysAcl> getRoleAclList(Long roleSurrogateId);
 
-
 	List<SysAcl> getUserAclList(Long userId);
+
+	List<SysAcl> getUserAclList(Long userId, Integer type);
 }

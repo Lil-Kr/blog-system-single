@@ -24,9 +24,7 @@ import { TablePageInfoType } from '@/types/base'
 import { aclApi, aclModuleApi } from '@/apis/sys'
 import { transformAclModuleTreeExpandeKeys, transformToAclModuleTreeData } from '@/utils/sys/treeUtils'
 import { AclModuleModal } from '@/components/modal'
-import { IAction, IModalParams, IModalRequestAction, IModalStyle } from '@/types/component/modal'
 import {
-  AclModalType,
   AclModuleReq,
   AclModuleTableType,
   AclPageListReq,
@@ -77,7 +75,11 @@ const Acl = () => {
       title: '菜单名称',
       width: '5%',
       render: (_, record: TableAclListType) => {
-        return <Tag color='geekblue'>{record.menuName}</Tag>
+        if (record.menuName.startsWith('-')) {
+          return record.menuName
+        } else {
+          return <Tag color='geekblue'>{record.menuName}</Tag>
+        }
       }
     },
     {

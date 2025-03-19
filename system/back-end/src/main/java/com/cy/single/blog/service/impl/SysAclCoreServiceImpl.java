@@ -46,7 +46,7 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 	}
 
 	/**
-	 * 获取[用户-权限]列表
+	 * 获取[用户-角色-权限]列表
 	 * @param userId 用户id
 	 * @return
 	 * @throws Exception
@@ -56,6 +56,39 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 		// 如果当前用户是超级管理员, 返回所有的权限点列表
 		if (isSuperAdmin(userId)) {
 			return aclMapper.selectList(new QueryWrapper<>());
+		}
+
+		// 1. 如果不是超级管理员, 就取出当前用户已经分配的角色id列表, 一个用户可以被分配到多个角色, 最后权限取多个角色的并集
+		List<Long> userRoleIdList = roleUserMapper.selectRoleIdListByUserId(userId);
+		if (CollectionUtils.isEmpty(userRoleIdList)) {
+			return Lists.newArrayList();
+		}
+
+		// 2. 根据角色id获取对应用户已经分配的权限点列表id(acl_id)
+		List<Long> userAclIdList = roleAclMapper.selectAclIdListByRoleIdList(userRoleIdList);
+		if (CollectionUtils.isEmpty(userAclIdList)) {
+			return Lists.newArrayList();
+		}
+
+		// 3. 根据权限点列表id查询详细权限点列表信息
+		List<SysAcl> aclList = aclMapper.selectAclListByAclIdList(userAclIdList);
+		return aclList;
+	}
+
+	/**
+	 * 获取当前用户对应的[xxx类型]权限点
+	 * @param userId
+	 * @param type
+	 * @return
+	 */
+	@Override
+	public List<SysAcl> getUserAclList(Long userId, Integer type) {
+		// 如果当前用户是超级管理员, 返回所有的菜单权限点列表
+		if (isSuperAdmin(userId)) {
+			QueryWrapper<SysAcl> wrapper = new QueryWrapper<>();
+			wrapper.eq("type", type);
+			wrapper.eq("status", 0);
+			return aclMapper.selectList(wrapper);
 		}
 
 		// 1. 如果不是超级管理员, 就取出当前用户已经分配的角色id列表, 一个用户可以被分配到多个角色, 最后权限取多个角色的并集
@@ -112,6 +145,7 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 			return false;
 		}
 
+		// 查询角色明细, 包含角色类型
 		List<SysRoleVO> roleList = roleMapper.selectRoleLIstByIds(roleIdList);
 		// 查看是否有超级管理员的角色
 		return roleList.stream().anyMatch(role -> role.getType() == 1);

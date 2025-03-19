@@ -155,7 +155,7 @@ const rootRouterConfig: Router<{}> = new Router({
  * 处理路由
  */
 const menuItems = getRouterMenuItems(rootConfig)
-console.log('--> oh-router 处理后的路由信息, 提供菜单使用: ', menuItems)
+// console.log('--> oh-router 处理后的路由信息, 提供菜单使用: ', menuItems)
 
 /**
  * 通过导出的面包屑结构, 生成Tabs结构

@@ -8,7 +8,7 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysDictDetailMapper;
 import com.cy.single.blog.dao.SysDictMapper;
-import com.cy.single.blog.pojo.SysDictService;
+import com.cy.single.blog.service.SysDictService;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.req.dict.DictDetailReq;

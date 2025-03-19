@@ -5,7 +5,7 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.pojo.SysDictService;
+import com.cy.single.blog.service.SysDictService;
 import com.cy.single.blog.pojo.req.dict.*;
 import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
 import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;

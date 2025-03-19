@@ -26,7 +26,7 @@ const MainLayout = () => {
   const keys: string[] = getMenuOpenKeysUtil(pathname)
   const { token } = useTokenStore()
   // 初始化字典数据状态
-  const { dictMap, setDictMap, dictStatues: statues, setDictStatueType, setAclType } = useDictDetailStore()
+  const { dictMap, setDictMap, setDictStatueType, setAclType } = useDictDetailStore()
   const { aclModuleSelector, setAclModuleSeletor } = useAclModuleStore()
 
   useEffect(() => {

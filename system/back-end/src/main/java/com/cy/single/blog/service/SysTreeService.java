@@ -1,5 +1,6 @@
 package com.cy.single.blog.service;
 
+import com.cy.single.blog.pojo.dto.sys.acl.AclDto;
 import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
 import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
 
@@ -14,11 +15,15 @@ public interface SysTreeService {
 
 	List<OrgLevelDto> orgTree();
 
-	List<OrgLevelDto> orgListToTree(List<OrgLevelDto> dtoList);
+//	List<OrgLevelDto> orgListToTree(List<OrgLevelDto> dtoList);
 
 	List<AclModuleDto> aclModuleTree();
+
 
 	List<AclModuleDto> roleAclTree(Long roleSurrogateId);
 
 	List<AclModuleDto> userAclTree(Long userId);
+
+	List<AclModuleDto> aclListToTree(List<AclDto> aclDtoList);
+
 }

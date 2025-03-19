@@ -2,7 +2,7 @@ package com.cy.single.blog.service.impl;
 
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.dao.SysDictDetailMapper;
-import com.cy.single.blog.pojo.SysDictService;
+import com.cy.single.blog.service.SysDictService;
 import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

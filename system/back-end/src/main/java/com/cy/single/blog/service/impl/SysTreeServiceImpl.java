@@ -65,8 +65,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 	 * @param dtoList 数据库中的所有组织信息
 	 * @return
 	 */
-	@Override
-	public List<OrgLevelDto> orgListToTree(List<OrgLevelDto> dtoList) {
+	private List<OrgLevelDto> orgListToTree(List<OrgLevelDto> dtoList) {
 		if (CollectionUtils.isEmpty(dtoList)) {
 			return new ArrayList<>();
 		}
@@ -94,7 +93,6 @@ public class SysTreeServiceImpl implements SysTreeService {
 	 * @param levelOrgMap
 	 */
 	private void transformOrgTree(List<OrgLevelDto> levelDtoList, String level, Map<String, List<OrgLevelDto>> levelOrgMap) {
-
 		levelDtoList.forEach(orgLevelDto -> {
 			/**
 			 * 处理当前层级数据
@@ -120,7 +118,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 	}
 
 	/**
-	 * 获取权限模块树
+	 * 获取所有的权限模块树
 	 * @return
 	 */
 	@Override
@@ -135,7 +133,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 	}
 
 	/**
-	 *
+	 * 组装权限模块树
 	 * @param dtoList
 	 * @return
 	 */
@@ -167,7 +165,6 @@ public class SysTreeServiceImpl implements SysTreeService {
 	 * @param levelAclModuleMap
 	 */
 	private void transformAclModuleTree(List<AclModuleDto> levelAclModuleList, String level, Map<String, List<AclModuleDto>> levelAclModuleMap) {
-
 		levelAclModuleList.forEach(aclModuleDto -> {
 			/**
 			 * 处理当前层级数据
@@ -215,9 +212,9 @@ public class SysTreeServiceImpl implements SysTreeService {
 		// 4. 当前角色已分配的权限id集合, [此处转为set是为了比较时的性能考虑, 比较时性能优于list]
 		Set<Long> roleAclIdSet = roleAclList.stream().map(SysAcl::getSurrogateId).collect(Collectors.toSet());
 
-		// 5. 获取所有的权限点列表, list
+		// 5. 获取所有的权限点列表 list
 		QueryWrapper<SysAcl> query2 = new QueryWrapper<>();
-		query2.eq("status",0);// 获取正常的权限点
+		query2.eq("status",0); // 获取正常的权限点
 		List<SysAcl> aclAllList = aclMapper.selectList(query2);
 
 		// 将权限点列表为当前用户标记出访问权限
@@ -244,10 +241,11 @@ public class SysTreeServiceImpl implements SysTreeService {
 
 	/**
 	 * 获取权限模块以及模块下面的权限点明细
-	 * @param aclDtoList
+	 * @param aclDtoList 用户对应的权限点
 	 * @return
 	 */
-	private List<AclModuleDto> aclListToTree (List<AclDto> aclDtoList) {
+	@Override
+	public List<AclModuleDto> aclListToTree (List<AclDto> aclDtoList) {
 		if (CollectionUtils.isEmpty(aclDtoList)) {
 			return Lists.newArrayList();
 		}
@@ -267,15 +265,14 @@ public class SysTreeServiceImpl implements SysTreeService {
 	/**
 	 * 递归绑定权限点到权限模块下
 	 * @param aclModuleDtoList
-	 * @param moduleIdAclMap
+	 * @param moduleIdAclMap 所有的权限模块信息
 	 */
 	private void bindAclsWithOrder(List<AclModuleDto> aclModuleDtoList, Map<Long, List<AclDto>> moduleIdAclMap) {
 		if (CollectionUtils.isEmpty(aclModuleDtoList)) {
 			return;
 		}
-
 		aclModuleDtoList.forEach(aclModuleDto -> {
-			List<AclDto> aclDtoList = moduleIdAclMap.get(aclModuleDto.getSurrogateId());
+			List<AclDto> aclDtoList = moduleIdAclMap.getOrDefault(aclModuleDto.getSurrogateId(), Collections.emptyList());
 			// 如果权限点列表不为空就绑定到权限模块上面
 			if (CollectionUtils.isNotEmpty(aclDtoList)) {
 				// 根据seq排序
@@ -283,12 +280,17 @@ public class SysTreeServiceImpl implements SysTreeService {
 				// 将排序好的权限点列表放到对应的权限模块下
 				aclModuleDto.setAclDtoList(aclDtoList);
 			}
+
 			// 递归下一级的权限点和权限模块
 			bindAclsWithOrder(aclModuleDto.getAclModuleDtoList(), moduleIdAclMap);
 		});
 	}
 
-	/** ============ 用户权限树  ============ **/
+	/**
+	 * 用户权限树
+	 * @param userId
+	 * @return
+	 */
 	@Override
 	public List<AclModuleDto> userAclTree(Long userId) {
 		List<SysAcl> userAclList = coreService.getUserAclList(userId);

@@ -4,8 +4,7 @@ import { getGlobalMessage } from '@/components/message/MessageProvider'
 import { useTokenStore } from '@/store/login'
 // import { useNavigate } from 'oh-router-react'
 
-const AUTO_LOGOUT_TIME = 30 * 60 * 1000 // 30 分钟
-// const AUTO_LOGOUT_TIME = 1 * 15 * 1000 // 30 分钟
+const AUTO_LOGOUT_TIME = 2 * 60 * 60 * 1000 // 2 hour
 
 // 创建axios实例
 const axiosInstance: AxiosInstance = axios.create({
