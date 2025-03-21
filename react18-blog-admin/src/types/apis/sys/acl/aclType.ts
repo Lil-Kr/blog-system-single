@@ -11,6 +11,7 @@ export interface SysAclModule {
   parentId: string
   parentName: string
   level: string
+  menuUrl: string
   seq: number
   status: number
   remark: string
@@ -56,6 +57,7 @@ export type AclModuleTableType = {
   parentSurrogateId?: string
   parentAclModuleInfo?: OptionType
   level?: string
+  menuUrl?: string
   seq?: number
   status?: number
   remark?: string
@@ -78,6 +80,7 @@ export interface AclModuleReq {
 export interface AclModuleAddReq {
   name: string
   parentSurrogateId: string
+  menuUrl?: string
   seq: number
   status: number
   remark: string

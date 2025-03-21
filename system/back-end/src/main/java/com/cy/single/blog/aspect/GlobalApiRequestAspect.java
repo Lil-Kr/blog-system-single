@@ -51,7 +51,7 @@ public class GlobalApiRequestAspect {
 			/**
 			 * get cookie
 			 */
-			String token = servletRequest.getHeader("clt_token");
+			String token = servletRequest.getHeader("authorization");
 
 			if (StringUtils.isBlank(token)) {
 				log.error("the request have exception:             {}");

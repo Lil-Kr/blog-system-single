@@ -9,18 +9,21 @@ type Actions = {
   setDictMap: (dictMap: Map<string, DictMapType[]>) => void
   setDictStatueType: (dictStatues: OptionType[]) => void
   setAclType: (aclTypes: OptionType[]) => void
+  setRoleType: (roleTypes: OptionType[]) => void
 }
 
 type DictDetailState = {
   dictMap: Map<string, DictMapType[]>
   dictStatues: OptionType[]
   aclTypes: OptionType[]
+  roleTypes: OptionType[]
 }
 
 const useDictDetailStore = create<DictDetailState & Actions>()(set => ({
   dictMap: new Map<string, DictMapType[]>(),
   dictStatues: [] as OptionType[],
   aclTypes: [] as OptionType[],
+  roleTypes: [] as OptionType[],
   setDictMap: (dictMap: Map<string, DictMapType[]>) =>
     set(() => ({
       dictMap
@@ -32,6 +35,10 @@ const useDictDetailStore = create<DictDetailState & Actions>()(set => ({
   setAclType: (aclTypes: OptionType[]) =>
     set(() => ({
       aclTypes: aclTypes
+    })),
+  setRoleType: (roleTypes: OptionType[]) =>
+    set(() => ({
+      roleTypes
     }))
 }))
 
@@ -42,18 +49,41 @@ export { useDictDetailStore }
  */
 type AclModuleState = {
   aclModuleSelector: OptionType[]
+  menusOptions: OptionType[]
+  isMenu: boolean
 }
 
 type AclModuleActions = {
   setAclModuleSeletor: (aclModuleList: OptionType[]) => void
+  setMenusOptions: (menusOptions: OptionType[]) => void
+  setIsMenu: (isMenu: boolean) => void
+}
+
+const initData = {
+  aclModuleSelector: [],
+  menusOptions: [
+    { value: '0', label: '否' },
+    { value: '1', label: '是' }
+  ],
+  isMenu: false
 }
 
 const useAclModuleStore = create<AclModuleState & AclModuleActions>()(set => ({
-  aclModuleSelector: [],
+  ...initData,
   setAclModuleSeletor: (aclModuleList: OptionType[]) =>
     set(state => ({
       ...state,
       aclModuleSelector: aclModuleList
+    })),
+  setMenusOptions: (menusOptions: OptionType[]) =>
+    set(state => ({
+      ...state,
+      ...menusOptions
+    })),
+  setIsMenu: (isMenu: boolean) =>
+    set(state => ({
+      ...state,
+      isMenu
     }))
 }))
 

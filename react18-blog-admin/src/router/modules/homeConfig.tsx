@@ -9,10 +9,10 @@ const homeConfig: RouterItemType[] = [
       key: '/home',
       title: '首页',
       layout: false,
-      icon: iconMap['home']
+      icon: iconMap['_admin_home']
     },
     path: '/admin/home',
-    element: LazyLoad(componentMap['home_a'])
+    element: LazyLoad(componentMap['_admin_home'])
   }
 ]
 

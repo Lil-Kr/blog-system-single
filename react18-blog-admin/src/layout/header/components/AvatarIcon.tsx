@@ -6,34 +6,44 @@ import avatar from '@/assets/images/icons/avatar.png'
 import { useTokenStore } from '@/store/login'
 import { useMenuStore, useTabsStore } from '@/store/global'
 import { useMessage } from '@/components/message/MessageProvider'
+import { useAdminStore } from '@/store/sys/adminStore'
+import { useRouterStore } from '@/store/router/routerStore'
 
 const AvatarIcon = () => {
   const messageApi = useMessage()
+  const { admin } = useAdminStore()
   const { clearToken } = useTokenStore()
-  const { resetTabs } = useTabsStore()
   const { restMenuState } = useMenuStore()
+  const { resetTabs } = useTabsStore()
+
   const navigateTo = useNavigate()
 
   const items: MenuProps['items'] = [
     {
       key: '2',
-      label: <span className='dropdown-item'>关于我</span>
+      label: <span className='dropdown-item'>{'关于我'}</span>
     },
     {
       key: '3',
-      label: <span className='dropdown-item'>修改密码</span>
+      label: <span className='dropdown-item'>{'修改密码'}</span>
     },
     {
       key: '4',
-      label: <span className='dropdown-item'>退出登录</span>
+      label: <span className='dropdown-item'>{'退出登录'}</span>
     }
   ]
 
-  const loginoutFunc = async () => {
+  /**
+   * 退出登录
+   */
+  const logout = async () => {
     /**
-     * remove token
+     * 清空数据
      */
     clearToken()
+    restMenuState()
+    resetTabs()
+    navigateTo('/login')
   }
 
   const handleMenuClick: MenuProps['onClick'] = event => {
@@ -49,7 +59,7 @@ const AvatarIcon = () => {
         messageApi?.info(key)
         break
       case '4':
-        loginoutFunc()
+        logout()
         break
       default:
         messageApi?.info(key)
@@ -64,6 +74,7 @@ const AvatarIcon = () => {
 
   return (
     <>
+      <div>{admin.userName}</div>
       <Dropdown menu={menuProps} placement='bottom' arrow trigger={['click']}>
         <Avatar size='large' src={avatar} />
       </Dropdown>

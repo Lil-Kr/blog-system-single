@@ -40,9 +40,14 @@ public class UserController {
 	@Autowired
 	private SysUserService userService;
 
+	/**
+	 * admin 登录
+	 * @param req
+	 * @return
+	 */
 	@RecordLogger
 	@PutMapping("/login")
-	public ApiResp<String> login(@RequestBody @Validated({UserLoginAdminReq.AdminLogin.class}) UserLoginAdminReq req) {
+	public ApiResp<SysUser> login(@RequestBody @Validated({UserLoginAdminReq.AdminLogin.class}) UserLoginAdminReq req) {
 		return userService.adminLogin(req);
 	}
 

@@ -8,25 +8,25 @@ import { useMenuStore, useTabsStore } from '@/store/global'
  * @returns
  */
 const LogoutAndRedirect = () => {
-  const navigate = useNavigate()
   const { clearToken, token } = useTokenStore()
   const { resetTabs } = useTabsStore()
   const { restMenuState } = useMenuStore()
-  useEffect(() => {
-    const handleLogout = () => {
-      // 移除token
-      clearToken()
-      // 移除所有样式
-      resetTabs()
-      restMenuState()
-      // 执行跳转逻辑
-      window.location.replace('/login')
-      // navigate('/login')
-    }
-    if (token === '') {
-      handleLogout()
-    }
-  }, [token])
+  // useEffect(() => {
+  //   console.log('--> 退出执行的是这里:', token)
+  //   const handleLogout = () => {
+  //     // 移除token
+  //     clearToken()
+  //     // 移除所有样式
+  //     resetTabs()
+  //     restMenuState()
+  //     // 执行跳转逻辑
+  //     window.location.replace('/login')
+  //     // navigate('/login')
+  //   }
+  //   if (token === '') {
+  //     handleLogout()
+  //   }
+  // }, [token])
 
   return <></>
 }

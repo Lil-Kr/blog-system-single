@@ -261,9 +261,6 @@ const AclModal = (props: ModalType.CustomModal) => {
           <Form.Item key={2} name={'name'} label={'权限名称'} rules={[{ required: true, message: '权限名称不能为空' }]}>
             <Input placeholder={'权限名称必填'} style={{ width: '100%' }} />
           </Form.Item>
-          <Form.Item key={3} name={'url'} label={'服务端API'} rules={[{ required: true, message: '访问url不能为空' }]}>
-            <Input placeholder={'服务端API必填'} style={{ width: '100%' }} />
-          </Form.Item>
           <Form.Item key={4} name={'seq'} label={'顺序'} rules={[{ required: true, message: '顺序不能为空' }]}>
             <InputNumber placeholder={'顺序必填'} style={{ width: '100%' }} min={0} max={10000} />
           </Form.Item>
@@ -312,6 +309,9 @@ const AclModal = (props: ModalType.CustomModal) => {
               </Form.Item>
             </div>
           )}
+          <Form.Item key={3} name={'url'} label={'服务端API'} rules={[{ required: true, message: '访问url不能为空' }]}>
+            <Input placeholder={'服务端API必填'} style={{ width: '100%' }} />
+          </Form.Item>
           <Form.Item
             key={7}
             name={'remark'}

@@ -1,13 +1,16 @@
 import { Menu, Spin } from 'antd'
 import { useNavigate, useLocation } from 'oh-router-react'
 import { SubMenuType } from '@/types/common'
-import { menuItems, tabMap } from '@/router'
 import { useMenuStore, useTabsStore } from '@/store/global/globalStore'
 import Logo from './logo/Logo'
+import { useMenuTreeStore } from '@/store/sys/menuStore'
+import { useEffect } from 'react'
+// import { menuItems, tabMap } from '@/router/config'
 
 const MenuLayout = () => {
   const { setTabActive } = useTabsStore()
   const { selectedKeys, openKeys, setOpenMenuKeys } = useMenuStore()
+  const { menuItems, tabMap } = useMenuTreeStore()
   const navigateTo = useNavigate()
 
   /**

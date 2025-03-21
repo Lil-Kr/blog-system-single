@@ -245,7 +245,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 	 * @return
 	 */
 	@Override
-	public List<AclModuleDto> aclListToTree (List<AclDto> aclDtoList) {
+	public List<AclModuleDto> aclListToTree(List<AclDto> aclDtoList) {
 		if (CollectionUtils.isEmpty(aclDtoList)) {
 			return Lists.newArrayList();
 		}

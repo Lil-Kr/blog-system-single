@@ -19,6 +19,7 @@ import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.cy.single.blog.utils.orgUtil.LevelUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,6 +92,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 			.name(req.getName())
 			.level(level)
 			.seq(req.getSeq())
+			.menuUrl(StringUtils.isBlank(req.getMenuUrl()) ? "-" : req.getMenuUrl())
 			.status(0)
 			.remark(req.getRemark())
 			.createTime(currentTime)
@@ -156,7 +158,6 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 		/**
 		 * 检查权限模块名是否相同
 		 */
-		// 检查待更新的权限模块是否存在
 		QueryWrapper<SysAclModule> query2 = new QueryWrapper<>();
 		query2.eq("surrogate_id", req.getSurrogateId());
 		SysAclModule before = aclModuleMapper.selectOne(query2);
@@ -187,6 +188,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 			.parentName(parentName)
 			.seq(req.getSeq())
 			.level(LevelUtil.calculateLevel(parentLevel, parentId))
+			.menuUrl(StringUtils.isBlank(req.getMenuUrl()) ? "-" : req.getMenuUrl())
 			.status(req.getStatus())
 			.remark(req.getRemark())
 			.updateTime(DateUtil.localDateTimeNow())

@@ -20,7 +20,7 @@ public interface SysUserService {
 
 	SysUserVO getUserBySurrogateId(Long surrogateId);
 
-	ApiResp<String> adminLogin(UserLoginAdminReq reqParam);
+	ApiResp<SysUser> adminLogin(UserLoginAdminReq reqParam);
 
 	ApiResp<Integer> registerAdmin(UserRegisterReq req);
 

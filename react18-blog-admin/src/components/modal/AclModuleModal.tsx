@@ -1,19 +1,19 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react'
-import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
+import React, { useEffect } from 'react'
+import { ModalType } from '@/types/component/modal'
 import { Modal, Form, Input, InputNumber, Select } from 'antd/lib'
 const { TextArea } = Input
-import { OptionType, transformTypeToSeletor } from '@/types/apis'
+import { OptionType } from '@/types/apis'
 import { AclModuleAddReq, AclModuleEditReq } from '@/types/apis/sys/acl/aclType'
 import { useAclModuleStore, useDictDetailStore } from '@/store/global/initDictStore'
-import { DictMapType } from '@/types/apis/sys/dict/dictType'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useAclModuleModalStore } from '@/store/sys/aclStore'
 
 const AclModuleModal = (props: ModalType.CustomModal) => {
+  const { update } = props
   const messageApi = useMessage()
   const [modalForm] = Form.useForm()
-  const { update } = props
-  const { aclModuleSelector } = useAclModuleStore()
+  const { aclModuleSelector, setAclModuleSeletor, menusOptions, setMenusOptions, isMenu, setIsMenu } =
+    useAclModuleStore()
   const {
     api,
     title,
@@ -27,7 +27,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
     modalSelector,
     setModalSelector
   } = useAclModuleModalStore()
-  const { dictMap, dictStatues } = useDictDetailStore()
+  const { dictStatues } = useDictDetailStore()
 
   /**
    * 初始化modal框
@@ -43,10 +43,9 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
     modalForm.resetFields()
     if (action === 'create') {
       // 绑定父级权限模块初始值
-      const aclModule = aclModuleSelector.find(item => item.label === '-')
       const parentAclModuleInfo: OptionType = {
-        label: aclModule?.label ?? '',
-        value: aclModule?.value ?? ''
+        label: data?.parentAclModuleInfo?.label ?? '',
+        value: data?.parentAclModuleInfo?.value ?? ''
       }
 
       // 绑定状态初始值
@@ -56,9 +55,15 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
         label: statues?.label ?? ''
       }
 
+      // 默认跳转页面为: 否
+      const menusOpt = menusOptions.find(item => item.value === '0')
+      setIsMenu(false)
+
+      // create -> 绑定默认值
       modalForm.setFieldsValue({
-        parentAclModuleInfo: parentAclModuleInfo,
-        statusInfo: statusInfo
+        parentAclModuleInfo,
+        statusInfo,
+        menusOpt
       })
       setModalSelector(parentAclModuleInfo, statusInfo)
     } else if (action === 'edit') {
@@ -66,9 +71,14 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
         value: data?.status?.toString() ?? '',
         label: dictStatues.find(item => item.value === data?.status?.toString())?.label ?? ''
       }
+      let menusOpt = menusOptions.find(item => item.value === '0')
+      if (isMenu) {
+        menusOpt = menusOptions.find(item => item.value === '1')
+      }
       modalForm.setFieldsValue({
         ...data,
-        statusInfo: statusInfo
+        statusInfo: statusInfo,
+        menusOpt
       })
       setModalSelector(data?.parentAclModuleInfo ?? { label: '', value: '' }, statusInfo)
     }
@@ -95,6 +105,10 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
         status: Number.parseInt(modalSelector?.statusInfo.value ?? '0'),
         remark: params.remark
       }
+      if (isMenu) {
+        addReq.menuUrl = params.menuUrl ?? ''
+      }
+
       const res = await api.add!(addReq)
       const { code, msg } = res
       if (code !== 200) {
@@ -110,14 +124,16 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
         status: Number.parseInt(modalSelector?.statusInfo.value ?? '0'),
         remark: params.remark
       }
+      if (isMenu) {
+        editReq.menuUrl = params.menuUrl ?? ''
+      }
+
       const res = await api.edit!(editReq)
       const { code, msg } = res
       if (code !== 200) {
         return
       }
       messageApi?.success(msg)
-    } else {
-      return
     }
     handleCancel()
     update()
@@ -163,9 +179,22 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
    * 点击取消按钮事件
    */
   const handleCancel = () => {
+    modalForm.resetFields()
     setOpenModal(false)
     setInputDisabled(false)
-    modalForm.resetFields()
+    setIsMenu(false)
+  }
+
+  /**
+   * 选择是否为菜单时触发
+   */
+  const handleMenus = (value: string) => {
+    const menu = menusOptions.find(item => item.value === value)
+    if (menu?.value === '1') {
+      setIsMenu(true)
+    } else {
+      setIsMenu(false)
+    }
   }
 
   return (
@@ -173,17 +202,17 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
       <Modal
         style={modalStyle}
         title={title}
-        // width={} // 宽度
         okText={'确定'}
         cancelText={'取消'}
         open={openModal}
         onOk={handleOk}
         onCancel={handleCancel}
         destroyOnClose={false}
+        maskClosable={false}
+        width={'40vw'} // 宽度
         // confirmLoading={confirmLoading}
         // afterClose={resetForm}
         // forceRender={true} // 强制渲染
-        maskClosable={false}
       >
         <Form form={modalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
           <Form.Item name={'key'} hidden>
@@ -225,6 +254,24 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
               options={dictStatues}
             />
           </Form.Item>
+          <Form.Item key={6} name={'menusOpt'} label={'是否跳转页面'}>
+            <Select
+              onChange={value => handleMenus(value)}
+              placeholder={'构成菜单时无需跳转页面'}
+              optionFilterProp='children'
+              options={menusOptions}
+            />
+          </Form.Item>
+          {isMenu && (
+            <Form.Item
+              key={7}
+              name={'menuUrl'}
+              label={'菜单地址'}
+              rules={[{ required: true, message: '菜单地址不能为空' }]}
+            >
+              <Input placeholder={' 需跳转页面时, 菜单地址必填'} style={{ width: '100%' }} />
+            </Form.Item>
+          )}
           <Form.Item
             key={5}
             name={'remark'}

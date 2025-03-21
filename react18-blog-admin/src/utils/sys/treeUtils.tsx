@@ -1,9 +1,14 @@
+import { OptionType } from '@/types/apis'
 import { AclModuleTreeResp, SysAclDto } from '@/types/apis/sys/acl/aclType'
+import { DictMapType } from '@/types/apis/sys/dict/dictType'
+import { MenuType } from '@/types/apis/sys/menu/menuType'
 import { SysOrgResp } from '@/types/apis/sys/org/orgType'
 import { RoleAclTreeType } from '@/types/apis/sys/role/roleType'
 import { CarryOutOutlined } from '@ant-design/icons'
 import { TreeDataNode } from 'antd/lib'
-import { DataNode } from 'antd/lib/tree'
+import { RouterItemType } from '@/types/router/routeType'
+import { componentMap, iconMap } from '@/router/config/configMappings'
+import LazyLoad from '@/components/router/LazyLoad'
 
 /**
  * transform org tree data
@@ -120,3 +125,52 @@ export const transformSelectedKeys = (treeList: RoleAclTreeType[]): string[] => 
   traverse(treeList)
   return selectedKeys
 }
+
+/**
+ * 字典类型数组
+ * @param statusDict
+ * @returns
+ */
+const transformTypeToSeletor = (statusDict: DictMapType[]): OptionType[] => {
+  const res: OptionType[] = statusDict.map(({ type, name }) => ({
+    value: type.toString() ?? '',
+    label: name
+  }))
+  return res
+}
+
+export { transformTypeToSeletor }
+
+/**
+ * 菜单转换
+ */
+const transformMenuTree = (menu: MenuType[]): RouterItemType[] => {
+  if (menu.length < 1) {
+    return []
+  }
+
+  const res: RouterItemType[] = menu.map(({ key, title, path, uniqueSign, children }) => {
+    const meta = {
+      key: key,
+      title: title,
+      layout: false,
+      icon: iconMap[uniqueSign as keyof typeof iconMap] || null
+    }
+
+    // const element =
+    //   children.length > 0 ? { element: LazyLoad(componentMap[uniqueSign as keyof typeof componentMap]) } : {}
+    const element = componentMap[uniqueSign as keyof typeof componentMap]
+      ? LazyLoad(componentMap[uniqueSign as keyof typeof componentMap])
+      : undefined
+    return {
+      meta,
+      path: path,
+      element,
+      children: children.length > 0 ? transformMenuTree(children) : []
+    } as RouterItemType
+  })
+
+  return res
+}
+
+export { transformMenuTree }

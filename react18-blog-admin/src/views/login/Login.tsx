@@ -1,4 +1,4 @@
-import { LockOutlined, UserOutlined } from '@ant-design/icons'
+import { UserOutlined } from '@ant-design/icons'
 import md5 from 'js-md5'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { useState } from 'react'
@@ -6,10 +6,13 @@ import { useTokenStore } from '@/store/login'
 import loginApi from '@/apis/sys/loginApi'
 import { Form, Input, Button, Flex } from 'antd'
 import { useNavigate } from 'oh-router-react'
-import { useTabsStore } from '@/store/global'
+import { useMenuStore, useTabsStore } from '@/store/global'
 import { LoginTpye } from '@/types/apis/sys/user/userType'
-import './css/login.css'
 import { useMessage } from '@/components/message/MessageProvider'
+import { useAdminStore } from '@/store/sys/adminStore'
+import { useRouterStore } from '@/store/router/routerStore'
+
+import './css/login.css'
 
 const Login = () => {
   const [btnSize, setSize] = useState<SizeType>('large')
@@ -17,6 +20,10 @@ const Login = () => {
   const messageApi = useMessage()
   const { resetTabs } = useTabsStore()
   const { setToken } = useTokenStore()
+  const { setAdmin } = useAdminStore()
+  const { restMenuState } = useMenuStore()
+  const { clearToken } = useTokenStore()
+  const { clearRootRouterConfig } = useRouterStore()
   const navigateTo = useNavigate()
 
   const onFinish = async (loginInfo: LoginTpye.LoginFormType) => {
@@ -25,14 +32,19 @@ const Login = () => {
     const res = await loginApi.login({ ...loginInfo })
     const { code, data, msg } = res
     if (code === 200) {
-      setToken(data, true)
-      const path = '/admin/home'
+      // 存储token
+      const { token } = data
+      setToken(token, true)
+      setAdmin(data)
       // 跳转主页面
-      navigateTo(path)
+      navigateTo('/')
       messageApi?.success(msg)
     } else {
-      navigateTo('/login')
       resetTabs()
+      clearToken()
+      restMenuState()
+      clearRootRouterConfig()
+      navigateTo('/login')
     }
   }
 
@@ -44,10 +56,6 @@ const Login = () => {
       vertical={true}
       style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}
     >
-      {/*
-        <p>token: {token}</p>
-        <Button onClick={handle}>zustand</Button>
-      */}
       <Form
         className='login-form'
         name='basic'
@@ -58,7 +66,7 @@ const Login = () => {
         autoComplete='off'
       >
         <Flex vertical={true} gap={4}>
-          <div className='login-title'>博客后台管理系统</div>
+          <div className='login-title'>{'博客后台管理系统'}</div>
           <Form.Item name={'account'} rules={[{ required: true, message: '不能为空' }]}>
             <Input
               autoComplete='username'
@@ -73,16 +81,16 @@ const Login = () => {
 
           <Form.Item>
             <Button type='primary' loading={loading} htmlType='submit' className='login-form-button'>
-              登陆
+              {'登陆'}
             </Button>
           </Form.Item>
 
           <Form.Item>
             <Button type='link' size={btnSize}>
-              注册
+              {'注册'}
             </Button>
             <Button type='link' size={btnSize}>
-              忘记密码?
+              {'忘记密码?'}
             </Button>
           </Form.Item>
         </Flex>

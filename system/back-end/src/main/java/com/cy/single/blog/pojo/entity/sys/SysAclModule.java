@@ -67,6 +67,11 @@ public class SysAclModule extends Model<SysAclModule> {
 	private Integer seq;
 
 	/**
+	 * 菜单名
+	 */
+	private String menuUrl;
+
+	/**
 	 * 0正常, 1冻结
 	 */
 	private Integer status;

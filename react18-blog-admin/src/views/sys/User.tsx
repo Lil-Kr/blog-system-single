@@ -121,8 +121,8 @@ const User = () => {
             onClick={() => editItem(record.key ?? '', record)}
           />
           <Popconfirm
-            title='删除标签'
-            description={`确定要删除 [${record.userName}] 这个这个用户吗?`}
+            title='删除用户'
+            description={`确定要删除 [${record.userName}] 这个用户吗?`}
             onConfirm={() => deleteItemConfirm(record)}
             onCancel={() => {}}
             okText='确定'

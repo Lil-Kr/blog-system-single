@@ -63,8 +63,8 @@ const ImageCategory = () => {
       render: (_: object, record: ImageCategoryDTO) => (
         <Space size='middle'>
           <Popconfirm
-            title='删除标签'
-            description={`确定要删除 [${record.name}] 这个分类吗?`}
+            title='删除图片分类'
+            description={`确定要删除 [${record.name}] 这个图片分类吗?`}
             onConfirm={() => deleteItemConfirm(record)}
             okText='确定'
             cancelText='取消'

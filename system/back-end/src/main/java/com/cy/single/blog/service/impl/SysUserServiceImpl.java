@@ -113,7 +113,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	@Override
-	public ApiResp<String> adminLogin(UserLoginAdminReq req) {
+	public ApiResp<SysUser> adminLogin(UserLoginAdminReq req) {
 		SysUser user = userMapper.loginAdmin(req);
 		if (Objects.isNull(user)) {
 			return ApiResp.failure(USER_INFO_ERROR);
@@ -122,7 +122,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		user.setUpdateTime(DateUtil.localDateTimeNow());
 		Integer update = userMapper.updateUserBySurrogateId(user);
 		if (update >= 1)
-			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "admin.login.success"), user.getToken());
+			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "admin.login.success"), user);
 		else
 			return ApiResp.failure();
 	}

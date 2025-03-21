@@ -22,6 +22,7 @@ export namespace LoginTpye {
 export interface SysUser {
   id: string
   surrogateId: string
+  token: string
   number: string
   account: string
   userName: string

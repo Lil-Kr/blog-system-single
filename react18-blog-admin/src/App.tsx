@@ -1,36 +1,41 @@
+import Router from 'oh-router'
 import { useEffect, useState } from 'react'
 import { ConfigProvider } from 'antd'
 import { RouterView } from 'oh-router-react'
-import { rootConfig, rootRouterConfig } from '@/router/config'
 import useTheme from './hooks/useTheme'
 import zhCN from 'antd/lib/locale/zh_CN'
 import enUS from 'antd/lib/locale/en_US'
-import { useBreadcrumbStore, useSystemStore } from './store/global'
-import { getBreadCrumbItems, getBrowserLang } from './utils/common'
-import { BreadcrumbType } from './types/common/breadcrumbType'
+import { useSystemStore } from './store/global'
 import MessageProvider from '@/components/message/MessageProvider'
+import { getBrowserLang } from './utils/common'
+import { dynamicRoutes } from './router/dynamicRoutes'
 
 function App() {
   const { language, assemblySize, setLanguage } = useSystemStore()
-  const { setBreadcrumbMap } = useBreadcrumbStore()
-  const breadcrumbMap: Map<string, BreadcrumbType[]> = getBreadCrumbItems(rootConfig)
   const [i18nLocale, setI18nLocale] = useState(zhCN)
-  useEffect(() => {
-    const fetchDictList = async () => {
-      try {
-        // 全局使用国际化
-        // i18n.changeLanguage(language || getBrowserLang())
-        // i18n.changeLanguage(getBrowserLang())
-        setLanguage(language || getBrowserLang())
-        setAntdLanguage()
-        setBreadcrumbMap(breadcrumbMap)
-      } catch (error) {
-        console.log('--> error:', JSON.stringify(error))
-      }
-    }
+  const { rootRouterConfig } = dynamicRoutes()
+  // const [rootConfig, setRootConfig] = useState<RouterItemType[]>([])
+  // const breadcrumbMap: Map<string, BreadcrumbType[]> = getBreadCrumbItems(rootConfig)
+  // const { rootRouterConfig } = useRouterStore()
+  // const { menuItems, tabMap } = useMenuTreeStore()
+  // const { menuTree, loading } = useMenu()
+  // console.log('--> rootRouterConfig:', rootRouterConfig.getRoutes())
+  // const { rootRouterConfig } = dynamicRoutes()
 
-    fetchDictList()
-  }, [language])
+  // useEffect(() => {
+  //   const fetchDictList = async () => {
+  //     try {
+  //       // 全局使用国际化
+  //       // i18n.changeLanguage(language || getBrowserLang())
+  //       // i18n.changeLanguage(getBrowserLang())
+  //       setLanguage(language || getBrowserLang())
+  //       setAntdLanguage()
+  //     } catch (error) {
+  //       console.log('--> error:', JSON.stringify(error))
+  //     }
+  //   }
+  //   fetchDictList()
+  // }, [language])
 
   /**
    * 全局使用主题
@@ -39,6 +44,7 @@ function App() {
 
   /**
    * 设置 antd 语言国际化
+   * // todo: 国际化配置
    */
   const setAntdLanguage = () => {
     // 如果 状态管理器 中有默认语言就设置成 状态管理器 的默认语言, 没有默认语言就设置成浏览器默认语言
@@ -59,7 +65,6 @@ function App() {
               // siderBg: '#ffbb96'
             }
           }
-
           // 设置统一主题风格
           //   token: {
           //     // Seed Token, 影响范围大

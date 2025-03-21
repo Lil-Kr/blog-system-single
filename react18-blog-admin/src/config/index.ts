@@ -76,3 +76,8 @@ export const PREFIX_URL_SYS_DICT = '/sys/dict'
  * sys-role
  */
 export const PREFIX_URL_SYS_ROLE = '/sys/role'
+
+/**
+ * sys-menu
+ */
+export const PREFIX_URL_SYS_MENU = '/sys/menu'

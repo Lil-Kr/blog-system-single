@@ -4,25 +4,37 @@ import { Spin } from 'antd'
 // css
 import styles from './index.module.scss'
 
-
 const LazyLoad = (Comp: React.LazyExoticComponent<any>) => {
-
   const LazyComponent = (props: any) => {
-
     return (
       <Suspense
         fallback={
-          <div>
-            <Spin size="large" className={styles.spinLargeStyle} />
+          <div
+            style={{
+              height: '100vh',
+              width: '100vw',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <Spin size='large' />
           </div>
         }
       >
-        <Comp />
+        <Comp {...props} />
       </Suspense>
     )
   }
 
-	return <LazyComponent/>
+  return <LazyComponent />
 }
+
+// const LazyLoad = (Comp: React.LazyExoticComponent<any>) => (props: any) =>
+//   (
+//     <Suspense fallback={<Spin size='large' className={styles.spinLargeStyle} />}>
+//       <Comp {...props} />
+//     </Suspense>
+//   )
 
 export default LazyLoad

@@ -24,7 +24,7 @@ axiosInstance.interceptors.request.use(
   (config: any) => {
     const { token, lastActiveTime, loginStatue, clearToken } = useTokenStore.getState()
     if (!loginStatue) {
-      config.headers['clt_token'] = token
+      config.headers['authorization'] = token
       return config
     }
 
@@ -33,7 +33,7 @@ axiosInstance.interceptors.request.use(
       return Promise.reject(new Error('登录超时, 请重新登录'))
     }
 
-    config.headers['clt_token'] = token
+    config.headers['authorization'] = token
     return config
   },
   (error: AxiosError) => {
@@ -50,19 +50,18 @@ axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
     const { data, config, headers, request, status, statusText } = response
     const messageApi = getGlobalMessage()
-    const { token, lastActiveTime, loginStatue, clearToken, resetToken } = useTokenStore.getState()
+    const { resetToken } = useTokenStore.getState()
     if (status === 200) {
       resetToken()
       const { data } = response
-      // todo: 每次请求成功都重新 set token cookie
       const { code, msg } = data
 
       if (code >= 500) {
         messageApi?.error(msg)
-        return response
+        throw Error(msg)
       } else if (code >= 400 && code < 500) {
         messageApi?.warning(msg)
-        return response
+        throw Error(msg)
       } else {
         return data
       }

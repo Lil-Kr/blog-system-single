@@ -22,6 +22,8 @@ public class SysMenu {
 
 	private String path; // mapping -> menuUrl
 
+	private String uniqueSign; // 唯一标记
+
 	private List<SysMenu> children = Lists.newArrayList();
 
 	public void addSubMenu(SysMenu menu) {

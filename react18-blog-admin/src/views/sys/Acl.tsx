@@ -37,7 +37,7 @@ import { TableRowSelection } from 'antd/es/table/interface'
 import { ColumnsType } from 'antd/lib/table'
 import AclModal from '@/components/modal/AclModal'
 import { useForm } from 'antd/lib/form/Form'
-import { useDictDetailStore } from '@/store/global/initDictStore'
+import { useAclModuleStore, useDictDetailStore } from '@/store/global/initDictStore'
 const { Title } = Typography
 import { useMessage } from '@/components/message/MessageProvider'
 import { Key } from 'antd/lib/table/interface'
@@ -85,7 +85,7 @@ const Acl = () => {
     {
       key: 'menuUrl',
       dataIndex: 'menuUrl',
-      title: '菜单url',
+      title: '路由url',
       width: '10%'
     },
     {
@@ -168,8 +168,8 @@ const Acl = () => {
             onClick={() => editAcl(record.key ?? '', record)}
           />
           <Popconfirm
-            title='删除标签'
-            description={`确定要删除 [${record.name}] 这个这个组织吗?`}
+            title='删除权限点'
+            description={`确定要删除 [${record.name}] 这个权限点吗?`}
             onConfirm={() => deleteItemConfirm(record)}
             onCancel={() => {}}
             okText='确定'
@@ -204,6 +204,7 @@ const Acl = () => {
   // 权限模块modal状态管理
   const { setAclModuelState } = useAclModuleModalStore()
   const { setAclModalState } = useAclModalStore()
+  const { setIsMenu } = useAclModuleStore()
 
   /**
    * 初始化数据
@@ -277,13 +278,20 @@ const Acl = () => {
    * create new acl module info
    */
   const createAclModule = () => {
+    const initData = {
+      parentAclModuleInfo: {
+        label: selectedInfo.aclModule?.name,
+        value: selectedInfo.aclModule?.surrogateId
+      }
+    }
     setAclModuelState({
       api: aclModuleApi,
       title: '添加权限模块',
       action: 'create',
       openModal: true,
       modalStyle: { maxWidth: '100vw' },
-      inputDisabled: false
+      inputDisabled: false,
+      data: initData
     })
   }
 
@@ -304,14 +312,21 @@ const Acl = () => {
       },
       seq: aclModule.seq,
       status: aclModule.status,
-      remark: aclModule.remark
+      remark: aclModule.remark,
+      menuUrl: aclModule.menuUrl
+    }
+    // 设置是否需要跳转页面
+    if (aclModule.menuUrl !== '-') {
+      setIsMenu(true)
+    } else {
+      setIsMenu(false)
     }
     setAclModuelState({
       api: aclModuleApi,
       title: '编辑权限模块',
       action: 'edit',
       openModal: true,
-      modalStyle: { maxWidth: '100vw' },
+      modalStyle: { width: '40vw' },
       inputDisabled: false,
       data: req
     })
@@ -333,10 +348,10 @@ const Acl = () => {
    * @param node
    */
   const selectTreeNode = async (node: SelectTreeNodeType) => {
-    const selectKeys = node.key.toString()
+    const selectKey = node.key.toString()
 
     const aclTableList = retrieveAclPageList({
-      aclModuleId: selectKeys,
+      aclModuleId: selectKey,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
@@ -347,14 +362,15 @@ const Acl = () => {
 
     /**
      * 加载当前选中的权限模块信息, 并保存到状态中
+     * // todo 优化此处代码, 减少不必要的请求
      */
-    const aclModule = await getAclModule({ surrogateId: selectKeys })
+    const aclModule = await getAclModule({ surrogateId: selectKey })
 
     setSelectedInfo(prevState => ({
       ...prevState,
       value: node.key.toString(),
       label: node.name,
-      selectKeys: [selectKeys],
+      selectKeys: [selectKey],
       aclModule: aclModule
     }))
   }
@@ -464,6 +480,11 @@ const Acl = () => {
     })
   }
 
+  /**
+   * 编辑权限点
+   * @param key
+   * @param record
+   */
   const editAcl = (key: string, record: TableAclListType) => {
     const req = {
       key,
@@ -492,6 +513,9 @@ const Acl = () => {
     })
   }
 
+  /**
+   *
+   */
   const deleteItemConfirm = async (record: TableAclListType) => {
     const res = await aclApi.delete({ surrogateId: record.key?.toString() ?? '' })
     if (res.code !== 200) {
@@ -503,6 +527,7 @@ const Acl = () => {
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
+    // 删除成功后刷新数据
     setAclDataSource(await aclList)
   }
 

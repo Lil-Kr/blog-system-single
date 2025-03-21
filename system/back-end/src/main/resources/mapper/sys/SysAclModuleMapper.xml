@@ -7,7 +7,7 @@
     </sql>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, surrogate_id, `name`, parent_id, parent_name, `level`, seq, status, remark, operate_ip, creator_id, operator, create_time, update_time
+        id, surrogate_id, `name`, parent_id, parent_name, `level`, seq, menu_url, status, remark, operate_ip, creator_id, operator, create_time, update_time
     </sql>
 
     <select id="selectChildAclModuleListByParentId" resultType="com.cy.single.blog.pojo.entity.sys.SysAclModule">

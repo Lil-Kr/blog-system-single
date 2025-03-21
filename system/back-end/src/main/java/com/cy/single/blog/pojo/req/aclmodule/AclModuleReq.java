@@ -7,62 +7,73 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
+/**
+ * @Author: Lil-K
+ * @Date: 2025/3/20
+ * @Description:
+ */
 @Data
 @ToString
-public class AclModuleReq {
+public class AclModuleReq implements Serializable {
 
-    public interface GroupAdd {}
-    public interface GroupEdit {}
+	private static final long serialVersionUID = 1285644014883462053L;
 
-    /**
-     * 自增主键
-     */
-    private Long id;
+	public interface GroupAdd {}
+	public interface GroupEdit {}
 
-    /**
-     * 权限模块id,唯一主键
-     */
-    @NotNull(message = "surrogateId不能为空", groups = {GroupEdit.class})
-    private Long surrogateId;
+	/**
+	 * 自增主键
+	 */
+	private Long id;
 
-    /**
-     * 权限模块名称
-     */
-    @NotNull(message = "权限模块名称不能为空", groups = {GroupAdd.class})
-    @Length(min = 2,max = 22,message = "权限名长度必须在2~50个字符之间", groups = {GroupAdd.class})
-    private String name;
+	/**
+	 * 权限模块id,唯一主键
+	 */
+	@NotNull(message = "surrogateId不能为空", groups = {AclModuleReq.GroupEdit.class})
+	private Long surrogateId;
 
-    /**
-     * 父id
-     * 默认0
-     */
-    private Long parentId = 0l;
+	/**
+	 * 权限模块名称
+	 */
+	@NotNull(message = "权限模块名称不能为空", groups = {AclModuleReq.GroupAdd.class})
+	@Length(min = 2,max = 22,message = "权限名长度必须在2~50个字符之间", groups = {AclModuleReq.GroupAdd.class})
+	private String name;
 
-    /**
-     * 上级权限模块surrogateId
-     */
-    @NotNull(message = "上级权限模块的parentSurrogateId不能为空", groups = {GroupAdd.class})
-    private Long parentSurrogateId;
+	/**
+	 * 父id
+	 * 默认0
+	 */
+	private Long parentId = 0l;
 
-    /**
-     * 顺序
-     */
-    @NotNull(message = "顺序不能为空", groups = {GroupAdd.class})
-    private Integer seq;
+	/**
+	 * 上级权限模块surrogateId
+	 */
+	@NotNull(message = "上级权限模块的parentSurrogateId不能为空", groups = {AclModuleReq.GroupAdd.class})
+	private Long parentSurrogateId;
 
-    /**
-     * 0正常, 1冻结, 2异常
-     */
-    @NotNull(message = "权限模块状态不能为空", groups = {GroupAdd.class})
-    @Min(value = 0, message = "权限模块状态在0~2之间", groups = {GroupAdd.class})
-    @Max(value = 2, message = "权限模块状态在0~2之间", groups = {GroupAdd.class})
-    private Integer status;
+	/**
+	 * 顺序
+	 */
+	@NotNull(message = "顺序不能为空", groups = {AclModuleReq.GroupAdd.class})
+	private Integer seq;
 
-    /**
-     * 备注
-     */
-    @Length(max = 100, message = "备注需要在64个字符之间")
-    private String remark;
+	/**
+	 * 0正常, 1冻结, 2异常
+	 */
+	@NotNull(message = "权限模块状态不能为空", groups = {AclModuleReq.GroupAdd.class})
+	@Min(value = 0, message = "权限模块状态在0~2之间", groups = {AclModuleReq.GroupAdd.class})
+	@Max(value = 2, message = "权限模块状态在0~2之间", groups = {AclModuleReq.GroupAdd.class})
+	private Integer status;
 
+	/**
+	 * 备注
+	 */
+	@Length(max = 100, message = "备注需要在64个字符之间")
+	private String remark;
+
+
+	@Length(max = 200, message = "菜单url长度在200个字符以内")
+	private String menuUrl;
 }

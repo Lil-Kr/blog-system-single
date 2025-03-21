@@ -54,7 +54,7 @@ const BlogCategory = () => {
             onClick={() => editItem(record.key, record)}
           />
           <Popconfirm
-            title='删除标签'
+            title='删除博客分类'
             description={`确定要删除 [${record.name}] 这个博客分类吗?`}
             onConfirm={() => deleteItemConfirm(record)}
             onCancel={() => {}}

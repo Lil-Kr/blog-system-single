@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons/lib/icons'
 import { Button, Flex, PaginationProps, Popconfirm, Space, Splitter, Tabs, TabsProps, Tag, Tooltip } from 'antd/lib'
-import { OptionType, transformTypeToSeletor } from '@/types/apis'
+import { OptionType } from '@/types/apis'
 import { SizeType } from 'antd/lib/config-provider/SizeContext'
 import { TableRowSelection } from 'antd/lib/table/interface'
 import { TablePageInfoType } from '@/types/base'
@@ -13,14 +13,14 @@ import RoleAcl from './RoleAcl'
 import RoleUser from './RoleUser'
 import { useRoleAclStore } from '@/store/sys/roleStore'
 import { useMessage } from '@/components/message/MessageProvider'
+import { transformTypeToSeletor } from '@/utils/sys/treeUtils'
 
 const Role = () => {
   const messageApi = useMessage()
   const MemoTooltip = Tooltip || React.memo(Tooltip)
   const [roleStyle] = useState<SizeType>('small')
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
-  // const [form] = useForm()
-  const { dictMap } = useDictDetailStore()
+  const { dictMap, dictStatues } = useDictDetailStore()
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
     currentPageNum: 1,
@@ -29,9 +29,7 @@ const Role = () => {
   })
 
   // 存储角色类型, 来自数据字典
-  const [roleType, setRoleType] = useState<OptionType[]>([])
-  // 存储状态类型, 来自数据字典
-  const [statuType, setStatuType] = useState<OptionType[]>([])
+  // const [roleType, setRoleType] = useState<OptionType[]>([])
 
   /**
    * role-acl store
@@ -39,6 +37,7 @@ const Role = () => {
    */
   const { roleId, setRoleId, selectedRowKeys, setSelectedRowKey, roleList, setRoleList } = useRoleAclStore()
 
+  const { roleTypes, setRoleType } = useDictDetailStore()
   /**
    * 角色列表的列配置
    */
@@ -67,18 +66,18 @@ const Role = () => {
       formItemProps: (form, { rowIndex }) => {
         return {
           rules: rowIndex > 1 ? [{ required: true, message: '此项为必填项' }] : [],
-          initialValue: roleType.length > 0 ? roleType[0].value : 2 // 初始化为第一个角色类型
+          initialValue: roleTypes.length > 0 ? roleTypes[0].value : 2 // 初始化为第一个角色类型
         }
       },
       fieldProps: {
-        options: roleType, // 绑定下拉框选项
-        defaultValue: roleType.length > 0 ? roleType[0].value : 2, // 确保默认选中普通用户
+        options: roleTypes, // 绑定下拉框选项
+        defaultValue: roleTypes.length > 0 ? roleTypes[0].value : 2, // 确保默认选中普通用户
         onChange: (value: number, option: any) => {}, // selector组件改变值时触发
         fieldNames: { label: 'label', value: 'value' } // 显式绑定 value 和 label
       },
       renderText: (value: number) => {
         // 显示下拉框文本
-        return roleType.find(item => item.value === value.toString())?.label || value
+        return roleTypes.find(item => item.value === value.toString())?.label || value
       },
       render: (_, record: TableRoleType) => {
         return <Tag color={record.type === 1 ? 'red' : 'blue'}>{record.name}</Tag>
@@ -93,23 +92,23 @@ const Role = () => {
       formItemProps: (form, { rowIndex }) => {
         return {
           rules: rowIndex > 1 ? [{ required: true, message: '此项为必填项' }] : [],
-          initialValue: statuType.length > 0 ? statuType[0].value : 0 // 初始化状态为正常
+          initialValue: dictStatues.length > 0 ? dictStatues[0].value : 0 // 初始化状态为正常
         }
       },
       fieldProps: {
-        options: statuType, // 绑定下拉框选项
-        defaultValue: statuType.length > 0 ? statuType[0].value : 0, // 确保默认选中普通用户
+        options: dictStatues, // 绑定下拉框选项
+        defaultValue: dictStatues.length > 0 ? dictStatues[0].value : 0, // 确保默认选中普通用户
         onChange: (value: number, option: any) => {},
         fieldNames: { label: 'label', value: 'value' } // 显式绑定 value 和 label
       },
       renderText: (value: number) => {
         // 显示下拉框文本
-        return statuType.find(item => item.value === value.toString())?.label || value
+        return dictStatues.find(item => item.value === value.toString())?.label || value
       },
       render: (_, record: TableRoleType) => {
         const { status } = record
         let colorText = ''
-        let statusText = statuType.find(item => item.value === status.toString())?.label || ''
+        let statusText = dictStatues.find(item => item.value === status.toString())?.label || ''
         switch (status) {
           case 0:
             colorText = 'green'
@@ -153,8 +152,8 @@ const Role = () => {
           />
           <Popconfirm
             key={`delete-${record.key}`} // 添加唯一的 key
-            title='删除标签'
-            description={`确定要删除 [${record.name}] 这个这个组织吗?`}
+            title='删除角色'
+            description={`确定要删除 [${record.name}] 这个角色吗?`}
             onConfirm={() => deleteRoleConfirm(record)}
             onCancel={() => {}}
             okText='确定'
@@ -205,20 +204,6 @@ const Role = () => {
        * 加载角色列表
        */
       initRoleList()
-
-      /**
-       * 查询数据字典【角色类型】
-       */
-      const roleTypes = dictMap.get('角色类型') ?? []
-      const roleType = transformTypeToSeletor(roleTypes)
-      setRoleType(roleType)
-
-      /**
-       * 查询数据字典【状态类型】
-       */
-      const statuTypeList = dictMap.get('状态类型') ?? []
-      const statusTypes = transformTypeToSeletor(statuTypeList)
-      setStatuType(statusTypes)
     } catch (error) {
       console.error('Failed to retrieve role list:', error)
     } finally {
@@ -348,9 +333,10 @@ const Role = () => {
                 type: 'multiple',
                 editableKeys,
                 onSave: async (rowKey, rowData, row) => {
-                  const typeValue = roleType.find(item => item.label === rowData.type.toString())?.value || rowData.type
+                  const typeValue =
+                    roleTypes.find(item => item.label === rowData.type.toString())?.value || rowData.type
                   const statuValue =
-                    statuType.find(item => item.label === rowData.status.toString())?.value || rowData.status
+                    dictStatues.find(item => item.label === rowData.status.toString())?.value || rowData.status
 
                   // insert
                   if (rowData.key.length < 2) {

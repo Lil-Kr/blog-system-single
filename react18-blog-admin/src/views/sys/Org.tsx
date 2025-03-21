@@ -133,8 +133,8 @@ const Org = () => {
             onClick={() => editItem(record.key ?? '', record)}
           />
           <Popconfirm
-            title='删除标签'
-            description={`确定要删除 [${record.name}] 这个这个组织吗?`}
+            title='删除组织'
+            description={`确定要删除 [${record.name}] 这个组织吗?`}
             onConfirm={() => deleteItemConfirm(record)}
             onCancel={() => {}}
             okText='确定'
