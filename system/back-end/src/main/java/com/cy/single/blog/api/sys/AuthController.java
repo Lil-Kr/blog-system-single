@@ -3,13 +3,13 @@ package com.cy.single.blog.api.sys;
 import com.cy.single.blog.aspect.annotations.CheckAuth;
 import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
-import com.cy.single.blog.pojo.entity.sys.SysMenu;
-import com.cy.single.blog.service.SysMenuService;
+import com.cy.single.blog.service.SysPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
+
+import java.util.Map;
 
 /**
  * @Author: Lil-K
@@ -17,11 +17,11 @@ import java.util.List;
  * @Description: 菜单api
  */
 @RestController
-@RequestMapping("/sys/menu")
-public class MenuController {
+@RequestMapping("/sys/auth")
+public class AuthController {
 
 	@Autowired
-	private SysMenuService menuService;
+	private SysPermissionService permissionService;
 
 	/**
 	 * 当前用户对应菜单,
@@ -29,8 +29,8 @@ public class MenuController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@GetMapping("/menuTree")
-	public ApiResp<List<SysMenu>> menuTree() {
-		return menuService.menuTree();
+	@GetMapping("/permission")
+	public ApiResp<Map<String, Object>> permission() {
+		return permissionService.permission();
 	}
 }

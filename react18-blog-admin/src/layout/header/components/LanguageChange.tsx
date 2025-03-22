@@ -29,11 +29,11 @@ const LanguageChange = () => {
   // const handleMenuClick = () => {}
 
   return (
-    <>
+    <div>
       <Dropdown menu={menuProps} placement='bottom' trigger={['click']} arrow={true}>
         <i className='icon-style iconfont icon-zhongyingwen'></i>
       </Dropdown>
-    </>
+    </div>
   )
 }
 

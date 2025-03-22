@@ -1,7 +1,7 @@
 import { OptionType } from '@/types/apis'
 import { AclModuleTreeResp, SysAclDto } from '@/types/apis/sys/acl/aclType'
 import { DictMapType } from '@/types/apis/sys/dict/dictType'
-import { MenuType } from '@/types/apis/sys/menu/menuType'
+import { MenuTreeType } from '@/types/apis/sys/menu/permissionType'
 import { SysOrgResp } from '@/types/apis/sys/org/orgType'
 import { RoleAclTreeType } from '@/types/apis/sys/role/roleType'
 import { CarryOutOutlined } from '@ant-design/icons'
@@ -144,7 +144,7 @@ export { transformTypeToSeletor }
 /**
  * 菜单转换
  */
-const transformMenuTree = (menu: MenuType[]): RouterItemType[] => {
+const transformMenuTree = (menu: MenuTreeType[]): RouterItemType[] => {
   if (menu.length < 1) {
     return []
   }
@@ -157,8 +157,6 @@ const transformMenuTree = (menu: MenuType[]): RouterItemType[] => {
       icon: iconMap[uniqueSign as keyof typeof iconMap] || null
     }
 
-    // const element =
-    //   children.length > 0 ? { element: LazyLoad(componentMap[uniqueSign as keyof typeof componentMap]) } : {}
     const element = componentMap[uniqueSign as keyof typeof componentMap]
       ? LazyLoad(componentMap[uniqueSign as keyof typeof componentMap])
       : undefined

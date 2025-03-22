@@ -80,4 +80,4 @@ export const PREFIX_URL_SYS_ROLE = '/sys/role'
 /**
  * sys-menu
  */
-export const PREFIX_URL_SYS_MENU = '/sys/menu'
+export const PREFIX_URL_SYS_MENU = '/sys/auth'

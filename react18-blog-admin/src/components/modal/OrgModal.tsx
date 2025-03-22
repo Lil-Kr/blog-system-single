@@ -1,94 +1,101 @@
-import React, { useImperativeHandle, useState } from 'react'
-import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
+import { useEffect } from 'react'
+import { ModalType } from '@/types/component/modal'
 import { Modal, Form, Input, InputNumber, Select } from 'antd/lib'
 const { TextArea } = Input
-import { orgApi } from '@/apis/sys'
-import { OrgTableType } from '@/types/apis/sys/org/orgType'
 import { OptionType } from '@/types/apis'
-import { clearScreenDown } from 'readline'
+import { useOrgModalStore } from '@/store/sys/orgStore'
+import { useDictDetailStore } from '@/store/global/initDictStore'
+import { SysOrgEditReq, SysOrgSaveReq } from '@/types/apis/sys/org/orgType'
 
 const OrgModal = (props: ModalType.CustomModal) => {
-  const { mRef, update } = props
+  const { update } = props
   const [orgModalForm] = Form.useForm()
-  const [action, setAction] = useState('create')
-  const [title, setTitle] = useState('')
-  const [openModal, setOpenModal] = useState(false)
-  const [inputDisabled, setInputDisabled] = useState<boolean>(false)
-  const [modalStyle, setmdalStyle] = useState<IModalStyle>()
-  const [requestParams, setRequestParams] = useState<IModalRequestAction>({
-    api: {}
-  })
-  const [orgList, setOrgList] = useState<OptionType[]>([])
-  const [selectedValue, setSelectedValue] = useState<string>('')
+  const { dictStatues } = useDictDetailStore()
 
-  useImperativeHandle(mRef, () => ({
-    form: orgModalForm,
-    open
-  }))
+  const {
+    openModal,
+    setOpenModal,
+    api,
+    orgSelectorInfo,
+    action,
+    inputDisabled,
+    setInputDisabled,
+    title,
+    req,
+    selectedOrgValue,
+    setSelectedOrgValue,
+    selectedStatueValue,
+    setSelectedStatueValue
+  } = useOrgModalStore()
 
-  const open = (
-    requestParams: IModalRequestAction,
-    params: IModalParams,
-    type: IAction,
-    modalStyle: IModalStyle,
-    data?: OrgTableType
-  ) => {
-    const { action, open } = type
-    const { title } = params
-
-    if (action === 'create') {
-      orgModalForm.resetFields()
-      orgModalForm.setFieldsValue({
-        orgInfo: data?.orgInfo ?? {}
-      })
-      setSelectedValue(data?.orgInfo?.value ?? '')
-    } else if (action === 'edit') {
-      orgModalForm.setFieldsValue(data)
-      setSelectedValue(data?.orgInfo?.value ?? '')
-    } else {
-      orgModalForm.setFieldsValue(data)
-      setInputDisabled(true)
+  useEffect(() => {
+    if (openModal) {
+      initOrgData()
     }
+  }, [openModal])
 
-    // load all org list
-    setSelectorComp()
-    setOpenModal(open)
-    setAction(action)
-    setTitle(title)
-    setRequestParams(requestParams)
-    setmdalStyle(modalStyle)
+  /**
+   * 初始化数据
+   */
+  const initOrgData = () => {
+    orgModalForm.resetFields()
+    if (action === 'create') {
+      // 默认显示第一条
+      const orgInfo: OptionType = orgSelectorInfo[0]
+      const statusInfo: OptionType = dictStatues.find(item => item.value === '0') ?? { value: '0', label: '正常' }
+      setSelectedOrgValue(orgInfo.value ?? '')
+      setSelectedStatueValue(statusInfo.value ?? '0')
+
+      orgModalForm.setFieldsValue({
+        orgInfo,
+        statusInfo
+      })
+    } else if (action === 'edit') {
+      const orgInfo: OptionType = req?.orgInfo ?? { value: '', label: '' }
+      const statusInfo: OptionType = dictStatues.find(item => item.value === req?.status) ?? {
+        value: '0',
+        label: '正常'
+      }
+      setSelectedOrgValue(orgInfo.value ?? '')
+      setSelectedStatueValue(statusInfo.value ?? '0')
+
+      orgModalForm.setFieldsValue({
+        ...req,
+        orgInfo,
+        statusInfo
+      })
+    } else {
+      const orgInfo: OptionType = req?.orgInfo ?? { value: '', label: '' }
+      const statusInfo: OptionType = dictStatues.find(item => item.value === req?.status) ?? {
+        value: '0',
+        label: '正常'
+      }
+      setSelectedOrgValue(orgInfo.value ?? '')
+      setSelectedStatueValue(statusInfo.value ?? '0')
+
+      orgModalForm.setFieldsValue({
+        ...req,
+        orgInfo,
+        statusInfo
+      })
+    }
   }
 
   /**
-   * load all org list
+   * 保存
    * @returns
    */
-  const setSelectorComp = async () => {
-    const res = await orgApi.orgAllList({})
-    const { code, data, msg } = res
-    if (code !== 200) {
-      setOrgList([])
-      return
-    }
-
-    let list: OptionType[] = data.map(({ surrogateId, name }) => ({
-      value: surrogateId,
-      label: name
-    }))
-    setOrgList(list)
-  }
-
   const handleOk = async () => {
     const valid = await orgModalForm.validateFields()
-    const { api } = requestParams
     const params = orgModalForm.getFieldsValue()
     if (!valid) {
       return
     }
 
     if (action === 'create') {
-      const addReq = {
-        parentSurrogateId: selectedValue,
+      const addReq: SysOrgSaveReq = {
+        parentSurrogateId: selectedOrgValue,
+        status: selectedStatueValue,
         ...params
       }
       const res = await api.add!(addReq)
@@ -96,28 +103,24 @@ const OrgModal = (props: ModalType.CustomModal) => {
       if (code !== 200) {
         return
       }
-
-      handleCancel()
-      update()
     } else if (action === 'edit') {
-      const editReq = {
-        surrogateId: params.key,
+      const editReq: SysOrgEditReq = {
+        surrogateId: req?.key ?? '',
         name: params.name,
-        parentSurrogateId: selectedValue,
-        remark: params.remark,
+        parentSurrogateId: selectedOrgValue ?? '',
+        status: selectedOrgValue ?? '0',
         seq: params.seq,
-        status: params.status
+        remark: params.remark
       }
       const res = await api.edit!(editReq)
       const { code, msg } = res
       if (code !== 200) {
         return
       }
-      handleCancel()
-      update()
-    } else {
-      return
     }
+
+    handleCancel()
+    update()
   }
 
   const handleCancel = () => {
@@ -126,12 +129,24 @@ const OrgModal = (props: ModalType.CustomModal) => {
     orgModalForm.resetFields()
   }
 
-  const handleChange = (value: string) => {
-    setSelectedValue(value)
+  /**
+   * 所属组织
+   * @param value
+   */
+  const handleOrgSelectorChange = (value: string) => {
+    setSelectedOrgValue(value)
+  }
+
+  /**
+   * 选择状态时更新
+   * @param value
+   */
+  const handleChangeStatus = (value: string) => {
+    setSelectedStatueValue(value)
   }
 
   return (
-    <div className='baseModal'>
+    <div className='orgModal'>
       <Modal
         style={{ maxWidth: '30vw' }}
         title={title}
@@ -141,26 +156,28 @@ const OrgModal = (props: ModalType.CustomModal) => {
         open={openModal}
         onOk={handleOk}
         onCancel={handleCancel}
-        // confirmLoading={confirmLoading}
         destroyOnClose={false}
+        maskClosable={false}
+        // confirmLoading={confirmLoading}
         // afterClose={resetForm}
         // forceRender={true} // 强制渲染
-        maskClosable={false}
       >
         <Form form={orgModalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
           <Form.Item name={'key'} hidden>
             <Input />
           </Form.Item>
-          <Form.Item
-            key={1}
-            name={'name'}
-            label={'新组织名称'}
-            rules={[{ required: true, message: '组织名称不能为空' }]}
-          >
+          <Form.Item key={1} name={'name'} label={'组织名称'} rules={[{ required: true, message: '组织名称不能为空' }]}>
             <Input placeholder={'组织名称必填'} style={{ width: '100%' }} />
           </Form.Item>
-          <Form.Item key={2} name={'status'} label={'状态'} rules={[{ required: true, message: '状态不能为空' }]}>
-            <InputNumber placeholder={'状态必填'} style={{ width: '100%' }} min={0} max={2} />
+          <Form.Item key={2} name={'statusInfo'} label={'状态'} rules={[{ required: true, message: '状态不能为空' }]}>
+            <Select
+              onChange={value => handleChangeStatus(value)}
+              showSearch={true}
+              placeholder={'状态'}
+              optionFilterProp='children'
+              filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              options={dictStatues}
+            />
           </Form.Item>
           <Form.Item key={3} name={'seq'} label={'序号'} rules={[{ required: true, message: '序号不能为空' }]}>
             <InputNumber placeholder={'序号必填'} style={{ width: '100%' }} min={1} max={10000} />
@@ -172,12 +189,12 @@ const OrgModal = (props: ModalType.CustomModal) => {
             rules={[{ required: true, message: '所属组织不能为空' }]}
           >
             <Select
-              onChange={value => handleChange(value)}
+              onChange={value => handleOrgSelectorChange(value)}
               showSearch={true}
               placeholder={'所属组织必填'}
               optionFilterProp='children'
               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-              options={orgList}
+              options={orgSelectorInfo}
             />
           </Form.Item>
           <Form.Item

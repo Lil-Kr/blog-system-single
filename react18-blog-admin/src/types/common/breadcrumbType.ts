@@ -3,7 +3,7 @@
  */
 export interface BreadcrumbState {
   breadcrumbMap?: Map<string, BreadcrumbType[]>
-  breadcrumbList?: any[]
+  breadcrumbList?: string[]
 }
 
 export interface BreadcrumbType {

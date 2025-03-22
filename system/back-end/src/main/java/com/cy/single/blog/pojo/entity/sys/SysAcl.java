@@ -73,6 +73,11 @@ public class SysAcl extends Model<SysAcl>  {
 	private String menuUrl;
 
 	/**
+	 * 按钮权限标识
+	 */
+	private String btnSign;
+
+	/**
 	 * 状态
 	 */
 	private Integer status;

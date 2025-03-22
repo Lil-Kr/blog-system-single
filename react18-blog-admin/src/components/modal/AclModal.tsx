@@ -28,7 +28,9 @@ const AclModal = (props: ModalType.CustomModal) => {
     inputDisabled,
     setInputDisabled,
     isMenu,
-    setIsMenu
+    setIsMenu,
+    isBtn,
+    setIsBtn
   } = useAclModalStore()
 
   useEffect(() => {
@@ -82,12 +84,24 @@ const AclModal = (props: ModalType.CustomModal) => {
       }
 
       /** 菜单类型需要显示明细 */
-      if (aclTypeInfo.label === '菜单') {
+      if (aclTypeInfo.value === '1') {
+        // 菜单类型
         setIsMenu(true)
+        setIsBtn(false)
         modalForm.setFieldsValue({
           menuName: data?.menuName ?? '',
           menuUrl: data?.menuUrl ?? ''
         })
+      } else if (aclTypeInfo.value === '2') {
+        // 按钮类型
+        setIsMenu(false)
+        setIsBtn(true)
+        modalForm.setFieldsValue({
+          btnSign: data?.btnSign ?? ''
+        })
+      } else {
+        setIsMenu(false)
+        setIsBtn(false)
       }
 
       const statusInfo: OptionType = {
@@ -209,16 +223,21 @@ const AclModal = (props: ModalType.CustomModal) => {
       aclTypeInfo
     )
 
-    if (aclTypeInfo.label === '菜单') {
+    if (aclTypeInfo.value === '1') { // 菜单类型
       setIsMenu(true)
-    } else {
+      setIsBtn(false)
+    } else if (aclTypeInfo.value === '2') { // 按钮类型
       setIsMenu(false)
+      setIsBtn(true)
       if (action === 'create') {
         modalForm.setFieldsValue({
           menuName: '',
           menuUrl: ''
         })
       }
+    } else { // 其他
+      setIsMenu(false)
+      setIsBtn(false)
     }
   }
 
@@ -289,6 +308,18 @@ const AclModal = (props: ModalType.CustomModal) => {
               options={aclTypes}
             />
           </Form.Item>
+          {/* 按钮选项配置 */}
+          {isBtn && (
+            <Form.Item
+              key={10}
+              name={'btnSign'}
+              label={'按钮标记'}
+              rules={[{ required: true, message: '按钮标记不能为空' }]}
+            >
+              <Input placeholder={'按钮标记必填, 格式: _add_user'} style={{ width: '100%' }} />
+            </Form.Item>
+          )}
+          {/* 菜单选项配置 */}
           {isMenu && (
             <div>
               <Form.Item

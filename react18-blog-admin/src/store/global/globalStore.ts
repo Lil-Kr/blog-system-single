@@ -1,5 +1,6 @@
 import { HOME_NAME, HOME_ROUTER_URL } from '@/config'
 import { TabType } from '@/types/common'
+import { SizeType } from 'antd/lib/config-provider/SizeContext'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -88,3 +89,40 @@ const useTabsStore = create<GlobalTabsState>()(
 )
 
 export { useTabsStore }
+
+/** ================================== 全局样式 ================================== **/
+
+interface GlobalStyleState {
+  btnSize: SizeType
+  tableSize: SizeType
+}
+
+interface GlobalStyleAction {
+  setBtnSize: (btnSize: SizeType) => void
+  setTableSize: (tableSize: SizeType) => void
+}
+
+const initGlobalStyleData = {
+  btnSize: 'small' as SizeType,
+  tableSize: 'small' as SizeType
+}
+
+const useGlobalStyleStore = create<GlobalStyleState & GlobalStyleAction>()(set => ({
+  ...initGlobalStyleData,
+  setBtnSize: (btnSize: SizeType) =>
+    set(state => {
+      return {
+        ...state,
+        btnSize
+      }
+    }),
+  setTableSize: (tableSize: SizeType) =>
+    set(state => {
+      return {
+        ...state,
+        tableSize
+      }
+    })
+}))
+
+export { useGlobalStyleStore }

@@ -26,7 +26,7 @@ const sysConfig: RouterItemType[] = [
       {
         meta: { key: 'sys-index', title: 'sys-index' },
         index: true,
-        element: LazyLoad(lazy(() => import('@/views/sys/User')))
+        element: LazyLoad(lazy(() => import('@/views/sys/user/User')))
       },
       {
         meta: {
@@ -36,7 +36,7 @@ const sysConfig: RouterItemType[] = [
           icon: <UserOutlined />
         },
         path: '/admin/sys/index',
-        element: LazyLoad(lazy(() => import('@/views/sys/User')))
+        element: LazyLoad(lazy(() => import('@/views/sys/user/User')))
       },
       {
         meta: {

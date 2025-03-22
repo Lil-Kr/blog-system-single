@@ -6,12 +6,11 @@ import avatar from '@/assets/images/icons/avatar.png'
 import { useTokenStore } from '@/store/login'
 import { useMenuStore, useTabsStore } from '@/store/global'
 import { useMessage } from '@/components/message/MessageProvider'
-import { useAdminStore } from '@/store/sys/adminStore'
-import { useRouterStore } from '@/store/router/routerStore'
+import { useAdminLoginStore } from '@/store/sys/adminStore'
 
 const AvatarIcon = () => {
   const messageApi = useMessage()
-  const { admin } = useAdminStore()
+  const { admin } = useAdminLoginStore()
   const { clearToken } = useTokenStore()
   const { restMenuState } = useMenuStore()
   const { resetTabs } = useTabsStore()

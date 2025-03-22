@@ -9,8 +9,9 @@ import { useNavigate } from 'oh-router-react'
 import { useMenuStore, useTabsStore } from '@/store/global'
 import { LoginTpye } from '@/types/apis/sys/user/userType'
 import { useMessage } from '@/components/message/MessageProvider'
-import { useAdminStore } from '@/store/sys/adminStore'
+import { useAdminLoginStore } from '@/store/sys/adminStore'
 import { useRouterStore } from '@/store/router/routerStore'
+import useLoadingStore from '@/store/global/loadingStore'
 
 import './css/login.css'
 
@@ -20,10 +21,11 @@ const Login = () => {
   const messageApi = useMessage()
   const { resetTabs } = useTabsStore()
   const { setToken } = useTokenStore()
-  const { setAdmin } = useAdminStore()
+  const { setAdmin } = useAdminLoginStore()
   const { restMenuState } = useMenuStore()
   const { clearToken } = useTokenStore()
   const { clearRootRouterConfig } = useRouterStore()
+  const { setLoginLoading } = useLoadingStore()
   const navigateTo = useNavigate()
 
   const onFinish = async (loginInfo: LoginTpye.LoginFormType) => {
@@ -32,12 +34,9 @@ const Login = () => {
     const res = await loginApi.login({ ...loginInfo })
     const { code, data, msg } = res
     if (code === 200) {
-      // 存储token
       const { token } = data
       setToken(token, true)
       setAdmin(data)
-      // 跳转主页面
-      navigateTo('/')
       messageApi?.success(msg)
     } else {
       resetTabs()

@@ -6,60 +6,74 @@ import { RouterItemType } from '@/types/router/routeType'
  */
 const getRouterMenuItems = (config: RouterItemType[]): MenuItemType[] => {
   let menuItems: MenuItemType[] = []
+
   if (!config || config.length <= 0) {
     return menuItems
   }
 
-  // just handle layout node
-  config = config.filter(item => item?.meta?.layout)
-
-  // handle menu item
-  for (const index in config) {
-    const { meta, path, redirect, element, children } = config[index]
-    const { key, title, icon } = meta!
-
-    const menuItem: MenuItemType[] = deepLoopRouterMenuItems(children!, key, [])
-    menuItems.push(...menuItem)
-  }
-
-  return menuItems
-}
-
-function deepLoopRouterMenuItems(
-  childrens: RouterItemType[],
-  perPath: string,
-  menuItemsTable: MenuItemType[] = []
-): MenuItemType[] {
-  if (!childrens || childrens.length <= 0) {
+  // 仅处理 layout 为 true 的节点
+  const routerConfig = config.filter(item => item?.meta?.layout === true)
+  if (!routerConfig || routerConfig.length <= 0) {
     return []
   }
 
-  let menuItems: MenuItemType[] = []
-  for (const idx in childrens) {
-    const { meta, path, element, children, index } = childrens[idx]
-    if (index) {
-      // 过滤索引路由, 不参与菜单展树
-      continue
-    }
-
-    const { key, title, icon } = meta!
-    // menu key, breadcrumb key
-    let menuKey = perPath + key
-    let menuItem: MenuItemType = { key: menuKey, icon: icon, label: title }
-    // if no have path, it is preMenu
-    if (!element && children && children.length >= 2) {
-      // children
-      menuItem.children = deepLoopRouterMenuItems(children, menuKey, menuItems)
-    }
-    menuItems.push(menuItem)
-
-    if (!children || children.length <= 0) {
-      continue
-    }
+  for (const index in routerConfig) {
+    const { meta, children } = routerConfig[index]
+    const { key } = meta!
+    const res = handleMenu(children ?? [], key)
+    menuItems.push(...res)
   }
 
   return menuItems
 }
+
+const handleMenu = (children: RouterItemType[], rootPaht: string): MenuItemType[] => {
+  if (!children || children.length <= 0) {
+    return []
+  }
+
+  return children.map(item => {
+    const { meta, element } = item
+    let menuKey = rootPaht + meta?.key!
+    const menuItem: MenuItemType = {
+      key: menuKey,
+      label: meta?.title ?? '',
+      icon: meta?.icon // 处理 icon 字段
+    }
+
+    // 如果有子菜单，递归处理
+    if (!element && item?.children && item?.children.length > 0) {
+      menuItem.children = handleMenu(item.children ?? [], menuKey)
+    }
+
+    return menuItem
+  })
+}
+
+// function deepLoopRouterMenuItems(
+//   childrens: RouterItemType[],
+//   perPath: string,
+//   menuItemsTable: MenuItemType[] = []
+// ): MenuItemType[] {
+//   let menuItems: MenuItemType[] = []
+
+//   for (const idx in childrens) {
+//     const { meta, path, children } = childrens[idx]
+//     const { key, title, icon } = meta!
+
+//     let menuKey = perPath + key
+//     let menuItem: MenuItemType = { key: menuKey, icon, label: title }
+
+//     // If there are children, process recursively
+//     if (children && children.length > 0) {
+//       menuItem.children = deepLoopRouterMenuItems(children, menuKey)
+//     }
+
+//     menuItems.push(menuItem)
+//   }
+
+//   return menuItems
+// }
 
 export { getRouterMenuItems }
 

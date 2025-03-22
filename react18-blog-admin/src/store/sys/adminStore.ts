@@ -1,19 +1,22 @@
 import { SysUser } from '@/types/apis/sys/user/userType'
 import { create } from 'zustand'
 
-interface AdminState {
+/**
+ * =========================== 存储后台用户登录后的信息 ===========================
+ */
+interface AdminLoginState {
   admin: SysUser
 }
 
-interface AdminActions {
+interface AdminLoginActions {
   setAdmin: (admin: SysUser) => void
 }
-
+// 初始化数据
 const initAdminState = {
   admin: {} as SysUser
 }
 
-const useAdminStore = create<AdminState & AdminActions>()(set => ({
+const useAdminLoginStore = create<AdminLoginState & AdminLoginActions>()(set => ({
   ...initAdminState,
   setAdmin: (admin: SysUser) =>
     set(state => {
@@ -24,4 +27,9 @@ const useAdminStore = create<AdminState & AdminActions>()(set => ({
     })
 }))
 
-export { useAdminStore }
+export { useAdminLoginStore }
+
+/**
+ * =========================== 用户管理(admin) 页面数据 store ===========================
+ */
+interface AdminState {}

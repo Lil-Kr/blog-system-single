@@ -7,12 +7,12 @@ import { BreadcrumbType } from '@/types/common/breadcrumbType'
 const BreadcrumbNav = () => {
   const { pathname } = useLocation()
   const { breadcrumbMap } = useBreadcrumbStore()
-  const items: BreadcrumbType[] = breadcrumbMap!.get(pathname)!
-
+  const items: BreadcrumbType[] = breadcrumbMap!.get(pathname) ?? []
+  // console.log('--> items:', items)
   return (
-    <>
+    <div>
       <Breadcrumb items={items} />
-    </>
+    </div>
   )
 }
 

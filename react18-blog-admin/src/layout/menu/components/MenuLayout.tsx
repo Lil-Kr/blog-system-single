@@ -3,14 +3,12 @@ import { useNavigate, useLocation } from 'oh-router-react'
 import { SubMenuType } from '@/types/common'
 import { useMenuStore, useTabsStore } from '@/store/global/globalStore'
 import Logo from './logo/Logo'
-import { useMenuTreeStore } from '@/store/sys/menuStore'
-import { useEffect } from 'react'
-// import { menuItems, tabMap } from '@/router/config'
+import { usePermissionsStore } from '@/store/sys/authStore'
 
 const MenuLayout = () => {
   const { setTabActive } = useTabsStore()
   const { selectedKeys, openKeys, setOpenMenuKeys } = useMenuStore()
-  const { menuItems, tabMap } = useMenuTreeStore()
+  const { menuItems, tabMap } = usePermissionsStore()
   const navigateTo = useNavigate()
 
   /**

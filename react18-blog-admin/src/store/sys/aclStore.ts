@@ -1,7 +1,7 @@
 import { aclApi, aclModuleApi } from '@/apis/sys'
 import { OptionType } from '@/types/apis'
-import { AclApi, AclModalType, AclModuleApi, AclModuleTableType, TableAclListType } from '@/types/apis/sys/acl/aclType'
 import { create } from 'zustand'
+import { AclApi, AclModalType, AclModuleApi, AclModuleTableType, TableAclListType } from '@/types/apis/sys/acl/aclType'
 
 /**
  * 权限模块modal框
@@ -91,6 +91,7 @@ type AclModalState = {
     aclTypeInfo: OptionType
   }
   isMenu: boolean
+  isBtn: boolean
 }
 
 type AclModalAction = {
@@ -100,6 +101,7 @@ type AclModalAction = {
   setInputDisabled: (inputDisabled: boolean) => void
   setModalSelector: (aclModuleInfo: OptionType, statusInfo: OptionType, aclTypeInfo: OptionType) => void
   setIsMenu: (isMenu: boolean) => void
+  setIsBtn: (isBtn: boolean) => void
 }
 
 const initAclModal = {
@@ -115,7 +117,8 @@ const initAclModal = {
     statusInfo: { label: '', value: '' },
     aclTypeInfo: { label: '', value: '' }
   },
-  isMenu: false
+  isMenu: false,
+  isBtn: false
 }
 
 const useAclModalStore = create<AclModalState & AclModalAction>()(set => ({
@@ -153,7 +156,11 @@ const useAclModalStore = create<AclModalState & AclModalAction>()(set => ({
     set(state => ({
       ...state,
       isMenu
+    })),
+  setIsBtn: (isBtn: boolean) =>
+    set(state => ({
+      ...state,
+      isBtn
     }))
 }))
-
 export { useAclModalStore }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import {
   Button,
@@ -49,14 +49,14 @@ const Acl = () => {
       key: 'name',
       dataIndex: 'name',
       title: '权限点名',
-      width: '10%',
+      width: '8%',
       render: (_, record: TableAclListType) => <Tag color='purple'>{record.name}</Tag>
     },
     {
       key: 'aclModuleName',
       dataIndex: 'aclModuleName',
       title: '权限模块',
-      width: '10%',
+      width: '5%',
       render: (_, record: TableAclListType) => <Tag color='magenta'>{record.aclModuleName}</Tag>
     },
     {
@@ -73,7 +73,7 @@ const Acl = () => {
       key: 'menuName',
       dataIndex: 'menuName',
       title: '菜单名称',
-      width: '5%',
+      width: '8%',
       render: (_, record: TableAclListType) => {
         if (record.menuName.startsWith('-')) {
           return record.menuName
@@ -86,7 +86,13 @@ const Acl = () => {
       key: 'menuUrl',
       dataIndex: 'menuUrl',
       title: '路由url',
-      width: '10%'
+      width: '7%'
+    },
+    {
+      key: 'btnSign',
+      dataIndex: 'btnSign',
+      title: '按钮权限点',
+      width: '7%'
     },
     {
       key: 'url',
@@ -106,8 +112,8 @@ const Acl = () => {
       title: '状态',
       width: '5%',
       render: (_, record: TableAclListType) => {
-        let tagColor = 'green' // 默认颜色
-
+        // 默认颜色
+        let tagColor = 'green'
         const statusType = dictStatues.find(item => item.value === record.status.toString())
         // 根据状态设置不同的颜色和文本
         switch (statusType?.value) {
@@ -476,6 +482,7 @@ const Acl = () => {
       openModal: true,
       inputDisabled: false,
       isMenu: false,
+      isBtn: true,
       data: req
     })
   }
@@ -497,6 +504,7 @@ const Acl = () => {
       url: record.url,
       menuName: record.menuName,
       menuUrl: record.menuUrl,
+      btnSign: record.btnSign,
       seq: record.seq,
       status: record.status,
       remark: record.remark
@@ -509,6 +517,7 @@ const Acl = () => {
       openModal: true,
       inputDisabled: false,
       isMenu: false,
+      isBtn: false,
       data: req
     })
   }
@@ -608,9 +617,9 @@ const Acl = () => {
                   blockNode={true} // 是否节点占据一行
                   treeData={aclModuleTree}
                   selectedKeys={selectedInfo.selectKeys}
+                  expandedKeys={expandedKeys}
                   // autoExpandParent={false}
                   // defaultExpandAll={true}
-                  expandedKeys={expandedKeys} // （受控）展开指定的树节点
                   // defaultExpandedKeys={[]}
                   // defaultExpandParent={true}
                   onExpand={handleExpand} // 控制展开后收缩树节点

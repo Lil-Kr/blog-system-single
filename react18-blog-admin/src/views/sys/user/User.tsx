@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { AntDesignOutlined, DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Card, Col, Flex, Row, Table, Tooltip, Tree } from 'antd/lib'
+import { Button, Card, Col, Flex, Row, Table, Tree } from 'antd/lib'
 import { Form, Input, PaginationProps, Popconfirm, Space, Tag, type TreeDataNode } from 'antd'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { TablePageInfoType } from '@/types/base'
@@ -12,8 +12,8 @@ import { UserListPageReq, UserTableType } from '@/types/apis/sys/user/userType'
 import UserModal from '@/components/modal/UserModal'
 import { orgApi, userApi } from '@/apis/sys'
 import { OptionType } from '@/types/apis'
-import DirectoryTree from 'antd/lib/tree/DirectoryTree'
 import { Key } from 'antd/lib/table/interface'
+import { AddUserButtonAcl, DelUserButtonAcl, EditUserButtonAcl } from './auth/authButton'
 
 const User = () => {
   const userColumns: ColumnsType<any> = [
@@ -112,7 +112,7 @@ const User = () => {
             icon={<SearchOutlined />}
             onClick={() => lookItem(record.key ?? '', record)}
           />
-          <Button
+          <EditUserButtonAcl
             size={btnSize}
             name='edit'
             type='link'
@@ -128,18 +128,24 @@ const User = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
+            <DelUserButtonAcl
+              size={btnSize}
+              name='delete'
+              type='link'
+              shape='circle'
+              danger
+              icon={<DeleteOutlined />}
+            />
           </Popconfirm>
         </Space>
       )
     }
   ]
 
-  const MemoTooltip = Tooltip || React.memo(Tooltip)
+  const [form] = useForm()
   const [btnSize] = useState<SizeType>('small')
   const [userTableSize] = useState<SizeType>('small')
   const [tableLoading, setTableLoading] = useState<boolean>(true)
-  const [form] = useForm()
   // 函数式更新值, 不能直接更新
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
     currentPageNum: 1,
@@ -294,8 +300,6 @@ const User = () => {
 
     // loading user list page
     pageUserList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
-
-    setTableLoading(false)
   }
 
   /**
@@ -323,6 +327,8 @@ const User = () => {
       ...prevState,
       totalSize: data.total
     }))
+
+    setTableLoading(false)
   }
 
   /**
@@ -389,7 +395,7 @@ const User = () => {
           <Col span={4} style={{ width: '100%', height: '100%' }}>
             {/* 当Tree向右展开超出右边界时, 出现水平滚动条 */}
             <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
-              <DirectoryTree
+              <Tree
                 showLine={true}
                 showIcon={false}
                 checkable={false}
@@ -401,10 +407,10 @@ const User = () => {
                 // defaultExpandAll={true}
                 // defaultExpandedKeys={[]}
                 // defaultExpandParent={true}
-                titleRender={item => {
-                  const title = item.title as React.ReactNode
-                  return <MemoTooltip title={title}>{title}</MemoTooltip>
-                }}
+                // titleRender={item => {
+                //   const title = item.title as React.ReactNode
+                //   return <MemoTooltip title={title}>{title}</MemoTooltip>
+                // }}
                 onSelect={(key, info) => pageUserListByOrgId(info.node)}
               />
             </Card>
@@ -414,9 +420,13 @@ const User = () => {
               <Flex vertical={true} gap={'small'}>
                 <div className='operation-btn'>
                   <Flex vertical={false} gap='small'>
-                    <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createUser}>
-                      {'新增'}
-                    </Button>
+                    <AddUserButtonAcl
+                      text='新增'
+                      size={btnSize}
+                      type='primary'
+                      icon={<PlusOutlined />}
+                      onClick={createUser}
+                    />
                     <Form form={form}>
                       <Flex gap='small'>
                         <Form.Item name={'keyWords'} label={'搜索关键字'}>

@@ -1,14 +1,13 @@
+import Router from 'oh-router'
 import { getBreadCrumbItems, getRouterMenuItems, getTabsMap } from '@/utils/common'
 import { BreadcrumbType } from '@/types/common/breadcrumbType'
-import Router from 'oh-router'
 import { loginCheckMiddleware } from './middleware/authCheck'
 import { baseRouterConfig } from '@/router/baseRouterConfig'
 import { useRouterStore } from '@/store/router/routerStore'
 import { useTokenStore } from '@/store/login'
 import { useEffect } from 'react'
-import { menuApi } from '@/apis/sys/menuApi'
-import { MenuType } from '@/types/apis/sys/menu/menuType'
-import { useMenuTreeStore } from '@/store/sys/menuStore'
+import { authApi } from '@/apis/sys/authApi'
+import { PermissionType } from '@/types/apis/sys/menu/permissionType'
 import { RouterItemType } from '@/types/router/routeType'
 import { transformMenuTree, transformTypeToSeletor } from '@/utils/sys/treeUtils'
 import { useBreadcrumbStore } from '@/store/global'
@@ -17,6 +16,7 @@ import { dictApi } from '@/apis/sys/dictApi'
 import { OptionType } from '@/types/apis'
 import { aclModuleApi } from '@/apis/sys'
 import { useAclModuleStore, useDictDetailStore } from '@/store/global/initDictStore'
+import { usePermissionsStore } from '@/store/sys/authStore'
 
 /**
  * 动态路由配置与加载
@@ -24,7 +24,7 @@ import { useAclModuleStore, useDictDetailStore } from '@/store/global/initDictSt
  */
 const dynamicRoutes = () => {
   const { token } = useTokenStore()
-  const { setMenuTree, setMenuItems, setTabMap } = useMenuTreeStore()
+  const { setMenuTree, setBtnSignSet, setMenuItems, setTabMap } = usePermissionsStore()
   const { rootRouterConfig, setRootRouterConfig, setRootConfig } = useRouterStore()
   const { setBreadcrumbMap } = useBreadcrumbStore()
   const { setDictMap, setDictStatueType, setAclType, setRoleType } = useDictDetailStore()
@@ -33,11 +33,11 @@ const dynamicRoutes = () => {
   /**
    * 初始化用户菜单
    */
-  const initUserMenuTree = async (): Promise<MenuType[]> => {
-    const menuTreeRes = await menuApi.menuTree()
-    const { code, msg, data } = menuTreeRes
+  const initUserPermission = async (): Promise<PermissionType> => {
+    const res = await authApi.permission()
+    const { code, data } = res
     if (code !== 200) {
-      return []
+      return {} as PermissionType
     }
     return data
   }
@@ -81,12 +81,14 @@ const dynamicRoutes = () => {
        * 初始化用户数据
        */
       const updateRouterConfig = async () => {
-        // 原始菜单数据
-        const menuTree = await initUserMenuTree()
-        setMenuTree(menuTree)
+        // 原始菜单数据和按钮权限数据
+        const resPermission = await initUserPermission()
+        const { menuList, btnSignList } = resPermission
+        setMenuTree(menuList)
+        setBtnSignSet(btnSignList)
 
         // 转换菜单数据, 菜单UI识别
-        const newRootConfig: RouterItemType[] = transformMenuTree(menuTree)
+        const newRootConfig: RouterItemType[] = transformMenuTree(menuList)
         setRootConfig(newRootConfig)
 
         // 构建新的路由表对象
@@ -107,6 +109,7 @@ const dynamicRoutes = () => {
         setMenuItems(menuItems)
 
         // 构建面包屑数据
+        // todo: map中的value丢失数据, 待修复
         const breadcrumbMap: Map<string, BreadcrumbType[]> = getBreadCrumbItems(newRouterConfig)
         setBreadcrumbMap(breadcrumbMap)
 
@@ -154,6 +157,7 @@ const dynamicRoutes = () => {
         const aclModuleSelector = await initAclModuleList()
         setAclModuleSeletor(aclModuleSelector)
       }
+
       updateRouterConfig()
       initDictMap()
       initAclModule()

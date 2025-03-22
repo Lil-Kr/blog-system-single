@@ -55,6 +55,7 @@ export interface SysOrgListAllReq {
   number?: string
   name?: string
   remark?: string
+  status?: number
 }
 
 export interface SysOrgAllResp extends SysOrg {}
@@ -69,10 +70,11 @@ export interface SysOrgSaveReq {
 }
 
 export interface SysOrgEditReq {
+  surrogateId: string
   name: string
-  parentId: string
+  parentId?: string
   parentSurrogateId: string
-  status: number
+  status: string
   seq: number
   remark?: string
 }

@@ -9,7 +9,6 @@ const getBreadCrumbItems = (config: RouterItemType[]): Map<string, BreadcrumbTyp
   if (getLayoutRouterItem(config)) {
     return new Map()
   }
-
   // container data in map
   let breadCrumbItemMap = new Map<string, string>()
   for (const idx in config) {
@@ -37,15 +36,14 @@ const getBreadCrumbItems = (config: RouterItemType[]): Map<string, BreadcrumbTyp
 
   let resMap = new Map<string, BreadcrumbType[]>()
   for (let [key, value] of breadCrumbItemMap.entries()) {
-    let newVaule = value.split('.')
+    let newVaule: string[] = value.split('.')
     if (newVaule.length >= 2) {
-      newVaule.splice(0, 1)
+      // 移除第一个元素
+      newVaule = newVaule.slice(1)
     }
 
-    let readcrumbObj: BreadcrumbType[] = newVaule.map(v => {
-      return { title: v }
-    })
-    resMap.set(key, readcrumbObj)
+    let breadcrumbObj: BreadcrumbType[] = newVaule.map(v => ({ title: v }))
+    resMap.set(key, breadcrumbObj)
   }
 
   return resMap

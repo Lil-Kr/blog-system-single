@@ -11,29 +11,29 @@ import {
   PaginationProps,
   Row,
   Table,
-  TreeDataNode,
   Space,
   Popconfirm,
-  Tag
+  Tag,
+  Tree
 } from 'antd/lib'
-import { SizeType } from 'antd/lib/config-provider/SizeContext'
 import { useForm } from 'antd/lib/form/Form'
 import { Key, TableRowSelection } from 'antd/lib/table/interface'
 import { OrgTableType, SysOrgPageReq } from '@/types/apis/sys/org/orgType'
 import { ColumnsType } from 'antd/es/table'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle } from '@/types/component/modal'
 import OrgModal from '@/components/modal/OrgModal'
-import { TablePageInfoType } from '@/types/base'
 import { transformOrgTreeExpandeKeys, transformToTreeData } from '@/utils/sys/treeUtils'
 import { orgApi } from '@/apis/sys'
+import { useOrgModalStore, useOrgStore } from '@/store/sys/orgStore'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
+import { transformOrgInfoToSeletor } from '@/utils/sys/transform'
 import { OptionType } from '@/types/apis'
-import DirectoryTree from 'antd/lib/tree/DirectoryTree'
-import { useMessage } from '@/components/message/MessageProvider'
 
 /**
  * org page
  */
 const Org = () => {
+  // 组织信息列表
   const orgColumns: ColumnsType<any> = [
     {
       key: 'name',
@@ -46,7 +46,15 @@ const Org = () => {
       dataIndex: 'parentName',
       title: '上级组织',
       width: 100,
-      render: (_, record: OrgTableType) => <Tag color='magenta'>{record.parentName}</Tag>
+      render: (_, record: OrgTableType) => {
+        let color = 'magenta'
+        let text = record.parentName
+        if (!record.parentName) {
+          text = '-'
+          color = 'geekblue'
+        }
+        return <Tag color={color}>{text}</Tag>
+      }
     },
     {
       key: 'seq',
@@ -147,24 +155,28 @@ const Org = () => {
     }
   ]
 
-  const messageApi = useMessage()
   const MemoTooltip = Tooltip || React.memo(Tooltip)
-  const [btnSize] = useState<SizeType>('small')
-  const [tableSize] = useState<SizeType>('small')
-  const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [form] = useForm()
-  // 函数式更新值, 不能直接更新
-  const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
-    currentPageNum: 1,
-    pageSize: 10,
-    totalSize: 0
-  })
-  // 默认展开所有节点
-  const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
-  const [orgTree, setOrgTree] = useState<TreeDataNode[]>([] as TreeDataNode[])
-  const [dataSource, setDataSource] = useState<OrgTableType[]>([] as OrgTableType[])
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
-  const [selectedInfo, setSelectedInfo] = useState<OptionType>({} as OptionType)
+  const { btnSize, tableSize } = useGlobalStyleStore()
+  const {
+    orgTree,
+    orgPageList,
+    setOrgPageList,
+    setOrgTree,
+    tablePageInfo,
+    setTablePageInfo,
+    expandedKeys,
+    setExpandedKeys,
+    selectedKeys,
+    setSelectedKeys,
+    selectorInfo,
+    setSelectorInfo,
+    tableLoading,
+    setTableLoading
+  } = useOrgStore()
+
+  const { setOrgModalState } = useOrgModalStore()
+
   const orgRef = useRef<{
     open: (
       requestParams: IModalRequestAction,
@@ -233,9 +245,9 @@ const Org = () => {
       currentPageNum: req.currentPageNum,
       pageSize: tablePageInfo.pageSize
     })
-    const { code, data, msg } = orgPageList
+    const { code, data } = orgPageList
     if (code !== 200) {
-      setDataSource([])
+      setOrgPageList([])
       return
     }
 
@@ -243,21 +255,18 @@ const Org = () => {
       key: surrogateId,
       ...rest
     }))
-    setDataSource(list)
-    setTablePageInfo(prevState => ({
-      ...prevState,
-      totalSize: data.total
-    }))
+    setOrgPageList(list)
+    setTablePageInfo({ ...tablePageInfo, totalSize: data.total })
   }
 
   /**
    * retrieve org info children list by node key
    */
-  const pageChildOrgList = async (node: any) => {
+  const selectTreeNode = async (node: any) => {
     // 选中当前key
     setSelectedKeys([node.key])
     // 设置选中的组织信息
-    setSelectedInfo({ label: node.title, value: node.key })
+    setSelectorInfo({ label: node.title, value: node.key })
 
     // 加载当前组织下的子节点数据
     const orgList = await orgApi.pageChildOrgList({
@@ -274,11 +283,71 @@ const Org = () => {
       key: surrogateId,
       ...rest
     }))
-    setDataSource(list)
-    setTablePageInfo(prevState => ({
-      ...prevState,
-      totalSize: data.total
-    }))
+    setOrgPageList(list)
+
+    setTablePageInfo({ ...tablePageInfo, totalSize: data.total })
+  }
+
+  /**
+   * create new org info
+   */
+  const createOrg = async () => {
+    const req: OrgTableType = {
+      orgInfo: selectorInfo
+    }
+    let orgSelectorInfo: OptionType[] = []
+    const res = await orgApi.orgAllList({ status: 0 })
+    const { code, data, msg } = res
+    if (code !== 200) {
+      orgSelectorInfo = []
+    } else {
+      orgSelectorInfo = transformOrgInfoToSeletor(data)
+    }
+
+    setOrgModalState({
+      api: orgApi,
+      title: '添加组织信息',
+      action: 'create',
+      openModal: true,
+      modalStyle: { maxWidth: '40vw' },
+      inputDisabled: false,
+      req: req,
+      orgSelectorInfo
+    })
+  }
+
+  /**
+   * edit
+   * @param key
+   * @param record
+   */
+  const editItem = async (key: string, record: OrgTableType) => {
+    const req: OrgTableType = {
+      orgInfo: {
+        label: record.parentName,
+        value: record.parentId
+      },
+      ...record
+    }
+
+    let orgSelectorInfo: OptionType[] = []
+    const res = await orgApi.orgAllList({ status: 0 })
+    const { code, data, msg } = res
+    if (code !== 200) {
+      orgSelectorInfo = []
+    } else {
+      orgSelectorInfo = transformOrgInfoToSeletor(data)
+    }
+    setOrgModalState({
+      api: orgApi,
+      title: '编辑组织信息',
+      action: 'edit',
+      openModal: true,
+      modalStyle: { maxWidth: '40vw' },
+      inputDisabled: false,
+      req: req,
+      orgSelectorInfo: []
+    })
   }
 
   /**
@@ -287,42 +356,24 @@ const Org = () => {
    * @param record
    */
   const lookItem = (key: string, record: OrgTableType) => {
-    const modalData: OrgTableType = {
+    const req: OrgTableType = {
       orgInfo: {
         label: record.parentName,
         value: record.parentId
       },
       ...record
     }
-    orgRef.current?.open(
-      { api: orgApi },
-      { title: '查看' },
-      { action: 'look', open: true }, // create | edit | look
-      { style: { maxWidth: '40vw' } },
-      { ...modalData }
-    )
-  }
 
-  /**
-   * edit
-   * @param key
-   * @param record
-   */
-  const editItem = (key: string, record: OrgTableType) => {
-    const modalData: OrgTableType = {
-      orgInfo: {
-        label: record.parentName,
-        value: record.parentId
-      },
-      ...record
-    }
-    orgRef.current?.open(
-      { api: orgApi },
-      { title: '编辑' },
-      { action: 'edit', open: true }, // create | edit | look
-      { style: { maxWidth: '40vw' } },
-      { ...modalData }
-    )
+    setOrgModalState({
+      api: orgApi,
+      title: '查看组织信息',
+      action: 'look',
+      openModal: true,
+      modalStyle: { maxWidth: '40vw' },
+      inputDisabled: true,
+      req: req,
+      orgSelectorInfo: []
+    })
   }
 
   const deleteItemConfirm = async (record: OrgTableType) => {
@@ -331,22 +382,6 @@ const Org = () => {
       return
     }
     retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
-  }
-
-  /**
-   * create new org info
-   */
-  const createOrg = () => {
-    const modalData = {
-      orgInfo: selectedInfo
-    }
-    orgRef.current?.open(
-      { api: orgApi },
-      { title: '添加' },
-      { action: 'create', open: true }, // create | edit | look
-      { style: { maxWidth: '40vw' } },
-      { ...modalData }
-    )
   }
 
   /**
@@ -368,10 +403,7 @@ const Org = () => {
 
   /** ===================== 分页 ===================== */
   const onShowSizeChange: PaginationProps['onShowSizeChange'] = (currentPageNum, pageSize) => {
-    setTablePageInfo(prevState => ({
-      ...prevState,
-      pageSize
-    }))
+    setTablePageInfo({ ...tablePageInfo, pageSize })
   }
 
   const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
@@ -388,7 +420,7 @@ const Org = () => {
     onSelectAll: (selected, selectedRows, changeRows) => {}
   }
 
-  const onExpand = (key: Key[]) => {
+  const handleExpand = (key: Key[]) => {
     setExpandedKeys(key)
   }
 
@@ -399,24 +431,24 @@ const Org = () => {
           <Col span={4} style={{ width: '100%', height: '100%' }}>
             {/* 当Tree向右展开超出右边界时, 出现水平滚动条 */}
             <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
-              <DirectoryTree
+              <Tree
                 showLine={true}
                 showIcon={false}
                 checkable={false}
                 blockNode={true} // 是否节点占据一行
                 treeData={orgTree}
                 selectedKeys={selectedKeys}
-                expandedKeys={expandedKeys} // （受控）展开指定的树节点
+                expandedKeys={expandedKeys}
                 // autoExpandParent={false}
                 // defaultExpandAll={true}
                 // defaultExpandedKeys={[]}
                 // defaultExpandParent={true}
-                onExpand={onExpand}
+                onExpand={handleExpand} // 控制展开后收缩树节点
                 titleRender={item => {
                   const title = item.title as React.ReactNode
                   return <MemoTooltip title={title}>{title}</MemoTooltip>
                 }}
-                onSelect={(key, info) => pageChildOrgList(info.node)}
+                onSelect={(key, info) => selectTreeNode(info.node)}
               />
             </Card>
           </Col>
@@ -462,7 +494,7 @@ const Org = () => {
                     }}
                     loading={tableLoading}
                     columns={orgColumns}
-                    dataSource={dataSource}
+                    dataSource={orgPageList}
                     pagination={{
                       position: ['bottomLeft'],
                       showQuickJumper: false, // 跳转指定页面

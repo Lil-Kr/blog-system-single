@@ -33,6 +33,7 @@ export interface SysAcl {
   url: string
   menuName: string
   menuUrl: string
+  btnSign: string
   status: number
   seq: number
   remark: string
@@ -139,7 +140,7 @@ export interface SysAclModuleListResp {
   updateTime: string
 }
 
-/** ================ table type ================ */
+/** ================ table-type ================ */
 export interface TableAclListType extends SysAcl {
   key: string
   aclModuleName: string
@@ -170,6 +171,7 @@ export interface AclModalType {
   url?: string
   menuName?: string
   menuUrl?: string
+  btnSign?:string
   seq?: number
   status?: number
   remark?: string
@@ -197,6 +199,7 @@ export interface AclAddReq {
   seq: number
   menuName?: string
   menuUrl?: string
+  btnSign?: string
   remark: string
   operateIp?: string
 }
@@ -211,6 +214,7 @@ export interface AclEditReq {
   seq: number
   menuName?: string
   menuUrl?: string
+  btnSign?: string
   remark: string
   operateIp?: string
 }

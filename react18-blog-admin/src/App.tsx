@@ -1,5 +1,5 @@
 import Router from 'oh-router'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { ConfigProvider } from 'antd'
 import { RouterView } from 'oh-router-react'
 import useTheme from './hooks/useTheme'
@@ -9,11 +9,14 @@ import { useSystemStore } from './store/global'
 import MessageProvider from '@/components/message/MessageProvider'
 import { getBrowserLang } from './utils/common'
 import { dynamicRoutes } from './router/dynamicRoutes'
+import { Spin } from 'antd/lib'
+import useLoadingStore from './store/global/loadingStore'
 
 function App() {
   const { language, assemblySize, setLanguage } = useSystemStore()
   const [i18nLocale, setI18nLocale] = useState(zhCN)
   const { rootRouterConfig } = dynamicRoutes()
+  const { loginLoading } = useLoadingStore()
   // const [rootConfig, setRootConfig] = useState<RouterItemType[]>([])
   // const breadcrumbMap: Map<string, BreadcrumbType[]> = getBreadCrumbItems(rootConfig)
   // const { rootRouterConfig } = useRouterStore()
@@ -76,7 +79,21 @@ function App() {
         }}
       >
         <MessageProvider>
-          <RouterView router={rootRouterConfig} />
+          {loginLoading ? (
+            <div
+              style={{
+                height: '100vh',
+                width: '100vw',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Spin size='large' />
+            </div>
+          ) : (
+            <RouterView router={rootRouterConfig} />
+          )}
         </MessageProvider>
       </ConfigProvider>
     </>

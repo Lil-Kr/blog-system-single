@@ -1,7 +1,6 @@
 import {
   ApartmentOutlined,
   BookOutlined,
-  DotChartOutlined,
   FileImageOutlined,
   HomeOutlined,
   MergeCellsOutlined,
@@ -34,7 +33,7 @@ export const componentMap = {
   // _admin_image_pictures: lazy(() => import('@/views/image/ImageManage')),
 
   // 系统管理
-  _admin_sys_index: lazy(() => import('@/views/sys/User')),
+  _admin_sys_user: lazy(() => import('@/views/sys/user/User')),
   _admin_sys_org: lazy(() => import('@/views/sys/Org')),
   _admin_sys_role: lazy(() => import('@/views/sys/role/Role')),
   _admin_sys_acl: lazy(() => import('@/views/sys/Acl')),
@@ -62,7 +61,7 @@ export const iconMap = {
 
   // 系统管理
   _admin_sys: <ToolOutlined />,
-  _admin_sys_index: <UserOutlined />,
+  _admin_sys_user: <UserOutlined />,
   _admin_sys_org: <ApartmentOutlined />,
   _admin_sys_role: <UserSwitchOutlined />,
   _admin_sys_acl: <MergeCellsOutlined />,

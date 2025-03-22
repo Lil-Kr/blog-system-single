@@ -28,4 +28,6 @@ public class OrgPageReq extends BasePageReq {
 	private String name;
 
 	private Integer seq;
+
+	private Integer status;
 }

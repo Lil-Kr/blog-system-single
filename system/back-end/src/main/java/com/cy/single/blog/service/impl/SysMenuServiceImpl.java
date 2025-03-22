@@ -5,16 +5,19 @@ import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysAclModuleMapper;
 import com.cy.single.blog.pojo.dto.sys.acl.AclDto;
 import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
+import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysMenu;
 import com.cy.single.blog.service.*;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.cy.single.blog.common.constants.FrontConstants.FRONT_ROUTER_PREFIX;
 
@@ -24,7 +27,7 @@ import static com.cy.single.blog.common.constants.FrontConstants.FRONT_ROUTER_PR
  * @Description:
  */
 @Service
-public class SysMenuServiceImpl implements SysMenuService {
+public class SysMenuServiceImpl implements SysPermissionService {
 
 	@Autowired
 	private MessageLangService msgService;
@@ -50,15 +53,35 @@ public class SysMenuServiceImpl implements SysMenuService {
  	 * @return
 	 */
 	@Override
-	public ApiResp<List<SysMenu>> menuTree() {
+	public ApiResp<Map<String, Object>> permission() {
+		Map<String, Object> userPermissionMap = Maps.newHashMap();
 		/**
 		 * 1. 获取当前用户对应的菜单权限
 		 */
 		Long userId = RequestHolder.getCurrentUser().getSurrogateId();
 		List<AclModuleDto> aclModuleDtoList = treeService.userAclTree(userId);
 
+		/**
+		 * 转换为菜单结构
+		 */
 		List<SysMenu> menuList = changeTreeToMenu(aclModuleDtoList, FRONT_ROUTER_PREFIX);
-		return ApiResp.success(menuList);
+
+		/**
+		 * 2. 请求当前用户[按钮]类型的权限点
+		 * type:2 -> 按钮类型
+		 */
+		List<SysAcl> userAclList = coreService.getUserAclList(userId, 2);
+		List<String> btnSignList = Optional.ofNullable(userAclList)
+			.filter(CollectionUtils::isNotEmpty)
+			.map(list -> list.stream().map(SysAcl::getBtnSign).collect(Collectors.toList()))
+			.orElseGet(ArrayList::new);
+
+		/**
+		 * 3. 组装数据, 同时给出菜单数据和按钮数据
+		 */
+		userPermissionMap.put("menuList", menuList);
+		userPermissionMap.put("btnSignList", btnSignList);
+		return ApiResp.success(userPermissionMap);
 	}
 
 	/**

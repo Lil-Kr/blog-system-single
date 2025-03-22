@@ -3,12 +3,18 @@ import { useTokenStore } from '@/store/login'
 import { Button, Result } from 'antd'
 import { useNavigate } from 'oh-router-react'
 import { HOME_ROUTER_URL } from '@/config'
+import { useMenuStore, useTabsStore } from '@/store/global'
 
 const Error403 = () => {
   const { clearToken } = useTokenStore()
   const navigateTo = useNavigate()
+  const { restMenuState } = useMenuStore()
+  const { resetTabs } = useTabsStore()
+
   const backHomePage = () => {
     clearToken()
+    restMenuState()
+    resetTabs()
     navigateTo(HOME_ROUTER_URL)
   }
   return (

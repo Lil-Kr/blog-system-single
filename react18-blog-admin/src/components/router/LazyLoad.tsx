@@ -30,11 +30,4 @@ const LazyLoad = (Comp: React.LazyExoticComponent<any>) => {
   return <LazyComponent />
 }
 
-// const LazyLoad = (Comp: React.LazyExoticComponent<any>) => (props: any) =>
-//   (
-//     <Suspense fallback={<Spin size='large' className={styles.spinLargeStyle} />}>
-//       <Comp {...props} />
-//     </Suspense>
-//   )
-
 export default LazyLoad

@@ -71,11 +71,14 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 		 * 每个权限模块下只能配置一个菜单类型的权限点
 		 */
 		QueryWrapper<SysAcl> query2 = new QueryWrapper<>();
-		query2.eq("type", req.getType());
-		query2.eq("acl_module_id", req.getAclModuleId());
-		SysAcl acl = aclMapper.selectOne(query2);
-		if (Objects.nonNull(acl) && acl.getType() == 1) {
-			return ApiResp.warning("权限模块只能有一个菜单类型的权限");
+		// 菜单类型需要检查重复, 每个权限模块下只能有一个菜单类型权限点
+		if (req.getType() == 1) {
+			query2.eq("type", req.getType());
+			query2.eq("acl_module_id", req.getAclModuleId());
+			SysAcl acl = aclMapper.selectOne(query2);
+			if (Objects.nonNull(acl)) {
+				return ApiResp.warning("权限模块只能有一个菜单类型的权限");
+			}
 		}
 
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
@@ -88,6 +91,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			.url(req.getUrl())
 			.menuName(StringUtils.isBlank(req.getMenuName()) ? "-" : req.getMenuName())
 			.menuUrl(StringUtils.isBlank(req.getMenuUrl()) ? "-" : req.getMenuUrl())
+			.btnSign(StringUtils.isBlank(req.getBtnSign()) ? "-" : req.getBtnSign())
 			.type(req.getType())
 			.status(req.getStatus())
 			.seq(req.getSeq())
@@ -122,15 +126,22 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			return ApiResp.warning(INFO_NOT_EXIST);
 		}
 
-		QueryWrapper<SysAcl> query1 = new QueryWrapper<>();
-		query1.eq("acl_module_id", req.getAclModuleId());
-		query1.eq("type", 1);
-		SysAcl acl = aclMapper.selectOne(query1);
-		if (Objects.nonNull(acl) && before.getType() != 1 && req.getType() == 1) {
-			return ApiResp.warning("权限模块只能有一个菜单类型的权限");
+		/**
+		 * 检查当需要修改的权限点类型
+		 */
+		if (req.getType() == 1) {
+			QueryWrapper<SysAcl> query1 = new QueryWrapper<>();
+			query1.eq("acl_module_id", req.getAclModuleId());
+			query1.eq("type", 1);
+			SysAcl acl = aclMapper.selectOne(query1);
+			// 如果之前不是菜单权限, 并且已经存在菜单权限, 是不合法的业务
+			if (Objects.nonNull(acl) && before.getType() != 1) {
+				return ApiResp.warning("权限模块只能有一个菜单类型的权限");
+			}
 		}
 
-		Date currentTime = DateUtil.localDateTimeNow(); // 当前时间
+		// 当前时间
+		Date currentTime = DateUtil.localDateTimeNow();
 		SysAcl build = SysAcl.builder()
 			.name(req.getName())
 			.aclModuleId(req.getAclModuleId())
@@ -140,6 +151,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			.seq(req.getSeq())
 			.menuName(StringUtils.isBlank(req.getMenuName()) ? "-" : req.getMenuName())
 			.menuUrl(StringUtils.isBlank(req.getMenuUrl()) ? "-" : req.getMenuUrl())
+			.btnSign(StringUtils.isBlank(req.getBtnSign()) ? "-" : req.getBtnSign())
 			.remark(req.getRemark())
 			.operator(RequestHolder.getCurrentUser().getSurrogateId())
 			.operateIp("127.0.0.1")
@@ -155,8 +167,6 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			return ApiResp.warning(EDITE_ERROR);
 		}
 	}
-
-
 
 	/**
 	 * 分页查询权限点列表
@@ -190,7 +200,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 		query1.select("role_id")
 			.eq("acl_id", req.getSurrogateId());
 		List<SysRoleAcl> roleIdList = roleAclMapper.selectList(query1);
-		Set<Long> roleIdSet = roleIdList.stream().map(roleAcl -> roleAcl.getAclId()).collect(Collectors.toSet());
+		Set<Long> roleIdSet = roleIdList.stream().map(SysRoleAcl::getAclId).collect(Collectors.toSet());
 		if (CollectionUtils.isEmpty(roleIdSet)) {
 			map.put("users", Lists.newArrayList());
 		}
@@ -200,7 +210,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 		query2.select("user_id")
 			.in("role_id", Lists.newArrayList(roleIdSet));
 		List<SysRoleUser>userIdList = roleUserMapper.selectList(query2);
-		Set<Long> userIdSet = userIdList.stream().map(roleUser -> roleUser.getUserId()).collect(Collectors.toSet());
+		Set<Long> userIdSet = userIdList.stream().map(SysRoleUser::getUserId).collect(Collectors.toSet());
 		if (CollectionUtils.isEmpty(userIdSet)) {
 			map.put("roles", Lists.newArrayList());
 		}
