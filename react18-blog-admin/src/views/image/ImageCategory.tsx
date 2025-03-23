@@ -11,6 +11,8 @@ import { useMessage } from '@/components/message/MessageProvider'
 
 // api
 import imageCategoryApi from '@/apis/image'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
+import { Tag } from 'antd/lib'
 
 const env = import.meta.env
 
@@ -20,13 +22,13 @@ const ImageCategory = () => {
       key: 'number',
       dataIndex: 'number',
       title: '编号',
-      width: 100
+      width: '25%'
     },
     {
       key: 'imageUrl',
       dataIndex: 'imageUrl',
       title: '标题图',
-      width: 100,
+      width: '25%',
       render: (_: object, record: ImageCategoryDTO) => (
         <img height={100} style={{ objectFit: 'cover' }} src={record.imageUrl} />
       )
@@ -35,33 +37,42 @@ const ImageCategory = () => {
       key: 'name',
       dataIndex: 'name',
       title: '分类名',
-      width: 100
+      width: '10%',
+      render: (_: object, record: ImageCategoryDTO) => <Tag color={'volcano'}>{record.name}</Tag>
     },
-    // {
-    //   key: 'status',
-    //   dataIndex: 'status',
-    //   title: '状态',
-    //   width: 60
-    // },
+    {
+      key: 'status',
+      dataIndex: 'status',
+      title: '状态',
+      width: '10%'
+    },
     {
       key: 'createTime',
       dataIndex: 'createTime',
       title: '创建时间',
-      width: 100
+      width: '10%'
     },
     {
       key: 'updateTime',
       dataIndex: 'updateTime',
       title: '更新时间',
-      width: 100
+      width: '10%'
     },
     {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
-      width: 150,
+      width: '10%',
       render: (_: object, record: ImageCategoryDTO) => (
-        <Space size='middle'>
+        <Flex vertical={false} gap={4}>
+          <Button
+            size={btnSize}
+            name='edit'
+            type='link'
+            shape='circle'
+            icon={<EditOutlined />}
+            onClick={() => delItem(record.key)}
+          />
           <Popconfirm
             title='删除图片分类'
             description={`确定要删除 [${record.name}] 这个图片分类吗?`}
@@ -70,21 +81,28 @@ const ImageCategory = () => {
             cancelText='取消'
           >
             <Button
+              size={btnSize}
               name='delete'
-              type='primary'
+              type='link'
               shape='circle'
               danger
               icon={<DeleteOutlined />}
               onClick={() => delItem(record.key)}
             />
           </Popconfirm>
-        </Space>
+        </Flex>
       )
     }
   ]
 
   const messageApi = useMessage()
   const [form] = useForm()
+  const { btnSize, tableSize } = useGlobalStyleStore()
+  const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
+  const [rowKeys, setRowKeys] = useState<React.Key[]>([])
+  const [tableLoading, setTableLoading] = useState<boolean>(false)
+  const [dataSource, setDataSource] = useState<ImageCategoryDTO[]>([])
+  const [pageInfo, setPageInfo] = useState({ pageSize: 5, totalSize: 0 })
   const imageCategoryRef = useRef<{
     open: (
       requestParams: IModalRequestAction,
@@ -95,12 +113,6 @@ const ImageCategory = () => {
       data?: any
     ) => void
   }>()
-  const [btnSize] = useState<SizeType>('middle')
-  const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
-  const [rowKeys, setRowKeys] = useState<React.Key[]>([])
-  const [tableLoading, setTableLoading] = useState<boolean>(false)
-  const [dataSource, setDataSource] = useState<ImageCategoryDTO[]>([])
-  const [pageInfo, setPageInfo] = useState({ pageSize: 5, totalSize: 0 })
 
   /**
    * 搜索
@@ -163,8 +175,6 @@ const ImageCategory = () => {
   const delItem = async (key: string) => {
     // const { key } = rowKeys[0]
   }
-
-  const deleteBatch = async () => {}
 
   /**
    * 多选
@@ -239,23 +249,22 @@ const ImageCategory = () => {
             </Form.Item>
             <Form.Item>
               <Button type='primary' onClick={resetSearch}>
-                置空
+                {'置空'}
               </Button>
             </Form.Item>
           </Flex>
         </Form>
         <Flex className='operation-btn' vertical={false} gap='small'>
           <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={create}>
-            添加分类
-          </Button>
-          <Button size={btnSize} type='primary' icon={<DeleteOutlined />} danger onClick={deleteBatch}>
-            删除分类
+            {'添加'}
           </Button>
         </Flex>
-        <Flex className='list' gap='middle' vertical={true}>
+
+        <Flex className='list' gap={4} vertical={true}>
           <Table
             key={1}
-            style={{ width: '60%' }}
+            size={tableSize}
+            bordered={true}
             rowSelection={{
               type: selectionType,
               ...rowSelection
@@ -264,6 +273,7 @@ const ImageCategory = () => {
             columns={columns}
             dataSource={dataSource}
             pagination={{
+              position: ['bottomLeft'], // pagination position
               hideOnSinglePage: false, // only one pageSize then hidden Paginator
               pageSizeOptions: [10, 20, 50], // specify how many items can be displayed on each page
               onChange: onChange,

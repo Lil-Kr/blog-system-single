@@ -42,7 +42,7 @@ const OrgModal = (props: ModalType.CustomModal) => {
     if (action === 'create') {
       // 默认显示第一条
       const orgInfo: OptionType = orgSelectorInfo[0]
-      const statusInfo: OptionType = dictStatues.find(item => item.value === '0') ?? { value: '0', label: '正常' }
+      const statusInfo: OptionType = dictStatues.find(item => item.value === '0') ?? dictStatues[0]
       setSelectedOrgValue(orgInfo.value ?? '')
       setSelectedStatueValue(statusInfo.value ?? '0')
 
@@ -52,13 +52,9 @@ const OrgModal = (props: ModalType.CustomModal) => {
       })
     } else if (action === 'edit') {
       const orgInfo: OptionType = req?.orgInfo ?? { value: '', label: '' }
-      const statusInfo: OptionType = dictStatues.find(item => item.value === req?.status) ?? {
-        value: '0',
-        label: '正常'
-      }
+      const statusInfo: OptionType = dictStatues.find(item => item.value === req?.status) ?? dictStatues[0]
       setSelectedOrgValue(orgInfo.value ?? '')
       setSelectedStatueValue(statusInfo.value ?? '0')
-
       orgModalForm.setFieldsValue({
         ...req,
         orgInfo,
@@ -66,10 +62,7 @@ const OrgModal = (props: ModalType.CustomModal) => {
       })
     } else {
       const orgInfo: OptionType = req?.orgInfo ?? { value: '', label: '' }
-      const statusInfo: OptionType = dictStatues.find(item => item.value === req?.status) ?? {
-        value: '0',
-        label: '正常'
-      }
+      const statusInfo: OptionType = dictStatues.find(item => item.value === req?.status) ?? dictStatues[0]
       setSelectedOrgValue(orgInfo.value ?? '')
       setSelectedStatueValue(statusInfo.value ?? '0')
 
@@ -108,7 +101,7 @@ const OrgModal = (props: ModalType.CustomModal) => {
         surrogateId: req?.key ?? '',
         name: params.name,
         parentSurrogateId: selectedOrgValue ?? '',
-        status: selectedOrgValue ?? '0',
+        status: selectedStatueValue ?? '0',
         seq: params.seq,
         remark: params.remark
       }

@@ -18,9 +18,10 @@ import { ImageInfoUploadParams } from '@/apis/image/imageInfo'
 import { CardActionProps } from '@/types/component/card'
 import { PageData } from '@/types/base/response'
 import ImageUploadModal from './ImageUploadModal'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
 
 const ImageManage = () => {
-  const [btnSize] = useState<SizeType>('middle')
+  const { btnSize, tableSize } = useGlobalStyleStore()
   const [activeKey, setActiveKey] = useState<string>('')
   const [tabsItem, setTabsItem] = useState<Tab[]>([])
 

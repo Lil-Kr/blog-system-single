@@ -1,30 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { TablePageInfoType } from '@/types/base'
-import {
-  AntDesignOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  PlusOutlined,
-  QuestionCircleOutlined,
-  SearchOutlined
-} from '@ant-design/icons'
-import {
-  Button,
-  Drawer,
-  Flex,
-  Form,
-  Input,
-  InputNumber,
-  PaginationProps,
-  Popconfirm,
-  Space,
-  Tag,
-  Typography
-} from 'antd/lib'
-import Table, { ColumnsType, TableProps } from 'antd/lib/table'
+import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import { Button, Drawer, Flex, Form, Input, PaginationProps, Popconfirm, Tag } from 'antd/lib'
+import Table, { ColumnsType } from 'antd/lib/table'
 import { useForm } from 'antd/lib/form/Form'
 import { TableRowSelection } from 'antd/es/table/interface'
-import { SizeType } from 'antd/lib/config-provider/SizeContext'
 import DictModal from '@/components/modal/DictModal'
 import { IModalRequestAction, IModalParams, IAction, IModalStyle } from '@/types/component/modal'
 import { dictApi } from '@/apis/sys/dictApi'
@@ -36,9 +16,9 @@ import {
   TableDictDetailType,
   TableDictType
 } from '@/types/apis/sys/dict/dictType'
-import { message } from 'antd'
 import { EditableProTable, ProColumns } from '@ant-design/pro-components'
 import { useMessage } from '@/components/message/MessageProvider'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
 
 const Dict = () => {
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
@@ -54,13 +34,11 @@ const Dict = () => {
 
   const messageApi = useMessage()
   const [form] = useForm()
-  const [formDetail] = useForm()
-  const [btnSize] = useState<SizeType>('middle')
-  const [roleStyle, setRoleStyle] = useState<SizeType>('small')
   const [tableLoading, setTableLoading] = useState<boolean>(false)
   const [dataSource, setDataSource] = useState<TableDictType[]>([] as TableDictType[])
   const [dictId, setDictId] = useState<string>('')
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
+  const { btnSize, tableSize } = useGlobalStyleStore()
   /**
    * 处理字典明细的状态
    */
@@ -100,13 +78,14 @@ const Dict = () => {
       title: '操作',
       width: '10%',
       render: (_: object, record: TableDictType) => (
-        <Space size='middle'>
+        <Flex key={`edit-${record.key}`} vertical={false} gap={4}>
           <Button name='look' type='link' onClick={() => dictDetial(record)}>
             {'明细'}
           </Button>
           <Button
+            size={btnSize}
             name='edit'
-            type='primary'
+            type='link'
             shape='circle'
             icon={<EditOutlined />}
             onClick={() => editDict(record.key ?? '', record)}
@@ -120,9 +99,9 @@ const Dict = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
+            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
-        </Space>
+        </Flex>
       )
     }
   ]
@@ -167,9 +146,9 @@ const Dict = () => {
       valueType: 'option',
       width: '20%',
       render: (text, record, _, action) => [
-        <Space key={`edit-${record.key}`} size={roleStyle}>
+        <Flex key={`edit-${record.key}`} vertical={false} gap={4}>
           <Button
-            size={roleStyle}
+            size={tableSize}
             name='edit'
             type='link'
             shape='circle'
@@ -189,7 +168,7 @@ const Dict = () => {
           >
             <Button size={'small'} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
-        </Space>
+        </Flex>
       ]
     }
   ]
@@ -502,7 +481,7 @@ const Dict = () => {
         <div className='operation-btn'>
           <Flex vertical={false} gap='small'>
             <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={addDict}>
-              {'新增'}
+              {'添加'}
             </Button>
             <Form form={form}>
               <Flex gap='small'>
@@ -510,11 +489,11 @@ const Dict = () => {
                   <Input placeholder={'搜索关键字'} />
                 </Form.Item>
                 <Form.Item>
-                  <Button icon={<SearchOutlined />} type='primary' onClick={searchDict} />
+                  <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={searchDict} />
                 </Form.Item>
                 <Form.Item>
-                  <Button type='primary' onClick={resetDict}>
-                    {'置空'}
+                  <Button size={btnSize} type='primary' onClick={resetDict}>
+                    {'重置'}
                   </Button>
                 </Form.Item>
               </Flex>
@@ -532,7 +511,7 @@ const Dict = () => {
             loading={tableLoading}
             columns={columns}
             dataSource={dataSource}
-            size={roleStyle}
+            size={tableSize}
             pagination={{
               size: 'small',
               position: ['bottomLeft'],
@@ -582,7 +561,7 @@ const Dict = () => {
               })
             }}
             loading={tableLoading}
-            size={roleStyle}
+            size={tableSize}
             columns={columnsDetail}
             value={dictDetailDataSource}
             onChange={refreash}

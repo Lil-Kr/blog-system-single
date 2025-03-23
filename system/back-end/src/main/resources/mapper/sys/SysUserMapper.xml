@@ -253,7 +253,7 @@
             a.update_time,
             b.name as 'orgName',
             c.user_name as 'creator_name',
-            d.operator as 'operatorName'
+            d.account as 'operatorName'
         from sys_user as a
         inner join sys_org as b on (a.org_id = b.surrogate_id)
         inner join sys_user as c on (a.creator_id = c.surrogate_id)

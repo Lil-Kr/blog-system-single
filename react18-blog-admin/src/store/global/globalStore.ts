@@ -95,16 +95,19 @@ export { useTabsStore }
 interface GlobalStyleState {
   btnSize: SizeType
   tableSize: SizeType
+  inputSize: SizeType
 }
 
 interface GlobalStyleAction {
   setBtnSize: (btnSize: SizeType) => void
   setTableSize: (tableSize: SizeType) => void
+  setInputSize: (inputSize: SizeType) => void
 }
 
 const initGlobalStyleData = {
   btnSize: 'small' as SizeType,
-  tableSize: 'small' as SizeType
+  tableSize: 'small' as SizeType,
+  inputSize: 'small' as SizeType
 }
 
 const useGlobalStyleStore = create<GlobalStyleState & GlobalStyleAction>()(set => ({
@@ -121,6 +124,13 @@ const useGlobalStyleStore = create<GlobalStyleState & GlobalStyleAction>()(set =
       return {
         ...state,
         tableSize
+      }
+    }),
+  setInputSize: (inputSize: SizeType) =>
+    set(state => {
+      return {
+        ...state,
+        inputSize
       }
     })
 }))

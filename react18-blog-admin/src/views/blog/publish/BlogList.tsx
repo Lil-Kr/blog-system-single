@@ -14,6 +14,7 @@ import blogContentApi, {
   BlogContentReqParams,
   MappedBlogContentDTO
 } from '@/apis/blog/content'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
 
 const BlogList = () => {
   const columns: ColumnsType<any> = [
@@ -21,14 +22,14 @@ const BlogList = () => {
       key: 'title',
       dataIndex: 'title',
       title: '博客标题',
-      width: 100,
+      width: '10%',
       render: (_: object, record: BlogContentDTO) => <Title level={5}>{record.title}</Title>
     },
     {
       key: 'blogLabelList',
       dataIndex: 'blogLabelList',
       title: '博客标签',
-      width: 100,
+      width: '10%',
       render: (_: object, record: BlogContentDTO) =>
         record.blogLabelList.map((item, index) => (
           <Tag key={item.surrogateId} color={item.color}>
@@ -40,13 +41,13 @@ const BlogList = () => {
       key: 'categoryName',
       dataIndex: 'categoryName',
       title: '博客分类',
-      width: 100
+      width: '10%'
     },
     {
       key: 'original',
       dataIndex: 'original',
       title: '是否原创',
-      width: 50,
+      width: '10%',
       render: (_: object, record: BlogContentDTO) =>
         record.original === 1 ? (
           <Tag key={record.key} color={`volcano`}>
@@ -62,7 +63,7 @@ const BlogList = () => {
       key: 'recommend',
       dataIndex: 'recommend',
       title: '是否推荐',
-      width: 50,
+      width: '10%',
       render: (_: object, record: BlogContentDTO) =>
         record.recommend === 1 ? (
           <Tag key={record.key} color={`volcano`}>
@@ -78,7 +79,7 @@ const BlogList = () => {
       key: 'status',
       dataIndex: 'status',
       title: '发布状态',
-      width: 100,
+      width: '10%',
       render: (_: object, record: BlogContentDTO) =>
         record.status === 1 ? (
           <Tag key={record.key} color={`green`}>
@@ -94,29 +95,23 @@ const BlogList = () => {
       key: 'publishTime',
       dataIndex: 'publishTime',
       title: '发布时间',
-      width: 100
+      width: '10%'
     },
     {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: 100
+      width: '20%'
     },
     {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
-      width: 150,
+      width: '10%',
       render: (_: object, record: BlogContentDTO) => (
         <Space size='middle'>
-          {/* <Button
-            name='look'
-            type='primary'
-            shape='circle'
-            icon={<SearchOutlined />}
-            // onClick={() => lookItem(record.key, record)}
-          /> */}
           <Button
+            size={btnSize}
             name='edit'
             type='primary'
             shape='circle'
@@ -131,7 +126,7 @@ const BlogList = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
+            <Button size={btnSize} name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
       )
@@ -153,6 +148,7 @@ const BlogList = () => {
   const [dataSource, setDataSource] = useState<BlogContentDTO[]>([])
   const [pageSize, setPageSize] = useState<number>(10)
   const [totalSize, setTotalSize] = useState<number>(0)
+  const { btnSize, tableSize } = useGlobalStyleStore()
 
   /**
    * 多选
@@ -287,25 +283,25 @@ const BlogList = () => {
               <Input placeholder='搜索关键字' />
             </Form.Item>
             <Form.Item>
-              <Button icon={<SearchOutlined />} type='primary' onClick={search} />
+              <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
             </Form.Item>
           </Flex>
         </Form>
         <Flex gap='small'>
-          <Button type='primary' onClick={createBlog}>
+          <Button size={btnSize} type='primary' onClick={createBlog}>
             {'创建博客'}
           </Button>
-          <Button type='primary' onClick={createBlog}>
+          <Button size={btnSize} type='primary' onClick={createBlog}>
             {'发布博客'}
           </Button>
-          <Button type='primary' danger onClick={deleteBlog}>
+          <Button size={btnSize} type='primary' danger onClick={deleteBlog}>
             {'删除'}
           </Button>
         </Flex>
         <div>
           <Table
             key={1}
-            style={{ width: '100%' }}
+            size={tableSize}
             rowSelection={{
               type: 'checkbox',
               ...rowSelection

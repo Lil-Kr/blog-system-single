@@ -13,12 +13,13 @@ import RoleAcl from './RoleAcl'
 import RoleUser from './RoleUser'
 import { useRoleAclStore } from '@/store/sys/roleStore'
 import { useMessage } from '@/components/message/MessageProvider'
-import { transformTypeToSeletor } from '@/utils/sys/treeUtils'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
 
 const Role = () => {
   const messageApi = useMessage()
   const MemoTooltip = Tooltip || React.memo(Tooltip)
-  const [roleStyle] = useState<SizeType>('small')
+  // const [roleStyle] = useState<SizeType>('small')
+  const { btnSize, tableSize } = useGlobalStyleStore()
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
   const { dictMap, dictStatues } = useDictDetailStore()
   const [tableLoading, setTableLoading] = useState<boolean>(true)
@@ -27,9 +28,6 @@ const Role = () => {
     pageSize: 10,
     totalSize: 0
   })
-
-  // 存储角色类型, 来自数据字典
-  // const [roleType, setRoleType] = useState<OptionType[]>([])
 
   /**
    * role-acl store
@@ -139,9 +137,9 @@ const Role = () => {
       valueType: 'option',
       width: '20%',
       render: (text, record, _, action) => [
-        <Space key={`edit-${record.key}`} size={roleStyle}>
+        <Flex key={`edit-${record.key}`} vertical={false} gap={4}>
           <Button
-            size={roleStyle}
+            size={btnSize}
             name='edit'
             type='link'
             shape='circle'
@@ -161,7 +159,7 @@ const Role = () => {
           >
             <Button size={'small'} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
-        </Space>
+        </Flex>
       ]
     }
   ]
@@ -307,10 +305,10 @@ const Role = () => {
           <Splitter.Panel defaultSize='30%' min='20%' max='60%'>
             <EditableProTable
               rowKey='key'
-              headerTitle='角色管理'
+              headerTitle={'角色管理'}
               rowSelection={{ type: 'radio', selectedRowKeys, ...rowSelection }}
               bordered={true}
-              size={roleStyle}
+              size={tableSize}
               loading={tableLoading}
               columns={roleColumns}
               value={roleList}

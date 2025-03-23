@@ -10,44 +10,47 @@ import Table, { ColumnsType } from 'antd/es/table'
 import { TableRowSelection } from 'antd/es/table/interface'
 import blogTopicApi from '@/apis/blog/topic'
 import { useMessage } from '@/components/message/MessageProvider'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
 
 const BlogTopic = () => {
-  const columns: ColumnsType<any> = [
+  const columnsBlogTopic: ColumnsType<any> = [
     {
       key: 'number',
       dataIndex: 'number',
       title: '编号',
-      width: 50
+      width: '20%'
     },
     {
       key: 'name',
       dataIndex: 'name',
       title: '主题名',
-      width: 100
+      width: '20%'
     },
     {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: 200
+      width: '40%'
     },
     {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
-      width: 150,
+      width: '20%',
       render: (_: object, record: TopicDTO) => (
         <Space size='middle'>
           <Button
+            size={btnSize}
             name='look'
-            type='primary'
+            type='link'
             shape='circle'
             icon={<SearchOutlined />}
             onClick={() => lookItem(record.key, record)}
           />
           <Button
+            size={btnSize}
             name='edit'
-            type='primary'
+            type='link'
             shape='circle'
             icon={<EditOutlined />}
             onClick={() => editItem(record.key, record)}
@@ -60,7 +63,7 @@ const BlogTopic = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
+            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
       )
@@ -79,12 +82,12 @@ const BlogTopic = () => {
   const messageApi = useMessage()
   const [form] = useForm()
   const [pageSize, setPageSize] = useState<number>(10)
-  const [btnSize] = useState<SizeType>('middle')
   const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
   const [rowKeys, setRowKeys] = useState<React.Key[]>([])
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [dataSource, setDataSource] = useState<TopicDTO[]>([])
   const [totalSize, setTotalSize] = useState<number>(0)
+  const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
 
   const rowSelection: TableRowSelection<TopicDTO> = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: TopicDTO[]) => {
@@ -285,14 +288,14 @@ const BlogTopic = () => {
       <Form form={form}>
         <Flex gap='small'>
           <Form.Item name={'keyWords'} label='搜索关键字'>
-            <Input placeholder='搜索关键字' />
+            <Input size={inputSize} placeholder='搜索关键字' />
           </Form.Item>
           <Form.Item>
-            <Button icon={<SearchOutlined />} type='primary' onClick={search} />
+            <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
           </Form.Item>
           <Form.Item>
-            <Button type='primary' onClick={resetSearch}>
-              置空
+            <Button size={btnSize} type='primary' onClick={resetSearch}>
+              {'重置'}
             </Button>
           </Form.Item>
         </Flex>
@@ -307,16 +310,17 @@ const BlogTopic = () => {
         </Button>
       </Flex>
 
-      <Flex className='blog-topic-table' gap='small'>
+      <div className='blog-topic-table-list'>
         <Table
           key={1}
-          style={{ width: '60%' }}
+          size={tableSize}
+          bordered={true}
           rowSelection={{
             type: selectionType,
             ...rowSelection
           }}
           loading={tableLoading}
-          columns={columns}
+          columns={columnsBlogTopic}
           dataSource={dataSource}
           pagination={{
             hideOnSinglePage: false, // only one pageSize then hidden Paginator
@@ -335,7 +339,7 @@ const BlogTopic = () => {
             getTopicPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
           }}
         />
-      </Flex>
+      </div>
     </Flex>
   )
 }

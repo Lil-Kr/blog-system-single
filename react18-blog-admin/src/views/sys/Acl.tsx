@@ -42,6 +42,7 @@ const { Title } = Typography
 import { useMessage } from '@/components/message/MessageProvider'
 import { Key } from 'antd/lib/table/interface'
 import { useAclModalStore, useAclModuleModalStore } from '@/store/sys/aclStore'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
 
 const Acl = () => {
   const columnAcl: ColumnsType<TableAclListType> = [
@@ -164,7 +165,7 @@ const Acl = () => {
       title: '操作',
       width: '5%',
       render: (_: object, record: TableAclListType) => (
-        <Space size={aclTableSize}>
+        <Space size={tableSize}>
           <Button
             size={btnSize}
             name='edit'
@@ -190,8 +191,7 @@ const Acl = () => {
 
   const messageApi = useMessage()
   const MemoTooltip = Tooltip || React.memo(Tooltip)
-  const [btnSize] = useState<SizeType>('small')
-  const [aclTableSize] = useState<SizeType>('small')
+  const { btnSize, tableSize } = useGlobalStyleStore()
   const [form] = useForm()
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
@@ -655,7 +655,7 @@ const Acl = () => {
                         </Form.Item>
                         <Form.Item>
                           <Button size={btnSize} type='primary' onClick={resetSearch}>
-                            {'置空'}
+                            {'重置'}
                           </Button>
                         </Form.Item>
                       </Flex>
@@ -666,7 +666,7 @@ const Acl = () => {
                 <div className='list'>
                   <Table<TableAclListType>
                     key={1}
-                    size={aclTableSize}
+                    size={tableSize}
                     title={() => <Title level={5}>{'权限点列表'}</Title>}
                     bordered={true}
                     rowSelection={{

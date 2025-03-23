@@ -1,5 +1,3 @@
-import exp from 'constants'
-
 /**
  *
  */
@@ -21,7 +19,7 @@ export const HOME_ROUTER_URL = '/admin/home'
 /**
  * =================== api base path ==================
  */
-export const PREFIX_BASE_URL = '/api'
+export const PREFIX_BASE_BACKEND_URL = import.meta.env.VITE_PREFIX_BASE_BACKEND_URL
 
 /**
  * blog-label

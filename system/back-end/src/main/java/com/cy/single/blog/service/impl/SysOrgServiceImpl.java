@@ -161,7 +161,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 			.id(before.getId())
 			.surrogateId(before.getSurrogateId())
 			.name(req.getName())
-			.parentId(req.getParentSurrogateId())// 上级组织id
+			.parentId(req.getParentSurrogateId()) // 上级组织id
 			.seq(req.getSeq())
 			.level(LevelUtil.calculateLevel(Objects.isNull(orgTemp) ? null : orgTemp.getLevel(), orgTemp.getId()))
 			.remark(req.getRemark())
@@ -214,7 +214,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 
 	@Override
 	public PageResult<SysOrgVO> pageOrgList(OrgPageReq req) {
-		req.setIsOrder(1);
+//		req.setIsOrder(1);
 		List<SysOrgVO> pageList = orgMapper.pageList(req);
 		Integer count = orgMapper.countByList(req);
 		if (CollectionUtils.isNotEmpty(pageList)) {

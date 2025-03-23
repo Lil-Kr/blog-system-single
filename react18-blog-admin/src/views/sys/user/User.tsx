@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { AntDesignOutlined, DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Card, Col, Flex, Row, Table, Tree } from 'antd/lib'
 import { Form, Input, PaginationProps, Popconfirm, Space, Tag, type TreeDataNode } from 'antd'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { TablePageInfoType } from '@/types/base'
 import { IModalRequestAction, IModalParams, IAction, IModalStyle } from '@/types/component/modal'
-import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { useForm } from 'antd/es/form/Form'
 import { transformOrgTreeExpandeKeys, transformToTreeData } from '@/utils/sys/treeUtils'
 import { UserListPageReq, UserTableType } from '@/types/apis/sys/user/userType'
@@ -14,6 +13,7 @@ import { orgApi, userApi } from '@/apis/sys'
 import { OptionType } from '@/types/apis'
 import { Key } from 'antd/lib/table/interface'
 import { AddUserButtonAcl, DelUserButtonAcl, EditUserButtonAcl } from './auth/authButton'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
 
 const User = () => {
   const userColumns: ColumnsType<any> = [
@@ -21,32 +21,32 @@ const User = () => {
       key: 'number',
       dataIndex: 'number',
       title: '编号',
-      width: 100
+      width: '10%'
     },
     {
       key: 'userName',
       dataIndex: 'userName',
       title: '昵称',
-      width: 100
+      width: '10%'
     },
     {
       key: 'orgName',
       dataIndex: 'orgName',
       title: '所属组织',
-      width: 50,
+      width: '10%',
       render: (_, record: UserTableType) => <Tag color='geekblue'>{record.orgName}</Tag>
     },
     {
       key: 'telephone',
       dataIndex: 'telephone',
       title: '联系方式',
-      width: 50
+      width: '10%'
     },
     {
       key: 'status',
       dataIndex: 'status',
       title: '状态',
-      width: 50,
+      width: '5%',
       render: (_, record: UserTableType) => {
         let tagColor = 'green' // 默认颜色
         let statusText = '正常' // 默认文本
@@ -77,31 +77,31 @@ const User = () => {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: 100
+      width: '15%'
     },
     {
       key: 'createTime',
       dataIndex: 'createTime',
       title: '创建时间',
-      width: 50
+      width: '10%'
     },
     {
       key: 'updateTime',
       dataIndex: 'updateTime',
       title: '修改时间',
-      width: 50
+      width: '10%'
     },
     {
       key: 'operatorName',
       dataIndex: 'operatorName',
       title: '操作人',
-      width: 50
+      width: '10%'
     },
     {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
-      width: 150,
+      width: '10%',
       render: (_: object, record: UserTableType) => (
         <Space size='middle'>
           <Button
@@ -143,8 +143,7 @@ const User = () => {
   ]
 
   const [form] = useForm()
-  const [btnSize] = useState<SizeType>('small')
-  const [userTableSize] = useState<SizeType>('small')
+  const { btnSize, tableSize } = useGlobalStyleStore()
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   // 函数式更新值, 不能直接更新
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
@@ -158,6 +157,14 @@ const User = () => {
   // 默认展开所有节点
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
   const [selectedInfo, setSelectedInfo] = useState<OptionType>({} as OptionType)
+
+  /**
+   * 初始化数据
+   */
+  useEffect(() => {
+    // load org info list
+    initInfo()
+  }, [])
 
   const userRef = useRef<{
     open: (
@@ -280,14 +287,6 @@ const User = () => {
     onSelect: (record, selected, selectedRows) => {},
     onSelectAll: (selected, selectedRows, changeRows) => {}
   }
-
-  /**
-   * 初始化数据
-   */
-  useEffect(() => {
-    // load org info list
-    initInfo()
-  }, [])
 
   /**
    * init
@@ -437,12 +436,7 @@ const User = () => {
                         </Form.Item>
                         <Form.Item>
                           <Button size={btnSize} type='primary' onClick={resetSearch}>
-                            {'置空'}
-                          </Button>
-                        </Form.Item>
-                        <Form.Item>
-                          <Button type='dashed' size={btnSize} icon={<AntDesignOutlined />} onClick={resetSearch}>
-                            {'全部'}
+                            {'重置'}
                           </Button>
                         </Form.Item>
                       </Flex>
@@ -453,7 +447,7 @@ const User = () => {
                 <div className='list'>
                   <Table
                     key={1}
-                    size={userTableSize}
+                    size={tableSize}
                     bordered={true}
                     title={() => '管理员列表'}
                     rowSelection={{

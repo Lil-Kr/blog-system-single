@@ -1,54 +1,57 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Flex, Form, Input, Pagination, PaginationProps, Popconfirm, Space, Table, message } from 'antd'
+import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { BlogCategoryPageReqParams, BlogCategoryReqParams, CategoryDTO } from '@/types/apis/blog/category'
+import { BlogCategoryPageReqParams, CategoryDTO } from '@/types/apis/blog/category'
 import { BaseModal } from '@/components/modal'
 import { useMessage } from '@/components/message/MessageProvider'
 
 // api
 import blogCategoryApi from '@/apis/blog/category'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
 
 const BlogCategory = () => {
-  const columns: ColumnsType<any> = [
+  const columnsBlogCategory: ColumnsType<any> = [
     {
       key: 'number',
       dataIndex: 'number',
       title: '编号',
-      width: 50
+      width: '10%'
     },
     {
       key: 'name',
       dataIndex: 'name',
       title: '分类名',
-      width: 100
+      width: '20%'
     },
     {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: 200
+      width: '50%'
     },
     {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
-      width: 150,
+      width: '20%',
       render: (_: object, record: CategoryDTO) => (
         <Space size='middle'>
           <Button
+            size={btnSize}
             name='look'
-            type='primary'
+            type='link'
             shape='circle'
             icon={<SearchOutlined />}
             onClick={() => lookItem(record.key, record)}
           />
           <Button
+            size={btnSize}
             name='edit'
-            type='primary'
+            type='link'
             shape='circle'
             icon={<EditOutlined />}
             onClick={() => editItem(record.key, record)}
@@ -61,7 +64,7 @@ const BlogCategory = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
+            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
       )
@@ -70,7 +73,6 @@ const BlogCategory = () => {
 
   const messageApi = useMessage()
   const [form] = useForm()
-  // const labelRef = useRef<{ open: (type: IAction, data?: TypeDTO) => void }>()
   const typeRef = useRef<{
     open: (
       requestParams: IModalRequestAction,
@@ -81,13 +83,13 @@ const BlogCategory = () => {
       data?: any
     ) => void
   }>()
-  const [btnSize] = useState<SizeType>('middle')
   const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
   const [rowKeys, setRowKeys] = useState<React.Key[]>([])
   const [dataSource, setDataSource] = useState<CategoryDTO[]>([])
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [pageSize, setPageSize] = useState<number>(10)
   const [totalSize, setTotalSize] = useState<number>(0)
+  const { btnSize, tableSize } = useGlobalStyleStore()
 
   /**
    * 删除确认提示
@@ -308,11 +310,11 @@ const BlogCategory = () => {
               <Input placeholder='搜索关键字' />
             </Form.Item>
             <Form.Item>
-              <Button icon={<SearchOutlined />} type='primary' onClick={search} />
+              <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
             </Form.Item>
             <Form.Item>
-              <Button type='primary' onClick={resetSearch}>
-                置空
+              <Button size={btnSize} type='primary' onClick={resetSearch}>
+                {'重置'}
               </Button>
             </Form.Item>
           </Flex>
@@ -321,10 +323,10 @@ const BlogCategory = () => {
         <div className='operation-btn'>
           <Flex gap='small'>
             <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createType}>
-              {'创建分类'}
+              {'添加'}
             </Button>
             <Button size={btnSize} type='primary' icon={<DeleteOutlined />} danger onClick={deleteBatch}>
-              {'删除分类'}
+              {'删除'}
             </Button>
           </Flex>
         </div>
@@ -332,13 +334,14 @@ const BlogCategory = () => {
         <div className='list'>
           <Table
             key={1}
-            style={{ width: '40%' }}
+            size={tableSize}
+            bordered={true}
             rowSelection={{
               type: selectionType,
               ...rowSelection
             }}
             loading={tableLoading}
-            columns={columns}
+            columns={columnsBlogCategory}
             dataSource={dataSource}
             pagination={{
               hideOnSinglePage: false, // only one pageSize then hidden Paginator

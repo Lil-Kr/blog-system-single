@@ -109,7 +109,7 @@ public class OrgController {
 	}
 
 	/**
-	 *
+	 * 分页获取子组织信息
 	 * @return
 	 */
 	@RecordLogger

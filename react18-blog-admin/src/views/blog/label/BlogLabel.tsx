@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Flex, Form, Input, Pagination, PaginationProps, Popconfirm, Space, Table, Tag, message } from 'antd'
-import { SizeType } from 'antd/es/config-provider/SizeContext'
+import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table, Tag } from 'antd'
 import { LabelDTO, LabelReqParams } from '@/types/apis/blog/label'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
@@ -11,20 +10,32 @@ import { useMessage } from '@/components/message/MessageProvider'
 
 // api
 import blogLabelApi from '@/apis/blog/label'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
 
 const BlogLabel = () => {
-  const columns: ColumnsType<any> = [
+  const messageApi = useMessage()
+  const [form] = useForm()
+  const labelRef = useRef<{ open: (type: IAction, data?: LabelDTO) => void }>()
+  const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
+  const [rowKeys, setRowKeys] = useState<React.Key[]>([])
+  const [dataSource, setDataSource] = useState<LabelDTO[]>([])
+  const [tableLoading, setTableLoading] = useState<boolean>(false)
+  const [pageSize, setPageSize] = useState<number>(5)
+  const [totalSize, setTotalSize] = useState<number>(0)
+  const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
+
+  const columnsLable: ColumnsType<any> = [
     {
       key: 'number',
       dataIndex: 'number',
       title: '编号',
-      width: 100
+      width: '10%'
     },
     {
       key: 'name',
       dataIndex: 'name',
       title: '标签名',
-      width: 100,
+      width: '30%',
       render: (_, record: LabelDTO) => (
         <>
           <Tag key={record.key} color={record.color}>
@@ -37,7 +48,7 @@ const BlogLabel = () => {
       key: 'colorText',
       dataIndex: 'colorText',
       title: '展示颜色',
-      width: 100,
+      width: '20%',
       render: (_, record: LabelDTO) => (
         <Tag key={record.key} color={record.colorText}>
           {record.name}
@@ -48,25 +59,27 @@ const BlogLabel = () => {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: 200
+      width: '20%'
     },
     {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
-      width: 150,
+      width: '20%',
       render: (_: object, record: LabelDTO) => (
         <Space size='middle'>
           <Button
+            size={btnSize}
             name='look'
-            type='primary'
+            type='link'
             shape='circle'
             icon={<SearchOutlined />}
             onClick={() => lookItem(record.key, record)}
           />
           <Button
+            size={btnSize}
             name='edit'
-            type='primary'
+            type='link'
             shape='circle'
             icon={<EditOutlined />}
             onClick={() => editItem(record.key, record)}
@@ -79,23 +92,12 @@ const BlogLabel = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
+            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
       )
     }
   ]
-
-  const messageApi = useMessage()
-  const [form] = useForm()
-  const labelRef = useRef<{ open: (type: IAction, data?: LabelDTO) => void }>()
-  const [btnSize] = useState<SizeType>('middle')
-  const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
-  const [rowKeys, setRowKeys] = useState<React.Key[]>([])
-  const [dataSource, setDataSource] = useState<LabelDTO[]>([])
-  const [tableLoading, setTableLoading] = useState<boolean>(false)
-  const [pageSize, setPageSize] = useState<number>(5)
-  const [totalSize, setTotalSize] = useState<number>(0)
 
   /**
    * 删除确认提示
@@ -226,10 +228,10 @@ const BlogLabel = () => {
         <Form form={form}>
           <Flex gap='small'>
             <Form.Item name={'keyWord'} label='搜索关键字'>
-              <Input placeholder='搜索关键字' />
+              <Input size={inputSize} placeholder='搜索关键字' />
             </Form.Item>
             <Form.Item>
-              <Button icon={<SearchOutlined />} type='primary' onClick={search} />
+              <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
             </Form.Item>
           </Flex>
         </Form>
@@ -246,13 +248,14 @@ const BlogLabel = () => {
         <Flex className='list' gap='middle' vertical={true}>
           <Table
             key={1}
-            style={{ width: '60%' }}
+            size={tableSize}
+            bordered={true}
             rowSelection={{
               type: selectionType,
               ...rowSelection
             }}
             loading={tableLoading}
-            columns={columns}
+            columns={columnsLable}
             dataSource={dataSource}
             pagination={{
               hideOnSinglePage: false, // only one pageSize then hidden Paginator

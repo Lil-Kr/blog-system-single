@@ -7,6 +7,7 @@ import { SizeType } from 'antd/lib/config-provider/SizeContext'
 // css
 import 'md-editor-rt/lib/style.css'
 import 'md-editor-rt/lib/preview.css'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
 
 // 博客标签
 const blogLableOptions = [
@@ -89,7 +90,7 @@ const BlogPublish = () => {
   const [text, setText] = useState('# 请输入标题')
   const [html, setHtml] = useState('')
   const [loading, setLoading] = useState<boolean>(false)
-  const [btnSize, setBntSize] = useState<SizeType>('middle')
+  const { btnSize } = useGlobalStyleStore()
   const [id, setId] = useState('preview-only')
 
   // const [toolbar, setToolbar] = useState<EditorProps>({
@@ -101,20 +102,17 @@ const BlogPublish = () => {
    * 文章分类搜索
    * @param v
    */
-  const blogTypeFunc = (v: string) => {
-  }
+  const blogTypeFunc = (v: string) => {}
 
   /**
    * save
    * @param v
    */
-  const onFinish = (html: string) => {
-  }
+  const onFinish = (html: string) => {}
   /**
    * onFinishFailed
    */
-  const onFinishFailed = (errorInfo: any) => {
-  }
+  const onFinishFailed = (errorInfo: any) => {}
 
   return (
     <div>

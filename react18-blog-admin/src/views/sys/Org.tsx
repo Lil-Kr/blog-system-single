@@ -20,7 +20,6 @@ import { useForm } from 'antd/lib/form/Form'
 import { Key, TableRowSelection } from 'antd/lib/table/interface'
 import { OrgTableType, SysOrgPageReq } from '@/types/apis/sys/org/orgType'
 import { ColumnsType } from 'antd/es/table'
-import { IAction, IModalParams, IModalRequestAction, IModalStyle } from '@/types/component/modal'
 import OrgModal from '@/components/modal/OrgModal'
 import { transformOrgTreeExpandeKeys, transformToTreeData } from '@/utils/sys/treeUtils'
 import { orgApi } from '@/apis/sys'
@@ -177,16 +176,6 @@ const Org = () => {
 
   const { setOrgModalState } = useOrgModalStore()
 
-  const orgRef = useRef<{
-    open: (
-      requestParams: IModalRequestAction,
-      params: IModalParams,
-      type: IAction,
-      modalStyle: IModalStyle,
-      data?: OrgTableType
-    ) => void
-  }>()
-
   /**
    * 初始化数据
    */
@@ -274,7 +263,7 @@ const Org = () => {
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
-    const { code, data, msg } = orgList
+    const { code, data } = orgList
     if (code !== 200) {
       return
     }
@@ -324,7 +313,7 @@ const Org = () => {
   const editItem = async (key: string, record: OrgTableType) => {
     const req: OrgTableType = {
       orgInfo: {
-        label: record.parentName,
+        label: record.parentName ? record.parentName : '-',
         value: record.parentId
       },
       ...record
@@ -332,7 +321,7 @@ const Org = () => {
 
     let orgSelectorInfo: OptionType[] = []
     const res = await orgApi.orgAllList({ status: 0 })
-    const { code, data, msg } = res
+    const { code, data } = res
     if (code !== 200) {
       orgSelectorInfo = []
     } else {
@@ -346,7 +335,7 @@ const Org = () => {
       modalStyle: { maxWidth: '40vw' },
       inputDisabled: false,
       req: req,
-      orgSelectorInfo: []
+      orgSelectorInfo: orgSelectorInfo
     })
   }
 
@@ -376,6 +365,11 @@ const Org = () => {
     })
   }
 
+  /**
+   * 删除按钮
+   * @param record
+   * @returns
+   */
   const deleteItemConfirm = async (record: OrgTableType) => {
     const res = await orgApi.delete({ surrogateId: record.key?.toString() ?? '' })
     if (res.code !== 200) {
@@ -412,7 +406,7 @@ const Org = () => {
   }
 
   /**
-   * 表格为checkbox时启用
+   * 表格为 checkbox 时启用
    */
   const rowSelection: TableRowSelection<OrgTableType> = {
     onChange: (selectedRowKeys, selectedRows) => {},
@@ -420,6 +414,10 @@ const Org = () => {
     onSelectAll: (selected, selectedRows, changeRows) => {}
   }
 
+  /**
+   * 展开树节点
+   * @param key
+   */
   const handleExpand = (key: Key[]) => {
     setExpandedKeys(key)
   }
@@ -470,12 +468,7 @@ const Org = () => {
                         </Form.Item>
                         <Form.Item>
                           <Button size={btnSize} type='primary' onClick={resetSearch}>
-                            {'置空'}
-                          </Button>
-                        </Form.Item>
-                        <Form.Item>
-                          <Button type='dashed' size={btnSize} icon={<AntDesignOutlined />} onClick={resetSearch}>
-                            {'全部'}
+                            {'重置'}
                           </Button>
                         </Form.Item>
                       </Flex>
@@ -513,7 +506,6 @@ const Org = () => {
           </Col>
         </Row>
         <OrgModal
-          mRef={orgRef}
           update={() => {
             initInfo()
           }}

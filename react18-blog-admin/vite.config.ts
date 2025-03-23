@@ -3,11 +3,15 @@ import { defineConfig, ConfigEnv } from 'vite'
 // 引入三个环境配置文件
 import ViteBaseConfig from './environment/vite.base.config'
 import ViteDevConfig from './environment/vite.dev.config'
+import ViteTestConfig from './environment/vite.test.config'
 import ViteProdConfig from './environment/vite.prod.config'
 
 const envResolver = {
   serve: () => {
     return { ...ViteBaseConfig, ...ViteDevConfig }
+  },
+  test: () => {
+    return { ...ViteBaseConfig, ...ViteTestConfig }
   },
   build: () => {
     return { ...ViteBaseConfig, ...ViteProdConfig }
@@ -15,5 +19,6 @@ const envResolver = {
 }
 
 export default defineConfig(({ command }: ConfigEnv) => {
+  console.log(`🚀 当前 Vite 运行模式: ${command}`)
   return envResolver[command]()
 })

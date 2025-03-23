@@ -1,14 +1,13 @@
-import { PREFIX_BASE_URL } from '@/config'
+import { PREFIX_BASE_BACKEND_URL } from '@/config'
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import { getGlobalMessage } from '@/components/message/MessageProvider'
 import { useTokenStore } from '@/store/login'
-// import { useNavigate } from 'oh-router-react'
 
 const AUTO_LOGOUT_TIME = 2 * 60 * 60 * 1000 // 2 hour
 
 // 创建axios实例
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: PREFIX_BASE_URL,
+  baseURL: PREFIX_BASE_BACKEND_URL,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json'
