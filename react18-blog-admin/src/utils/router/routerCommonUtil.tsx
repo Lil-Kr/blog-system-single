@@ -57,7 +57,7 @@ const getRouterItems = (routerConfig: RouterItemType[]): RouterItemType[] => {
       mainRouter.element = layout
 
       // handle have children node case
-      const itemRouter = deepLoopRouterChildren(children, key, [])
+      const itemRouter = deepLoopRouterChildren(children, key!, [])
       mainRouter.children = itemRouter
       routeInfo.push(mainRouter)
     }

@@ -4,7 +4,7 @@ import { BlogContenType } from '@/types/entity/blog'
 import { useForm } from 'antd/es/form/Form'
 import { BaseModal, FullScreenModal } from '@/components/modal'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import labelApi from '@/apis/blog/label'
+import labelApi from '@/apis/blog/label/labelApi'
 
 const ModalTest = () => {
   const [baseModalTestForm] = useForm()

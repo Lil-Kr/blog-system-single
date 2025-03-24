@@ -143,7 +143,7 @@ const User = () => {
   ]
 
   const [form] = useForm()
-  const { btnSize, tableSize } = useGlobalStyleStore()
+  const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   // 函数式更新值, 不能直接更新
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
@@ -427,9 +427,9 @@ const User = () => {
                       onClick={createUser}
                     />
                     <Form form={form}>
-                      <Flex gap='small'>
+                      <Flex gap={8}>
                         <Form.Item name={'keyWords'} label={'搜索关键字'}>
-                          <Input placeholder={'搜索关键字'} />
+                          <Input style={{ width: '10vw' }} size={inputSize} placeholder={'搜索关键字'} />
                         </Form.Item>
                         <Form.Item>
                           <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />

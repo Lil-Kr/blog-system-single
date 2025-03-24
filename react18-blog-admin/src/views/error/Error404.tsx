@@ -3,17 +3,12 @@ import { useTokenStore } from '@/store/login'
 import { Button, Result } from 'antd'
 import { useNavigate } from 'oh-router-react'
 import { useMenuStore, useTabsStore } from '@/store/global'
+import { resetPermissionRouters } from '@/router/dynamicRoutes'
 
 const Error404 = () => {
-  const { clearToken } = useTokenStore()
   const navigateTo = useNavigate()
-  const { restMenuState } = useMenuStore()
-  const { resetTabs } = useTabsStore()
-
   const backLoginPage = () => {
-    clearToken()
-    restMenuState()
-    resetTabs()
+    resetPermissionRouters()
     navigateTo('/login')
   }
 

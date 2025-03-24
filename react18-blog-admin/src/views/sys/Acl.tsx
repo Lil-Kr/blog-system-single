@@ -20,6 +20,7 @@ import {
   TreeDataNode,
   Typography
 } from 'antd/lib'
+const { Title } = Typography
 import { TablePageInfoType } from '@/types/base'
 import { aclApi, aclModuleApi } from '@/apis/sys'
 import { transformAclModuleTreeExpandeKeys, transformToAclModuleTreeData } from '@/utils/sys/treeUtils'
@@ -32,13 +33,12 @@ import {
   TableAclListType
 } from '@/types/apis/sys/acl/aclType'
 import { SelectOptionType, SelectTreeNodeType } from '@/types/apis'
-import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { TableRowSelection } from 'antd/es/table/interface'
 import { ColumnsType } from 'antd/lib/table'
 import AclModal from '@/components/modal/AclModal'
 import { useForm } from 'antd/lib/form/Form'
-import { useAclModuleStore, useDictDetailStore } from '@/store/global/initDictStore'
-const { Title } = Typography
+import { useAclModuleStore } from '@/store/global/initDictStore'
+import { useDictDetailStore } from '@/store/sys/dictStore'
 import { useMessage } from '@/components/message/MessageProvider'
 import { Key } from 'antd/lib/table/interface'
 import { useAclModalStore, useAclModuleModalStore } from '@/store/sys/aclStore'

@@ -8,37 +8,18 @@ import enUS from 'antd/lib/locale/en_US'
 import { useSystemStore } from './store/global'
 import MessageProvider from '@/components/message/MessageProvider'
 import { getBrowserLang } from './utils/common'
-import { dynamicRoutes } from './router/dynamicRoutes'
 import { Spin } from 'antd/lib'
-import useLoadingStore from './store/global/loadingStore'
+import { resetPermissionRouters, rootRouterConfig } from '@/router/dynamicRoutes'
+import { useTokenStore } from './store/login'
+import { useAdminLoginStore } from './store/sys/adminStore'
+import { userApi } from './apis/sys'
+import { SysUser } from './types/apis/sys/user/userType'
 
 function App() {
   const { language, assemblySize, setLanguage } = useSystemStore()
   const [i18nLocale, setI18nLocale] = useState(zhCN)
-  const { rootRouterConfig } = dynamicRoutes()
-  const { loginLoading } = useLoadingStore()
-  // const [rootConfig, setRootConfig] = useState<RouterItemType[]>([])
-  // const breadcrumbMap: Map<string, BreadcrumbType[]> = getBreadCrumbItems(rootConfig)
-  // const { rootRouterConfig } = useRouterStore()
-  // const { menuItems, tabMap } = useMenuTreeStore()
-  // const { menuTree, loading } = useMenu()
-  // console.log('--> rootRouterConfig:', rootRouterConfig.getRoutes())
-  // const { rootRouterConfig } = dynamicRoutes()
-
-  // useEffect(() => {
-  //   const fetchDictList = async () => {
-  //     try {
-  //       // 全局使用国际化
-  //       // i18n.changeLanguage(language || getBrowserLang())
-  //       // i18n.changeLanguage(getBrowserLang())
-  //       setLanguage(language || getBrowserLang())
-  //       setAntdLanguage()
-  //     } catch (error) {
-  //       console.log('--> error:', JSON.stringify(error))
-  //     }
-  //   }
-  //   fetchDictList()
-  // }, [language])
+  const { token } = useTokenStore()
+  const { setAdmin } = useAdminLoginStore()
 
   /**
    * 全局使用主题
@@ -55,6 +36,46 @@ function App() {
     if (language && language == 'en') return setI18nLocale(enUS)
     if (getBrowserLang() == 'zh') return setI18nLocale(zhCN)
     if (getBrowserLang() == 'en') return setI18nLocale(enUS)
+  }
+
+  useEffect(() => {
+    if (token && token !== '') {
+      initPermissionData()
+    }
+
+    const fetchDictList = () => {
+      try {
+        // 全局使用国际化
+        // i18n.changeLanguage(language || getBrowserLang())
+        // i18n.changeLanguage(getBrowserLang())
+        setLanguage(language || getBrowserLang())
+        setAntdLanguage()
+      } catch (error) {
+        console.log('--> error:', JSON.stringify(error))
+      }
+    }
+    fetchDictList()
+  }, [language, token])
+
+  /**
+   * 初始化路由权限配置 用户权限信息
+   */
+  const initPermissionData = async () => {
+    resetPermissionRouters(token)
+    const admin = await retrieveAdmin()
+    setAdmin(admin)
+  }
+
+  /**
+   * 获取用户信息
+   */
+  const retrieveAdmin = async (): Promise<SysUser> => {
+    const res = await userApi.get()
+    const { code, data } = res
+    if (code !== 200) {
+      return {} as SysUser
+    }
+    return data
   }
 
   return (
@@ -79,21 +100,22 @@ function App() {
         }}
       >
         <MessageProvider>
-          {loginLoading ? (
-            <div
-              style={{
-                height: '100vh',
-                width: '100vw',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <Spin size='large' />
-            </div>
-          ) : (
-            <RouterView router={rootRouterConfig} />
-          )}
+          <RouterView
+            router={rootRouterConfig}
+            splash={
+              <div
+                style={{
+                  height: '100vh',
+                  width: '100vw',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <Spin size='large' />
+              </div>
+            }
+          />
         </MessageProvider>
       </ConfigProvider>
     </>

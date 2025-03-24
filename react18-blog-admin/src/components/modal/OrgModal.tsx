@@ -4,8 +4,8 @@ import { Modal, Form, Input, InputNumber, Select } from 'antd/lib'
 const { TextArea } = Input
 import { OptionType } from '@/types/apis'
 import { useOrgModalStore } from '@/store/sys/orgStore'
-import { useDictDetailStore } from '@/store/global/initDictStore'
 import { SysOrgEditReq, SysOrgSaveReq } from '@/types/apis/sys/org/orgType'
+import { useDictDetailStore } from '@/store/sys/dictStore'
 
 const OrgModal = (props: ModalType.CustomModal) => {
   const { update } = props

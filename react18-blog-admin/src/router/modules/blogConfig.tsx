@@ -16,7 +16,7 @@ const blogConfig: RouterItemType[] = [
       {
         meta: { key: 'blog-index', title: 'blog-index' },
         index: true,
-        element: LazyLoad(lazy(() => import('@/views/blog/publish/BlogList')))
+        element: LazyLoad(lazy(() => import('@/views/blog/blogContent/BlogList')))
       },
       {
         meta: {
@@ -26,7 +26,7 @@ const blogConfig: RouterItemType[] = [
           icon: <UnorderedListOutlined />
         },
         path: '/admin/blog/index',
-        element: LazyLoad(lazy(() => import('@/views/blog/publish/BlogList')))
+        element: LazyLoad(lazy(() => import('@/views/blog/blogContent/BlogList')))
       },
       {
         meta: {
@@ -36,7 +36,7 @@ const blogConfig: RouterItemType[] = [
           icon: <TagsOutlined />
         },
         path: '/admin/blog/label',
-        element: LazyLoad(lazy(() => import('@/views/blog//label/BlogLabel')))
+        element: LazyLoad(lazy(() => import('@/views/blog/label/Label')))
       },
       {
         meta: {

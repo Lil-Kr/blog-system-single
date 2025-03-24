@@ -18,7 +18,7 @@ interface PermissionsAction {
   setMenuTree: (menutree: MenuTreeType[]) => void
   setMenuItems: (menuItems: MenuItemType[]) => void
   setTabMap: (tabMap: Map<string, TabType>) => void
-  setBtnSignSet: (btnSignList: string[]) => void
+  setBtnSign: (btnSignList: string[]) => void
 }
 
 const initMenuState = {
@@ -49,7 +49,7 @@ const usePermissionsStore = create<PermissionsAction & PermissionsState>()(set =
         tabMap: tabMap
       }
     }),
-  setBtnSignSet: (btnSignList: string[]) =>
+    setBtnSign: (btnSignList: string[]) =>
     set(state => {
       return {
         ...state,

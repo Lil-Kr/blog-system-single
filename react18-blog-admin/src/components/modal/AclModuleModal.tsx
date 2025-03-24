@@ -4,9 +4,10 @@ import { Modal, Form, Input, InputNumber, Select } from 'antd/lib'
 const { TextArea } = Input
 import { OptionType } from '@/types/apis'
 import { AclModuleAddReq, AclModuleEditReq } from '@/types/apis/sys/acl/aclType'
-import { useAclModuleStore, useDictDetailStore } from '@/store/global/initDictStore'
+import { useAclModuleStore } from '@/store/global/initDictStore'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useAclModuleModalStore } from '@/store/sys/aclStore'
+import { useDictDetailStore } from '@/store/sys/dictStore'
 
 const AclModuleModal = (props: ModalType.CustomModal) => {
   const { update } = props

@@ -24,8 +24,8 @@ import { EventEmitter, RouteMeta, RouteObject } from 'oh-router-shared'
  * oh-router
  */
 interface RouterMetaType extends RouteMeta {
-  key: string
-  title: string // 主框架页面 为空
+  key?: string
+  title?: string // 主框架页面 为空
   icon?: any
   layout?: boolean
 }

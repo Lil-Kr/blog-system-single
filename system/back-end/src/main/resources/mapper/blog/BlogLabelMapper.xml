@@ -9,18 +9,17 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,surrogate_id, `number`, `name`, color, color_text, `status`, remark, deleted, creator_id,operator,create_time,update_time
+        id,surrogate_id, `number`, `name`, color, color_text, `status`, remark, deleted, creator_id, operator, create_time, update_time
     </sql>
-
 
     <update id="editBySurrogateId">
         update <include refid="Table_Name" />
         <set>
             <if test="param.number != null and param.number != ''">
-                number = #{param.number},
+                `number` = #{param.number},
             </if>
             <if test="param.name != null and param.name != ''">
-                name = #{param.name},
+                `name` = #{param.name},
             </if>
             <if test="param.color != null and param.color != ''">
                 color = #{param.color},
@@ -31,8 +30,8 @@
             <if test="param.remark != null and param.remark != ''">
                 remark = #{param.remark},
             </if>
-            <if test="param.modifierId != null and param.modifierId != ''">
-                operator = #{param.modifierId},
+            <if test="param.operator != null and param.operator != ''">
+                operator = #{param.operator},
             </if>
             <if test="param.updateTime != null">
                 update_time = #{param.updateTime},

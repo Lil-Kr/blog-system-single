@@ -11,31 +11,33 @@ import { useForm } from 'antd/es/form/Form'
 import blogContentApi, {
   BlogContent,
   BlogContentDTO,
-  BlogContentReqParams,
+  BlogContentReqReq,
+  BlogContentVO,
   MappedBlogContentDTO
-} from '@/apis/blog/content'
+} from '@/apis/blog/content/blogContentApi'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
+import { blogTransformToTable } from '@/utils/blog/blogTransform'
+import { useBlogStore } from '@/store/blog/blogStore'
 
 const BlogList = () => {
-  const columns: ColumnsType<any> = [
+  const columnsBlog: ColumnsType<BlogContentDTO> = [
     {
       key: 'title',
       dataIndex: 'title',
       title: '博客标题',
-      width: '10%',
-      render: (_: object, record: BlogContentDTO) => <Title level={5}>{record.title}</Title>
+      width: '10%'
     },
     {
       key: 'blogLabelList',
       dataIndex: 'blogLabelList',
       title: '博客标签',
-      width: '10%',
-      render: (_: object, record: BlogContentDTO) =>
-        record.blogLabelList.map((item, index) => (
-          <Tag key={item.surrogateId} color={item.color}>
-            {item.name}
-          </Tag>
-        ))
+      width: '10%'
+      // render: (_: object, record: BlogContentDTO) =>
+      //   record.blogLabelList.map((item, index) => (
+      //     <Tag key={item.surrogateId} color={item.color}>
+      //       {item.name}
+      //     </Tag>
+      //   ))
     },
     {
       key: 'categoryName',
@@ -109,11 +111,11 @@ const BlogList = () => {
       title: '操作',
       width: '10%',
       render: (_: object, record: BlogContentDTO) => (
-        <Space size='middle'>
+        <Flex vertical={false} gap={4}>
           <Button
             size={btnSize}
             name='edit'
-            type='primary'
+            type='link'
             shape='circle'
             icon={<EditOutlined />}
             onClick={() => editBlog(record.key as string, record)}
@@ -121,14 +123,13 @@ const BlogList = () => {
           <Popconfirm
             title='删除博客'
             description={`确定要删除 [${record.title}] 这篇博客吗?`}
-            // onConfirm={() => deleteItemConfirm(record)}
             onCancel={() => {}}
             okText='确定'
             cancelText='取消'
           >
-            <Button size={btnSize} name='delete' type='primary' shape='circle' danger icon={<DeleteOutlined />} />
+            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
-        </Space>
+        </Flex>
       )
     }
   ]
@@ -144,9 +145,8 @@ const BlogList = () => {
 
   const [form] = useForm()
   const [rowKeys, setRowKeys] = useState<React.Key[]>([])
-  const [tableLoading, setTableLoading] = useState<boolean>(false)
-  const [dataSource, setDataSource] = useState<BlogContentDTO[]>([])
-  const [pageSize, setPageSize] = useState<number>(10)
+  const { blogPageTableList, setBlogPageList } = useBlogStore()
+  const [pageSize, setPageSize] = useState<number>(20)
   const [totalSize, setTotalSize] = useState<number>(0)
   const { btnSize, tableSize } = useGlobalStyleStore()
 
@@ -214,54 +214,24 @@ const BlogList = () => {
    * 初始化数据
    */
   useEffect(() => {
-    getBlogContentPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
+    const initBolgContentData = async () => {
+      const bolgList = await getBlogContentPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
+      const blogs = blogTransformToTable(bolgList)
+      setBlogPageList(blogs)
+    }
+    initBolgContentData()
   }, [])
 
-  const getBlogContentPageList = async (params: BlogContentReqParams) => {
+  const getBlogContentPageList = async (req: BlogContentReqReq): Promise<BlogContentVO[]> => {
     const values = form.getFieldsValue()
-    const blogContent = await blogContentApi.getBlogContentPageList({ ...params, ...values })
+    const blogContent = await blogContentApi.getBlogContentPageList({ ...req, ...values })
     const { code, data, msg } = blogContent
-    if (code === 200) {
-      const dataMapping = data.list.map(
-        ({
-          surrogateId,
-          title,
-          introduction,
-          original,
-          recommend,
-          imgUrl,
-          status,
-          publishTime,
-          remark,
-          blogLabelList,
-          blogCategoryVO,
-          blogTopicVO
-        }) => ({
-          key: surrogateId,
-          title,
-          introduction,
-          original,
-          recommend,
-          imgUrl,
-          status,
-          publishTime,
-          remark,
-          categoryId: blogCategoryVO.surrogateId,
-          categoryName: blogCategoryVO.name,
-          topicId: blogTopicVO.surrogateId,
-          topicName: blogTopicVO.name,
-          blogLabelList: blogLabelList.map((item, index) => {
-            return {
-              ...item,
-              key: item.surrogateId
-            }
-          })
-        })
-      )
-      setDataSource(dataMapping)
-      setTotalSize(data.total)
-      setTableLoading(false)
+    if (code !== 200) {
+      return []
     }
+
+    setTotalSize(data.total)
+    return data.list
   }
 
   const getBlogContent = async (param: { blogId: string }): Promise<BlogContent> => {
@@ -298,17 +268,17 @@ const BlogList = () => {
             {'删除'}
           </Button>
         </Flex>
-        <div>
+        <div className='blog-table-wapper'>
           <Table
             key={1}
             size={tableSize}
+            bordered={true}
             rowSelection={{
               type: 'checkbox',
               ...rowSelection
             }}
-            loading={tableLoading}
-            columns={columns}
-            dataSource={dataSource}
+            columns={columnsBlog}
+            dataSource={blogPageTableList}
             pagination={{
               position: ['bottomLeft'],
               hideOnSinglePage: false, // only one pageSize then hidden Paginator

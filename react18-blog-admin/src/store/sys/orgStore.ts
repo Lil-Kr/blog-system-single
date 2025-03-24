@@ -29,12 +29,12 @@ interface OrgActions {
   setTableLoading: (tableLoading: boolean) => void
 }
 
-const initOrgData = {
+export const initOrgData = {
   orgTree: [],
   orgPageList: [],
   tablePageInfo: {
     currentPageNum: 1,
-    pageSize: 20,
+    pageSize: 10,
     totalSize: 0
   },
   expandedKeys: [],

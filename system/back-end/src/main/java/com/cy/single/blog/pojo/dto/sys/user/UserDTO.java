@@ -75,6 +75,7 @@ public class UserDTO {
 		SysUser build = SysUser.builder().build();
 		BeanUtils.copyProperties(req, build);
 
+		build.setToken(RequestHolder.getCurrentUser().getToken());
 		build.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
 		build.setUpdateTime(DateUtil.localDateTimeNow());
 		return build;

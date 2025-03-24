@@ -13,17 +13,17 @@ import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
  */
 public interface BlogLabelService {
 
-    PageResult<BlogLabelVO> pageList(BlogLabelPageReq req);
+	PageResult<BlogLabelVO> pageList(BlogLabelPageReq req);
 
-    PageResult<BlogLabelVO> list(BlogLabelListReq req);
+	PageResult<BlogLabelVO> list(BlogLabelListReq req);
 
-    ApiResp<String> save(BlogLabelReq req);
+	ApiResp<String> add(BlogLabelReq req);
 
-    ApiResp<String> edit(BlogLabelReq req);
+	ApiResp<String> edit(BlogLabelReq req);
 
-    ApiResp<String> delete(BlogLabelReq req);
+	ApiResp<String> delete(BlogLabelReq req);
 
-    ApiResp<String> deleteBatch(BlogLabelReq req);
+	ApiResp<String> deleteBatch(BlogLabelReq req);
 
 //    List<BlogLabelVO> getLabelNames(List<Long> labelIds);
 }

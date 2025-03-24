@@ -20,7 +20,7 @@ const getRouterMenuItems = (config: RouterItemType[]): MenuItemType[] => {
   for (const index in routerConfig) {
     const { meta, children } = routerConfig[index]
     const { key } = meta!
-    const res = handleMenu(children ?? [], key)
+    const res = handleMenu(children ?? [], key!)
     menuItems.push(...res)
   }
 

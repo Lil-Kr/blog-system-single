@@ -64,14 +64,15 @@ public class GlobalApiRequestAspect {
 			 */
 			SysUser user = getUserCache(token);
 			if (Objects.isNull(user)) {
-				 user = userMapper.getUserByToken(token);
+				user = userMapper.getUserByToken(token);
+
+				if (Objects.isNull(user)) {
+					log.error("The request {} try fake token", "ip");
+					throw new BusinessException(ReturnCodeEnum.NOT_LOGIN);
+				}
+				setUserCache(token, user);
 			}
 
-			if (Objects.isNull(user)) {
-				log.error("The request {} try fake token", "ip");
-				throw new BusinessException(ReturnCodeEnum.NOT_LOGIN);
-			}
-			setUserCache(token, user);
 
 			/**
 			 * record user info into ThreadLocal

@@ -1,14 +1,15 @@
 import { Middleware, MiddlewareContext } from 'oh-router'
 import { useRouterStore } from '@/store/router/routerStore'
 import { useTokenStore } from '@/store/login'
+import { usePermissionsStore } from '@/store/sys/authStore'
+import { rootRouterConfig } from '@/router/dynamicRoutes'
 
 /**
  * 使用全局状态管理
  * @returns
  */
-const getAuthData = () => {
+const getRouterData = () => {
   return {
-    rootRouterConfig: useRouterStore.getState().rootRouterConfig,
     token: useTokenStore.getState().token
   }
 }
@@ -24,7 +25,7 @@ class LoginCheckMiddleware extends Middleware {
    * @param next
    */
   async handler(ctx: MiddlewareContext<{}>, next: () => Promise<any>): Promise<void> {
-    const { token, rootRouterConfig } = getAuthData()
+    const { token } = getRouterData()
     /**
      * 对未登录时, 访问登录页做处理
      * 如果访问的是登录页, 在token有效时
@@ -59,5 +60,4 @@ class LoginCheckMiddleware extends Middleware {
   // }
 }
 
-const loginCheckMiddleware = new LoginCheckMiddleware()
-export { loginCheckMiddleware }
+export { LoginCheckMiddleware }

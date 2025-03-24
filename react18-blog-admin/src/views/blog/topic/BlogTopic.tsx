@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { BaseModal } from '@/components/modal'
-import { BlogTopicPageReqParams, BlogTopicReqParams, TopicDTO } from '@/types/apis/blog/topic'
+import { BlogTopicPageReqParams, TopicDTO } from '@/types/apis/blog/topic'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, message } from 'antd'
+import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { useForm } from 'antd/es/form/Form'
 import Table, { ColumnsType } from 'antd/es/table'
@@ -38,7 +38,7 @@ const BlogTopic = () => {
       title: '操作',
       width: '20%',
       render: (_: object, record: TopicDTO) => (
-        <Space size='middle'>
+        <Flex vertical={false} gap={4}>
           <Button
             size={btnSize}
             name='look'
@@ -65,7 +65,7 @@ const BlogTopic = () => {
           >
             <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
-        </Space>
+        </Flex>
       )
     }
   ]
@@ -85,7 +85,7 @@ const BlogTopic = () => {
   const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
   const [rowKeys, setRowKeys] = useState<React.Key[]>([])
   const [tableLoading, setTableLoading] = useState<boolean>(true)
-  const [dataSource, setDataSource] = useState<TopicDTO[]>([])
+  const [topicPageList, setTopicPageList] = useState<TopicDTO[]>([])
   const [totalSize, setTotalSize] = useState<number>(0)
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
 
@@ -156,7 +156,7 @@ const BlogTopic = () => {
         name,
         remark
       }))
-      setDataSource(datas)
+      setTopicPageList(datas)
       setTotalSize(data.total)
       setTableLoading(false)
     }
@@ -301,12 +301,12 @@ const BlogTopic = () => {
         </Flex>
       </Form>
 
-      <Flex className='blog-topic-operation' gap='small'>
+      <Flex className='blog-topic-operation' gap={4}>
         <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createTopic}>
-          创建
+          {'添加'}
         </Button>
         <Button size={btnSize} type='primary' icon={<DeleteOutlined />} danger>
-          删除
+          {'删除'}
         </Button>
       </Flex>
 
@@ -321,7 +321,7 @@ const BlogTopic = () => {
           }}
           loading={tableLoading}
           columns={columnsBlogTopic}
-          dataSource={dataSource}
+          dataSource={topicPageList}
           pagination={{
             hideOnSinglePage: false, // only one pageSize then hidden Paginator
             pageSizeOptions: [10, 20, 50], // specify how many items can be displayed on each page

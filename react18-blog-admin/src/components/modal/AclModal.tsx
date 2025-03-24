@@ -5,7 +5,8 @@ import { Form, Input, InputNumber, Modal, Select } from 'antd/lib'
 const { TextArea } = Input
 import { AclAddReq, AclEditReq, CallBackType } from '@/types/apis/sys/acl/aclType'
 import { DictMapType } from '@/types/apis/sys/dict/dictType'
-import { useAclModuleStore, useDictDetailStore } from '@/store/global/initDictStore'
+import { useAclModuleStore } from '@/store/global/initDictStore'
+import { useDictDetailStore } from '@/store/sys/dictStore'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useAclModalStore } from '@/store/sys/aclStore'
 
@@ -223,10 +224,12 @@ const AclModal = (props: ModalType.CustomModal) => {
       aclTypeInfo
     )
 
-    if (aclTypeInfo.value === '1') { // 菜单类型
+    if (aclTypeInfo.value === '1') {
+      // 菜单类型
       setIsMenu(true)
       setIsBtn(false)
-    } else if (aclTypeInfo.value === '2') { // 按钮类型
+    } else if (aclTypeInfo.value === '2') {
+      // 按钮类型
       setIsMenu(false)
       setIsBtn(true)
       if (action === 'create') {
@@ -235,7 +238,8 @@ const AclModal = (props: ModalType.CustomModal) => {
           menuUrl: ''
         })
       }
-    } else { // 其他
+    } else {
+      // 其他
       setIsMenu(false)
       setIsBtn(false)
     }

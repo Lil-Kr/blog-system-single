@@ -90,6 +90,31 @@ const useTabsStore = create<GlobalTabsState>()(
 
 export { useTabsStore }
 
+/** ========================== 登录成功后的loading ========================== **/
+
+interface LoginLoadingState {
+  loginLoading: boolean
+}
+
+interface LoginLoadingAction {
+  setLoginLoading: (load: boolean) => void
+}
+
+const initLoginLoading = {
+  loginLoading: false
+}
+
+const useLoadingStore = create<LoginLoadingState & LoginLoadingAction>(set => ({
+  ...initLoginLoading,
+  setLoginLoading: (load: boolean) =>
+    set(state => ({
+      ...state,
+      load
+    }))
+}))
+
+export { useLoadingStore }
+
 /** ================================== 全局样式 ================================== **/
 
 interface GlobalStyleState {

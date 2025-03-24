@@ -8,12 +8,12 @@ import { TablePageInfoType } from '@/types/base'
 import { RoleAddReq, RoleEditReq, RoleListPageReq, SysRoleVO, TableRoleType } from '@/types/apis/sys/role/roleType'
 import roleApi from '@/apis/sys/roleApi'
 import { EditableProTable, ProColumns } from '@ant-design/pro-components'
-import { useDictDetailStore } from '@/store/global/initDictStore'
 import RoleAcl from './RoleAcl'
 import RoleUser from './RoleUser'
 import { useRoleAclStore } from '@/store/sys/roleStore'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
+import { useDictDetailStore } from '@/store/sys/dictStore'
 
 const Role = () => {
   const messageApi = useMessage()

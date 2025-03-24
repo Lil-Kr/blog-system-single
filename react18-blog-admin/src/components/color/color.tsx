@@ -1,5 +1,4 @@
 import { Tag } from 'antd'
-import exp from 'constants'
 
 const colors = [
   'primary',
@@ -31,8 +30,7 @@ const colorsOptions = [
   { value: 'geekblue', label: <Tag color={'geekblue'}>geekblue</Tag> },
   { value: 'purple', label: <Tag color={'purple'}>purple</Tag> },
   { value: 'magenta', label: <Tag color={'magenta'}>magenta</Tag> },
-  { value: 'grey', label: <Tag color={'grey'}>grey</Tag> },
-  { value: 'gray', label: <Tag color={'gray'}>gray</Tag> }
+  { value: 'grey', label: <Tag color={'grey'}>grey</Tag> }
 ]
 
 export { colors, colorsOptions }

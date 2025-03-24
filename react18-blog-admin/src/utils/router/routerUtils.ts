@@ -12,11 +12,11 @@ const getAllRoutersMap = (routerConfig: RouterItemType[]): Map<string, any> => {
 		const { key } = meta!
 
     if (!children || children.length <= 0) {
-      resMap.set(key, element)
+      resMap.set(key!, element)
     }
 
     if (layout) {
-      resMap = deepLoopChildrenKey(children!, key, resMap)
+      resMap = deepLoopChildrenKey(children!, key!, resMap)
     }
   }
   return resMap

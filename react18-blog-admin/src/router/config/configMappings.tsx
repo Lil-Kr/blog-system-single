@@ -21,8 +21,8 @@ export const componentMap = {
   _admin_home: lazy(() => import('@/views/home')),
   // 博客管理
   // _admin_blog: lazy(() => import('@/views/home')),
-  _admin_blog_index: lazy(() => import('@/views/blog/publish/BlogList')),
-  _admin_blog_label: lazy(() => import('@/views/blog//label/BlogLabel')),
+  _admin_blog_index: lazy(() => import('@/views/blog/blogContent/BlogList')),
+  _admin_blog_label: lazy(() => import('@/views/blog/label/Label')),
   _admin_blog_category: lazy(() => import('@/views/blog/category/BlogCategory')),
   _admin_blog_topic: lazy(() => import('@/views/blog/topic/BlogTopic')),
   // 图片管理

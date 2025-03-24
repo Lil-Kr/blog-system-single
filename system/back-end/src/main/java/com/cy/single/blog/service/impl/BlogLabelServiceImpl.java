@@ -1,5 +1,6 @@
 package com.cy.single.blog.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.common.holder.RequestHolder;
@@ -17,13 +18,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
-import static com.cy.single.blog.enums.ReturnCodeEnum.OPERATE_ERROR;
-import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
+import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
  * @author Lil-K
@@ -32,82 +31,81 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
 @Service
 public class BlogLabelServiceImpl implements BlogLabelService {
 
-    @Autowired
-    private BlogLabelMapper blogLabelMapper;
+	@Autowired
+	private BlogLabelMapper blogLabelMapper;
 
-    @Override
-    public PageResult<BlogLabelVO> pageList(BlogLabelPageReq req) {
-        List<BlogLabelVO> pageList = blogLabelMapper.pageList(req);
-        Integer count = blogLabelMapper.getCountByList(req);
-        if (CollectionUtils.isEmpty(pageList)) {
-            return new PageResult<>(new ArrayList<>(0), 0);
-        }else {
-            return new PageResult<>(pageList, count);
-        }
-    }
+	@Override
+	public PageResult<BlogLabelVO> pageList(BlogLabelPageReq req) {
+		List<BlogLabelVO> pageList = blogLabelMapper.pageList(req);
+		Integer count = blogLabelMapper.getCountByList(req);
+		if (CollectionUtils.isEmpty(pageList)) {
+			return new PageResult<>(new ArrayList<>(0), 0);
+		}else {
+			return new PageResult<>(pageList, count);
+		}
+	}
 
-    @Override
-    public PageResult<BlogLabelVO> list(BlogLabelListReq req) {
-        List<BlogLabelVO> labelList = blogLabelMapper.getLabelList(req);
-        if (CollectionUtils.isEmpty(labelList)) {
-            return new PageResult<>(new ArrayList<>(0), 0);
-        }else {
-            return new PageResult<>(labelList, labelList.size());
-        }
-    }
+	@Override
+	public PageResult<BlogLabelVO> list(BlogLabelListReq req) {
+		List<BlogLabelVO> labelList = blogLabelMapper.getLabelList(req);
+		if (CollectionUtils.isEmpty(labelList)) {
+			return new PageResult<>(new ArrayList<>(0), 0);
+		}else {
+			return new PageResult<>(labelList, labelList.size());
+		}
+	}
 
-    @Override
-    public ApiResp<String> save(BlogLabelReq req) {
-        BlogLabel saveEntity = BlogLabelDTO.convertSaveLabelReq(req);
-        Integer save = blogLabelMapper.insert(saveEntity);
-        if (save >= 1) {
-            // update cache
-            BlogLabelVO cacheEntity = new BlogLabelVO();
-            BeanUtils.copyProperties(saveEntity, cacheEntity);
-//            List<BlogLabelVO> blogLabelListCache = Stream.concat(CacheManager.getBlogLabelListCache().stream(), Stream.of(cacheEntity)).collect(Collectors.toList());
-//            CacheManager.setBlogLabelInfoCache(blogLabelListCache);
-            return ApiResp.success();
-        }else {
-            return ApiResp.failure(SAVE_ERROR);
-        }
-    }
+	@Override
+	public ApiResp<String> add(BlogLabelReq req) {
+		BlogLabel saveEntity = BlogLabelDTO.convertSaveLabelReq(req);
+		Integer save = blogLabelMapper.insert(saveEntity);
+		if (save >= 1) {
+			// update cache
+			BlogLabelVO cacheEntity = new BlogLabelVO();
+			BeanUtils.copyProperties(saveEntity, cacheEntity);
+			return ApiResp.success();
+		}else {
+			return ApiResp.failure(SAVE_ERROR);
+		}
+	}
 
-    @Override
-    public ApiResp<String> edit(BlogLabelReq req) {
-        Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
-        req.setUpdateTime(nowDateTime);
-        req.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
-        Integer count = blogLabelMapper.editBySurrogateId(req);
+	@Override
+	public ApiResp<String> edit(BlogLabelReq req) {
+		QueryWrapper<BlogLabel> query = new QueryWrapper<>();
+		query.eq("surrogate_id", req.getSurrogateId());
+		BlogLabel before = blogLabelMapper.selectOne(query);
+		if (Objects.isNull(before)) {
+			return ApiResp.failure(INFO_NOT_EXIST);
+		}
 
-        if (count >= 1) {
-            // update cache
-            BlogLabel blogLabel = new BlogLabel();
-            BeanUtils.copyProperties(req,blogLabel);
-//            CacheManager.setBlogLabelCache(blogLabel);
-            return ApiResp.success();
-        }else {
-            return ApiResp.failure(SAVE_ERROR);
-        }
-    }
+		req.setUpdateTime(DateUtil.localDateTimeNow());
+		req.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
+		Integer count = blogLabelMapper.editBySurrogateId(req);
 
-    @Override
-    public ApiResp<String> delete(BlogLabelReq req) {
-        int count = blogLabelMapper.deleteBySurrogateId(req.getSurrogateId());
-        if (count >= 1) {
-//            CacheManager.removeBlogLabelCache(req.getSurrogateId());
-            return ApiResp.success();
-        }else {
-            return ApiResp.failure(OPERATE_ERROR);
-        }
-    }
+		if (count >= 1) {
+			return ApiResp.success();
+		}else {
+			return ApiResp.failure(SAVE_ERROR);
+		}
+	}
 
-    @Override
-    public ApiResp<String> deleteBatch(BlogLabelReq req) {
-        Integer count = blogLabelMapper.deleteBatch(req.getSurrogateIds());
-        if (count >= 1) {
-            return ApiResp.success();
-        }else {
-            return ApiResp.failure(OPERATE_ERROR);
-        }
-    }
+	@Override
+	public ApiResp<String> delete(BlogLabelReq req) {
+		int count = blogLabelMapper.deleteBySurrogateId(req.getSurrogateId());
+		if (count >= 1) {
+			return ApiResp.success();
+		}else {
+			return ApiResp.failure(OPERATE_ERROR);
+		}
+	}
+
+	@Override
+	public ApiResp<String> deleteBatch(BlogLabelReq req) {
+		Integer count = blogLabelMapper.deleteBatch(req.getSurrogateIds());
+		if (count >= 1) {
+			return ApiResp.success();
+		}else {
+			return ApiResp.failure(OPERATE_ERROR);
+		}
+	}
 }

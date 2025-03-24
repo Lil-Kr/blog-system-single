@@ -23,7 +23,7 @@ import { ColumnsType } from 'antd/es/table'
 import OrgModal from '@/components/modal/OrgModal'
 import { transformOrgTreeExpandeKeys, transformToTreeData } from '@/utils/sys/treeUtils'
 import { orgApi } from '@/apis/sys'
-import { useOrgModalStore, useOrgStore } from '@/store/sys/orgStore'
+import { initOrgData, useOrgModalStore, useOrgStore } from '@/store/sys/orgStore'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { transformOrgInfoToSeletor } from '@/utils/sys/transform'
 import { OptionType } from '@/types/apis'
@@ -38,13 +38,13 @@ const Org = () => {
       key: 'name',
       dataIndex: 'name',
       title: '组织名',
-      width: 100
+      width: '10%'
     },
     {
       key: 'parentName',
       dataIndex: 'parentName',
       title: '上级组织',
-      width: 100,
+      width: '10%',
       render: (_, record: OrgTableType) => {
         let color = 'magenta'
         let text = record.parentName
@@ -59,13 +59,13 @@ const Org = () => {
       key: 'seq',
       dataIndex: 'seq',
       title: '顺序',
-      width: 50
+      width: '10%'
     },
     {
       key: 'status',
       dataIndex: 'status',
       title: '状态',
-      width: 50,
+      width: '10%',
       render: (_, record: OrgTableType) => {
         let tagColor = 'green' // 默认颜色
         let statusText = '正常' // 默认文本
@@ -96,31 +96,31 @@ const Org = () => {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: 100
+      width: '20%'
     },
     {
       key: 'createTime',
       dataIndex: 'createTime',
       title: '创建时间',
-      width: 50
+      width: '10%'
     },
     {
       key: 'updateTime',
       dataIndex: 'updateTime',
       title: '修改时间',
-      width: 50
+      width: '10%'
     },
     {
       key: 'operatorName',
       dataIndex: 'operatorName',
       title: '操作人',
-      width: 50
+      width: '10%'
     },
     {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
-      width: 150,
+      width: '10%',
       render: (_: object, record: OrgTableType) => (
         <Space size='middle'>
           <Button
@@ -169,9 +169,7 @@ const Org = () => {
     selectedKeys,
     setSelectedKeys,
     selectorInfo,
-    setSelectorInfo,
-    tableLoading,
-    setTableLoading
+    setSelectorInfo
   } = useOrgStore()
 
   const { setOrgModalState } = useOrgModalStore()
@@ -188,15 +186,11 @@ const Org = () => {
    * init
    */
   const initInfo = async () => {
-    setTableLoading(true)
-
     // 加载组织树
     retrieveOrgTreeList()
 
     // 加载全部组织信息, 分页
     retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
-
-    setTableLoading(false)
   }
 
   /**
@@ -232,7 +226,7 @@ const Org = () => {
     const orgPageList = await orgApi.pageOrgList({
       keyWords: req.keyWords,
       currentPageNum: req.currentPageNum,
-      pageSize: tablePageInfo.pageSize
+      pageSize: req.pageSize
     })
     const { code, data } = orgPageList
     if (code !== 200) {
@@ -245,7 +239,12 @@ const Org = () => {
       ...rest
     }))
     setOrgPageList(list)
-    setTablePageInfo({ ...tablePageInfo, totalSize: data.total })
+    setTablePageInfo({
+      ...tablePageInfo,
+      totalSize: data.total,
+      pageSize: req.pageSize,
+      currentPageNum: req.currentPageNum
+    })
   }
 
   /**
@@ -392,17 +391,17 @@ const Org = () => {
    */
   const resetSearch = () => {
     form.resetFields()
-    retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
-  }
 
-  /** ===================== 分页 ===================== */
-  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (currentPageNum, pageSize) => {
-    setTablePageInfo({ ...tablePageInfo, pageSize })
+    retrievePageOrgList({
+      keyWords: '',
+      ...initOrgData.tablePageInfo
+    })
   }
 
   const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
+    console.log('--> onChangePageInfo:')
     const values = form.getFieldsValue()
-    retrievePageOrgList({ ...values, currentPageNum, pageSize })
+    retrievePageOrgList({ ...values, pageSize, currentPageNum })
   }
 
   /**
@@ -485,7 +484,7 @@ const Org = () => {
                       type: 'checkbox',
                       ...rowSelection
                     }}
-                    loading={tableLoading}
+                    // loading={tableLoading}
                     columns={orgColumns}
                     dataSource={orgPageList}
                     pagination={{
@@ -494,8 +493,7 @@ const Org = () => {
                       showSizeChanger: true,
                       hideOnSinglePage: false,
                       pageSizeOptions: [10, 20, 50],
-                      onChange: onChangePageInfo,
-                      onShowSizeChange: onShowSizeChange,
+                      onChange: onChangePageInfo, // just use this pagination function
                       pageSize: tablePageInfo.pageSize, // 每页条数
                       total: tablePageInfo.totalSize // 总条数
                     }}

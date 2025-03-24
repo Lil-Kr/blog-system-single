@@ -31,62 +31,62 @@ import static com.cy.single.blog.utils.checkUtil.ParamValidator.checkSurrogateId
 @RequestMapping("/blog/label")
 public class LabelController {
 
-    @Autowired
-    private BlogLabelService blogLabelService;
+	@Autowired
+	private BlogLabelService blogLabelService;
 
-    @RecordLogger
-    @CheckAuth
-    @PostMapping("/pageList")
-    public ApiResp<PageResult<BlogLabelVO>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogLabelPageReq req) {
-        PageResult<BlogLabelVO> list = blogLabelService.pageList(req);
-        return ApiResp.success(list);
-    }
+	@RecordLogger
+	@CheckAuth
+	@PostMapping("/pageList")
+	public ApiResp<PageResult<BlogLabelVO>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogLabelPageReq req) {
+		PageResult<BlogLabelVO> list = blogLabelService.pageList(req);
+		return ApiResp.success(list);
+	}
 
-    @RecordLogger
-    @CheckAuth
-    @PostMapping("/list")
-    public ApiResp<PageResult<BlogLabelVO>> list(@RequestBody @Valid BlogLabelListReq req) {
-        PageResult<BlogLabelVO> list = blogLabelService.list(req);
-        return ApiResp.success(list);
-    }
+	@RecordLogger
+	@CheckAuth
+	@PostMapping("/list")
+	public ApiResp<PageResult<BlogLabelVO>> list(@RequestBody @Valid BlogLabelListReq req) {
+		PageResult<BlogLabelVO> list = blogLabelService.list(req);
+		return ApiResp.success(list);
+	}
 
-    @RecordLogger
-    @CheckAuth
-    @PostMapping("/save")
-    public ApiResp<String> save(@RequestBody @Validated({BlogLabelReq.GroupLabelSave.class}) BlogLabelReq req) {
-        return blogLabelService.save(req);
-    }
+	@RecordLogger
+	@CheckAuth
+	@PostMapping("/add")
+	public ApiResp<String> add(@RequestBody @Validated({BlogLabelReq.GroupLabelSave.class}) BlogLabelReq req) {
+		return blogLabelService.add(req);
+	}
 
-    @RecordLogger
-    @CheckAuth
-    @PostMapping("/edit")
-    public ApiResp<String> edit(@RequestBody @Validated({BlogLabelReq.GroupLabelSave.class}) BlogLabelReq req) {
-        return blogLabelService.edit(req);
-    }
+	@RecordLogger
+	@CheckAuth
+	@PostMapping("/edit")
+	public ApiResp<String> edit(@RequestBody @Validated({BlogLabelReq.GroupLabelSave.class}) BlogLabelReq req) {
+		return blogLabelService.edit(req);
+	}
 
-    @RecordLogger
-    @CheckAuth
-    @PostMapping("/delete")
-    public ApiResp<String> delete(@RequestBody @Validated({BlogLabelReq.GroupLabelDel.class}) BlogLabelReq req) {
-        return blogLabelService.delete(req);
-    }
+	@RecordLogger
+	@CheckAuth
+	@PostMapping("/delete")
+	public ApiResp<String> delete(@RequestBody @Validated({BlogLabelReq.GroupLabelDel.class}) BlogLabelReq req) {
+		return blogLabelService.delete(req);
+	}
 
-    @RecordLogger
-    @CheckAuth
-    @PostMapping("/deleteBatch")
-    public ApiResp<String> deleteBatch(@RequestBody @Validated({BlogLabelReq.GroupLabelDelBatch.class}) BlogLabelReq req) {
-        if (CollectionUtils.isEmpty(req.getSurrogateIds())) return ApiResp.failure("surrogateIds不能为空");
-        if (!checkSurrogateIds(req.getSurrogateIds())) return ApiResp.failure("surrogateIds不规范");
-        return blogLabelService.deleteBatch(req);
-    }
+	@RecordLogger
+	@CheckAuth
+	@PostMapping("/deleteBatch")
+	public ApiResp<String> deleteBatch(@RequestBody @Validated({BlogLabelReq.GroupLabelDelBatch.class}) BlogLabelReq req) {
+		if (CollectionUtils.isEmpty(req.getSurrogateIds())) return ApiResp.failure("surrogateIds不能为空");
+		if (!checkSurrogateIds(req.getSurrogateIds())) return ApiResp.failure("surrogateIds不规范");
+		return blogLabelService.deleteBatch(req);
+	}
 
 
-    /** =============== 门户网站接口 ===============**/
-    @RecordLogger
-    @GetMapping("/frontLabelList")
-    public ApiResp<List<BlogLabelVO>> frontLabelList() {
-        PageResult<BlogLabelVO> list = blogLabelService.list(new BlogLabelListReq());
-        return ApiResp.success(list.getList());
-    }
+	/** =============== 门户网站接口 ===============**/
+	@RecordLogger
+	@GetMapping("/frontLabelList")
+	public ApiResp<List<BlogLabelVO>> frontLabelList() {
+		PageResult<BlogLabelVO> list = blogLabelService.list(new BlogLabelListReq());
+		return ApiResp.success(list.getList());
+	}
 
 }

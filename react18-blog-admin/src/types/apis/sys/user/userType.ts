@@ -104,9 +104,7 @@ export interface SysUserDelReq {
 
 export interface SysUserApi extends BaseApi {
   pageUserList(req: UserListPageReq): Promise<ResultPage<UserPageListByOrgIdResp>>
-  // pageChildOrgList(req: SysOrgPageReq): Promise<ResultPage<SysOrgResp>>
-  // pageOrgList(req: SysOrgPageReq): Promise<ResultPage<SysOrgResp>>
-  // orgAllList(req: SysOrgListAllReq): Promise<Result<SysOrgAllResp[]>>
+  get(): Promise<Result<SysUser>>
   add(req: UserAddReq): Promise<Result<string>>
   edit(req: UserEditReq): Promise<Result<string>>
   delete(req: SysUserDelReq): Promise<Result<string>>

@@ -19,9 +19,9 @@ public class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -4120652138040137224L;
 
-    private Integer status;
-
     private String remark;
+
+    private Integer status;
 
     /**
      * 默认 0

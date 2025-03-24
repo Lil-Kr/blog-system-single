@@ -20,13 +20,13 @@ import {
   Space
 } from 'antd'
 const { confirm } = Modal
-import blogContentApi, { MappedBlogContentDTO } from '@/apis/blog/content'
+import blogContentApi, { MappedBlogContentDTO } from '@/apis/blog/content/blogContentApi'
 import { createStyles } from 'antd-style'
 import { useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { LabelVO } from '@/types/apis/blog/label'
+import { LabelTableResq } from '@/types/apis/blog/labelType'
 import { BlogCategoryVO } from '@/types/apis/blog/category'
 import { BlogTopicVO } from '@/types/apis/blog/topic'
-import labelApi from '@/apis/blog/label'
+import labelApi from '@/apis/blog/label/labelApi'
 import blogTopicApi from '@/apis/blog/topic'
 import blogCategoryApi from '@/apis/blog/category'
 import { Editor } from '@tinymce/tinymce-react'
@@ -66,8 +66,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
   const { mRef, update } = props
   const [saveBlogForm] = Form.useForm()
   const editorRef = useRef<EditorInstance | null>(null)
-  const { tinyMceContents, tinymecStatus, setTinyMCEContents, setTinymecStatus, setTinymceEditorReady } =
-    useTinymceStore()
+  const { tinyMceContents, setTinyMCEContents, setTinymecStatus } = useTinymceStore()
   const [title, setTitle] = useState<string>('')
   const [openModal, setOpenModal] = useState(false)
   const [modalAction, setModalAction] = useState<string>('create')
@@ -145,8 +144,12 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
     fetchLabels()
   }, [])
 
-  const getLabels = async (): Promise<LabelVO[]> => {
-    const labels = await labelApi.getLabelList({})
+  /**
+   * 查询所有标签
+   * @returns
+   */
+  const getLabels = async (): Promise<LabelTableResq[]> => {
+    const labels = await labelApi.retrieveLabelPageList({})
     if (labels.code !== 200) {
       return []
     }

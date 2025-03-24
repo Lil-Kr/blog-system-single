@@ -1,19 +1,14 @@
 import React from 'react'
-import { Avatar, Dropdown, MenuProps, message } from 'antd'
+import { Avatar, Dropdown, MenuProps } from 'antd'
 import { useNavigate } from 'oh-router-react'
 import avatar from '@/assets/images/icons/avatar.png'
-// zustand
-import { useTokenStore } from '@/store/login'
-import { useMenuStore, useTabsStore } from '@/store/global'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useAdminLoginStore } from '@/store/sys/adminStore'
+import { resetPermissionRouters } from '@/router/dynamicRoutes'
 
 const AvatarIcon = () => {
   const messageApi = useMessage()
   const { admin } = useAdminLoginStore()
-  const { clearToken } = useTokenStore()
-  const { restMenuState } = useMenuStore()
-  const { resetTabs } = useTabsStore()
 
   const navigateTo = useNavigate()
 
@@ -39,9 +34,7 @@ const AvatarIcon = () => {
     /**
      * 清空数据
      */
-    clearToken()
-    restMenuState()
-    resetTabs()
+    resetPermissionRouters()
     navigateTo('/login')
   }
 

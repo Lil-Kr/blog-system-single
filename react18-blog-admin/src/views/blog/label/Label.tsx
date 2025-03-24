@@ -1,72 +1,63 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table, Tag } from 'antd'
-import { LabelDTO, LabelReqParams } from '@/types/apis/blog/label'
+import { LabelListTableType, LabelPageReq, LabelReq, LabelTableResq } from '@/types/apis/blog/labelType'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
-import LabelDetail from './LabelDetail'
 import { IAction } from '@/types/component/modal'
 import { useMessage } from '@/components/message/MessageProvider'
-
-// api
-import blogLabelApi from '@/apis/blog/label'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
+import labelApi from '@/apis/blog/label/labelApi'
+import { labelTransformToTable } from '@/utils/blog/labelTransform'
+import { useLabelModalStore, useLabelStore } from '@/store/blog/labelStore'
+import LabelModal from './LabelModal'
 
 const BlogLabel = () => {
   const messageApi = useMessage()
   const [form] = useForm()
-  const labelRef = useRef<{ open: (type: IAction, data?: LabelDTO) => void }>()
-  const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
-  const [rowKeys, setRowKeys] = useState<React.Key[]>([])
-  const [dataSource, setDataSource] = useState<LabelDTO[]>([])
-  const [tableLoading, setTableLoading] = useState<boolean>(false)
-  const [pageSize, setPageSize] = useState<number>(5)
-  const [totalSize, setTotalSize] = useState<number>(0)
+  const { labelPageList, setLabelPageList, tablePageInfo, setTablePageInfo, rowKeys, setRowKeys, rowSelectType } =
+    useLabelStore()
+  const { setLabelState } = useLabelModalStore()
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
 
-  const columnsLable: ColumnsType<any> = [
+  const labelRef = useRef<{ open: (type: IAction, data?: LabelListTableType) => void }>()
+
+  const columnsLable: ColumnsType<LabelListTableType> = [
     {
       key: 'number',
       dataIndex: 'number',
       title: '编号',
-      width: '10%'
+      width: '5%'
     },
     {
       key: 'name',
       dataIndex: 'name',
       title: '标签名',
       width: '30%',
-      render: (_, record: LabelDTO) => (
-        <>
-          <Tag key={record.key} color={record.color}>
-            {record.name}
-          </Tag>
-        </>
+      render: (_, record) => (
+        <Tag key={record.key} color={record.color}>
+          {record.name}
+        </Tag>
       )
     },
     {
       key: 'colorText',
       dataIndex: 'colorText',
       title: '展示颜色',
-      width: '20%',
-      render: (_, record: LabelDTO) => (
-        <Tag key={record.key} color={record.colorText}>
-          {record.name}
-        </Tag>
-      )
+      width: '20%'
     },
     {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: '20%'
+      width: '25%'
     },
     {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
       width: '20%',
-      render: (_: object, record: LabelDTO) => (
+      render: (_: object, record) => (
         <Space size='middle'>
           <Button
             size={btnSize}
@@ -100,30 +91,24 @@ const BlogLabel = () => {
   ]
 
   /**
+   * 初始化
+   */
+  useEffect(() => {
+    initLabelList({ keyWords: '', pageSize: tablePageInfo.pageSize, currentPageNum: tablePageInfo.currentPageNum })
+  }, [])
+
+  /**
    * 删除确认提示
    * @param record
    */
-  const deleteItemConfirm = async (record: LabelDTO) => {
-    const res = await blogLabelApi.delete({ surrogateId: record.key })
-    if (res.code === 200) {
-      messageApi?.success('操作成功')
-      getLabelList({ keyWord: '' })
-    } else {
-      messageApi?.warning('操作失败')
+  const deleteItemConfirm = async (record: LabelListTableType) => {
+    const res = await labelApi.delete({ surrogateId: record.key })
+    if (res.code !== 200) {
+      return
     }
-  }
+    messageApi?.success('删除成功')
 
-  /**
-   * 多选
-   */
-  const rowSelection: TableRowSelection<LabelDTO> = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: LabelDTO[]) => {
-      setRowKeys(selectedRowKeys)
-    },
-    getCheckboxProps: (record: LabelDTO) => ({
-      disabled: record.name === 'Disabled User', // Column configuration not to be checked
-      name: record.name
-    })
+    initLabelList({ keyWords: '', pageSize: tablePageInfo.pageSize, currentPageNum: tablePageInfo.currentPageNum })
   }
 
   /**
@@ -131,8 +116,17 @@ const BlogLabel = () => {
    * @param key
    * @param record
    */
-  const lookItem = (key: string, record: LabelDTO) => {
-    labelRef.current?.open({ action: 'look', open: true }, record)
+  const lookItem = (key: string, record: LabelListTableType) => {
+    const req = { ...record }
+    setLabelState({
+      api: labelApi,
+      title: '编辑标签',
+      action: 'edit',
+      openModal: true,
+      modalStyle: { maxWidth: '50vw' },
+      inputDisabled: true,
+      labelData: req
+    })
   }
 
   /**
@@ -140,15 +134,31 @@ const BlogLabel = () => {
    * @param key
    * @param record
    */
-  const editItem = (key: string, record: LabelDTO) => {
-    labelRef.current?.open({ action: 'edit', open: true }, record)
+  const editItem = (key: string, record: LabelListTableType) => {
+    const req = { ...record }
+    setLabelState({
+      api: labelApi,
+      title: '编辑标签',
+      action: 'edit',
+      openModal: true,
+      modalStyle: { maxWidth: '50vw' },
+      inputDisabled: false,
+      labelData: req
+    })
   }
 
   /**
    * create
    */
   const createLabel = () => {
-    labelRef.current?.open({ action: 'create', open: true })
+    setLabelState({
+      api: labelApi,
+      title: '添加标签',
+      action: 'create',
+      openModal: true,
+      modalStyle: { maxWidth: '50vw' },
+      inputDisabled: false
+    })
   }
 
   /**
@@ -161,13 +171,12 @@ const BlogLabel = () => {
     }
 
     const ids = rowKeys.join(',')
-    const res = await blogLabelApi.deleteBatch({ surrogateId: ids })
-    if (res.code === 200) {
-      messageApi?.success(res.msg)
-      getLabelList({ keyWord: '' })
-    } else {
+    const res = await labelApi.deleteBatch({ surrogateId: ids })
+    if (res.code !== 200) {
       messageApi?.error(res.msg)
+      return
     }
+    initLabelList({ keyWords: '', pageSize: tablePageInfo.pageSize, currentPageNum: tablePageInfo.currentPageNum })
   }
 
   /**
@@ -176,51 +185,57 @@ const BlogLabel = () => {
   const search = () => {}
 
   /**
-   * 初始化
+   * 多选
    */
-  useEffect(() => {
-    getLabelList({ keyWord: '' })
-  }, [])
+  const rowSelection: TableRowSelection<LabelListTableType> = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: LabelListTableType[]) => {
+      setRowKeys(selectedRowKeys)
+    },
+    getCheckboxProps: (record: LabelListTableType) => ({
+      disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      name: record.name
+    })
+  }
 
   /**
    * 获取标签列表, 不分页
    */
-  const getLabelList = async (params: LabelReqParams) => {
+  const initLabelList = async (req: LabelPageReq) => {
     const values = form.getFieldsValue()
+    const labelPageList = await retrieveLabelPageList({ ...values, ...req })
+    const labelTableList = labelTransformToTable(labelPageList)
+    setLabelPageList(labelTableList)
+  }
 
-    const labelList = await blogLabelApi.getLabelList({ ...values })
-    const { code, data, msg } = labelList
-    if (code === 200) {
-      const datas = data.list.map(({ surrogateId, number, name, color, colorText, remark }) => ({
-        key: surrogateId,
-        number,
-        name,
-        color,
-        colorText,
-        remark
-      }))
-      setDataSource(datas)
-      setTotalSize(data.total)
-      setTableLoading(false)
+  /**
+   * 分页查询-标签列表
+   * @param req
+   * @returns
+   */
+  const retrieveLabelPageList = async (req: LabelPageReq): Promise<LabelTableResq[]> => {
+    const res = await labelApi.retrieveLabelPageList(req)
+    const { code, data } = res
+    if (code !== 200) {
+      return []
     }
+    setTablePageInfo({
+      ...tablePageInfo,
+      totalSize: data.total,
+      pageSize: req.pageSize,
+      currentPageNum: req.currentPageNum
+    })
+    return data.list
   }
 
   /**
-   * change pageSize
-   * pageSize 变化的回调
-   * @param current
+   * 翻页
+   * @param currentPageNum
    * @param pageSize
    */
-  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
-    setPageSize(pageSize)
+  const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
+    const values = form.getFieldsValue()
+    initLabelList({ ...values, pageSize, currentPageNum })
   }
-
-  /**
-   * 页码或 pageSize 改变的回调，参数是改变后的页码及每页条数
-   * @param page
-   * @param pageSize
-   */
-  const onChange: PaginationProps['onChange'] = (page, pageSize) => {}
 
   return (
     <div className='blog-label-warpper'>
@@ -238,10 +253,10 @@ const BlogLabel = () => {
         <div className='operation-btn'>
           <Flex gap='small'>
             <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createLabel}>
-              {'新增标签'}
+              {'新增'}
             </Button>
             <Button size={btnSize} type='primary' icon={<DeleteOutlined />} danger onClick={deleteBatch}>
-              {'删除标签'}
+              {'删除'}
             </Button>
           </Flex>
         </div>
@@ -251,28 +266,31 @@ const BlogLabel = () => {
             size={tableSize}
             bordered={true}
             rowSelection={{
-              type: selectionType,
+              type: rowSelectType,
               ...rowSelection
             }}
-            loading={tableLoading}
+            // loading={tableLoading}
             columns={columnsLable}
-            dataSource={dataSource}
+            dataSource={labelPageList}
             pagination={{
+              position: ['bottomLeft'],
               hideOnSinglePage: false, // only one pageSize then hidden Paginator
               pageSizeOptions: [10, 20, 50], // specify how many items can be displayed on each page
-              onChange: onChange,
-              onShowSizeChange: onShowSizeChange,
+              onChange: onChangePageInfo, // just use this pagination function
               showSizeChanger: true,
-              pageSize: pageSize,
-              total: totalSize
+              pageSize: tablePageInfo.pageSize,
+              total: tablePageInfo.totalSize
             }}
           />
         </Flex>
       </Flex>
-      <LabelDetail
-        mRef={labelRef}
+      <LabelModal
         update={() => {
-          getLabelList({ keyWord: '' })
+          initLabelList({
+            keyWords: '',
+            pageSize: tablePageInfo.pageSize,
+            currentPageNum: tablePageInfo.currentPageNum
+          })
         }}
       />
     </div>

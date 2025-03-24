@@ -22,12 +22,12 @@ const getBreadCrumbItems = (config: RouterItemType[]): Map<string, BreadcrumbTyp
     for (const childIdx in children) {
       const { meta, children: childs, index, path, element } = children[childIdx]
       if (!childs || childs.length < 1) {
-        let secondPath = key + meta!.key
+        let secondPath = key! + meta!.key!
         let secondCrumb = title + '.' + meta!.title
         breadCrumbItemMap.set(secondPath, secondCrumb)
         continue
       } else {
-        let secondPath = key + meta!.key
+        let secondPath = key! + meta!.key!
         let secondCrumb = title + '.' + meta!.title
         handleBreadCrumbItems(childs, secondPath, secondCrumb, breadCrumbItemMap)
       }

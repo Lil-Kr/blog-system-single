@@ -89,6 +89,19 @@ public class UserController {
 		return ApiResp.success(user);
 	}
 
+	/**
+	 * 获取后台用户数据
+	 * @return
+	 */
+	@CheckAuth
+	@RecordLogger
+	@GetMapping("/get")
+	public ApiResp<SysUser> get() {
+		// 如果能通过验证, 说明AOP中token校验已经通过
+		SysUser currentUser = RequestHolder.getCurrentUser();
+		return ApiResp.success(currentUser);
+	}
+
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/register")

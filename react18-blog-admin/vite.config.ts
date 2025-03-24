@@ -19,6 +19,5 @@ const envResolver = {
 }
 
 export default defineConfig(({ command }: ConfigEnv) => {
-  console.log(`🚀 当前 Vite 运行模式: ${command}`)
   return envResolver[command]()
 })

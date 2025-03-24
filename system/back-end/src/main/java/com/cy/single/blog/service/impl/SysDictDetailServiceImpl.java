@@ -54,7 +54,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 			.build();
 		int insert = dictDetailMapper.insert(dictDetail);
 		if (insert >= 1) {
-			return ApiResp.warning(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg2"));
+			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg2"));
 		} else {
 			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg3"));
 		}

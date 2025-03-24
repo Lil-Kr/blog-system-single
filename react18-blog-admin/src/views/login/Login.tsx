@@ -6,26 +6,17 @@ import { useTokenStore } from '@/store/login'
 import loginApi from '@/apis/sys/loginApi'
 import { Form, Input, Button, Flex } from 'antd'
 import { useNavigate } from 'oh-router-react'
-import { useMenuStore, useTabsStore } from '@/store/global'
 import { LoginTpye } from '@/types/apis/sys/user/userType'
 import { useMessage } from '@/components/message/MessageProvider'
-import { useAdminLoginStore } from '@/store/sys/adminStore'
-import { useRouterStore } from '@/store/router/routerStore'
-import useLoadingStore from '@/store/global/loadingStore'
+import { resetPermissionRouters } from '@/router/dynamicRoutes'
 
 import './css/login.css'
 
 const Login = () => {
-  const [btnSize, setSize] = useState<SizeType>('large')
-  const [loading, setLoading] = useState<boolean>(false)
   const messageApi = useMessage()
-  const { resetTabs } = useTabsStore()
+  const [btnSize] = useState<SizeType>('large')
+  const [loading] = useState<boolean>(false)
   const { setToken } = useTokenStore()
-  const { setAdmin } = useAdminLoginStore()
-  const { restMenuState } = useMenuStore()
-  const { clearToken } = useTokenStore()
-  const { clearRootRouterConfig } = useRouterStore()
-  const { setLoginLoading } = useLoadingStore()
   const navigateTo = useNavigate()
 
   const onFinish = async (loginInfo: LoginTpye.LoginFormType) => {
@@ -36,13 +27,10 @@ const Login = () => {
     if (code === 200) {
       const { token } = data
       setToken(token, true)
-      setAdmin(data)
+      navigateTo('/')
       messageApi?.success(msg)
     } else {
-      resetTabs()
-      clearToken()
-      restMenuState()
-      clearRootRouterConfig()
+      resetPermissionRouters()
       navigateTo('/login')
     }
   }

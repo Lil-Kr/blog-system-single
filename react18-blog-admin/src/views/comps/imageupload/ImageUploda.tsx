@@ -1,5 +1,5 @@
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Divider, Flex, GetProp, Upload, Image as ImageUpload, UploadFile, UploadProps, message } from 'antd'
+import { Button, Divider, Flex, GetProp, Upload, Image as ImageUpload, UploadFile, UploadProps } from 'antd'
 import React, { useState } from 'react'
 import ImgCrop from 'antd-img-crop'
 import { useMessage } from '@/components/message/MessageProvider'

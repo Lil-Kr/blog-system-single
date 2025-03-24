@@ -2,6 +2,7 @@ import LazyLoad from '@/components/router/LazyLoad'
 import { RouterItemType } from '@/types/router/routeType'
 import { UserOutlined } from '@ant-design/icons'
 import { lazy } from 'react'
+import { homeConfig } from './modules/homeConfig'
 
 const baseRouterConfig: RouterItemType[] = [
   {
@@ -61,9 +62,10 @@ const baseRouterConfig: RouterItemType[] = [
       layout: true,
       icon: ''
     },
+    name:'admin-base',
     path: '/admin',
     element: LazyLoad(lazy(() => import('@/layout/MainLayout'))),
-    children: []
+    children: [...homeConfig]
   }
 ]
 

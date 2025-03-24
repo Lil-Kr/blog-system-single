@@ -102,11 +102,6 @@ public class BlogContentServiceImpl implements BlogContentService {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
 
-//    list.stream().forEach(item -> {
-//      item.setBlogLabelList(CacheManager.getBlogLabelListCache(item.getLabelIds()));
-//      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
-//    });
-
     return new PageResult<>(list, list.size());
   }
 

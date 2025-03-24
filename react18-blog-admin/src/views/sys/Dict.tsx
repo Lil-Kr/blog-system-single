@@ -19,8 +19,23 @@ import {
 import { EditableProTable, ProColumns } from '@ant-design/pro-components'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
+import { useDictDetailStore } from '@/store/sys/dictStore'
+import { RecordKey } from '@ant-design/pro-utils/es/useEditableArray'
 
 const Dict = () => {
+  const messageApi = useMessage()
+  const { btnSize, tableSize } = useGlobalStyleStore()
+  const [form] = useForm()
+  const [tableLoading, setTableLoading] = useState<boolean>(false)
+  const [dataSource, setDataSource] = useState<TableDictType[]>([] as TableDictType[])
+  const [dictId, setDictId] = useState<string>('')
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false)
+
+  /**
+   * 处理字典明细的状态
+   */
+  const [dictDetailDataSource, setDictDetailDataSource] = useState<readonly TableDictDetailType[]>([])
+  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
     currentPageNum: 1,
     pageSize: 10,
@@ -32,21 +47,8 @@ const Dict = () => {
     totalSize: 0
   })
 
-  const messageApi = useMessage()
-  const [form] = useForm()
-  const [tableLoading, setTableLoading] = useState<boolean>(false)
-  const [dataSource, setDataSource] = useState<TableDictType[]>([] as TableDictType[])
-  const [dictId, setDictId] = useState<string>('')
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false)
-  const { btnSize, tableSize } = useGlobalStyleStore()
-  /**
-   * 处理字典明细的状态
-   */
-  const [dictDetailDataSource, setDictDetailDataSource] = useState<readonly TableDictDetailType[]>([])
-  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
-
   // 字典主信息 table
-  const columns: ColumnsType<TableDictType> = [
+  const columnsDict: ColumnsType<TableDictType> = [
     {
       key: 'name',
       dataIndex: 'name',
@@ -112,20 +114,17 @@ const Dict = () => {
       key: 'name',
       dataIndex: 'name',
       title: '字典名称',
-      width: '40%',
-      render: (_, record: TableDictDetailType) => (
-        <Tag color={record.name.startsWith('超级') ? 'red' : 'geekblue'}>{record.name}</Tag>
-      ),
+      width: '20%',
       formItemProps: (form, { rowIndex }) => ({
         rules: rowIndex > 1 ? [{ required: true, message: '此项为必填项' }] : []
       }),
-      editable: (text, record, index) => index !== 0
+      render: (text, record) => <Tag color='geekblue'>{record.name}</Tag>
     },
     {
       key: 'type',
       title: '类型值',
       dataIndex: 'type',
-      width: '20%',
+      width: '10%',
       formItemProps: (form, { rowIndex }) => ({
         rules: rowIndex > 1 ? [{ required: true, message: '此项为必填项' }] : []
       })
@@ -134,7 +133,7 @@ const Dict = () => {
       key: 'remark',
       title: '备注',
       dataIndex: 'remark',
-      width: '20%',
+      width: '50%',
       formItemProps: (form, { rowIndex }) => ({
         rules: rowIndex > 1 ? [{ required: true, message: '此项为必填项' }] : []
       })
@@ -235,7 +234,7 @@ const Dict = () => {
   }
 
   /**
-   *
+   * 查询字典
    */
   const searchDict = async () => {
     let req = form.getFieldsValue()
@@ -361,15 +360,15 @@ const Dict = () => {
    * @param record
    */
   const dictDetial = async (record: TableDictType) => {
-    setDictId(record.key ?? '')
     const dictDetailList = await retrieveDictDetailPageList({
       dictId: record.key ?? '',
       currentPageNum: 1,
       pageSize: tableDetailPageInfo.pageSize
     })
     const list = transformDictDetalPageList(dictDetailList)
+    setDictId(record.key ?? '')
     setDictDetailDataSource(list)
-    setOpenDrawer(!openDrawer)
+    setOpenDrawer(true)
   }
 
   const initDetailData = async () => {
@@ -390,10 +389,26 @@ const Dict = () => {
   }
 
   /**
+   * 刷新字典明细列表
+   */
+  const refreshDictDetail = async () => {
+    // 刷新字典明细列表
+    const dictDetailList = await retrieveDictDetailPageList({
+      dictId: dictId,
+      currentPageNum: 1,
+      pageSize: tableDetailPageInfo.pageSize
+    })
+    const list = transformDictDetalPageList(dictDetailList)
+    setDictDetailDataSource(list)
+    setEditableRowKeys([])
+  }
+
+  /**
    * 打开或关闭抽屉
    */
   const onDrawerClose = () => {
-    setOpenDrawer(!openDrawer)
+    setOpenDrawer(false)
+    setEditableRowKeys([])
   }
 
   /**
@@ -509,7 +524,7 @@ const Dict = () => {
               ...rowSelection
             }}
             loading={tableLoading}
-            columns={columns}
+            columns={columnsDict}
             dataSource={dataSource}
             size={tableSize}
             pagination={{
@@ -526,6 +541,87 @@ const Dict = () => {
             }}
           />
         </div>
+        <div className='dict-detail-warpper'>
+          <Drawer
+            title={'字典明细'}
+            placement={'right'}
+            width={'50%'} // 设置宽度
+            size={'large'}
+            closable={true}
+            onClose={onDrawerClose}
+            open={openDrawer}
+            getContainer={false}
+          >
+            <EditableProTable
+              rowKey='key'
+              headerTitle='字典明细'
+              bordered={true}
+              loading={tableLoading}
+              size={tableSize}
+              recordCreatorProps={{
+                position: 'bottom',
+                creatorButtonText: '新增字典明细',
+                record: () => ({
+                  key: 'create', // 生成唯一的 key, 默认 create
+                  parentId: '',
+                  name: '',
+                  type: 0,
+                  remark: ''
+                })
+              }}
+              columns={columnsDetail}
+              value={dictDetailDataSource}
+              onChange={refreash}
+              editable={{
+                type: 'multiple',
+                editableKeys, // 控制数据行是否可编辑的函数
+                onSave: async (rowKey, rowData, row) => {
+                  // 保存字典明细
+                  let res
+                  if (rowData.key === 'create') {
+                    res = await dictApi.addDictDetail({
+                      parentId: dictId,
+                      type: rowData.type,
+                      name: rowData.name,
+                      remark: rowData.remark
+                    })
+                  } else {
+                    res = await dictApi.editDictDetail({
+                      surrogateId: rowData.key,
+                      parentId: dictId,
+                      type: rowData.type,
+                      name: rowData.name,
+                      remark: rowData.remark
+                    })
+                  }
+
+                  const { code, msg } = res
+                  if (code !== 200) {
+                    return
+                  }
+                  messageApi?.success(msg)
+
+                  // 刷新字典明细列表
+                  refreshDictDetail()
+                },
+                onChange: setEditableRowKeys // 更新可编辑行的函数
+                // onCancel: handleCancel // 点击 [取消] 触发
+              }}
+              pagination={{
+                size: 'small',
+                position: ['bottomLeft'],
+                showQuickJumper: false, // 跳转指定页面
+                showSizeChanger: true,
+                hideOnSinglePage: false,
+                pageSizeOptions: [10, 20, 50],
+                onChange: onChangeDetailPageInfo,
+                onShowSizeChange: onShowDetailSizeChange,
+                pageSize: tableDetailPageInfo.pageSize, // 每页条数
+                total: tableDetailPageInfo.totalSize // 总条数
+              }}
+            />
+          </Drawer>
+        </div>
         <DictModal
           mRef={dictRef}
           update={() => {
@@ -535,84 +631,6 @@ const Dict = () => {
             })
           }}
         />
-        <Drawer
-          title={'字典明细'}
-          placement={'right'}
-          width={'30%'} // 设置宽度
-          size={'large'}
-          closable={true}
-          onClose={onDrawerClose}
-          open={openDrawer}
-          getContainer={false}
-        >
-          <EditableProTable
-            rowKey='key'
-            headerTitle='字典明细'
-            bordered={true}
-            recordCreatorProps={{
-              position: 'bottom',
-              creatorButtonText: '新增字典明细',
-              record: () => ({
-                key: (Math.random() * 10).toFixed(0), // 生成唯一的 key
-                parentId: '',
-                name: '',
-                type: -1,
-                remark: ''
-              })
-            }}
-            loading={tableLoading}
-            size={tableSize}
-            columns={columnsDetail}
-            value={dictDetailDataSource}
-            onChange={refreash}
-            editable={{
-              type: 'multiple',
-              editableKeys,
-              onSave: async (rowKey, rowData, row) => {
-                if (rowData.key.length < 2) {
-                  // 新增
-                  const res = await dictApi.addDictDetail({
-                    parentId: dictId,
-                    type: rowData.type,
-                    name: rowData.name,
-                    remark: rowData.remark
-                  })
-                  const { code, msg, data } = res
-                  if (code !== 200) {
-                    return
-                  }
-                  messageApi?.success(msg)
-                } else {
-                  const res = await dictApi.editDictDetail({
-                    surrogateId: rowData.key,
-                    parentId: dictId,
-                    type: rowData.type,
-                    name: rowData.name,
-                    remark: rowData.remark
-                  })
-                  const { code, msg, data } = res
-                  if (code !== 200) {
-                    return
-                  }
-                  messageApi?.success(msg)
-                }
-              },
-              onChange: setEditableRowKeys // 更新可编辑行的函数
-            }}
-            pagination={{
-              size: 'small',
-              position: ['bottomLeft'],
-              showQuickJumper: false, // 跳转指定页面
-              showSizeChanger: true,
-              hideOnSinglePage: false,
-              pageSizeOptions: [10, 20, 50],
-              onChange: onChangeDetailPageInfo,
-              onShowSizeChange: onShowDetailSizeChange,
-              pageSize: tableDetailPageInfo.pageSize, // 每页条数
-              total: tableDetailPageInfo.totalSize // 总条数
-            }}
-          />
-        </Drawer>
       </Flex>
     </div>
   )
