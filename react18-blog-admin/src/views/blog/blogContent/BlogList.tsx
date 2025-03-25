@@ -18,6 +18,7 @@ import blogContentApi, {
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { blogTransformToTable } from '@/utils/blog/blogTransform'
 import { useBlogStore } from '@/store/blog/blogStore'
+import { useTranslation } from 'react-i18next'
 
 const BlogList = () => {
   const columnsBlog: ColumnsType<BlogContentDTO> = [
@@ -149,6 +150,7 @@ const BlogList = () => {
   const [pageSize, setPageSize] = useState<number>(20)
   const [totalSize, setTotalSize] = useState<number>(0)
   const { btnSize, tableSize } = useGlobalStyleStore()
+  const { i18n, t } = useTranslation()
 
   /**
    * 多选

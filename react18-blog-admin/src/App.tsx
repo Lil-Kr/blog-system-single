@@ -1,5 +1,4 @@
-import Router from 'oh-router'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ConfigProvider } from 'antd'
 import { RouterView } from 'oh-router-react'
 import useTheme from './hooks/useTheme'
@@ -12,14 +11,17 @@ import { Spin } from 'antd/lib'
 import { resetPermissionRouters, rootRouterConfig } from '@/router/dynamicRoutes'
 import { useTokenStore } from './store/login'
 import { useAdminLoginStore } from './store/sys/adminStore'
-import { userApi } from './apis/sys'
 import { SysUser } from './types/apis/sys/user/userType'
+import { userApi } from './apis/sys'
+import { useTranslation } from 'react-i18next'
+import './locales/index' // 导入i18n配置
 
 function App() {
   const { language, assemblySize, setLanguage } = useSystemStore()
   const [i18nLocale, setI18nLocale] = useState(zhCN)
   const { token } = useTokenStore()
   const { setAdmin } = useAdminLoginStore()
+  const { i18n, t } = useTranslation()
 
   /**
    * 全局使用主题
@@ -28,43 +30,60 @@ function App() {
 
   /**
    * 设置 antd 语言国际化
-   * // todo: 国际化配置
    */
-  const setAntdLanguage = () => {
-    // 如果 状态管理器 中有默认语言就设置成 状态管理器 的默认语言, 没有默认语言就设置成浏览器默认语言
-    if (language && language == 'zh') return setI18nLocale(zhCN)
-    if (language && language == 'en') return setI18nLocale(enUS)
-    if (getBrowserLang() == 'zh') return setI18nLocale(zhCN)
-    if (getBrowserLang() == 'en') return setI18nLocale(enUS)
-  }
+  // const setAntdLanguage = () => {
+  //   // 如果 状态管理器 中有默认语言就设置成 状态管理器 的默认语言, 没有默认语言就设置成浏览器默认语言
+  //   if (language && language == 'zh') {
+  //     setI18nLocale(zhCN)
+  //     i18n.changeLanguage('zh')
+  //     localStorage.setItem('language', 'zh')
+  //     return
+  //   }
+  //   if (language && language == 'en') {
+  //     setI18nLocale(enUS)
+  //     i18n.changeLanguage('en')
+  //     localStorage.setItem('language', 'en')
+  //     return
+  //   }
+
+  //   const browserLang = getBrowserLang()
+  //   if (browserLang == 'zh') {
+  //     setI18nLocale(zhCN)
+  //     i18n.changeLanguage('zh')
+  //     localStorage.setItem('language', 'zh')
+  //     return
+  //   }
+  //   if (browserLang == 'en') {
+  //     setI18nLocale(enUS)
+  //     i18n.changeLanguage('en')
+  //     localStorage.setItem('language', 'en')
+  //     return
+  //   }
+  // }
 
   useEffect(() => {
+    // token有效时执行
     if (token && token !== '') {
+      const initPermissionData = async () => {
+        resetPermissionRouters(token)
+        const admin = await retrieveAdmin()
+        setAdmin(admin)
+      }
       initPermissionData()
     }
 
-    const fetchDictList = () => {
-      try {
-        // 全局使用国际化
-        // i18n.changeLanguage(language || getBrowserLang())
-        // i18n.changeLanguage(getBrowserLang())
-        setLanguage(language || getBrowserLang())
-        setAntdLanguage()
-      } catch (error) {
-        console.log('--> error:', JSON.stringify(error))
-      }
-    }
-    fetchDictList()
+    // const setI18nConfig = () => {
+    //   try {
+    //     // 全局使用国际化
+    //     const currentLang = language || localStorage.getItem('language') || getBrowserLang()
+    //     setLanguage(currentLang)
+    //     // setAntdLanguage()
+    //   } catch (error) {
+    //     console.log('--> error:', JSON.stringify(error))
+    //   }
+    // }
+    // setI18nConfig()
   }, [language, token])
-
-  /**
-   * 初始化路由权限配置 用户权限信息
-   */
-  const initPermissionData = async () => {
-    resetPermissionRouters(token)
-    const admin = await retrieveAdmin()
-    setAdmin(admin)
-  }
 
   /**
    * 获取用户信息

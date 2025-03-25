@@ -32,7 +32,7 @@ const rootRouterConfig: Router<RouterMetaType> = new Router({
 const initUserPermission = async (): Promise<PermissionType> => {
   const res = await authApi.permission()
   const { code, data } = res
-  if (code !== 200) {
+  if (!code || code !== 200) {
     return {} as PermissionType
   }
   return data
@@ -122,7 +122,7 @@ const initAclModule = async () => {
  * @param token
  */
 const resetPermissionRouters = async (token?: string) => {
-  const setMenuTree = usePermissionsStore.getState().setMenuTree
+  // const setMenuTree = usePermissionsStore.getState().setMenuTree
   const setMenuItems = usePermissionsStore.getState().setMenuItems
   const setBtnSignSet = usePermissionsStore.getState().setBtnSign
   const setBreadcrumbMap = useBreadcrumbStore.getState().setBreadcrumbMap
@@ -135,7 +135,7 @@ const resetPermissionRouters = async (token?: string) => {
     // 请求后端权限数据
     const resPermission = await initUserPermission()
     const { menuList, btnSignList } = resPermission
-    setMenuTree(menuList)
+    // 存储按钮权限数据
     setBtnSignSet(btnSignList)
 
     // 转为前端路由结构
@@ -151,7 +151,6 @@ const resetPermissionRouters = async (token?: string) => {
     // 构建菜单数据
     const menuItems = getRouterMenuItems(rootRouterConfig.getRoutes())
     setMenuItems(menuItems)
-    console.log('--> 进来了:', menuItems)
 
     // 构建面包屑数据
     // todo: map中的value丢失数据, 待修复

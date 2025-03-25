@@ -6,7 +6,6 @@ import { create } from 'zustand'
  * =========================== 用户菜单-按钮权限 ===========================
  */
 interface PermissionsState {
-  menuTree: MenuTreeType[]
   menuItems: MenuItemType[]
   tabMap: Map<string, TabType>
 
@@ -15,14 +14,13 @@ interface PermissionsState {
 }
 
 interface PermissionsAction {
-  setMenuTree: (menutree: MenuTreeType[]) => void
+  // setMenuTree: (menutree: MenuTreeType[]) => void
   setMenuItems: (menuItems: MenuItemType[]) => void
   setTabMap: (tabMap: Map<string, TabType>) => void
   setBtnSign: (btnSignList: string[]) => void
 }
 
 const initMenuState = {
-  menuTree: [],
   menuItems: [],
   tabMap: new Map<string, TabType>(),
   btnSignSet: new Set<string>()
@@ -30,13 +28,6 @@ const initMenuState = {
 
 const usePermissionsStore = create<PermissionsAction & PermissionsState>()(set => ({
   ...initMenuState,
-  setMenuTree: (menutree: MenuTreeType[]) =>
-    set(state => {
-      return {
-        ...state,
-        menutree: menutree
-      }
-    }),
   setMenuItems: (menuItems: MenuItemType[]) =>
     set(state => ({
       ...state,

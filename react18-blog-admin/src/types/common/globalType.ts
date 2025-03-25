@@ -6,10 +6,3 @@ export interface ThemeConfigProp {
   isDark: boolean
   weakOrGray: string
 }
-
-/* GlobalState */
-export interface GlobalState {
-  assemblySize?: SizeType
-  language?: string
-  themeConfig?: ThemeConfigProp
-}

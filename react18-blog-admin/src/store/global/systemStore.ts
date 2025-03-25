@@ -1,27 +1,34 @@
-import { GlobalState } from '@/types/common'
 import { create } from 'zustand'
+import { ThemeConfigProp } from '@/types/common'
+import type { SizeType } from 'antd/lib/config-provider/SizeContext'
 
 type Actions = {
   setLanguage: (language: string) => void
 }
 
-const useSystemStore = create<GlobalState & Actions>(set => ({
-  /**
-   * init data
-   */
-  assemblySize: 'middle',
+type GlobalState = {
+  assemblySize?: SizeType
+  language?: string
+  themeConfig?: ThemeConfigProp
+}
+
+const initialState = {
+  assemblySize: 'middle' as SizeType,
   language: 'zh',
   themeConfig: {
     primary: '#1890ff',
     isDark: false,
     weakOrGray: ''
-  },
-  setLanguage: (language: string) => set(state => setLanguageFunc(state, language))
-}))
-
-const setLanguageFunc = (state: GlobalState & Actions, language: string) => {
-  state.language = language
-  return state
+  }
 }
+
+const useSystemStore = create<GlobalState & Actions>()(set => ({
+  ...initialState,
+  setLanguage: (language: string) =>
+    set(state => ({
+      ...state,
+      language
+    }))
+}))
 
 export default useSystemStore

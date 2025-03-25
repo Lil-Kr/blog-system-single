@@ -1,5 +1,4 @@
 import { OptionType } from '@/types/apis'
-import { DictMapType } from '@/types/apis/sys/dict/dictType'
 import { create } from 'zustand'
 
 /**
