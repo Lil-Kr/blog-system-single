@@ -12,7 +12,7 @@ spring:
     password: 123456
   data:
     mongodb:
-      uri: mongodb://admin:123456@mongodb_main:27017/blog?authSource=admin
+      uri: mongodb://admin:123456@192.168.9.135:27017/blog?authSource=admin
 
 ## upload config
 upload:

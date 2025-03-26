@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table, Tag, Typography } from 'antd'
-const { Title } = Typography
+import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Table, Tag } from 'antd'
 import { IAction, IModalParams, IModalRequestAction } from '@/types/component/modal'
-import SaveBlogModal from './SaveBlogModal'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
 import { useForm } from 'antd/es/form/Form'
-
+import { useGlobalStyleStore } from '@/store/global/globalStore'
+import { blogTransformToTable } from '@/utils/blog/blogTransform'
+import { useBlogStore } from '@/store/blog/blogStore'
+import BlogModal from './BlogModal'
+import { BlogModalType } from '@/types/blog/BlogType'
 // api
 import blogContentApi, {
   BlogContent,
@@ -15,10 +17,7 @@ import blogContentApi, {
   BlogContentVO,
   MappedBlogContentDTO
 } from '@/apis/blog/content/blogContentApi'
-import { useGlobalStyleStore } from '@/store/global/globalStore'
-import { blogTransformToTable } from '@/utils/blog/blogTransform'
-import { useBlogStore } from '@/store/blog/blogStore'
-import { useTranslation } from 'react-i18next'
+import SaveBlogModal from './SaveBlogModal'
 
 const BlogList = () => {
   const columnsBlog: ColumnsType<BlogContentDTO> = [
@@ -145,21 +144,23 @@ const BlogList = () => {
   }>()
 
   const [form] = useForm()
-  const [rowKeys, setRowKeys] = useState<React.Key[]>([])
   const { blogPageTableList, setBlogPageList } = useBlogStore()
   const [pageSize, setPageSize] = useState<number>(20)
   const [totalSize, setTotalSize] = useState<number>(0)
   const { btnSize, tableSize } = useGlobalStyleStore()
-  const { i18n, t } = useTranslation()
+  const [blogModal, setBlogModal] = useState<BlogModalType>({
+    openModal: false,
+    api: blogContentApi,
+    title: '添加博客',
+    inputDisabled: false,
+    update: () => {}
+  })
 
   /**
    * 多选
    */
   const rowSelection: TableRowSelection<BlogContentDTO> = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: BlogContentDTO[]) => {
-      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-      setRowKeys(selectedRowKeys)
-    },
+    onChange: (selectedRowKeys: React.Key[], selectedRows: BlogContentDTO[]) => {},
     getCheckboxProps: (record: BlogContentDTO) => ({})
   }
   /**
@@ -167,7 +168,9 @@ const BlogList = () => {
    * @param page
    * @param pageSize
    */
-  const onChange: PaginationProps['onChange'] = (page, pageSize) => {}
+  const onChange: PaginationProps['onChange'] = (page, pageSize) => {
+    setPageSize(pageSize)
+  }
 
   /**
    * change pageSize
@@ -183,8 +186,20 @@ const BlogList = () => {
    * 创建博客, 打开modal
    */
   const createBlog = () => {
-    let param = blogsRef.current?.open({ api: blogContentApi }, { title: '创建博客' }, { action: 'create', open: true })
+    // let param = blogsRef.current?.open({ api: blogContentApi }, { title: '创建博客' }, { action: 'create', open: true })
+    const param: BlogModalType = {
+      api: blogContentApi,
+      openModal: true,
+      title: '添加博客',
+      inputDisabled: false,
+      update: () => {
+        setBlogModal(preState => ({ ...preState, openModal: false }))
+      }
+    }
+    setBlogModal({ ...param })
   }
+
+  const callBackUpdate = () => {}
 
   /**
    * 编辑博客
@@ -236,8 +251,8 @@ const BlogList = () => {
     return data.list
   }
 
-  const getBlogContent = async (param: { blogId: string }): Promise<BlogContent> => {
-    const blogContent = await blogContentApi.getContent({ blogId: param.blogId })
+  const getBlogContent = async (req: { blogId: string }): Promise<BlogContent> => {
+    const blogContent = await blogContentApi.getContent({ blogId: req.blogId })
     if (blogContent.code !== 200) {
       return {} as BlogContent
     }
@@ -286,7 +301,7 @@ const BlogList = () => {
               hideOnSinglePage: false, // only one pageSize then hidden Paginator
               pageSizeOptions: [10, 20, 50], // specify how many items can be displayed on each page
               onChange: onChange,
-              onShowSizeChange: onShowSizeChange,
+              // onShowSizeChange: onShowSizeChange,
               showSizeChanger: true,
               pageSize: pageSize,
               total: totalSize
@@ -294,10 +309,11 @@ const BlogList = () => {
           />
         </div>
       </Flex>
-      <SaveBlogModal
+      {/* <SaveBlogModal
         mRef={blogsRef}
         update={() => getBlogContentPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })}
-      />
+      /> */}
+      <BlogModal {...blogModal} />
     </div>
   )
 }

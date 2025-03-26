@@ -7,13 +7,13 @@ const LanguageChange = () => {
   const items: MenuProps['items'] = [
     {
       key: '1',
-      label: <span>简体中文</span>,
+      label: <span>{'简体中文'}</span>,
       onClick: () => setLanguage('zh'),
       disabled: language === 'zh'
     },
     {
       key: '2',
-      label: <span>English</span>,
+      label: <span>{'English'}</span>,
       onClick: () => setLanguage('zh'),
       disabled: language === 'en'
     }
@@ -25,8 +25,6 @@ const LanguageChange = () => {
     items,
     onClick: handleMenuClick
   }
-
-  // const handleMenuClick = () => {}
 
   return (
     <div>

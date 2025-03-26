@@ -7,7 +7,6 @@ import { LabelMapped, LabelTableResq } from '@/types/apis/blog/labelType'
 import { BlogCategoryVO } from '@/types/apis/blog/category'
 import { BaseEntityPageType } from '@/types/base'
 import { BlogTopicVO } from '@/types/apis/blog/topic'
-import exp from 'constants'
 /**
  * blog label request API type
  */

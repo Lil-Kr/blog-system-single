@@ -17,11 +17,10 @@ import { useTranslation } from 'react-i18next'
 import './locales/index' // 导入i18n配置
 
 function App() {
-  const { language, assemblySize, setLanguage } = useSystemStore()
-  const [i18nLocale, setI18nLocale] = useState(zhCN)
+  const { language, assemblySize } = useSystemStore()
+  const [i18nLocale] = useState(zhCN)
   const { token } = useTokenStore()
   const { setAdmin } = useAdminLoginStore()
-  const { i18n, t } = useTranslation()
 
   /**
    * 全局使用主题
@@ -31,35 +30,6 @@ function App() {
   /**
    * 设置 antd 语言国际化
    */
-  // const setAntdLanguage = () => {
-  //   // 如果 状态管理器 中有默认语言就设置成 状态管理器 的默认语言, 没有默认语言就设置成浏览器默认语言
-  //   if (language && language == 'zh') {
-  //     setI18nLocale(zhCN)
-  //     i18n.changeLanguage('zh')
-  //     localStorage.setItem('language', 'zh')
-  //     return
-  //   }
-  //   if (language && language == 'en') {
-  //     setI18nLocale(enUS)
-  //     i18n.changeLanguage('en')
-  //     localStorage.setItem('language', 'en')
-  //     return
-  //   }
-
-  //   const browserLang = getBrowserLang()
-  //   if (browserLang == 'zh') {
-  //     setI18nLocale(zhCN)
-  //     i18n.changeLanguage('zh')
-  //     localStorage.setItem('language', 'zh')
-  //     return
-  //   }
-  //   if (browserLang == 'en') {
-  //     setI18nLocale(enUS)
-  //     i18n.changeLanguage('en')
-  //     localStorage.setItem('language', 'en')
-  //     return
-  //   }
-  // }
 
   useEffect(() => {
     // token有效时执行
@@ -71,18 +41,6 @@ function App() {
       }
       initPermissionData()
     }
-
-    // const setI18nConfig = () => {
-    //   try {
-    //     // 全局使用国际化
-    //     const currentLang = language || localStorage.getItem('language') || getBrowserLang()
-    //     setLanguage(currentLang)
-    //     // setAntdLanguage()
-    //   } catch (error) {
-    //     console.log('--> error:', JSON.stringify(error))
-    //   }
-    // }
-    // setI18nConfig()
   }, [language, token])
 
   /**

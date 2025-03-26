@@ -1,57 +1,44 @@
-import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
-import { IAction, IModalParams, IModalRequestAction, ModalType } from '@/types/component/modal'
-import { DeleteOutlined, ExclamationCircleFilled, EyeOutlined } from '@ant-design/icons'
+import React, { useEffect, useRef, useState } from 'react'
 import {
+  Button,
   Col,
   ConfigProvider,
   Form,
+  Image,
   Input,
   Modal,
   Radio,
   Row,
   Select,
   SelectProps,
-  Tag,
-  message,
-  Image,
-  Button,
-  List,
-  RadioChangeEvent,
-  Space
-} from 'antd'
-const { confirm } = Modal
-import blogContentApi, { MappedBlogContentDTO } from '@/apis/blog/content/blogContentApi'
-import { createStyles } from 'antd-style'
-import { useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { LabelTableResq } from '@/types/apis/blog/labelType'
-import { BlogCategoryVO } from '@/types/apis/blog/category'
-import { BlogTopicVO } from '@/types/apis/blog/topic'
-import labelApi from '@/apis/blog/label/labelApi'
-import blogTopicApi from '@/apis/blog/topic'
-import blogCategoryApi from '@/apis/blog/category'
+  Space,
+  Tag
+} from 'antd/lib'
+import { BlogModalType } from '@/types/blog/BlogType'
+import { DeleteOutlined, DingdingOutlined, EyeOutlined } from '@ant-design/icons'
+import screenfull from 'screenfull'
 import { Editor } from '@tinymce/tinymce-react'
 import { Editor as EditorInstance } from 'node_modules/tinymce/tinymce'
-import { Result } from '@/types/base/response'
-import { imageInfoApi } from '@/apis/image/imageInfo'
-import { useMessage } from '@/components/message/MessageProvider'
+import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
+import { createStyles } from 'antd-style'
 
 const env = import.meta.env
+
 const useStyle = createStyles(({ token }) => ({
   'blog-modal-body': {}
 }))
 
-/**
- * change image function
- */
-type ImageInfoType = {
-  key: string
-  value: string
-  name: string
-  imgUrl: string
-}
-
-const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
+const BlogModal = (props: BlogModalType) => {
+  const { openModal, api, title, inputDisabled, update } = props
+  const modalRef = useRef(null)
+  const [radioValue, setRadioValue] = useState<string>('')
+  const editorRef = useRef<EditorInstance | null>(null)
+  const [selectedLabelValues, setSelectedLabelValues] = useState<SelectProps['options']>([])
+  const { tinyMceContents, setTinyMCEContents, setTinymecStatus } = useTinymceStore()
+  const [selectCategory, setSelectCategory] = useState<SelectProps['options']>([])
+  const [selectTopic, setSelectTopic] = useState<SelectProps['options']>([])
   const { styles } = useStyle()
+
   const modalStyles = {
     body: {
       height: 'calc(100vh - 120px)',
@@ -62,116 +49,11 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
     body: styles['blog-modal-body']
   }
 
-  const messageApi = useMessage()
-  const { mRef, update } = props
-  const [saveBlogForm] = Form.useForm()
-  const editorRef = useRef<EditorInstance | null>(null)
-  const { tinyMceContents, setTinyMCEContents, setTinymecStatus } = useTinymceStore()
-  const [title, setTitle] = useState<string>('')
-  const [openModal, setOpenModal] = useState(false)
-  const [modalAction, setModalAction] = useState<string>('create')
-  const [inputDisabled, setInputDisabled] = useState<boolean>(false)
-  const [selectedLabelValues, setSelectedLabelValues] = useState<SelectProps['options']>([])
-  const [selectCategory, setSelectCategory] = useState<SelectProps['options']>([])
-  const [selectTopic, setSelectTopic] = useState<SelectProps['options']>([])
-  const [isOpenUploadImage, setIsOpenUploadImage] = useState<boolean>(false)
-  const [imageInfoList, setImageInfoList] = useState<ImageInfoType[]>([]) // set image list
-
-  /**
-   *
-   */
-  useImperativeHandle(mRef, () => ({
-    form: saveBlogForm,
-    open
-  }))
-
-  const open = (
-    requestParams: IModalRequestAction,
-    params: IModalParams,
-    type: IAction,
-    // items?: ModalType.InputType[],
-    data?: { blog: MappedBlogContentDTO }
-  ) => {
-    const { action, open } = type
-    const { title } = params
-
-    setModalAction(action)
-
-    if (action === 'create') {
-      setTinymecStatus(0, '') // create blog
-    } else if (action === 'edit') {
-      const { blog } = data as { blog: MappedBlogContentDTO }
-
-      saveBlogForm.setFieldsValue(blog)
-      setTinymecStatus(1, blog.contentText ?? '') // edit blog
-      setRadioValue(`${blog.imgUrl}`)
-    } else {
-      setInputDisabled(true)
-    }
-
-    setOpenModal(open)
-    setTitle(title)
-  }
-
   useEffect(() => {
-    const fetchLabels = async () => {
-      const labels = await getLabels()
-      const selectLabels = labels.map(({ surrogateId, name, color }, index) => ({
-        key: surrogateId,
-        value: surrogateId,
-        label: name,
-        color
-      }))
-      setSelectedLabelValues(selectLabels)
-
-      const selectBlogCategory = await getCategorys()
-      const categorys = selectBlogCategory.map(({ surrogateId, name }, index) => ({
-        key: surrogateId,
-        value: surrogateId,
-        label: name
-      }))
-      setSelectCategory(categorys)
-
-      const selectBlogTopic = await getTopics()
-      const blogTopics = selectBlogTopic.map(({ surrogateId, name }, index) => ({
-        key: surrogateId,
-        value: surrogateId,
-        label: name
-      }))
-      setSelectTopic(blogTopics)
+    if (openModal && screenfull.isEnabled && modalRef.current) {
+      screenfull.request(modalRef.current)
     }
-
-    fetchLabels()
-  }, [])
-
-  /**
-   * 查询所有标签
-   * @returns
-   */
-  const getLabels = async (): Promise<LabelTableResq[]> => {
-    const labels = await labelApi.retrieveLabelPageList({})
-    if (labels.code !== 200) {
-      return []
-    }
-    return labels.data.list
-  }
-
-  const getCategorys = async (): Promise<BlogCategoryVO[]> => {
-    const blogCategory = await blogCategoryApi.getCategoryList({})
-    if (blogCategory.code !== 200) {
-      return [] as BlogCategoryVO[]
-    }
-    return blogCategory.data.list
-  }
-
-  const getTopics = async (): Promise<BlogTopicVO[]> => {
-    const blogTopics = await blogTopicApi.getTopicList({})
-
-    if (blogTopics.code !== 200) {
-      return [] as BlogTopicVO[]
-    }
-    return blogTopics.data.list
-  }
+  }, [openModal])
 
   type TagRender = SelectProps['tagRender']
   const tagRender: TagRender = props => {
@@ -185,108 +67,17 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
     )
   }
 
-  /**
-   * 退出编辑框时的提示
-   */
-  const showBlogCancelConfirm = () => {
-    confirm({
-      title: '提示',
-      icon: <ExclamationCircleFilled />,
-      content: '是否退出编辑模式？',
-      onOk() {
-        saveBlogForm.resetFields()
-        setOpenModal(false)
-        setTinyMCEContents('')
-        setRadioValue('')
-      },
-      onCancel() {
-        messageApi?.warning('取消成功')
-      }
-    })
-  }
-
-  const handleBlogOk = async () => {
-    const valid = await saveBlogForm.validateFields()
-    if (valid) {
-      const params = saveBlogForm.getFieldsValue()
-      params.contentText = tinyMceContents
-
-      params.labelIds = params.blogLabelList.map((item: any, index: any) => item.value)
-
-      let res = {} as Result<string>
-      if (modalAction === 'create') {
-        res = await blogContentApi.add(params)
-      } else {
-        params.surrogateId = params.key
-        params.imgUrl = radioValue
-        res = await blogContentApi.edit(params)
-      }
-
-      if (res.code === 200) {
-        messageApi?.success('操作成功')
-        saveBlogForm.resetFields()
-        setOpenModal(false)
-        update()
-      } else {
-        messageApi?.error('操作失败')
-      }
-    }
-  }
-
   const handleBlogCancel = () => {
-    if (tinyMceContents !== '' || tinyMceContents.length > 0) {
-      showBlogCancelConfirm()
-    } else {
-      saveBlogForm.resetFields()
-      setRadioValue('')
-      setOpenModal(false)
-    }
-  }
-
-  /**
-   * open change image list radios
-   * @returns
-   */
-  const openImageListModal = async () => {
-    /**
-     * hard code
-     */
-    const imageInfoList = await imageInfoApi.imageInfoList({ imageCategoryId: '1795772207981531136' })
-    if (imageInfoList.code !== 200) {
-      return
-    }
-    const imageInfoMapping: ImageInfoType[] = imageInfoList.data.list.map((item, index) => ({
-      key: item.surrogateId,
-      name: item.name,
-      value: item.imageUrl,
-      imgUrl: item.imageUrl
-    }))
-    setIsOpenUploadImage(true) // open modal
-    setImageInfoList(imageInfoMapping)
-  }
-
-  /**
-   * 选择图片
-   */
-  const [radioValue, setRadioValue] = useState<string>('')
-
-  const imageRadioOnChange = (e: RadioChangeEvent) => {
-    setRadioValue(e.target.value)
-  }
-
-  const handleUploadImageOK = () => {
-    setIsOpenUploadImage(false)
+    update()
   }
 
   const handleRemoveImage = () => {
     setRadioValue('')
   }
 
-  const cancelImageListModal = () => {
-    setIsOpenUploadImage(false)
-    setImageInfoList([])
-    setRadioValue('')
-  }
+  const handleBlogOk = () => {}
+
+  const openImageListModal = () => {}
 
   return (
     <div className='saveBlogModal'>
@@ -297,26 +88,24 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
         }}
       >
         <Modal
+          className='blog-modal-warpper'
           style={{
             maxWidth: '100vw',
-            height:'100vh',
+            height: '100vh',
             top: 0,
             paddingBottom: 0
           }}
           title={title}
+          open={openModal}
           width={'100vw'}
           okText={'确定'}
           cancelText={'取消'}
-          open={openModal}
           onOk={handleBlogOk}
           onCancel={handleBlogCancel}
-          destroyOnClose={false}
-          // afterClose={resetForm}
-          // forceRender={true} // 强制渲染
-          // confirmLoading={confirmLoading}
-          maskClosable={false}
+          getContainer={false} // 让 Modal 渲染在当前 DOM 结构
+          maskClosable={false} // 禁止点击遮罩层关闭
         >
-          <Form form={saveBlogForm} disabled={inputDisabled} labelCol={{ flex: '100px' }} preserve={false}>
+          <Form disabled={inputDisabled} preserve={false}>
             <Row gutter={16} justify={'start'}>
               <Col span={12}>
                 <Form.Item name={'key'} hidden>
@@ -432,9 +221,9 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
               <Col span={6}>
                 <Form.Item name={'status'} label={'发布状态'} rules={[{ required: true, message: '发布状态不能为空' }]}>
                   <Radio.Group>
-                    <Radio value={0}>草稿</Radio>
-                    <Radio value={1}>发布</Radio>
-                    <Radio value={-1}>下架</Radio>
+                    <Radio value={0}>{'草稿'}</Radio>
+                    <Radio value={1}>{'发布'}</Radio>
+                    <Radio value={-1}>{'下架'}</Radio>
                   </Radio.Group>
                 </Form.Item>
               </Col>
@@ -451,7 +240,7 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
                       editorRef.current = editor
                     }}
                     init={{
-                      height: '100vh',
+                      height: '40vh',
                       menubar: true, // menu bar
                       statusbar: false, // status bar
                       promotion: false, // upgrade the pro version
@@ -540,47 +329,9 @@ const SaveBlogModal = (props: ModalType.SaveBlogModal) => {
             </Row>
           </Form>
         </Modal>
-        {/* select image modal */}
-        <Modal
-          title={'请选择文章封面图片'}
-          style={{ top: 0, paddingBottom: 0 }}
-          open={isOpenUploadImage}
-          onOk={handleUploadImageOK}
-          onCancel={cancelImageListModal}
-          width={'90%'}
-        >
-          <Radio.Group onChange={imageRadioOnChange} value={radioValue}>
-            <List
-              grid={{
-                gutter: 16,
-                xs: 1,
-                sm: 2,
-                md: 4,
-                lg: 4,
-                xl: 6,
-                xxl: 8
-              }}
-              dataSource={imageInfoList}
-              renderItem={item => (
-                <List.Item>
-                  <Radio key={item.key} value={item.value}>
-                    <Image preview={true} src={`${env.VITE_BACKEND_IMAGE_BASE_API}${item.imgUrl}`} />
-                  </Radio>
-                </List.Item>
-              )}
-              pagination={{
-                size: 'small',
-                position: 'bottom',
-                align: 'start',
-                pageSize: 16,
-                total: 12 // todo: 修改为真实的值
-              }}
-            />
-          </Radio.Group>
-        </Modal>
       </ConfigProvider>
     </div>
   )
 }
 
-export default SaveBlogModal
+export default BlogModal
