@@ -66,6 +66,7 @@ export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 
 export interface TableDictDetailType {
   key: string
+  surrogateId?: string | null
   parentId: string
   name: string
   type: number

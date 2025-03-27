@@ -4,7 +4,6 @@ import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table, T
 import { LabelListTableType, LabelPageReq, LabelReq, LabelTableResq } from '@/types/apis/blog/labelType'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
-import { IAction } from '@/types/component/modal'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import labelApi from '@/apis/blog/label/labelApi'
@@ -20,7 +19,7 @@ const BlogLabel = () => {
   const { setLabelState } = useLabelModalStore()
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
 
-  const labelRef = useRef<{ open: (type: IAction, data?: LabelListTableType) => void }>()
+  // const labelRef = useRef<{ open: (type: IAction, data?: LabelListTableType) => void }>()
 
   const columnsLable: ColumnsType<LabelListTableType> = [
     {

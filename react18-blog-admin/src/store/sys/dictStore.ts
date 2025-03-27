@@ -11,6 +11,10 @@ type DictDetailState = {
   dictStatues: OptionType[]
   aclTypes: OptionType[]
   roleTypes: OptionType[]
+  blogTypes: OptionType[]
+  blogTopics: OptionType[]
+  blogPublisStatue: OptionType[]
+  switchStatue: OptionType[]
 }
 
 type Actions = {
@@ -18,13 +22,21 @@ type Actions = {
   setDictStatueType: (dictStatues: OptionType[]) => void
   setAclType: (aclTypes: OptionType[]) => void
   setRoleType: (roleTypes: OptionType[]) => void
+  setBlogType: (blogTypes: OptionType[]) => void
+  setBlogTopic: (blogTopics: OptionType[]) => void
+  setBlogPublisStatue: (blogPublisStatue: OptionType[]) => void
+  setSwitchStatue: (switchStatue: OptionType[]) => void
 }
 
 const initDictDitailData = {
   dictMap: new Map<string, DictMapType[]>(),
   dictStatues: [] as OptionType[],
   aclTypes: [] as OptionType[],
-  roleTypes: [] as OptionType[]
+  roleTypes: [] as OptionType[],
+  blogTypes: [] as OptionType[],
+  blogTopics: [] as OptionType[],
+  blogPublisStatue: [] as OptionType[],
+  switchStatue: [] as OptionType[]
 }
 
 const useDictDetailStore = create<DictDetailState & Actions>()(set => ({
@@ -44,6 +56,22 @@ const useDictDetailStore = create<DictDetailState & Actions>()(set => ({
   setRoleType: (roleTypes: OptionType[]) =>
     set(() => ({
       roleTypes
+    })),
+  setBlogType: (blogTypes: OptionType[]) =>
+    set(() => ({
+      blogTypes
+    })),
+  setBlogTopic: (blogTopics: OptionType[]) =>
+    set(() => ({
+      blogTopics
+    })),
+  setBlogPublisStatue: (blogPublisStatue: OptionType[]) =>
+    set(() => ({
+      blogPublisStatue
+    })),
+  setSwitchStatue: (switchStatue: OptionType[]) =>
+    set(() => ({
+      switchStatue
     }))
 }))
 

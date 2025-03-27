@@ -1,6 +1,7 @@
 import labelApi from '@/apis/blog/label/labelApi'
 import { LabelApi, LabelListTableType } from '@/types/apis/blog/labelType'
 import { TablePageInfoType } from '@/types/base'
+import { SelectProps } from 'antd/lib'
 import { RowSelectionType } from 'antd/lib/table/interface'
 import { create } from 'zustand'
 
@@ -9,6 +10,7 @@ import { create } from 'zustand'
  */
 interface LabelState {
   labelPageList: LabelListTableType[]
+  labelList: SelectProps['options']
   tablePageInfo: TablePageInfoType
   rowKeys: React.Key[]
   rowSelectType: RowSelectionType
@@ -19,13 +21,15 @@ interface LabelAction {
   setTablePageInfo: (tablePageInfo: TablePageInfoType) => void
   setRowKeys: (rowKeys: React.Key[]) => void
   setRowSelectType: (rowSelectType: RowSelectionType) => void
+  setLabelList: (labelList: SelectProps['options']) => void
 }
 
 const initLabelDate = {
   labelPageList: [],
+  labelList: [],
   tablePageInfo: {
     currentPageNum: 1,
-    pageSize: 2,
+    pageSize: 20,
     totalSize: 0
   },
   rowKeys: [],
@@ -53,6 +57,11 @@ const useLabelStore = create<LabelState & LabelAction>()(set => ({
     set(state => ({
       ...state,
       rowSelectType
+    })),
+  setLabelList: (labelList: SelectProps['options']) =>
+    set(state => ({
+      ...state,
+      labelList
     }))
 }))
 

@@ -15,7 +15,7 @@ export interface LabelType {
   name: string
   color: string
   colorText: string
-  status: number // 未使用
+  status: string // 未使用
   remark: string
   creatorId: string
   operator: string
@@ -79,6 +79,7 @@ export interface LabelTableResq extends LabelType {
  */
 export interface LabelApi extends BaseApi {
   retrieveLabelPageList(req: LabelReq): Promise<ResultPage<LabelTableResq>>
+  retrieveLabelList(req: LabelReq): Promise<ResultPage<LabelTableResq>>
   add(req: CreateLabelReq): Promise<Result<string>>
   edit(req: EditLabelReq): Promise<Result<string>>
   delete(req: DelLabelReq): Promise<Result<string>>

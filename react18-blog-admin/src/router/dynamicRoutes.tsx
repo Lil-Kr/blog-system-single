@@ -59,6 +59,8 @@ const initDictMap = async () => {
   const setDictStatueType = useDictDetailStore.getState().setDictStatueType
   const setAclType = useDictDetailStore.getState().setAclType
   const setRoleType = useDictDetailStore.getState().setRoleType
+  const setSwitchStatue = useDictDetailStore.getState().setSwitchStatue
+
   /**
    * 初始化字典表
    */
@@ -85,6 +87,13 @@ const initDictMap = async () => {
   const roleTypes = dictMap.get('角色类型') ?? []
   const roleType = transformTypeToSeletor(roleTypes)
   setRoleType(roleType)
+
+  /**
+   * 查询数据字典[角色类型]
+   */
+  const switchStatues = dictMap.get('开关') ?? []
+  const switchStatue = transformTypeToSeletor(switchStatues)
+  setSwitchStatue(switchStatue)
 }
 
 /**

@@ -21,7 +21,7 @@ public interface BlogLabelMapper extends BaseMapper<BlogLabel> {
 
 	Integer deleteBySurrogateId(Long surrogateId);
 
-	List<BlogLabelVO> getLabelList(@Param("param") BlogLabelListReq req);
+	List<BlogLabelVO> labelList(@Param("param") BlogLabelListReq req);
 
 	Integer deleteBatch(List<Long> list);
 

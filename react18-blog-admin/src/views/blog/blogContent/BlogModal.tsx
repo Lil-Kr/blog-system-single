@@ -3,11 +3,13 @@ import {
   Button,
   Col,
   ConfigProvider,
+  Flex,
   Form,
   Image,
   Input,
   Modal,
   Radio,
+  RadioChangeEvent,
   Row,
   Select,
   SelectProps,
@@ -15,53 +17,85 @@ import {
   Tag
 } from 'antd/lib'
 import { BlogModalType } from '@/types/blog/BlogType'
-import { DeleteOutlined, DingdingOutlined, EyeOutlined } from '@ant-design/icons'
-import screenfull from 'screenfull'
+import { DeleteOutlined, EyeOutlined } from '@ant-design/icons'
 import { Editor } from '@tinymce/tinymce-react'
 import { Editor as EditorInstance } from 'node_modules/tinymce/tinymce'
 import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
-import { createStyles } from 'antd-style'
+import { useDictDetailStore } from '@/store/sys/dictStore'
+import { BlogContentAddReq } from '@/apis/blog/content/blogContentApi'
+import { useBlogStore } from '@/store/blog/blogStore'
 
 const env = import.meta.env
-
-const useStyle = createStyles(({ token }) => ({
-  'blog-modal-body': {}
-}))
+const modalStyles = {
+  body: {
+    height: 'calc(100vh - 120px)',
+    overflowy: 'auto'
+  }
+}
 
 const BlogModal = (props: BlogModalType) => {
-  const { openModal, api, title, inputDisabled, update } = props
-  const modalRef = useRef(null)
+  // const [selectedLabelValues, setSelectedLabelValues] = useState<SelectProps['options']>([])
+  // const [selectCategory, setSelectCategory] = useState<SelectProps['options']>([])
+  // const [selectTopic, setSelectTopic] = useState<SelectProps['options']>([])
+  // const {blogPublish, setBlogPublish} = useState()
+  const { openModal, api, title, inputDisabled, action, data, update } = props
+  const [blogForm] = Form.useForm()
   const [radioValue, setRadioValue] = useState<string>('')
   const editorRef = useRef<EditorInstance | null>(null)
-  const [selectedLabelValues, setSelectedLabelValues] = useState<SelectProps['options']>([])
-  const { tinyMceContents, setTinyMCEContents, setTinymecStatus } = useTinymceStore()
-  const [selectCategory, setSelectCategory] = useState<SelectProps['options']>([])
-  const [selectTopic, setSelectTopic] = useState<SelectProps['options']>([])
-  const { styles } = useStyle()
-
-  const modalStyles = {
-    body: {
-      height: 'calc(100vh - 120px)',
-      overflowy: 'auto'
-    }
-  }
-  const classNames = {
-    body: styles['blog-modal-body']
-  }
+  // const { tinyMceContents, setTinyMCEContents, setTinymecStatus } = useTinymceStore()
+  const { blogTypes, blogTopics, blogPublisStatue, switchStatue } = useDictDetailStore()
+  const { blogModalData, setBlogModalData } = useBlogStore()
 
   useEffect(() => {
-    if (openModal && screenfull.isEnabled && modalRef.current) {
-      screenfull.request(modalRef.current)
+    if (openModal) {
+      initData()
     }
   }, [openModal])
+
+  const initData = () => {
+    blogForm.resetFields()
+    if (action === 'create') {
+      const initModalData = {
+        categoryInfo: data?.categoryInfo,
+        publishStatue: data?.blogPublisStatue,
+        original: data?.original,
+        recommend: data?.recommend
+      }
+      blogForm.setFieldsValue({ ...initModalData })
+
+      setBlogModalData({
+        ...blogModalData,
+        original: data?.original ?? '',
+        recommend: data?.recommend ?? '',
+        status: data?.blogPublisStatue ?? '',
+        categoryId: data?.categoryInfo.value ?? ''
+      })
+    } else if (action === 'edit') {
+      const initModalData = {
+        categoryInfo: data?.categoryInfo,
+        publishStatue: data?.blogPublisStatue,
+        original: data?.original,
+        recommend: data?.recommend
+      }
+      blogForm.setFieldsValue({  ...data })
+
+      setBlogModalData({
+        ...blogModalData,
+        original: data?.original ?? '',
+        recommend: data?.recommend ?? '',
+        status: data?.blogPublisStatue ?? '',
+        categoryId: data?.categoryInfo.value ?? ''
+      })
+    } else {
+    }
+  }
 
   type TagRender = SelectProps['tagRender']
   const tagRender: TagRender = props => {
     const { label, value, closable, onClose } = props
-    const option = selectedLabelValues?.find(opt => opt.value === value)
-
+    const option = data?.blogLabelList?.find(opt => opt.value === value)
     return (
-      <Tag color={option?.color} closable={closable} onClose={onClose} style={{ marginRight: 1 }}>
+      <Tag color={option?.color} closable={closable} onClose={onClose}>
         {label}
       </Tag>
     )
@@ -75,15 +109,88 @@ const BlogModal = (props: BlogModalType) => {
     setRadioValue('')
   }
 
-  const handleBlogOk = () => {}
+  const handleBlogOk = async () => {
+    const valid = await blogForm.validateFields()
+    const params = blogForm.getFieldsValue()
+    if (!valid) {
+      return
+    }
 
+    if (action === 'create') {
+      const req: BlogContentAddReq = {
+        ...blogModalData,
+        ...params
+      }
+
+      console.log('--> req:', { ...req })
+      api.add({ ...req })
+    } else if (action === 'edit') {
+    } else {
+    }
+  }
+
+  /**
+   * 选择图片时打开
+   */
   const openImageListModal = () => {}
+
+  /**
+   * 选择分类
+   * @param value
+   */
+  const handleChangeCategory = (value: string) => {
+    setBlogModalData({
+      ...blogModalData,
+      categoryId: value
+    })
+  }
+
+  /**
+   * 选择标签
+   */
+  const handleChangeLabels = (value: SelectProps['options']) => {
+    setBlogModalData({
+      ...blogModalData,
+      labelIds: value?.map(({ key }) => key) ?? []
+    })
+  }
+
+  /**
+   * 选择专题
+   * @param value
+   */
+  const handleChangeTopic = (value: string) => {
+    setBlogModalData({
+      ...blogModalData,
+      topicId: value
+    })
+  }
+
+  const onChangeOriginal = (event: RadioChangeEvent) => {
+    setBlogModalData({
+      ...blogModalData,
+      original: event.target.value
+    })
+  }
+
+  const onChangeRecommend = (event: RadioChangeEvent) => {
+    setBlogModalData({
+      ...blogModalData,
+      recommend: event.target.value
+    })
+  }
+
+  const onChangePublishStatue = (event: RadioChangeEvent) => {
+    setBlogModalData({
+      ...blogModalData,
+      status: event.target.value
+    })
+  }
 
   return (
     <div className='saveBlogModal'>
       <ConfigProvider
         modal={{
-          classNames,
           styles: modalStyles
         }}
       >
@@ -91,7 +198,7 @@ const BlogModal = (props: BlogModalType) => {
           className='blog-modal-warpper'
           style={{
             maxWidth: '100vw',
-            height: '100vh',
+            maxHeight: '100vh',
             top: 0,
             paddingBottom: 0
           }}
@@ -105,7 +212,7 @@ const BlogModal = (props: BlogModalType) => {
           getContainer={false} // 让 Modal 渲染在当前 DOM 结构
           maskClosable={false} // 禁止点击遮罩层关闭
         >
-          <Form disabled={inputDisabled} preserve={false}>
+          <Form form={blogForm} disabled={inputDisabled} preserve={false}>
             <Row gutter={16} justify={'start'}>
               <Col span={12}>
                 <Form.Item name={'key'} hidden>
@@ -132,7 +239,7 @@ const BlogModal = (props: BlogModalType) => {
                       <Image
                         preview={{
                           mask: (
-                            <Space>
+                            <Flex vertical={false} gap={8}>
                               <EyeOutlined style={{ color: 'white', fontSize: '20px' }} />
                               <DeleteOutlined
                                 style={{ fontSize: '20px' }}
@@ -141,7 +248,7 @@ const BlogModal = (props: BlogModalType) => {
                                   handleRemoveImage()
                                 }}
                               />
-                            </Space>
+                            </Flex>
                           )
                         }}
                         src={`${env.VITE_BACKEND_IMAGE_BASE_API}${radioValue}`}
@@ -163,35 +270,37 @@ const BlogModal = (props: BlogModalType) => {
                     mode='multiple'
                     labelInValue={true}
                     tagRender={tagRender}
-                    options={selectedLabelValues}
+                    options={data?.blogLabelList}
                     maxCount={4}
+                    onChange={value => handleChangeLabels(value)}
                   />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item name={'categoryId'} label={'分类'} rules={[{ required: true, message: '分类不能为空' }]}>
+                <Form.Item name={'categoryInfo'} label={'分类'} rules={[{ required: true, message: '分类不能为空' }]}>
                   <Select
                     key={1}
                     showSearch
                     placeholder='select category'
                     optionFilterProp='children'
-                    options={selectCategory}
+                    options={blogTypes}
+                    onChange={value => handleChangeCategory(value)}
                   />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item name={'topicId'} label={'所属专题'}>
+                <Form.Item name={'topicInfo'} label={'所属专题'}>
                   <Select
                     key={2}
                     showSearch
                     placeholder='select category'
                     optionFilterProp='children'
-                    options={selectTopic}
+                    options={blogTopics}
+                    onChange={value => handleChangeTopic(value)}
                   />
                 </Form.Item>
               </Col>
             </Row>
-
             <Row gutter={16} justify={'start'}>
               <Col span={6}>
                 <Form.Item
@@ -200,9 +309,15 @@ const BlogModal = (props: BlogModalType) => {
                   rules={[{ required: true, message: '原创类型不能为空' }]}
                 >
                   {/* <Radio.Group onChange={onChange} value={value}> */}
-                  <Radio.Group>
-                    <Radio value={0}>否</Radio>
-                    <Radio value={1}>是</Radio>
+                  <Radio.Group onChange={onChangeOriginal}>
+                    {switchStatue.length &&
+                      switchStatue.map(item => {
+                        return (
+                          <Radio key={item.value} value={item.value}>
+                            {item.label}
+                          </Radio>
+                        )
+                      })}
                   </Radio.Group>
                 </Form.Item>
               </Col>
@@ -212,18 +327,33 @@ const BlogModal = (props: BlogModalType) => {
                   label={'是否推荐'}
                   rules={[{ required: true, message: '是否推荐不能为空' }]}
                 >
-                  <Radio.Group>
-                    <Radio value={0}>否</Radio>
-                    <Radio value={1}>是</Radio>
+                  <Radio.Group onChange={onChangeRecommend}>
+                    {switchStatue.length &&
+                      switchStatue.map(item => {
+                        return (
+                          <Radio key={item.value} value={item.value}>
+                            {item.label}
+                          </Radio>
+                        )
+                      })}
                   </Radio.Group>
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item name={'status'} label={'发布状态'} rules={[{ required: true, message: '发布状态不能为空' }]}>
-                  <Radio.Group>
-                    <Radio value={0}>{'草稿'}</Radio>
-                    <Radio value={1}>{'发布'}</Radio>
-                    <Radio value={-1}>{'下架'}</Radio>
+                <Form.Item
+                  name={'publishStatue'}
+                  label={'发布状态'}
+                  rules={[{ required: true, message: '发布状态不能为空' }]}
+                >
+                  <Radio.Group onChange={onChangePublishStatue}>
+                    {blogPublisStatue.length &&
+                      blogPublisStatue.map(item => {
+                        return (
+                          <Radio key={item.value} value={item.value}>
+                            {item.label}
+                          </Radio>
+                        )
+                      })}
                   </Radio.Group>
                 </Form.Item>
               </Col>
@@ -240,7 +370,7 @@ const BlogModal = (props: BlogModalType) => {
                       editorRef.current = editor
                     }}
                     init={{
-                      height: '40vh',
+                      height: '50vh',
                       menubar: true, // menu bar
                       statusbar: false, // status bar
                       promotion: false, // upgrade the pro version
@@ -321,7 +451,7 @@ const BlogModal = (props: BlogModalType) => {
                       // content_css: 'dark'
                     }}
                     onEditorChange={(newValue, editor) => {
-                      setTinyMCEContents(editor.getContent())
+                      setBlogModalData({ ...blogModalData, contentText: editor.getContent() })
                     }}
                   />
                 </Form.Item>

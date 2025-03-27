@@ -20,7 +20,7 @@ import java.util.List;
  */
 public interface BlogContentService {
 
-  ApiResp<String> save(BlogContentReq req);
+  ApiResp<String> add(BlogContentReq req);
 
   BlogContentMongo saveBlogContentMongo(BlogContentMongo entity);
 

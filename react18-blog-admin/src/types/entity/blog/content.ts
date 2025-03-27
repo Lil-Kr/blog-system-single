@@ -6,9 +6,9 @@ import { BaseEntityRequiredType } from '@/types/base'
 export interface BlogContentType extends BaseEntityRequiredType {
   id?: number
   surrogateId: string
-  number: number | string
-  recommend: number
-  original: number
+  number: string
+  recommend: string
+  original: string
   title: string
   introduction: string
   imgUrl: string

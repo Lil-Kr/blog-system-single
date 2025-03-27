@@ -70,9 +70,9 @@ public class BlogController {
 
   @RecordLogger
   @CheckAuth
-  @PostMapping("/save")
-  public ApiResp<String> save(@RequestBody @Validated({BlogContentReq.GroupBlogContentSave.class}) BlogContentReq req) {
-    return blogContentService.save(req);
+  @PostMapping("/add")
+  public ApiResp<String> add(@RequestBody @Validated({BlogContentReq.GroupBlogContentAdd.class}) BlogContentReq req) {
+    return blogContentService.add(req);
   }
 
   @RecordLogger

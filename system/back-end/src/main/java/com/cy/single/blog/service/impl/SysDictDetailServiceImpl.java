@@ -40,7 +40,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 
 	@Override
 	public ApiResp<String> addDetail(SaveDictDetailReq req) {
-		if (checkDetailExist(req.getSurrogateId(), req.getName(), req.getType())) {
+		if (checkDetailExist(req.getParentId(), req.getName(), req.getType())) {
 			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg1"));
 		}
 
@@ -62,15 +62,13 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 
 	/**
 	 * 检查是否存在相同的明细名称
-	 * @param surrogateId
+	 * @param parentId
 	 * @param name
 	 * @return
 	 */
-	protected boolean checkDetailExist(Long surrogateId, String name, Integer type) {
+	protected boolean checkDetailExist(Long parentId, String name, Integer type) {
 		QueryWrapper<SysDictDetail> query = new QueryWrapper<>();
-		if (Objects.nonNull(surrogateId)) {
-			query.eq("surrogate_id",surrogateId);
-		}
+		query.eq("parent_id", parentId);
 		query.eq("name", name);
 		query.eq("type", type);
 		Long count = dictDetailMapper.selectCount(query);

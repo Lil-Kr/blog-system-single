@@ -45,7 +45,7 @@ public class BlogContentServiceImpl implements BlogContentService {
   private BlogContentMongoMapper blogContentMongoMapper;
 
   @Override
-  public ApiResp<String> save(BlogContentReq req) {
+  public ApiResp<String> add(BlogContentReq req) {
     BlogContent blogContent = BlogContentDTO.convertSaveBlogContentReq(req);
     BlogContentMongo blogContentMongo = BlogContentMongo.builder()
       .id(String.valueOf(blogContent.getSurrogateId()))
@@ -85,13 +85,11 @@ public class BlogContentServiceImpl implements BlogContentService {
     if (CollectionUtils.isEmpty(pageList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
-
 //    pageList.stream().forEach(item -> {
 //      item.setBlogLabelList(CacheManager.getBlogLabelListCache(item.getLabelIds()));
 //      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
 //      item.setBlogTopicVO(CacheManager.getBlogTopicInfoCacheMap().getOrDefault(item.getTopicId(), new BlogTopicVO()));
 //    });
-
     return new PageResult<>(pageList, count);
   }
 

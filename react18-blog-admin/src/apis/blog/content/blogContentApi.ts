@@ -7,50 +7,21 @@ import { LabelMapped, LabelTableResq } from '@/types/apis/blog/labelType'
 import { BlogCategoryVO } from '@/types/apis/blog/category'
 import { BaseEntityPageType } from '@/types/base'
 import { BlogTopicVO } from '@/types/apis/blog/topic'
-/**
- * blog label request API type
- */
-export interface BlogContentApi extends BaseApi {
-  getBlogContentPageList(params: BlogContentReqReq): Promise<ResultPage<BlogContentVO>>
-  getContent(params: GetBlogContentReq): Promise<Result<BlogContent>>
-  add(params: CreateBlogContentReq): Promise<Result<string>>
-  edit(params: EditeBlogContentReq): Promise<Result<string>>
-  // delete(params: DelLabelReq): Promise<Result<string>>
-  // deleteBatch(params: DelLabelReq): Promise<Result<string>>
-}
-
-const blogContentApi: BlogContentApi = {
-  getBlogContentPageList(req: BlogContentReqReq) {
-    return baseAxiosRequest.post<ResultPage<BlogContentVO>>(PREFIX_URL_BLOG_CONTENT + '/pageList', req)
-  },
-  add(params: CreateBlogContentReq) {
-    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CONTENT + '/save', params)
-  },
-  edit(params: EditeBlogContentReq) {
-    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CONTENT + '/edit', params)
-  },
-  getContent(params: GetBlogContentReq) {
-    return baseAxiosRequest.get<Result<BlogContent>>(PREFIX_URL_BLOG_CONTENT + `/getContent/${params.blogId}`, params)
-  }
-}
-
-export default blogContentApi
 
 /**
  * ==================== blog-content request ====================
  */
 export interface BlogContentReqReq extends BaseEntityPageType {}
 
-export interface CreateBlogContentReq extends BaseEntityPageType {
-  number: string
+export interface BlogContentAddReq {
+  title: string
   original: string
   recommend: string
-  title: string
+  status: string
   categoryId: string
-  categoryName: string
   labelIds: string[]
   topicId?: string
-  topicName?: string
+  imgUrl?: string
   contentText: string
 }
 
@@ -79,8 +50,8 @@ export interface GetBlogContentReq {
 export interface BlogContentDTO {
   key: string
   title: string
-  original: number
-  recommend: number
+  original: string
+  recommend: string
   imgUrl: string
   categoryId: string
   categoryName: string
@@ -110,3 +81,32 @@ export interface BlogContent {
   surrogateId: string
   contentText: string
 }
+
+/**
+ * blog label request API type
+ */
+export interface BlogContentApi extends BaseApi {
+  getBlogContentPageList(params: BlogContentReqReq): Promise<ResultPage<BlogContentVO>>
+  getContent(params: GetBlogContentReq): Promise<Result<BlogContent>>
+  add(params: BlogContentAddReq): Promise<Result<string>>
+  edit(params: EditeBlogContentReq): Promise<Result<string>>
+  // delete(params: DelLabelReq): Promise<Result<string>>
+  // deleteBatch(params: DelLabelReq): Promise<Result<string>>
+}
+
+const blogContentApi: BlogContentApi = {
+  getBlogContentPageList(req: BlogContentReqReq) {
+    return baseAxiosRequest.post<ResultPage<BlogContentVO>>(PREFIX_URL_BLOG_CONTENT + '/pageList', req)
+  },
+  add(params: BlogContentAddReq) {
+    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CONTENT + '/add', params)
+  },
+  edit(params: EditeBlogContentReq) {
+    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CONTENT + '/edit', params)
+  },
+  getContent(params: GetBlogContentReq) {
+    return baseAxiosRequest.get<Result<BlogContent>>(PREFIX_URL_BLOG_CONTENT + `/getContent/${params.blogId}`, params)
+  }
+}
+
+export default blogContentApi

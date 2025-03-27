@@ -14,7 +14,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Lil-K
@@ -29,60 +29,54 @@ import java.util.Date;
 @TableName("blog_content")
 public class BlogContent extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+	@TableId(value = "id", type = IdType.AUTO)
+	private Long id;
 
-    /**
-     * 唯一键
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long surrogateId;
+	/**
+	 * 唯一键
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long surrogateId;
 
-    /**
-     * 编号
-     */
-    private String number;
+	/**
+	 * 编号
+	 */
+	private String number;
 
-    private Integer original;
+	private Integer original;
 
-    private Integer recommend;
+	private Integer recommend;
 
-    /**
-     * 博客文章标题
-     */
-    private String title;
+	/**
+	 * 博客文章标题
+	 */
+	private String title;
 
-    private String introduction;
+	private String introduction;
 
-    private String imgUrl;
+	private String imgUrl;
 
-    private String paragraph;
+	private String paragraph;
 
-    private Date publishTime;
+	private Date publishTime;
 
-    /**
-     * 博客分类ids
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long categoryId;
+	/**
+	 * 博客分类ids
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long categoryId;
 
-    /**
-     * 博客标签ids, ","分隔
-     */
-    private String labelIds;
+	/**
+	 * 博客标签ids, ","分隔
+	 */
+	private String labelIds;
 
-    /**
-     * 博客专题id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long topicId;
-
-    /**
-     * 文章字数
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long wordCount;
+	/**
+	 * 博客专题id
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long topicId;
 
 }

@@ -47,7 +47,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 
 	@Override
 	public PageResult<BlogLabelVO> list(BlogLabelListReq req) {
-		List<BlogLabelVO> labelList = blogLabelMapper.getLabelList(req);
+		List<BlogLabelVO> labelList = blogLabelMapper.labelList(req);
 		if (CollectionUtils.isEmpty(labelList)) {
 			return new PageResult<>(new ArrayList<>(0), 0);
 		}else {

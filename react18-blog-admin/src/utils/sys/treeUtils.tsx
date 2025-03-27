@@ -142,6 +142,22 @@ const transformTypeToSeletor = (statusDict: DictMapType[]): OptionType[] => {
 export { transformTypeToSeletor }
 
 /**
+ * 字典类型数组
+ * @param statusDict
+ * @returns
+ */
+const transformTypeToSeletorById = (statusDict: DictMapType[]): OptionType[] => {
+  const res: OptionType[] = statusDict.map(({ surrogateId, name, type }) => ({
+    value: surrogateId.toString() ?? '',
+    label: name,
+    type: type.toString() ?? ''
+  }))
+  return res
+}
+
+export { transformTypeToSeletorById }
+
+/**
  * 菜单转换
  */
 const transformMenuTree = (menu: MenuTreeType[]): RouterItemType[] => {

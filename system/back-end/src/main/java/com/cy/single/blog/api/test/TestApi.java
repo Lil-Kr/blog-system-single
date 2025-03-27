@@ -1,4 +1,4 @@
-package com.cy.single.blog.api.demo;
+package com.cy.single.blog.api.test;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.cy.single.blog.common.holder.RequestHolder;

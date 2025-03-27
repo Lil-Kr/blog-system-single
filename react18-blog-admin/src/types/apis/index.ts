@@ -13,6 +13,7 @@ type BaseApi = {
 type OptionType = {
   value?: string
   label?: string
+  type?: string
 }
 
 type SelectOptionType = {

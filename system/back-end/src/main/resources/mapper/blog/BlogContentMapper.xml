@@ -15,7 +15,6 @@
         <result column="introduction" jdbcType="VARCHAR" property="introduction" />
         <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
         <result column="paragraph" jdbcType="VARCHAR" property="paragraph" />
-        <result column="word_count" jdbcType="BIGINT" property="wordCount" />
         <result column="publish_time" jdbcType="TIMESTAMP" property="publishTime" />
         <result column="status" jdbcType="INTEGER" property="status" />
         <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -32,7 +31,7 @@
 
     <sql id="Base_Column_List">
         id, surrogate_id, category_id, label_ids, topic_id, `number`, original, recommend,
-    title, introduction, img_url, paragraph, word_count, publish_time, `status`, remark, deleted, creator_id,
+    title, introduction, img_url, paragraph, publish_time, `status`, remark, deleted, creator_id,
     operator, create_time, update_time
     </sql>
 

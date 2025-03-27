@@ -81,9 +81,6 @@ const OrgModal = (props: ModalType.CustomModal) => {
   const handleOk = async () => {
     const valid = await orgModalForm.validateFields()
     const params = orgModalForm.getFieldsValue()
-    if (!valid) {
-      return
-    }
 
     if (action === 'create') {
       const addReq: SysOrgSaveReq = {

@@ -95,11 +95,6 @@ const ProTableDemo = () => {
     }
   ]
 
-  useEffect(() => {
-    // initData()
-    setTableLoading(false)
-  }, [])
-
   const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
     // const values = form.getFieldsValue()
     // retrieveAclPageList({ ...values, currentPageNum, pageSize })
@@ -161,6 +156,7 @@ const ProTableDemo = () => {
   const transformDictDetalPageList = (list: PageDictDetailResp[]): TableDictDetailType[] => {
     const res = list.map(({ surrogateId, ...rest }) => ({
       key: surrogateId,
+      surrogateId,
       ...rest
     }))
     return res

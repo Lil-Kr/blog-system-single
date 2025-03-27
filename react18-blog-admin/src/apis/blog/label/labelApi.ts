@@ -14,6 +14,9 @@ const labelApi: LabelApi = {
   retrieveLabelPageList(req: LabelReq) {
     return baseAxiosRequest.post<ResultPage<LabelTableResq>>(PREFIX_URL_BLOG_LABEL + '/pageList', req)
   },
+  retrieveLabelList(req: LabelReq) {
+    return baseAxiosRequest.post<ResultPage<LabelTableResq>>(PREFIX_URL_BLOG_LABEL + '/list', req)
+  },
   add(req: CreateLabelReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_LABEL + '/add', req)
   },
