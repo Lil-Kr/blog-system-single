@@ -61,7 +61,7 @@ bin-release/
 *.tar.gz
 *.rar
 
-#eclipse ignore
+# eclipse ignore
 .settings/
 .project
 .classpatch
@@ -96,3 +96,6 @@ hs_err_pid*
 
 # front files
 *.tsbuildinfo
+
+# prod files
+*/*-prod.yml
