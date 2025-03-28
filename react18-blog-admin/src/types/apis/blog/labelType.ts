@@ -9,7 +9,7 @@ import { BaseApi } from '..'
  * blog => label entity
  */
 export interface LabelType {
-  id: number
+  id: string
   surrogateId: string
   number: string
   name: string

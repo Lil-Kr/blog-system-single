@@ -50,7 +50,7 @@
         </where>
     </delete>
 
-    <select id="labelList" resultType="com.cy.single.blog.pojo.vo.blog.BlogLabelVO">
+    <select id="labelList" resultType="com.cy.single.blog.pojo.entity.blog.BlogLabel">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name"/>
         <where>
@@ -64,15 +64,7 @@
                 )
             </if>
         </where>
-        <if test="param.isOrder != null and param.isOrder != ''">
-            order by update_time
-            <if test="param.isOrder == 0">
-                asc
-            </if>
-            <if test="param.isOrder == 1">
-                desc
-            </if>
-        </if>
+            order by create_time desc
     </select>
 
     <delete id="deleteBatch">

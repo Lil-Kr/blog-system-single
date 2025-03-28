@@ -8,6 +8,7 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysDictDetailMapper;
 import com.cy.single.blog.dao.SysDictMapper;
+import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.SysDictService;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
@@ -28,6 +29,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.cy.single.blog.common.constants.CommonConstants.BUS_CREATE;
+import static com.cy.single.blog.common.constants.CommonConstants.BUS_EDIT;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -44,6 +47,9 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 
 	@Autowired
 	private SysDictDetailMapper dictDetailMapper;
+
+	@Autowired
+	private CacheService cacheService;
 
 	/**
 	 * 新增数据字典分类
@@ -73,6 +79,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 
 		int insert = dictMapper.insert(dict);
 		if (insert >= 1) {
+			cacheService.updateDictCache(dict.getSurrogateId(), dict, BUS_CREATE);
 			return ApiResp.success();
 		} else {
 			return ApiResp.failure(SAVE_ERROR);
@@ -122,6 +129,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 		try {
 			int update = dictMapper.update(after, query);
 			if (update >= 1) {
+				cacheService.updateDictCache(after.getSurrogateId(), after, BUS_EDIT);
 				return ApiResp.success("修改数据字典信息成功");
 			}else {
 				return ApiResp.failure("修改数据字典信息失败");
@@ -138,10 +146,6 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	 */
 	@Override
 	public PageResult<SysDictVO> listAll() {
-//		QueryWrapper<SysDict> query = new QueryWrapper<>();
-//		query.orderByAsc("create_time");
-//		List<SysDict> sysDicts = sysDictMapper1.selectList(query);
-//		return ApiResp.success(sysDicts);
 		return null;
 	}
 
@@ -201,16 +205,21 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 		deleteWrapper.eq("surrogate_id", surrogateId);
 		int delete = dictMapper.delete(deleteWrapper);
 		if (delete >= 1) {
+			// 移除缓存
+			cacheService.removeDicCache(surrogateId);
 			return ApiResp.success();
 		}
 		return ApiResp.failure(DEL_ERROR);
 	}
 
+	/**
+	 * 查询字典明细 -> map
+	 * @return
+	 */
 	@Override
 	public ApiResp<Map<String, List<SysDictDetailVO>>> dictDetailTree() {
 		List<SysDictDetailVO> dictDetailTree = dictDetailMapper.dictDetailTree();
 		Map<String, List<SysDictDetailVO>> collect = dictDetailTree.stream().collect(Collectors.groupingBy(SysDictDetailVO::getParentName));
-
 		return ApiResp.success(MapUtils.isEmpty(collect) ? Maps.newHashMap() : collect);
 	}
 }

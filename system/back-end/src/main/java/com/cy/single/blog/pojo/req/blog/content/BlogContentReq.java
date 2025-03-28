@@ -5,6 +5,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
@@ -38,10 +39,9 @@ public class BlogContentReq {
   @NotNull(groups = {GroupBlogContentAdd.class, GroupBlogContentEdit.class}, message = "categoryId是必须的")
   private Long categoryId;
 
-  @NotNull(groups = {GroupBlogContentAdd.class, GroupBlogContentEdit.class}, message = "labelIds是必须的, 并用多个','分隔")
-  private Set<String> labelIds;
+  @NotEmpty(groups = {GroupBlogContentAdd.class, GroupBlogContentEdit.class}, message = "labelIds是必须的, 并用多个','分隔")
+  private Set<Long> labelIds;
 
-//  @NotNull(groups = {GroupBlogContentSave.class}, message = "topicId是必须的")
   private Long topicId;
 
   private String imgUrl;

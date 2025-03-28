@@ -28,7 +28,7 @@ import java.util.Date;
 @TableName("blog_label")
 public class BlogLabel implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3659470283029206105L;
 
 	@TableId(value = "id", type = IdType.AUTO)
 	private Long id;
@@ -59,7 +59,9 @@ public class BlogLabel implements Serializable {
 	 */
 	private String colorText;
 
-
+	/**
+	 *
+	 */
 	private Integer status;
 
 	/**

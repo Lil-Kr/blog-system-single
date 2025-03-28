@@ -1,20 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table } from 'antd'
-import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { BlogCategoryPageReqParams, CategoryDTO } from '@/types/apis/blog/category'
-import { BaseModal } from '@/components/modal'
+import { BlogCategoryPageReq, CategoryTableType } from '@/types/apis/blog/category'
 import { useMessage } from '@/components/message/MessageProvider'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
+import { Tag } from 'antd/lib'
 
 // api
-import blogCategoryApi from '@/apis/blog/category'
-import { useGlobalStyleStore } from '@/store/global/globalStore'
+import blogCategoryApi from '@/apis/blog/category/categoryApi'
+import CategoryModal from './CategoryModal'
+import { useCategoryModalStore, useCategoryStore } from '@/store/blog/categoryStore'
 
 const BlogCategory = () => {
-  const columnsBlogCategory: ColumnsType<any> = [
+  const columnsBlogCategory: ColumnsType<CategoryTableType> = [
     {
       key: 'number',
       dataIndex: 'number',
@@ -28,17 +29,24 @@ const BlogCategory = () => {
       width: '20%'
     },
     {
+      key: 'color',
+      dataIndex: 'color',
+      title: '颜色',
+      width: '10%',
+      render: (_: object, record) => <Tag color={record.color}>{record.color}</Tag>
+    },
+    {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: '50%'
+      width: '40%'
     },
     {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
       width: '20%',
-      render: (_: object, record: CategoryDTO) => (
+      render: (_: object, record) => (
         <Space size='middle'>
           <Button
             size={btnSize}
@@ -73,46 +81,35 @@ const BlogCategory = () => {
 
   const messageApi = useMessage()
   const [form] = useForm()
-  const typeRef = useRef<{
-    open: (
-      requestParams: IModalRequestAction,
-      params: IModalParams,
-      type: IAction,
-      modalStyle: IModalStyle,
-      items: ModalType.InputType[],
-      data?: any
-    ) => void
-  }>()
   const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
   const [rowKeys, setRowKeys] = useState<React.Key[]>([])
-  const [dataSource, setDataSource] = useState<CategoryDTO[]>([])
-  const [tableLoading, setTableLoading] = useState<boolean>(true)
-  const [pageSize, setPageSize] = useState<number>(10)
-  const [totalSize, setTotalSize] = useState<number>(0)
-  const { btnSize, tableSize } = useGlobalStyleStore()
+  const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
+  const { setCategoryModal } = useCategoryModalStore()
+  const { tablePageInfo, setTablePageInfo, categoryPageList, setCategoryPageList } = useCategoryStore()
 
   /**
    * 删除确认提示
    * @param record
    */
-  const deleteItemConfirm = async (record: CategoryDTO) => {
+  const deleteItemConfirm = async (record: CategoryTableType) => {
     const res = await blogCategoryApi.delete!({ surrogateId: record.key })
-    if (res.code === 200) {
-      messageApi?.success(res.msg)
-      getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
-    } else {
+    if (res.code !== 200) {
       messageApi?.error(res.msg)
+      return
     }
+
+    messageApi?.success(res.msg)
+    getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
 
   /**
    * 多选
    */
-  const rowSelection: TableRowSelection<CategoryDTO> = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: CategoryDTO[]) => {
+  const rowSelection: TableRowSelection<CategoryTableType> = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: CategoryTableType[]) => {
       setRowKeys(selectedRowKeys)
     },
-    getCheckboxProps: (record: CategoryDTO) => ({
+    getCheckboxProps: (record: CategoryTableType) => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked
       name: record.name
     })
@@ -123,36 +120,20 @@ const BlogCategory = () => {
    * @param key
    * @param record
    */
-  const lookItem = (key: string, record: CategoryDTO) => {
-    typeRef.current?.open(
-      { api: blogCategoryApi },
-      { title: '查看博客类型' },
-      { action: 'look', open: true }, // create | edit | look
-      { style: { maxWidth: '30vw' } },
-      [
-        {
-          name: 'number',
-          label: '分类编号',
-          textValue: '分类编号, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '分类编号不能为空' }]
-        },
-        {
-          name: 'name',
-          label: '分类名称',
-          textValue: '分类名称, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '分类名称不能为空' }]
-        },
-        {
-          name: 'remark',
-          label: '备注',
-          textValue: '备注不超过200个字符',
-          style: { width: '100%' }
-        }
-      ],
-      { ...record }
-    )
+  const lookItem = (key: string, record: CategoryTableType) => {
+    const categoryModalData = {
+      api: blogCategoryApi,
+      title: '查看分类',
+      action: 'edit',
+      openModal: true,
+      inputDisabled: true,
+      modalStyle: { width: '60vw' },
+      req: { ...record },
+      update: () => {
+        getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+      }
+    }
+    setCategoryModal({ ...categoryModalData })
   }
 
   /**
@@ -160,80 +141,38 @@ const BlogCategory = () => {
    * @param key
    * @param record
    */
-  const editItem = (key: string, record: CategoryDTO) => {
-    typeRef.current?.open(
-      { api: blogCategoryApi },
-      { title: '编辑博客类型' },
-      { action: 'edit', open: true }, // create | edit | look
-      { style: { maxWidth: '30vw' } },
-      [
-        {
-          name: 'number',
-          label: '分类编号',
-          textValue: '分类编号, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '分类编号不能为空' }]
-        },
-        {
-          name: 'name',
-          label: '分类名称',
-          textValue: '分类名称, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '分类名称不能为空' }]
-        },
-        {
-          name: 'remark',
-          label: '备注',
-          textValue: '备注不超过200个字符',
-          style: { width: '100%' }
-        }
-      ],
-      { ...record }
-    )
+  const editItem = (key: string, record: CategoryTableType) => {
+    const categoryModalData = {
+      api: blogCategoryApi,
+      title: '编辑分类',
+      action: 'edit',
+      openModal: true,
+      inputDisabled: false,
+      modalStyle: { width: '60vw' },
+      req: { ...record },
+      update: () => {
+        getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+      }
+    }
+    setCategoryModal(categoryModalData)
   }
 
   /**
    * create
    */
   const createType = () => {
-    typeRef.current?.open(
-      { api: blogCategoryApi },
-      { title: '创建博客类型' },
-      { action: 'create', open: true }, // create | edit | look
-      { style: { maxWidth: '30vw' } },
-      [
-        {
-          name: 'number',
-          label: '分类编号',
-          textValue: '分类编号, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '分类编号不能为空' }]
-        },
-        {
-          name: 'name',
-          label: '分类名称',
-          textValue: '分类名称, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '分类名称不能为空' }]
-        },
-        {
-          name: 'remark',
-          label: '备注',
-          textValue: '备注不超过200个字符',
-          style: { width: '100%' }
-        }
-      ]
-    )
-  }
-
-  /**
-   * deleteBatch
-   */
-  const deleteBatch = async () => {
-    if (!rowKeys || rowKeys.length < 1) {
-      messageApi?.warning('请选择待删除项')
-      return
+    const categoryModalData = {
+      api: blogCategoryApi,
+      title: '添加分类',
+      action: 'create',
+      openModal: true,
+      inputDisabled: false,
+      modalStyle: { width: '60vw' },
+      update: () => {
+        getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+      }
     }
+    setCategoryModal(categoryModalData)
   }
 
   /**
@@ -241,54 +180,44 @@ const BlogCategory = () => {
    */
   const search = () => {
     let data = form.getFieldsValue()
-    const searchParam = { ...data, currentPageNum: 1, pageSize: pageSize }
+    const searchParam = { ...data, currentPageNum: 1, pageSize: tablePageInfo.pageSize }
     getCategoryPageList({ ...searchParam })
   }
 
   const resetSearch = () => {
     form.resetFields()
-    getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
+    getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
 
   /**
    * 初始化数据
    */
   useEffect(() => {
-    getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
+    getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }, [])
 
   /**
    * 获取标签列表, 不分页
    */
-  const getCategoryPageList = async (params: BlogCategoryPageReqParams) => {
-    const values = form.getFieldsValue()
-    const blogTypesRes = await blogCategoryApi.getCategoryPageList({ ...params, ...values })
-    const { code, data, msg } = blogTypesRes
+  const getCategoryPageList = async (req: BlogCategoryPageReq) => {
+    const blogTypesRes = await blogCategoryApi.getCategoryPageList({ ...req })
+    const { code, data } = blogTypesRes
     if (code !== 200) {
-      return []
+      setCategoryPageList([])
+      return
     }
 
-    const datas = data.list.map(({ surrogateId, number, name, remark }) => ({
+    const list = data.list.map(({ surrogateId, ...rest }) => ({
       key: surrogateId,
-      number,
-      name,
-      remark
+      ...rest
     }))
-    setDataSource(datas)
-    setTotalSize(data.total)
-    setTableLoading(false)
-  }
-
-  /**
-   * change pageSize
-   * pageSize 变化的回调
-   * @param current
-   * @param pageSize
-   */
-  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
-    const values = form.getFieldsValue()
-    getCategoryPageList({ ...values, currentPageNum: current, pageSize: pageSize })
-    setPageSize(pageSize)
+    setCategoryPageList(list)
+    setTablePageInfo({
+      ...tablePageInfo,
+      totalSize: data.total,
+      pageSize: req.pageSize,
+      currentPageNum: req.currentPageNum
+    })
   }
 
   /**
@@ -296,9 +225,9 @@ const BlogCategory = () => {
    * @param page 当前页码数
    * @param pageSize 每页记录数
    */
-  const onChange: PaginationProps['onChange'] = (page, pageSize) => {
+  const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
     const values = form.getFieldsValue()
-    getCategoryPageList({ ...values, currentPageNum: page, pageSize: pageSize })
+    getCategoryPageList({ ...values, currentPageNum, pageSize })
   }
 
   return (
@@ -307,7 +236,7 @@ const BlogCategory = () => {
         <Form form={form}>
           <Flex gap='small'>
             <Form.Item name={'keyWords'} label='搜索关键字'>
-              <Input placeholder='搜索关键字' />
+              <Input size={inputSize} placeholder='搜索关键字' />
             </Form.Item>
             <Form.Item>
               <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
@@ -325,42 +254,33 @@ const BlogCategory = () => {
             <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createType}>
               {'添加'}
             </Button>
-            <Button size={btnSize} type='primary' icon={<DeleteOutlined />} danger onClick={deleteBatch}>
-              {'删除'}
-            </Button>
           </Flex>
         </div>
 
         <div className='list'>
           <Table
             key={1}
-            size={tableSize}
             bordered={true}
+            size={tableSize}
+            // loading={tableLoading}
+            columns={columnsBlogCategory}
+            dataSource={categoryPageList}
             rowSelection={{
               type: selectionType,
               ...rowSelection
             }}
-            loading={tableLoading}
-            columns={columnsBlogCategory}
-            dataSource={dataSource}
             pagination={{
+              position: ['bottomLeft'],
               hideOnSinglePage: false, // only one pageSize then hidden Paginator
               pageSizeOptions: [10, 20, 50], // specify how many items can be displayed on each page
-              onChange: onChange,
-              onShowSizeChange: onShowSizeChange,
+              onChange: onChangePageInfo,
               showSizeChanger: true,
-              pageSize: pageSize,
-              total: totalSize
+              pageSize: tablePageInfo.pageSize,
+              total: tablePageInfo.totalSize
             }}
           />
         </div>
-        <BaseModal
-          mRef={typeRef}
-          innerComponent={'all-input'}
-          update={() => {
-            getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
-          }}
-        />
+        <CategoryModal />
       </Flex>
     </div>
   )

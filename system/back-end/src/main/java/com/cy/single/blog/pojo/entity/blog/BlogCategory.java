@@ -3,20 +3,15 @@ package com.cy.single.blog.pojo.entity.blog;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.cy.single.blog.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
-
 import java.io.Serializable;
 import java.util.Date;
+import static com.cy.single.blog.common.constants.CommonConstants.DEFAULT_COLOR;
 
 /**
- * <p>
- * 
- * </p>
- *
  * @author Lil-K
  * @since 2024-03-31
  */
@@ -28,54 +23,64 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @TableName("blog_category")
 @Data
-public class BlogCategory extends BaseEntity implements Serializable {
+public class BlogCategory implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -9049411642335166764L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+	@TableId(value = "id", type = IdType.AUTO)
+	private Integer id;
 
-    /**
-     * 唯一键
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long surrogateId;
+	/**
+	 * 唯一键
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long surrogateId;
 
-    /**
-     * 编号
-     */
-    private String number;
+	/**
+	 * 编号
+	 */
+	private String number;
 
-    /**
-     * 类别名称
-     */
-    private String name;
+	/**
+	 * 类别名称
+	 */
+	private String name;
 
-    /**
-     * 备注
-     */
-    private String remark;
+	/**
+	 * 颜色
+	 */
+	private String color = DEFAULT_COLOR;
 
-    /**
-     * 创建人
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long creatorId;
+	/**
+	 * 状态: 未使用
+	 */
+	private Integer status;
 
-    /**
-     * 操作人
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long operator;
+	/**
+	 * 备注
+	 */
+	private String remark;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+	/**
+	 * 创建人
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long creatorId;
 
-    /**
-     * 更改时间
-     */
-    private Date updateTime;
+	/**
+	 * 操作人
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long operator;
+
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
+
+	/**
+	 * 更改时间
+	 */
+	private Date updateTime;
 
 }

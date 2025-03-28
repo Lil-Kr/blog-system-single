@@ -38,11 +38,11 @@ const BlogModal = (props: BlogModalType) => {
   // const [selectCategory, setSelectCategory] = useState<SelectProps['options']>([])
   // const [selectTopic, setSelectTopic] = useState<SelectProps['options']>([])
   // const {blogPublish, setBlogPublish} = useState()
+  // const { tinyMceContents, setTinyMCEContents, setTinymecStatus } = useTinymceStore()
   const { openModal, api, title, inputDisabled, action, data, update } = props
   const [blogForm] = Form.useForm()
   const [radioValue, setRadioValue] = useState<string>('')
   const editorRef = useRef<EditorInstance | null>(null)
-  // const { tinyMceContents, setTinyMCEContents, setTinymecStatus } = useTinymceStore()
   const { blogTypes, blogTopics, blogPublisStatue, switchStatue } = useDictDetailStore()
   const { blogModalData, setBlogModalData } = useBlogStore()
 

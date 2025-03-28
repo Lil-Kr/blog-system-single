@@ -1,4 +1,4 @@
-import { BlogContentApi, BlogContentDTO } from '@/apis/blog/content/blogContentApi'
+import { BlogContentApi, BlogContentTableType } from '@/apis/blog/content/blogContentApi'
 import { SelectProps } from 'antd/lib'
 import { OptionType } from '../apis'
 

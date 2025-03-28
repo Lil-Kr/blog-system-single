@@ -15,6 +15,6 @@ import java.io.Serializable;
 @Data
 public class BlogLabelVO extends BlogLabel implements Serializable {
 
-    private static final long serialVersionUID = -4260688027806695727L;
+	private static final long serialVersionUID = -4260688027806695727L;
 
 }

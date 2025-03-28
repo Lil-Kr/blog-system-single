@@ -26,7 +26,7 @@ public class BlogContentDTO {
     blogContent.setSurrogateId(IdWorker.getSnowFlakeId());
     blogContent.setNumber(RunCodeUtil.getFourPipelineNumbers("blog-"));
     blogContent.setLabelIds(convertBlogLabelToString(baseReq.getLabelIds()));
-    Set<String> labelIds = baseReq.getLabelIds();
+    Set<Long> labelIds = baseReq.getLabelIds();
     blogContent.setDeleted(0);
 
     blogContent.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
@@ -39,8 +39,8 @@ public class BlogContentDTO {
     return blogContent;
   }
 
-  public static String convertBlogLabelToString(Set<String> labelIds) {
-    return labelIds.stream().collect(Collectors.joining(","));
+  public static String convertBlogLabelToString(Set<Long> labelIds) {
+    return labelIds.stream().map(String::valueOf).collect(Collectors.joining(","));
   }
 
 }

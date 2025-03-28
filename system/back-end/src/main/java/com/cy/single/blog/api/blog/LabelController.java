@@ -5,6 +5,7 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
+import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
@@ -45,8 +46,8 @@ public class LabelController {
 	@RecordLogger
 	@CheckAuth
 	@PostMapping("/list")
-	public ApiResp<PageResult<BlogLabelVO>> list(@RequestBody @Valid BlogLabelListReq req) {
-		PageResult<BlogLabelVO> list = blogLabelService.list(req);
+	public ApiResp<PageResult<BlogLabel>> list(@RequestBody @Valid BlogLabelListReq req) {
+		PageResult<BlogLabel> list = blogLabelService.list(req);
 		return ApiResp.success(list);
 	}
 
@@ -84,8 +85,8 @@ public class LabelController {
 	/** =============== 门户网站接口 ===============**/
 	@RecordLogger
 	@GetMapping("/frontLabelList")
-	public ApiResp<List<BlogLabelVO>> frontLabelList() {
-		PageResult<BlogLabelVO> list = blogLabelService.list(new BlogLabelListReq());
+	public ApiResp<List<BlogLabel>> frontLabelList() {
+		PageResult<BlogLabel> list = blogLabelService.list(new BlogLabelListReq());
 		return ApiResp.success(list.getList());
 	}
 

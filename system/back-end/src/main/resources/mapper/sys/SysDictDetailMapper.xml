@@ -76,4 +76,5 @@
         from sys_dict as a
         inner join sys_dict_detail as b on (a.surrogate_id = b.parent_id)
     </select>
+
 </mapper>

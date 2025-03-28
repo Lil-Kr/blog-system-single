@@ -1,6 +1,7 @@
 package com.cy.single.blog.pojo.vo.blog;
 
 import com.cy.single.blog.pojo.entity.blog.BlogContent;
+import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import lombok.Data;
 import lombok.ToString;
 
@@ -16,18 +17,22 @@ import java.util.List;
 @Data
 public class BlogContentVO extends BlogContent implements Serializable {
 
+  private static final long serialVersionUID = -6216586260975821759L;
+
   /**
    * label
    */
-  private List<BlogLabelVO> blogLabelList;
+  private List<BlogLabel> blogLabelList;
 
-  private BlogCategoryVO blogCategoryVO;
+  private String categoryName;
 
-  private BlogTopicVO blogTopicVO;
+  private String categoryColor;
 
-  /**
-   * content text
-   */
-  private String contentText;
+  private String topicName;
 
+  private Integer originalType;
+
+  private Integer recommendType;
+
+  private Integer statusType;
 }

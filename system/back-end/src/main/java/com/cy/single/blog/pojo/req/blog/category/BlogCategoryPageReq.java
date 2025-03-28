@@ -6,18 +6,20 @@ import lombok.ToString;
 
 /**
  * @Author: Lil-K
- * @Date: 2024/4/6
+ * @Date: 2025/3/28
  * @Description:
  */
 @ToString
 @Data
 public class BlogCategoryPageReq extends BasePageReq {
 
-    private Long surrogateId;
+	private Long surrogateId;
 
-    private String number;
+	private String number;
 
-    private String name;
+	private String name;
 
-    private String remark;
+	private String color;
+
+	private String remark;
 }

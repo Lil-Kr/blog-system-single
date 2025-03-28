@@ -9,24 +9,26 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,surrogate_id, `number`, `name`, remark, deleted, creator_id,operator,create_time,update_time
+        id, surrogate_id, `number`, `name`, color, remark, status, creator_id, operator, create_time, update_time
     </sql>
-
 
     <delete id="editBySurrogateId">
         update <include refid="Table_Name" />
         <set>
             <if test="param.number != null and param.number != ''">
-                number = #{param.number},
+                `number` = #{param.number},
             </if>
             <if test="param.name != null and param.name != ''">
-                name = #{param.name},
+                `name` = #{param.name},
+            </if>
+            <if test="param.color != null and param.color != ''">
+                color = #{param.color},
             </if>
             <if test="param.remark != null and param.remark != ''">
                 remark = #{param.remark},
             </if>
-            <if test="param.modifierId != null and param.modifierId != ''">
-                operator = #{param.modifierId},
+            <if test="param.operator != null">
+                operator = #{param.operator},
             </if>
             <if test="param.updateTime != null">
                 update_time = #{param.updateTime},
@@ -35,17 +37,7 @@
         <where>
             surrogate_id = #{param.surrogateId}
         </where>
-        <if test="param.isOrder != null and param.isOrder != ''">
-            order by create_time
-            <if test="param.isOrder == 0">
-                asc
-            </if>
-            <if test="param.isOrder == 1">
-                desc
-            </if>
-        </if>
     </delete>
-
 
     <delete id="deleteBySurrogateId">
         delete from <include refid="Table_Name"/>
@@ -182,6 +174,5 @@
     </select>
 
     <select id="frontList" resultType="com.cy.single.blog.pojo.vo.blog.BlogCategoryVO">
-        select
     </select>
 </mapper>

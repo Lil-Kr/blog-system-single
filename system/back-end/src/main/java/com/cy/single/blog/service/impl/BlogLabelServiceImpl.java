@@ -12,6 +12,7 @@ import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
 import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
 import com.cy.single.blog.service.BlogLabelService;
+import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.cy.single.blog.common.constants.CommonConstants.BUS_CREATE;
+import static com.cy.single.blog.common.constants.CommonConstants.CACHE_KEY_BLOG_LABEL_LIST;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -33,6 +36,9 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 
 	@Autowired
 	private BlogLabelMapper blogLabelMapper;
+
+	@Autowired
+	private CacheService cacheService;
 
 	@Override
 	public PageResult<BlogLabelVO> pageList(BlogLabelPageReq req) {
@@ -46,8 +52,16 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 	}
 
 	@Override
-	public PageResult<BlogLabelVO> list(BlogLabelListReq req) {
-		List<BlogLabelVO> labelList = blogLabelMapper.labelList(req);
+	public PageResult<BlogLabel> list(BlogLabelListReq req) {
+		/**
+		 * 先查询缓存, 在查询列表
+		 */
+		List<BlogLabel> labelList = cacheService.getLabelListCache(CACHE_KEY_BLOG_LABEL_LIST);
+		if (CollectionUtils.isEmpty(labelList)) {
+			labelList = blogLabelMapper.labelList(req);
+			cacheService.saveLabelCache(CACHE_KEY_BLOG_LABEL_LIST, labelList);
+		}
+
 		if (CollectionUtils.isEmpty(labelList)) {
 			return new PageResult<>(new ArrayList<>(0), 0);
 		}else {
@@ -58,11 +72,10 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 	@Override
 	public ApiResp<String> add(BlogLabelReq req) {
 		BlogLabel saveEntity = BlogLabelDTO.convertSaveLabelReq(req);
-		Integer save = blogLabelMapper.insert(saveEntity);
-		if (save >= 1) {
-			// update cache
-			BlogLabelVO cacheEntity = new BlogLabelVO();
-			BeanUtils.copyProperties(saveEntity, cacheEntity);
+		Integer add = blogLabelMapper.insert(saveEntity);
+		if (add >= 1) {
+			// 更新缓存
+			cacheService.updateLabelCache(CACHE_KEY_BLOG_LABEL_LIST, BUS_CREATE, saveEntity);
 			return ApiResp.success();
 		}else {
 			return ApiResp.failure(SAVE_ERROR);
@@ -83,6 +96,10 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 		Integer count = blogLabelMapper.editBySurrogateId(req);
 
 		if (count >= 1) {
+			// 更新缓存
+			BlogLabel cache = new BlogLabel();
+			BeanUtils.copyProperties(req, cache);
+			cacheService.updateLabelCache(CACHE_KEY_BLOG_LABEL_LIST, BUS_CREATE, cache);
 			return ApiResp.success();
 		}else {
 			return ApiResp.failure(SAVE_ERROR);

@@ -7,7 +7,7 @@ import { getBreadCrumbItems, getRouterMenuItems, getTabsMap } from '@/utils/comm
 import { BreadcrumbType } from '@/types/common/breadcrumbType'
 import { useTokenStore } from '@/store/login'
 import { RouterItemType, RouterMetaType } from '@/types/router/routeType'
-import { transformMenuTree, transformTypeToSeletor } from '@/utils/sys/treeUtils'
+import { transformMenuTree, transformTypeToSeletor, transformTypeToSeletorById } from '@/utils/sys/treeUtils'
 import { useBreadcrumbStore, useMenuStore, useTabsStore } from '@/store/global'
 import { DictMapType } from '@/types/apis/sys/dict/dictType'
 import { dictApi } from '@/apis/sys/dictApi'
@@ -92,7 +92,7 @@ const initDictMap = async () => {
    * 查询数据字典[角色类型]
    */
   const switchStatues = dictMap.get('开关') ?? []
-  const switchStatue = transformTypeToSeletor(switchStatues)
+  const switchStatue = transformTypeToSeletorById(switchStatues)
   setSwitchStatue(switchStatue)
 }
 

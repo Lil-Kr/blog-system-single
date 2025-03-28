@@ -10,22 +10,27 @@ import com.cy.single.blog.dao.BlogContentMongoMapper;
 import com.cy.single.blog.pojo.dto.blog.BlogContentDTO;
 import com.cy.single.blog.pojo.entity.blog.BlogContent;
 import com.cy.single.blog.pojo.entity.blog.BlogContentMongo;
+import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
 import com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO;
 import com.cy.single.blog.pojo.vo.blog.BlogContentVO;
 import com.cy.single.blog.service.BlogContentService;
+import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
 import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
 import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
 
@@ -43,6 +48,9 @@ public class BlogContentServiceImpl implements BlogContentService {
 
   @Autowired
   private BlogContentMongoMapper blogContentMongoMapper;
+
+  @Autowired
+  private CacheService cacheService;
 
   @Override
   public ApiResp<String> add(BlogContentReq req) {
@@ -85,11 +93,26 @@ public class BlogContentServiceImpl implements BlogContentService {
     if (CollectionUtils.isEmpty(pageList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
-//    pageList.stream().forEach(item -> {
-//      item.setBlogLabelList(CacheManager.getBlogLabelListCache(item.getLabelIds()));
-//      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
-//      item.setBlogTopicVO(CacheManager.getBlogTopicInfoCacheMap().getOrDefault(item.getTopicId(), new BlogTopicVO()));
-//    });
+    pageList.forEach(item -> {
+      // 组装标签信息
+      List<BlogLabel> labelList = Arrays.stream(item.getLabelIds().split(","))
+        .map(Long::valueOf)
+        .map(cacheService::getLabelCache)
+        .collect(Collectors.toList());
+      item.setBlogLabelList(labelList);
+
+      // 分类信息
+      item.setCategoryName(cacheService.getBlogCategory(item.getCategoryId()).getName());
+      item.setCategoryColor(cacheService.getBlogCategory(item.getCategoryId()).getColor());
+      // 所属专题
+      item.setTopicName(cacheService.getDictDetailCache(item.getTopicId()).getName());
+      // 是否原创
+      item.setOriginalType(cacheService.getDictDetailCache(item.getOriginal()).getType());
+      // 是否推荐
+      item.setRecommendType(cacheService.getDictDetailCache(item.getRecommend()).getType());
+      // 发布状态
+      item.setStatusType(cacheService.getDictDetailCache(item.getStatus()).getType());
+    });
     return new PageResult<>(pageList, count);
   }
 
@@ -100,8 +123,28 @@ public class BlogContentServiceImpl implements BlogContentService {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
 
+    list.forEach(item -> {
+      // 组装标签信息
+      List<BlogLabel> labelList = Arrays.stream(item.getLabelIds().split(","))
+        .map(Long::valueOf)
+        .map(cacheService::getLabelCache)
+        .collect(Collectors.toList());
+      item.setBlogLabelList(labelList);
+
+      // 分类信息
+      item.setCategoryName(cacheService.getBlogCategory(item.getCategoryId()).getName());
+      // 所属专题
+      item.setTopicName(cacheService.getDictDetailCache(item.getTopicId()).getName());
+      // 是否原创
+      item.setOriginalType(cacheService.getDictDetailCache(item.getOriginal()).getType());
+      // 是否推荐
+      item.setRecommendType(cacheService.getDictDetailCache(item.getRecommend()).getType());
+      // 发布状态
+      item.setStatusType(cacheService.getDictDetailCache(item.getStatus()).getType());
+    });
     return new PageResult<>(list, list.size());
   }
+
 
   @Override
   public ApiResp<BlogContentVO> get(Long surrogateId) {
@@ -137,7 +180,7 @@ public class BlogContentServiceImpl implements BlogContentService {
     BeanUtils.copyProperties(req, blogContent);
     blogContent.setUpdateTime(DateUtil.localDateTimeToDate(LocalDateTime.now()));
     blogContent.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
-    blogContent.setLabelIds(req.getLabelIds().stream().collect(Collectors.joining(",")));
+    blogContent.setLabelIds(req.getLabelIds().stream().map(String::valueOf).collect(Collectors.joining(",")));
 
     UpdateWrapper<BlogContent> updateWrapper = new UpdateWrapper<>();
     updateWrapper.eq("surrogate_id", req.getSurrogateId());

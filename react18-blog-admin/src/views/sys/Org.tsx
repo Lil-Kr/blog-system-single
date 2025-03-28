@@ -399,7 +399,6 @@ const Org = () => {
   }
 
   const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
-    console.log('--> onChangePageInfo:')
     const values = form.getFieldsValue()
     retrievePageOrgList({ ...values, pageSize, currentPageNum })
   }

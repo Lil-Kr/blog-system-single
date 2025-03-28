@@ -9,6 +9,7 @@ import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.req.dict.DictDetailPageListReq;
 import com.cy.single.blog.pojo.req.dict.SaveDictDetailReq;
 import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
+import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysDictDetailService;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
+import static com.cy.single.blog.common.constants.CommonConstants.*;
 
 /**
  * @Author: Lil-K
@@ -37,6 +38,9 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 
 	@Autowired
 	private MessageLangService msgService;
+
+	@Autowired
+	private CacheService cacheService;
 
 	@Override
 	public ApiResp<String> addDetail(SaveDictDetailReq req) {
@@ -54,6 +58,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 			.build();
 		int insert = dictDetailMapper.insert(dictDetail);
 		if (insert >= 1) {
+			cacheService.updateDictDetailCache(dictDetail.getSurrogateId(), dictDetail, BUS_CREATE);
 			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg2"));
 		} else {
 			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg3"));
@@ -106,6 +111,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 			.build();
 		int update = dictDetailMapper.update(after, query);
 		if (update >= 1) {
+			cacheService.updateDictDetailCache(after.getSurrogateId(), after, BUS_EDIT);
 			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg5"));
 		}else {
 			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg6"));
@@ -124,6 +130,8 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 		query.eq("surrogate_id",surrogateId);
 		int delete = dictDetailMapper.delete(query);
 		if (delete >= 1) {
+			// 更新缓存
+			cacheService.removeDicDetailCache(surrogateId);
 			return ApiResp.success("删除字典明细信息成功");
 		}else {
 			return ApiResp.failure("删除字典明细信息失败");

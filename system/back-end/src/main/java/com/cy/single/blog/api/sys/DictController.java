@@ -5,21 +5,19 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.service.SysDictService;
 import com.cy.single.blog.pojo.req.dict.*;
 import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
 import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;
 import com.cy.single.blog.service.SysDictDetailService;
+import com.cy.single.blog.service.SysDictService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @Author: Lil-K
@@ -36,23 +34,6 @@ public class DictController {
 
 	@Autowired
 	private SysDictDetailService dictDetailService;
-
-	/**
-	 * 保存数据字典类型信息
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/save")
-	public ApiResp<String> save (@RequestBody @Valid DictSaveReq req) {
-		if (Objects.isNull(req.getSurrogateId())) {
-			return dictService.add(req);
-		}else {
-			return dictService.edit(req);
-		}
-	}
 
 	@CheckAuth
 	@RecordLogger
@@ -82,7 +63,7 @@ public class DictController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("pageDictList")
+	@PostMapping("/pageDictList")
 	public ApiResp<PageResult<SysDictVO>> pageDictList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictListPageReq req) {
 		PageResult<SysDictVO> res = dictService.pageDictList(req);
 		return ApiResp.success(res);
@@ -107,7 +88,7 @@ public class DictController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("pageDictDetailList")
+	@PostMapping("/pageDictDetailList")
 	public ApiResp<PageResult<SysDictDetailVO>> pageDictDetailList (@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictDetailPageListReq req) {
 		PageResult<SysDictDetailVO> res = dictDetailService.pageDictDetailList(req);
 		return ApiResp.success(res);
@@ -121,7 +102,7 @@ public class DictController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("addDetail")
+	@PostMapping("/addDetail")
 	public ApiResp<String> addDetail (@RequestBody @Validated({SaveDictDetailReq.AddDictDetail.class}) SaveDictDetailReq req) {
 		return dictDetailService.addDetail(req);
 	}
@@ -134,7 +115,7 @@ public class DictController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("editDetail")
+	@PostMapping("/editDetail")
 	public ApiResp<String> editDetail (@RequestBody @Validated({SaveDictDetailReq.EditDictDetail.class}) SaveDictDetailReq req) {
 		return dictDetailService.editDetail(req);
 	}
@@ -147,7 +128,7 @@ public class DictController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@DeleteMapping("deleteDetail")
+	@DeleteMapping("/deleteDetail")
 	public ApiResp<String> deleteDetail (@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
 		return dictDetailService.deleteDetail(surrogateId);
 	}
@@ -159,7 +140,7 @@ public class DictController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("dictDetail")
+	@PostMapping("/dictDetail")
 	public ApiResp<SysDictVO> dictDetail(@RequestBody @Validated({DictDetailReq.GroupGetDictDetail.class}) DictDetailReq req) {
 		return dictService.dictDetail(req);
 	}

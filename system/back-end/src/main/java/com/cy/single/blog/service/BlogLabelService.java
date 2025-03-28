@@ -2,6 +2,7 @@ package com.cy.single.blog.service;
 
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
+import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
@@ -15,7 +16,7 @@ public interface BlogLabelService {
 
 	PageResult<BlogLabelVO> pageList(BlogLabelPageReq req);
 
-	PageResult<BlogLabelVO> list(BlogLabelListReq req);
+	PageResult<BlogLabel> list(BlogLabelListReq req);
 
 	ApiResp<String> add(BlogLabelReq req);
 
@@ -24,6 +25,4 @@ public interface BlogLabelService {
 	ApiResp<String> delete(BlogLabelReq req);
 
 	ApiResp<String> deleteBatch(BlogLabelReq req);
-
-//    List<BlogLabelVO> getLabelNames(List<Long> labelIds);
 }

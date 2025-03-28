@@ -59,7 +59,7 @@ public class BlogTopicServiceImpl implements BlogTopicService {
   }
 
   @Override
-  public ApiResp<String> save(BlogTopicReq req) {
+  public ApiResp<String> add(BlogTopicReq req) {
     BlogTopic blogTopic =  blogTopicMapper.selectByNumber(req.getNumber());
     if (Objects.nonNull(blogTopic)) {
       return ApiResp.failure(DATA_INFO_REPEAT);
@@ -69,7 +69,8 @@ public class BlogTopicServiceImpl implements BlogTopicService {
 
     BeanUtils.copyProperties(req, blogTopic);
     blogTopic.setSurrogateId(IdWorker.getSnowFlakeId());
-    blogTopic.setDeleted(0);
+    blogTopic.setStatus(0); // default 0, it`s not used now
+    blogTopic.setDeleted(0); // default 0, it not used now
     Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
     blogTopic.setCreateTime(nowDateTime);
     blogTopic.setUpdateTime(nowDateTime);

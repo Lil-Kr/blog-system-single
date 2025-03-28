@@ -20,7 +20,7 @@ public interface BlogTopicService {
 
   PageResult<BlogTopicVO> topicList(BlogTopicReq req);
 
-  ApiResp<String> save(BlogTopicReq req);
+  ApiResp<String> add(BlogTopicReq req);
 
   ApiResp<String> edit(BlogTopicReq req);
 

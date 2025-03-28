@@ -3,7 +3,6 @@ package com.cy.single.blog.pojo.entity.blog;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.cy.single.blog.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -27,7 +26,7 @@ import java.util.Date;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @TableName("blog_content")
-public class BlogContent extends BaseEntity implements Serializable {
+public class BlogContent implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -45,9 +44,11 @@ public class BlogContent extends BaseEntity implements Serializable {
 	 */
 	private String number;
 
-	private Integer original;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long original;
 
-	private Integer recommend;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long recommend;
 
 	/**
 	 * 博客文章标题
@@ -60,10 +61,12 @@ public class BlogContent extends BaseEntity implements Serializable {
 
 	private String paragraph;
 
+	private String contentText;
+
 	private Date publishTime;
 
 	/**
-	 * 博客分类ids
+	 * 博客分类id
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long categoryId;
@@ -79,4 +82,31 @@ public class BlogContent extends BaseEntity implements Serializable {
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long topicId;
 
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long status;
+
+	private String remark;
+
+	private Integer deleted = 0;
+	/**
+	 * 创建人
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long creatorId;
+
+	/**
+	 * 修改人
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long operator;
+
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
+
+	/**
+	 * 更改时间
+	 */
+	private Date updateTime;
 }

@@ -2,25 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.BlogTopicMapper">
 
-    <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.blog.BlogTopic">
-        <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="surrogate_id" jdbcType="BIGINT" property="surrogateId" />
-        <result column="number" jdbcType="VARCHAR" property="number" />
-        <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="status" jdbcType="INTEGER" property="status" />
-        <result column="remark" jdbcType="VARCHAR" property="remark" />
-        <result column="deleted" jdbcType="INTEGER" property="deleted" />
-        <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
-        <result column="operator" jdbcType="BIGINT" property="operator" />
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    </resultMap>
+<!--    <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.blog.BlogTopic">-->
+<!--        <id column="id" jdbcType="BIGINT" property="id" />-->
+<!--        <result column="surrogate_id" jdbcType="BIGINT" property="surrogateId" />-->
+<!--        <result column="number" jdbcType="VARCHAR" property="number" />-->
+<!--        <result column="name" jdbcType="VARCHAR" property="name" />-->
+<!--        <result column="status" jdbcType="INTEGER" property="status" />-->
+<!--        <result column="remark" jdbcType="VARCHAR" property="remark" />-->
+<!--        <result column="deleted" jdbcType="INTEGER" property="deleted" />-->
+<!--        <result column="creator_id" jdbcType="BIGINT" property="creatorId" />-->
+<!--        <result column="operator" jdbcType="BIGINT" property="operator" />-->
+<!--        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />-->
+<!--        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />-->
+<!--    </resultMap>-->
 
     <sql id="Table_Name">
         blog_topic
     </sql>
     <sql id="Base_Column_List">
-        id, surrogate_id, `number`, `name`, remark, deleted, creator_id, operator, create_time,update_time
+        id, surrogate_id, `number`, `name`, status, color,  remark, deleted, creator_id, operator, create_time,update_time
     </sql>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from blog_topic
@@ -182,7 +182,7 @@
         </if>
     </select>
 
-    <select id="selectByNumber" resultMap="BaseResultMap">
+    <select id="selectByNumber" resultType="com.cy.single.blog.pojo.entity.blog.BlogTopic">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         <where>

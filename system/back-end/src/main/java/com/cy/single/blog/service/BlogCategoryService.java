@@ -19,7 +19,7 @@ public interface BlogCategoryService {
 
     PageResult<BlogCategoryVO> list(BlogCategoryPageReq req);
 
-    ApiResp<String> save(BlogCategoryReq req);
+    ApiResp<String> add(BlogCategoryReq req);
 
     ApiResp<String> edit(BlogCategoryReq req);
 

@@ -19,20 +19,18 @@ const BlogLabel = () => {
   const { setLabelState } = useLabelModalStore()
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
 
-  // const labelRef = useRef<{ open: (type: IAction, data?: LabelListTableType) => void }>()
-
   const columnsLable: ColumnsType<LabelListTableType> = [
     {
       key: 'number',
       dataIndex: 'number',
       title: '编号',
-      width: '5%'
+      width: '10%'
     },
     {
       key: 'name',
       dataIndex: 'name',
       title: '标签名',
-      width: '30%',
+      width: '20%',
       render: (_, record) => (
         <Tag key={record.key} color={record.color}>
           {record.name}
@@ -40,16 +38,27 @@ const BlogLabel = () => {
       )
     },
     {
+      key: 'color',
+      dataIndex: 'color',
+      title: '展示颜色',
+      width: '10%',
+      render: (_, record) => (
+        <Tag key={record.key} color={record.color}>
+          {record.color}
+        </Tag>
+      )
+    },
+    {
       key: 'colorText',
       dataIndex: 'colorText',
       title: '展示颜色',
-      width: '20%'
+      width: '10%'
     },
     {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: '25%'
+      width: '30%'
     },
     {
       key: 'oparet',

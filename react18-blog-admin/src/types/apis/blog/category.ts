@@ -1,30 +1,30 @@
-import { BaseEntityPageType, BaseEntityType, BasePageReq } from '@/types/base'
+import { BaseEntityPageType, BaseEntityRequiredType, BaseEntityType, BasePageReq } from '@/types/base'
 import { BaseApi } from '..'
-import { ResultPage } from '@/types/base/response'
-import { BlogCategoryType } from '@/types/entity/blog/categoryType'
+import { Result, ResultPage } from '@/types/base/response'
 
 /**
- * blog label request API type
+ * blog => label entity
  */
-export interface BlogCategoryApi extends BaseApi {
-  getCategoryPageList(params: BlogCategoryPageReqParams): Promise<ResultPage<BlogCategoryVO>>
-  getCategoryList(params: BlogCategoryReqParams): Promise<ResultPage<BlogCategoryVO>>
-  // save(params: CreateLabelReq): Promise<Result<string>>
-  // edit(params: EditLabelReq): Promise<Result<string>>
-  // delete(params: DelLabelReq): Promise<Result<string>>
-  // deleteBatch(params: DelLabelReq): Promise<Result<string>>
+export interface BlogCategory extends BaseEntityRequiredType {
+  id: number
+  surrogateId: string
+  number: string
+  name: string
+  color: string
+  remark: string
 }
 
 /** ==================== blog type request ====================  */
-export interface BlogCategoryReqParams extends BaseEntityType {
+export interface BlogCategoryReq extends BaseEntityType {
   keyWords?: string | number
 }
 
-export interface BlogCategoryPageReqParams extends BaseEntityPageType {}
+export interface BlogCategoryPageReq extends BaseEntityPageType {}
 
 export interface CreateCategoryReq {
   number: string
   name: string
+  color?: string
   remark: string
 }
 
@@ -32,6 +32,7 @@ export interface EditCategoryReq {
   surrogateId: string
   number: string
   name: string
+  color?: string
   remark: string
 }
 
@@ -40,12 +41,25 @@ export interface DelCategoryReq {
 }
 
 /** ==================== blog type response ====================  */
-export interface CategoryDTO {
+export interface CategoryTableType {
   key: string
-  number: string | number
+  number: string
   name: string
+  color: string
   remark: string
 }
 
 /** ==================== mapping back-end data ====================  */
-export interface BlogCategoryVO extends BlogCategoryType {}
+
+export interface BlogCategoryVO extends BlogCategory {}
+
+/**
+ * blog label request API type
+ */
+export interface BlogCategoryApi extends BaseApi {
+  getCategoryPageList(params: BlogCategoryPageReq): Promise<ResultPage<BlogCategoryVO>>
+  getCategoryList(params: BlogCategoryReq): Promise<ResultPage<BlogCategoryVO>>
+  add(params: CreateCategoryReq): Promise<Result<string>>
+  edit(params: EditCategoryReq): Promise<Result<string>>
+  delete(params: DelCategoryReq): Promise<Result<string>>
+}

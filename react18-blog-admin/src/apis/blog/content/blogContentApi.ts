@@ -2,16 +2,37 @@ import { baseAxiosRequest } from '@/utils/http/request'
 import { Result, ResultPage } from '@/types/base/response'
 import { PREFIX_URL_BLOG_CONTENT } from '@/config'
 import { BaseApi } from '@/types/apis'
-import { BlogContentType } from '@/types/entity/blog/content'
-import { LabelMapped, LabelTableResq } from '@/types/apis/blog/labelType'
-import { BlogCategoryVO } from '@/types/apis/blog/category'
+import { LabelTableResq } from '@/types/apis/blog/labelType'
 import { BaseEntityPageType } from '@/types/base'
-import { BlogTopicVO } from '@/types/apis/blog/topic'
+
+export interface BlogContent {
+  id: string
+  surrogateId: string
+  number: string
+  original: string
+  recommend: string
+  title: string
+  introduction: string
+  imgUrl: string
+  paragraph: string
+  contentText: string
+  publishTime: string
+  categoryId: string
+  labelIds: string
+  topicId: string
+  status: string
+  remark: string
+  deleted: string
+  creatorId: string
+  operator: string
+  createTime: string
+  updateTime: string
+}
 
 /**
  * ==================== blog-content request ====================
  */
-export interface BlogContentReqReq extends BaseEntityPageType {}
+export interface BlogContentReq extends BaseEntityPageType {}
 
 export interface BlogContentAddReq {
   title: string
@@ -47,46 +68,57 @@ export interface GetBlogContentReq {
 /**
  * ==================== blog content binding response ====================
  */
-export interface BlogContentDTO {
+export interface BlogContentTableType {
   key: string
   title: string
+  introduction: string
   original: string
   recommend: string
-  imgUrl: string
   categoryId: string
-  categoryName: string
-  topicName: string
-  introduction: string
+  topicId: string
+  status: string // 发布状态
   remark: string
-  status: number
   publishTime: string
-  blogLabelList: LabelTableResq[]
   contentText?: string
-}
-
-export interface MappedBlogContentDTO extends Omit<BlogContentDTO, 'blogLabelList'> {
-  blogLabelList: LabelMapped[]
+  categoryName: string
+  categoryColor: string
+  topicName: string
+  blogLabelList: LabelTableResq[]
+  originalType: number
+  recommendType: number
+  statusType: number
 }
 
 /** ==================== mapping back-end data ====================  */
-export interface BlogContentVO extends BlogContentType {
-  labelNames: string[]
-  contentText: string
-  blogLabelList: LabelTableResq[]
-  blogCategoryVO: BlogCategoryVO
-  blogTopicVO: BlogTopicVO
-}
 
-export interface BlogContent {
+export interface BlogContentResq {
+  id: string
   surrogateId: string
-  contentText: string
+  number: string
+  title: string
+  introduction: string
+  original: string
+  recommend: string
+  categoryId: string
+  topicId: string
+  status: string // 发布状态
+  remark: string
+  publishTime: string
+  contentText?: string
+  categoryName: string
+  categoryColor: string
+  topicName: string
+  blogLabelList: LabelTableResq[]
+  originalType: number
+  recommendType: number
+  statusType: number
 }
 
 /**
  * blog label request API type
  */
 export interface BlogContentApi extends BaseApi {
-  getBlogContentPageList(params: BlogContentReqReq): Promise<ResultPage<BlogContentVO>>
+  getBlogContentPageList(params: BlogContentReq): Promise<ResultPage<BlogContentResq>>
   getContent(params: GetBlogContentReq): Promise<Result<BlogContent>>
   add(params: BlogContentAddReq): Promise<Result<string>>
   edit(params: EditeBlogContentReq): Promise<Result<string>>
@@ -95,8 +127,8 @@ export interface BlogContentApi extends BaseApi {
 }
 
 const blogContentApi: BlogContentApi = {
-  getBlogContentPageList(req: BlogContentReqReq) {
-    return baseAxiosRequest.post<ResultPage<BlogContentVO>>(PREFIX_URL_BLOG_CONTENT + '/pageList', req)
+  getBlogContentPageList(req: BlogContentReq) {
+    return baseAxiosRequest.post<ResultPage<BlogContentResq>>(PREFIX_URL_BLOG_CONTENT + '/pageList', req)
   },
   add(params: BlogContentAddReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CONTENT + '/add', params)

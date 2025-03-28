@@ -14,6 +14,14 @@ public class CommonConstants {
 	public static final String LANG_EN = "en";
 
 	/**
+	 * bus type
+	 */
+	public static final String BUS_CREATE = "create";
+	public static final String BUS_EDIT = "edit";
+	public static final String BUS_DELETE = "delete";
+	public static final String BUS_DELETE_BATCH = "delete_batch";
+
+	/**
 	 * org
 	 */
 	public static final String ORG_PREV_NUMBER_INFO = "ORG";
@@ -27,18 +35,14 @@ public class CommonConstants {
 	/**
 	 * cache manager key
 	 */
-	public static final String CACHE_KEY_BLOG_LABEL_GET = "blog-label-get";
+	// label
 	public static final String CACHE_KEY_BLOG_LABEL_LIST = "blog-label-list";
-	public static final String CACHE_KEY_BLOG_LABEL_MAP = "blog-label-map";
-
+	// category
 	public static final String CACHE_KEY_BLOG_CATEGORY_LIST = "blog-category-list";
-	public static final String CACHE_KEY_BLOG_CATEGORY_MAP = "blog-category-map";
 
-	public static final String CACHE_KEY_TOPIC_LIST = "blog-topic-list";
-	public static final String CACHE_KEY_TOPIC_MAP = "blog-topic-map";
-
-	public static final String CACHE_KEY_IMAGE_CATEGORY_LIST = "image-category-list";
-	public static final String CACHE_KEY_IMAGE_CATEGORY_MAP = "image-category-map";
-
+	/**
+	 * default color
+	 */
+	public static final String DEFAULT_COLOR = "magenta";
 
 }

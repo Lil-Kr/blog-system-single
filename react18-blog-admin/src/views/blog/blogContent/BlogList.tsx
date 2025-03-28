@@ -4,12 +4,11 @@ import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
 import { useForm } from 'antd/es/form/Form'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
-import { blogTransformToTable } from '@/utils/blog/blogTransform'
 import { useBlogStore } from '@/store/blog/blogStore'
 import BlogModal from './BlogModal'
 import { BlogModalType } from '@/types/blog/BlogType'
 import { useDictDetailStore } from '@/store/sys/dictStore'
-import { transformTypeToSeletor, transformTypeToSeletorById } from '@/utils/sys/treeUtils'
+import { transformTypeToSeletorById } from '@/utils/sys/treeUtils'
 import labelApi from '@/apis/blog/label/labelApi'
 import { LabelPageReq } from '@/types/apis/blog/labelType'
 import { SelectProps } from 'antd/lib'
@@ -17,13 +16,14 @@ import { useLabelStore } from '@/store/blog/labelStore'
 // api
 import blogContentApi, {
   BlogContent,
-  BlogContentDTO,
-  BlogContentReqReq,
-  BlogContentVO
+  BlogContentTableType,
+  BlogContentReq,
+  BlogContentResq
 } from '@/apis/blog/content/blogContentApi'
+import { transformBlogToTable } from '@/utils/blog/blogTransform'
 
 const BlogList = () => {
-  const columnsBlog: ColumnsType<BlogContentDTO> = [
+  const columnsBlog: ColumnsType<BlogContentTableType> = [
     {
       key: 'title',
       dataIndex: 'title',
@@ -40,27 +40,39 @@ const BlogList = () => {
       key: 'blogLabelList',
       dataIndex: 'blogLabelList',
       title: '博客标签',
-      width: '10%'
-      // render: (_: object, record: BlogContentDTO) =>
-      //   record.blogLabelList.map((item, index) => (
-      //     <Tag key={item.surrogateId} color={item.color}>
-      //       {item.name}
-      //     </Tag>
-      //   ))
+      width: '20%',
+      render: (_: object, record) => (
+        <Flex gap='4px' wrap='wrap'>
+          {record.blogLabelList.map(item => (
+            <Tag
+              key={item.surrogateId}
+              color={item.color}
+              style={{ margin: 0, padding: '0 4px', fontSize: '12px', lineHeight: '15px' }}
+            >
+              {item.name}
+            </Tag>
+          ))}
+        </Flex>
+      )
     },
     {
       key: 'categoryName',
       dataIndex: 'categoryName',
       title: '博客分类',
-      width: '10%'
+      width: '10%',
+      render: (_: object, record) => (
+        <Tag key={record.key} color={record.categoryColor}>
+          {record.categoryName}
+        </Tag>
+      )
     },
     {
-      key: 'original',
-      dataIndex: 'original',
+      key: 'originalType',
+      dataIndex: 'originalType',
       title: '是否原创',
       width: '5%',
-      render: (_: object, record: BlogContentDTO) =>
-        record.original === '1' ? (
+      render: (_: object, record) =>
+        record.originalType === 1 ? (
           <Tag key={record.key} color={`volcano`}>
             {`是`}
           </Tag>
@@ -71,12 +83,12 @@ const BlogList = () => {
         )
     },
     {
-      key: 'recommend',
-      dataIndex: 'recommend',
+      key: 'recommendType',
+      dataIndex: 'recommendType',
       title: '是否推荐',
       width: '5%',
-      render: (_: object, record: BlogContentDTO) =>
-        record.recommend === '1' ? (
+      render: (_: object, record) =>
+        record.recommendType === 1 ? (
           <Tag key={record.key} color={`volcano`}>
             {`是`}
           </Tag>
@@ -87,12 +99,12 @@ const BlogList = () => {
         )
     },
     {
-      key: 'status',
-      dataIndex: 'status',
+      key: 'statusType',
+      dataIndex: 'statusType',
       title: '发布状态',
       width: '10%',
-      render: (_: object, record: BlogContentDTO) =>
-        record.status === 1 ? (
+      render: (_: object, record) =>
+        record.statusType === 1 ? (
           <Tag key={record.key} color={`green`}>
             {`已发布`}
           </Tag>
@@ -112,14 +124,14 @@ const BlogList = () => {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: '20%'
+      width: '10%'
     },
     {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
       width: '10%',
-      render: (_: object, record: BlogContentDTO) => (
+      render: (_: object, record) => (
         <Flex vertical={false} gap={4}>
           <Button
             size={btnSize}
@@ -175,35 +187,35 @@ const BlogList = () => {
   useEffect(() => {
     const initBolgContentData = async () => {
       const bolgList = await getBlogContentPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
-      const blogs = blogTransformToTable(bolgList)
+      const blogs = transformBlogToTable(bolgList)
       setBlogPageList(blogs)
 
-      /**
-       * 加载博客分类
-       */
-      const blogTypes = dictMap.get('博客分类') ?? []
-      const blogType = transformTypeToSeletorById(blogTypes)
-      setBlogType(blogType)
+      // /**
+      //  * 加载博客分类
+      //  */
+      // const blogTypes = dictMap.get('博客分类') ?? []
+      // const blogType = transformTypeToSeletorById(blogTypes)
+      // setBlogType(blogType)
 
-      /**
-       * 加载博客标签
-       */
-      const labelRes = await retrieveLableList({} as LabelPageReq)
-      setLabelList(labelRes)
+      // /**
+      //  * 加载博客标签
+      //  */
+      // const labelRes = await retrieveLableList({} as LabelPageReq)
+      // setLabelList(labelRes)
 
-      /**
-       * 博客专题
-       */
-      const blogTopics = dictMap.get('博客专题') ?? []
-      const blogTopic = transformTypeToSeletorById(blogTopics)
-      setBlogTopic(blogTopic)
+      // /**
+      //  * 博客专题
+      //  */
+      // const blogTopics = dictMap.get('博客专题') ?? []
+      // const blogTopic = transformTypeToSeletorById(blogTopics)
+      // setBlogTopic(blogTopic)
 
-      /**
-       * 博客发布状态
-       */
-      const blogPublisStatueDict = dictMap.get('博客发布状态') ?? []
-      const publishStatue = transformTypeToSeletorById(blogPublisStatueDict)
-      setBlogPublisStatue(publishStatue)
+      // /**
+      //  * 博客发布状态
+      //  */
+      // const blogPublisStatueDict = dictMap.get('博客发布状态') ?? []
+      // const publishStatue = transformTypeToSeletorById(blogPublisStatueDict)
+      // setBlogPublisStatue(publishStatue)
     }
     initBolgContentData()
   }, [])
@@ -228,21 +240,21 @@ const BlogList = () => {
   /**
    * 多选
    */
-  const rowSelection: TableRowSelection<BlogContentDTO> = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: BlogContentDTO[]) => {},
-    getCheckboxProps: (record: BlogContentDTO) => ({})
+  const rowSelection: TableRowSelection<BlogContentTableType> = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: BlogContentTableType[]) => {},
+    getCheckboxProps: (record: BlogContentTableType) => ({})
   }
   /**
    * 页码或 pageSize 改变的回调, 参数是改变后的页码及每页条数
    * @param page
    * @param pageSize
    */
-  const onChange: PaginationProps['onChange'] = (page, pageSize) => {
+  const onChangePageInfo: PaginationProps['onChange'] = (page, pageSize) => {
     setPageSize(pageSize)
   }
 
   /**
-   * 创建博客, 打开modal
+   * 创建博客, 打开 modal
    */
   const createBlog = () => {
     const param: BlogModalType = {
@@ -268,7 +280,7 @@ const BlogList = () => {
   /**
    * 编辑博客
    */
-  const editBlog = async (blogId: string, record: BlogContentDTO) => {
+  const editBlog = async (blogId: string, record: BlogContentTableType) => {
     const param: BlogModalType = {
       api: blogContentApi,
       openModal: true,
@@ -294,7 +306,7 @@ const BlogList = () => {
 
   const deleteBlog = () => {}
 
-  const getBlogContentPageList = async (req: BlogContentReqReq): Promise<BlogContentVO[]> => {
+  const getBlogContentPageList = async (req: BlogContentReq): Promise<BlogContentResq[]> => {
     const values = form.getFieldsValue()
     const blogContent = await blogContentApi.getBlogContentPageList({ ...req, ...values })
     const { code, data, msg } = blogContent
@@ -303,6 +315,7 @@ const BlogList = () => {
     }
 
     setTotalSize(data.total)
+    console.log('--> data.list:', data.list)
     return data.list
   }
 
@@ -355,7 +368,7 @@ const BlogList = () => {
               position: ['bottomLeft'],
               hideOnSinglePage: false, // only one pageSize then hidden Paginator
               pageSizeOptions: [10, 20, 50], // specify how many items can be displayed on each page
-              onChange: onChange,
+              onChange: onChangePageInfo,
               // onShowSizeChange: onShowSizeChange,
               showSizeChanger: true,
               pageSize: pageSize,
@@ -364,10 +377,6 @@ const BlogList = () => {
           />
         </div>
       </Flex>
-      {/* <SaveBlogModal
-        mRef={blogsRef}
-        update={() => getBlogContentPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })}
-      /> */}
       <BlogModal {...blogModal} />
     </div>
   )

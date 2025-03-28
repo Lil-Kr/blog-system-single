@@ -15,13 +15,13 @@ import java.util.List;
  * @Date: 2025/3/24
  * @Description:
  */
-public interface BlogLabelMapper extends BaseMapper<BlogLabel> {
+public interface BlogLabelMapper extends BaseMapper<com.cy.single.blog.pojo.entity.blog.BlogLabel> {
 
 	Integer editBySurrogateId(@Param("param") BlogLabelReq req);
 
 	Integer deleteBySurrogateId(Long surrogateId);
 
-	List<BlogLabelVO> labelList(@Param("param") BlogLabelListReq req);
+	List<BlogLabel> labelList(@Param("param") BlogLabelListReq req);
 
 	Integer deleteBatch(List<Long> list);
 

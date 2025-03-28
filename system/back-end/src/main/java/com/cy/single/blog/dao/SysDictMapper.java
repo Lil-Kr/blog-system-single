@@ -23,4 +23,7 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 	List<SysDictVO> pageDictList(@Param("param") DictListPageReq req);
 
 	Integer countPageDict(@Param("param") DictListPageReq req);
+
+	List<SysDict> selectDictList();
+
 }

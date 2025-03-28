@@ -5,7 +5,6 @@ import { create } from 'zustand'
 /**
  * 字典详情状态管理
  */
-
 type DictDetailState = {
   dictMap: Map<string, DictMapType[]>
   dictStatues: OptionType[]

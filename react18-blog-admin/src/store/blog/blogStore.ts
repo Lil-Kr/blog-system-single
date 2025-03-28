@@ -1,14 +1,13 @@
-import { BlogContentAddReq, BlogContentDTO } from '@/apis/blog/content/blogContentApi'
-import { SelectProps } from 'antd/lib'
+import { BlogContentAddReq, BlogContentTableType } from '@/apis/blog/content/blogContentApi'
 import { create } from 'zustand'
 
 interface BlogState {
-  blogPageTableList: BlogContentDTO[]
+  blogPageTableList: BlogContentTableType[]
   blogModalData: BlogContentAddReq
 }
 
 interface BlogAction {
-  setBlogPageList: (blogPageTableList: BlogContentDTO[]) => void
+  setBlogPageList: (blogPageTableList: BlogContentTableType[]) => void
   setBlogModalData: (blogModalData: BlogContentAddReq) => void
 }
 
@@ -16,7 +15,7 @@ const blogData = { blogPageTableList: [], blogModalData: {} as BlogContentAddReq
 
 const useBlogStore = create<BlogState & BlogAction>()(set => ({
   ...blogData,
-  setBlogPageList: (blogPageTableList: BlogContentDTO[]) =>
+  setBlogPageList: (blogPageTableList: BlogContentTableType[]) =>
     set(state => ({
       ...state,
       blogPageTableList: blogPageTableList

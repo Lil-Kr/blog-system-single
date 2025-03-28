@@ -52,4 +52,10 @@
             </if>
         </where>
     </select>
+
+    <select id="selectDictList" resultType="com.cy.single.blog.pojo.entity.sys.SysDict">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name" />
+    </select>
+
 </mapper>

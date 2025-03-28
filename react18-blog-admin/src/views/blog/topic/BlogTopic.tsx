@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { BaseModal } from '@/components/modal'
-import { BlogTopicPageReqParams, TopicDTO } from '@/types/apis/blog/topic'
+import { BlogTopicPageReq, TopiciTableType } from '@/types/apis/blog/topicType'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space } from 'antd'
@@ -11,20 +11,28 @@ import { TableRowSelection } from 'antd/es/table/interface'
 import blogTopicApi from '@/apis/blog/topic'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
+import { Tag } from 'antd/lib'
 
 const BlogTopic = () => {
-  const columnsBlogTopic: ColumnsType<any> = [
+  const columnsBlogTopic: ColumnsType<TopiciTableType> = [
     {
       key: 'number',
       dataIndex: 'number',
       title: '编号',
-      width: '20%'
+      width: '10%'
     },
     {
       key: 'name',
       dataIndex: 'name',
       title: '主题名',
-      width: '20%'
+      width: '10%'
+    },
+    {
+      key: 'color',
+      dataIndex: 'color',
+      title: '展示颜色',
+      width: '20%',
+      render: (_, record) => <Tag color={record.color}>{record.color}</Tag>
     },
     {
       key: 'remark',
@@ -37,7 +45,7 @@ const BlogTopic = () => {
       dataIndex: 'oparet',
       title: '操作',
       width: '20%',
-      render: (_: object, record: TopicDTO) => (
+      render: (_: object, record) => (
         <Flex vertical={false} gap={4}>
           <Button
             size={btnSize}
@@ -69,6 +77,7 @@ const BlogTopic = () => {
       )
     }
   ]
+
   const topicRef = useRef<{
     open: (
       requestParams: IModalRequestAction,
@@ -85,15 +94,15 @@ const BlogTopic = () => {
   const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
   const [rowKeys, setRowKeys] = useState<React.Key[]>([])
   const [tableLoading, setTableLoading] = useState<boolean>(true)
-  const [topicPageList, setTopicPageList] = useState<TopicDTO[]>([])
+  const [topicPageList, setTopicPageList] = useState<TopiciTableType[]>([])
   const [totalSize, setTotalSize] = useState<number>(0)
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
 
-  const rowSelection: TableRowSelection<TopicDTO> = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: TopicDTO[]) => {
+  const rowSelection: TableRowSelection<TopiciTableType> = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: TopiciTableType[]) => {
       setRowKeys(selectedRowKeys)
     },
-    getCheckboxProps: (record: TopicDTO) => ({
+    getCheckboxProps: (record: TopiciTableType) => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked
       name: record.name
     })
@@ -145,21 +154,21 @@ const BlogTopic = () => {
     getTopicPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
   }, [])
 
-  const getTopicPageList = async (params: BlogTopicPageReqParams) => {
+  const getTopicPageList = async (params: BlogTopicPageReq) => {
     const values = form.getFieldsValue()
     const blogTopicRes = await blogTopicApi.getTopicPageList({ ...params, ...values })
     const { code, data, msg } = blogTopicRes
-    if (code === 200) {
-      const datas = data.list.map(({ surrogateId, number, name, remark }) => ({
-        key: surrogateId,
-        number,
-        name,
-        remark
-      }))
-      setTopicPageList(datas)
-      setTotalSize(data.total)
-      setTableLoading(false)
+    if (code !== 200) {
+      return
     }
+
+    const datas = data.list.map(({ surrogateId, ...rest }) => ({
+      key: surrogateId,
+      ...rest
+    }))
+    setTopicPageList(datas)
+    setTotalSize(data.total)
+    setTableLoading(false)
   }
   /**
    * create
@@ -200,7 +209,7 @@ const BlogTopic = () => {
    * @param key
    * @param record
    */
-  const lookItem = (key: string, record: TopicDTO) => {
+  const lookItem = (key: string, record: TopiciTableType) => {
     topicRef.current?.open(
       { api: blogTopicApi },
       { title: '查看博客专题' },
@@ -237,7 +246,7 @@ const BlogTopic = () => {
    * @param key
    * @param record
    */
-  const editItem = (key: string, record: TopicDTO) => {
+  const editItem = (key: string, record: TopiciTableType) => {
     topicRef.current?.open(
       { api: blogTopicApi },
       { title: '编辑博客专题' },
@@ -273,7 +282,7 @@ const BlogTopic = () => {
    * 删除确认提示
    * @param record
    */
-  const deleteItemConfirm = async (record: TopicDTO) => {
+  const deleteItemConfirm = async (record: TopiciTableType) => {
     const res = await blogTopicApi.delete!({ surrogateId: record.key })
     if (res.code === 200) {
       messageApi?.success(res.msg)

@@ -48,9 +48,9 @@ public class TopicController {
 
   @RecordLogger
   @CheckAuth
-  @PostMapping("/save")
-  public ApiResp<String> save(@RequestBody @Validated(BlogTopicReq.GroupBlogTopicSave.class) BlogTopicReq req) {
-    return blogTopicService.save(req);
+  @PostMapping("/add")
+  public ApiResp<String> add(@RequestBody @Validated(BlogTopicReq.GroupBlogTopicSave.class) BlogTopicReq req) {
+    return blogTopicService.add(req);
   }
 
   @RecordLogger
