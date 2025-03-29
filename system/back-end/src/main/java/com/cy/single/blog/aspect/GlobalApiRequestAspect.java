@@ -6,6 +6,7 @@ import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysUserMapper;
 import com.cy.single.blog.enums.ReturnCodeEnum;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
+import com.cy.single.blog.service.CacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -19,8 +20,6 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
-import static com.cy.single.blog.common.cache.CacheManager.getUserCache;
-import static com.cy.single.blog.common.cache.CacheManager.setUserCache;
 import static com.cy.single.blog.enums.ReturnCodeEnum.SYSTEM_ERROR;
 
 /**
@@ -32,13 +31,16 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.SYSTEM_ERROR;
 @Slf4j
 @Component
 @Aspect
-@Order(3)
+@Order(2)
 public class GlobalApiRequestAspect {
 	@Autowired
 	private HttpServletRequest servletRequest;
 
 	@Autowired
 	private SysUserMapper userMapper;
+
+	@Autowired
+	private CacheService cacheService;
 
 	@Pointcut("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
 	public void auth() {}
@@ -62,7 +64,7 @@ public class GlobalApiRequestAspect {
 			 * 先与缓存中对应的用户 token 做校验
 			 * 如果缓存中没有token 就查询用户在DB中的 token, 并返回
 			 */
-			SysUser user = getUserCache(token);
+			SysUser user = cacheService.getUserCache(token);
 			if (Objects.isNull(user)) {
 				user = userMapper.getUserByToken(token);
 
@@ -70,9 +72,8 @@ public class GlobalApiRequestAspect {
 					log.error("The request {} try fake token", "ip");
 					throw new BusinessException(ReturnCodeEnum.NOT_LOGIN);
 				}
-				setUserCache(token, user);
+				cacheService.setUserCache(token, user);
 			}
-
 
 			/**
 			 * record user info into ThreadLocal

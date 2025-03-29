@@ -24,4 +24,6 @@ public interface SysAclCoreService {
 	List<SysAcl> getUserAclList(Long userId);
 
 	List<SysAcl> getUserAclList(Long userId, Integer type);
+
+	boolean hasUrlAcl(String url);
 }

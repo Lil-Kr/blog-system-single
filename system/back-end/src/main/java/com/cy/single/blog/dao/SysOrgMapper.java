@@ -21,9 +21,5 @@ public interface SysOrgMapper extends BaseMapper<SysOrg> {
 
 	Integer countByList(@Param("param") OrgPageReq req);
 
-	List<SysOrgVO> pageChildOrgList(@Param("param") OrgPageReq req);
-
-	Integer childOrgListCount(@Param("param") OrgPageReq req);
-
 	List<SysOrgVO> retrieveAllList(@Param("param") OrgListAllReq req);
 }

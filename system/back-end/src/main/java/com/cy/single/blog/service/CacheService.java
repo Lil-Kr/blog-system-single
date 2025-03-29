@@ -2,8 +2,10 @@ package com.cy.single.blog.service;
 
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.entity.blog.BlogTopic;
+import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
+import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
 
 import java.util.List;
@@ -14,6 +16,13 @@ import java.util.List;
  * @Description: cache service
  */
 public interface CacheService {
+
+	/** ================= admin cache ============== **/
+	void setUserCache(String token, SysUser user);
+
+	SysUser getUserCache(String key);
+
+	void removeCache(String key);
 
 	/** ================= blog label ============== **/
 	List<BlogLabel> getLabelListCache(String key);
@@ -67,5 +76,7 @@ public interface CacheService {
 	/**
 	 * ================================== sys user acl ===============================
 	 */
+	void saveUserAclCache(Long surrogateId, List<SysAcl> aclList);
 
+	List<SysAcl> getUserAclListCache(Long userId);
 }

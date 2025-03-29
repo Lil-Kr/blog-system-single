@@ -34,7 +34,7 @@ export const initOrgData = {
   orgPageList: [],
   tablePageInfo: {
     currentPageNum: 1,
-    pageSize: 10,
+    pageSize: 20,
     totalSize: 0
   },
   expandedKeys: [],

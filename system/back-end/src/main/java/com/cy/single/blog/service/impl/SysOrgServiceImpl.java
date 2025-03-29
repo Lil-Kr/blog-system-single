@@ -212,39 +212,25 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 		this.updateBatchById(orgList);
 	}
 
+	/**
+	 * 分页查询组织列表
+	 * @param req
+	 * @return
+	 */
 	@Override
 	public PageResult<SysOrgVO> pageOrgList(OrgPageReq req) {
-//		req.setIsOrder(1);
 		List<SysOrgVO> pageList = orgMapper.pageList(req);
 		Integer count = orgMapper.countByList(req);
-		if (CollectionUtils.isNotEmpty(pageList)) {
-			return new PageResult<>(pageList, count);
-		}else {
+		if (CollectionUtils.isEmpty(pageList)) {
 			return new PageResult<>(new ArrayList<>(0), 0);
 		}
+		return new PageResult<>(pageList, count);
 	}
 
 	@Override
 	public List<SysOrgVO> list(OrgListAllReq req) {
 		List<SysOrgVO> list = orgMapper.retrieveAllList(req);
 		return list;
-	}
-
-
-	/**
-	 * retrieve child org list by surrogateId
-	 * @param req
-	 * @return
-	 */
-	@Override
-	public PageResult<SysOrgVO> pageChildOrgList(OrgPageReq req) {
-		List<SysOrgVO> pageList = orgMapper.pageChildOrgList(req);
-		Integer count = orgMapper.childOrgListCount(req);
-		if (CollectionUtils.isNotEmpty(pageList)) {
-			return new PageResult<>(pageList, count);
-		}else {
-			return new PageResult<>(new ArrayList<>(0), 0);
-		}
 	}
 
 	/**
@@ -268,17 +254,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 		query.eq("surrogate_id", surrogateId);
 		SysOrg org = orgMapper.selectOne(query);
 		if (Objects.isNull(org)) {
-			return ApiResp.failure(INFO_NOT_EXIST);
-		}
-
-		/**
-		 * check will delete org include user
-		 */
-		QueryWrapper<SysUser> queryWrapperUser = new QueryWrapper<>();
-		queryWrapperUser.eq("org_id", surrogateId);
-		Long userCount = userMapper.selectCount(queryWrapperUser);
-		if (userCount >= 1) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.org.api.resp.msg1"));
+			return ApiResp.warning(INFO_NOT_EXIST);
 		}
 
 		/**
@@ -288,15 +264,24 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 		query2.eq("parent_id", surrogateId);
 		Long count = orgMapper.selectCount(query2);
 		if (count >= 1) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.org.api.resp.msg2"));
+			return ApiResp.warning(msgService.getGreetingMessage(LANG_ZH, "sys.org.api.resp.msg2"));
+		}
+
+		/**
+		 * check will delete org include user
+		 */
+		QueryWrapper<SysUser> queryWrapperUser = new QueryWrapper<>();
+		queryWrapperUser.eq("org_id", surrogateId);
+		Long userCount = userMapper.selectCount(queryWrapperUser);
+		if (userCount >= 1) {
+			return ApiResp.warning(msgService.getGreetingMessage(LANG_ZH, "sys.org.api.resp.msg1"));
 		}
 
 		int delete = orgMapper.deleteById(org.getId());
-		if (delete >= 1) {
-			return ApiResp.success();
-		} else {
-			return ApiResp.failure(OPERATE_ERROR);
+		if (delete < 1) {
+			return ApiResp.failure();
 		}
+		return ApiResp.success();
 	}
 
 }

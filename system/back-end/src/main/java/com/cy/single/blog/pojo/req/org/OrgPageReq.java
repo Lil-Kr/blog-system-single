@@ -20,6 +20,7 @@ public class OrgPageReq extends BasePageReq {
 	@NotNull(groups = {GroupChildOrgList.class}, message = "surrogateId不能为空")
 	private Long surrogateId;
 
+	private Long parentId;
 
 	// org number
 	private String number;

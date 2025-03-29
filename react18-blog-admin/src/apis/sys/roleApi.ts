@@ -32,11 +32,11 @@ const roleApi: RoleApi = {
   roleAclTree(req: RoleAclTreeReq) {
     return baseAxiosRequest.post<Result<AclModuleTreeResp[]>>(PREFIX_URL_SYS_ROLE + '/roleAclTree', req)
   },
-  updateRoleAcls(req: UpdateRoleAclsReq) {
-    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ROLE + '/updateRoleAcls', req)
-  },
   roleUserList(req: RoleUserReq) {
     return baseAxiosRequest.post<Result<RoleUserListResp>>(PREFIX_URL_SYS_ROLE + '/roleUserList', req)
+  },
+  updateRoleAcls(req: UpdateRoleAclsReq) {
+    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ROLE + '/updateRoleAcls', req)
   },
   updateRoleUsers(req: UpdateRoleUserReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ROLE + '/updateRoleUsers', req)

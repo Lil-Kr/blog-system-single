@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @Author: Lil-K
  * @Date: 2024/3/21
- * @Description: api request limit
+ * @Description: qpi rate limit
  */
 @Slf4j
 @Component

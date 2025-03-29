@@ -41,7 +41,8 @@ const OrgModal = (props: ModalType.CustomModal) => {
     orgModalForm.resetFields()
     if (action === 'create') {
       // 默认显示第一条
-      const orgInfo: OptionType = orgSelectorInfo[0]
+      // const orgInfo: OptionType = orgSelectorInfo[0]
+      const orgInfo: OptionType = req?.orgInfo ?? orgSelectorInfo[0]
       const statusInfo: OptionType = dictStatues.find(item => item.value === '0') ?? dictStatues[0]
       setSelectedOrgValue(orgInfo.value ?? '')
       setSelectedStatueValue(statusInfo.value ?? '0')
@@ -80,6 +81,7 @@ const OrgModal = (props: ModalType.CustomModal) => {
    */
   const handleOk = async () => {
     const valid = await orgModalForm.validateFields()
+    if (!valid) return
     const params = orgModalForm.getFieldsValue()
 
     if (action === 'create') {
@@ -110,7 +112,7 @@ const OrgModal = (props: ModalType.CustomModal) => {
     }
 
     handleCancel()
-    update()
+    update({ parentId: req?.orgInfo?.value })
   }
 
   const handleCancel = () => {
@@ -156,6 +158,21 @@ const OrgModal = (props: ModalType.CustomModal) => {
           <Form.Item name={'key'} hidden>
             <Input />
           </Form.Item>
+          <Form.Item
+            key={4}
+            name={'orgInfo'}
+            label={'所属组织'}
+            rules={[{ required: true, message: '所属组织不能为空' }]}
+          >
+            <Select
+              onChange={value => handleOrgSelectorChange(value)}
+              showSearch={true}
+              placeholder={'所属组织必填'}
+              optionFilterProp='children'
+              filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              options={orgSelectorInfo}
+            />
+          </Form.Item>
           <Form.Item key={1} name={'name'} label={'组织名称'} rules={[{ required: true, message: '组织名称不能为空' }]}>
             <Input placeholder={'组织名称必填'} style={{ width: '100%' }} />
           </Form.Item>
@@ -171,21 +188,6 @@ const OrgModal = (props: ModalType.CustomModal) => {
           </Form.Item>
           <Form.Item key={3} name={'seq'} label={'序号'} rules={[{ required: true, message: '序号不能为空' }]}>
             <InputNumber placeholder={'序号必填'} style={{ width: '100%' }} min={1} max={10000} />
-          </Form.Item>
-          <Form.Item
-            key={4}
-            name={'orgInfo'}
-            label={'所属组织'}
-            rules={[{ required: true, message: '所属组织不能为空' }]}
-          >
-            <Select
-              onChange={value => handleOrgSelectorChange(value)}
-              showSearch={true}
-              placeholder={'所属组织必填'}
-              optionFilterProp='children'
-              filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-              options={orgSelectorInfo}
-            />
           </Form.Item>
           <Form.Item
             key={5}

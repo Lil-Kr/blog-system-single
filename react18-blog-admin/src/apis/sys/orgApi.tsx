@@ -16,9 +16,6 @@ const orgApi: SysOrgApi = {
   retrieveOrgTreeList() {
     return baseAxiosRequest.post<Result<SysOrgResp[]>>(PREFIX_URL_SYS_ORG + '/orgTreeList', {})
   },
-  pageChildOrgList(req: SysOrgReq) {
-    return baseAxiosRequest.post<ResultPage<SysOrgResp>>(PREFIX_URL_SYS_ORG + '/pageChildOrgList', req)
-  },
   pageOrgList(req: SysOrgReq) {
     return baseAxiosRequest.post<ResultPage<SysOrgResp>>(PREFIX_URL_SYS_ORG + '/pageOrgList', req)
   },

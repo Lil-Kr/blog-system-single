@@ -41,6 +41,7 @@ export interface SysOrgReq extends BaseEntityPageType {
 
 export interface SysOrgPageReq extends BaseEntityPageType {
   surrogateId?: string
+  parentId?: string
   keyWords?: string
 }
 
@@ -90,7 +91,6 @@ export interface SysOrgDelReq {
 
 export interface SysOrgApi extends BaseApi {
   retrieveOrgTreeList(): Promise<Result<SysOrgResp[]>>
-  pageChildOrgList(req: SysOrgPageReq): Promise<ResultPage<SysOrgResp>>
   pageOrgList(req: SysOrgPageReq): Promise<ResultPage<SysOrgResp>>
   orgAllList(req: SysOrgListAllReq): Promise<Result<SysOrgAllResp[]>>
   add(params: SysOrgSaveReq): Promise<Result<string>>

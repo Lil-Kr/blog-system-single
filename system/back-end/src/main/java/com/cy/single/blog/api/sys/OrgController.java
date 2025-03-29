@@ -16,10 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @Author: Lil-K
@@ -33,23 +31,6 @@ public class OrgController {
 
 	@Autowired
 	private SysOrgService orgService;
-
-	/**
-	 * save org list
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("save")
-	public ApiResp<String> save(@RequestBody @Valid OrgReq req) {
-		if (Objects.nonNull(req.getSurrogateId())) {// update
-			return orgService.edit(req);
-		}else { // insert
-			return orgService.add(req);
-		}
-	}
 
 	/**
 	 * add org info
@@ -107,19 +88,6 @@ public class OrgController {
 		List<SysOrgVO> list = orgService.list(req);
 		return ApiResp.success(list);
 	}
-
-	/**
-	 * 分页获取子组织信息
-	 * @return
-	 */
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("pageChildOrgList")
-	public ApiResp<PageResult<SysOrgVO>> pageChildOrgList(@RequestBody @Validated({OrgPageReq.GroupChildOrgList.class, BasePageReq.GroupPageQuery.class}) OrgPageReq req) {
-		PageResult<SysOrgVO> list = orgService.pageChildOrgList(req);
-		return ApiResp.success(list);
-	}
-
 
 	/**
 	 * delete org

@@ -66,8 +66,11 @@
         left join sys_org as c on (a.parent_id = c.surrogate_id)
         left join sys_user as b on (a.operator = b.surrogate_id)
         <where>
-            <if test="param.surrogateId != null and param.surrogateId != ''">
+            <if test="param.surrogateId != null">
                 and a.surrogate_id = #{param.surrogateId}
+            </if>
+            <if test="param.parentId != null">
+                and a.parent_id = #{param.parentId}
             </if>
             <if test="param.name != null and param.name != ''">
                 and a.`name` = #{param.name}
@@ -92,6 +95,9 @@
             <if test="param.surrogateId != null and param.surrogateId != ''">
                 and surrogate_id = #{param.surrogateId}
             </if>
+            <if test="param.parentId != null">
+                and parent_id = #{param.parentId}
+            </if>
             <if test="param.name != null and param.name != ''">
                 and `name` = #{param.name}
             </if>
@@ -105,36 +111,6 @@
                 )
             </if>
         </where>
-    </select>
-
-    <select id="pageChildOrgList" resultType="com.cy.single.blog.pojo.vo.sys.org.SysOrgVO">
-        select
-            a.id,
-            a.surrogate_id,
-            a.`number`,
-            a.`name`,
-            a.parent_id,
-            a.`level`,
-            a.seq,
-            a.status,
-            a.remark,
-            a.operator,
-            a.operate_ip,
-            a.create_time,
-            a.update_time,
-            b.account as 'operator_name',
-            c.`name` as 'parent_name'
-        from sys_org as a
-        left join sys_org as c on (a.parent_id = c.surrogate_id)
-        left join sys_user as b on (a.operator = b.surrogate_id)
-        where a.parent_id = #{param.surrogateId}
-        order by a.seq asc
-    </select>
-
-    <select id="childOrgListCount" resultType="java.lang.Integer">
-        select count(1)
-        from <include refid="Table_Name"/>
-        where parent_id = #{param.surrogateId}
     </select>
 
     <select id="retrieveAllList" resultType="com.cy.single.blog.pojo.vo.sys.org.SysOrgVO">

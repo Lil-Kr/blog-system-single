@@ -122,7 +122,7 @@ const Org = () => {
       title: '操作',
       width: '10%',
       render: (_: object, record: OrgTableType) => (
-        <Space size='middle'>
+        <Flex vertical={false} gap={8}>
           <Button
             size={btnSize}
             name='look'
@@ -149,7 +149,7 @@ const Org = () => {
           >
             <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
-        </Space>
+        </Flex>
       )
     }
   ]
@@ -224,7 +224,7 @@ const Org = () => {
    */
   const retrievePageOrgList = async (req: SysOrgPageReq) => {
     const orgPageList = await orgApi.pageOrgList({
-      keyWords: req.keyWords,
+      ...req,
       currentPageNum: req.currentPageNum,
       pageSize: req.pageSize
     })
@@ -257,8 +257,8 @@ const Org = () => {
     setSelectorInfo({ label: node.title, value: node.key })
 
     // 加载当前组织下的子节点数据
-    const orgList = await orgApi.pageChildOrgList({
-      surrogateId: node.key,
+    const orgList = await orgApi.pageOrgList({
+      parentId: node.key,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
@@ -374,7 +374,12 @@ const Org = () => {
     if (res.code !== 200) {
       return
     }
-    retrievePageOrgList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    retrievePageOrgList({
+      parentId: selectorInfo.value,
+      keyWords: '',
+      currentPageNum: 1,
+      pageSize: tablePageInfo.pageSize
+    })
   }
 
   /**
@@ -503,8 +508,9 @@ const Org = () => {
           </Col>
         </Row>
         <OrgModal
-          update={() => {
-            initInfo()
+          update={({ parentId }) => {
+            // initInfo()
+            retrievePageOrgList({ parentId, keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
           }}
         />
       </Flex>

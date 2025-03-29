@@ -2,8 +2,10 @@ package com.cy.single.blog.service.impl;
 
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.entity.blog.BlogTopic;
+import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
+import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
 import com.cy.single.blog.service.CacheService;
 import com.google.common.cache.Cache;
@@ -25,6 +27,24 @@ import static com.cy.single.blog.common.constants.CommonConstants.*;
 public class CacheServiceImpl implements CacheService, Serializable {
 
 	private static final long serialVersionUID = -3794279386684757741L;
+
+	/** ================= admin cache ============== **/
+	private static Cache<String, SysUser> userCache = CacheBuilder.newBuilder().build();
+
+	@Override
+	public void setUserCache(String token, SysUser user) {
+		userCache.put(token, user);
+	}
+
+	@Override
+	public SysUser getUserCache(String key) {
+		return userCache.getIfPresent(key);
+	}
+
+	@Override
+	public void removeCache(String key) {
+		userCache.invalidate(key);
+	}
 
 	/**
 	 * blog-label cache
@@ -200,12 +220,15 @@ public class CacheServiceImpl implements CacheService, Serializable {
 	}
 
 	/**
-	 * 初始化, 保存 topic 数据
-	 * @param list
+	 * ================================== blog category ===============================
 	 */
 	private static Cache<Long, BlogTopic> topicCache = CacheBuilder.newBuilder().build();
 	private static Cache<String, List<BlogTopic>> topicListCache = CacheBuilder.newBuilder().build();
 
+	/**
+	 * 保存专题缓存
+	 * @param list
+	 */
 	@Override
 	public void saveBlogTopicCache(List<BlogTopic> list) {
 		list.forEach(item -> topicCache.put(item.getSurrogateId(), item));
@@ -249,5 +272,25 @@ public class CacheServiceImpl implements CacheService, Serializable {
 	@Override
 	public List<BlogTopic> getTopicListCache(String key) {
 		return topicListCache.getIfPresent(key);
+	}
+
+	/**
+	 * ================================== admin acl ===============================
+	 */
+	private static Cache<Long, List<SysAcl>> adminAclCache = CacheBuilder.newBuilder().build();
+
+	/**
+	 * 保存每个后台管理员的权限点
+	 * @param surrogateId
+	 * @param aclList
+	 */
+	@Override
+	public void saveUserAclCache(Long surrogateId, List<SysAcl> aclList) {
+		adminAclCache.put(surrogateId, aclList);
+	}
+
+	@Override
+	public List<SysAcl> getUserAclListCache(Long userId) {
+		return adminAclCache.getIfPresent(userId);
 	}
 }

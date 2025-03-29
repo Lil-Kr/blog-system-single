@@ -104,11 +104,10 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 			.build();
 
 		int insert = aclMapper.insert(build);
-		if (insert >= 1) {
-			return ApiResp.success("添加权限点成功");
-		} else {
+		if (insert < 1) {
 			return ApiResp.failure(SAVE_ERROR);
 		}
+		return ApiResp.success("添加权限点成功");
 	}
 
 	/**
@@ -161,11 +160,10 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 		UpdateWrapper<SysAcl> updateWrapper = new UpdateWrapper<>();
 		updateWrapper.eq("surrogate_id", req.getSurrogateId());
 		int update = aclMapper.update(build, updateWrapper);
-		if (update >= 1) {
-			return ApiResp.success(SUCCESS);
-		} else {
+		if (update < 1) {
 			return ApiResp.warning(EDITE_ERROR);
 		}
+		return ApiResp.success(SUCCESS);
 	}
 
 	/**

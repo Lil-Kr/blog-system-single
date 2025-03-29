@@ -1,6 +1,5 @@
 package com.cy.single.blog.api.sys;
 
-
 import com.cy.single.blog.aspect.annotations.CheckAuth;
 import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
@@ -8,8 +7,6 @@ import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.acl.AclPageReq;
 import com.cy.single.blog.pojo.req.acl.AclReq;
-import com.cy.single.blog.pojo.req.roleacl.RoleAclSaveReq;
-import com.cy.single.blog.pojo.req.roleuser.RoleUserReq;
 import com.cy.single.blog.pojo.vo.sys.acl.SysAclVO;
 import com.cy.single.blog.service.SysAclService;
 import com.cy.single.blog.service.SysRoleAclService;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author: Lil-K
@@ -78,42 +74,6 @@ public class AclController {
 	@PostMapping("/editAcl")
 	public ApiResp<String> editAcl(@RequestBody @Valid AclReq req) {
 		return aclService.editAcl(req);
-	}
-
-	/**
-	 * 获取权限点分配的用户角色
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/acls")
-	public ApiResp<ConcurrentHashMap<String, Object>> acls(@RequestBody @Validated({AclReq.GroupAcls.class}) AclReq req) {
-		return aclService.acls(req);
-	}
-
-	/**
-	 * 维护[角色-用户]关系接口
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/changeRoleUsers")
-	public ApiResp<String> changeRoleUsers(@RequestBody @Validated({RoleUserReq.GroupChangeRoleUsers.class}) RoleUserReq req) {
-		return roleUserService.updateRoleUsers(req);
-	}
-
-	/**
-	 * 修改[角色-权限]关系
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/changeRoleAcls")
-	public ApiResp<String> changeRoleAcls(@RequestBody @Validated({RoleAclSaveReq.GroupUpdateRoleAcls.class}) RoleAclSaveReq req) {
-		return roleAclService.updateRoleAcls(req);
 	}
 
 	/**

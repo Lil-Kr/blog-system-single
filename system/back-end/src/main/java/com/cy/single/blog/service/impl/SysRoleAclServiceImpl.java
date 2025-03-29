@@ -50,7 +50,7 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 	private MessageLangService msgService;
 
 	/**
-	 * 更新角色对应的权限点信息
+	 * 更新[角色-权限点]信息
 	 * @param req
 	 * @return
 	 * @throws Exception
@@ -110,6 +110,8 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 		 * 修改需要更新的权限点
 		 */
 		this.updateRoleAcls(req.getRoleId(), updateIdList);
+
+		// todo 让角色对应的用户权限点缓存失效
 		return ApiResp.success("修改角色对应权限点成功");
 	}
 

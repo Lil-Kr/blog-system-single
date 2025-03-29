@@ -13,6 +13,7 @@ import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
 import com.cy.single.blog.pojo.req.user.UserRegisterReq;
 import com.cy.single.blog.pojo.req.user.UserSaveReq;
 import com.cy.single.blog.pojo.vo.sys.user.SysUserVO;
+import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysUserService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
@@ -21,13 +22,9 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static com.cy.single.blog.common.cache.CacheManager.removeCache;
-import static com.cy.single.blog.common.cache.CacheManager.setUserCache;
 import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 import static com.cy.single.blog.pojo.dto.sys.user.UserDTO.convertAddUserReq;
@@ -48,6 +45,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Autowired
 	private SysUserMapper userMapper;
 
+	@Autowired
+	private CacheService cacheService;
+
 	@Override
 	public ApiResp<String> add(UserSaveReq req) {
 		List<SysUserVO> checkRes = userMapper.selectUserInfoExist(req);
@@ -59,7 +59,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		int insert = userMapper.insert(user);
 		if (insert >= 1) {
 			// 更新缓存
-			setUserCache(user.getToken(), user);
+			cacheService.setUserCache(user.getToken(), user);
 			return ApiResp.success();
 		} else {
 			return ApiResp.failure(SAVE_ERROR);
@@ -77,7 +77,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		int update = userMapper.updateUserBySurrogateId(user);
 		if (update >= 1) {
 			// 更新缓存
-			setUserCache(user.getToken(), user);
+			cacheService.setUserCache(user.getToken(), user);
 			return ApiResp.success();
 		} else {
 			return ApiResp.failure(EDITE_ERROR);
@@ -95,7 +95,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		int delete = userMapper.delete(wrapper);
 		if (delete >= 1) {
 			// 移除缓存
-			removeCache(StringUtils.isNotBlank(user.getToken()) ? user.getToken() : "");
+			cacheService.removeCache(StringUtils.isNotBlank(user.getToken()) ? user.getToken() : "");
 			return ApiResp.success();
 		} else {
 			return ApiResp.failure(DEL_ERROR);

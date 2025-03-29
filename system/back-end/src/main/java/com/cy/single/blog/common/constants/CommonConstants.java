@@ -41,6 +41,8 @@ public class CommonConstants {
 	public static final String CACHE_KEY_BLOG_CATEGORY_LIST = "blog-category-list";
 	// topic
 	public static final String CACHE_KEY_BLOG_TOPIC_LIST = "blog-topic-list";
+	// admin acl
+	public static final String CACHE_KEY_ADMIN_ADL_LIST = "sys-admin-acl-list";
 
 	/**
 	 * default color

@@ -45,6 +45,11 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 	@Autowired
 	private SysUserMapper userMapper;
 
+	/**
+	 * 更新[角色-用户]信息
+	 * @param req
+	 * @return
+	 */
 	@Override
 	public ApiResp<String> updateRoleUsers(RoleUserReq req) {
 		/**
@@ -77,11 +82,13 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 
 		// 更新角色-用户信息
 		this.updateRoleUsers(req.getRoleId(), userIdList);
+
+		// todo 让角色对应的用户权限点缓存失效
 		return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.role.user.resp.msg4"));
 	}
 
 	/**
-	 * 更新角色-用户信息
+	 * 更新[角色-用户]信息
 	 * @param roleId
 	 * @param userIdList
 	 */

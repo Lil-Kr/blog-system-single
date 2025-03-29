@@ -21,8 +21,6 @@ public interface SysOrgService {
 
 	ApiResp<String> edit(OrgReq req);
 
-	PageResult<SysOrgVO> pageChildOrgList(OrgPageReq req);
-
 	List<OrgLevelDto> orgTree();
 
 	ApiResp<String> delete(Long surrogateId);

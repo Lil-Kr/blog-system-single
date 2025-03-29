@@ -131,6 +131,19 @@ public class RoleController {
 	}
 
 	/**
+	 * 查询[角色-用户]列表
+	 * @param req
+	 * @return
+	 * @throws Exception
+	 */
+	@CheckAuth
+	@RecordLogger
+	@PostMapping("/roleUserList")
+	public ApiResp<RoleUserVO> roleUserList(@RequestBody @Validated({RoleUserReq.GroupRoleUserPageList.class}) RoleUserReq req) {
+		return roleUserService.roleUserList(req);
+	}
+
+	/**
 	 * 修改角色对应的权限点
 	 * update
 	 * @param req
@@ -142,19 +155,6 @@ public class RoleController {
 	@PostMapping("/updateRoleAcls")
 	public ApiResp<String> updateRoleAcls(@RequestBody @Validated({RoleAclSaveReq.GroupUpdateRoleAcls.class}) RoleAclSaveReq req) {
 		return roleAclService.updateRoleAcls(req);
-	}
-
-	/**
-	 * 获取[角色-用户]列表
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/roleUserList")
-	public ApiResp<RoleUserVO> roleUserList(@RequestBody @Validated({RoleUserReq.GroupRoleUserPageList.class}) RoleUserReq req) {
-		return roleUserService.roleUserList(req);
 	}
 
 	/**

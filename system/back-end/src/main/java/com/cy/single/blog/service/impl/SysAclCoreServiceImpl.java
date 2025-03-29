@@ -8,6 +8,7 @@ import com.cy.single.blog.dao.SysRoleMapper;
 import com.cy.single.blog.dao.SysRoleUserMapper;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.vo.sys.role.SysRoleVO;
+import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.SysAclCoreService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,9 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 	@Autowired
 	private SysRoleAclMapper roleAclMapper;
 
+	@Autowired
+	private CacheService cacheService;
+
 	/**
 	 * 获取当前用户所拥有的权限列表
 	 * @return List<SysAcl>
@@ -42,6 +46,12 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 	public List<SysAcl> getCurrentUserAclList() {
 		// 获取当前用户surrogateId
 		Long userId = RequestHolder.getCurrentUser().getSurrogateId();
+		// todo 先从缓存中获取 [用户-权限点]
+//		List<SysAcl> userAclList = cacheService.getUserAclListCache(userId);
+//		if (CollectionUtils.isEmpty(userAclList)) {
+//			userAclList = this.getUserAclList(userId);
+//			cacheService.saveUserAclCache(userId, userAclList);
+//		}
 		return this.getUserAclList(userId);
 	}
 
@@ -77,6 +87,7 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 
 	/**
 	 * 获取当前用户对应的[xxx类型]权限点
+	 * 用于菜单构建
 	 * @param userId
 	 * @param type
 	 * @return
@@ -149,5 +160,16 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 		List<SysRoleVO> roleList = roleMapper.selectRoleLIstByIds(roleIdList);
 		// 查看是否有超级管理员的角色
 		return roleList.stream().anyMatch(role -> role.getType() == 1);
+	}
+
+	@Override
+	public boolean hasUrlAcl(String url) {
+		Long userId = RequestHolder.getCurrentUser().getSurrogateId();
+		// 超级管理员可以访问所有url
+		if (isSuperAdmin(userId)) {
+			return true;
+		}
+
+		return false;
 	}
 }
