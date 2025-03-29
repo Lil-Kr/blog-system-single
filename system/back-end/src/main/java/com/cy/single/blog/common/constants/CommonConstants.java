@@ -39,6 +39,8 @@ public class CommonConstants {
 	public static final String CACHE_KEY_BLOG_LABEL_LIST = "blog-label-list";
 	// category
 	public static final String CACHE_KEY_BLOG_CATEGORY_LIST = "blog-category-list";
+	// topic
+	public static final String CACHE_KEY_BLOG_TOPIC_LIST = "blog-topic-list";
 
 	/**
 	 * default color

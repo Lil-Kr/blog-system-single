@@ -86,8 +86,7 @@ public class BlogController {
   @CheckAuth
   @DeleteMapping("/delete")
   public ApiResp<String> delete(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
-//    return blogContentService.delete(surrogateId);
-    return null;
+    return blogContentService.delete(surrogateId);
   }
 
   /** ================== 门户网站接口 =============== **/

@@ -3,15 +3,16 @@ import { BaseModal } from '@/components/modal'
 import { BlogTopicPageReq, TopiciTableType } from '@/types/apis/blog/topicType'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space } from 'antd'
-import { SizeType } from 'antd/es/config-provider/SizeContext'
+import { Button, Flex, Form, Input, PaginationProps, Popconfirm } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import Table, { ColumnsType } from 'antd/es/table'
 import { TableRowSelection } from 'antd/es/table/interface'
-import blogTopicApi from '@/apis/blog/topic'
+import blogTopicApi from '@/apis/blog/topic/topicApi'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { Tag } from 'antd/lib'
+import { TopicModalState, useBlogTopicModalStore, useBlogTopicStore } from '@/store/blog/tobpicStore'
+import TopicModal from './TopicModal'
 
 const BlogTopic = () => {
   const columnsBlogTopic: ColumnsType<TopiciTableType> = [
@@ -25,13 +26,14 @@ const BlogTopic = () => {
       key: 'name',
       dataIndex: 'name',
       title: '主题名',
-      width: '10%'
+      width: '10%',
+      render: (_, record) => <Tag color={record.color}>{record.name}</Tag>
     },
     {
       key: 'color',
       dataIndex: 'color',
       title: '展示颜色',
-      width: '20%',
+      width: '10%',
       render: (_, record) => <Tag color={record.color}>{record.color}</Tag>
     },
     {
@@ -41,10 +43,22 @@ const BlogTopic = () => {
       width: '40%'
     },
     {
+      key: 'createTime',
+      dataIndex: 'createTime',
+      title: '创建时间',
+      width: '10%'
+    },
+    {
+      key: 'updateTime',
+      dataIndex: 'updateTime',
+      title: '修改时间',
+      width: '10%'
+    },
+    {
       key: 'oparet',
       dataIndex: 'oparet',
       title: '操作',
-      width: '20%',
+      width: '10%',
       render: (_: object, record) => (
         <Flex vertical={false} gap={4}>
           <Button
@@ -78,26 +92,28 @@ const BlogTopic = () => {
     }
   ]
 
-  const topicRef = useRef<{
-    open: (
-      requestParams: IModalRequestAction,
-      params: IModalParams,
-      type: IAction,
-      modalStyle: IModalStyle,
-      items: ModalType.InputType[],
-      data?: any
-    ) => void
-  }>()
   const messageApi = useMessage()
   const [form] = useForm()
-  const [pageSize, setPageSize] = useState<number>(10)
   const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
   const [rowKeys, setRowKeys] = useState<React.Key[]>([])
-  const [tableLoading, setTableLoading] = useState<boolean>(true)
-  const [topicPageList, setTopicPageList] = useState<TopiciTableType[]>([])
-  const [totalSize, setTotalSize] = useState<number>(0)
+  const { topicPageList, setTopicPageList, tablePageInfo, setTablePageInfo } = useBlogTopicStore()
+  const { setTopicModalData } = useBlogTopicModalStore()
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
 
+  /**
+   * 初始化
+   */
+  useEffect(() => {
+    retrieveTopicPageList({
+      keyWords: '',
+      currentPageNum: tablePageInfo.currentPageNum,
+      pageSize: tablePageInfo.pageSize
+    })
+  }, [])
+
+  /**
+   * 复选框
+   */
   const rowSelection: TableRowSelection<TopiciTableType> = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: TopiciTableType[]) => {
       setRowKeys(selectedRowKeys)
@@ -113,30 +129,17 @@ const BlogTopic = () => {
    * @param page 当前页码数
    * @param pageSize 每页记录数
    */
-  const onChange: PaginationProps['onChange'] = (page, pageSize) => {
+  const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
     const values = form.getFieldsValue()
-    getTopicPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
-  }
-
-  /**
-   * change pageSize
-   * pageSize 变化的回调
-   * @param current
-   * @param pageSize
-   */
-  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
-    const values = form.getFieldsValue()
-    getTopicPageList({ ...values, currentPageNum: current, pageSize: pageSize })
-    setPageSize(pageSize)
+    retrieveTopicPageList({ keyWords: '', ...values, currentPageNum, pageSize })
   }
 
   /**
    * 搜索
    */
   const search = () => {
-    let data = form.getFieldsValue()
-    const searchParam = { ...data, currentPageNum: 1, pageSize: pageSize }
-    // getCategoryPageList({ ...searchParam })
+    const values = form.getFieldsValue()
+    retrieveTopicPageList({ keyWords: '', ...values, currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
 
   /**
@@ -144,101 +147,53 @@ const BlogTopic = () => {
    */
   const resetSearch = () => {
     form.resetFields()
-    // getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
+    retrieveTopicPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
 
   /**
-   * 初始化
+   * 查询专题列表数据
    */
-  useEffect(() => {
-    getTopicPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
-  }, [])
-
-  const getTopicPageList = async (params: BlogTopicPageReq) => {
+  const retrieveTopicPageList = async (req: BlogTopicPageReq) => {
     const values = form.getFieldsValue()
-    const blogTopicRes = await blogTopicApi.getTopicPageList({ ...params, ...values })
-    const { code, data, msg } = blogTopicRes
+    const blogTopicRes = await blogTopicApi.retrieveTopicPageList({ ...req, ...values })
+    const { code, data } = blogTopicRes
     if (code !== 200) {
       return
     }
 
-    const datas = data.list.map(({ surrogateId, ...rest }) => ({
+    const list = data.list.map(({ surrogateId, ...rest }) => ({
       key: surrogateId,
+      surrogateId,
       ...rest
     }))
-    setTopicPageList(datas)
-    setTotalSize(data.total)
-    setTableLoading(false)
+    setTopicPageList(list)
+    setTablePageInfo({
+      ...tablePageInfo,
+      currentPageNum: req.currentPageNum,
+      pageSize: req.pageSize,
+      totalSize: data.total
+    })
   }
+
   /**
    * create
    */
   const createTopic = () => {
-    topicRef.current?.open(
-      { api: blogTopicApi },
-      { title: '创建博客类型' },
-      { action: 'create', open: true }, // create | edit | look
-      { style: { maxWidth: '30vw' } },
-      [
-        {
-          name: 'number',
-          label: '编号',
-          textValue: '主题编号, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '主题编号不能为空' }]
-        },
-        {
-          name: 'name',
-          label: '主题名称',
-          textValue: '主题名称, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '主题名称不能为空' }]
-        },
-        {
-          name: 'remark',
-          label: '备注',
-          textValue: '备注不超过200个字符',
-          style: { width: '100%' }
-        }
-      ]
-    )
-  }
-
-  /**
-   * lookItem
-   * @param key
-   * @param record
-   */
-  const lookItem = (key: string, record: TopiciTableType) => {
-    topicRef.current?.open(
-      { api: blogTopicApi },
-      { title: '查看博客专题' },
-      { action: 'look', open: true }, // create | edit | look
-      { style: { maxWidth: '30vw' } },
-      [
-        {
-          name: 'number',
-          label: '主题编号',
-          textValue: 'number, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '分类编号不能为空' }]
-        },
-        {
-          name: 'name',
-          label: '主题名称',
-          textValue: '主题名称, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '分类名称不能为空' }]
-        },
-        {
-          name: 'remark',
-          label: '备注',
-          textValue: '备注不超过200个字符',
-          style: { width: '100%' }
-        }
-      ],
-      { ...record }
-    )
+    const reqModal: TopicModalState = {
+      api: blogTopicApi,
+      title: '添加专题',
+      action: 'create',
+      openModal: true,
+      inputDisabled: false,
+      update: () => {
+        retrieveTopicPageList({
+          keyWords: '',
+          currentPageNum: tablePageInfo.currentPageNum,
+          pageSize: tablePageInfo.pageSize
+        })
+      }
+    }
+    setTopicModalData(reqModal)
   }
 
   /**
@@ -247,35 +202,40 @@ const BlogTopic = () => {
    * @param record
    */
   const editItem = (key: string, record: TopiciTableType) => {
-    topicRef.current?.open(
-      { api: blogTopicApi },
-      { title: '编辑博客专题' },
-      { action: 'edit', open: true }, // create | edit | look
-      { style: { maxWidth: '30vw' } },
-      [
-        {
-          name: 'number',
-          label: '主题编号',
-          textValue: '主题编号, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '分类编号不能为空' }]
-        },
-        {
-          name: 'name',
-          label: '主题名称',
-          textValue: '主题名称, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '主题名称不能为空' }]
-        },
-        {
-          name: 'remark',
-          label: '备注',
-          textValue: '备注不超过200个字符',
-          style: { width: '100%' }
-        }
-      ],
-      { ...record }
-    )
+    const reqModal = {
+      api: blogTopicApi,
+      title: '编辑专题',
+      action: 'edit',
+      openModal: true,
+      inputDisabled: false,
+      modalReq: record,
+      update: () => {
+        retrieveTopicPageList({
+          keyWords: '',
+          currentPageNum: tablePageInfo.currentPageNum,
+          pageSize: tablePageInfo.pageSize
+        })
+      }
+    }
+    setTopicModalData(reqModal)
+  }
+
+  /**
+   * lookItem
+   * @param key
+   * @param record
+   */
+  const lookItem = (key: string, record: TopiciTableType) => {
+    const reqModal = {
+      api: blogTopicApi,
+      title: '查看专题',
+      action: 'look',
+      openModal: true,
+      inputDisabled: true,
+      modalReq: record,
+      update: () => {}
+    }
+    setTopicModalData(reqModal)
   }
 
   /**
@@ -284,12 +244,16 @@ const BlogTopic = () => {
    */
   const deleteItemConfirm = async (record: TopiciTableType) => {
     const res = await blogTopicApi.delete!({ surrogateId: record.key })
-    if (res.code === 200) {
-      messageApi?.success(res.msg)
-      getTopicPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
-    } else {
-      messageApi?.error(res.msg)
+    const { code, msg } = res
+    if (code !== 200) {
+      return
     }
+    messageApi?.success(msg)
+    retrieveTopicPageList({
+      keyWords: '',
+      currentPageNum: tablePageInfo.currentPageNum,
+      pageSize: tablePageInfo.pageSize
+    })
   }
 
   return (
@@ -314,9 +278,6 @@ const BlogTopic = () => {
         <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createTopic}>
           {'添加'}
         </Button>
-        <Button size={btnSize} type='primary' icon={<DeleteOutlined />} danger>
-          {'删除'}
-        </Button>
       </Flex>
 
       <div className='blog-topic-table-list'>
@@ -328,26 +289,20 @@ const BlogTopic = () => {
             type: selectionType,
             ...rowSelection
           }}
-          loading={tableLoading}
           columns={columnsBlogTopic}
           dataSource={topicPageList}
           pagination={{
+            size: 'small',
+            position: ['bottomLeft'],
             hideOnSinglePage: false, // only one pageSize then hidden Paginator
             pageSizeOptions: [10, 20, 50], // specify how many items can be displayed on each page
-            onChange: onChange,
-            onShowSizeChange: onShowSizeChange,
+            onChange: onChangePageInfo,
             showSizeChanger: true,
-            pageSize: pageSize,
-            total: totalSize
+            pageSize: tablePageInfo.pageSize,
+            total: tablePageInfo.totalSize
           }}
         />
-        <BaseModal
-          innerComponent={'all-input'}
-          mRef={topicRef}
-          update={() => {
-            getTopicPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
-          }}
-        />
+        <TopicModal />
       </div>
     </Flex>
   )

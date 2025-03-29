@@ -5,7 +5,6 @@ import { Button, Flex } from 'antd'
 import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
 
 const TinymceLocal = () => {
-  // const { contentText, action } = props
   const editorRef = useRef<EditorInstance | null>(null)
   const { tinyMceContents, tinymecStatus, setTinyMCEContents } = useTinymceStore()
 

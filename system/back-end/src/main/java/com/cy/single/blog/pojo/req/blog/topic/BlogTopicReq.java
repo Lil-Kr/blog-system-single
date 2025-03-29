@@ -1,6 +1,7 @@
 package com.cy.single.blog.pojo.req.blog.topic;
 
 import com.cy.single.blog.base.BaseReq;
+import com.cy.single.blog.pojo.req.blog.category.BlogCategoryReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
 import lombok.Data;
 import lombok.ToString;
@@ -9,6 +10,8 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 import java.util.List;
+
+import static com.cy.single.blog.common.constants.CommonConstants.DEFAULT_COLOR;
 
 /**
  * @Author: Lil-K
@@ -39,6 +42,9 @@ public class BlogTopicReq extends BaseReq {
   @NotNull(groups = {GroupBlogTopicEdit.class, GroupBlogTopicSave.class}, message = "博客主题不能为空")
   @Length(groups = {GroupBlogTopicEdit.class, GroupBlogTopicSave.class}, max = 50, message = "博客主题长度在50个字符以内")
   private String name;
+
+  @Length(groups = {Default.class, BlogCategoryReq.GroupTypeAdd.class, BlogCategoryReq.GroupTypeEdit.class}, max = 50, message = "后台展示颜色不能为空, 请输入正确的颜色禁制码")
+  private String color = DEFAULT_COLOR;
 
   @Length(groups = {Default.class, GroupTopicDelBatch.class},max = 200, message = "备注长度必须在200个字符以内")
   private String remark;

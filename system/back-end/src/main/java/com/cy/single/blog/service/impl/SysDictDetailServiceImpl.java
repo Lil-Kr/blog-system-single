@@ -153,4 +153,15 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 			return new PageResult<>(pageList, count);
 		}
 	}
+
+	@Override
+	public SysDictDetail get(SaveDictDetailReq req) {
+		QueryWrapper<SysDictDetail> wrapper = new QueryWrapper<>();
+		wrapper.eq("surrogate_id", req.getSurrogateId());
+		SysDictDetail dictDetail = dictDetailMapper.selectOne(wrapper);
+		if (Objects.isNull(dictDetail)) {
+			return null;
+		}
+		return dictDetail;
+	}
 }

@@ -148,9 +148,9 @@ export { transformTypeToSeletor }
  */
 const transformTypeToSeletorById = (statusDict: DictMapType[]): OptionType[] => {
   const res: OptionType[] = statusDict.map(({ surrogateId, name, type }) => ({
-    value: surrogateId.toString() ?? '',
+    value: surrogateId,
     label: name,
-    type: type.toString() ?? ''
+    type: type.toString()
   }))
   return res
 }

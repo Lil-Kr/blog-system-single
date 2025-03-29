@@ -55,10 +55,10 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
 
   @Override
   public PageResult<BlogCategoryVO> list(BlogCategoryPageReq req) {
-    List<BlogCategoryVO> blogCategoryList = cacheService.getBlogCategoryList(CACHE_KEY_BLOG_CATEGORY_LIST);
+    List<BlogCategoryVO> blogCategoryList = cacheService.getBlogCategoryListCache(CACHE_KEY_BLOG_CATEGORY_LIST);
     if (CollectionUtils.isEmpty(blogCategoryList)) {
       blogCategoryList = blogCategoryMapper.categoryList(req);
-      cacheService.saveBlogCategory(blogCategoryList);
+      cacheService.saveBlogCategoryCache(blogCategoryList);
     }
 
     if (CollectionUtils.isEmpty(blogCategoryList)) {
@@ -83,7 +83,7 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
       // 更新缓存
       BlogCategoryVO blogCategoryVO = new BlogCategoryVO();
       BeanUtils.copyProperties(saveEntity, blogCategoryVO);
-      cacheService.updateBlogCategory(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryVO, BUS_CREATE);
+      cacheService.updateBlogCategoryCache(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryVO, BUS_CREATE);
       return ApiResp.success();
     }else {
         return ApiResp.failure(SAVE_ERROR);
@@ -111,7 +111,7 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
         // 更新缓存
         BlogCategoryVO blogCategoryVO = new BlogCategoryVO();
         BeanUtils.copyProperties(before, blogCategoryVO);
-        cacheService.updateBlogCategory(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryVO, BUS_EDIT);
+        cacheService.updateBlogCategoryCache(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryVO, BUS_EDIT);
         return ApiResp.success();
       }else {
         return ApiResp.failure(SAVE_ERROR);
@@ -125,7 +125,7 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
         // 更新缓存
         BlogCategoryVO blogCategoryVO = new BlogCategoryVO();
         blogCategoryVO.setSurrogateId(surrogateId);
-        cacheService.updateBlogCategory(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryVO, BUS_DELETE);
+        cacheService.updateBlogCategoryCache(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryVO, BUS_DELETE);
         return ApiResp.success("删除成功");
       }else {
         return ApiResp.failure(OPERATE_ERROR);

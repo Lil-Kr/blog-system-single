@@ -11,6 +11,7 @@ import com.cy.single.blog.pojo.req.blog.topic.BlogTopicPageReq;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicReq;
 import com.cy.single.blog.pojo.vo.blog.BlogTopicVO;
 import com.cy.single.blog.service.BlogTopicService;
+import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static com.cy.single.blog.common.constants.CommonConstants.*;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -34,9 +36,11 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 @Service
 public class BlogTopicServiceImpl implements BlogTopicService {
 
-
   @Autowired
   private BlogTopicMapper blogTopicMapper;
+
+  @Autowired
+  private CacheService cacheService;
 
   @Override
   public PageResult<BlogTopicVO> pageTopicList(BlogTopicPageReq req) {
@@ -49,13 +53,16 @@ public class BlogTopicServiceImpl implements BlogTopicService {
   }
 
   @Override
-  public PageResult<BlogTopicVO> topicList(BlogTopicReq req) {
-    List<BlogTopicVO> blogTopicList = blogTopicMapper.topicList(req);
-    if (CollectionUtils.isEmpty(blogTopicList)) {
-      return new PageResult<>(new ArrayList<>(0), 0);
-    } else {
-      return new PageResult<>(blogTopicList, blogTopicList.size());
+  public PageResult<BlogTopic> list(BlogTopicReq req) {
+    List<BlogTopic> topicList = cacheService.getTopicListCache(CACHE_KEY_BLOG_TOPIC_LIST);
+    if (CollectionUtils.isEmpty(topicList)) {
+      topicList = blogTopicMapper.topicList(req);
+      cacheService.saveBlogTopicCache(topicList);
     }
+    if (CollectionUtils.isEmpty(topicList)) {
+      return new PageResult<>(new ArrayList<>(0), 0);
+    }
+    return new PageResult<>(topicList, topicList.size());
   }
 
   @Override
@@ -79,6 +86,8 @@ public class BlogTopicServiceImpl implements BlogTopicService {
 
     int save = blogTopicMapper.insert(blogTopic);
     if (save >= 1) {
+      // 更新缓存
+      cacheService.updateBlogTopicCache(CACHE_KEY_BLOG_TOPIC_LIST, blogTopic, BUS_CREATE, 0l);
       return ApiResp.success();
     }else {
       return ApiResp.failure(SAVE_ERROR);
@@ -105,6 +114,8 @@ public class BlogTopicServiceImpl implements BlogTopicService {
     int update = blogTopicMapper.update(blogTopic, updateWrapper);
 
     if (update >= 1) {
+      // 更新缓存
+      cacheService.updateBlogTopicCache(CACHE_KEY_BLOG_TOPIC_LIST, blogTopic, BUS_EDIT, 0l);
       return ApiResp.success();
     } else {
       return ApiResp.failure(SAVE_ERROR);
@@ -113,11 +124,12 @@ public class BlogTopicServiceImpl implements BlogTopicService {
 
   @Override
   public ApiResp<String> delete(Long surrogateId) {
-
     QueryWrapper wrapper = new QueryWrapper();
     wrapper.eq("surrogate_id", surrogateId);
     int delete = blogTopicMapper.delete(wrapper);
     if (delete >= 1) {
+      // 更新缓存
+      cacheService.updateBlogTopicCache(CACHE_KEY_BLOG_TOPIC_LIST, null, BUS_DELETE, surrogateId);
       return ApiResp.success();
     }else {
       return ApiResp.failure(OPERATE_ERROR);

@@ -11,28 +11,29 @@ import com.cy.single.blog.pojo.dto.blog.BlogContentDTO;
 import com.cy.single.blog.pojo.entity.blog.BlogContent;
 import com.cy.single.blog.pojo.entity.blog.BlogContentMongo;
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
+import com.cy.single.blog.pojo.entity.blog.BlogTopic;
+import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
+import com.cy.single.blog.pojo.req.dict.SaveDictDetailReq;
+import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
 import com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO;
 import com.cy.single.blog.pojo.vo.blog.BlogContentVO;
 import com.cy.single.blog.service.BlogContentService;
 import com.cy.single.blog.service.CacheService;
+import com.cy.single.blog.service.SysDictDetailService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
-import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
+import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
  * @Author: Lil-K
@@ -50,39 +51,58 @@ public class BlogContentServiceImpl implements BlogContentService {
   private BlogContentMongoMapper blogContentMongoMapper;
 
   @Autowired
+  private SysDictDetailService dictDetailService;
+
+  @Autowired
   private CacheService cacheService;
 
   @Override
   public ApiResp<String> add(BlogContentReq req) {
     BlogContent blogContent = BlogContentDTO.convertSaveBlogContentReq(req);
+
+    // insert into mysql
+    int insert = blogContentMapper.insert(blogContent);
+    if (insert < 1) {
+      return ApiResp.failure(SAVE_ERROR);
+    }
+
+    if (StringUtils.isBlank(req.getContentText())) {
+      return ApiResp.success("添加博客成功, 但文章内容没有任何值");
+    }
+
     BlogContentMongo blogContentMongo = BlogContentMongo.builder()
       .id(String.valueOf(blogContent.getSurrogateId()))
       .contentText(req.getContentText())
       .build();
-
-    // insert into mysql
-    int insert = blogContentMapper.insert(blogContent);
-
-    if (insert > 0) {
-      // insert into mongodb
-      BlogContentMongo saveMongoResp = saveBlogContentMongo(blogContentMongo);
-      return ApiResp.success();
-    }else {
-      return ApiResp.failure(SAVE_ERROR);
-    }
+    // insert into mongodb
+    saveBlogContentMongo(blogContentMongo);
+    return ApiResp.success();
   }
 
+  /**
+   * 保存博客内容
+   *
+   * @param entity
+   * @return
+   */
   @Override
   public BlogContentMongo saveBlogContentMongo(BlogContentMongo entity) {
     return blogContentMongoMapper.save(entity);
   }
 
+  /**
+   * 获取博客内容
+   *
+   * @param surrogateId
+   * @return
+   */
   private BlogContentMongo getBlogContentMongo(Long surrogateId) {
     return blogContentMongoMapper.findById(String.valueOf(surrogateId)).orElse(null);
   }
 
   /**
-   * 分页查询
+   * 分页查询博客列表
+   *
    * @param req
    * @return
    */
@@ -94,7 +114,7 @@ public class BlogContentServiceImpl implements BlogContentService {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
     pageList.forEach(item -> {
-      // 组装标签信息
+      // 标签信息
       List<BlogLabel> labelList = Arrays.stream(item.getLabelIds().split(","))
         .map(Long::valueOf)
         .map(cacheService::getLabelCache)
@@ -102,16 +122,27 @@ public class BlogContentServiceImpl implements BlogContentService {
       item.setBlogLabelList(labelList);
 
       // 分类信息
-      item.setCategoryName(cacheService.getBlogCategory(item.getCategoryId()).getName());
-      item.setCategoryColor(cacheService.getBlogCategory(item.getCategoryId()).getColor());
+      BlogCategoryVO categoryVO = cacheService.getBlogCategoryCache(item.getCategoryId());
+      item.setCategoryName(categoryVO.getName());
+      item.setCategoryColor(categoryVO.getColor());
+
       // 所属专题
-      item.setTopicName(cacheService.getDictDetailCache(item.getTopicId()).getName());
+      if (Objects.nonNull(item.getTopicId())) {
+        BlogTopic topic = cacheService.getTopicCache(item.getTopicId());
+        item.setTopicName(topic.getName());
+        item.setTopicColor(topic.getColor());
+      }
+
       // 是否原创
       item.setOriginalType(cacheService.getDictDetailCache(item.getOriginal()).getType());
+
       // 是否推荐
       item.setRecommendType(cacheService.getDictDetailCache(item.getRecommend()).getType());
+
       // 发布状态
-      item.setStatusType(cacheService.getDictDetailCache(item.getStatus()).getType());
+      SysDictDetail dictDetail = cacheService.getDictDetailCache(item.getStatus());
+      item.setStatusType(dictDetail.getType());
+      item.setStatusName(dictDetail.getName());
     });
     return new PageResult<>(pageList, count);
   }
@@ -124,7 +155,7 @@ public class BlogContentServiceImpl implements BlogContentService {
     }
 
     list.forEach(item -> {
-      // 组装标签信息
+      // 标签信息
       List<BlogLabel> labelList = Arrays.stream(item.getLabelIds().split(","))
         .map(Long::valueOf)
         .map(cacheService::getLabelCache)
@@ -132,13 +163,19 @@ public class BlogContentServiceImpl implements BlogContentService {
       item.setBlogLabelList(labelList);
 
       // 分类信息
-      item.setCategoryName(cacheService.getBlogCategory(item.getCategoryId()).getName());
+      item.setCategoryName(cacheService.getBlogCategoryCache(item.getCategoryId()).getName());
+      item.setCategoryColor(cacheService.getBlogCategoryCache(item.getCategoryId()).getColor());
+
       // 所属专题
-      item.setTopicName(cacheService.getDictDetailCache(item.getTopicId()).getName());
+      item.setTopicName(cacheService.getTopicCache(item.getTopicId()).getName());
+      item.setTopicColor(cacheService.getTopicCache(item.getTopicId()).getColor());
+
       // 是否原创
       item.setOriginalType(cacheService.getDictDetailCache(item.getOriginal()).getType());
+
       // 是否推荐
       item.setRecommendType(cacheService.getDictDetailCache(item.getRecommend()).getType());
+
       // 发布状态
       item.setStatusType(cacheService.getDictDetailCache(item.getStatus()).getType());
     });
@@ -178,7 +215,7 @@ public class BlogContentServiceImpl implements BlogContentService {
     }
 
     BeanUtils.copyProperties(req, blogContent);
-    blogContent.setUpdateTime(DateUtil.localDateTimeToDate(LocalDateTime.now()));
+    blogContent.setUpdateTime(DateUtil.localDateTimeNow());
     blogContent.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
     blogContent.setLabelIds(req.getLabelIds().stream().map(String::valueOf).collect(Collectors.joining(",")));
 
@@ -186,14 +223,18 @@ public class BlogContentServiceImpl implements BlogContentService {
     updateWrapper.eq("surrogate_id", req.getSurrogateId());
     int update = blogContentMapper.update(blogContent, updateWrapper);
 
-    if (update > 0) {
-      // update mongodb
-      BlogContentMongo updateMongo = BlogContentMongo.builder().id(String.valueOf(req.getSurrogateId())).contentText(req.getContentText()).build();
-      BlogContentMongo blogContentMongo = saveBlogContentMongo(updateMongo);
-      return ApiResp.success();
-    }else {
+    if (update < 1) {
       return ApiResp.failure();
     }
+
+    if (StringUtils.isBlank(req.getContentText())) {
+      return ApiResp.success("更新博客成功, 但文章内容没有任何值");
+    }
+
+    // update mongodb
+    BlogContentMongo updateMongo = BlogContentMongo.builder().id(String.valueOf(req.getSurrogateId())).contentText(req.getContentText()).build();
+    saveBlogContentMongo(updateMongo);
+    return ApiResp.success();
   }
 
   /**
@@ -203,23 +244,37 @@ public class BlogContentServiceImpl implements BlogContentService {
    */
   @Override
   public ApiResp<String> publishBlog(BlogContentReq req) {
-    Integer update = blogContentMapper.updateStatusBySurrogateId(req);
-    if (update > 0) {
-      return ApiResp.success();
-    }else {
+    // 检查在字典中是否存在该数据
+    SaveDictDetailReq dictDetailReq = new SaveDictDetailReq();
+    dictDetailReq.setSurrogateId(req.getSurrogateId());
+    SysDictDetail dictDetail = dictDetailService.get(dictDetailReq);
+    if (Objects.isNull(dictDetail)) {
+      return ApiResp.warning(INFO_NOT_EXIST);
+    }
+
+    BlogContent content = new BlogContent();
+    BeanUtils.copyProperties(req, content);
+    Date nowDate = DateUtil.localDateTimeNow();
+    content.setPublishTime(nowDate);
+    content.setUpdateTime(nowDate);
+    Integer update = blogContentMapper.updateStatusBySurrogateId(content);
+    if (update < 1) {
       return ApiResp.failure();
     }
+    return ApiResp.success();
   }
 
   @Override
   public ApiResp<BlogContentVO> getContent(Long blogId) {
     BlogContentMongo blogContentMongo = getBlogContentMongo(blogId);
-    if (Objects.isNull(blogContentMongo)) {
-      return ApiResp.failure(INFO_NOT_EXIST);
-    }
-
     BlogContentVO res = new BlogContentVO();
     res.setSurrogateId(blogId);
+
+    if (Objects.isNull(blogContentMongo)) {
+      res.setContentText("");
+      return ApiResp.success(res);
+    }
+
     res.setContentText(blogContentMongo.getContentText());
     return ApiResp.success(res);
   }
@@ -246,7 +301,7 @@ public class BlogContentServiceImpl implements BlogContentService {
     }
     Integer count = blogContentMapper.contentCount(req);
 
-      // 设置缓存--作废
+    // 设置缓存--作废
 //    pageList.stream().forEach(item -> {
 //      item.setBlogLabelList(CacheManager.getBlogLabelNameListCache(item.getLabelIds()));
 //      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
@@ -254,6 +309,27 @@ public class BlogContentServiceImpl implements BlogContentService {
 //    });
 
     return new PageResult<>(new ArrayList<>(pageList), count);
+  }
+
+  @Override
+  public ApiResp<String> delete(Long surrogateId) {
+    QueryWrapper<BlogContent> query = new QueryWrapper<>();
+    query.eq("surrogate_id", surrogateId);
+    BlogContent blogContent = blogContentMapper.selectOne(query);
+    if (Objects.isNull(blogContent)) {
+      return ApiResp.warning(INFO_NOT_EXIST);
+    }
+
+    int delete = blogContentMapper.delete(query);
+    if (delete < 1) {
+      return ApiResp.warning(DEL_ERROR);
+    }
+
+    BlogContentMongo blogContentMongo = BlogContentMongo.builder()
+      .id(String.valueOf(blogContent.getSurrogateId()))
+      .build();
+    blogContentMongoMapper.delete(blogContentMongo);
+    return ApiResp.success();
   }
 
 }

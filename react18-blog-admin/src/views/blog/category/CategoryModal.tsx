@@ -16,7 +16,6 @@ const CategoryModal = () => {
     openModal,
     inputDisabled,
     modalStyle,
-    setCategoryModal,
     setOpenModal,
     setRequestParams,
     req,

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Button,
   Col,
@@ -13,17 +13,16 @@ import {
   Row,
   Select,
   SelectProps,
-  Space,
   Tag
 } from 'antd/lib'
-import { BlogModalType } from '@/types/blog/BlogType'
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons'
 import { Editor } from '@tinymce/tinymce-react'
 import { Editor as EditorInstance } from 'node_modules/tinymce/tinymce'
-import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
 import { useDictDetailStore } from '@/store/sys/dictStore'
-import { BlogContentAddReq } from '@/apis/blog/content/blogContentApi'
-import { useBlogStore } from '@/store/blog/blogStore'
+import { BlogContentModalSaveReq, useBlogModalStore } from '@/store/blog/blogStore'
+import { useLabelStore } from '@/store/blog/labelStore'
+import { BlogContentAddReq, BlogContentEditeReq } from '@/apis/blog/content/blogContentApi'
+import { useMessage } from '@/components/message/MessageProvider'
 
 const env = import.meta.env
 const modalStyles = {
@@ -33,18 +32,26 @@ const modalStyles = {
   }
 }
 
-const BlogModal = (props: BlogModalType) => {
-  // const [selectedLabelValues, setSelectedLabelValues] = useState<SelectProps['options']>([])
-  // const [selectCategory, setSelectCategory] = useState<SelectProps['options']>([])
-  // const [selectTopic, setSelectTopic] = useState<SelectProps['options']>([])
-  // const {blogPublish, setBlogPublish} = useState()
-  // const { tinyMceContents, setTinyMCEContents, setTinymecStatus } = useTinymceStore()
-  const { openModal, api, title, inputDisabled, action, data, update } = props
+const BlogModal = () => {
+  const messageApi = useMessage()
   const [blogForm] = Form.useForm()
   const [radioValue, setRadioValue] = useState<string>('')
-  const editorRef = useRef<EditorInstance | null>(null)
+  const editorRef = useRef<EditorInstance>()
   const { blogTypes, blogTopics, blogPublisStatue, switchStatue } = useDictDetailStore()
-  const { blogModalData, setBlogModalData } = useBlogStore()
+  const { labelList } = useLabelStore()
+  const {
+    api,
+    openModal,
+    setOpenModal,
+    action,
+    title,
+    inputDisabled,
+    modalReq,
+    update,
+    saveReq,
+    setSaveReq,
+    clearSaveReq
+  } = useBlogModalStore()
 
   useEffect(() => {
     if (openModal) {
@@ -52,48 +59,61 @@ const BlogModal = (props: BlogModalType) => {
     }
   }, [openModal])
 
+  /**
+   * 初始化数据
+   */
   const initData = () => {
     blogForm.resetFields()
     if (action === 'create') {
-      const initModalData = {
-        categoryInfo: data?.categoryInfo,
-        publishStatue: data?.blogPublisStatue,
-        original: data?.original,
-        recommend: data?.recommend
-      }
-      blogForm.setFieldsValue({ ...initModalData })
+      // 设置默认值
+      blogForm.setFieldsValue({ ...modalReq })
+      editorRef.current?.setContent('')
 
-      setBlogModalData({
-        ...blogModalData,
-        original: data?.original ?? '',
-        recommend: data?.recommend ?? '',
-        status: data?.blogPublisStatue ?? '',
-        categoryId: data?.categoryInfo.value ?? ''
-      })
+      // 设置待保存的值
+      const saveReq: BlogContentModalSaveReq = {
+        categoryId: modalReq?.categoryInfo?.value ?? '',
+        original: modalReq?.original ?? '',
+        recommend: modalReq?.recommend ?? '',
+        status: modalReq?.publishStatue ?? ''
+      }
+      setSaveReq(saveReq)
     } else if (action === 'edit') {
       const initModalData = {
-        categoryInfo: data?.categoryInfo,
-        publishStatue: data?.blogPublisStatue,
-        original: data?.original,
-        recommend: data?.recommend
+        categoryInfo: modalReq?.categoryInfo,
+        publishStatue: modalReq?.publishStatue,
+        original: modalReq?.original,
+        recommend: modalReq?.recommend
       }
-      blogForm.setFieldsValue({  ...data })
+      blogForm.setFieldsValue({ ...modalReq, ...initModalData })
+      // 绑定富文本编辑器
+      editorRef.current?.setContent(modalReq?.contentText ?? '')
 
-      setBlogModalData({
-        ...blogModalData,
-        original: data?.original ?? '',
-        recommend: data?.recommend ?? '',
-        status: data?.blogPublisStatue ?? '',
-        categoryId: data?.categoryInfo.value ?? ''
-      })
+      // 设置待保存的值
+      const labelIds: string[] = modalReq?.blogLabelList?.map(item => item.value?.toString() ?? '') ?? []
+      const saveReq: BlogContentModalSaveReq = {
+        surrogateId: modalReq?.key,
+        title: modalReq?.title,
+        introduction: modalReq?.introduction,
+        categoryId: modalReq?.categoryInfo?.value ?? '',
+        labelIds: labelIds,
+        original: modalReq?.original ?? '',
+        recommend: modalReq?.recommend ?? '',
+        topicId: modalReq?.topicInfo?.value ?? '',
+        status: modalReq?.publishStatue ?? '',
+        contentText: modalReq?.contentText ?? '',
+        imgUrl: ''
+      }
+      setSaveReq(saveReq)
     } else {
+      messageApi?.error('操作错误')
+      return
     }
   }
 
   type TagRender = SelectProps['tagRender']
   const tagRender: TagRender = props => {
     const { label, value, closable, onClose } = props
-    const option = data?.blogLabelList?.find(opt => opt.value === value)
+    const option = labelList?.find(opt => opt.value === value)
     return (
       <Tag color={option?.color} closable={closable} onClose={onClose}>
         {label}
@@ -101,14 +121,10 @@ const BlogModal = (props: BlogModalType) => {
     )
   }
 
-  const handleBlogCancel = () => {
-    update()
-  }
-
-  const handleRemoveImage = () => {
-    setRadioValue('')
-  }
-
+  /**
+   * 点击保存
+   * @returns
+   */
   const handleBlogOk = async () => {
     const valid = await blogForm.validateFields()
     const params = blogForm.getFieldsValue()
@@ -118,15 +134,66 @@ const BlogModal = (props: BlogModalType) => {
 
     if (action === 'create') {
       const req: BlogContentAddReq = {
-        ...blogModalData,
-        ...params
+        title: params.title,
+        original: params.original,
+        introduction: params.introduction,
+        recommend: saveReq?.recommend ?? '',
+        status: saveReq?.status ?? '',
+        categoryId: saveReq?.categoryId ?? '',
+        labelIds: saveReq?.labelIds ?? [],
+        topicId: saveReq?.topicId ?? '',
+        contentText: saveReq?.contentText ?? '',
+        imgUrl: saveReq?.imgUrl ?? ''
       }
-
-      console.log('--> req:', { ...req })
-      api.add({ ...req })
+      const res = await api.add(req)
+      const { code, msg } = res
+      if (code !== 200) {
+        return
+      }
+      messageApi?.success(msg)
     } else if (action === 'edit') {
+      const req: BlogContentEditeReq = {
+        surrogateId: params.key,
+        title: params.title,
+        original: params.original,
+        introduction: params.introduction,
+        recommend: params.recommend,
+        status: params.publishStatue,
+        categoryId: saveReq?.categoryId ?? '',
+        labelIds: saveReq?.labelIds ?? [],
+        topicId: saveReq?.topicId ?? '',
+        contentText: saveReq?.contentText ?? '',
+        imgUrl: saveReq?.imgUrl ?? ''
+      }
+      const res = await api.edit(req)
+      const { code, msg } = res
+      if (code !== 200) {
+        return
+      }
+      messageApi?.success(msg)
     } else {
+      messageApi?.error('操作异常')
+      return
     }
+    update()
+    handleBlogCancel()
+  }
+
+  /**
+   * 关门-Modal
+   */
+  const handleBlogCancel = () => {
+    blogForm.resetFields()
+    setOpenModal(false)
+    clearSaveReq()
+    editorRef.current?.setContent('')
+  }
+
+  /**
+   * 移除图片
+   */
+  const handleRemoveImage = () => {
+    // setRadioValue('')
   }
 
   /**
@@ -135,24 +202,18 @@ const BlogModal = (props: BlogModalType) => {
   const openImageListModal = () => {}
 
   /**
+   * 选择标签
+   */
+  const handleChangeLabels = (value: SelectProps['options']) => {
+    setSaveReq({ ...saveReq, labelIds: value?.map(({ key }) => key) ?? [] })
+  }
+
+  /**
    * 选择分类
    * @param value
    */
   const handleChangeCategory = (value: string) => {
-    setBlogModalData({
-      ...blogModalData,
-      categoryId: value
-    })
-  }
-
-  /**
-   * 选择标签
-   */
-  const handleChangeLabels = (value: SelectProps['options']) => {
-    setBlogModalData({
-      ...blogModalData,
-      labelIds: value?.map(({ key }) => key) ?? []
-    })
+    setSaveReq({ ...saveReq, categoryId: value })
   }
 
   /**
@@ -160,31 +221,23 @@ const BlogModal = (props: BlogModalType) => {
    * @param value
    */
   const handleChangeTopic = (value: string) => {
-    setBlogModalData({
-      ...blogModalData,
-      topicId: value
-    })
+    setSaveReq({ ...saveReq, topicId: value })
   }
 
+  /**
+   * 选择原创/转载
+   * @param event
+   */
   const onChangeOriginal = (event: RadioChangeEvent) => {
-    setBlogModalData({
-      ...blogModalData,
-      original: event.target.value
-    })
+    setSaveReq({ ...saveReq, original: event.target.value })
   }
 
   const onChangeRecommend = (event: RadioChangeEvent) => {
-    setBlogModalData({
-      ...blogModalData,
-      recommend: event.target.value
-    })
+    setSaveReq({ ...saveReq, recommend: event.target.value })
   }
 
   const onChangePublishStatue = (event: RadioChangeEvent) => {
-    setBlogModalData({
-      ...blogModalData,
-      status: event.target.value
-    })
+    setSaveReq({ ...saveReq, status: event.target.value })
   }
 
   return (
@@ -205,7 +258,7 @@ const BlogModal = (props: BlogModalType) => {
           title={title}
           open={openModal}
           width={'100vw'}
-          okText={'确定'}
+          okText={'保存'}
           cancelText={'取消'}
           onOk={handleBlogOk}
           onCancel={handleBlogCancel}
@@ -218,15 +271,25 @@ const BlogModal = (props: BlogModalType) => {
                 <Form.Item name={'key'} hidden>
                   <Input />
                 </Form.Item>
-                <Form.Item name={'title'} label={'标题'} rules={[{ required: true, message: '博客标题不能为空' }]}>
+                <Form.Item
+                  key={1}
+                  name={'title'}
+                  label={'标题'}
+                  rules={[{ required: true, message: '博客标题不能为空' }]}
+                >
                   <Input placeholder={'blog title...'} style={{ width: '100%' }} />
                 </Form.Item>
-                <Form.Item name={'introduction'} label={'简介'} rules={[{ required: true, message: '简介不能为空' }]}>
+                <Form.Item
+                  key={2}
+                  name={'introduction'}
+                  label={'简介'}
+                  rules={[{ required: true, message: '简介不能为空' }]}
+                >
                   <Input placeholder={'blog introduction...'} style={{ width: '100%' }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name={'imgUrl'} label={'博客封面'}>
+                <Form.Item key={3} name={'imgUrl'} label={'博客封面'}>
                   {radioValue !== '' ? (
                     <div
                       style={{
@@ -265,19 +328,29 @@ const BlogModal = (props: BlogModalType) => {
 
             <Row gutter={16} justify={'start'}>
               <Col span={12}>
-                <Form.Item name={'blogLabelList'} label={'标签'} rules={[{ required: true, message: '标签不能为空' }]}>
+                <Form.Item
+                  key={4}
+                  name={'blogLabelList'}
+                  label={'标签'}
+                  rules={[{ required: true, message: '标签不能为空' }]}
+                >
                   <Select
                     mode='multiple'
                     labelInValue={true}
                     tagRender={tagRender}
-                    options={data?.blogLabelList}
+                    options={labelList}
                     maxCount={4}
                     onChange={value => handleChangeLabels(value)}
                   />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item name={'categoryInfo'} label={'分类'} rules={[{ required: true, message: '分类不能为空' }]}>
+                <Form.Item
+                  key={5}
+                  name={'categoryInfo'}
+                  label={'分类'}
+                  rules={[{ required: true, message: '分类不能为空' }]}
+                >
                   <Select
                     key={1}
                     showSearch
@@ -289,11 +362,11 @@ const BlogModal = (props: BlogModalType) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item name={'topicInfo'} label={'所属专题'}>
+                <Form.Item key={6} name={'topicInfo'} label={'所属专题'}>
                   <Select
                     key={2}
                     showSearch
-                    placeholder='select category'
+                    placeholder='select topic'
                     optionFilterProp='children'
                     options={blogTopics}
                     onChange={value => handleChangeTopic(value)}
@@ -304,11 +377,11 @@ const BlogModal = (props: BlogModalType) => {
             <Row gutter={16} justify={'start'}>
               <Col span={6}>
                 <Form.Item
+                  key={7}
                   name={'original'}
                   label={'是否原创'}
                   rules={[{ required: true, message: '原创类型不能为空' }]}
                 >
-                  {/* <Radio.Group onChange={onChange} value={value}> */}
                   <Radio.Group onChange={onChangeOriginal}>
                     {switchStatue.length &&
                       switchStatue.map(item => {
@@ -323,6 +396,7 @@ const BlogModal = (props: BlogModalType) => {
               </Col>
               <Col span={6}>
                 <Form.Item
+                  key={8}
                   name={'recommend'}
                   label={'是否推荐'}
                   rules={[{ required: true, message: '是否推荐不能为空' }]}
@@ -341,6 +415,7 @@ const BlogModal = (props: BlogModalType) => {
               </Col>
               <Col span={6}>
                 <Form.Item
+                  key={9}
                   name={'publishStatue'}
                   label={'发布状态'}
                   rules={[{ required: true, message: '发布状态不能为空' }]}
@@ -362,99 +437,98 @@ const BlogModal = (props: BlogModalType) => {
             <Row gutter={16} justify={'start'}></Row>
             <Row gutter={16} justify={'start'}>
               <Col span={24}>
-                <Form.Item name={'contentText'} label={'内容'}>
-                  <Editor
-                    id={'editor-local'}
-                    tinymceScriptSrc={import.meta.env.BASE_URL + 'tinymce/tinymce.min.js'}
-                    onInit={(_evt, editor) => {
-                      editorRef.current = editor
-                    }}
-                    init={{
-                      height: '50vh',
-                      menubar: true, // menu bar
-                      statusbar: false, // status bar
-                      promotion: false, // upgrade the pro version
-                      branding: false, // remove the branding
-                      // end_container_on_empty_block: true,
-                      plugins: [
-                        'lists',
-                        'advlist',
-                        'link',
-                        'code',
-                        'preview',
-                        'codesample',
-                        // 'codemirror',
-                        'image',
-                        'imagetools',
-                        'searchreplace',
-                        'fullscreen',
-                        'emoticons',
-                        'insertdatetime',
-                        'anchor'
-                      ],
-                      toolbar:
-                        'undo redo |' +
-                        'styleselect |' +
-                        // 'blocks |' +
-                        'bold italic underline strikethrough forecolor backcolor |' +
-                        'alignleft aligncenter alignright alignjustify |' +
-                        'bullist numlist outdent indent |' +
-                        // 'code codesample |' +
-                        'code preview  codesample |' +
-                        'link image |' +
-                        'searchreplace fullscreen |' +
-                        'emoticons anchor insertdatetime |' +
-                        'removeformat',
-                      advlist_bullet_styles: 'square',
-                      paste_data_images: true,
-                      image_advtab: true, // add advanced image tab
-                      image_title: true,
-                      image_caption: true, // image caption
-                      file_picker_callback: (callback, value, meta) => {
-                        // Provide image and alt text for the image dialog
-                        if (meta.filetype == 'image') {
-                          const input = document.createElement('input')
-                          input.setAttribute('type', 'file')
-                          input.setAttribute('accpet', 'image/*') // 只接受图片文件
+                <Editor
+                  id={'editor-local'}
+                  tinymceScriptSrc={import.meta.env.BASE_URL + 'tinymce/tinymce.min.js'}
+                  onInit={(_evt, editor) => {
+                    editorRef.current = editor
+                  }}
+                  init={{
+                    height: '50vh',
+                    menubar: true, // menu bar
+                    statusbar: false, // status bar
+                    promotion: false, // upgrade the pro version
+                    branding: false, // remove the branding
+                    // end_container_on_empty_block: true,
+                    plugins: [
+                      'lists',
+                      'advlist',
+                      'link',
+                      'code',
+                      'preview',
+                      'codesample',
+                      // 'codemirror',
+                      'image',
+                      'imagetools',
+                      'searchreplace',
+                      'fullscreen',
+                      'emoticons',
+                      'insertdatetime',
+                      'anchor'
+                    ],
+                    toolbar:
+                      'undo redo |' +
+                      'styleselect |' +
+                      // 'blocks |' +
+                      'bold italic underline strikethrough forecolor backcolor |' +
+                      'alignleft aligncenter alignright alignjustify |' +
+                      'bullist numlist outdent indent |' +
+                      // 'code codesample |' +
+                      'code preview  codesample |' +
+                      'link image |' +
+                      'searchreplace fullscreen |' +
+                      'emoticons anchor insertdatetime |' +
+                      'removeformat',
+                    advlist_bullet_styles: 'square',
+                    paste_data_images: true,
+                    image_advtab: true, // add advanced image tab
+                    image_title: true,
+                    image_caption: true, // image caption
+                    file_picker_callback: (callback, value, meta) => {
+                      // Provide image and alt text for the image dialog
+                      if (meta.filetype == 'image') {
+                        const input = document.createElement('input')
+                        input.setAttribute('type', 'file')
+                        input.setAttribute('accpet', 'image/*') // 只接受图片文件
 
-                          input.addEventListener('change', (e: Event) => {
-                            const target = e.target as HTMLInputElement
-                            const files = target.files
-                            if (!files || files.length === 0) {
-                              return
-                            }
+                        input.addEventListener('change', (e: Event) => {
+                          const target = e.target as HTMLInputElement
+                          const files = target.files
+                          if (!files || files.length === 0) {
+                            return
+                          }
 
-                            const file = files[0]
-                            // 在这里可以对选中的文件进行处理, 例如上传到服务器等操作
-                            if (!file.type.startsWith('image/')) {
-                              return
-                            }
+                          const file = files[0]
+                          // 在这里可以对选中的文件进行处理, 例如上传到服务器等操作
+                          if (!file.type.startsWith('image/')) {
+                            return
+                          }
 
-                            const reader = new FileReader()
-                            reader.addEventListener('load', () => {
-                              const id = 'blobid' + new Date().getTime()
-                              const blobCache = editorRef.current?.editorUpload.blobCache
-                              const base64 = (reader.result as string).split(',')[1]
-                              const blobInfo = blobCache?.create(id, file, base64)
-                              blobCache?.add(blobInfo!)
-                              callback(blobInfo?.blobUri()!, { title: file.name })
-                            })
-                            reader.readAsDataURL(file)
+                          const reader = new FileReader()
+                          reader.addEventListener('load', () => {
+                            const id = 'blobid' + new Date().getTime()
+                            const blobCache = editorRef.current?.editorUpload.blobCache
+                            const base64 = (reader.result as string).split(',')[1]
+                            const blobInfo = blobCache?.create(id, file, base64)
+                            blobCache?.add(blobInfo!)
+                            callback(blobInfo?.blobUri()!, { title: file.name })
                           })
-                          input.click()
-                        }
-                      },
-                      insertdatetime_formats: ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d', '%Y/%m/%d', '%H:%M:%S', '%D'],
-                      insertdatetime_element: true // insert time/date plugin
-                      // content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px } h2 { font-size:24px; font-weight:bold; margin:20px 0; }'
-                      // skin: 'oxide-dark',
-                      // content_css: 'dark'
-                    }}
-                    onEditorChange={(newValue, editor) => {
-                      setBlogModalData({ ...blogModalData, contentText: editor.getContent() })
-                    }}
-                  />
-                </Form.Item>
+                          reader.readAsDataURL(file)
+                        })
+                        input.click()
+                      }
+                    },
+                    insertdatetime_formats: ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d', '%Y/%m/%d', '%H:%M:%S', '%D'],
+                    insertdatetime_element: true // insert time/date plugin
+                    // content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px } h2 { font-size:24px; font-weight:bold; margin:20px 0; }'
+                    // skin: 'oxide-dark',
+                    // content_css: 'dark'
+                  }}
+                  initialValue={modalReq?.contentText || ''}
+                  onEditorChange={(newValue, editor) => {
+                    setSaveReq({ ...saveReq, contentText: editor.getContent() })
+                  }}
+                />
               </Col>
             </Row>
           </Form>

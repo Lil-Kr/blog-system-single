@@ -583,21 +583,26 @@ const Acl = () => {
             <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
               <Flex vertical gap={'small'}>
                 <Flex vertical={false} gap={'middle'}>
-                  <Button
-                    size={btnSize}
-                    color='primary'
-                    variant='solid'
-                    icon={<PlusOutlined />}
-                    onClick={createAclModule}
-                  />
-                  <Button
-                    size={btnSize}
-                    color='primary'
-                    variant='solid'
-                    icon={<EditOutlined />}
-                    onClick={editAclModule}
-                  />
+                  <Tooltip title='添加权限模块'>
+                    <Button
+                      size={btnSize}
+                      color='primary'
+                      variant='solid'
+                      icon={<PlusOutlined />}
+                      onClick={createAclModule}
+                    />
+                  </Tooltip>
+                  <Tooltip title='编辑权限模块'>
+                    <Button
+                      size={btnSize}
+                      color='primary'
+                      variant='solid'
+                      icon={<EditOutlined />}
+                      onClick={editAclModule}
+                    />
+                  </Tooltip>
 
+                  <Tooltip title='删除权限模块'>
                   <Popconfirm
                     title='删除权限模块'
                     description={`确定要删除 [ ${selectedInfo.label} ] 模块么`}
@@ -607,7 +612,7 @@ const Acl = () => {
                     cancelText='取消'
                   >
                     <Button size={btnSize} color='red' variant='solid' icon={<DeleteOutlined />} />
-                  </Popconfirm>
+                  </Popconfirm></Tooltip>
                 </Flex>
                 <Divider plain>{'权限模块'}</Divider>
                 <Tree
@@ -623,6 +628,7 @@ const Acl = () => {
                   // defaultExpandedKeys={[]}
                   // defaultExpandParent={true}
                   onExpand={handleExpand} // 控制展开后收缩树节点
+                  // 鼠标悬停出提示
                   titleRender={item => {
                     const title = item.title as React.ReactNode
                     return <MemoTooltip title={title}>{title}</MemoTooltip>

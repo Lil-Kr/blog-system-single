@@ -5,6 +5,7 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
+import com.cy.single.blog.pojo.entity.blog.BlogTopic;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicPageReq;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicReq;
 import com.cy.single.blog.pojo.vo.blog.BlogTopicVO;
@@ -41,8 +42,8 @@ public class TopicController {
   @RecordLogger
   @CheckAuth
   @PostMapping("/list")
-  public ApiResp<PageResult<BlogTopicVO>> list(@RequestBody @Valid BlogTopicReq req) {
-    PageResult<BlogTopicVO> blogTopicVOPageResult = blogTopicService.topicList(req);
+  public ApiResp<PageResult<BlogTopic>> list(@RequestBody @Valid BlogTopicReq req) {
+    PageResult<BlogTopic> blogTopicVOPageResult = blogTopicService.list(req);
     return ApiResp.success(blogTopicVOPageResult);
   }
 

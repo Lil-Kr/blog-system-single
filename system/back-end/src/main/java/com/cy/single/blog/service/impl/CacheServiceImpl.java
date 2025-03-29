@@ -1,6 +1,7 @@
 package com.cy.single.blog.service.impl;
 
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
+import com.cy.single.blog.pojo.entity.blog.BlogTopic;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
@@ -149,13 +150,13 @@ public class CacheServiceImpl implements CacheService, Serializable {
 	 * @param categoryList
 	 */
 	@Override
-	public void saveBlogCategory(List<BlogCategoryVO> categoryList) {
+	public void saveBlogCategoryCache(List<BlogCategoryVO> categoryList) {
 		categoryList.forEach(item -> categoryCache.put(item.getSurrogateId(), item));
 		categoryListCache.put(CACHE_KEY_BLOG_CATEGORY_LIST, categoryList);
 	}
 
 	@Override
-	public void updateBlogCategory(String key, BlogCategoryVO categoryVO, String sign) {
+	public void updateBlogCategoryCache(String key, BlogCategoryVO categoryVO, String sign) {
 		if (BUS_CREATE.equals(sign)) {
 			List<BlogCategoryVO> newList = categoryListCache.getIfPresent(key);
 			newList.add(categoryVO);
@@ -185,19 +186,68 @@ public class CacheServiceImpl implements CacheService, Serializable {
 //				.filter(item -> !surrogateIds.contains(item.getSurrogateId()))
 //				.collect(Collectors.toList());
 //			categoryListCache.put(key, collect);
-//
 		}
 	}
 
 	@Override
-	public List<BlogCategoryVO> getBlogCategoryList(String key) {
+	public List<BlogCategoryVO> getBlogCategoryListCache(String key) {
 		return categoryListCache.getIfPresent(key);
 	}
 
 	@Override
-	public BlogCategoryVO getBlogCategory(Long surrogateId) {
+	public BlogCategoryVO getBlogCategoryCache(Long surrogateId) {
 		return categoryCache.getIfPresent(surrogateId);
 	}
 
+	/**
+	 * 初始化, 保存 topic 数据
+	 * @param list
+	 */
+	private static Cache<Long, BlogTopic> topicCache = CacheBuilder.newBuilder().build();
+	private static Cache<String, List<BlogTopic>> topicListCache = CacheBuilder.newBuilder().build();
 
+	@Override
+	public void saveBlogTopicCache(List<BlogTopic> list) {
+		list.forEach(item -> topicCache.put(item.getSurrogateId(), item));
+		topicListCache.put(CACHE_KEY_BLOG_TOPIC_LIST, list);
+	}
+
+	@Override
+	public void updateBlogTopicCache(String key, BlogTopic topic, String sign, Long delId) {
+		if (BUS_CREATE.equals(sign)) {
+			List<BlogTopic> list = topicListCache.getIfPresent(key);
+			list.add(topic);
+			topicListCache.put(key, list);
+
+			topicCache.put(topic.getSurrogateId(), topic);
+		} else if (BUS_EDIT.equals(sign)) {
+			List<BlogTopic> list = topicListCache.getIfPresent(key);
+			List<BlogTopic> newList = list.stream()
+				.map(item -> item.getSurrogateId().equals(topic.getSurrogateId()) ? topic : item)
+				.collect(Collectors.toList());
+			topicListCache.put(key, newList);
+
+			topicCache.put(topic.getSurrogateId(), topic);
+		} else if (BUS_DELETE.equals(sign)) {
+			List<BlogTopic> list = topicListCache.getIfPresent(key);
+			List<BlogTopic> newList = list.stream()
+				.filter(item -> !item.getSurrogateId().equals(delId))
+				.collect(Collectors.toList());
+			topicListCache.put(key, newList);
+
+			topicCache.invalidate(topic.getSurrogateId());
+		} else {
+
+		}
+	}
+
+	@Override
+	public BlogTopic getTopicCache(Long surrogateId) {
+		return topicCache.getIfPresent(surrogateId);
+	}
+
+	@Override
+	public List<BlogTopic> getTopicListCache(String key) {
+		return topicListCache.getIfPresent(key);
+	}
 }

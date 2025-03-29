@@ -30,9 +30,13 @@ public class BlogContentVO extends BlogContent implements Serializable {
 
   private String topicName;
 
+  private String topicColor;
+
   private Integer originalType;
 
   private Integer recommendType;
 
   private Integer statusType;
+
+  private String statusName;
 }

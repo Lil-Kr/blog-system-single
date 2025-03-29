@@ -58,7 +58,7 @@ export interface BlogCategoryVO extends BlogCategory {}
  */
 export interface BlogCategoryApi extends BaseApi {
   getCategoryPageList(params: BlogCategoryPageReq): Promise<ResultPage<BlogCategoryVO>>
-  getCategoryList(params: BlogCategoryReq): Promise<ResultPage<BlogCategoryVO>>
+  retrieveCategoryList(req: BlogCategoryReq): Promise<ResultPage<BlogCategoryVO>>
   add(params: CreateCategoryReq): Promise<Result<string>>
   edit(params: EditCategoryReq): Promise<Result<string>>
   delete(params: DelCategoryReq): Promise<Result<string>>

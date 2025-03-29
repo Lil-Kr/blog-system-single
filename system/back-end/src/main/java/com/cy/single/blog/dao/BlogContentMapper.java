@@ -3,7 +3,6 @@ package com.cy.single.blog.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.blog.BlogContent;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
-import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
 import com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO;
 import com.cy.single.blog.pojo.vo.blog.BlogContentVO;
 import org.apache.ibatis.annotations.Param;
@@ -26,7 +25,7 @@ public interface BlogContentMapper extends BaseMapper<BlogContent> {
 
   List<BlogContentVO> contentList(@Param("param") BlogContentPageReq req);
 
-  Integer updateStatusBySurrogateId(@Param("param") BlogContentReq req);
+  Integer updateStatusBySurrogateId(@Param("param") BlogContent req);
 
   List<BlogContentVO> frontContentList();
 

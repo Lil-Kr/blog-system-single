@@ -1,6 +1,5 @@
 import { Result } from '../base/response'
 import { SysAclModule } from './sys/acl/aclType'
-import { DictMapType } from './sys/dict/dictType'
 
 type BaseApi = {
   add?(params: any): Promise<Result<any>>

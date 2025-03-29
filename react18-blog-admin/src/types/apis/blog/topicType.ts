@@ -13,22 +13,26 @@ export interface TopicType extends BaseEntityRequiredType {
 /** ==================== blog topic request ====================  */
 export interface BlogTopicPageReq extends BaseEntityPageType {}
 
-export interface BlogTopicReqParams extends BaseEntityType {
+export interface BlogTopicReq extends BaseEntityType {
   keyWords?: string
 }
 
 /** ==================== blog topic response ====================  */
 export interface TopiciTableType {
   key: string
+  surrogateId: string
   number: string
   name: string
   color: string
   remark: string
+  createTime: string
+  updateTime: string
 }
 
 export interface CreateTopicReq {
   number: string
   name: string
+  color: string
   remark: string
 }
 
@@ -36,6 +40,7 @@ export interface EditTopicReq {
   surrogateId: string
   number: string
   name: string
+  color: string
   remark: string
 }
 
@@ -44,16 +49,14 @@ export interface DelTopicReq {
 }
 
 /** ==================== mapping back-end data ====================  */
-export interface BlogTopicVO extends TopicType {
-
-}
+export interface BlogTopicVO extends TopicType {}
 
 /**
  * blog label request API type
  */
 export interface BlogTopicApi extends BaseApi {
-  getTopicPageList(params: BlogTopicPageReq): Promise<ResultPage<BlogTopicVO>>
-  getTopicList(params: BlogTopicReqParams): Promise<ResultPage<BlogTopicVO>>
+  retrieveTopicPageList(params: BlogTopicPageReq): Promise<ResultPage<BlogTopicVO>>
+  retrieveTopicList(params: BlogTopicReq): Promise<ResultPage<BlogTopicVO>>
   add(params: CreateTopicReq): Promise<Result<string>>
   edit(params: EditTopicReq): Promise<Result<string>>
   delete(params: DelTopicReq): Promise<Result<string>>

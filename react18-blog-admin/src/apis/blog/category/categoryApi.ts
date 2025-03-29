@@ -15,7 +15,7 @@ const blogCategoryApi: BlogCategoryApi = {
   getCategoryPageList(req: BlogCategoryPageReq) {
     return baseAxiosRequest.post<ResultPage<BlogCategoryVO>>(PREFIX_URL_BLOG_CATEGORY + '/pageCategoryList', req)
   },
-  getCategoryList(req: BlogCategoryReq) {
+  retrieveCategoryList(req: BlogCategoryReq) {
     return baseAxiosRequest.post<ResultPage<BlogCategoryVO>>(PREFIX_URL_BLOG_CATEGORY + '/list', req)
   },
   add(req: CreateCategoryReq) {

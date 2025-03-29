@@ -14,21 +14,6 @@ const compsConfig: RouterItemType[] = [
     path: '/admin/comps',
     children: [
       {
-        meta: { key: 'comps-index', title: 'comps-index' },
-        index: true,
-        element: LazyLoad(lazy(() => import('@/views/comps/modal/ModalTest')))
-      },
-      {
-        meta: {
-          key: '/modal',
-          title: 'Modal组件',
-          layout: false,
-          icon: <SlidersOutlined />
-        },
-        path: '/admin/comps/modal',
-        element: LazyLoad(lazy(() => import('@/views/comps/modal/ModalTest')))
-      },
-      {
         meta: {
           key: '/tinymce-cloud',
           title: 'tinymce-cloud',

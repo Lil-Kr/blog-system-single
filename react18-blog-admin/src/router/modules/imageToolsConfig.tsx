@@ -14,11 +14,6 @@ const imageToolsConfig: RouterItemType[] = [
     path: '/admin/image',
     children: [
       {
-        meta: { key: 'image-index', title: 'comps-index' },
-        index: true,
-        element: LazyLoad(lazy(() => import('@/views/comps/modal/ModalTest')))
-      },
-      {
         meta: {
           key: '/category',
           title: '图片分类管理',

@@ -19,15 +19,13 @@ import {
 import { EditableProTable, ProColumns } from '@ant-design/pro-components'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
-import { useDictDetailStore } from '@/store/sys/dictStore'
-import { RecordKey } from '@ant-design/pro-utils/es/useEditableArray'
 
 const Dict = () => {
   const messageApi = useMessage()
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
   const [form] = useForm()
   const [tableLoading, setTableLoading] = useState<boolean>(false)
-  const [dataSource, setDataSource] = useState<TableDictType[]>([] as TableDictType[])
+  const [dictPageList, setDictPageList] = useState<TableDictType[]>([] as TableDictType[])
   const [dict, setDict] = useState<TableDictType>({} as TableDictType)
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
 
@@ -213,7 +211,7 @@ const Dict = () => {
     try {
       const dictList = retrieveDictPageList({ ...dictPageReq })
       const res = transformDictList(await dictList)
-      setDataSource(res)
+      setDictPageList(res)
     } catch (error) {}
   }
 
@@ -247,7 +245,7 @@ const Dict = () => {
     const searchParam = { ...req, currentPageNum: 1, pageSize: tablePageInfo.pageSize }
     const dictList = retrieveDictPageList({ ...searchParam })
     const res = transformDictList(await dictList)
-    setDataSource(res)
+    setDictPageList(res)
     setTablePageInfo(prevState => ({
       ...prevState,
       totalSize: tablePageInfo.totalSize
@@ -272,7 +270,7 @@ const Dict = () => {
       surrogateId,
       ...rest
     }))
-    setDataSource(list)
+    setDictPageList(list)
     setTablePageInfo(prevState => ({
       ...prevState,
       totalSize: data.total
@@ -339,7 +337,7 @@ const Dict = () => {
 
     const dictList = retrieveDictPageList({ ...searchParam })
     const res = transformDictList(await dictList)
-    setDataSource(res)
+    setDictPageList(res)
   }
   /**
    * dict page component
@@ -538,7 +536,7 @@ const Dict = () => {
           }}
           loading={tableLoading}
           columns={columnsDict}
-          dataSource={dataSource}
+          dataSource={dictPageList}
           pagination={{
             size: 'small',
             position: ['bottomLeft'],

@@ -17,7 +17,7 @@ public interface BlogTopicMapper extends BaseMapper<BlogTopic> {
 
   List<BlogTopicVO> pageTopicList(@Param("param") BlogTopicPageReq req);
 
-  List<BlogTopicVO> topicList(@Param("param") BlogTopicReq req);
+  List<BlogTopic> topicList(@Param("param") BlogTopicReq req);
 
   BlogTopic selectByNumber(String number);
 }

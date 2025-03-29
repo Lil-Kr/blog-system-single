@@ -1,30 +1,120 @@
-import { BlogContentAddReq, BlogContentTableType } from '@/apis/blog/content/blogContentApi'
+import blogContentApi, {
+  BlogContentAddReq,
+  BlogContentApi,
+  BlogContentEditeReq,
+  BlogContentTableType
+} from '@/apis/blog/content/blogContentApi'
+import { OptionType } from '@/types/apis'
+import { SelectProps } from 'antd/lib'
 import { create } from 'zustand'
 
 interface BlogState {
   blogPageTableList: BlogContentTableType[]
-  blogModalData: BlogContentAddReq
 }
 
 interface BlogAction {
   setBlogPageList: (blogPageTableList: BlogContentTableType[]) => void
-  setBlogModalData: (blogModalData: BlogContentAddReq) => void
 }
 
-const blogData = { blogPageTableList: [], blogModalData: {} as BlogContentAddReq }
+const initBlogData = {
+  blogPageTableList: []
+}
 
 const useBlogStore = create<BlogState & BlogAction>()(set => ({
-  ...blogData,
+  ...initBlogData,
   setBlogPageList: (blogPageTableList: BlogContentTableType[]) =>
     set(state => ({
       ...state,
       blogPageTableList: blogPageTableList
-    })),
-  setBlogModalData: (blogModalData: BlogContentAddReq) =>
-    set(state => ({
-      ...state,
-      blogModalData
     }))
 }))
 
 export { useBlogStore }
+
+/**
+ * =================== blog Modal store ======================
+ */
+// 从列表打开Modal时, 绑定到Modal的参数类型
+export interface BlogContentModalType {
+  key?: string
+  surrogateId?: string
+  title?: string
+  introduction?: string
+  blogLabelList?: SelectProps['options']
+  categoryInfo?: OptionType
+  topicInfo?: OptionType
+  original?: string
+  recommend?: string
+  publishStatue?: string // 发布状态
+  publishTime?: string
+  contentText?: string
+}
+
+// Modal 保存数据时传递的参数类型
+export interface BlogContentModalSaveReq {
+  surrogateId?: string
+  title?: string
+  introduction?: string
+  original?: string
+  recommend?: string
+  status?: string
+  categoryId?: string
+  labelIds?: string[]
+  topicId?: string
+  imgUrl?: string
+  contentText?: string
+}
+
+export type BlogMoadlState = {
+  api: BlogContentApi
+  openModal: boolean
+  title: string
+  action: string
+  inputDisabled: boolean
+  modalReq?: BlogContentModalType
+  saveReq?: BlogContentModalSaveReq
+  update: () => void
+}
+
+export type BlogMoadlAction = {
+  setBlogModalData: (blogModalData: BlogMoadlState) => void
+  setOpenModal: (openModal: boolean) => void
+  setSaveReq: (req: BlogContentModalSaveReq) => void
+  clearSaveReq: () => void
+}
+
+const initBlogModalData = {
+  api: blogContentApi,
+  openModal: false,
+  title: '创建博客',
+  action: 'create',
+  inputDisabled: false,
+  update: () => {}
+}
+
+const useBlogModalStore = create<BlogMoadlState & BlogMoadlAction>()(set => ({
+  ...initBlogModalData,
+  setBlogModalData: (blogModalData: BlogMoadlState) =>
+    set(state => ({
+      ...state,
+      ...blogModalData
+    })),
+  setOpenModal: (openModal: boolean) =>
+    set(state => ({
+      ...state,
+      openModal
+    })),
+  setSaveReq: (req: BlogContentModalSaveReq) =>
+    set(state => ({
+      ...state,
+      saveReq: req
+    })),
+  clearSaveReq: () =>
+    set(state => ({
+      ...state,
+      saveReq: {}
+    }))
+}))
+
+export { useBlogModalStore }
+

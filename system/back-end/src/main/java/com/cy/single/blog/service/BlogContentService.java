@@ -42,4 +42,5 @@ public interface BlogContentService {
 
   PageResult<BlogContentVO> frontContentPageList(BlogContentPageReq req);
 
+	ApiResp<String> delete(Long surrogateId);
 }

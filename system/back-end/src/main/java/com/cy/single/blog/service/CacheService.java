@@ -1,6 +1,7 @@
 package com.cy.single.blog.service;
 
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
+import com.cy.single.blog.pojo.entity.blog.BlogTopic;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
@@ -44,11 +45,27 @@ public interface CacheService {
 	/**
 	 * ================================== blog category ===============================
 	 */
-	void saveBlogCategory(List<BlogCategoryVO> categoryList);
+	void saveBlogCategoryCache(List<BlogCategoryVO> categoryList);
 
-	void updateBlogCategory(String key, BlogCategoryVO categoryVO, String sign);
+	void updateBlogCategoryCache(String key, BlogCategoryVO categoryVO, String sign);
 
-	List<BlogCategoryVO> getBlogCategoryList(String key);
+	List<BlogCategoryVO> getBlogCategoryListCache(String key);
 
-	BlogCategoryVO getBlogCategory(Long surrogateId);
+	BlogCategoryVO getBlogCategoryCache(Long surrogateId);
+
+	/**
+	 * ================================== blog topic ===============================
+	 */
+	void saveBlogTopicCache(List<BlogTopic> list);
+
+	void updateBlogTopicCache(String key, BlogTopic topic, String sign, Long delId);
+
+	BlogTopic getTopicCache(Long surrogateId);
+
+	List<BlogTopic> getTopicListCache(String key);
+
+	/**
+	 * ================================== sys user acl ===============================
+	 */
+
 }

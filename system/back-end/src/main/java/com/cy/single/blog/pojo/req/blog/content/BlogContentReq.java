@@ -26,12 +26,14 @@ public class BlogContentReq {
   @NotNull(groups = {GroupBlogContentEdit.class, GroupBlogContentDelete.class, GroupBlogContentPublish.class}, message = "surrogateId是必须的")
   private Long surrogateId;
 
+  private String introduction;
+
   @NotNull(groups = {GroupBlogContentAdd.class, GroupBlogContentEdit.class}, message = "original是必须的")
   @Min(value = 0, message = "原创类型")
-  private Integer original;
+  private Long original;
 
   @NotNull(groups = {GroupBlogContentAdd.class, GroupBlogContentEdit.class}, message = "recommend是必须的")
-  private Integer recommend;
+  private Long recommend;
 
   @NotNull(groups = {GroupBlogContentAdd.class, GroupBlogContentEdit.class}, message = "title是必须的")
   private String title;
@@ -39,7 +41,7 @@ public class BlogContentReq {
   @NotNull(groups = {GroupBlogContentAdd.class, GroupBlogContentEdit.class}, message = "categoryId是必须的")
   private Long categoryId;
 
-  @NotEmpty(groups = {GroupBlogContentAdd.class, GroupBlogContentEdit.class}, message = "labelIds是必须的, 并用多个','分隔")
+  @NotEmpty(groups = {GroupBlogContentAdd.class, GroupBlogContentEdit.class}, message = "labelIds是必须的")
   private Set<Long> labelIds;
 
   private Long topicId;
@@ -50,7 +52,5 @@ public class BlogContentReq {
   private String contentText;
 
   @NotNull(groups = {GroupBlogContentPublish.class}, message = "status是必须的")
-  @Max(groups = {GroupBlogContentPublish.class}, value = 1, message = "status必须是0或1")
-  @Min(groups = {GroupBlogContentPublish.class}, value = 0, message = "status必须是0或1")
-  private Integer status;
+  private Long status;
 }

@@ -22,4 +22,6 @@ public interface SysDictDetailService extends IService<SysDictDetail> {
 	ApiResp<String> deleteDetail(Long surrogateId);
 
 	PageResult<SysDictDetailVO> pageDictDetailList(DictDetailPageListReq req);
+
+	SysDictDetail get(SaveDictDetailReq req);
 }
