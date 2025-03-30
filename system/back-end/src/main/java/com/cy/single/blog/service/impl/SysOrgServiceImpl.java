@@ -142,11 +142,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 	 */
 	@Override
 	public ApiResp<String> edit(OrgReq req) {
-		// 检查组织名是否重复
-//		if (checkOrgExist(req.getParentSurrogateId(), req.getName(), req.getSurrogateId())) {
-//			return ApiResp.failure(DATA_INFO_REPEAT);
-//		}
-
 		// 检查待更新的组织是否存在
 		QueryWrapper<SysOrg> wrapper = new QueryWrapper<>();
 		wrapper.eq("surrogate_id", req.getSurrogateId());

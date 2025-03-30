@@ -9,8 +9,6 @@ import com.cy.single.blog.pojo.req.acl.AclPageReq;
 import com.cy.single.blog.pojo.req.acl.AclReq;
 import com.cy.single.blog.pojo.vo.sys.acl.SysAclVO;
 import com.cy.single.blog.service.SysAclService;
-import com.cy.single.blog.service.SysRoleAclService;
-import com.cy.single.blog.service.SysRoleUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -31,12 +29,6 @@ public class AclController {
 
 	@Autowired
 	private SysAclService aclService;
-
-	@Autowired
-	private SysRoleUserService roleUserService;
-
-	@Autowired
-	private SysRoleAclService roleAclService;
 
 	/**
 	 * 分页查询权限点列表
