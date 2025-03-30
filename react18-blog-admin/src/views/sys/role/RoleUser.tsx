@@ -7,7 +7,7 @@ import { useRoleAclStore } from '@/store/sys/roleStore'
 import roleApi from '@/apis/sys/roleApi'
 import { useMessage } from '@/components/message/MessageProvider'
 
-const columns: TableColumnsType<RoleUserTableType> = [
+const columnsAclUser: TableColumnsType<RoleUserTableType> = [
   {
     key: 'account',
     dataIndex: 'account',
@@ -43,8 +43,8 @@ const columns: TableColumnsType<RoleUserTableType> = [
 ]
 
 const RoleUser = () => {
-  const { roleId, transferTargetKeys, setTransferTargetKeys, roleUserList, setRoleUserList } = useRoleAclStore()
   const messageApi = useMessage()
+  const { roleId, transferTargetKeys, setTransferTargetKeys, roleUserList, setRoleUserList } = useRoleAclStore()
 
   /**
    * 控制穿梭框的搜索功能
@@ -59,6 +59,11 @@ const RoleUser = () => {
     return accountMatch || userNameMatch || remarkMatch
   }
 
+  /**
+   * 穿梭框的回调函数
+   * 数据左右滑动时触发
+   * @param nextTargetKeys
+   */
   const onChange: TableTransferProps['onChange'] = nextTargetKeys => {
     setTransferTargetKeys(nextTargetKeys)
   }
@@ -116,21 +121,21 @@ const RoleUser = () => {
 
   return (
     <div className='role-user-warpper'>
-      <Flex gap='middle' vertical>
+      <Flex gap='middle' vertical={true}>
         <TableTransfer
           titles={['待选用户列表', '已选用户列表']}
           dataSource={roleUserList}
-          targetKeys={transferTargetKeys} // 穿梭框右边的数据
+          targetKeys={transferTargetKeys} // 穿梭框右边的数据 [已选用户]
           disabled={false}
           showSearch
           showSelectAll={false}
           onChange={onChange}
           filterOption={filterOption}
-          leftColumns={columns}
-          rightColumns={columns}
+          leftColumns={columnsAclUser}
+          rightColumns={columnsAclUser}
         />
         <Flex justify={'flex-start'} align={'center'} gap={'middle'}>
-          <Button onClick={updateRoleUsers}>{'保存'}</Button>
+          <Button onClick={updateRoleUsers}>{'更新'}</Button>
         </Flex>
       </Flex>
     </div>

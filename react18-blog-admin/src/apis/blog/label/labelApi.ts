@@ -1,20 +1,21 @@
 import { baseAxiosRequest } from '@/utils/http/request'
 import { Result, ResultPage } from '@/types/base/response'
 import {
-  LabelReq,
+  LabelListReq,
   CreateLabelReq,
   EditLabelReq,
   DelLabelReq,
   LabelTableResq,
-  LabelApi
+  LabelApi,
+  LabelPageListReq
 } from '@/types/apis/blog/labelType'
 import { PREFIX_URL_BLOG_LABEL } from '@/config'
 
 const labelApi: LabelApi = {
-  retrieveLabelPageList(req: LabelReq) {
+  retrieveLabelPageList(req: LabelPageListReq) {
     return baseAxiosRequest.post<ResultPage<LabelTableResq>>(PREFIX_URL_BLOG_LABEL + '/pageList', req)
   },
-  retrieveLabelList(req: LabelReq) {
+  retrieveLabelList(req: LabelListReq) {
     return baseAxiosRequest.post<ResultPage<LabelTableResq>>(PREFIX_URL_BLOG_LABEL + '/list', req)
   },
   add(req: CreateLabelReq) {

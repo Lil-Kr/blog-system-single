@@ -3,6 +3,10 @@ import { TransferProps, TreeDataNode } from 'antd/lib'
 import { create } from 'zustand'
 
 interface RoleAclState {
+  // 数据加载样式
+  tableLoading: boolean
+  setTableLoading: (tableLoading: boolean) => void
+
   // 存储角色列表数据
   roleList: TableRoleType[]
   setRoleList: (roleList: TableRoleType[]) => void
@@ -37,6 +41,7 @@ interface RoleAclState {
 }
 
 const roleAclInit = {
+  tableLoading: false,
   roleList: [],
   roleId: '',
   selectedRowKeys: [],
@@ -49,6 +54,11 @@ const roleAclInit = {
 
 const useRoleAclStore = create<RoleAclState>()((set, get) => ({
   ...roleAclInit,
+  setTableLoading: (tableLoading: boolean) =>
+    set(state => ({
+      ...state,
+      tableLoading
+    })),
   setRoleList: (roleList: TableRoleType[]) =>
     set(state => {
       return {

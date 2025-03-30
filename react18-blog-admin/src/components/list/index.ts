@@ -1,2 +1,2 @@
-import ListCardPage from './ListCardPage'
-export { ListCardPage }
+import ListCardPageComp from './ListCardPageComp'
+export { ListCardPageComp as ListCardPage }

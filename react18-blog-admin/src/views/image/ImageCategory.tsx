@@ -1,49 +1,57 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Table } from 'antd'
-import { SizeType } from 'antd/es/config-provider/SizeContext'
+import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Table, Tag } from 'antd/lib'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
-import React, { useEffect, useRef, useState } from 'react'
-import { ImageCategoryDTO, ImageCategoryPageReqParams } from '@/types/apis/image/image'
-import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { BaseModal } from '@/components/modal'
+import React, { useEffect, useState } from 'react'
+import { ImageCategoryPageReq, ImageCategoryTableType } from '@/types/apis/image/imageType'
 import { useMessage } from '@/components/message/MessageProvider'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
 
 // api
-import imageCategoryApi from '@/apis/image'
-import { useGlobalStyleStore } from '@/store/global/globalStore'
-import { Tag } from 'antd/lib'
+import imageCategoryApi from '@/apis/image/imageCategoryApi'
+import { ImageCategoryModalState, useImageCategoryModalStore, useImageCategoryStore } from '@/store/blog/imageStore'
+import { ImageCategoryModal } from '@/components/blog/imageManage/indext'
 
 const env = import.meta.env
 
 const ImageCategory = () => {
-  const columns: ColumnsType<any> = [
-    {
-      key: 'number',
-      dataIndex: 'number',
-      title: '编号',
-      width: '25%'
-    },
+  const columnsImageCategory: ColumnsType<ImageCategoryTableType> = [
     {
       key: 'imageUrl',
       dataIndex: 'imageUrl',
       title: '标题图',
-      width: '25%',
-      render: (_: object, record: ImageCategoryDTO) => (
-        <img height={100} style={{ objectFit: 'cover' }} src={record.imageUrl} />
-      )
+      width: '30%',
+      render: (_, record) => <img height={100} style={{ objectFit: 'cover' }} src={record.imageUrl} />
     },
     {
       key: 'name',
       dataIndex: 'name',
       title: '分类名',
-      width: '10%',
-      render: (_: object, record: ImageCategoryDTO) => <Tag color={'volcano'}>{record.name}</Tag>
+      width: '20%',
+      render: (_, record) => <Tag color={'pink'}>{record.name}</Tag>
     },
     {
       key: 'status',
       dataIndex: 'status',
       title: '状态',
+      width: '0%',
+      render: (_, record) => {
+        let text = ''
+        let color = ''
+        if (record.status === 0) {
+          text = '正常'
+          color = 'green'
+        } else {
+          text = '作废'
+          color = 'geekblue'
+        }
+        return <Tag color={color}>{text}</Tag>
+      }
+    },
+    {
+      key: 'remark',
+      dataIndex: 'remark',
+      title: '备注',
       width: '10%'
     },
     {
@@ -55,7 +63,7 @@ const ImageCategory = () => {
     {
       key: 'updateTime',
       dataIndex: 'updateTime',
-      title: '更新时间',
+      title: '修改时间',
       width: '10%'
     },
     {
@@ -63,7 +71,7 @@ const ImageCategory = () => {
       dataIndex: 'oparet',
       title: '操作',
       width: '10%',
-      render: (_: object, record: ImageCategoryDTO) => (
+      render: (_, record) => (
         <Flex vertical={false} gap={4}>
           <Button
             size={btnSize}
@@ -71,7 +79,7 @@ const ImageCategory = () => {
             type='link'
             shape='circle'
             icon={<EditOutlined />}
-            onClick={() => delItem(record.key)}
+            onClick={() => editItem(record)}
           />
           <Popconfirm
             title='删除图片分类'
@@ -80,15 +88,7 @@ const ImageCategory = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button
-              size={btnSize}
-              name='delete'
-              type='link'
-              shape='circle'
-              danger
-              icon={<DeleteOutlined />}
-              onClick={() => delItem(record.key)}
-            />
+            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Flex>
       )
@@ -97,158 +97,149 @@ const ImageCategory = () => {
 
   const messageApi = useMessage()
   const [form] = useForm()
-  const { btnSize, tableSize } = useGlobalStyleStore()
-  const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
-  const [rowKeys, setRowKeys] = useState<React.Key[]>([])
-  const [tableLoading, setTableLoading] = useState<boolean>(false)
-  const [dataSource, setDataSource] = useState<ImageCategoryDTO[]>([])
-  const [pageInfo, setPageInfo] = useState({ pageSize: 5, totalSize: 0 })
-  const imageCategoryRef = useRef<{
-    open: (
-      requestParams: IModalRequestAction,
-      params: IModalParams,
-      type: IAction,
-      modalStyle: IModalStyle,
-      items: ModalType.InputType[],
-      data?: any
-    ) => void
-  }>()
+  const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
+  // const [rowKeys, setRowKeys] = useState<React.Key[]>([])
+  const {
+    imageCategoryPageList,
+    setImageCategoryPageList,
+    tableLoading,
+    setTableLoading,
+    tablePageInfo,
+    setTablePageInfo,
+    selectionType
+  } = useImageCategoryStore()
+  const { title, openModal, inputDisabled, setOpenModal, setImageCategoryModalState } = useImageCategoryModalStore()
+
+  useEffect(() => {
+    pageImageCategoryList({ currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+  }, [])
 
   /**
    * 搜索
    */
   const search = () => {
     const values = form.getFieldsValue()
-    imageCategoryPageList({ ...values, currentPageNum: 1, pageSize: pageInfo.pageSize })
+    pageImageCategoryList({ ...values, currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
 
+  /**
+   * 重置
+   */
   const resetSearch = () => {
     form.resetFields()
-    imageCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageInfo.pageSize })
+    const values = form.getFieldsValue()
+    pageImageCategoryList({ ...values, currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
 
   /**
    * create
    */
   const create = () => {
-    imageCategoryRef.current?.open(
-      { api: imageCategoryApi },
-      { title: '添加图片类型' },
-      { action: 'create', open: true },
-      { style: { maxWidth: '30vw' } },
-      [
-        {
-          name: 'number',
-          label: '类别编号',
-          textValue: '类别编号, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '类别编号不能为空' }]
-        },
-        {
-          name: 'name',
-          label: '类别名称',
-          textValue: '类别名称, 必填',
-          style: { width: '100%' },
-          rules: [{ required: true, message: '类别名称不能为空' }]
-        },
-        {
-          name: 'remark',
-          label: '备注',
-          textValue: '备注',
-          style: { width: '100%' }
-        }
-      ]
-    )
+    const modalData: ImageCategoryModalState = {
+      api: imageCategoryApi,
+      title: '添加图片分类',
+      action: 'create',
+      openModal: true,
+      inputDisabled: false,
+      updateCallBack: () => {
+        pageImageCategoryList({ currentPageNum: tablePageInfo.currentPageNum, pageSize: tablePageInfo.pageSize })
+      }
+    }
+    setImageCategoryModalState({ ...modalData })
   }
 
-  const deleteItemConfirm = async (record: ImageCategoryDTO) => {
+  /**
+   * 编辑
+   * @param key
+   */
+  const editItem = async (record: ImageCategoryTableType) => {
+    const modalData: ImageCategoryModalState = {
+      api: imageCategoryApi,
+      title: '编辑图片分类',
+      action: 'edit',
+      openModal: true,
+      inputDisabled: false,
+      updateCallBack: () => {
+        pageImageCategoryList({ currentPageNum: tablePageInfo.currentPageNum, pageSize: tablePageInfo.pageSize })
+      },
+      modalData: {
+        ...record,
+        key: record.key
+      }
+    }
+    setImageCategoryModalState({ ...modalData })
+  }
+
+  /**
+   * 删除分类
+   * @param record
+   * @returns
+   */
+  const deleteItemConfirm = async (record: ImageCategoryTableType) => {
     const delRes = await imageCategoryApi.delete({ surrogateId: record.key })
-    const { code } = delRes
+    const { code, msg } = delRes
     if (code !== 200) {
-      messageApi?.warning('删除失败')
       return
     }
-    imageCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageInfo.pageSize })
-    messageApi?.success('删除成功')
-  }
-
-  const delItem = async (key: string) => {
-    // const { key } = rowKeys[0]
+    // 刷新列表
+    pageImageCategoryList({ currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    messageApi?.success(msg)
   }
 
   /**
    * 多选
    */
-  const rowSelection: TableRowSelection<ImageCategoryDTO> = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: ImageCategoryDTO[]) => {
-      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-      setRowKeys(selectedRowKeys)
-    }
-    // getCheckboxProps: (record: LabelDTO) => ({
-    //   disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    //   name: record.name
-    // })
+  const rowSelection: TableRowSelection<ImageCategoryTableType> = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: ImageCategoryTableType[]) => {}
   }
 
   /**
    * 页码或 pageSize 改变的回调, 参数是改变后的页码及每页条数
-   * @param page
+   * @param currentPageNum
    * @param pageSize
    */
-  const onChange: PaginationProps['onChange'] = (page, pageSize) => {
+  const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
     const values = form.getFieldsValue()
-    imageCategoryPageList({ ...values, currentPageNum: page, pageSize })
+    pageImageCategoryList({ ...values, currentPageNum, pageSize })
   }
 
   /**
-   * change pageSize
-   * pageSize 变化的回调
-   * @param current
-   * @param pageSize
+   * 分页查询图片分类信息
+   * @param req
+   * @returns
    */
-  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
-    setPageInfo({ ...pageInfo, pageSize })
-  }
-
-  useEffect(() => {
-    imageCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: pageInfo.pageSize })
-  }, [])
-
-  const imageCategoryPageList = async (params: ImageCategoryPageReqParams) => {
+  const pageImageCategoryList = async (req: ImageCategoryPageReq) => {
+    setTableLoading(true)
     const values = form.getFieldsValue()
-    const imageCategoryList = await imageCategoryApi.imageCategoryPageList({ ...values, ...params })
-    const { code, data, msg } = imageCategoryList
+    const imageCategoryList = await imageCategoryApi.pageImageCategoryList({ ...values, ...req })
+    const { code, data } = imageCategoryList
     if (code !== 200) {
       return []
     }
 
-    const datas = data.list.map(({ surrogateId, number, name, imageUrl, status, createTime, updateTime, remark }) => ({
-      key: surrogateId ? surrogateId : '',
-      number: number ? number : '',
-      name: name ? name : '',
+    const list = data.list.map(({ surrogateId, imageUrl, ...rest }) => ({
+      key: surrogateId,
       imageUrl: env.VITE_BACKEND_IMAGE_BASE_API + imageUrl,
-      status: status ? status : 0,
-      createTime: createTime ? createTime : '',
-      updateTime: updateTime ? updateTime : '',
-      remark: remark ? remark : ''
+      ...rest
     }))
-    setDataSource(datas)
-    setPageInfo({ totalSize: data.total, pageSize: params.pageSize })
+    setImageCategoryPageList(list)
+    setTablePageInfo({ ...tablePageInfo, totalSize: data.total, pageSize: req.pageSize })
+    setTableLoading(false)
   }
 
   return (
     <div className='image-category-warpper'>
       <Flex gap='small' vertical={true}>
         <Form form={form}>
-          <Flex gap='small'>
-            <Form.Item name={'keyWords'} label='搜索关键字'>
-              <Input placeholder='搜索关键字' />
+          <Flex vertical={false} gap={8}>
+            <Form.Item name={'keyWords'} label='关键字'>
+              <Input size={inputSize} placeholder='搜索关键字' />
             </Form.Item>
             <Form.Item>
-              <Button icon={<SearchOutlined />} type='primary' onClick={search} />
+              <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
             </Form.Item>
             <Form.Item>
-              <Button type='primary' onClick={resetSearch}>
+              <Button size={btnSize} type='primary' onClick={resetSearch}>
                 {'置空'}
               </Button>
             </Form.Item>
@@ -270,22 +261,22 @@ const ImageCategory = () => {
               ...rowSelection
             }}
             loading={tableLoading}
-            columns={columns}
-            dataSource={dataSource}
+            columns={columnsImageCategory}
+            dataSource={imageCategoryPageList}
             pagination={{
               position: ['bottomLeft'], // pagination position
+              showQuickJumper: false, // 跳转指定页面
+              showSizeChanger: true,
               hideOnSinglePage: false, // only one pageSize then hidden Paginator
               pageSizeOptions: [10, 20, 50], // specify how many items can be displayed on each page
-              onChange: onChange,
-              onShowSizeChange: onShowSizeChange,
-              showSizeChanger: true,
-              pageSize: pageInfo.pageSize,
-              total: pageInfo.totalSize
+              onChange: onChangePageInfo,
+              pageSize: tablePageInfo.pageSize,
+              total: tablePageInfo.totalSize
             }}
           />
         </Flex>
       </Flex>
-      <BaseModal innerComponent={'all-input'} mRef={imageCategoryRef} update={() => {}} />
+      <ImageCategoryModal />
     </div>
   )
 }

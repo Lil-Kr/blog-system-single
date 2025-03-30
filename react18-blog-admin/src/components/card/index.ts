@@ -1,2 +1,2 @@
-import CardAction from './CardAction'
-export { CardAction }
+import CardActionComp from './CardActionComp'
+export { CardActionComp as CardAction }

@@ -6,7 +6,7 @@ import React from 'react'
 
 const env = import.meta.env
 
-const CardAction = (props: { cardItem: CardActionProps }) => {
+const CardActionComp = (props: { cardItem: CardActionProps }) => {
   const { cardItem } = props
 
   const copy = () => {
@@ -42,4 +42,4 @@ const CardAction = (props: { cardItem: CardActionProps }) => {
   )
 }
 
-export default CardAction
+export default CardActionComp

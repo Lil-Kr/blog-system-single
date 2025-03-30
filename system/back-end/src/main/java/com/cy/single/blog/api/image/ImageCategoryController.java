@@ -5,7 +5,8 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.pojo.req.image.ImageCategoryPageReq;
+import com.cy.single.blog.pojo.req.image.ImageCategoryListReq;
+import com.cy.single.blog.pojo.req.image.ImageCategoryPageListReq;
 import com.cy.single.blog.pojo.req.image.ImageCategoryReq;
 import com.cy.single.blog.pojo.vo.image.ImageCategoryVO;
 import com.cy.single.blog.service.ImageCategoryService;
@@ -34,7 +35,7 @@ public class ImageCategoryController {
   @RecordLogger
   @CheckAuth
   @PostMapping("/pageList")
-  public ApiResp<PageResult<ImageCategoryVO>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) ImageCategoryPageReq req) {
+  public ApiResp<PageResult<ImageCategoryVO>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) ImageCategoryPageListReq req) {
     PageResult<ImageCategoryVO> blogTopicVOPageResult = imageCategoryService.pageList(req);
     return ApiResp.success(blogTopicVOPageResult);
   }
@@ -42,16 +43,16 @@ public class ImageCategoryController {
   @RecordLogger
   @CheckAuth
   @PostMapping("/list")
-  public ApiResp<PageResult<ImageCategoryVO>> list(@RequestBody @Validated ImageCategoryPageReq req) {
+  public ApiResp<PageResult<ImageCategoryVO>> list(@RequestBody @Valid ImageCategoryListReq req) {
     PageResult<ImageCategoryVO> blogTopicVOPageResult = imageCategoryService.list(req);
     return ApiResp.success(blogTopicVOPageResult);
   }
 
   @RecordLogger
   @CheckAuth
-  @PostMapping("/save")
-  public ApiResp<String> save(@RequestBody @Validated({ImageCategoryReq.GroupImageCategorySave.class}) ImageCategoryReq req) {
-    return imageCategoryService.save(req);
+  @PostMapping("/add")
+  public ApiResp<String> add(@RequestBody @Validated({ImageCategoryReq.GroupImageCategoryAdd.class}) ImageCategoryReq req) {
+    return imageCategoryService.add(req);
   }
 
   @RecordLogger

@@ -2,9 +2,9 @@ import { Button, Flex, Form, GetProp, Modal, Progress, Upload, UploadFile, Uploa
 import ImgCrop from 'antd-img-crop'
 import React, { useImperativeHandle, useState } from 'react'
 import { IAction, IModalParams, IModalRequestAction, ModalType } from '@/types/component/modal'
-import { ImageInfoUploadParams } from '@/apis/image/imageInfo'
+import { ImageInfoUploadReq } from '@/apis/image/imageInfoApi'
 import { RcFile, UploadRequestOption } from 'rc-upload/lib/interface'
-import { imageInfoApi } from '@/apis/image/imageInfo'
+import { imageInfoApi } from '@/apis/image/imageInfoApi'
 import { AxiosProgressEvent, AxiosRequestConfig } from 'axios'
 import { FileImageOutlined } from '@ant-design/icons'
 import { useMessage } from '@/components/message/MessageProvider'
@@ -35,7 +35,7 @@ const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
     // }
   ])
   const [uploadFiles, setUploadFiles] = useState<UploadImageType[]>([])
-  const [imageInfo, setImageInfo] = useState<ImageInfoUploadParams>({ imageCategoryId: '' })
+  const [imageInfo, setImageInfo] = useState<ImageInfoUploadReq>({ imageCategoryId: '' })
   const [uploadPercent, setUploadPercent] = useState(0)
   const [uploading, setUploading] = useState(false)
 
@@ -46,7 +46,7 @@ const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
 
   const open = (requestParams: IModalRequestAction, params: IModalParams, type: IAction, data?: any) => {
     setOpenModal(true)
-    const imageInfo = data as ImageInfoUploadParams
+    const imageInfo = data as ImageInfoUploadReq
     setImageInfo(imageInfo)
   }
 
@@ -123,13 +123,14 @@ const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
    * @param params
    * @returns
    */
-  const handleCustomRequest = async (options: UploadRequestOption<any>, params: ImageInfoUploadParams) => {
+  const handleCustomRequest = async (options: UploadRequestOption<any>, params: ImageInfoUploadReq) => {
     const { onSuccess, onError, file, filename, onProgress } = options
 
     const formData = new FormData()
     formData.append('image', file)
     formData.append('imageCategoryId', params.imageCategoryId)
 
+    // 进度条百分比计算逻辑
     const getImageUploadInfo = (progress: number): UploadImageType => {
       return {
         uid: (file as RcFile).uid,
@@ -163,7 +164,6 @@ const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
       return
     }
     data.url = env.VITE_BACKEND_IMAGE_BASE_API + data.url
-
     messageApi?.success(msg)
     setFileList(prevFiles => [...prevFiles, data as UploadFile])
   }
@@ -179,24 +179,24 @@ const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
         onOk={handleOk}
         onCancel={handleCancel}
         destroyOnClose={false}
+        maskClosable={false}
         // confirmLoading={confirmLoading}
         // afterClose={resetForm}
         // forceRender={true} // 强制渲染
-        maskClosable={false}
       >
         <Flex vertical={true} gap={16}>
           <ImgCrop quality={0.2} showGrid rotationSlider aspectSlider showReset resetText={'reset'}>
             <Upload
-              // {...uploadProps}
               listType='picture-card'
-              // action={'http://localhost:7010/api/image/info/upload'}
-              // onChange={handleChange}
-              // customRequest={e => customRequest(e, imageInfo)}
-              // beforeUpload={}
               fileList={fileList}
               onPreview={onPreview}
               showUploadList={true}
               customRequest={e => handleCustomRequest(e, imageInfo)}
+              // {...uploadProps}
+              // action={'http://localhost:7010/api/image/info/upload'}
+              // onChange={handleChange}
+              // customRequest={e => customRequest(e, imageInfo)}
+              // beforeUpload={}
             >
               {/* {fileList.length < 3 && '+ Upload'} */}
               {'+ Upload'}

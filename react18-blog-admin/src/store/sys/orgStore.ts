@@ -91,12 +91,10 @@ const useOrgStore = create<OrgStates & OrgActions>()(set => ({
       }
     }),
   setTableLoading: (tableLoading: boolean) =>
-    set(state => {
-      return {
-        ...state,
-        tableLoading
-      }
-    })
+    set(state => ({
+      ...state,
+      tableLoading
+    }))
 }))
 
 export { useOrgStore }

@@ -94,14 +94,14 @@ const baseAxiosRequest = {
   post<T>(url: string, body?: object): Promise<T> {
     return axiosInstance.post(url, body)
   },
-  postUpload<T>(url: string, body?: object, config?: object | {}): Promise<T> {
-    return axiosInstance.post(url, body, config)
-  },
   put<T>(url: string, body?: object): Promise<T> {
     return axiosInstance.put(url, body)
   },
   delete<T>(url: string, params?: object): Promise<T> {
     return axiosInstance.delete(url, { params })
+  },
+  postUpload<T>(url: string, body?: object, config?: object | {}): Promise<T> {
+    return axiosInstance.post(url, body, config)
   }
 }
 

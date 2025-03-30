@@ -8,9 +8,10 @@ import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.ImageCategoryMapper;
 import com.cy.single.blog.pojo.dto.image.ImageDTO;
 import com.cy.single.blog.pojo.entity.image.ImageCategory;
-import com.cy.single.blog.pojo.req.image.ImageCategoryPageReq;
+import com.cy.single.blog.pojo.req.image.ImageCategoryListReq;
+import com.cy.single.blog.pojo.req.image.ImageCategoryPageListReq;
 import com.cy.single.blog.pojo.req.image.ImageCategoryReq;
-import com.cy.single.blog.pojo.req.image.ImageInfoPageReq;
+import com.cy.single.blog.pojo.req.image.ImageInfoPageListReq;
 import com.cy.single.blog.pojo.vo.image.ImageCategoryVO;
 import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
 import com.cy.single.blog.service.ImageCategoryService;
@@ -20,11 +21,12 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -42,7 +44,7 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
   private ImageInfoService imageInfoService;
 
   @Override
-  public PageResult<ImageCategoryVO> pageList(ImageCategoryPageReq req) {
+  public PageResult<ImageCategoryVO> pageList(ImageCategoryPageListReq req) {
     List<ImageCategoryVO> list = imageCategoryMapper.pageList(req);
     Integer total = imageCategoryMapper.total(req);
     if (CollectionUtils.isEmpty(list)) {
@@ -53,7 +55,7 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
   }
 
   @Override
-  public PageResult<ImageCategoryVO> list(ImageCategoryPageReq req) {
+  public PageResult<ImageCategoryVO> list(ImageCategoryListReq req) {
     List<ImageCategoryVO> list = imageCategoryMapper.imageCategoryList(req);
     if (CollectionUtils.isEmpty(list)) {
       return new PageResult<>(new ArrayList<>(0), 0);
@@ -69,7 +71,7 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
       return ApiResp.failure();
     }
 
-    ImageInfoPageReq req = new ImageInfoPageReq();
+    ImageInfoPageListReq req = new ImageInfoPageListReq();
     req.setImageCategoryId(imageCategoryVO.getSurrogateId());
     PageResult<ImageInfoVO> imageInfoVOPageResult = imageInfoService.imageInfoList(req);
 
@@ -79,57 +81,61 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
   }
 
   @Override
-  public ApiResp<String> save(ImageCategoryReq req) {
+  public ApiResp<String> add(ImageCategoryReq req) {
+    QueryWrapper<ImageCategory> wrapper = new QueryWrapper<>();
+    wrapper.eq("name", req.getName());
+    ImageCategory before = imageCategoryMapper.selectOne(wrapper);
+    if (Objects.nonNull(before)) {
+      return ApiResp.warning(SAVE_ERROR);
+    }
+
     ImageCategory imageCategory = ImageDTO.convertSaveImageCategory(req);
     int insert = imageCategoryMapper.insert(imageCategory);
-
-    if (insert > 0) {
-      return ApiResp.success();
-    }else {
+    if (insert < 1) {
       return ApiResp.failure(SAVE_ERROR);
     }
+
+    return ApiResp.success();
   }
 
   @Override
   public ApiResp<String> edit(ImageCategoryReq req) {
-    QueryWrapper queryWrapper = new QueryWrapper();
+    // 检查数据是否合法
+    QueryWrapper<ImageCategory> queryWrapper = new QueryWrapper<>();
     queryWrapper.eq("surrogate_id", req.getSurrogateId());
-    ImageCategory imageCategory = imageCategoryMapper.selectOne(queryWrapper);
-    if (Objects.isNull(imageCategory)) {
+    queryWrapper.eq("name", req.getName());
+    ImageCategory before = imageCategoryMapper.selectOne(queryWrapper);
+    if (Objects.isNull(before)) {
       return ApiResp.failure(OPERATE_ERROR);
     }
-    BeanUtils.copyProperties(req, imageCategory);
-    Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
-    imageCategory.setUpdateTime(nowDateTime);
-    imageCategory.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
+
+    BeanUtils.copyProperties(req, before);
+    before.setUpdateTime(DateUtil.localDateTimeNow());
+    before.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
 
     UpdateWrapper<ImageCategory> updateWrapper = new UpdateWrapper<>();
-    updateWrapper.eq("surrogate_id", imageCategory.getSurrogateId());
-    int update = imageCategoryMapper.update(imageCategory, updateWrapper);
+    updateWrapper.eq("surrogate_id", before.getSurrogateId());
+    int update = imageCategoryMapper.update(before, updateWrapper);
 
-    if (update >= 1) {
-      return ApiResp.success();
-    } else {
+    if (update < 1) {
       return ApiResp.failure(SAVE_ERROR);
     }
+    return ApiResp.success();
   }
 
+  @Transactional
   @Override
   public ApiResp<String> delete(Long surrogateId) {
-    Long imageCateCount = imageInfoService.countByImageCategoryId(surrogateId);
+    imageInfoService.countByImageCategoryId(surrogateId);
+    QueryWrapper<ImageCategory> wrapper = new QueryWrapper<>();
+    wrapper.eq("surrogate_id", surrogateId);
+    int delete = imageCategoryMapper.delete(wrapper);
 
-    if (imageCateCount >= 1) {
+    if (delete < 1) {
       return ApiResp.failure(DEL_ERROR);
     }
 
-    QueryWrapper queryWrapper = new QueryWrapper();
-    queryWrapper.eq("surrogate_id", surrogateId);
-    int delete = imageCategoryMapper.delete(queryWrapper);
-    if (delete >= 1) {
-      return ApiResp.success();
-    } else {
-      return ApiResp.failure(DEL_ERROR);
-    }
+    return ApiResp.success();
   }
 
 }

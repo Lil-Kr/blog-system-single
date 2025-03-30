@@ -6,35 +6,17 @@ import { SizeType } from 'antd/lib/config-provider/SizeContext'
 import { TablePageInfoType } from '@/types/base'
 import { PaginationProps } from 'antd/lib'
 import { useRoleAclStore } from '@/store/sys/roleStore'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
 
 const TableTransfer: React.FC<TableTransferProps> = props => {
   const { leftColumns, rightColumns, dataSource, ...restProps } = props
 
-  const [transferStyle] = useState<SizeType>('middle')
+  const { tableSize } = useGlobalStyleStore()
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
     currentPageNum: 1,
     pageSize: 20,
     totalSize: 0
   })
-
-  // /**
-  //  * page component
-  //  * @param currentPageNum
-  //  * @param pageSize
-  //  */
-  // const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {}
-
-  // /**
-  //  * page component
-  //  * @param currentPageNum
-  //  * @param pageSize
-  //  */
-  // const onShowSizeChange: PaginationProps['onShowSizeChange'] = (currentPageNum, pageSize) => {
-  //   setTablePageInfo(prevState => ({
-  //     ...prevState,
-  //     pageSize
-  //   }))
-  // }
 
   return (
     <Transfer {...restProps} style={{ width: '100%' }} dataSource={dataSource}>
@@ -58,7 +40,7 @@ const TableTransfer: React.FC<TableTransferProps> = props => {
 
         return (
           <Table
-            size={transferStyle}
+            size={tableSize}
             rowSelection={{ type: 'checkbox', ...rowSelection }}
             bordered={true}
             columns={columns}

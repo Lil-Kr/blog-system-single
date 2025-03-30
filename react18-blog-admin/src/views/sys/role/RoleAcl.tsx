@@ -29,13 +29,13 @@ const RoleAcl = ({ roleId }: { roleId: string }) => {
    * 当roleId 变化时, 重新获取当前角色对应的权限点
    */
   const initRoleAclTree = useCallback(async () => {
-    const roleAclTreeData = roleAclTree()
-    const res = transformRoleAclTreeToAntdTree(await roleAclTreeData)
+    const roleAclTreeData = await roleAclTree()
+    const res = transformRoleAclTreeToAntdTree(roleAclTreeData)
     // 设置角色权限点树结构
     setRoleAclsTree(res)
 
     // 默认展开所有节点
-    const allExpandedKeys = transformAclModuleTreeExpandeKeys(await roleAclTreeData)
+    const allExpandedKeys = transformAclModuleTreeExpandeKeys(roleAclTreeData)
     setExpandedKeys(allExpandedKeys)
 
     const selectKeys = transformSelectedKeys(res)
@@ -107,7 +107,7 @@ const RoleAcl = ({ roleId }: { roleId: string }) => {
           // selectedKeys={selectedKeys}
         />
         <Button style={{ width: '5%' }} onClick={saveRoleAcls}>
-          {'保存'}
+          {'更新权限'}
         </Button>
       </Flex>
     </div>

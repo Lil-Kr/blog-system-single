@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 public class ImageCategoryReq extends BaseEntity {
 
-  public interface GroupImageCategorySave {}
+  public interface GroupImageCategoryAdd {}
   public interface GroupImageCategoryEdit {}
   public interface GroupImageCategoryDel {}
   public interface GroupImageCategoryDelBatch {}
@@ -32,16 +32,15 @@ public class ImageCategoryReq extends BaseEntity {
   @NotNull(groups = {GroupImageCategoryDelBatch.class}, message = "批量删除surrogateId不能为空")
   private List<Long> surrogateIds;
 
-  @NotNull(groups = {GroupImageCategorySave.class, GroupImageCategoryEdit.class}, message = "编号不能为空")
-  private String number;
-
-  @NotNull(groups = {Default.class, GroupImageCategorySave.class}, message = "图片分类名不能为空")
-  @Length(groups = {Default.class, GroupImageCategorySave.class, GroupImageCategoryEdit.class}, max = 50, message = "标签类型名长度在50个字符以内")
+  @NotNull(groups = {Default.class, GroupImageCategoryAdd.class}, message = "图片分类名不能为空")
+  @Length(groups = {Default.class, GroupImageCategoryAdd.class, GroupImageCategoryEdit.class}, max = 50, message = "标签类型名长度在50个字符以内")
   private String name;
 
 //  @NotNull(groups = {GroupImageCategorySave.class}, message = "标题图url不能为空")
   private String imageUrl;
 
-  @Length(groups = {Default.class, GroupImageCategorySave.class, GroupImageCategoryEdit.class},max = 200, message = "备注长度必须在200个字符以内")
+  private Integer status;
+
+  @Length(groups = {Default.class, GroupImageCategoryAdd.class, GroupImageCategoryEdit.class},max = 200, message = "备注长度必须在200个字符以内")
   private String remark;
 }

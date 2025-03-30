@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.ImageCategoryMapper">
-  <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.image.ImageCategory">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="surrogate_id" jdbcType="BIGINT" property="surrogateId" />
-    <result column="number" jdbcType="VARCHAR" property="number" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="deleted" jdbcType="INTEGER" property="deleted" />
-    <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
-    <result column="operator" jdbcType="BIGINT" property="operator" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
 
   <sql id="Table_Name">
     image_category
   </sql>
 
   <sql id="Base_Column_List">
-    id, surrogate_id, `number`, `name`, image_url, `status`, remark, deleted, creator_id, 
-    operator, create_time, update_time
+    surrogate_id, `name`, image_url, `status`, remark, deleted, creator_id, operator, create_time, update_time
   </sql>
 
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.cy.single.blog.pojo.entity.image.ImageCategory">
     select 
     <include refid="Base_Column_List" />
     from image_category
@@ -115,6 +100,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.cy.single.blog.pojo.entity.image.ImageCategory">
     update image_category
     <set>
@@ -154,6 +140,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.cy.single.blog.pojo.entity.image.ImageCategory">
     update image_category
     set surrogate_id = #{surrogateId,jdbcType=BIGINT},
@@ -226,11 +213,9 @@
     <where>
       <if test="param.keyWords != null and param.keyWords != ''">
         and (
-        `number` like concat('%',#{param.keyWords},'%')
-        or
-        `name` like concat('%',#{param.keyWords},'%')
-        or
-        remark like concat('%',#{param.keyWords},'%')
+          `name` like concat('%',#{param.keyWords},'%')
+          or
+          remark like concat('%',#{param.keyWords},'%')
         )
       </if>
     </where>

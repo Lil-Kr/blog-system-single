@@ -10,44 +10,34 @@ import java.util.Date;
 
 /**
  * @Author: Lil-K
- * @Date: 2024/3/31
- * @Description:
+ * @Date: 2025/3/30
+ * @Description: BaseEntity
  */
 @ToString
 @Data
 public class BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = -4120652138040137224L;
+	private static final long serialVersionUID = -4120652138040137224L;
 
-    private String remark;
+	/**
+	 * 创建人
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long creatorId;
 
-    private Integer status;
+	/**
+	 * 修改人
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long operator;
 
-    /**
-     * 默认 0
-     */
-    private Integer deleted = 0;
-    
-    /**
-     * 创建人
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long creatorId;
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
 
-    /**
-     * 修改人
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long operator;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更改时间
-     */
-    private Date updateTime;
-
+	/**
+	 * 更改时间
+	 */
+	private Date updateTime;
 }

@@ -15,8 +15,8 @@ export interface BlogCategory extends BaseEntityRequiredType {
 }
 
 /** ==================== blog type request ====================  */
-export interface BlogCategoryReq extends BaseEntityType {
-  keyWords?: string | number
+export interface BlogCategoryReq {
+  keyWords?: string
 }
 
 export interface BlogCategoryPageReq extends BaseEntityPageType {}

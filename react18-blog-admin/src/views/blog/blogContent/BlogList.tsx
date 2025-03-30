@@ -16,7 +16,7 @@ import { BlogContentModalType, useBlogModalStore, useBlogStore } from '@/store/b
 import BlogModal from './BlogModal'
 import { useDictDetailStore } from '@/store/sys/dictStore'
 import labelApi from '@/apis/blog/label/labelApi'
-import { LabelPageReq } from '@/types/apis/blog/labelType'
+import { LabelListReq, LabelPageListReq } from '@/types/apis/blog/labelType'
 import { SelectProps, Tooltip } from 'antd/lib'
 import { useLabelStore } from '@/store/blog/labelStore'
 // api
@@ -31,7 +31,7 @@ import { transformTypeToSeletorById } from '@/utils/sys/treeUtils'
 import blogCategoryApi from '@/apis/blog/category/categoryApi'
 import { BlogCategoryReq, BlogCategoryVO } from '@/types/apis/blog/category'
 import blogTopicApi from '@/apis/blog/topic/topicApi'
-import { BlogTopicReq, BlogTopicVO } from '@/types/apis/blog/topicType'
+import { BlogTopicListReq, BlogTopicVO } from '@/types/apis/blog/topicType'
 import { useMessage } from '@/components/message/MessageProvider'
 import Link from 'antd/lib/typography/Link'
 
@@ -238,7 +238,7 @@ const BlogList = () => {
       /**
        * 加载博客标签
        */
-      const labelRes = await retrieveLableList({} as LabelPageReq)
+      const labelRes = await retrieveLableList({} as LabelListReq)
       setLabelList(labelRes)
 
       /**
@@ -268,7 +268,7 @@ const BlogList = () => {
   /**
    * 查询标签列表
    */
-  const retrieveLableList = async (req: LabelPageReq): Promise<SelectProps['options']> => {
+  const retrieveLableList = async (req: LabelListReq): Promise<SelectProps['options']> => {
     const res = await labelApi.retrieveLabelList(req)
     const { code, data } = res
     if (code !== 200) {
@@ -286,7 +286,7 @@ const BlogList = () => {
    * 查询[博客-分类]列表
    * @returns
    */
-  const retrieveTopicList = async (req: BlogTopicReq): Promise<BlogTopicVO[]> => {
+  const retrieveTopicList = async (req: BlogTopicListReq): Promise<BlogTopicVO[]> => {
     const res = await blogTopicApi.retrieveTopicList({ ...req })
     const { code, data, msg } = res
     if (code !== 200) {

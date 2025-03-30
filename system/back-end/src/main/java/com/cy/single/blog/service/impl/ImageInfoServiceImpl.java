@@ -6,7 +6,7 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.dao.ImageInfoMapper;
 import com.cy.single.blog.pojo.dto.image.ImageDTO;
 import com.cy.single.blog.pojo.entity.image.ImageInfo;
-import com.cy.single.blog.pojo.req.image.ImageInfoPageReq;
+import com.cy.single.blog.pojo.req.image.ImageInfoPageListReq;
 import com.cy.single.blog.pojo.req.image.ImageInfoReq;
 import com.cy.single.blog.pojo.req.image.ImageUploadReq;
 import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
@@ -68,12 +68,10 @@ public class ImageInfoServiceImpl implements ImageInfoService {
   private MessageLangService msgService;
 
   @Override
-  public PageResult<ImageInfoVO> pageImageInfoList(ImageInfoPageReq req) {
+  public PageResult<ImageInfoVO> pageImageInfoList(ImageInfoPageListReq req) {
     List<ImageInfoVO> pageList = imageInfoMapper.pageImageInfoList(req);
     Integer count = imageInfoMapper.pageImageInfoListCount(req);
-
 //    pageList.forEach(item -> item.setImageCategoryName(CacheManager.getImageCategoryCacheMap().getOrDefault(item.getImageCategoryId(),"")));
-
     if (CollectionUtils.isEmpty(pageList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     }else {
@@ -82,7 +80,7 @@ public class ImageInfoServiceImpl implements ImageInfoService {
   }
 
   @Override
-  public PageResult<ImageInfoVO> imageInfoList(ImageInfoPageReq req) {
+  public PageResult<ImageInfoVO> imageInfoList(ImageInfoPageListReq req) {
     List<ImageInfoVO> list = imageInfoMapper.imageInfoList(req);
     if (CollectionUtils.isEmpty(list)) {
       return new PageResult<>(new ArrayList<>(0), 0);
@@ -92,7 +90,7 @@ public class ImageInfoServiceImpl implements ImageInfoService {
   }
 
   @Override
-  public ApiResp<String> save(ImageInfoReq req) {
+  public ApiResp<String> add(ImageInfoReq req) {
     ImageInfo imageInfo = ImageDTO.convertSaveImageInfo(req);
     int insert = imageInfoMapper.insert(imageInfo);
 
@@ -101,6 +99,11 @@ public class ImageInfoServiceImpl implements ImageInfoService {
     }else {
       return ApiResp.failure(SAVE_ERROR);
     }
+  }
+
+  @Override
+  public ApiResp<String> edit(ImageInfoReq req) {
+    return null;
   }
 
   @Override
@@ -135,18 +138,18 @@ public class ImageInfoServiceImpl implements ImageInfoService {
 
     // delete from DB
     int delete = imageInfoMapper.delete(queryWrapper);
-    if (delete >= 1) {
-      // delete from Disk
-      String filePath = rootDir + imageInfo.getImageUrl();
-      Path delPath = Paths.get(filePath);
-      try {
-        Files.delete(delPath);
-        return ApiResp.success();
-      } catch (IOException e) {
-        log.info("delete image error: {}", e.getMessage());
-        return ApiResp.failure(DEL_ERROR);
-      }
-    } else {
+    if (delete < 1) {
+      return ApiResp.failure(DEL_ERROR);
+    }
+
+    // delete from Disk
+    String filePath = rootDir + imageInfo.getImageUrl();
+    Path delPath = Paths.get(filePath);
+    try {
+      Files.delete(delPath);
+      return ApiResp.success();
+    } catch (IOException e) {
+      log.info("delete image error: {}", e.getMessage());
       return ApiResp.failure(DEL_ERROR);
     }
   }
@@ -219,13 +222,12 @@ public class ImageInfoServiceImpl implements ImageInfoService {
       imageUploadVO.setName(imageInfo.getName());
       imageUploadVO.setUid(String.valueOf(imageInfo.getSurrogateId()));
       imageUploadVO.setUrl(imageUrl);
-      if (insert > 0) {
-        imageUploadVO.setStatus(UPLOAD_IMAGE_DONE);
-        return ApiResp.success(imageUploadVO);
-      }else {
+      if (insert < 1) {
         imageUploadVO.setStatus(UPLOAD_IMAGE_ERROR);
         return ApiResp.failure(imageUploadVO);
       }
+      imageUploadVO.setStatus(UPLOAD_IMAGE_DONE);
+      return ApiResp.success(imageUploadVO);
     } catch (Exception e) {
       log.info("upload image error: {}", e.getMessage());
       imageUploadVO.setMessage(e.getMessage());
@@ -233,5 +235,4 @@ public class ImageInfoServiceImpl implements ImageInfoService {
       return ApiResp.failure(imageUploadVO);
     }
   }
-
 }

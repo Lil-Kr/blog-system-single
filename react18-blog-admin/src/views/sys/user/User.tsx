@@ -148,7 +148,7 @@ const User = () => {
   // 函数式更新值, 不能直接更新
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
     currentPageNum: 1,
-    pageSize: 10,
+    pageSize: 20,
     totalSize: 0
   })
   const [orgTree, setOrgTree] = useState<TreeDataNode[]>([] as TreeDataNode[])
@@ -162,7 +162,6 @@ const User = () => {
    * 初始化数据
    */
   useEffect(() => {
-    // load org info list
     initInfo()
   }, [])
 
@@ -420,7 +419,7 @@ const User = () => {
                 <div className='operation-btn'>
                   <Flex vertical={false} gap='small'>
                     <AddUserButtonAcl
-                      text='新增'
+                      text={'添加'}
                       size={btnSize}
                       type='primary'
                       icon={<PlusOutlined />}

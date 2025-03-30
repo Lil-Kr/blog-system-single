@@ -24,8 +24,8 @@ const blogCategoryApi: BlogCategoryApi = {
   edit(req: EditCategoryReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CATEGORY + '/edit', req)
   },
-  delete(params: DelCategoryReq) {
-    return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_BLOG_CATEGORY + '/delete', params)
+  delete(req: DelCategoryReq) {
+    return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_BLOG_CATEGORY + '/delete', req)
   }
 }
 

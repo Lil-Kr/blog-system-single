@@ -5,7 +5,7 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.pojo.req.image.ImageInfoPageReq;
+import com.cy.single.blog.pojo.req.image.ImageInfoPageListReq;
 import com.cy.single.blog.pojo.req.image.ImageInfoReq;
 import com.cy.single.blog.pojo.req.image.ImageUploadReq;
 import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
@@ -37,7 +37,7 @@ public class ImageInfoController {
   @RecordLogger
   @CheckAuth
   @PostMapping("/pageList")
-  public ApiResp<PageResult<ImageInfoVO>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) ImageInfoPageReq req) {
+  public ApiResp<PageResult<ImageInfoVO>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) ImageInfoPageListReq req) {
     PageResult<ImageInfoVO> imageInfoVOPageResult = imageInfoService.pageImageInfoList(req);
     return ApiResp.success(imageInfoVOPageResult);
   }
@@ -45,23 +45,23 @@ public class ImageInfoController {
   @RecordLogger
   @CheckAuth
   @PostMapping("/list")
-  public ApiResp<PageResult<ImageInfoVO>> list(@RequestBody @Validated ImageInfoPageReq req) {
+  public ApiResp<PageResult<ImageInfoVO>> list(@RequestBody @Validated ImageInfoPageListReq req) {
     PageResult<ImageInfoVO> imageInfoVOPageResult = imageInfoService.imageInfoList(req);
     return ApiResp.success(imageInfoVOPageResult);
   }
 
   @RecordLogger
   @CheckAuth
-  @PostMapping("/save")
-  public ApiResp<String> list(@RequestBody @Validated({ImageInfoReq.GroupImageInfoSave.class}) ImageInfoReq req) {
-    return imageInfoService.save(req);
+  @PostMapping("/add")
+  public ApiResp<String> add(@RequestBody @Validated({ImageInfoReq.GroupImageInfoAdd.class}) ImageInfoReq req) {
+    return imageInfoService.add(req);
   }
 
   @RecordLogger
   @CheckAuth
   @PostMapping("/edit")
   public ApiResp<String> edit(@RequestBody @Validated(ImageInfoReq.GroupImageInfoEdit.class) ImageInfoReq req) {
-    return imageInfoService.save(req);
+    return imageInfoService.edit(req);
   }
 
   @RecordLogger
@@ -73,8 +73,8 @@ public class ImageInfoController {
 
   @RecordLogger
   @CheckAuth
-  @DeleteMapping("/delete")
-  public ApiResp<String> delete(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+  @DeleteMapping("/delete/{imageId}")
+  public ApiResp<String> delete(@PathVariable("imageId") @Valid @NotNull(message = "imageId是必须的") Long surrogateId) {
     return imageInfoService.delete(surrogateId);
   }
 

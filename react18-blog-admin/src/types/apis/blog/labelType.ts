@@ -35,11 +35,11 @@ export interface LabelListTableType {
 /**
  * ==================== label request ====================
  */
-export interface LabelReq extends BaseEntityType {
+export interface LabelListReq {
   keyWord?: string
 }
 
-export interface LabelPageReq extends BaseEntityPageType {}
+export interface LabelPageListReq extends BaseEntityPageType {}
 
 export interface CreateLabelReq {
   number: string
@@ -78,8 +78,8 @@ export interface LabelTableResq extends LabelType {
  * blog label request API type
  */
 export interface LabelApi extends BaseApi {
-  retrieveLabelPageList(req: LabelReq): Promise<ResultPage<LabelTableResq>>
-  retrieveLabelList(req: LabelReq): Promise<ResultPage<LabelTableResq>>
+  retrieveLabelPageList(req: LabelPageListReq): Promise<ResultPage<LabelTableResq>>
+  retrieveLabelList(req: LabelListReq): Promise<ResultPage<LabelTableResq>>
   add(req: CreateLabelReq): Promise<Result<string>>
   edit(req: EditLabelReq): Promise<Result<string>>
   delete(req: DelLabelReq): Promise<Result<string>>

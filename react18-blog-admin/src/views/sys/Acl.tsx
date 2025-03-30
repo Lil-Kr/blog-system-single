@@ -191,12 +191,12 @@ const Acl = () => {
 
   const messageApi = useMessage()
   const MemoTooltip = Tooltip || React.memo(Tooltip)
-  const { btnSize, tableSize } = useGlobalStyleStore()
+  const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
   const [form] = useForm()
   const [tableLoading, setTableLoading] = useState<boolean>(true)
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
     currentPageNum: 1,
-    pageSize: 10,
+    pageSize: 20,
     totalSize: 0
   })
   const [selectedInfo, setSelectedInfo] = useState<SelectOptionType>({} as SelectOptionType)
@@ -224,12 +224,8 @@ const Acl = () => {
    * init
    */
   const initInfo = () => {
-    setTableLoading(true)
-
     // 加载权限模块树
     initAclModuleTreeList()
-
-    setTableLoading(false)
   }
 
   /**
@@ -241,11 +237,11 @@ const Acl = () => {
     // 存入权限模块树数据
     setAclModuleTree(aclModuleList)
 
-    const selectKey = aclModuleList.length > 0 ? aclModuleList[0]?.key.toString() : ''
-    const label = aclModuleList.length > 0 ? aclModuleList[0]?.title ?? '' : ''
+    // const selectKey = aclModuleList.length > 0 ? aclModuleList[0]?.key.toString() : ''
+    // const label = aclModuleList.length > 0 ? aclModuleList[0]?.title ?? '' : ''
 
+    // 加载所有信息
     const aclList = await retrieveAclPageList({
-      aclModuleId: selectKey,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
@@ -254,12 +250,12 @@ const Acl = () => {
     /**
      * 加载当前选中的权限模块信息, 并保存到状态中
      */
-    const aclModule = await getAclModule({ surrogateId: selectKey })
+    // const aclModule = await getAclModule({ surrogateId: selectKey })
 
     /**
      * 首次渲染设置
      */
-    setSelectedInfo({ value: selectKey, label: label.toString(), selectKeys: [selectKey], aclModule: aclModule })
+    // setSelectedInfo({ value: selectKey, label: label.toString(), selectKeys: [selectKey], aclModule })
   }
 
   /**
@@ -307,22 +303,22 @@ const Acl = () => {
   const editAclModule = () => {
     const aclModule = selectedInfo.aclModule
     const req: AclModuleTableType = {
-      key: aclModule.surrogateId,
-      surrogateId: aclModule.surrogateId,
-      name: aclModule.name,
-      parentId: aclModule.parentId,
-      parentName: aclModule.parentName,
+      key: aclModule?.surrogateId,
+      surrogateId: aclModule?.surrogateId,
+      name: aclModule?.name,
+      parentId: aclModule?.parentId,
+      parentName: aclModule?.parentName,
       parentAclModuleInfo: {
-        value: aclModule.parentId,
-        label: aclModule.parentId === '0' ? '-' : aclModule.parentName
+        value: aclModule?.parentId,
+        label: aclModule?.parentId === '0' ? '-' : aclModule?.parentName
       },
-      seq: aclModule.seq,
-      status: aclModule.status,
-      remark: aclModule.remark,
-      menuUrl: aclModule.menuUrl
+      seq: aclModule?.seq,
+      status: aclModule?.status,
+      remark: aclModule?.remark,
+      menuUrl: aclModule?.menuUrl
     }
     // 设置是否需要跳转页面
-    if (aclModule.menuUrl !== '-') {
+    if (aclModule?.menuUrl !== '-') {
       setIsMenu(true)
     } else {
       setIsMenu(false)
@@ -356,22 +352,11 @@ const Acl = () => {
   const selectTreeNode = async (node: SelectTreeNodeType) => {
     const selectKey = node.key.toString()
 
-    const aclTableList = retrieveAclPageList({
-      aclModuleId: selectKey,
-      currentPageNum: 1,
-      pageSize: tablePageInfo.pageSize
-    })
-    /**
-     * 加载权限点列表数据, 并设置到表格中显示
-     */
-    setAclDataSource(await aclTableList)
-
     /**
      * 加载当前选中的权限模块信息, 并保存到状态中
      * // todo 优化此处代码, 减少不必要的请求
      */
     const aclModule = await getAclModule({ surrogateId: selectKey })
-
     setSelectedInfo(prevState => ({
       ...prevState,
       value: node.key.toString(),
@@ -379,18 +364,31 @@ const Acl = () => {
       selectKeys: [selectKey],
       aclModule: aclModule
     }))
+
+    /**
+     * 加载权限点列表数据, 并设置到表格中显示
+     */
+    const aclTableList = await retrieveAclPageList({
+      aclModuleId: selectKey,
+      currentPageNum: 1,
+      pageSize: tablePageInfo.pageSize
+    })
+
+    setAclDataSource(aclTableList)
   }
 
   /**
-   * 获取单挑权限模块信息
+   * 获取单条权限模块信息
    * @param req
    */
   const getAclModule = async (req: AclModuleReq): Promise<SysAclModule> => {
+    setTableLoading(true)
     const aclModule = await aclModuleApi.getAclModule({ ...req })
-    const { code, msg, data } = aclModule
+    const { code, data } = aclModule
     if (code !== 200) {
       return {} as SysAclModule
     }
+    setTableLoading(false)
     return data
   }
 
@@ -398,6 +396,7 @@ const Acl = () => {
    * 分页查询权限点列表
    */
   const retrieveAclPageList = async (req: AclPageListReq): Promise<TableAclListType[]> => {
+    setTableLoading(true)
     const aclPageList = await aclApi.pageList(req)
     const { code, data, msg } = aclPageList
     if (code !== 200) {
@@ -423,6 +422,7 @@ const Acl = () => {
       ...prevState,
       totalSize: data.total
     }))
+    setTableLoading(false)
     return aclList
   }
 
@@ -431,12 +431,13 @@ const Acl = () => {
    */
   const resetSearch = async () => {
     form.resetFields()
-    const aclList = retrieveAclPageList({
-      aclModuleId: selectedInfo.aclModule.surrogateId,
+    const aclList = await retrieveAclPageList({
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
-    setAclDataSource(await aclList)
+    setAclDataSource(aclList)
+    //
+    setSelectedInfo({})
   }
 
   /**
@@ -448,22 +449,11 @@ const Acl = () => {
     onSelectAll: (selected, selectedRows, changeRows) => {}
   }
 
-  /**
-   * page component
-   * @param currentPageNum
-   * @param pageSize
-   */
-  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (currentPageNum, pageSize) => {
-    setTablePageInfo(prevState => ({
-      ...prevState,
-      pageSize
-    }))
-  }
-
   const onChangePageInfo: PaginationProps['onChange'] = async (currentPageNum, pageSize) => {
     const values = form.getFieldsValue()
-    const aclList = retrieveAclPageList({ ...values, currentPageNum, pageSize })
-    setAclDataSource(await aclList)
+    const aclList = await retrieveAclPageList({ ...values, currentPageNum, pageSize })
+    setAclDataSource(aclList)
+    setTablePageInfo(preState => ({ ...preState, currentPageNum, pageSize }))
   }
 
   /**
@@ -496,7 +486,7 @@ const Acl = () => {
     const req = {
       key,
       aclModuleId: selectedInfo.value,
-      aclModuleSurrogateId: selectedInfo.aclModule.surrogateId,
+      aclModuleSurrogateId: selectedInfo.aclModule?.surrogateId,
       aclModuleName: selectedInfo.label,
       type: record.type,
       aclTypeName: record.aclTypeName,
@@ -523,21 +513,21 @@ const Acl = () => {
   }
 
   /**
-   *
+   * 删除权限点
    */
   const deleteItemConfirm = async (record: TableAclListType) => {
     const res = await aclApi.delete({ surrogateId: record.key?.toString() ?? '' })
     if (res.code !== 200) {
       return
     }
-    const aclList = retrieveAclPageList({
+    const aclList = await retrieveAclPageList({
       keyWords: '',
-      aclModuleId: selectedInfo.aclModule.surrogateId,
+      aclModuleId: selectedInfo.aclModule?.surrogateId,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
     // 删除成功后刷新数据
-    setAclDataSource(await aclList)
+    setAclDataSource(aclList)
   }
 
   /**
@@ -603,16 +593,17 @@ const Acl = () => {
                   </Tooltip>
 
                   <Tooltip title='删除权限模块'>
-                  <Popconfirm
-                    title='删除权限模块'
-                    description={`确定要删除 [ ${selectedInfo.label} ] 模块么`}
-                    onConfirm={deleteAclModuleConfirm}
-                    onCancel={cancel}
-                    okText='确定'
-                    cancelText='取消'
-                  >
-                    <Button size={btnSize} color='red' variant='solid' icon={<DeleteOutlined />} />
-                  </Popconfirm></Tooltip>
+                    <Popconfirm
+                      title='删除权限模块'
+                      description={`确定要删除 [ ${selectedInfo.label} ] 模块么`}
+                      onConfirm={deleteAclModuleConfirm}
+                      onCancel={cancel}
+                      okText='确定'
+                      cancelText='取消'
+                    >
+                      <Button size={btnSize} color='red' variant='solid' icon={<DeleteOutlined />} />
+                    </Popconfirm>
+                  </Tooltip>
                 </Flex>
                 <Divider plain>{'权限模块'}</Divider>
                 <Tree
@@ -645,43 +636,40 @@ const Acl = () => {
           </Col>
           <Col span={20} style={{ width: '100%', height: '100%' }}>
             <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
-              <Flex vertical={true} gap={'small'}>
-                <div className='operation-btn'>
-                  <Flex vertical={false} gap='small'>
-                    <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createAcl}>
-                      {'添加'}
-                    </Button>
-                    <Form form={form}>
-                      <Flex gap='small'>
-                        <Form.Item name={'keyWords'} label={'搜索关键字'}>
-                          <Input placeholder={'搜索关键字'} />
-                        </Form.Item>
-                        <Form.Item>
-                          <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
-                        </Form.Item>
-                        <Form.Item>
-                          <Button size={btnSize} type='primary' onClick={resetSearch}>
-                            {'重置'}
-                          </Button>
-                        </Form.Item>
-                      </Flex>
-                    </Form>
-                  </Flex>
-                </div>
-                {/* show table info */}
+              <Flex vertical={true} gap={4}>
+                <Flex className='operation-btn' vertical={false} gap={4}>
+                  <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createAcl}>
+                    {'添加'}
+                  </Button>
+                  <Form form={form}>
+                    <Flex gap='small'>
+                      <Form.Item name={'keyWords'} label={'关键字'}>
+                        <Input size={inputSize} placeholder={'搜索关键字'} />
+                      </Form.Item>
+                      <Form.Item>
+                        <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+                      </Form.Item>
+                      <Form.Item>
+                        <Button size={btnSize} type='primary' onClick={resetSearch}>
+                          {'重置'}
+                        </Button>
+                      </Form.Item>
+                    </Flex>
+                  </Form>
+                </Flex>
                 <div className='list'>
                   <Table<TableAclListType>
                     key={1}
                     size={tableSize}
                     title={() => <Title level={5}>{'权限点列表'}</Title>}
                     bordered={true}
+                    loading={tableLoading}
+                    columns={columnAcl}
+                    dataSource={aclDataSource}
                     rowSelection={{
                       type: 'checkbox',
                       ...rowSelection
                     }}
-                    loading={tableLoading}
-                    columns={columnAcl}
-                    dataSource={aclDataSource}
                     pagination={{
                       position: ['bottomLeft'],
                       showQuickJumper: false, // 跳转指定页面
@@ -689,7 +677,7 @@ const Acl = () => {
                       hideOnSinglePage: false,
                       pageSizeOptions: [10, 20, 50],
                       onChange: onChangePageInfo,
-                      onShowSizeChange: onShowSizeChange,
+                      // onShowSizeChange: onShowSizeChange,
                       pageSize: tablePageInfo.pageSize, // 每页条数
                       total: tablePageInfo.totalSize // 总条数
                     }}

@@ -158,6 +158,8 @@ const AclModal = (props: ModalType.CustomModal) => {
         return
       }
       messageApi?.success(msg)
+    } else {
+      return
     }
 
     /**
@@ -248,7 +250,6 @@ const AclModal = (props: ModalType.CustomModal) => {
   return (
     <div className='baseModal'>
       <Modal
-        // style={{ maxWidth: '100vw' }}
         title={title}
         width={'50vw'}
         okText={'确定'}
@@ -256,11 +257,11 @@ const AclModal = (props: ModalType.CustomModal) => {
         open={openModal}
         onOk={handleOk}
         onCancel={handleCancel}
-        // confirmLoading={confirmLoading}
         destroyOnClose={false}
+        maskClosable={false}
+        // confirmLoading={confirmLoading}
         // afterClose={resetForm}
         // forceRender={true} // 强制渲染
-        maskClosable={false}
       >
         <Form form={modalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
           <Form.Item name={'key'} hidden>

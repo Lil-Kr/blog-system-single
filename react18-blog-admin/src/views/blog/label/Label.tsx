@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table, Tag } from 'antd'
-import { LabelListTableType, LabelPageReq, LabelReq, LabelTableResq } from '@/types/apis/blog/labelType'
+import { LabelListTableType, LabelPageListReq, LabelListReq, LabelTableResq } from '@/types/apis/blog/labelType'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
 import { useMessage } from '@/components/message/MessageProvider'
@@ -208,7 +208,7 @@ const BlogLabel = () => {
   /**
    * 获取标签列表, 不分页
    */
-  const initLabelList = async (req: LabelPageReq) => {
+  const initLabelList = async (req: LabelPageListReq) => {
     const values = form.getFieldsValue()
     const labelPageList = await retrieveLabelPageList({ ...values, ...req })
     const labelTableList = labelTransformToTable(labelPageList)
@@ -220,7 +220,7 @@ const BlogLabel = () => {
    * @param req
    * @returns
    */
-  const retrieveLabelPageList = async (req: LabelPageReq): Promise<LabelTableResq[]> => {
+  const retrieveLabelPageList = async (req: LabelPageListReq): Promise<LabelTableResq[]> => {
     const res = await labelApi.retrieveLabelPageList(req)
     const { code, data } = res
     if (code !== 200) {

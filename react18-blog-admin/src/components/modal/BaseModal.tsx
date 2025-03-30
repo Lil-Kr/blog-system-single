@@ -1,7 +1,7 @@
-import React, { useImperativeHandle, useState } from 'react'
+import { useImperativeHandle, useState } from 'react'
 import { Modal } from 'antd/lib'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { Form, Input } from 'antd'
+import { Form, Input } from 'antd/lib'
 import { useMessage } from '@/components/message/MessageProvider'
 
 const BaseModal = (props: ModalType.BaseModalType) => {

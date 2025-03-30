@@ -11,11 +11,17 @@ import lombok.ToString;
  */
 @ToString
 @Data
-public class ImageCategoryPageReq extends BasePageReq {
+public class ImageInfoPageListReq extends BasePageReq {
 
-  private Integer number;
+  private Long surrogateId;
 
   private String name;
 
+  private String imageOriginalName;
+
+  private String imageType;
+
   private String remark;
+
+  private Long imageCategoryId;
 }

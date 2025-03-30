@@ -1,30 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.ImageInfoMapper">
-  <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.image.ImageInfo">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="surrogate_id" jdbcType="BIGINT" property="surrogateId" />
-    <result column="image_category_id" jdbcType="BIGINT" property="imageCategoryId" />
-    <result column="number" jdbcType="VARCHAR" property="number" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="image_original_name" jdbcType="VARCHAR" property="imageOriginalName" />
-    <result column="image_type" jdbcType="VARCHAR" property="imageType" />
-    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="deleted" jdbcType="INTEGER" property="deleted" />
-    <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
-    <result column="operator" jdbcType="BIGINT" property="operator" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
 
   <sql id="Table_Name">
     image_info
   </sql>
 
   <sql id="Base_Column_List">
-    id, surrogate_id, image_category_id, `number`, `name`, image_original_name, image_type, 
-    image_url, remark, deleted, creator_id, operator, create_time, update_time
+    surrogate_id, `name`, image_original_name, image_type, image_url, remark, deleted, image_category_id, creator_id, operator, create_time, update_time
   </sql>
 
   <sql id="ALIASES_BASE_COLUMN_LIST_A">

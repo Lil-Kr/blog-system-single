@@ -4,7 +4,7 @@ import { PREFIX_URL_BLOG_TOPIC } from '@/config'
 import {
   BlogTopicApi,
   BlogTopicPageReq,
-  BlogTopicReq,
+  BlogTopicListReq,
   BlogTopicVO,
   CreateTopicReq,
   DelTopicReq,
@@ -15,7 +15,7 @@ const blogTopicApi: BlogTopicApi = {
   retrieveTopicPageList(req: BlogTopicPageReq) {
     return baseAxiosRequest.post<ResultPage<BlogTopicVO>>(PREFIX_URL_BLOG_TOPIC + '/pageTopicList', req)
   },
-  retrieveTopicList(req: BlogTopicReq) {
+  retrieveTopicList(req: BlogTopicListReq) {
     return baseAxiosRequest.post<ResultPage<BlogTopicVO>>(PREFIX_URL_BLOG_TOPIC + '/list', req)
   },
   add(req: CreateTopicReq) {

@@ -2,13 +2,10 @@
  *
  */
 export interface BaseEntityType {
-  deleted?: number
-  status?: number // 未使用
-  remark?: string
-  creatorId?: string
-  operator?: string
-  createTime?: string
-  updateTime?: string
+  creatorId: string
+  operator: string
+  createTime: string
+  updateTime: string
   isOrder?: number
 }
 

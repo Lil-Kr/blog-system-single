@@ -93,8 +93,8 @@ export interface SysOrgApi extends BaseApi {
   retrieveOrgTreeList(): Promise<Result<SysOrgResp[]>>
   pageOrgList(req: SysOrgPageReq): Promise<ResultPage<SysOrgResp>>
   orgAllList(req: SysOrgListAllReq): Promise<Result<SysOrgAllResp[]>>
-  add(params: SysOrgSaveReq): Promise<Result<string>>
-  edit(params: SysOrgEditReq): Promise<Result<string>>
-  delete(params: SysOrgDelReq): Promise<Result<string>>
+  add(req: SysOrgSaveReq): Promise<Result<string>>
+  edit(req: SysOrgEditReq): Promise<Result<string>>
+  delete(req: SysOrgDelReq): Promise<Result<string>>
   // deleteBatch(params: DelLabelReq): Promise<Result<string>>
 }

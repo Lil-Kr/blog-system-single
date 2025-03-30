@@ -13,7 +13,7 @@ export interface TopicType extends BaseEntityRequiredType {
 /** ==================== blog topic request ====================  */
 export interface BlogTopicPageReq extends BaseEntityPageType {}
 
-export interface BlogTopicReq extends BaseEntityType {
+export interface BlogTopicListReq {
   keyWords?: string
 }
 
@@ -55,10 +55,10 @@ export interface BlogTopicVO extends TopicType {}
  * blog label request API type
  */
 export interface BlogTopicApi extends BaseApi {
-  retrieveTopicPageList(params: BlogTopicPageReq): Promise<ResultPage<BlogTopicVO>>
-  retrieveTopicList(params: BlogTopicReq): Promise<ResultPage<BlogTopicVO>>
-  add(params: CreateTopicReq): Promise<Result<string>>
-  edit(params: EditTopicReq): Promise<Result<string>>
-  delete(params: DelTopicReq): Promise<Result<string>>
+  retrieveTopicPageList(req: BlogTopicPageReq): Promise<ResultPage<BlogTopicVO>>
+  retrieveTopicList(req: BlogTopicListReq): Promise<ResultPage<BlogTopicVO>>
+  add(req: CreateTopicReq): Promise<Result<string>>
+  edit(req: EditTopicReq): Promise<Result<string>>
+  delete(req: DelTopicReq): Promise<Result<string>>
   // deleteBatch(params: DelLabelReq): Promise<Result<string>>
 }

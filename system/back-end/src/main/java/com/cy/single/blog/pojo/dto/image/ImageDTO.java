@@ -10,7 +10,6 @@ import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import org.springframework.beans.BeanUtils;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -26,8 +25,9 @@ public class ImageDTO {
     BeanUtils.copyProperties(imageCategoryReq, imageCategory);
     imageCategory.setSurrogateId(IdWorker.getSnowFlakeId());
 
-    Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
-    imageCategory.setDeleted(0);
+    Date nowDateTime = DateUtil.localDateTimeNow();
+    imageCategory.setStatus(0);// 默认正常
+    imageCategory.setDeleted(0);// 暂未使用, 默认 0
     imageCategory.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
     imageCategory.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
     imageCategory.setCreateTime(nowDateTime);
@@ -40,7 +40,8 @@ public class ImageDTO {
     BeanUtils.copyProperties(imageInfoReq, imageInfo);
     imageInfo.setSurrogateId(IdWorker.getSnowFlakeId());
 
-    Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
+    Date nowDateTime = DateUtil.localDateTimeNow();
+    imageInfo.setStatus(0);
     imageInfo.setDeleted(0);
     imageInfo.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
     imageInfo.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
@@ -67,9 +68,12 @@ public class ImageDTO {
     imageInfo.setImageType(imageTypeSuffix);
     imageInfo.setImageOriginalName(imageOriginalFullName);
     imageInfo.setImageUrl(imageUrl);
+    imageInfo.setStatus(0); // 未使用
+    imageInfo.setDeleted(0);// 未使用
     imageInfo.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
     imageInfo.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
-    Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
+
+    Date nowDateTime = DateUtil.localDateTimeNow();
     imageInfo.setCreateTime(nowDateTime);
     imageInfo.setUpdateTime(nowDateTime);
 

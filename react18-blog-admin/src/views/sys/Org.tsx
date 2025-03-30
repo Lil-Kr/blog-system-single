@@ -168,7 +168,9 @@ const Org = () => {
     selectedKeys,
     setSelectedKeys,
     selectorInfo,
-    setSelectorInfo
+    setSelectorInfo,
+    tableLoading,
+    setTableLoading
   } = useOrgStore()
 
   const { setOrgModalState } = useOrgModalStore()
@@ -222,6 +224,7 @@ const Org = () => {
    * @param pageSize
    */
   const retrievePageOrgList = async (req: SysOrgPageReq) => {
+    setTableLoading(true)
     const orgPageList = await orgApi.pageOrgList({
       ...req,
       currentPageNum: req.currentPageNum,
@@ -244,6 +247,7 @@ const Org = () => {
       pageSize: req.pageSize,
       currentPageNum: req.currentPageNum
     })
+    setTableLoading(false)
   }
 
   /**
@@ -480,14 +484,14 @@ const Org = () => {
                 {/* show table info */}
                 <div className='list'>
                   <Table
-                    size={tableSize}
                     key={1}
+                    size={tableSize}
                     bordered={true}
                     rowSelection={{
                       type: 'checkbox',
                       ...rowSelection
                     }}
-                    // loading={tableLoading}
+                    loading={tableLoading}
                     columns={orgColumns}
                     dataSource={orgPageList}
                     pagination={{

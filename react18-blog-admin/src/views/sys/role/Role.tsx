@@ -18,7 +18,6 @@ import { useDictDetailStore } from '@/store/sys/dictStore'
 const Role = () => {
   const messageApi = useMessage()
   const MemoTooltip = Tooltip || React.memo(Tooltip)
-  // const [roleStyle] = useState<SizeType>('small')
   const { btnSize, tableSize } = useGlobalStyleStore()
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
   const { dictMap, dictStatues } = useDictDetailStore()

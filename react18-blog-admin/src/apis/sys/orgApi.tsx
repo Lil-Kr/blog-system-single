@@ -22,14 +22,14 @@ const orgApi: SysOrgApi = {
   orgAllList(req: SysOrgListAllReq) {
     return baseAxiosRequest.post<Result<SysOrgAllResp[]>>(PREFIX_URL_SYS_ORG + '/list', req)
   },
-  add(params: SysOrgSaveReq) {
-    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ORG + '/add', params)
+  add(req: SysOrgSaveReq) {
+    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ORG + '/add', req)
   },
-  edit(params: SysOrgEditReq) {
-    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ORG + '/edit', params)
+  edit(req: SysOrgEditReq) {
+    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ORG + '/edit', req)
   },
-  delete(params: SysOrgDelReq) {
-    return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_SYS_ORG + '/delete', params)
+  delete(req: SysOrgDelReq) {
+    return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_SYS_ORG + '/delete', req)
   }
 }
 

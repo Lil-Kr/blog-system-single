@@ -4,7 +4,7 @@ import { CardAction } from '../card'
 import { CardActionProps } from '@/types/component/card'
 import { PageData } from '@/types/base/response'
 
-const ListCardPage = (props: { data: PageData }) => {
+const ListCardPageComp = (props: { data: PageData }) => {
   const { data } = props
   return (
     <div>
@@ -38,4 +38,4 @@ const ListCardPage = (props: { data: PageData }) => {
   )
 }
 
-export default ListCardPage
+export default ListCardPageComp
