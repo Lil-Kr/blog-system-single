@@ -6,8 +6,8 @@ import roleApi from '@/apis/sys/roleApi'
 import { AclModuleTreeResp } from '@/types/apis/sys/acl/aclType'
 import {
   transformAclModuleTreeExpandeKeys,
-  transformRoleAclTreeToAntdTree,
-  transformSelectedKeys
+  processAclModuleTreeData
+  // transformSelectedKeys,
 } from '@/utils/sys/treeUtils'
 import { UpdateRoleAclsReq } from '@/types/apis/sys/role/roleType'
 import { useMessage } from '@/components/message/MessageProvider'
@@ -30,16 +30,16 @@ const RoleAcl = ({ roleId }: { roleId: string }) => {
    */
   const initRoleAclTree = useCallback(async () => {
     const roleAclTreeData = await roleAclTree()
-    const res = transformRoleAclTreeToAntdTree(roleAclTreeData)
     // 设置角色权限点树结构
-    setRoleAclsTree(res)
+    const { checkedKeys, processedTree } = processAclModuleTreeData(roleAclTreeData)
+    setRoleAclsTree(processedTree)
 
     // 默认展开所有节点
     const allExpandedKeys = transformAclModuleTreeExpandeKeys(roleAclTreeData)
     setExpandedKeys(allExpandedKeys)
 
-    const selectKeys = transformSelectedKeys(res)
-    setCheckedAclsKeys(selectKeys)
+    // 设置哪些权限点需要被默认打勾
+    setCheckedAclsKeys(checkedKeys)
   }, [roleId])
 
   /**
@@ -73,7 +73,7 @@ const RoleAcl = ({ roleId }: { roleId: string }) => {
   /**
    * 更新角色-权限点关系
    */
-  const saveRoleAcls = async () => {
+  const updateRoleAcls = async () => {
     const updateRoleAclsReq: UpdateRoleAclsReq = {
       roleId: roleId,
       aclIdList: checkedAclsKeys as string[]
@@ -81,11 +81,11 @@ const RoleAcl = ({ roleId }: { roleId: string }) => {
 
     const res = await roleApi.updateRoleAcls({ ...updateRoleAclsReq })
     const { code, msg } = res
-    if (code !== 200) {
+    if (code >= 500) {
       return
     }
     messageApi.success(msg)
-    initRoleAclTree()
+    await initRoleAclTree()
   }
 
   return (
@@ -102,11 +102,10 @@ const RoleAcl = ({ roleId }: { roleId: string }) => {
           onCheck={onCheck} // 勾选时触发
           treeData={roleAclsTree} // 当前用户对应角色所拥有的权限点
           checkedKeys={checkedAclsKeys}
-
           // onSelect={onSelect} // 点击时触发
           // selectedKeys={selectedKeys}
         />
-        <Button style={{ width: '5%' }} onClick={saveRoleAcls}>
+        <Button style={{ width: '5%' }} onClick={updateRoleAcls}>
           {'更新权限'}
         </Button>
       </Flex>

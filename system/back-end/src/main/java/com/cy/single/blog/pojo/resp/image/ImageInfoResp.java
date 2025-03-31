@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.vo.image;
+package com.cy.single.blog.pojo.resp.image;
 
 import com.cy.single.blog.pojo.entity.image.ImageInfo;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @ToString
 @Data
-public class ImageInfoVO extends ImageInfo implements Serializable {
+public class ImageInfoResp extends ImageInfo implements Serializable {
   private static final long serialVersionUID = 5506127010451586144L;
 
   private String imageCategoryName;

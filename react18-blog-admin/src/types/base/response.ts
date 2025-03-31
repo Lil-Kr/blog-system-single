@@ -1,11 +1,11 @@
 export interface Result<T = any> {
-  code: number | string
+  code: number
   msg: string
   data: T
 }
 
 export interface ResultPage<T = any> {
-  code: number | string
+  code: number
   msg: string
   data: PageData<T>
 }

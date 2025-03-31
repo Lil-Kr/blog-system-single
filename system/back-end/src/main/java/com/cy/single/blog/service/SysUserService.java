@@ -7,7 +7,7 @@ import com.cy.single.blog.pojo.req.user.UserListPageReq;
 import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
 import com.cy.single.blog.pojo.req.user.UserRegisterReq;
 import com.cy.single.blog.pojo.req.user.UserSaveReq;
-import com.cy.single.blog.pojo.vo.sys.user.SysUserVO;
+import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
 
 /**
  * @Author: Lil-K
@@ -18,7 +18,7 @@ public interface SysUserService {
 
 	SysUser getUserById(Long id);
 
-	SysUserVO getUserBySurrogateId(Long surrogateId);
+	SysUserResp getUserBySurrogateId(Long surrogateId);
 
 	ApiResp<SysUser> adminLogin(UserLoginAdminReq reqParam);
 
@@ -26,7 +26,7 @@ public interface SysUserService {
 
 	ApiResp<String> add(UserSaveReq req);
 
-	PageResult<SysUserVO> pageUserList(UserListPageReq req);
+	PageResult<SysUserResp> pageUserList(UserListPageReq req);
 
 	ApiResp<String> edit(UserSaveReq req);
 

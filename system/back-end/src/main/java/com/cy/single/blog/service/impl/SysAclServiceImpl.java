@@ -10,7 +10,7 @@ import com.cy.single.blog.dao.*;
 import com.cy.single.blog.pojo.entity.sys.*;
 import com.cy.single.blog.pojo.req.acl.AclPageReq;
 import com.cy.single.blog.pojo.req.acl.AclReq;
-import com.cy.single.blog.pojo.vo.sys.acl.SysAclVO;
+import com.cy.single.blog.pojo.resp.sys.acl.SysAclResp;
 import com.cy.single.blog.service.SysAclService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
@@ -59,7 +59,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 	 * @throws Exception
 	 */
 	@Override
-	public ApiResp<String> addAcl(AclReq req) {
+	public ApiResp<String> add(AclReq req) {
 		QueryWrapper<SysAcl> query = new QueryWrapper<>();
 		query.eq("name", req.getName());
 		query.eq("acl_module_id", req.getAclModuleId());
@@ -117,7 +117,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 	 * @throws Exception
 	 */
 	@Override
-	public ApiResp<String> editAcl(AclReq req) {
+	public ApiResp<String> edit(AclReq req) {
 		QueryWrapper<SysAcl> query = new QueryWrapper<>();
 		query.eq("surrogate_id", req.getSurrogateId());
 		SysAcl before = aclMapper.selectOne(query);
@@ -173,14 +173,13 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 	 * @throws Exception
 	 */
 	@Override
-	public PageResult<SysAclVO> pageList(AclPageReq req) {
-		List<SysAclVO> list = aclMapper.pageAclList(req);
+	public PageResult<SysAclResp> pageList(AclPageReq req) {
+		List<SysAclResp> list = aclMapper.pageAclList(req);
 		Integer count = aclMapper.countPageAclList(req);
-		if (CollectionUtils.isNotEmpty(list)) {
-			return new PageResult<>(list, count);
-		}else {
+		if (CollectionUtils.isEmpty(list)) {
 			return new PageResult<>(new ArrayList<>(0), 0);
 		}
+		return new PageResult<>(list, count);
 	}
 
 	/**
@@ -233,11 +232,10 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 		QueryWrapper<SysAcl> wrapper = new QueryWrapper<>();
 		wrapper.eq("surrogate_id", surrogateId);
 		int delete = aclMapper.delete(wrapper);
-		if (delete >= 1) {
-			return ApiResp.success();
-		} else {
+		if (delete < 1) {
 			return ApiResp.failure(DEL_ERROR);
 		}
+		return ApiResp.success();
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
-import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
+import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
 
 import java.util.List;
 
@@ -54,13 +54,13 @@ public interface CacheService {
 	/**
 	 * ================================== blog category ===============================
 	 */
-	void saveBlogCategoryCache(List<BlogCategoryVO> categoryList);
+	void saveBlogCategoryCache(List<BlogCategoryResp> categoryList);
 
-	void updateBlogCategoryCache(String key, BlogCategoryVO categoryVO, String sign);
+	void updateBlogCategoryCache(String key, BlogCategoryResp categoryVO, String sign);
 
-	List<BlogCategoryVO> getBlogCategoryListCache(String key);
+	List<BlogCategoryResp> getBlogCategoryListCache(String key);
 
-	BlogCategoryVO getBlogCategoryCache(Long surrogateId);
+	BlogCategoryResp getBlogCategoryCache(Long surrogateId);
 
 	/**
 	 * ================================== blog topic ===============================
@@ -79,4 +79,6 @@ public interface CacheService {
 	void saveUserAclCache(Long surrogateId, List<SysAcl> aclList);
 
 	List<SysAcl> getUserAclListCache(Long userId);
+
+	void invalidUserAclCache(List<Long> userIdList);
 }

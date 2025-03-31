@@ -2,14 +2,17 @@ package com.cy.single.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cy.single.blog.aspect.exceptions.BusinessException;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysAclMapper;
 import com.cy.single.blog.dao.SysRoleAclMapper;
+import com.cy.single.blog.dao.SysRoleUserMapper;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysRoleAcl;
 import com.cy.single.blog.pojo.req.acl.AclReq;
 import com.cy.single.blog.pojo.req.roleacl.RoleAclSaveReq;
+import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysAclCoreService;
 import com.cy.single.blog.service.SysRoleAclService;
@@ -28,6 +31,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
+
 /**
  * @Author: Lil-K
  * @Date: 2025/3/5
@@ -44,6 +49,12 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 	private SysRoleAclMapper roleAclMapper;
 
 	@Autowired
+	private SysRoleUserMapper roleUserMapper;
+
+	@Autowired
+	private CacheService cacheService;
+
+	@Autowired
 	private SysAclMapper aclMapper;
 
 	@Autowired
@@ -58,52 +69,47 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 	@Override
 	public ApiResp<String> updateRoleAcls(RoleAclSaveReq req) {
 		/**
-		 * 将权多个权限点的id转换为Long的列表
+		 * 取出入参中的权限点 id list
 		 */
-		List<Long> aclIdList = req.getAclIdList();
+		List<Long> updateAclIds = req.getAclIdList();
 
 		/**
 		 * 过滤权限模块id, 只保留权限点id
 		 */
 		AclReq aclReq = new AclReq();
 		aclReq.setStatus(0); // 查询所有有效的权限点id
-		Set<Long> aclIdAllSet = Sets.newTreeSet(aclMapper.selectAclIdAllList(aclReq));
-		Set<Long> aclIdsSetTemp = Sets.newTreeSet(aclIdList); // 当前需要更新的权限id
-		Set<Long> aclIdsSet = Sets.newTreeSet(aclIdsSetTemp);
-		aclIdsSetTemp.removeAll(aclIdAllSet);
-		aclIdsSet.removeAll(aclIdsSetTemp);
+		List<Long> aclAllIds = aclMapper.selectAclIdAllList(aclReq);
+		// 将权限点id转为set, 用于比较
+		Set<Long> aclIdAllSet = Sets.newTreeSet(aclAllIds);
+		// 当前需要更新的权限id转为set, 用于比较
+		Set<Long> updateAclIdSet = Sets.newTreeSet(updateAclIds);
+		// 取出有效的权限id
+		Set<Long> includeAclIds = updateAclIdSet.stream().filter(aclIdAllSet::contains).collect(Collectors.toSet());
 
 		/**
-		 * 记录需要更新的有效权限信息
+		 * 记录需要更新的有效权限id
 		 */
-		List<Long> updateIdList = Lists.newArrayList(aclIdsSet);
+		List<Long> updateIdList = Lists.newArrayList(includeAclIds);
+		Set<Long> aclIdSet = Sets.newTreeSet(includeAclIds);
 
 		/**
 		 * 判断将要修改的权限点是否超过了当前用户所拥有的最大权限范围
+		 * 如果 includeAclIds 没有剩余, 说明在当前用户的修改范围内
 		 */
 		List<SysAcl> currentUserAclList = coreService.getCurrentUserAclList();
 		Set<Long> currentUserAclIdSet = currentUserAclList.stream().map(SysAcl::getSurrogateId).collect(Collectors.toSet());
-		aclIdsSet.removeAll(currentUserAclIdSet);
-		if (CollectionUtils.isNotEmpty(aclIdsSet)) {
-			return ApiResp.failure("待更新的权限点超过已有权限");
+
+		includeAclIds.removeAll(currentUserAclIdSet);
+		if (CollectionUtils.isNotEmpty(includeAclIds)) {
+			return ApiResp.warning("待更新的权限点超过已有权限");
 		}
 
 		/**
-		 * 查询当前角色已经分配的权限点id
+		 * 查询当前选中的角色已分配的权限点id
 		 */
 		Set<Long> originAclIdSet = Sets.newTreeSet(roleAclMapper.selectAclIdListByRoleId(req.getRoleId()));
-		Set<Long> aclIdSet = Sets.newTreeSet(aclIdList);
 		if (CollectionUtils.isEqualCollection(originAclIdSet, aclIdSet)) {
 			return ApiResp.warning("没有需要更新的权限点");
-		}
-		originAclIdSet.removeAll(aclIdSet);
-		/**
-		 * 判断角色将要修改的权限点与之前已经分配的权限点数量是否相同, 如果相同则不需要更新
-		 */
-		if (originAclIdSet.size() == aclIdSet.size()) {
-			if (CollectionUtils.isEmpty(originAclIdSet)) {
-				return ApiResp.warning("没有需要更新的权限点");
-			}
 		}
 
 		/**
@@ -111,7 +117,11 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 		 */
 		this.updateRoleAcls(req.getRoleId(), updateIdList);
 
-		// todo 让角色对应的用户权限点缓存失效
+		/**
+		 * 缓存失效: 用户的权限点失效
+		 */
+		List<Long> userIdList = roleUserMapper.selectUserIdListByRoleId(req.getRoleId());
+		cacheService.invalidUserAclCache(userIdList);
 		return ApiResp.success("修改角色对应权限点成功");
 	}
 
@@ -125,10 +135,13 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 		if (CollectionUtils.isEmpty(aclIdList)) {
 			return;
 		}
-		// delete role info
+		// 删除旧 [角色-权限] 对应关系数据
 		QueryWrapper<SysRoleAcl> wrapper = new QueryWrapper<>();
 		wrapper.eq("role_id",roleId);
-		roleAclMapper.delete(wrapper);
+		int delete = roleAclMapper.delete(wrapper);
+		if (delete < 1) {
+			throw new BusinessException(msgService.getGreetingMessage(LANG_ZH, "sys.role.acl.resp.msg5"));
+		}
 
 		// 构建新的角色-权限点对象, 然后批量插入
 		Date currentTime = DateUtil.localDateTimeNow();

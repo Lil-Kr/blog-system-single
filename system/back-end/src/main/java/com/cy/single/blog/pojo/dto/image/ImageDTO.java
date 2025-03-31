@@ -5,7 +5,7 @@ import com.cy.single.blog.pojo.entity.image.ImageCategory;
 import com.cy.single.blog.pojo.entity.image.ImageInfo;
 import com.cy.single.blog.pojo.req.image.ImageCategoryReq;
 import com.cy.single.blog.pojo.req.image.ImageInfoReq;
-import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
+import com.cy.single.blog.pojo.resp.image.ImageInfoResp;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import org.springframework.beans.BeanUtils;
@@ -50,13 +50,13 @@ public class ImageDTO {
     return imageInfo;
   }
 
-  public static ImageInfoVO convertImageInfoVO(ImageInfo imageInfo) {
+  public static ImageInfoResp convertImageInfoVO(ImageInfo imageInfo) {
 //    String imageCategoryName = CacheManager.getImageCategoryCacheMap().getOrDefault(imageInfo.getImageCategoryId(), "");
 //
 //    ImageInfoVO imageInfoVO = new ImageInfoVO();
 //    BeanUtils.copyProperties(imageInfo, imageInfoVO);
 //    imageInfoVO.setImageCategoryName(imageCategoryName);
-    return new ImageInfoVO();
+    return new ImageInfoResp();
   }
 
   public static ImageInfo buildImageInfo(Long imageCategoryId, String imageReName, String imageTypeSuffix, String imageOriginalFullName,

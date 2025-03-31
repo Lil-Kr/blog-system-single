@@ -46,7 +46,7 @@
         </where>
     </delete>
 
-    <select id="getTypeList" resultType="com.cy.single.blog.pojo.vo.blog.BlogCategoryVO">
+    <select id="getTypeList" resultType="com.cy.single.blog.pojo.resp.blog.BlogCategoryResp">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name"/>
         <where>
@@ -82,7 +82,7 @@
         </foreach>
     </delete>
 
-    <select id="pageCategoryList" resultType="com.cy.single.blog.pojo.vo.blog.BlogCategoryVO">
+    <select id="pageCategoryList" resultType="com.cy.single.blog.pojo.resp.blog.BlogCategoryResp">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name"/>
         <where>
@@ -145,7 +145,7 @@
         </where>
     </select>
 
-    <select id="categoryList" resultType="com.cy.single.blog.pojo.vo.blog.BlogCategoryVO">
+    <select id="categoryList" resultType="com.cy.single.blog.pojo.resp.blog.BlogCategoryResp">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         <where>
@@ -173,6 +173,6 @@
         </if>
     </select>
 
-    <select id="frontList" resultType="com.cy.single.blog.pojo.vo.blog.BlogCategoryVO">
+    <select id="frontList" resultType="com.cy.single.blog.pojo.resp.blog.BlogCategoryResp">
     </select>
 </mapper>

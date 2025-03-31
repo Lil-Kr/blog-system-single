@@ -9,7 +9,7 @@ import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
-import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
+import com.cy.single.blog.pojo.resp.blog.BlogLabelResp;
 import com.cy.single.blog.service.BlogLabelService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -38,8 +38,8 @@ public class LabelController {
 	@RecordLogger
 	@CheckAuth
 	@PostMapping("/pageList")
-	public ApiResp<PageResult<BlogLabelVO>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogLabelPageReq req) {
-		PageResult<BlogLabelVO> list = blogLabelService.pageList(req);
+	public ApiResp<PageResult<BlogLabelResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogLabelPageReq req) {
+		PageResult<BlogLabelResp> list = blogLabelService.pageList(req);
 		return ApiResp.success(list);
 	}
 

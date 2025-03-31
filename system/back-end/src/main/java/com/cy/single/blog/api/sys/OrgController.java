@@ -9,7 +9,7 @@ import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.org.OrgPageReq;
 import com.cy.single.blog.pojo.req.org.OrgReq;
-import com.cy.single.blog.pojo.vo.sys.org.SysOrgVO;
+import com.cy.single.blog.pojo.resp.sys.org.SysOrgResp;
 import com.cy.single.blog.service.SysOrgService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,16 +76,16 @@ public class OrgController {
 	@RecordLogger
 	@CheckAuth
 	@PostMapping("/pageOrgList")
-	public ApiResp<PageResult<SysOrgVO>> pageOrgList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) OrgPageReq req) {
-		PageResult<SysOrgVO> list = orgService.pageOrgList(req);
+	public ApiResp<PageResult<SysOrgResp>> pageOrgList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) OrgPageReq req) {
+		PageResult<SysOrgResp> list = orgService.pageOrgList(req);
 		return ApiResp.success(list);
 	}
 
 	@RecordLogger
 	@CheckAuth
 	@PostMapping("list")
-	public ApiResp<List<SysOrgVO>> list(@RequestBody OrgListAllReq req) {
-		List<SysOrgVO> list = orgService.list(req);
+	public ApiResp<List<SysOrgResp>> list(@RequestBody OrgListAllReq req) {
+		List<SysOrgResp> list = orgService.list(req);
 		return ApiResp.success(list);
 	}
 

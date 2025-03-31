@@ -157,7 +157,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <select id="pageList" resultType="com.cy.single.blog.pojo.vo.image.ImageCategoryVO">
+  <select id="pageList" resultType="com.cy.single.blog.pojo.resp.image.ImageCategoryResp">
     select <include refid="Base_Column_List"/>
     from <include refid="Table_Name"/>
     <where>
@@ -207,7 +207,7 @@
     </if>
   </select>
 
-  <select id="imageCategoryList" resultType="com.cy.single.blog.pojo.vo.image.ImageCategoryVO">
+  <select id="imageCategoryList" resultType="com.cy.single.blog.pojo.resp.image.ImageCategoryResp">
     select <include refid="Base_Column_List"/>
     from <include refid="Table_Name"/>
     <where>
@@ -230,7 +230,7 @@
     </if>
   </select>
 
-  <select id="get" resultType="com.cy.single.blog.pojo.vo.image.ImageCategoryVO">
+  <select id="get" resultType="com.cy.single.blog.pojo.resp.image.ImageCategoryResp">
     select <include refid="Base_Column_List"/>
     from <include refid="Table_Name"/>
     where surrogate_id = #{surrogateId}

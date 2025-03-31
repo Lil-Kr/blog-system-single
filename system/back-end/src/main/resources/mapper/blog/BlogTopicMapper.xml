@@ -135,7 +135,7 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
 
-    <select id="pageTopicList" resultType="com.cy.single.blog.pojo.vo.blog.BlogTopicVO">
+    <select id="pageTopicList" resultType="com.cy.single.blog.pojo.resp.blog.BlogTopicResp">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         <where>

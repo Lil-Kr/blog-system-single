@@ -7,8 +7,8 @@ import com.cy.single.blog.pojo.entity.sys.SysDict;
 import com.cy.single.blog.pojo.req.dict.DictDetailReq;
 import com.cy.single.blog.pojo.req.dict.DictListPageReq;
 import com.cy.single.blog.pojo.req.dict.DictSaveReq;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;
+import com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp;
+import com.cy.single.blog.pojo.resp.sys.dic.SysDictResp;
 
 import java.util.List;
 import java.util.Map;
@@ -24,15 +24,15 @@ public interface SysDictService extends IService<SysDict> {
 
 	ApiResp<String> edit(DictSaveReq req);
 
-	PageResult<SysDictVO> listAll();
+	PageResult<SysDictResp> listAll();
 
-	ApiResp<SysDictVO> dictDetail(DictDetailReq req);
+	ApiResp<SysDictResp> dictDetail(DictDetailReq req);
 
-	SysDictVO getDict(Long surrogateId);
+	SysDictResp getDict(Long surrogateId);
 
-	PageResult<SysDictVO> pageDictList(DictListPageReq req);
+	PageResult<SysDictResp> pageDictList(DictListPageReq req);
 
 	ApiResp<String> delete(Long surrogateId);
 
-	ApiResp<Map<String, List<SysDictDetailVO>>> dictDetailTree();
+	ApiResp<Map<String, List<SysDictDetailResp>>> dictDetailTree();
 }

@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.vo.sys.dic;
+package com.cy.single.blog.pojo.resp.sys.dic;
 
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @ToString
 @Data
-public class SysDictDetailVO extends SysDictDetail {
+public class SysDictDetailResp extends SysDictDetail {
 
 	private String parentName;
 }

@@ -4,7 +4,7 @@ import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryPageReq;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryReq;
-import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
+import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ import java.util.List;
  */
 public interface BlogCategoryService {
 
-    PageResult<BlogCategoryVO> pageCategoryList(BlogCategoryPageReq req);
+    PageResult<BlogCategoryResp> pageCategoryList(BlogCategoryPageReq req);
 
-    PageResult<BlogCategoryVO> list(BlogCategoryPageReq req);
+    PageResult<BlogCategoryResp> list(BlogCategoryPageReq req);
 
     ApiResp<String> add(BlogCategoryReq req);
 
@@ -27,5 +27,5 @@ public interface BlogCategoryService {
 
     ApiResp<String> deleteBatch(BlogCategoryReq req);
 
-    List<BlogCategoryVO> frontList();
+    List<BlogCategoryResp> frontList();
 }

@@ -13,7 +13,7 @@ import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.org.OrgPageReq;
 import com.cy.single.blog.pojo.req.org.OrgReq;
-import com.cy.single.blog.pojo.vo.sys.org.SysOrgVO;
+import com.cy.single.blog.pojo.resp.sys.org.SysOrgResp;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysOrgService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
@@ -213,8 +213,8 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 	 * @return
 	 */
 	@Override
-	public PageResult<SysOrgVO> pageOrgList(OrgPageReq req) {
-		List<SysOrgVO> pageList = orgMapper.pageList(req);
+	public PageResult<SysOrgResp> pageOrgList(OrgPageReq req) {
+		List<SysOrgResp> pageList = orgMapper.pageList(req);
 		Integer count = orgMapper.countByList(req);
 		if (CollectionUtils.isEmpty(pageList)) {
 			return new PageResult<>(new ArrayList<>(0), 0);
@@ -223,8 +223,8 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 	}
 
 	@Override
-	public List<SysOrgVO> list(OrgListAllReq req) {
-		List<SysOrgVO> list = orgMapper.retrieveAllList(req);
+	public List<SysOrgResp> list(OrgListAllReq req) {
+		List<SysOrgResp> list = orgMapper.retrieveAllList(req);
 		return list;
 	}
 

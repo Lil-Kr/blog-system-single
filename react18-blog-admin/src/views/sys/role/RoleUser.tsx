@@ -135,7 +135,7 @@ const RoleUser = () => {
           rightColumns={columnsAclUser}
         />
         <Flex justify={'flex-start'} align={'center'} gap={'middle'}>
-          <Button onClick={updateRoleUsers}>{'更新'}</Button>
+          <Button onClick={updateRoleUsers}>{'更新用户'}</Button>
         </Flex>
       </Flex>
     </div>

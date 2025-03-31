@@ -11,7 +11,7 @@ import com.cy.single.blog.dao.SysRoleUserMapper;
 import com.cy.single.blog.pojo.entity.sys.SysRole;
 import com.cy.single.blog.pojo.req.role.RoleListPageReq;
 import com.cy.single.blog.pojo.req.role.RoleSaveReq;
-import com.cy.single.blog.pojo.vo.sys.role.SysRoleVO;
+import com.cy.single.blog.pojo.resp.sys.role.SysRoleResp;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysRoleService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
@@ -49,8 +49,8 @@ public class SysRoleServiceImpl implements SysRoleService {
 	private SysRoleAclMapper roleAclMapper;
 
 	@Override
-	public PageResult<SysRoleVO> pageList(RoleListPageReq req) {
-		List<SysRoleVO> roleList = roleMapper.pageRoleList(req);
+	public PageResult<SysRoleResp> pageList(RoleListPageReq req) {
+		List<SysRoleResp> roleList = roleMapper.pageRoleList(req);
 		Integer count = roleMapper.countRolePage(req);
 		if (CollectionUtils.isEmpty(roleList)) {
 			return new PageResult<>(new ArrayList<>(0), 0);

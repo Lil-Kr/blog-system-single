@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.vo.blog;
+package com.cy.single.blog.pojo.resp.blog;
 
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @ToString
 @Data
-public class BlogLabelVO extends BlogLabel implements Serializable {
+public class BlogLabelResp extends BlogLabel implements Serializable {
 
 	private static final long serialVersionUID = -4260688027806695727L;
 

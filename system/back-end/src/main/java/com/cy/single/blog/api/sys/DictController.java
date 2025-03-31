@@ -6,8 +6,8 @@ import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.dict.*;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;
+import com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp;
+import com.cy.single.blog.pojo.resp.sys.dic.SysDictResp;
 import com.cy.single.blog.service.SysDictDetailService;
 import com.cy.single.blog.service.SysDictService;
 import lombok.extern.slf4j.Slf4j;
@@ -64,8 +64,8 @@ public class DictController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/pageDictList")
-	public ApiResp<PageResult<SysDictVO>> pageDictList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictListPageReq req) {
-		PageResult<SysDictVO> res = dictService.pageDictList(req);
+	public ApiResp<PageResult<SysDictResp>> pageDictList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictListPageReq req) {
+		PageResult<SysDictResp> res = dictService.pageDictList(req);
 		return ApiResp.success(res);
 	}
 
@@ -76,7 +76,7 @@ public class DictController {
 	@CheckAuth
 	@RecordLogger
 	@GetMapping("/dictDetailTree")
-	public ApiResp<Map<String, List<SysDictDetailVO>>> dictDetailTree() {
+	public ApiResp<Map<String, List<SysDictDetailResp>>> dictDetailTree() {
 		return dictService.dictDetailTree();
 	}
 
@@ -89,8 +89,8 @@ public class DictController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/pageDictDetailList")
-	public ApiResp<PageResult<SysDictDetailVO>> pageDictDetailList (@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictDetailPageListReq req) {
-		PageResult<SysDictDetailVO> res = dictDetailService.pageDictDetailList(req);
+	public ApiResp<PageResult<SysDictDetailResp>> pageDictDetailList (@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictDetailPageListReq req) {
+		PageResult<SysDictDetailResp> res = dictDetailService.pageDictDetailList(req);
 		return ApiResp.success(res);
 	}
 
@@ -134,14 +134,14 @@ public class DictController {
 	}
 
 	/**
-	 *
+	 * 根据 字典主表id, 获取分组的字典明细信息
 	 * @param req
 	 * @return
 	 */
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/dictDetail")
-	public ApiResp<SysDictVO> dictDetail(@RequestBody @Validated({DictDetailReq.GroupGetDictDetail.class}) DictDetailReq req) {
+	public ApiResp<SysDictResp> dictDetail(@RequestBody @Validated({DictDetailReq.GroupGetDictDetail.class}) DictDetailReq req) {
 		return dictService.dictDetail(req);
 	}
 }

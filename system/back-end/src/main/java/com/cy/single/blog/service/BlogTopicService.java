@@ -5,7 +5,7 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.entity.blog.BlogTopic;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicPageReq;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicReq;
-import com.cy.single.blog.pojo.vo.blog.BlogTopicVO;
+import com.cy.single.blog.pojo.resp.blog.BlogTopicResp;
 
 /**
  * <p>
@@ -17,7 +17,7 @@ import com.cy.single.blog.pojo.vo.blog.BlogTopicVO;
  */
 public interface BlogTopicService {
 
-  PageResult<BlogTopicVO> pageTopicList(BlogTopicPageReq req);
+  PageResult<BlogTopicResp> pageTopicList(BlogTopicPageReq req);
 
   PageResult<BlogTopic> list(BlogTopicReq req);
 

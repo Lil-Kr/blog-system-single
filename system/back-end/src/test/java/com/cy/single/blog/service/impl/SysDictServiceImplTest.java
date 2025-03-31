@@ -3,7 +3,7 @@ package com.cy.single.blog.service.impl;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.dao.SysDictDetailMapper;
 import com.cy.single.blog.service.SysDictService;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
+import com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,8 +22,8 @@ class SysDictServiceImplTest {
 
 	@Test
 	public void test1() {
-		ApiResp<Map<String, List<SysDictDetailVO>>> mapApiResp = dictService.dictDetailTree();
-		Map<String, List<SysDictDetailVO>> data = mapApiResp.getData();
+		ApiResp<Map<String, List<SysDictDetailResp>>> mapApiResp = dictService.dictDetailTree();
+		Map<String, List<SysDictDetailResp>> data = mapApiResp.getData();
 	}
 
 }

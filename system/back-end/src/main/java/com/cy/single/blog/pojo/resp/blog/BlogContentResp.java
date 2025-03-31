@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.vo.blog;
+package com.cy.single.blog.pojo.resp.blog;
 
 import com.cy.single.blog.pojo.entity.blog.BlogContent;
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @ToString
 @Data
-public class BlogContentVO extends BlogContent implements Serializable {
+public class BlogContentResp extends BlogContent implements Serializable {
 
   private static final long serialVersionUID = -6216586260975821759L;
 

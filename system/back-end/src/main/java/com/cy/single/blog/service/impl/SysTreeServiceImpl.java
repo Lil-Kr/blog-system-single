@@ -124,7 +124,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 	@Override
 	public List<AclModuleDto> aclModuleTree() {
 		// 查询所有权限模块信息
-		List<SysAclModule> aclModuleList = aclModuleMapper.selectList(new QueryWrapper());
+		List<SysAclModule> aclModuleList = aclModuleMapper.selectList(new QueryWrapper<>());
 
 		// 实体集合转为Dto集合
 		List<AclModuleDto> dtoList = aclModuleList.stream().map(AclModuleDto::adapt).collect(Collectors.toList());
@@ -215,11 +215,11 @@ public class SysTreeServiceImpl implements SysTreeService {
 		// 5. 获取所有的权限点列表 list
 		QueryWrapper<SysAcl> query2 = new QueryWrapper<>();
 		query2.eq("status",0); // 获取正常的权限点
-		List<SysAcl> aclAllList = aclMapper.selectList(query2);
+		List<SysAcl> aclList = aclMapper.selectList(query2);
 
 		// 将权限点列表为当前用户标记出访问权限
 		List<AclDto> aclDtoList = Lists.newArrayList();
-		aclAllList.stream()
+		aclList.stream()
 			.map(AclDto::adapt)
 			.forEach(aclDto -> {
 				// 当前用户已拥有的权限点, 可操作
@@ -235,8 +235,7 @@ public class SysTreeServiceImpl implements SysTreeService {
 			});
 
 		// 将权限点与权限模块组装为树结构
-		List<AclModuleDto> aclModuleDtoList = aclListToTree(aclDtoList);
-		return aclModuleDtoList;
+		return this.aclListToTree(aclDtoList);
 	}
 
 	/**

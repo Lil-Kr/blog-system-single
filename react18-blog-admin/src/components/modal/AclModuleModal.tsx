@@ -255,7 +255,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
               options={dictStatues}
             />
           </Form.Item>
-          <Form.Item key={6} name={'menusOpt'} label={'是否跳转页面'}>
+          <Form.Item key={6} name={'menusOpt'} label={'作为父级菜单'}>
             <Select
               onChange={value => handleMenus(value)}
               placeholder={'构成菜单时无需跳转页面'}

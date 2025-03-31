@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons/lib/icons'
-import { Button, Flex, PaginationProps, Popconfirm, Space, Splitter, Tabs, TabsProps, Tag, Tooltip } from 'antd/lib'
-import { OptionType } from '@/types/apis'
-import { SizeType } from 'antd/lib/config-provider/SizeContext'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons/lib/icons'
+import { Button, Flex, PaginationProps, Popconfirm, Splitter, Tabs, TabsProps, Tag, Tooltip } from 'antd/lib'
 import { TableRowSelection } from 'antd/lib/table/interface'
 import { TablePageInfoType } from '@/types/base'
 import { RoleAddReq, RoleEditReq, RoleListPageReq, SysRoleVO, TableRoleType } from '@/types/apis/sys/role/roleType'
@@ -17,7 +15,6 @@ import { useDictDetailStore } from '@/store/sys/dictStore'
 
 const Role = () => {
   const messageApi = useMessage()
-  const MemoTooltip = Tooltip || React.memo(Tooltip)
   const { btnSize, tableSize } = useGlobalStyleStore()
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
   const { dictMap, dictStatues } = useDictDetailStore()
@@ -34,7 +31,7 @@ const Role = () => {
    */
   const { roleId, setRoleId, selectedRowKeys, setSelectedRowKey, roleList, setRoleList } = useRoleAclStore()
 
-  const { roleTypes, setRoleType } = useDictDetailStore()
+  const { roleTypes } = useDictDetailStore()
   /**
    * 角色列表的列配置
    */

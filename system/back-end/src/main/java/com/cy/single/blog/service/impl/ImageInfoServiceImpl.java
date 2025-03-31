@@ -9,8 +9,8 @@ import com.cy.single.blog.pojo.entity.image.ImageInfo;
 import com.cy.single.blog.pojo.req.image.ImageInfoPageListReq;
 import com.cy.single.blog.pojo.req.image.ImageInfoReq;
 import com.cy.single.blog.pojo.req.image.ImageUploadReq;
-import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
-import com.cy.single.blog.pojo.vo.image.ImageUploadVO;
+import com.cy.single.blog.pojo.resp.image.ImageInfoResp;
+import com.cy.single.blog.pojo.resp.image.ImageUploadResp;
 import com.cy.single.blog.service.ImageInfoService;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
@@ -68,8 +68,8 @@ public class ImageInfoServiceImpl implements ImageInfoService {
   private MessageLangService msgService;
 
   @Override
-  public PageResult<ImageInfoVO> pageImageInfoList(ImageInfoPageListReq req) {
-    List<ImageInfoVO> pageList = imageInfoMapper.pageImageInfoList(req);
+  public PageResult<ImageInfoResp> pageImageInfoList(ImageInfoPageListReq req) {
+    List<ImageInfoResp> pageList = imageInfoMapper.pageImageInfoList(req);
     Integer count = imageInfoMapper.pageImageInfoListCount(req);
 //    pageList.forEach(item -> item.setImageCategoryName(CacheManager.getImageCategoryCacheMap().getOrDefault(item.getImageCategoryId(),"")));
     if (CollectionUtils.isEmpty(pageList)) {
@@ -80,8 +80,8 @@ public class ImageInfoServiceImpl implements ImageInfoService {
   }
 
   @Override
-  public PageResult<ImageInfoVO> imageInfoList(ImageInfoPageListReq req) {
-    List<ImageInfoVO> list = imageInfoMapper.imageInfoList(req);
+  public PageResult<ImageInfoResp> imageInfoList(ImageInfoPageListReq req) {
+    List<ImageInfoResp> list = imageInfoMapper.imageInfoList(req);
     if (CollectionUtils.isEmpty(list)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     }else {
@@ -107,7 +107,7 @@ public class ImageInfoServiceImpl implements ImageInfoService {
   }
 
   @Override
-  public ApiResp<ImageInfoVO> get(Long surrogateId) {
+  public ApiResp<ImageInfoResp> get(Long surrogateId) {
     QueryWrapper<ImageInfo> queryWrapper = new QueryWrapper<>();
     queryWrapper.eq("surrogate_id", surrogateId);
     ImageInfo imageInfo = imageInfoMapper.selectOne(queryWrapper);
@@ -115,8 +115,8 @@ public class ImageInfoServiceImpl implements ImageInfoService {
       return ApiResp.failure(INFO_NOT_EXIST);
     }
 
-    ImageInfoVO imageInfoVO = ImageDTO.convertImageInfoVO(imageInfo);
-    return ApiResp.success(imageInfoVO);
+    ImageInfoResp imageInfoResp = ImageDTO.convertImageInfoVO(imageInfo);
+    return ApiResp.success(imageInfoResp);
   }
 
   @Override
@@ -155,7 +155,7 @@ public class ImageInfoServiceImpl implements ImageInfoService {
   }
 
   @Override
-  public ApiResp<ImageUploadVO> imageUpload(ImageUploadReq req) throws IOException {
+  public ApiResp<ImageUploadResp> imageUpload(ImageUploadReq req) throws IOException {
     MultipartFile imageFile = req.getImage();
     // 检查文件大小，限制为 15MB
     long maxSizeInBytes = 10 * 1024 * 1024; // 15MB
@@ -184,7 +184,7 @@ public class ImageInfoServiceImpl implements ImageInfoService {
     String imageReName = imageName + "_" + IdWorker.getSnowFlakeId() + "." + imageTypeSuffix;
     resourcePath.append(moduleImagePath + "/" + imageReName);
 
-    ImageUploadVO imageUploadVO = new ImageUploadVO();
+    ImageUploadResp imageUploadResp = new ImageUploadResp();
     try(InputStream inputStream = imageFile.getInputStream()) {
       /**
        * write image to disk
@@ -206,9 +206,9 @@ public class ImageInfoServiceImpl implements ImageInfoService {
         writer.write(null, new IIOImage(originalImage, null, null), writeParam);
       } catch (Exception e) {
         log.info("image format webp error: {}", e.getMessage());
-        imageUploadVO.setMessage(e.getMessage());
-        imageUploadVO.setStatus(UPLOAD_IMAGE_ERROR);
-        return ApiResp.failure(imageUploadVO);
+        imageUploadResp.setMessage(e.getMessage());
+        imageUploadResp.setStatus(UPLOAD_IMAGE_ERROR);
+        return ApiResp.failure(imageUploadResp);
       }
 
       /**
@@ -219,20 +219,20 @@ public class ImageInfoServiceImpl implements ImageInfoService {
       ImageInfo imageInfo = ImageDTO.buildImageInfo(req.getImageCategoryId(), imageReName, imageTypeSuffix, imageOriginalFullName, imageUrl);
       int insert = imageInfoMapper.insert(imageInfo);
 
-      imageUploadVO.setName(imageInfo.getName());
-      imageUploadVO.setUid(String.valueOf(imageInfo.getSurrogateId()));
-      imageUploadVO.setUrl(imageUrl);
+      imageUploadResp.setName(imageInfo.getName());
+      imageUploadResp.setUid(String.valueOf(imageInfo.getSurrogateId()));
+      imageUploadResp.setUrl(imageUrl);
       if (insert < 1) {
-        imageUploadVO.setStatus(UPLOAD_IMAGE_ERROR);
-        return ApiResp.failure(imageUploadVO);
+        imageUploadResp.setStatus(UPLOAD_IMAGE_ERROR);
+        return ApiResp.failure(imageUploadResp);
       }
-      imageUploadVO.setStatus(UPLOAD_IMAGE_DONE);
-      return ApiResp.success(imageUploadVO);
+      imageUploadResp.setStatus(UPLOAD_IMAGE_DONE);
+      return ApiResp.success(imageUploadResp);
     } catch (Exception e) {
       log.info("upload image error: {}", e.getMessage());
-      imageUploadVO.setMessage(e.getMessage());
-      imageUploadVO.setStatus(UPLOAD_IMAGE_ERROR);
-      return ApiResp.failure(imageUploadVO);
+      imageUploadResp.setMessage(e.getMessage());
+      imageUploadResp.setStatus(UPLOAD_IMAGE_ERROR);
+      return ApiResp.failure(imageUploadResp);
     }
   }
 }

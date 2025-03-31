@@ -7,7 +7,7 @@ import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.acl.AclPageReq;
 import com.cy.single.blog.pojo.req.acl.AclReq;
-import com.cy.single.blog.pojo.vo.sys.acl.SysAclVO;
+import com.cy.single.blog.pojo.resp.sys.acl.SysAclResp;
 import com.cy.single.blog.service.SysAclService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +39,8 @@ public class AclController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/pageList")
-	public ApiResp<PageResult<SysAclVO>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) AclPageReq req) {
-		PageResult<SysAclVO> res = aclService.pageList(req);
+	public ApiResp<PageResult<SysAclResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) AclPageReq req) {
+		PageResult<SysAclResp> res = aclService.pageList(req);
 		return ApiResp.success(res);
 	}
 
@@ -51,9 +51,9 @@ public class AclController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("/addAcl")
-	public ApiResp<String> addAcl(@RequestBody @Valid AclReq req) {
-		return aclService.addAcl(req);
+	@PostMapping("/add")
+	public ApiResp<String> add(@RequestBody @Valid AclReq req) {
+		return aclService.add(req);
 	}
 
 	/**
@@ -63,21 +63,21 @@ public class AclController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("/editAcl")
-	public ApiResp<String> editAcl(@RequestBody @Valid AclReq req) {
-		return aclService.editAcl(req);
+	@PostMapping("/edit")
+	public ApiResp<String> edit(@RequestBody @Valid AclReq req) {
+		return aclService.edit(req);
 	}
 
 	/**
 	 * 删除权限点
-	 * @param surrogateId
+	 * @param aclId
 	 * @return
 	 */
 	@RecordLogger
 	@CheckAuth
-	@DeleteMapping("/delete")
-	public ApiResp<String> delete(@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
-		return aclService.delete(surrogateId);
+	@DeleteMapping("/delete/{aclId}")
+	public ApiResp<String> delete(@PathVariable("aclId") @NotNull(message = "surrogateId是必须的") Long aclId) {
+		return aclService.delete(aclId);
 	}
 
 }

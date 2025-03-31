@@ -1,6 +1,6 @@
-package com.cy.single.blog.pojo.vo.sys.role;
+package com.cy.single.blog.pojo.resp.sys.role;
 
-import com.cy.single.blog.pojo.vo.sys.user.SysUserVO;
+import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
@@ -16,11 +16,11 @@ import java.util.List;
 @ToString
 @Data
 @Builder
-public class RoleUserVO implements Serializable {
+public class RoleUserResp implements Serializable {
 
 	private static final long serialVersionUID = 7237593845976133220L;
 
-	private List<SysUserVO> selectedUserList;
+	private List<SysUserResp> selectedUserList;
 
-	private List<SysUserVO> unSelectedUserList;
+	private List<SysUserResp> unSelectedUserList;
 }

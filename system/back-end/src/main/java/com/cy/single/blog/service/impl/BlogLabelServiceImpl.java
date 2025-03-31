@@ -10,7 +10,7 @@ import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
-import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
+import com.cy.single.blog.pojo.resp.blog.BlogLabelResp;
 import com.cy.single.blog.service.BlogLabelService;
 import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
@@ -41,8 +41,8 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 	private CacheService cacheService;
 
 	@Override
-	public PageResult<BlogLabelVO> pageList(BlogLabelPageReq req) {
-		List<BlogLabelVO> pageList = blogLabelMapper.pageList(req);
+	public PageResult<BlogLabelResp> pageList(BlogLabelPageReq req) {
+		List<BlogLabelResp> pageList = blogLabelMapper.pageList(req);
 		Integer count = blogLabelMapper.getCountByList(req);
 		if (CollectionUtils.isEmpty(pageList)) {
 			return new PageResult<>(new ArrayList<>(0), 0);

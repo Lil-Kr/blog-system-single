@@ -61,28 +61,6 @@ export const transformToAclModuleTreeData = (data: AclModuleTreeResp[]): TreeDat
 }
 
 /**
- * 将当前用户对应角色的权限点tree 转换为 antd-tree 组件所需的 treeData 格式
- * @param list
- */
-export const transformRoleAclTreeToAntdTree = (aclModules: AclModuleTreeResp[]): RoleAclTreeType[] => {
-  return aclModules.map(module => ({
-    key: module.surrogateId, // 设定 key
-    title: module.name, // 设定 title
-    children: [
-      // 先处理权限点 (aclDtoList)
-      ...module.aclDtoList.map((acl: SysAclDto) => ({
-        key: acl.surrogateId,
-        title: acl.name,
-        checked: acl.checked, // 设置 checked 属性
-        hasAcl: acl.hasAcl
-      })),
-      // 递归处理子模块 (aclModuleDtoList)
-      ...transformRoleAclTreeToAntdTree(module.aclModuleDtoList)
-    ]
-  }))
-}
-
-/**
  * 收集所有的权限模块id, 作为默认展开所有节点用
  */
 export const transformAclModuleTreeExpandeKeys = (data: AclModuleTreeResp[]): string[] => {
@@ -97,33 +75,110 @@ export const transformAclModuleTreeExpandeKeys = (data: AclModuleTreeResp[]): st
 }
 
 /**
- * 将需要选中的keys 转换为 antd-tree 组件所需的 checkedKeys 格式
+ *
+ * @param aclModules
+ * @returns
  */
-export const transformSelectedKeys = (treeList: RoleAclTreeType[]): string[] => {
-  if (treeList.length === 0) return []
-  const selectedKeys: string[] = []
+interface EnhancedTreeType {
+  key: string
+  title: string
+  children?: EnhancedTreeType[]
+  checked?: boolean
+  hasAcl?: boolean
+  disabled?: boolean
+  indeterminate?: boolean
+}
 
-  const traverse = (treeList: RoleAclTreeType[]) => {
-    treeList.forEach(tree => {
-      // 如果是叶子节点且选中, 添加到 selectedKeys
-      if (tree.checked === true && (!tree.children || tree.children.length === 0)) {
-        selectedKeys.push(tree.key as string)
-      }
-      if (tree.hasAcl === false) {
-        tree.disableCheckbox = true
-      } else {
-        tree.disableCheckbox = false
+/**
+ * 将AclModuleTreeResp[]转换为EnhancedTreeType[]
+ */
+const convertAclModuleToEnhancedTree = (aclModules: AclModuleTreeResp[]): EnhancedTreeType[] => {
+  return aclModules.map(module => ({
+    key: module.surrogateId,
+    title: module.name,
+    checked: false, // 模块默认不选中
+    hasAcl: true, // 模块默认有权限
+    children: [
+      // 处理权限点
+      ...module.aclDtoList.map(acl => ({
+        key: acl.surrogateId,
+        title: acl.name,
+        checked: acl.checked,
+        hasAcl: acl.hasAcl
+      })),
+      // 递归处理子模块
+      ...convertAclModuleToEnhancedTree(module.aclModuleDtoList)
+    ]
+  }))
+}
+
+/**
+ * 增强版树形数据处理（直接接受AclModuleTreeResp[]）
+ */
+export const processAclModuleTreeData = (
+  roleAclTreeData: AclModuleTreeResp[]
+): {
+  checkedKeys: string[]
+  processedTree: EnhancedTreeType[]
+} => {
+  // 先转换为EnhancedTreeType格式
+  const enhancedTree = convertAclModuleToEnhancedTree(roleAclTreeData)
+
+  const checkedKeys: string[] = []
+  const processedTree: EnhancedTreeType[] = JSON.parse(JSON.stringify(enhancedTree))
+
+  const traverse = (
+    nodes: EnhancedTreeType[]
+  ): {
+    allDisabled: boolean
+    someChecked: boolean
+    allChecked: boolean
+  } => {
+    let allDisabled = true
+    let someChecked = false
+    let allChecked = true
+
+    nodes.forEach(node => {
+      // 初始化节点状态
+      node.disabled = node.hasAcl === false
+      node.indeterminate = false
+
+      // 处理子节点
+      if (node.children && node.children.length > 0) {
+        const childrenStatus = traverse(node.children)
+
+        // 更新当前节点状态
+        if (childrenStatus.someChecked) someChecked = true
+        if (!childrenStatus.allChecked) allChecked = false
+        if (!childrenStatus.allDisabled) allDisabled = false
+
+        // 设置父节点的indeterminate状态
+        if (childrenStatus.someChecked || node.checked) {
+          node.indeterminate = !allChecked
+        }
       }
 
-      // 如果有子节点, 继续递归遍历
-      if (tree.children && tree.children.length > 0) {
-        traverse(tree.children)
+      // 如果是叶子节点且选中
+      if (node.checked && (!node.children || node.children.length === 0)) {
+        checkedKeys.push(node.key)
+        someChecked = true
+      }
+
+      // 如果所有子节点都被禁用，当前节点也应被禁用
+      if (node.children && node.children.every(child => child.disabled)) {
+        node.disabled = true
       }
     })
+
+    return { allDisabled, someChecked, allChecked }
   }
 
-  traverse(treeList)
-  return selectedKeys
+  traverse(processedTree)
+
+  return {
+    checkedKeys,
+    processedTree
+  }
 }
 
 /**

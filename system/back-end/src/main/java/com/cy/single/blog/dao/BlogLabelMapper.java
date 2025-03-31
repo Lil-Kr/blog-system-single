@@ -5,7 +5,7 @@ import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
-import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
+import com.cy.single.blog.pojo.resp.blog.BlogLabelResp;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public interface BlogLabelMapper extends BaseMapper<com.cy.single.blog.pojo.enti
 
 	Integer deleteBatch(List<Long> list);
 
-	List<BlogLabelVO> pageList(@Param("param") BlogLabelPageReq req);
+	List<BlogLabelResp> pageList(@Param("param") BlogLabelPageReq req);
 
 	Integer getCountByList(@Param("param") BlogLabelPageReq req);
 }

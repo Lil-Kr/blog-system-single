@@ -75,7 +75,7 @@
         </foreach>
     </delete>
 
-    <select id="pageList" resultType="com.cy.single.blog.pojo.vo.blog.BlogLabelVO">
+    <select id="pageList" resultType="com.cy.single.blog.pojo.resp.blog.BlogLabelResp">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name"/>
         <where>

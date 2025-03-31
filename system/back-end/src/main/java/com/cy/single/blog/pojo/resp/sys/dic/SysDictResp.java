@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.vo.sys.dic;
+package com.cy.single.blog.pojo.resp.sys.dic;
 
 import com.cy.single.blog.pojo.entity.sys.SysDict;
 import lombok.Data;
@@ -13,6 +13,6 @@ import java.util.List;
  */
 @ToString
 @Data
-public class SysDictVO extends SysDict {
-	private List<SysDictDetailVO> dictDetailVOList;
+public class SysDictResp extends SysDict {
+	private List<SysDictDetailResp> dictDetailVOList;
 }

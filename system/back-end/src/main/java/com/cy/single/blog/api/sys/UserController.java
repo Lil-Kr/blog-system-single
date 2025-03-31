@@ -11,7 +11,7 @@ import com.cy.single.blog.pojo.req.user.UserListPageReq;
 import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
 import com.cy.single.blog.pojo.req.user.UserRegisterReq;
 import com.cy.single.blog.pojo.req.user.UserSaveReq;
-import com.cy.single.blog.pojo.vo.sys.user.SysUserVO;
+import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +62,13 @@ public class UserController {
 
 	@CheckAuth
 	@RecordLogger
+	@PostMapping("/register")
+	public ApiResp<Integer> register(@RequestBody @Valid UserRegisterReq req) {
+		return userService.registerAdmin(req);
+	}
+
+	@CheckAuth
+	@RecordLogger
 	@PostMapping("/add")
 	public ApiResp<String> add(@RequestBody @Validated({UserSaveReq.GroupAddUser.class}) UserSaveReq req) {
 		return userService.add(req);
@@ -81,14 +88,6 @@ public class UserController {
 		return userService.delete(surrogateId);
 	}
 
-	@CheckAuth
-	@RecordLogger
-	@GetMapping("/get/{surrogateId}")
-	public ApiResp<SysUser> get(@PathVariable("surrogateId") Long surrogateId) {
-		SysUser user = userService.getUserBySurrogateId(surrogateId);
-		return ApiResp.success(user);
-	}
-
 	/**
 	 * 获取后台用户数据
 	 * @return
@@ -102,26 +101,16 @@ public class UserController {
 		return ApiResp.success(currentUser);
 	}
 
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/register")
-	public ApiResp<Integer> register(@RequestBody @Valid UserRegisterReq req) {
-		return userService.registerAdmin(req);
-	}
-
-	@CheckAuth
-	@RecordLogger
-	@GetMapping("/getUserById/{id}")
-	public ApiResp<SysUser> getUserById(@PathVariable("id") Long id) {
-		SysUser user = userService.getUserById(id);
-		return ApiResp.success(user);
-	}
-
+	/**
+	 * 分页-查询用户列表
+	 * @param req
+	 * @return
+	 */
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/pageUserList")
-	public ApiResp<PageResult<SysUserVO>> pageUserList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) UserListPageReq req) {
-		PageResult<SysUserVO> result = userService.pageUserList(req);
+	public ApiResp<PageResult<SysUserResp>> pageUserList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) UserListPageReq req) {
+		PageResult<SysUserResp> result = userService.pageUserList(req);
 		return ApiResp.success(result);
 	}
 

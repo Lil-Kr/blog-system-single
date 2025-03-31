@@ -16,9 +16,9 @@ import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
 import com.cy.single.blog.pojo.req.dict.SaveDictDetailReq;
-import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
-import com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO;
-import com.cy.single.blog.pojo.vo.blog.BlogContentVO;
+import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
+import com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp;
+import com.cy.single.blog.pojo.resp.blog.BlogContentResp;
 import com.cy.single.blog.service.BlogContentService;
 import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.SysDictDetailService;
@@ -107,8 +107,8 @@ public class BlogContentServiceImpl implements BlogContentService {
    * @return
    */
   @Override
-  public PageResult<BlogContentVO> pageContentList(BlogContentPageReq req) {
-    List<BlogContentVO> pageList = blogContentMapper.pageContentList(req);
+  public PageResult<BlogContentResp> pageContentList(BlogContentPageReq req) {
+    List<BlogContentResp> pageList = blogContentMapper.pageContentList(req);
     Integer count = blogContentMapper.contentCount(req);
     if (CollectionUtils.isEmpty(pageList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
@@ -122,7 +122,7 @@ public class BlogContentServiceImpl implements BlogContentService {
       item.setBlogLabelList(labelList);
 
       // 分类信息
-      BlogCategoryVO categoryVO = cacheService.getBlogCategoryCache(item.getCategoryId());
+      BlogCategoryResp categoryVO = cacheService.getBlogCategoryCache(item.getCategoryId());
       item.setCategoryName(categoryVO.getName());
       item.setCategoryColor(categoryVO.getColor());
 
@@ -148,8 +148,8 @@ public class BlogContentServiceImpl implements BlogContentService {
   }
 
   @Override
-  public PageResult<BlogContentVO> contentList(BlogContentPageReq req) {
-    List<BlogContentVO> list = blogContentMapper.contentList(req);
+  public PageResult<BlogContentResp> contentList(BlogContentPageReq req) {
+    List<BlogContentResp> list = blogContentMapper.contentList(req);
     if (CollectionUtils.isEmpty(list)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
@@ -184,7 +184,7 @@ public class BlogContentServiceImpl implements BlogContentService {
 
 
   @Override
-  public ApiResp<BlogContentVO> get(Long surrogateId) {
+  public ApiResp<BlogContentResp> get(Long surrogateId) {
     QueryWrapper<BlogContent> queryWrapper = new QueryWrapper<>();
     queryWrapper.eq("surrogate_id", surrogateId);
     BlogContent blogContent = blogContentMapper.selectOne(queryWrapper);
@@ -198,7 +198,7 @@ public class BlogContentServiceImpl implements BlogContentService {
       return ApiResp.failure(INFO_NOT_EXIST);
     }
 
-    BlogContentVO res = new BlogContentVO();
+    BlogContentResp res = new BlogContentResp();
     BeanUtils.copyProperties(blogContent, res);
     res.setContentText(blogContentMongo.getContentText());
 
@@ -265,9 +265,9 @@ public class BlogContentServiceImpl implements BlogContentService {
   }
 
   @Override
-  public ApiResp<BlogContentVO> getContent(Long blogId) {
+  public ApiResp<BlogContentResp> getContent(Long blogId) {
     BlogContentMongo blogContentMongo = getBlogContentMongo(blogId);
-    BlogContentVO res = new BlogContentVO();
+    BlogContentResp res = new BlogContentResp();
     res.setSurrogateId(blogId);
 
     if (Objects.isNull(blogContentMongo)) {
@@ -280,8 +280,8 @@ public class BlogContentServiceImpl implements BlogContentService {
   }
 
   @Override
-  public ApiResp<List<BlogContentVO>> frontContentList() {
-    List<BlogContentVO> res = blogContentMapper.frontContentList();
+  public ApiResp<List<BlogContentResp>> frontContentList() {
+    List<BlogContentResp> res = blogContentMapper.frontContentList();
     if (CollectionUtils.isEmpty(res)) {
       return ApiResp.success(new ArrayList<>());
     }
@@ -289,13 +289,13 @@ public class BlogContentServiceImpl implements BlogContentService {
   }
 
   @Override
-  public List<BlogContentGroupVO> frontContentByGroupCategory() {
+  public List<BlogContentGroupResp> frontContentByGroupCategory() {
     return blogContentMapper.frontContentByGroupCategory();
   }
 
   @Override
-  public PageResult<BlogContentVO> frontContentPageList(BlogContentPageReq req) {
-    List<BlogContentVO> pageList = blogContentMapper.frontContentPageList(req);
+  public PageResult<BlogContentResp> frontContentPageList(BlogContentPageReq req) {
+    List<BlogContentResp> pageList = blogContentMapper.frontContentPageList(req);
     if (CollectionUtils.isEmpty(pageList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     }

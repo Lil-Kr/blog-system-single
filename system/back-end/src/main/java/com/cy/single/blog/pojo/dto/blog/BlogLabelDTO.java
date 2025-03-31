@@ -4,7 +4,7 @@ import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
-import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
+import com.cy.single.blog.pojo.resp.blog.BlogLabelResp;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import org.springframework.beans.BeanUtils;
@@ -64,10 +64,10 @@ public class BlogLabelDTO {
      * @param blogLabels
      * @return
      */
-    public static List<BlogLabelVO> convertLabelsToVO(List<com.cy.single.blog.pojo.entity.blog.BlogLabel> blogLabels) {
+    public static List<BlogLabelResp> convertLabelsToVO(List<com.cy.single.blog.pojo.entity.blog.BlogLabel> blogLabels) {
         return blogLabels.stream()
                 .map(blogLabel -> {
-                    BlogLabelVO req = new BlogLabelVO();
+                    BlogLabelResp req = new BlogLabelResp();
                     BeanUtils.copyProperties(blogLabel, req);
                     return req;
                 })

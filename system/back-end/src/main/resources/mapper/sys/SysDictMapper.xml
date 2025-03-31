@@ -12,13 +12,13 @@
         id, surrogate_id, `name`, remark, operator, operate_ip, deleted, create_time, update_time
     </sql>
 
-    <select id="getDict" resultType="com.cy.single.blog.pojo.vo.sys.dic.SysDictVO">
+    <select id="getDict" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictResp">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         where surrogate_id = #{surrogateId}
     </select>
 
-    <select id="pageDictList" resultType="com.cy.single.blog.pojo.vo.sys.dic.SysDictVO">
+    <select id="pageDictList" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictResp">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         <where>

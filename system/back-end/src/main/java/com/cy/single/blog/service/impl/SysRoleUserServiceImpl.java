@@ -2,14 +2,16 @@ package com.cy.single.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cy.single.blog.aspect.exceptions.BusinessException;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysRoleUserMapper;
 import com.cy.single.blog.dao.SysUserMapper;
 import com.cy.single.blog.pojo.entity.sys.SysRoleUser;
 import com.cy.single.blog.pojo.req.roleuser.RoleUserReq;
-import com.cy.single.blog.pojo.vo.sys.role.RoleUserVO;
-import com.cy.single.blog.pojo.vo.sys.user.SysUserVO;
+import com.cy.single.blog.pojo.resp.sys.role.RoleUserResp;
+import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
+import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysRoleUserService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
@@ -22,7 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
@@ -45,6 +50,9 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 	@Autowired
 	private SysUserMapper userMapper;
 
+	@Autowired
+	private CacheService cacheService;
+
 	/**
 	 * 更新[角色-用户]信息
 	 * @param req
@@ -55,7 +63,7 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 		/**
 		 * 查询当前角色id已分配的用户信息
 		 */
-		List<Long> originUserIdList = new ArrayList<>(roleUserMapper.selectUserIdListByRoleId(req.getRoleId()));
+		List<Long> originUserIdList = roleUserMapper.selectUserIdListByRoleId(req.getRoleId());
 		if (CollectionUtils.isEmpty(originUserIdList)) {
 			return ApiResp.warning(msgService.getGreetingMessage(LANG_ZH, "sys.role.user.resp.msg1"));
 		}
@@ -69,7 +77,7 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 		}
 
 		/**
-		 *
+		 * 待修改的用户id列表 与 原来的用户id列表做数量对比
 		 */
 		if (originUserIdList.size() == userIdList.size()) {
 			Set<Long> originUserIdSet = Sets.newHashSet(originUserIdList);
@@ -80,10 +88,15 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 			}
 		}
 
-		// 更新角色-用户信息
+		/**
+		 * 更新[角色-用户]信息
+		 */
 		this.updateRoleUsers(req.getRoleId(), userIdList);
 
-		// todo 让角色对应的用户权限点缓存失效
+		/**
+		 * 缓存失效: 用户的权限点失效
+		 */
+		cacheService.invalidUserAclCache(userIdList);
 		return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.role.user.resp.msg4"));
 	}
 
@@ -94,10 +107,16 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 	 */
 	@Transactional
 	public void updateRoleUsers(Long roleId, List<Long> userIdList) {
-		// 删除原来角色分配的用户的对应关系数据
-		QueryWrapper<SysRoleUser> delete = new QueryWrapper<>();
-		delete.eq("role_id",roleId);
-		roleUserMapper.delete(delete);
+		if (CollectionUtils.isEmpty(userIdList)) {
+			return;
+		}
+		// 删除旧的 [角色-用户] 对应关系数据
+		QueryWrapper<SysRoleUser> wrapper = new QueryWrapper<>();
+		wrapper.eq("role_id",roleId);
+		int delete = roleUserMapper.delete(wrapper);
+		if (delete < 1) {
+			throw new BusinessException(msgService.getGreetingMessage(LANG_ZH, "sys.role.user.resp.msg5"));
+		}
 
 		Date currentTime = DateUtil.localDateTimeNow();
 		List<SysRoleUser> roleUsers = userIdList.stream()
@@ -122,7 +141,7 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 	 * @return
 	 */
 	@Override
-	public ApiResp<RoleUserVO> roleUserList(RoleUserReq req) {
+	public ApiResp<RoleUserResp> roleUserList(RoleUserReq req) {
 		/**
 		 * query user id list by roleId
 		 */
@@ -132,18 +151,18 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 		 * 查询角色对应分配的用户信息
 		 * 用于已选列表
 		 */
-		List<SysUserVO> roleUserSelectList = CollectionUtils.isEmpty(userIdList) ? Lists.newArrayList() : userMapper.selectUserListByIds(userIdList);
+		List<SysUserResp> roleUserSelectList = CollectionUtils.isEmpty(userIdList) ? Lists.newArrayList() : userMapper.selectUserListByIds(userIdList);
 
 		/**
 		 * 查询所有用户信息, 与 已选列表互斥
 		 * 当前角色从未分配用户时, 返回整个用户列表
 		 */
-		List<SysUserVO> roleUserAllList = userMapper.selectUserList();
+		List<SysUserResp> roleUserAllList = userMapper.selectUserList();
 		if (CollectionUtils.isEmpty(userIdList)) {
 			roleUserAllList.removeIf(item -> roleUserSelectList.stream().anyMatch(i -> Objects.equals(i.getSurrogateId(), item.getSurrogateId())));
 		}
 
-		RoleUserVO build = RoleUserVO.builder()
+		RoleUserResp build = RoleUserResp.builder()
 			.selectedUserList(roleUserSelectList)
 			.unSelectedUserList(roleUserAllList)
 			.build();

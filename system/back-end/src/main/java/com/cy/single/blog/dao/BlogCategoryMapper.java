@@ -3,7 +3,7 @@ package com.cy.single.blog.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.blog.BlogCategory;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryPageReq;
-import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
+import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,9 +21,9 @@ public interface BlogCategoryMapper extends BaseMapper<BlogCategory> {
 
 	BlogCategory selectByNumber(String Number);
 
-	List<BlogCategoryVO> pageCategoryList(@Param("param") BlogCategoryPageReq req);
+	List<BlogCategoryResp> pageCategoryList(@Param("param") BlogCategoryPageReq req);
 
-	List<BlogCategoryVO> categoryList(@Param("param") BlogCategoryPageReq req);
+	List<BlogCategoryResp> categoryList(@Param("param") BlogCategoryPageReq req);
 
 	Integer getCountByList(@Param("param") BlogCategoryPageReq req);
 
@@ -31,5 +31,5 @@ public interface BlogCategoryMapper extends BaseMapper<BlogCategory> {
 
 	Integer deleteBatch(List<Long> surrogateIds);
 
-	List<BlogCategoryVO> frontList();
+	List<BlogCategoryResp> frontList();
 }

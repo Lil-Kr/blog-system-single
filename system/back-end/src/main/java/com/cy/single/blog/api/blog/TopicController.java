@@ -8,7 +8,7 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.entity.blog.BlogTopic;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicPageReq;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicReq;
-import com.cy.single.blog.pojo.vo.blog.BlogTopicVO;
+import com.cy.single.blog.pojo.resp.blog.BlogTopicResp;
 import com.cy.single.blog.service.BlogTopicService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,8 @@ public class TopicController {
   @RecordLogger
   @CheckAuth
   @PostMapping("/pageTopicList")
-  public ApiResp<PageResult<BlogTopicVO>> pageTopicList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogTopicPageReq req) {
-    PageResult<BlogTopicVO> blogTopicVOPageResult = blogTopicService.pageTopicList(req);
+  public ApiResp<PageResult<BlogTopicResp>> pageTopicList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogTopicPageReq req) {
+    PageResult<BlogTopicResp> blogTopicVOPageResult = blogTopicService.pageTopicList(req);
     return ApiResp.success(blogTopicVOPageResult);
   }
 

@@ -5,7 +5,7 @@ import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.user.UserListPageReq;
 import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
 import com.cy.single.blog.pojo.req.user.UserSaveReq;
-import com.cy.single.blog.pojo.vo.sys.user.SysUserVO;
+import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
 	SysUser getUserById(Long id);
 
-	SysUserVO getUserBySurrogateId(Long surrogateId);
+	SysUserResp getUserBySurrogateId(Long surrogateId);
 
 	SysUser getUserByToken(String token);
 
@@ -31,13 +31,13 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
 	Integer updateUserBySurrogateId(@Param("param") SysUser user);
 
-	List<SysUserVO> pageUserList(@Param("param") UserListPageReq req);
+	List<SysUserResp> pageUserList(@Param("param") UserListPageReq req);
 
 	Integer countUserList(@Param("param") UserListPageReq req);
 
-	List<SysUserVO> selectUserInfoExist(@Param("param") UserSaveReq req);
+	List<SysUserResp> selectUserInfoExist(@Param("param") UserSaveReq req);
 
-	List<SysUserVO> selectUserListByIds(@Param("userIdList") List<Long> userIdList);
+	List<SysUserResp> selectUserListByIds(@Param("userIdList") List<Long> userIdList);
 
-	List<SysUserVO> selectUserList();
+	List<SysUserResp> selectUserList();
 }

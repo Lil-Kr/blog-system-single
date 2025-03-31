@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.blog.BlogTopic;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicPageReq;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicReq;
-import com.cy.single.blog.pojo.vo.blog.BlogTopicVO;
+import com.cy.single.blog.pojo.resp.blog.BlogTopicResp;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface BlogTopicMapper extends BaseMapper<BlogTopic> {
 
-  List<BlogTopicVO> pageTopicList(@Param("param") BlogTopicPageReq req);
+  List<BlogTopicResp> pageTopicList(@Param("param") BlogTopicPageReq req);
 
   List<BlogTopic> topicList(@Param("param") BlogTopicReq req);
 

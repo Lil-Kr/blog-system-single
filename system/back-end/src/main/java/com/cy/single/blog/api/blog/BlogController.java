@@ -7,7 +7,7 @@ import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
-import com.cy.single.blog.pojo.vo.blog.BlogContentVO;
+import com.cy.single.blog.pojo.resp.blog.BlogContentResp;
 import com.cy.single.blog.service.BlogContentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +34,16 @@ public class BlogController {
   @RecordLogger
   @CheckAuth
   @PostMapping("/pageList")
-  public ApiResp<PageResult<BlogContentVO>> pageContentList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogContentPageReq req) {
-    PageResult<BlogContentVO> list = blogContentService.pageContentList(req);
+  public ApiResp<PageResult<BlogContentResp>> pageContentList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogContentPageReq req) {
+    PageResult<BlogContentResp> list = blogContentService.pageContentList(req);
     return ApiResp.success(list);
   }
 
   @RecordLogger
   @CheckAuth
   @PostMapping("/list")
-  public ApiResp<PageResult<BlogContentVO>> list(@RequestBody @Validated BlogContentPageReq req) {
-    PageResult<BlogContentVO> list = blogContentService.contentList(req);
+  public ApiResp<PageResult<BlogContentResp>> list(@RequestBody @Validated BlogContentPageReq req) {
+    PageResult<BlogContentResp> list = blogContentService.contentList(req);
     return ApiResp.success(list);
   }
 
@@ -57,14 +57,14 @@ public class BlogController {
   @RecordLogger
   @CheckAuth
   @GetMapping("/get")
-  public ApiResp<BlogContentVO> get(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+  public ApiResp<BlogContentResp> get(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
     return blogContentService.get(surrogateId);
   }
 
   @RecordLogger
   @CheckAuth
   @GetMapping("/getContent/{blogId}")
-  public ApiResp<BlogContentVO> getContent(@PathVariable("blogId") @Valid @NotNull(message = "blogId是必须的") Long blogId) {
+  public ApiResp<BlogContentResp> getContent(@PathVariable("blogId") @Valid @NotNull(message = "blogId是必须的") Long blogId) {
     return blogContentService.getContent(blogId);
   }
 
@@ -92,20 +92,20 @@ public class BlogController {
   /** ================== 门户网站接口 =============== **/
   @RecordLogger
   @GetMapping("/frontContentList")
-  public ApiResp<List<BlogContentVO>> frontContentList() {
+  public ApiResp<List<BlogContentResp>> frontContentList() {
     return blogContentService.frontContentList();
   }
 
   @RecordLogger
   @PostMapping("/frontContentPageList")
-  public ApiResp<PageResult<BlogContentVO>> frontContentPageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogContentPageReq req) {
-    PageResult<BlogContentVO> list = blogContentService.frontContentPageList(req);
+  public ApiResp<PageResult<BlogContentResp>> frontContentPageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogContentPageReq req) {
+    PageResult<BlogContentResp> list = blogContentService.frontContentPageList(req);
     return ApiResp.success(list);
   }
 
   @RecordLogger
   @GetMapping("/frontGetBlog")
-  public ApiResp<BlogContentVO> frontGetBlog(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+  public ApiResp<BlogContentResp> frontGetBlog(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
     return blogContentService.get(surrogateId);
   }
 }

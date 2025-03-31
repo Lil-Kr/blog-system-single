@@ -16,7 +16,7 @@
         where surrogate_id = #{surrogateId}
     </delete>
 
-    <select id="pageRoleList" resultType="com.cy.single.blog.pojo.vo.sys.role.SysRoleVO">
+    <select id="pageRoleList" resultType="com.cy.single.blog.pojo.resp.sys.role.SysRoleResp">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         <where>
@@ -67,7 +67,7 @@
         </where>
     </select>
 
-    <select id="selectRoleLIstByIds" resultType="com.cy.single.blog.pojo.vo.sys.role.SysRoleVO">
+    <select id="selectRoleLIstByIds" resultType="com.cy.single.blog.pojo.resp.sys.role.SysRoleResp">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         <where>

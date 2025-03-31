@@ -12,7 +12,7 @@
     operator, create_time, update_time
     </sql>
 
-    <select id="pageContentList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">
+    <select id="pageContentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         <where>
@@ -88,7 +88,7 @@
         </if>
     </select>
 
-    <select id="contentList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">
+    <select id="contentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         <where>
@@ -135,21 +135,21 @@
         </where>
     </update>
 
-    <select id="frontContentList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">
+    <select id="frontContentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         order by publish_time desc
         limit 50
     </select>
 
-    <select id="frontContentByGroupCategory" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO">
+    <select id="frontContentByGroupCategory" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp">
         select category_id, count(1) as 'category_count'
         from <include refid="Table_Name" />
         where `status` = 1
         group by category_id
     </select>
 
-    <select id="frontContentPageList" resultType="com.cy.single.blog.pojo.vo.blog.BlogContentVO">
+    <select id="frontContentPageList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
         select <include refid="Base_Column_List" />
         from <include refid="Table_Name" />
         <where>

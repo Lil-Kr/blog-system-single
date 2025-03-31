@@ -9,7 +9,5 @@ import com.cy.single.blog.pojo.req.roleacl.RoleAclSaveReq;
  * @Description: SysRoleAclService
  */
 public interface SysRoleAclService {
-
 	ApiResp<String> updateRoleAcls(RoleAclSaveReq param);
-
 }

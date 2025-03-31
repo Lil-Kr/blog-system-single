@@ -8,8 +8,8 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.image.ImageInfoPageListReq;
 import com.cy.single.blog.pojo.req.image.ImageInfoReq;
 import com.cy.single.blog.pojo.req.image.ImageUploadReq;
-import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
-import com.cy.single.blog.pojo.vo.image.ImageUploadVO;
+import com.cy.single.blog.pojo.resp.image.ImageInfoResp;
+import com.cy.single.blog.pojo.resp.image.ImageUploadResp;
 import com.cy.single.blog.service.ImageInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,16 +37,16 @@ public class ImageInfoController {
   @RecordLogger
   @CheckAuth
   @PostMapping("/pageList")
-  public ApiResp<PageResult<ImageInfoVO>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) ImageInfoPageListReq req) {
-    PageResult<ImageInfoVO> imageInfoVOPageResult = imageInfoService.pageImageInfoList(req);
+  public ApiResp<PageResult<ImageInfoResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) ImageInfoPageListReq req) {
+    PageResult<ImageInfoResp> imageInfoVOPageResult = imageInfoService.pageImageInfoList(req);
     return ApiResp.success(imageInfoVOPageResult);
   }
 
   @RecordLogger
   @CheckAuth
   @PostMapping("/list")
-  public ApiResp<PageResult<ImageInfoVO>> list(@RequestBody @Validated ImageInfoPageListReq req) {
-    PageResult<ImageInfoVO> imageInfoVOPageResult = imageInfoService.imageInfoList(req);
+  public ApiResp<PageResult<ImageInfoResp>> list(@RequestBody @Validated ImageInfoPageListReq req) {
+    PageResult<ImageInfoResp> imageInfoVOPageResult = imageInfoService.imageInfoList(req);
     return ApiResp.success(imageInfoVOPageResult);
   }
 
@@ -67,7 +67,7 @@ public class ImageInfoController {
   @RecordLogger
   @CheckAuth
   @GetMapping("/get/{surrogateId}")
-  public ApiResp<ImageInfoVO> get(@PathVariable("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+  public ApiResp<ImageInfoResp> get(@PathVariable("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
     return imageInfoService.get(surrogateId);
   }
 
@@ -87,7 +87,7 @@ public class ImageInfoController {
   @RecordLogger
   @CheckAuth
   @PostMapping("/upload")
-  public ApiResp<ImageUploadVO> upload(@ModelAttribute ImageUploadReq req) throws IOException {
+  public ApiResp<ImageUploadResp> upload(@ModelAttribute ImageUploadReq req) throws IOException {
     return imageInfoService.imageUpload(req);
   }
 

@@ -33,6 +33,7 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.SYSTEM_ERROR;
 @Aspect
 @Order(2)
 public class GlobalApiRequestAspect {
+
 	@Autowired
 	private HttpServletRequest servletRequest;
 
@@ -49,7 +50,6 @@ public class GlobalApiRequestAspect {
 	@Around("auth()")
 	public Object checkAuth(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		try {
-
 			/**
 			 * get cookie
 			 */

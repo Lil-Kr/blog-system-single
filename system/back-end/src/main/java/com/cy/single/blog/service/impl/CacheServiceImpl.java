@@ -6,10 +6,11 @@ import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
-import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
+import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
 import com.cy.single.blog.service.CacheService;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import java.io.Serializable;
 import java.util.List;
@@ -162,38 +163,38 @@ public class CacheServiceImpl implements CacheService, Serializable {
 	/**
 	 * ================================== blog category ===============================
 	 */
-	private static Cache<Long, BlogCategoryVO> categoryCache = CacheBuilder.newBuilder().build();
-	private static Cache<String, List<BlogCategoryVO>> categoryListCache = CacheBuilder.newBuilder().build();
+	private static Cache<Long, BlogCategoryResp> categoryCache = CacheBuilder.newBuilder().build();
+	private static Cache<String, List<BlogCategoryResp>> categoryListCache = CacheBuilder.newBuilder().build();
 
 	/**
 	 * 初始化, 保存 category 数据
 	 * @param categoryList
 	 */
 	@Override
-	public void saveBlogCategoryCache(List<BlogCategoryVO> categoryList) {
+	public void saveBlogCategoryCache(List<BlogCategoryResp> categoryList) {
 		categoryList.forEach(item -> categoryCache.put(item.getSurrogateId(), item));
 		categoryListCache.put(CACHE_KEY_BLOG_CATEGORY_LIST, categoryList);
 	}
 
 	@Override
-	public void updateBlogCategoryCache(String key, BlogCategoryVO categoryVO, String sign) {
+	public void updateBlogCategoryCache(String key, BlogCategoryResp categoryVO, String sign) {
 		if (BUS_CREATE.equals(sign)) {
-			List<BlogCategoryVO> newList = categoryListCache.getIfPresent(key);
+			List<BlogCategoryResp> newList = categoryListCache.getIfPresent(key);
 			newList.add(categoryVO);
 			categoryListCache.put(key, newList);
 
 			categoryCache.put(categoryVO.getSurrogateId(), categoryVO);
 		} else if (BUS_EDIT.equals(sign)) {
-			List<BlogCategoryVO> newList = categoryListCache.getIfPresent(key);
-			List<BlogCategoryVO> collect = newList.stream()
+			List<BlogCategoryResp> newList = categoryListCache.getIfPresent(key);
+			List<BlogCategoryResp> collect = newList.stream()
 				.map(item -> item.getSurrogateId().equals(categoryVO.getSurrogateId()) ? categoryVO : item)
 				.collect(Collectors.toList());
 			categoryListCache.put(key, collect);
 
 			categoryCache.put(categoryVO.getSurrogateId(), categoryVO);
 		} else if (BUS_DELETE.equals(sign)) {
-			List<BlogCategoryVO> newList = categoryListCache.getIfPresent(key);
-			List<BlogCategoryVO> collect = newList.stream()
+			List<BlogCategoryResp> newList = categoryListCache.getIfPresent(key);
+			List<BlogCategoryResp> collect = newList.stream()
 				.filter(item -> !item.getSurrogateId().equals(categoryVO.getSurrogateId()))
 				.collect(Collectors.toList());
 			categoryListCache.put(key, collect);
@@ -210,12 +211,12 @@ public class CacheServiceImpl implements CacheService, Serializable {
 	}
 
 	@Override
-	public List<BlogCategoryVO> getBlogCategoryListCache(String key) {
+	public List<BlogCategoryResp> getBlogCategoryListCache(String key) {
 		return categoryListCache.getIfPresent(key);
 	}
 
 	@Override
-	public BlogCategoryVO getBlogCategoryCache(Long surrogateId) {
+	public BlogCategoryResp getBlogCategoryCache(Long surrogateId) {
 		return categoryCache.getIfPresent(surrogateId);
 	}
 
@@ -292,5 +293,17 @@ public class CacheServiceImpl implements CacheService, Serializable {
 	@Override
 	public List<SysAcl> getUserAclListCache(Long userId) {
 		return adminAclCache.getIfPresent(userId);
+	}
+
+	/**
+	 * 缓存失效
+	 * @param userIdList
+	 */
+	@Override
+	public void invalidUserAclCache(List<Long> userIdList) {
+		if (CollectionUtils.isEmpty(userIdList)) {
+			return;
+		}
+		userIdList.forEach(userId-> adminAclCache.invalidate(userId));
 	}
 }

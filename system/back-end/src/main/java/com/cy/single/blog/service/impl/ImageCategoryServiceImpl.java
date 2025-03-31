@@ -12,8 +12,8 @@ import com.cy.single.blog.pojo.req.image.ImageCategoryListReq;
 import com.cy.single.blog.pojo.req.image.ImageCategoryPageListReq;
 import com.cy.single.blog.pojo.req.image.ImageCategoryReq;
 import com.cy.single.blog.pojo.req.image.ImageInfoPageListReq;
-import com.cy.single.blog.pojo.vo.image.ImageCategoryVO;
-import com.cy.single.blog.pojo.vo.image.ImageInfoVO;
+import com.cy.single.blog.pojo.resp.image.ImageCategoryResp;
+import com.cy.single.blog.pojo.resp.image.ImageInfoResp;
 import com.cy.single.blog.service.ImageCategoryService;
 import com.cy.single.blog.service.ImageInfoService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
@@ -44,8 +44,8 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
   private ImageInfoService imageInfoService;
 
   @Override
-  public PageResult<ImageCategoryVO> pageList(ImageCategoryPageListReq req) {
-    List<ImageCategoryVO> list = imageCategoryMapper.pageList(req);
+  public PageResult<ImageCategoryResp> pageList(ImageCategoryPageListReq req) {
+    List<ImageCategoryResp> list = imageCategoryMapper.pageList(req);
     Integer total = imageCategoryMapper.total(req);
     if (CollectionUtils.isEmpty(list)) {
       return new PageResult<>(new ArrayList<>(0), 0);
@@ -55,8 +55,8 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
   }
 
   @Override
-  public PageResult<ImageCategoryVO> list(ImageCategoryListReq req) {
-    List<ImageCategoryVO> list = imageCategoryMapper.imageCategoryList(req);
+  public PageResult<ImageCategoryResp> list(ImageCategoryListReq req) {
+    List<ImageCategoryResp> list = imageCategoryMapper.imageCategoryList(req);
     if (CollectionUtils.isEmpty(list)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
@@ -65,19 +65,19 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
   }
 
   @Override
-  public ApiResp<ImageCategoryVO> get(Long surrogateId) {
-    ImageCategoryVO imageCategoryVO = imageCategoryMapper.get(surrogateId);
-    if (Objects.isNull(imageCategoryVO)) {
+  public ApiResp<ImageCategoryResp> get(Long surrogateId) {
+    ImageCategoryResp imageCategoryResp = imageCategoryMapper.get(surrogateId);
+    if (Objects.isNull(imageCategoryResp)) {
       return ApiResp.failure();
     }
 
     ImageInfoPageListReq req = new ImageInfoPageListReq();
-    req.setImageCategoryId(imageCategoryVO.getSurrogateId());
-    PageResult<ImageInfoVO> imageInfoVOPageResult = imageInfoService.imageInfoList(req);
+    req.setImageCategoryId(imageCategoryResp.getSurrogateId());
+    PageResult<ImageInfoResp> imageInfoVOPageResult = imageInfoService.imageInfoList(req);
 
-    imageCategoryVO.setImageInfo(imageInfoVOPageResult);
+    imageCategoryResp.setImageInfo(imageInfoVOPageResult);
 
-    return ApiResp.success(imageCategoryVO);
+    return ApiResp.success(imageCategoryResp);
   }
 
   @Override

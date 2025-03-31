@@ -20,7 +20,7 @@
     b.image_url, b.remark, b.deleted, b.creator_id, b.operator, b.create_time, b.update_time
   </sql>
 
-  <select id="pageImageInfoList" resultType="com.cy.single.blog.pojo.vo.image.ImageInfoVO">
+  <select id="pageImageInfoList" resultType="com.cy.single.blog.pojo.resp.image.ImageInfoResp">
     select <include refid="Base_Column_List" />
     from <include refid="Table_Name" />
     <where>
@@ -90,7 +90,7 @@
     </where>
   </select>
 
-  <select id="imageInfoList" resultType="com.cy.single.blog.pojo.vo.image.ImageInfoVO">
+  <select id="imageInfoList" resultType="com.cy.single.blog.pojo.resp.image.ImageInfoResp">
     select <include refid="Base_Column_List" />
     from <include refid="Table_Name" />
     <where>
@@ -125,7 +125,7 @@
     </where>
   </select>
 
-  <select id="pageImageInfoListByCategoryId" resultType="com.cy.single.blog.pojo.vo.image.ImageInfoVO">
+  <select id="pageImageInfoListByCategoryId" resultType="com.cy.single.blog.pojo.resp.image.ImageInfoResp">
     select <include refid="ALIASES_BASE_COLUMN_LIST_B" />,
     a.surrogate_id as 'image_category_id',
     a.name as 'image_category_name'

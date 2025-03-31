@@ -6,7 +6,7 @@ import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
 import com.cy.single.blog.pojo.req.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.org.OrgPageReq;
 import com.cy.single.blog.pojo.req.org.OrgReq;
-import com.cy.single.blog.pojo.vo.sys.org.SysOrgVO;
+import com.cy.single.blog.pojo.resp.sys.org.SysOrgResp;
 
 import java.util.List;
 
@@ -25,8 +25,8 @@ public interface SysOrgService {
 
 	ApiResp<String> delete(Long surrogateId);
 
-	PageResult<SysOrgVO> pageOrgList(OrgPageReq req);
+	PageResult<SysOrgResp> pageOrgList(OrgPageReq req);
 
-	List<SysOrgVO> list(OrgListAllReq req);
+	List<SysOrgResp> list(OrgListAllReq req);
 
 }

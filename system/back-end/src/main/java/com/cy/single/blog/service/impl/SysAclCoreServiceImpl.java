@@ -7,7 +7,7 @@ import com.cy.single.blog.dao.SysRoleAclMapper;
 import com.cy.single.blog.dao.SysRoleMapper;
 import com.cy.single.blog.dao.SysRoleUserMapper;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
-import com.cy.single.blog.pojo.vo.sys.role.SysRoleVO;
+import com.cy.single.blog.pojo.resp.sys.role.SysRoleResp;
 import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.SysAclCoreService;
 import com.google.common.collect.Lists;
@@ -44,15 +44,15 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 	 */
 	@Override
 	public List<SysAcl> getCurrentUserAclList() {
-		// 获取当前用户surrogateId
+		// 获取当前用户 surrogateId
 		Long userId = RequestHolder.getCurrentUser().getSurrogateId();
-		// todo 先从缓存中获取 [用户-权限点]
-//		List<SysAcl> userAclList = cacheService.getUserAclListCache(userId);
-//		if (CollectionUtils.isEmpty(userAclList)) {
-//			userAclList = this.getUserAclList(userId);
-//			cacheService.saveUserAclCache(userId, userAclList);
-//		}
-		return this.getUserAclList(userId);
+		// 从缓存中获取 [用户-权限点]
+		List<SysAcl> userAclList = cacheService.getUserAclListCache(userId);
+		if (CollectionUtils.isEmpty(userAclList)) {
+			userAclList = this.getUserAclList(userId);
+			cacheService.saveUserAclCache(userId, userAclList);
+		}
+		return userAclList;
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 		}
 
 		// 查询角色明细, 包含角色类型
-		List<SysRoleVO> roleList = roleMapper.selectRoleLIstByIds(roleIdList);
+		List<SysRoleResp> roleList = roleMapper.selectRoleLIstByIds(roleIdList);
 		// 查看是否有超级管理员的角色
 		return roleList.stream().anyMatch(role -> role.getType() == 1);
 	}
@@ -169,7 +169,6 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 		if (isSuperAdmin(userId)) {
 			return true;
 		}
-
 		return false;
 	}
 }

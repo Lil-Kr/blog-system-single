@@ -9,7 +9,7 @@ import com.cy.single.blog.dao.BlogTopicMapper;
 import com.cy.single.blog.pojo.entity.blog.BlogTopic;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicPageReq;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicReq;
-import com.cy.single.blog.pojo.vo.blog.BlogTopicVO;
+import com.cy.single.blog.pojo.resp.blog.BlogTopicResp;
 import com.cy.single.blog.service.BlogTopicService;
 import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
@@ -43,8 +43,8 @@ public class BlogTopicServiceImpl implements BlogTopicService {
   private CacheService cacheService;
 
   @Override
-  public PageResult<BlogTopicVO> pageTopicList(BlogTopicPageReq req) {
-    List<BlogTopicVO> blogTopicList = blogTopicMapper.pageTopicList(req);
+  public PageResult<BlogTopicResp> pageTopicList(BlogTopicPageReq req) {
+    List<BlogTopicResp> blogTopicList = blogTopicMapper.pageTopicList(req);
     if (CollectionUtils.isEmpty(blogTopicList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     } else {

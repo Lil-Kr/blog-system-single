@@ -4,7 +4,7 @@ import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.role.RoleListPageReq;
 import com.cy.single.blog.pojo.req.role.RoleSaveReq;
-import com.cy.single.blog.pojo.vo.sys.role.SysRoleVO;
+import com.cy.single.blog.pojo.resp.sys.role.SysRoleResp;
 
 /**
  * @Author: Lil-K
@@ -21,7 +21,7 @@ public interface SysRoleService {
 
 	ApiResp<String> delete(Long surrogateId);
 
-	PageResult<SysRoleVO> pageList(RoleListPageReq param);
+	PageResult<SysRoleResp> pageList(RoleListPageReq param);
 
 	boolean checkSupperAdminExist();
 }

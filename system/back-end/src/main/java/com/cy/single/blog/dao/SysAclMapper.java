@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.req.acl.AclPageReq;
 import com.cy.single.blog.pojo.req.acl.AclReq;
-import com.cy.single.blog.pojo.vo.sys.acl.SysAclVO;
+import com.cy.single.blog.pojo.resp.sys.acl.SysAclResp;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface SysAclMapper extends BaseMapper<SysAcl> {
 
 	List<SysAcl> selectAclListByAclIdList(@Param("userAclIdList") List<Long> userAclIdList);
 
-	List<SysAclVO> pageAclList(@Param("param") AclPageReq req);
+	List<SysAclResp> pageAclList(@Param("param") AclPageReq req);
 
 	Integer countPageAclList(@Param("param") AclPageReq req);
 

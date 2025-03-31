@@ -12,7 +12,7 @@
     </sql>
 
     <!--根据权限id列表查询权限点列表-->
-    <select id="selectAclListByAclIdList" resultType="com.cy.single.blog.pojo.vo.sys.acl.SysAclVO">
+    <select id="selectAclListByAclIdList" resultType="com.cy.single.blog.pojo.resp.sys.acl.SysAclResp">
         select
             a.id,
             a.surrogate_id,
@@ -49,7 +49,7 @@
     </select>
 
     <!-- 分页查询权限点 -->
-    <select id="pageAclList" resultType="com.cy.single.blog.pojo.vo.sys.acl.SysAclVO">
+    <select id="pageAclList" resultType="com.cy.single.blog.pojo.resp.sys.acl.SysAclResp">
         select
             a.id,
             a.surrogate_id,

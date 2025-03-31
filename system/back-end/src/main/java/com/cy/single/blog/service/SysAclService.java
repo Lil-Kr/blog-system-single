@@ -6,7 +6,7 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.req.acl.AclPageReq;
 import com.cy.single.blog.pojo.req.acl.AclReq;
-import com.cy.single.blog.pojo.vo.sys.acl.SysAclVO;
+import com.cy.single.blog.pojo.resp.sys.acl.SysAclResp;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,11 +17,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public interface SysAclService extends IService<SysAcl> {
 
-	ApiResp<String> addAcl(AclReq req);
+	ApiResp<String> add(AclReq req);
 
-	ApiResp<String> editAcl(AclReq req);
+	ApiResp<String> edit(AclReq req);
 
-	PageResult<SysAclVO> pageList(AclPageReq req);
+	PageResult<SysAclResp> pageList(AclPageReq req);
 
 	ApiResp<ConcurrentHashMap<String, Object>> acls(AclReq req);
 

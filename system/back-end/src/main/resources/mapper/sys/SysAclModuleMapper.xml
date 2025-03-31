@@ -16,7 +16,7 @@
         where parent_id = #{parentId}
     </select>
 
-    <select id="selectAclModuleList" resultType="com.cy.single.blog.pojo.vo.sys.aclmodule.SysAclModuleVO">
+    <select id="selectAclModuleList" resultType="com.cy.single.blog.pojo.resp.sys.aclmodule.SysAclModuleResp">
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         <where>

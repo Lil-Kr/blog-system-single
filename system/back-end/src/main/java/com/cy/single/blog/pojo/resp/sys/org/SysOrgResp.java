@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.vo.sys.org;
+package com.cy.single.blog.pojo.resp.sys.org;
 
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,7 +12,7 @@ import lombok.ToString;
 @Data
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SysOrgVO extends SysOrg {
+public class SysOrgResp extends SysOrg {
 
 	private String parentName;
 

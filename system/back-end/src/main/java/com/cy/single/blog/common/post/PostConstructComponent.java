@@ -8,8 +8,8 @@ import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryPageReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicReq;
-import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
+import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
+import com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp;
 import com.cy.single.blog.service.CacheService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class PostConstructComponent {
 		cacheService.saveLabelCache(CACHE_KEY_BLOG_LABEL_LIST, labelList);
 
 		// 博客分类
-		List<BlogCategoryVO> blogCategoryList = blogCategoryMapper.categoryList(new BlogCategoryPageReq());
+		List<BlogCategoryResp> blogCategoryList = blogCategoryMapper.categoryList(new BlogCategoryPageReq());
 		cacheService.saveBlogCategoryCache(blogCategoryList);
 
 		// 博客专题
@@ -70,7 +70,7 @@ public class PostConstructComponent {
 
 		// 数据字典
 		List<SysDict> dictList = dictMapper.selectDictList();
-		List<SysDictDetailVO> dictDetailListVO = dictDetailMapper.dictDetailTree();
+		List<SysDictDetailResp> dictDetailListVO = dictDetailMapper.dictDetailTree();
 		List<SysDictDetail> dictDetailList = dictDetailListVO.stream().map(item -> {
 			SysDictDetail dictDetail = new SysDictDetail();
 			BeanUtils.copyProperties(item, dictDetail);

@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.vo.blog;
+package com.cy.single.blog.pojo.resp.blog;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -12,7 +12,7 @@ import lombok.ToString;
  */
 @ToString
 @Data
-public class LabelVO {
+public class LabelResp {
 
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long surrogateId;

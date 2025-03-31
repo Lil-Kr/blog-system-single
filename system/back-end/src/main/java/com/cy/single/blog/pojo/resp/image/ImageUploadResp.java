@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.vo.image;
+package com.cy.single.blog.pojo.resp.image;
 
 import lombok.Data;
 import lombok.ToString;
@@ -10,7 +10,7 @@ import lombok.ToString;
  */
 @ToString
 @Data
-public class ImageUploadVO {
+public class ImageUploadResp {
 
   private String uid;
   private String name;

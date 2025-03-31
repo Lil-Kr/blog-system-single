@@ -6,7 +6,7 @@ import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
-import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
+import com.cy.single.blog.pojo.resp.blog.BlogLabelResp;
 
 /**
  * @author Lil-K
@@ -14,7 +14,7 @@ import com.cy.single.blog.pojo.vo.blog.BlogLabelVO;
  */
 public interface BlogLabelService {
 
-	PageResult<BlogLabelVO> pageList(BlogLabelPageReq req);
+	PageResult<BlogLabelResp> pageList(BlogLabelPageReq req);
 
 	PageResult<BlogLabel> list(BlogLabelListReq req);
 

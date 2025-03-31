@@ -8,7 +8,7 @@ import com.cy.single.blog.pojo.dto.blog.BlogCategoryDTO;
 import com.cy.single.blog.pojo.entity.blog.BlogCategory;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryPageReq;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryReq;
-import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
+import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
 import com.cy.single.blog.service.BlogCategoryService;
 import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
@@ -43,8 +43,8 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
   private CacheService cacheService;
 
   @Override
-  public PageResult<BlogCategoryVO> pageCategoryList(BlogCategoryPageReq req) {
-    List<BlogCategoryVO> pageList = blogCategoryMapper.pageCategoryList(req);
+  public PageResult<BlogCategoryResp> pageCategoryList(BlogCategoryPageReq req) {
+    List<BlogCategoryResp> pageList = blogCategoryMapper.pageCategoryList(req);
     Integer count = blogCategoryMapper.getCountByList(req);
     if (CollectionUtils.isEmpty(pageList)) {
         return new PageResult<>(new ArrayList<>(0), 0);
@@ -54,8 +54,8 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
   }
 
   @Override
-  public PageResult<BlogCategoryVO> list(BlogCategoryPageReq req) {
-    List<BlogCategoryVO> blogCategoryList = cacheService.getBlogCategoryListCache(CACHE_KEY_BLOG_CATEGORY_LIST);
+  public PageResult<BlogCategoryResp> list(BlogCategoryPageReq req) {
+    List<BlogCategoryResp> blogCategoryList = cacheService.getBlogCategoryListCache(CACHE_KEY_BLOG_CATEGORY_LIST);
     if (CollectionUtils.isEmpty(blogCategoryList)) {
       blogCategoryList = blogCategoryMapper.categoryList(req);
       cacheService.saveBlogCategoryCache(blogCategoryList);
@@ -81,9 +81,9 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
     Integer save = blogCategoryMapper.insert(saveEntity);
     if (save >= 1) {
       // 更新缓存
-      BlogCategoryVO blogCategoryVO = new BlogCategoryVO();
-      BeanUtils.copyProperties(saveEntity, blogCategoryVO);
-      cacheService.updateBlogCategoryCache(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryVO, BUS_CREATE);
+      BlogCategoryResp blogCategoryResp = new BlogCategoryResp();
+      BeanUtils.copyProperties(saveEntity, blogCategoryResp);
+      cacheService.updateBlogCategoryCache(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryResp, BUS_CREATE);
       return ApiResp.success();
     }else {
         return ApiResp.failure(SAVE_ERROR);
@@ -109,9 +109,9 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
       Integer count = blogCategoryMapper.editBySurrogateId(before);
       if (count >= 1) {
         // 更新缓存
-        BlogCategoryVO blogCategoryVO = new BlogCategoryVO();
-        BeanUtils.copyProperties(before, blogCategoryVO);
-        cacheService.updateBlogCategoryCache(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryVO, BUS_EDIT);
+        BlogCategoryResp blogCategoryResp = new BlogCategoryResp();
+        BeanUtils.copyProperties(before, blogCategoryResp);
+        cacheService.updateBlogCategoryCache(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryResp, BUS_EDIT);
         return ApiResp.success();
       }else {
         return ApiResp.failure(SAVE_ERROR);
@@ -123,9 +123,9 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
       int count = blogCategoryMapper.deleteBySurrogateId(surrogateId);
       if (count >= 1) {
         // 更新缓存
-        BlogCategoryVO blogCategoryVO = new BlogCategoryVO();
-        blogCategoryVO.setSurrogateId(surrogateId);
-        cacheService.updateBlogCategoryCache(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryVO, BUS_DELETE);
+        BlogCategoryResp blogCategoryResp = new BlogCategoryResp();
+        blogCategoryResp.setSurrogateId(surrogateId);
+        cacheService.updateBlogCategoryCache(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryResp, BUS_DELETE);
         return ApiResp.success("删除成功");
       }else {
         return ApiResp.failure(OPERATE_ERROR);
@@ -143,8 +143,8 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
   }
 
   @Override
-  public List<BlogCategoryVO> frontList() {
-    List<BlogCategoryVO> res = blogCategoryMapper.frontList();
+  public List<BlogCategoryResp> frontList() {
+    List<BlogCategoryResp> res = blogCategoryMapper.frontList();
 
     return res;
   }

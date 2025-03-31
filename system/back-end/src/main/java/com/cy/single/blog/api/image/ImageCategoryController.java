@@ -8,7 +8,7 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.image.ImageCategoryListReq;
 import com.cy.single.blog.pojo.req.image.ImageCategoryPageListReq;
 import com.cy.single.blog.pojo.req.image.ImageCategoryReq;
-import com.cy.single.blog.pojo.vo.image.ImageCategoryVO;
+import com.cy.single.blog.pojo.resp.image.ImageCategoryResp;
 import com.cy.single.blog.service.ImageCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,16 +35,16 @@ public class ImageCategoryController {
   @RecordLogger
   @CheckAuth
   @PostMapping("/pageList")
-  public ApiResp<PageResult<ImageCategoryVO>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) ImageCategoryPageListReq req) {
-    PageResult<ImageCategoryVO> blogTopicVOPageResult = imageCategoryService.pageList(req);
+  public ApiResp<PageResult<ImageCategoryResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) ImageCategoryPageListReq req) {
+    PageResult<ImageCategoryResp> blogTopicVOPageResult = imageCategoryService.pageList(req);
     return ApiResp.success(blogTopicVOPageResult);
   }
 
   @RecordLogger
   @CheckAuth
   @PostMapping("/list")
-  public ApiResp<PageResult<ImageCategoryVO>> list(@RequestBody @Valid ImageCategoryListReq req) {
-    PageResult<ImageCategoryVO> blogTopicVOPageResult = imageCategoryService.list(req);
+  public ApiResp<PageResult<ImageCategoryResp>> list(@RequestBody @Valid ImageCategoryListReq req) {
+    PageResult<ImageCategoryResp> blogTopicVOPageResult = imageCategoryService.list(req);
     return ApiResp.success(blogTopicVOPageResult);
   }
 
@@ -65,7 +65,7 @@ public class ImageCategoryController {
   @RecordLogger
   @CheckAuth
   @GetMapping("/get")
-  public ApiResp<ImageCategoryVO> get(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+  public ApiResp<ImageCategoryResp> get(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
     return imageCategoryService.get(surrogateId);
   }
 

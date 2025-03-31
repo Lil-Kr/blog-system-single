@@ -45,7 +45,7 @@
         where parent_id = #{parentId}
     </select>
 
-    <select id="pageList" resultType="com.cy.single.blog.pojo.vo.sys.org.SysOrgVO">
+    <select id="pageList" resultType="com.cy.single.blog.pojo.resp.sys.org.SysOrgResp">
         select
             a.id,
             a.surrogate_id,
@@ -113,7 +113,7 @@
         </where>
     </select>
 
-    <select id="retrieveAllList" resultType="com.cy.single.blog.pojo.vo.sys.org.SysOrgVO">
+    <select id="retrieveAllList" resultType="com.cy.single.blog.pojo.resp.sys.org.SysOrgResp">
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         <where>

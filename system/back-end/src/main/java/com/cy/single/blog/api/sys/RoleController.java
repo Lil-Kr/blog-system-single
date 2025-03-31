@@ -10,8 +10,8 @@ import com.cy.single.blog.pojo.req.role.RoleListPageReq;
 import com.cy.single.blog.pojo.req.role.RoleSaveReq;
 import com.cy.single.blog.pojo.req.roleacl.RoleAclSaveReq;
 import com.cy.single.blog.pojo.req.roleuser.RoleUserReq;
-import com.cy.single.blog.pojo.vo.sys.role.RoleUserVO;
-import com.cy.single.blog.pojo.vo.sys.role.SysRoleVO;
+import com.cy.single.blog.pojo.resp.sys.role.RoleUserResp;
+import com.cy.single.blog.pojo.resp.sys.role.SysRoleResp;
 import com.cy.single.blog.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -57,8 +57,8 @@ public class RoleController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/pageList")
-	public ApiResp<PageResult<SysRoleVO>> pageList (@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) RoleListPageReq req) {
-		PageResult<SysRoleVO> res = roleService.pageList(req);
+	public ApiResp<PageResult<SysRoleResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) RoleListPageReq req) {
+		PageResult<SysRoleResp> res = roleService.pageList(req);
 		return ApiResp.success(res);
 	}
 
@@ -71,7 +71,7 @@ public class RoleController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/add")
-	public ApiResp<String> add (@RequestBody @Validated({RoleSaveReq.GroupAdd.class}) RoleSaveReq req) {
+	public ApiResp<String> add(@RequestBody @Validated({RoleSaveReq.GroupAdd.class}) RoleSaveReq req) {
 		return roleService.add(req);
 	}
 
@@ -123,11 +123,10 @@ public class RoleController {
 	@PostMapping("/roleAclTree")
 	public ApiResp<List<AclModuleDto>> roleAclTree (@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
 		List<AclModuleDto> aclModuleDtoList = treeService.roleAclTree(req.getRoleId());
-		if (CollectionUtils.isNotEmpty(aclModuleDtoList)) {
-			return ApiResp.success(aclModuleDtoList);
-		}else {
+		if (CollectionUtils.isEmpty(aclModuleDtoList)) {
 			return ApiResp.failure(msgLangService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg1"));
 		}
+		return ApiResp.success(aclModuleDtoList);
 	}
 
 	/**
@@ -139,12 +138,12 @@ public class RoleController {
 	@CheckAuth
 	@RecordLogger
 	@PostMapping("/roleUserList")
-	public ApiResp<RoleUserVO> roleUserList(@RequestBody @Validated({RoleUserReq.GroupRoleUserPageList.class}) RoleUserReq req) {
+	public ApiResp<RoleUserResp> roleUserList(@RequestBody @Validated({RoleUserReq.GroupRoleUserPageList.class}) RoleUserReq req) {
 		return roleUserService.roleUserList(req);
 	}
 
 	/**
-	 * 修改角色对应的权限点
+	 * 修改[角色-权限点]关系接口
 	 * update
 	 * @param req
 	 * @return

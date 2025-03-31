@@ -3,8 +3,8 @@ package com.cy.single.blog.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.blog.BlogContent;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
-import com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO;
-import com.cy.single.blog.pojo.vo.blog.BlogContentVO;
+import com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp;
+import com.cy.single.blog.pojo.resp.blog.BlogContentResp;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,17 +19,17 @@ import java.util.List;
  */
 public interface BlogContentMapper extends BaseMapper<BlogContent> {
 
-  List<BlogContentVO> pageContentList(@Param("param") BlogContentPageReq req);
+  List<BlogContentResp> pageContentList(@Param("param") BlogContentPageReq req);
 
   Integer contentCount(@Param("param") BlogContentPageReq req);
 
-  List<BlogContentVO> contentList(@Param("param") BlogContentPageReq req);
+  List<BlogContentResp> contentList(@Param("param") BlogContentPageReq req);
 
   Integer updateStatusBySurrogateId(@Param("param") BlogContent req);
 
-  List<BlogContentVO> frontContentList();
+  List<BlogContentResp> frontContentList();
 
-  List<BlogContentGroupVO> frontContentByGroupCategory();
+  List<BlogContentGroupResp> frontContentByGroupCategory();
 
-  List<BlogContentVO> frontContentPageList(@Param("param") BlogContentPageReq req);
+  List<BlogContentResp> frontContentPageList(@Param("param") BlogContentPageReq req);
 }

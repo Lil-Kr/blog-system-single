@@ -48,7 +48,7 @@
             and password = #{param.oldPassword}
     </update>
 
-    <select id="selectUserPage" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+    <select id="selectUserPage" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         <where>
@@ -62,7 +62,7 @@
         </if>
     </select>
 
-    <select id="getUserById" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+    <select id="getUserById" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         <where>
@@ -70,7 +70,7 @@
         </where>
     </select>
 
-    <select id="getUserBySurrogateId" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+    <select id="getUserBySurrogateId" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
         select
             a.id,
             a.surrogate_id,
@@ -106,7 +106,7 @@
         </where>
     </select>
 
-    <select id="getUserByKeyword" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+    <select id="getUserByKeyword" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
         select <include refid="Column_1_List"/>
         from <include refid="Table_Name"/>
         <where>
@@ -194,7 +194,7 @@
         </where>
     </select>
 
-    <select id="pageUserListByOrgId1" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+    <select id="pageUserListByOrgId1" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
         select
             a.id,
             a.surrogate_id,
@@ -231,7 +231,7 @@
         </where>
     </select>
 
-    <select id="pageUserList" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+    <select id="pageUserList" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
         select
             a.id,
             a.surrogate_id,
@@ -315,7 +315,7 @@
         </where>
     </select>
 
-    <select id="selectUserInfoExist" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+    <select id="selectUserInfoExist" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
         SELECT
             account,
             email,
@@ -329,7 +329,7 @@
     </select>
 
     <!--  根据userIds, 查询用户列表  -->
-    <select id="selectUserListByIds" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+    <select id="selectUserListByIds" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
         select
             a.surrogate_id,
             a.account,
@@ -351,7 +351,7 @@
     </select>
 
     <!--  查询所有用户列表, 与上一条sql一起使用  -->
-    <select id="selectUserList" resultType="com.cy.single.blog.pojo.vo.sys.user.SysUserVO">
+    <select id="selectUserList" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
         select
             a.surrogate_id,
             a.account,

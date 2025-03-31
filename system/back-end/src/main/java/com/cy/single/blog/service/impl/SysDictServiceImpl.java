@@ -15,8 +15,8 @@ import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.req.dict.DictDetailReq;
 import com.cy.single.blog.pojo.req.dict.DictListPageReq;
 import com.cy.single.blog.pojo.req.dict.DictSaveReq;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictVO;
+import com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp;
+import com.cy.single.blog.pojo.resp.sys.dic.SysDictResp;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.google.common.collect.Maps;
@@ -145,23 +145,23 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	 * @throws Exception
 	 */
 	@Override
-	public PageResult<SysDictVO> listAll() {
+	public PageResult<SysDictResp> listAll() {
 		return null;
 	}
 
 	/**
-	 *
+	 * 获取明细组
 	 * @param req
 	 * @return
 	 */
 	@Override
-	public ApiResp<SysDictVO> dictDetail(DictDetailReq req) {
-		SysDictVO dict = this.getDict(req.getDictSurrogateId());
+	public ApiResp<SysDictResp> dictDetail(DictDetailReq req) {
+		SysDictResp dict = this.getDict(req.getDictSurrogateId());
 		if (Objects.isNull(dict)) {
 			return ApiResp.failure(INFO_NOT_EXIST);
 		}
 
-		List<SysDictDetailVO> dictDetailList = dictDetailMapper.getDictDetailListByParentId(req.getDictSurrogateId());
+		List<SysDictDetailResp> dictDetailList = dictDetailMapper.getDictDetailListByParentId(req.getDictSurrogateId());
 		if (CollectionUtils.isEmpty(dictDetailList)) {
 			return ApiResp.failure(INFO_NOT_EXIST);
 		}
@@ -171,8 +171,8 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	}
 
 	@Override
-	public SysDictVO getDict(Long surrogateId) {
-		SysDictVO dictVO = dictMapper.getDict(surrogateId);
+	public SysDictResp getDict(Long surrogateId) {
+		SysDictResp dictVO = dictMapper.getDict(surrogateId);
 		return dictVO;
 	}
 
@@ -182,8 +182,8 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	 * @return
 	 */
 	@Override
-	public PageResult<SysDictVO> pageDictList(DictListPageReq req) {
-		List<SysDictVO> pageList = dictMapper.pageDictList(req);
+	public PageResult<SysDictResp> pageDictList(DictListPageReq req) {
+		List<SysDictResp> pageList = dictMapper.pageDictList(req);
 		Integer count = dictMapper.countPageDict(req);
 		if (CollectionUtils.isNotEmpty(pageList)) {
 			return new PageResult<>(pageList, count);
@@ -217,9 +217,9 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	 * @return
 	 */
 	@Override
-	public ApiResp<Map<String, List<SysDictDetailVO>>> dictDetailTree() {
-		List<SysDictDetailVO> dictDetailTree = dictDetailMapper.dictDetailTree();
-		Map<String, List<SysDictDetailVO>> collect = dictDetailTree.stream().collect(Collectors.groupingBy(SysDictDetailVO::getParentName));
+	public ApiResp<Map<String, List<SysDictDetailResp>>> dictDetailTree() {
+		List<SysDictDetailResp> dictDetailTree = dictDetailMapper.dictDetailTree();
+		Map<String, List<SysDictDetailResp>> collect = dictDetailTree.stream().collect(Collectors.groupingBy(SysDictDetailResp::getParentName));
 		return ApiResp.success(MapUtils.isEmpty(collect) ? Maps.newHashMap() : collect);
 	}
 }

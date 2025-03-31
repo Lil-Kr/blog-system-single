@@ -8,7 +8,7 @@ import com.cy.single.blog.dao.SysDictDetailMapper;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.req.dict.DictDetailPageListReq;
 import com.cy.single.blog.pojo.req.dict.SaveDictDetailReq;
-import com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO;
+import com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp;
 import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysDictDetailService;
@@ -144,8 +144,8 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 	 * @return
 	 */
 	@Override
-	public PageResult<SysDictDetailVO> pageDictDetailList(DictDetailPageListReq req) {
-		List<SysDictDetailVO> pageList = dictDetailMapper.pageDictDetailListById(req);
+	public PageResult<SysDictDetailResp> pageDictDetailList(DictDetailPageListReq req) {
+		List<SysDictDetailResp> pageList = dictDetailMapper.pageDictDetailListById(req);
 		Integer count = dictDetailMapper.countPageDictDetail(req);
 		if (CollectionUtils.isEmpty(pageList)) {
 			return new PageResult<>(new ArrayList<>(0), 0);

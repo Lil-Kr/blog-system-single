@@ -6,7 +6,7 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleListReq;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleReq;
-import com.cy.single.blog.pojo.vo.sys.aclmodule.SysAclModuleVO;
+import com.cy.single.blog.pojo.resp.sys.aclmodule.SysAclModuleResp;
 import com.cy.single.blog.service.SysAclModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -35,9 +35,9 @@ public class AclModuleController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("addAclModule")
-	public ApiResp addAclModule(@RequestBody @Validated({AclModuleReq.GroupAdd.class}) AclModuleReq req) {
-		return aclModuleService.addAclModule(req);
+	@PostMapping("/add")
+	public ApiResp add(@RequestBody @Validated({AclModuleReq.GroupAdd.class}) AclModuleReq req) {
+		return aclModuleService.add(req);
 	}
 
 	/**
@@ -48,9 +48,9 @@ public class AclModuleController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("editAclModule")
-	public ApiResp<String> editAclModule(@RequestBody @Validated({AclModuleReq.GroupEdit.class}) AclModuleReq req) {
-		return aclModuleService.editAclModule(req);
+	@PostMapping("/edit")
+	public ApiResp<String> edit(@RequestBody @Validated({AclModuleReq.GroupEdit.class}) AclModuleReq req) {
+		return aclModuleService.edit(req);
 	}
 
 	/**
@@ -60,8 +60,8 @@ public class AclModuleController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@GetMapping("getAclModule")
-	public ApiResp<SysAclModuleVO> getAclModule(@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+	@GetMapping("/getAclModule/{surrogateId}")
+	public ApiResp<SysAclModuleResp> getAclModule(@PathVariable("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
 		return aclModuleService.getAclModule(surrogateId);
 	}
 
@@ -83,8 +83,8 @@ public class AclModuleController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@DeleteMapping("delete")
-	public ApiResp delete(@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+	@DeleteMapping("/delete/{surrogateId}")
+	public ApiResp delete(@PathVariable("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
 		return aclModuleService.delete(surrogateId);
 	}
 
@@ -94,9 +94,9 @@ public class AclModuleController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("aclModuleList")
-	public ApiResp<List<SysAclModuleVO>> aclModuleList(@RequestBody AclModuleListReq req) {
-		return aclModuleService.aclModuleList(req);
+	@PostMapping("/list")
+	public ApiResp<List<SysAclModuleResp>> list(@RequestBody AclModuleListReq req) {
+		return aclModuleService.list(req);
 	}
 
 }

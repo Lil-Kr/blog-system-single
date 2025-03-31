@@ -12,7 +12,7 @@ import com.cy.single.blog.pojo.req.user.UserListPageReq;
 import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
 import com.cy.single.blog.pojo.req.user.UserRegisterReq;
 import com.cy.single.blog.pojo.req.user.UserSaveReq;
-import com.cy.single.blog.pojo.vo.sys.user.SysUserVO;
+import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
 import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysUserService;
@@ -50,7 +50,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 	@Override
 	public ApiResp<String> add(UserSaveReq req) {
-		List<SysUserVO> checkRes = userMapper.selectUserInfoExist(req);
+		List<SysUserResp> checkRes = userMapper.selectUserInfoExist(req);
 		if (CollectionUtils.isNotEmpty(checkRes)) {
 			return ApiResp.failure(DATA_INFO_REPEAT);
 		}
@@ -108,7 +108,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	@Override
-	public SysUserVO getUserBySurrogateId(Long surrogateId) {
+	public SysUserResp getUserBySurrogateId(Long surrogateId) {
 		return userMapper.getUserBySurrogateId(surrogateId);
 	}
 
@@ -149,8 +149,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	@Override
-	public PageResult<SysUserVO> pageUserList(UserListPageReq req) {
-		List<SysUserVO> list =  userMapper.pageUserList(req);
+	public PageResult<SysUserResp> pageUserList(UserListPageReq req) {
+		List<SysUserResp> list =  userMapper.pageUserList(req);
 		Integer count = userMapper.countUserList(req);
 		if (CollectionUtils.isNotEmpty(list)) {
 			return new PageResult<>(list, count);

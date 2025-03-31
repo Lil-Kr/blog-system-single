@@ -5,7 +5,7 @@ import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleListReq;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleReq;
-import com.cy.single.blog.pojo.vo.sys.aclmodule.SysAclModuleVO;
+import com.cy.single.blog.pojo.resp.sys.aclmodule.SysAclModuleResp;
 
 import java.util.List;
 
@@ -16,15 +16,15 @@ import java.util.List;
  */
 public interface SysAclModuleService extends IService<SysAclModule> {
 
-    ApiResp<String> addAclModule(AclModuleReq req);
+    ApiResp<String> add(AclModuleReq req);
 
-    ApiResp<String> editAclModule(AclModuleReq req);
+    ApiResp<String> edit(AclModuleReq req);
 
     ApiResp aclModuleTree();
 
     ApiResp delete(Long surrogateId);
 
-    ApiResp<SysAclModuleVO> getAclModule(Long surrogateId);
+    ApiResp<SysAclModuleResp> getAclModule(Long surrogateId);
 
-    ApiResp<List<SysAclModuleVO>> aclModuleList(AclModuleListReq req);
+    ApiResp<List<SysAclModuleResp>> list(AclModuleListReq req);
 }

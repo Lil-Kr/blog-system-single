@@ -5,8 +5,8 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.entity.blog.BlogContentMongo;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
-import com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO;
-import com.cy.single.blog.pojo.vo.blog.BlogContentVO;
+import com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp;
+import com.cy.single.blog.pojo.resp.blog.BlogContentResp;
 
 import java.util.List;
 
@@ -24,23 +24,23 @@ public interface BlogContentService {
 
   BlogContentMongo saveBlogContentMongo(BlogContentMongo entity);
 
-  PageResult<BlogContentVO> pageContentList(BlogContentPageReq req);
+  PageResult<BlogContentResp> pageContentList(BlogContentPageReq req);
 
-  PageResult<BlogContentVO> contentList(BlogContentPageReq req);
+  PageResult<BlogContentResp> contentList(BlogContentPageReq req);
 
-  ApiResp<BlogContentVO> get(Long surrogateId);
+  ApiResp<BlogContentResp> get(Long surrogateId);
 
   ApiResp<String> edit(BlogContentReq req);
 
   ApiResp<String> publishBlog(BlogContentReq req);
 
-  ApiResp<BlogContentVO> getContent(Long blogId);
+  ApiResp<BlogContentResp> getContent(Long blogId);
 
-  ApiResp<List<BlogContentVO>> frontContentList();
+  ApiResp<List<BlogContentResp>> frontContentList();
 
-  List<BlogContentGroupVO> frontContentByGroupCategory();
+  List<BlogContentGroupResp> frontContentByGroupCategory();
 
-  PageResult<BlogContentVO> frontContentPageList(BlogContentPageReq req);
+  PageResult<BlogContentResp> frontContentPageList(BlogContentPageReq req);
 
 	ApiResp<String> delete(Long surrogateId);
 }

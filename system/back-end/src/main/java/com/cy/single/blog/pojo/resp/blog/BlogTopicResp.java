@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.vo.blog;
+package com.cy.single.blog.pojo.resp.blog;
 
 import com.cy.single.blog.pojo.entity.blog.BlogTopic;
 
@@ -9,5 +9,5 @@ import java.io.Serializable;
  * @Date: 2024/5/25
  * @Description:
  */
-public class BlogTopicVO extends BlogTopic implements Serializable {
+public class BlogTopicResp extends BlogTopic implements Serializable {
 }

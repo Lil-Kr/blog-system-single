@@ -12,7 +12,6 @@ import {
   Popconfirm,
   PopconfirmProps,
   Row,
-  Space,
   Table,
   Tag,
   Tooltip,
@@ -66,8 +65,22 @@ const Acl = () => {
       title: '权限类型',
       width: '5%',
       render: (_, record: TableAclListType) => {
+        let color = 'volcano'
+        switch (record.type) {
+          case 1:
+            color = 'volcano'
+            break
+          case 2:
+            color = 'green'
+            break
+          case 3:
+            color = 'blue'
+            break
+          default:
+            color = 'volcano'
+        }
         const value = aclTypes?.find(item => item.value === record.type.toString())
-        return <Tag color='volcano'>{value?.label}</Tag>
+        return <Tag color={color}>{value?.label}</Tag>
       }
     },
     {
@@ -165,7 +178,7 @@ const Acl = () => {
       title: '操作',
       width: '5%',
       render: (_: object, record: TableAclListType) => (
-        <Space size={tableSize}>
+        <Flex vertical={false} gap={8}>
           <Button
             size={btnSize}
             name='edit'
@@ -184,7 +197,7 @@ const Acl = () => {
           >
             <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
-        </Space>
+        </Flex>
       )
     }
   ]
@@ -242,6 +255,7 @@ const Acl = () => {
 
     // 加载所有信息
     const aclList = await retrieveAclPageList({
+      status: 0,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })

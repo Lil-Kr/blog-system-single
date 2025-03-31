@@ -9,7 +9,7 @@ import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleListReq;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleReq;
-import com.cy.single.blog.pojo.vo.sys.aclmodule.SysAclModuleVO;
+import com.cy.single.blog.pojo.resp.sys.aclmodule.SysAclModuleResp;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysAclModuleService;
 import com.cy.single.blog.service.SysAclService;
@@ -62,7 +62,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 	 * @return
 	 */
 	@Override
-	public ApiResp<String> addAclModule(AclModuleReq req) {
+	public ApiResp<String> add(AclModuleReq req) {
 		/**
 		 * 检查权限模块名是否相同
 		 */
@@ -154,7 +154,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 	 * @return
 	 */
 	@Override
-	public ApiResp<String> editAclModule(AclModuleReq req) {
+	public ApiResp<String> edit(AclModuleReq req) {
 		/**
 		 * 检查权限模块名是否相同
 		 */
@@ -288,14 +288,14 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 	 * @return
 	 */
 	@Override
-	public ApiResp<SysAclModuleVO> getAclModule(Long surrogateId) {
+	public ApiResp<SysAclModuleResp> getAclModule(Long surrogateId) {
 		QueryWrapper<SysAclModule> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("surrogate_id", surrogateId);
 		SysAclModule aclModule = aclModuleMapper.selectOne(queryWrapper);
 		if (Objects.isNull(aclModule)) {
 			return ApiResp.failure(INFO_NOT_EXIST);
 		}
-		SysAclModuleVO aclModuleVO = new SysAclModuleVO();
+		SysAclModuleResp aclModuleVO = new SysAclModuleResp();
 		BeanUtils.copyProperties(aclModule, aclModuleVO);
 		return ApiResp.success(aclModuleVO);
 	}
@@ -305,8 +305,8 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 	 * @return
 	 */
 	@Override
-	public ApiResp<List<SysAclModuleVO>> aclModuleList(AclModuleListReq req) {
-		List<SysAclModuleVO> sysAclModules = aclModuleMapper.selectAclModuleList(req);
+	public ApiResp<List<SysAclModuleResp>> list(AclModuleListReq req) {
+		List<SysAclModuleResp> sysAclModules = aclModuleMapper.selectAclModuleList(req);
 		return ApiResp.success(sysAclModules);
 	}
 }

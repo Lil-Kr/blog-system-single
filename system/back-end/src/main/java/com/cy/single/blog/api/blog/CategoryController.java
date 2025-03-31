@@ -7,8 +7,8 @@ import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryPageReq;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryReq;
-import com.cy.single.blog.pojo.vo.blog.BlogCategoryVO;
-import com.cy.single.blog.pojo.vo.blog.BlogContentGroupVO;
+import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
+import com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp;
 import com.cy.single.blog.service.BlogCategoryService;
 import com.cy.single.blog.service.BlogContentService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,16 +39,16 @@ public class CategoryController {
 	@RecordLogger
 	@CheckAuth
 	@PostMapping("/pageCategoryList")
-	public ApiResp<PageResult<BlogCategoryVO>> pageCategoryList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogCategoryPageReq req) {
-		PageResult<BlogCategoryVO> list = blogCategoryService.pageCategoryList(req);
+	public ApiResp<PageResult<BlogCategoryResp>> pageCategoryList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogCategoryPageReq req) {
+		PageResult<BlogCategoryResp> list = blogCategoryService.pageCategoryList(req);
 		return ApiResp.success(list);
 	}
 
 	@RecordLogger
 	@CheckAuth
 	@PostMapping("/list")
-	public ApiResp<PageResult<BlogCategoryVO>> list(@RequestBody @Validated BlogCategoryPageReq req) {
-		PageResult<BlogCategoryVO> list = blogCategoryService.list(req);
+	public ApiResp<PageResult<BlogCategoryResp>> list(@RequestBody @Validated BlogCategoryPageReq req) {
+		PageResult<BlogCategoryResp> list = blogCategoryService.list(req);
 		return ApiResp.success(list);
 	}
 
@@ -85,8 +85,8 @@ public class CategoryController {
 	/** =============== 门户网站接口 ===============**/
 	@RecordLogger
 	@GetMapping("/frontCategoryCountList")
-	public ApiResp<List<BlogContentGroupVO>> frontCategoryCountList() {
-		List<BlogContentGroupVO> blogContentGroupList = blogContentService.frontContentByGroupCategory();
+	public ApiResp<List<BlogContentGroupResp>> frontCategoryCountList() {
+		List<BlogContentGroupResp> blogContentGroupList = blogContentService.frontContentByGroupCategory();
 
 //        Map<Long, BlogCategoryVO> blogCategoryAllMapCache = CacheManager.getBlogCategoryAllMapCache();
 //        blogContentGroupList.forEach(item -> {

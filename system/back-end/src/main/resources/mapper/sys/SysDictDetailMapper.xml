@@ -12,14 +12,14 @@
         surrogate_id, parent_id, `name`, `type`, remark
     </sql>
 
-    <select id="getDictDetailListByParentId" resultType="com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO">
+    <select id="getDictDetailListByParentId" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp">
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         where parent_id = #{dictSurrogateId}
     </select>
 
     <!--  -->
-    <select id="pageDictDetailListById" resultType="com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO">
+    <select id="pageDictDetailListById" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp">
         select <include refid="Base_Column_List"/>
         from <include refid="Table_Name"/>
         <where>
@@ -65,7 +65,7 @@
         </where>
     </select>
 
-    <select id="dictDetailTree" resultType="com.cy.single.blog.pojo.vo.sys.dic.SysDictDetailVO">
+    <select id="dictDetailTree" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp">
         select
             a.name as 'parentName',
             b.surrogate_id,

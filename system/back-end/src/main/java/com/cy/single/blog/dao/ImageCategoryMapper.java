@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.image.ImageCategory;
 import com.cy.single.blog.pojo.req.image.ImageCategoryListReq;
 import com.cy.single.blog.pojo.req.image.ImageCategoryPageListReq;
-import com.cy.single.blog.pojo.vo.image.ImageCategoryVO;
+import com.cy.single.blog.pojo.resp.image.ImageCategoryResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -16,11 +16,11 @@ import java.util.List;
 @Repository
 public interface ImageCategoryMapper extends BaseMapper<ImageCategory> {
 
-  List<ImageCategoryVO> pageList(@Param("param") ImageCategoryPageListReq req);
+  List<ImageCategoryResp> pageList(@Param("param") ImageCategoryPageListReq req);
 
   Integer total(@Param("param") ImageCategoryPageListReq req);
 
-  List<ImageCategoryVO> imageCategoryList(@Param("param") ImageCategoryListReq req);
+  List<ImageCategoryResp> imageCategoryList(@Param("param") ImageCategoryListReq req);
 
-  ImageCategoryVO get(Long surrogateId);
+  ImageCategoryResp get(Long surrogateId);
 }
