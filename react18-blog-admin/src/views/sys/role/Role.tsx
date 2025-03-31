@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons/lib/icons'
-import { Button, Flex, PaginationProps, Popconfirm, Splitter, Tabs, TabsProps, Tag, Tooltip } from 'antd/lib'
+import { Button, Flex, PaginationProps, Popconfirm, Splitter, Tabs, TabsProps, Tag } from 'antd/lib'
 import { TableRowSelection } from 'antd/lib/table/interface'
 import { TablePageInfoType } from '@/types/base'
 import { RoleAddReq, RoleEditReq, RoleListPageReq, SysRoleVO, TableRoleType } from '@/types/apis/sys/role/roleType'
@@ -298,7 +298,7 @@ const Role = () => {
     <div className='sys-role-warpper' style={{ height: '100%', width: '100%' }}>
       <Flex gap='middle' vertical={true} style={{ height: '100%', width: '100%' }}>
         <Splitter style={{ height: '100%', width: '100%', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', flex: 'auto' }}>
-          <Splitter.Panel defaultSize='30%' min='20%' max='60%'>
+          <Splitter.Panel defaultSize='40%' min='20%' max='60%'>
             <EditableProTable
               rowKey='key'
               headerTitle={'角色管理'}

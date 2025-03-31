@@ -1,14 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Tree, Button, Flex, TreeDataNode, TreeProps } from 'antd/lib'
-// import type { TreeDataNode, TreeProps } from 'antd'
+import { Tree, Button, Flex, TreeProps } from 'antd/lib'
 import { useRoleAclStore } from '@/store/sys/roleStore'
 import roleApi from '@/apis/sys/roleApi'
 import { AclModuleTreeResp } from '@/types/apis/sys/acl/aclType'
-import {
-  transformAclModuleTreeExpandeKeys,
-  processAclModuleTreeData
-  // transformSelectedKeys,
-} from '@/utils/sys/treeUtils'
+import { transformAclModuleTreeExpandeKeys, processAclModuleTreeData } from '@/utils/sys/treeUtils'
 import { UpdateRoleAclsReq } from '@/types/apis/sys/role/roleType'
 import { useMessage } from '@/components/message/MessageProvider'
 
@@ -96,6 +91,7 @@ const RoleAcl = ({ roleId }: { roleId: string }) => {
           showIcon={false}
           checkable={true}
           blockNode={true}
+          height={800}
           onExpand={onExpand} // 展开树时触发
           expandedKeys={expandedKeys}
           autoExpandParent={true} // 控制是否严格每层依次展开
@@ -105,9 +101,9 @@ const RoleAcl = ({ roleId }: { roleId: string }) => {
           // onSelect={onSelect} // 点击时触发
           // selectedKeys={selectedKeys}
         />
-        <Button style={{ width: '5%' }} onClick={updateRoleAcls}>
-          {'更新权限'}
-        </Button>
+        <Flex justify={'flex-start'} align={'center'} gap={'middle'}>
+          <Button onClick={updateRoleAcls}>{'更新权限'}</Button>
+        </Flex>
       </Flex>
     </div>
   )

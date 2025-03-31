@@ -26,19 +26,13 @@ const columnsAclUser: TableColumnsType<RoleUserTableType> = [
     key: 'remark',
     dataIndex: 'remark',
     title: '备注',
-    width: '30%'
-  },
-  {
-    key: 'createTime',
-    dataIndex: 'createTime',
-    title: '创建时间',
-    width: '20%'
+    width: '40%'
   },
   {
     key: 'updateTime',
     dataIndex: 'updateTime',
     title: '修改时间',
-    width: '20%'
+    width: '30%'
   }
 ]
 
