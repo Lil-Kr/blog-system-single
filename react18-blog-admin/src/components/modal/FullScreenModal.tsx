@@ -107,7 +107,7 @@ const FullScreenModal = (props: ModalType.FullScreenModalType) => {
           // forceRender={true} // 强制渲染
           maskClosable={false}
         >
-          <Form form={fullScreenModalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
+          <Form form={fullScreenModalForm} disabled={inputDisabled} labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
             {items.map((item, index) => (
               <Form.Item key={index} name={item.name} label={item.label} rules={item.rules}>
                 <Input placeholder={item.textValue} style={item.style} />

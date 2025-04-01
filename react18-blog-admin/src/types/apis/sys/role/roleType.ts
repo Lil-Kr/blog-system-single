@@ -2,10 +2,9 @@ import { Result, ResultPage } from '@/types/base/response'
 import { BaseApi } from '../..'
 import { BaseEntityPageType } from '@/types/base'
 import { AclModuleTreeResp } from '../acl/aclType'
-import { DataNode } from 'antd/lib/tree'
 import { GetProp, TableColumnsType, TableProps, TransferProps, TreeDataNode } from 'antd/lib'
 
-export interface TableRoleType {
+export interface RoleTableType {
   key: string
   surrogateId: string
   name: string
@@ -31,7 +30,7 @@ export interface SysRole {
   updateTime: string
 }
 
-export interface SysRoleVO extends SysRole {}
+export interface SysRoleTableType extends SysRole {}
 
 export interface RoleListPageReq extends BaseEntityPageType {
   name?: string
@@ -119,7 +118,7 @@ export interface UpdateRoleUserReq {
 }
 
 export interface RoleApi extends BaseApi {
-  retrievePageRoleList(req: RoleListPageReq): Promise<ResultPage<SysRoleVO>>
+  retrievePageRoleList(req: RoleListPageReq): Promise<ResultPage<SysRoleTableType>>
   add(req: RoleAddReq): Promise<Result<string>>
   edit(params: RoleEditReq): Promise<Result<string>>
   delete(req: RoleDelReq): Promise<Result<string>>

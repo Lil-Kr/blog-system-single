@@ -9,7 +9,7 @@ import {
   RoleListPageReq,
   RoleUserListResp,
   RoleUserReq,
-  SysRoleVO,
+  SysRoleTableType,
   UpdateRoleAclsReq,
   UpdateRoleUserReq
 } from '@/types/apis/sys/role/roleType'
@@ -18,7 +18,7 @@ import { baseAxiosRequest } from '@/utils/http/request'
 
 const roleApi: RoleApi = {
   retrievePageRoleList(req: RoleListPageReq) {
-    return baseAxiosRequest.post<ResultPage<SysRoleVO>>(PREFIX_URL_SYS_ROLE + '/pageList', req)
+    return baseAxiosRequest.post<ResultPage<SysRoleTableType>>(PREFIX_URL_SYS_ROLE + '/pageList', req)
   },
   add(req: RoleAddReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ROLE + '/add', req)

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons/lib/icons'
 import { Button, Flex, PaginationProps, Popconfirm, Splitter, Tabs, TabsProps, Tag } from 'antd/lib'
 import { TableRowSelection } from 'antd/lib/table/interface'
-import { TablePageInfoType } from '@/types/base'
-import { RoleAddReq, RoleEditReq, RoleListPageReq, SysRoleVO, TableRoleType } from '@/types/apis/sys/role/roleType'
+import { RoleAddReq, RoleEditReq, RoleListPageReq, RoleTableType } from '@/types/apis/sys/role/roleType'
 import roleApi from '@/apis/sys/roleApi'
 import { EditableProTable, ProColumns } from '@ant-design/pro-components'
 import RoleAcl from './RoleAcl'
@@ -12,30 +11,35 @@ import { useRoleAclStore } from '@/store/sys/roleStore'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { useDictDetailStore } from '@/store/sys/dictStore'
+import { transformRoleListToTable } from '@/utils/sys/transform'
 
 const Role = () => {
   const messageApi = useMessage()
   const { btnSize, tableSize } = useGlobalStyleStore()
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
-  const { dictMap, dictStatues } = useDictDetailStore()
-  const [tableLoading, setTableLoading] = useState<boolean>(true)
-  const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
-    currentPageNum: 1,
-    pageSize: 10,
-    totalSize: 0
-  })
+  const { dictStatues } = useDictDetailStore()
 
   /**
    * role-acl store
    * 默认选中角色列表的第一行数据
    */
-  const { roleId, setRoleId, selectedRowKeys, setSelectedRowKey, roleList, setRoleList } = useRoleAclStore()
+  const {
+    roleId,
+    setRoleId,
+    selectedRowKeys,
+    setSelectedRowKey,
+    roleList,
+    setRoleList,
+    tableLoading,
+    tablePageInfo,
+    setTablePageInfo
+  } = useRoleAclStore()
 
   const { roleTypes } = useDictDetailStore()
   /**
    * 角色列表的列配置
    */
-  const roleColumns: ProColumns<TableRoleType>[] = [
+  const roleColumns: ProColumns<RoleTableType>[] = [
     {
       key: 'name',
       dataIndex: 'name',
@@ -44,7 +48,7 @@ const Role = () => {
       formItemProps: (form, { rowIndex }) => ({
         rules: rowIndex > 1 ? [{ required: true, message: '此项为必填项' }] : []
       }),
-      render: (_, record: TableRoleType) => {
+      render: (_, record: RoleTableType) => {
         if (record.type === 1) {
           return <Tag color={'red'}>{record.name}</Tag>
         }
@@ -73,7 +77,7 @@ const Role = () => {
         // 显示下拉框文本
         return roleTypes.find(item => item.value === value.toString())?.label || value
       },
-      render: (_, record: TableRoleType) => {
+      render: (_, record: RoleTableType) => {
         return <Tag color={record.type === 1 ? 'red' : 'blue'}>{record.name}</Tag>
       }
     },
@@ -99,7 +103,7 @@ const Role = () => {
         // 显示下拉框文本
         return dictStatues.find(item => item.value === value.toString())?.label || value
       },
-      render: (_, record: TableRoleType) => {
+      render: (_, record: RoleTableType) => {
         const { status } = record
         let colorText = ''
         let statusText = dictStatues.find(item => item.value === status.toString())?.label || ''
@@ -181,29 +185,11 @@ const Role = () => {
    */
   useEffect(() => {
     const fetchData = async () => {
-      setTableLoading(true)
-      await initData() // 等待数据加载完成
-      setTableLoading(false)
+      initRoleList()
     }
 
     fetchData()
   }, [])
-
-  /**
-   * 初始化数据
-   */
-  const initData = async () => {
-    try {
-      /**
-       * 加载角色列表
-       */
-      initRoleList()
-    } catch (error) {
-      console.error('Failed to retrieve role list:', error)
-    } finally {
-      setTableLoading(false)
-    }
-  }
 
   /**
    * 初始化角色列表
@@ -212,11 +198,7 @@ const Role = () => {
     /**
      * 分页查询角色列表
      */
-    const roleList = await retrievePageRoleList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
-    // 这里传入的是 SysRoleVO[] 类型
-    const roleTableList = transformRoleList(roleList)
-    // 处理 roleTableList, 例如设置到状态中
-    setRoleList(roleTableList)
+    await retrievePageRoleList({ currentPageNum: tablePageInfo.currentPageNum, pageSize: tablePageInfo.pageSize })
   }
 
   /**
@@ -224,33 +206,23 @@ const Role = () => {
    * @param req
    * @returns
    */
-  const retrievePageRoleList = async (req: RoleListPageReq): Promise<SysRoleVO[]> => {
+  const retrievePageRoleList = async (req: RoleListPageReq) => {
     const res = await roleApi.retrievePageRoleList({ ...req })
     const { code, data } = res
     if (code !== 200) {
       return []
     }
-    return data.list as SysRoleVO[]
-  }
-
-  /**
-   * 转换角色信息列表, 用于角色列表展示
-   * @param list
-   * @returns
-   */
-  const transformRoleList = (list: SysRoleVO[]): TableRoleType[] => {
-    const mappingList = list.map(({ surrogateId, ...rest }) => ({
-      key: surrogateId,
-      surrogateId,
-      ...rest
-    }))
-    return mappingList
+    // 这里传入的是 SysRoleVO[] 类型
+    const roleTableList = transformRoleListToTable(data.list ?? [])
+    // 处理 roleTableList, 例如设置到状态中
+    setRoleList(roleTableList)
+    setTablePageInfo({ currentPageNum: req.currentPageNum, pageSize: req.pageSize, totalSize: data.total })
   }
 
   /**
    * 表格为checkbox时启用
    */
-  const rowSelection: TableRowSelection<TableRoleType> = {
+  const rowSelection: TableRowSelection<RoleTableType> = {
     onChange: (selectedRowKeys, selectedRows) => {},
     onSelect: async (record, selected, selectedRows) => {
       const selectKey = record.key.toString()
@@ -265,26 +237,25 @@ const Role = () => {
    * @param currentPageNum
    * @param pageSize
    */
-  const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {}
-
-  /**
-   * page component
-   * @param currentPageNum
-   * @param pageSize
-   */
-  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (currentPageNum, pageSize) => {
-    setTablePageInfo(prevState => ({
-      ...prevState,
-      pageSize
-    }))
+  const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
+    retrievePageRoleList({ currentPageNum, pageSize })
   }
+
+  // /**
+  //  * page component
+  //  * @param currentPageNum
+  //  * @param pageSize
+  //  */
+  // const onShowSizeChange: PaginationProps['onShowSizeChange'] = (currentPageNum, pageSize) => {
+  //   setTablePageInfo({ ...tablePageInfo, pageSize })
+  // }
 
   /**
    * 删除角色
    * @param record
    * @returns
    */
-  const deleteRoleConfirm = async (record: TableRoleType) => {
+  const deleteRoleConfirm = async (record: RoleTableType) => {
     const res = await roleApi.delete({ surrogateId: record.key })
     const { code, msg } = res
     if (code !== 200) {
@@ -374,7 +345,6 @@ const Role = () => {
                 hideOnSinglePage: false,
                 pageSizeOptions: [10, 20, 50],
                 onChange: onChangePageInfo,
-                onShowSizeChange: onShowSizeChange,
                 pageSize: tablePageInfo.pageSize, // 每页条数
                 total: tablePageInfo.totalSize // 总条数
               }}

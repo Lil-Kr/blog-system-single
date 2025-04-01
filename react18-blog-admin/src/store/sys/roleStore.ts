@@ -1,4 +1,5 @@
-import { RoleUserTableType, TableRoleType } from '@/types/apis/sys/role/roleType'
+import { RoleUserTableType, RoleTableType } from '@/types/apis/sys/role/roleType'
+import { TablePageInfoType } from '@/types/base'
 import { TransferProps, TreeDataNode } from 'antd/lib'
 import { create } from 'zustand'
 
@@ -7,9 +8,12 @@ interface RoleAclState {
   tableLoading: boolean
   setTableLoading: (tableLoading: boolean) => void
 
+  tablePageInfo: TablePageInfoType
+  setTablePageInfo: (tablePageInfo: TablePageInfoType) => void
+
   // 存储角色列表数据
-  roleList: TableRoleType[]
-  setRoleList: (roleList: TableRoleType[]) => void
+  roleList: RoleTableType[]
+  setRoleList: (roleList: RoleTableType[]) => void
 
   // 存储角色列表单选时的id
   roleId: string
@@ -42,6 +46,11 @@ interface RoleAclState {
 
 const roleAclInit = {
   tableLoading: false,
+  tablePageInfo: {
+    currentPageNum: 1,
+    pageSize: 20,
+    totalSize: 0
+  },
   roleList: [],
   roleId: '',
   selectedRowKeys: [],
@@ -59,7 +68,14 @@ const useRoleAclStore = create<RoleAclState>()((set, get) => ({
       ...state,
       tableLoading
     })),
-  setRoleList: (roleList: TableRoleType[]) =>
+  setTablePageInfo: (tablePageInfo: TablePageInfoType) =>
+    set(state => {
+      return {
+        ...state,
+        tablePageInfo
+      }
+    }),
+  setRoleList: (roleList: RoleTableType[]) =>
     set(state => {
       return {
         ...state,

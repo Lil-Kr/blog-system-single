@@ -6,7 +6,7 @@ import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { TablePageInfoType } from '@/types/base'
 import { IModalRequestAction, IModalParams, IAction, IModalStyle } from '@/types/component/modal'
 import { useForm } from 'antd/es/form/Form'
-import { transformOrgTreeExpandeKeys, transformToTreeData } from '@/utils/sys/treeUtils'
+import { transformOrgTreeExpandeKeys, transformOrgListToTreeData } from '@/utils/sys/treeUtils'
 import { UserListPageReq, UserTableType } from '@/types/apis/sys/user/userType'
 import UserModal from '@/components/modal/UserModal'
 import { orgApi, userApi } from '@/apis/sys'
@@ -14,6 +14,7 @@ import { OptionType } from '@/types/apis'
 import { Key } from 'antd/lib/table/interface'
 import { AddUserButtonAcl, DelUserButtonAcl, EditUserButtonAcl } from './auth/authButton'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
+import { transformUserListToTable } from '@/utils/sys/transform'
 
 const User = () => {
   const userColumns: ColumnsType<any> = [
@@ -144,7 +145,7 @@ const User = () => {
 
   const [form] = useForm()
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
-  const [tableLoading, setTableLoading] = useState<boolean>(true)
+  const [tableLoading, setTableLoading] = useState<boolean>(false)
   // 函数式更新值, 不能直接更新
   const [tablePageInfo, setTablePageInfo] = useState<TablePageInfoType>({
     currentPageNum: 1,
@@ -152,7 +153,7 @@ const User = () => {
     totalSize: 0
   })
   const [orgTree, setOrgTree] = useState<TreeDataNode[]>([] as TreeDataNode[])
-  const [dataSource, setDataSource] = useState<UserTableType[]>([] as UserTableType[])
+  const [userPageList, setUserPageList] = useState<UserTableType[]>([] as UserTableType[])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   // 默认展开所有节点
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
@@ -242,7 +243,7 @@ const User = () => {
     if (res.code !== 200) {
       return
     }
-    pageUserList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    retirevePageUserList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
   /**
    * 搜索
@@ -250,7 +251,7 @@ const User = () => {
   const search = () => {
     let data = form.getFieldsValue()
     const searchParam = { ...data, currentPageNum: 1, pageSize: tablePageInfo.pageSize }
-    pageUserList({ ...searchParam })
+    retirevePageUserList({ ...searchParam })
   }
 
   /**
@@ -258,14 +259,7 @@ const User = () => {
    */
   const resetSearch = () => {
     form.resetFields()
-    pageUserList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
-  }
-
-  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (currentPageNum, pageSize) => {
-    setTablePageInfo(prevState => ({
-      ...prevState,
-      pageSize
-    }))
+    retirevePageUserList({ currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
 
   /**
@@ -275,7 +269,7 @@ const User = () => {
    */
   const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
     const values = form.getFieldsValue()
-    pageUserList({ ...values, currentPageNum, pageSize })
+    retirevePageUserList({ ...values, currentPageNum, pageSize })
   }
 
   /**
@@ -291,42 +285,38 @@ const User = () => {
    * init
    */
   const initInfo = async () => {
-    setTableLoading(true)
-
     // 加载组织树
     retrieveOrgTreeList()
 
     // loading user list page
-    pageUserList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    retirevePageUserList({ currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
 
   /**
    * loading user list page
    * @param req
    */
-  const pageUserList = async (req: UserListPageReq) => {
+  const retirevePageUserList = async (req: UserListPageReq) => {
     // 加载当前组织下的子节点数据
-    const userList = await userApi.pageUserList({
-      keyWords: req.keyWords || '',
-      currentPageNum: 1,
-      pageSize: tablePageInfo.pageSize
+    const res = await userApi.pageUserList({
+      ...req,
+      currentPageNum: req.currentPageNum,
+      pageSize: req.pageSize
     })
-    const { code, data, msg } = userList
+    const { code, data } = res
     if (code !== 200) {
       return
     }
 
-    const list: UserTableType[] = data.list.map(({ surrogateId, ...rest }) => ({
-      key: surrogateId,
-      ...rest
-    }))
-    setDataSource(list)
+    const list: UserTableType[] = transformUserListToTable(data.list ?? [])
+    setUserPageList(list)
+    // 设置分页信息
     setTablePageInfo(prevState => ({
       ...prevState,
+      currentPageNum: req.currentPageNum,
+      pageSize: req.pageSize,
       totalSize: data.total
     }))
-
-    setTableLoading(false)
   }
 
   /**
@@ -335,11 +325,11 @@ const User = () => {
    */
   const retrieveOrgTreeList = async () => {
     const orgList = await orgApi.retrieveOrgTreeList()
-    const { code, data, msg } = orgList
+    const { code, data } = orgList
     if (code !== 200) {
       return
     }
-    const res = transformToTreeData(data)
+    const res = transformOrgListToTreeData(data)
     // 加载组织树
     setOrgTree(res)
 
@@ -360,26 +350,11 @@ const User = () => {
     // 设置选中的组织信息
     setSelectedInfo({ label: node.title, value: node.key })
 
-    // 加载当前组织下的子节点数据
-    const userList = await userApi.pageUserList({
+    await retirevePageUserList({
       surrogateId: node.key,
       currentPageNum: 1,
       pageSize: tablePageInfo.pageSize
     })
-    const { code, data, msg } = userList
-    if (code !== 200) {
-      return
-    }
-
-    const list: UserTableType[] = data.list.map(({ surrogateId, ...rest }) => ({
-      key: surrogateId,
-      ...rest
-    }))
-    setDataSource(list)
-    setTablePageInfo(prevState => ({
-      ...prevState,
-      totalSize: data.total
-    }))
   }
 
   const onExpand = (expandedKeysValue: Key[]) => {
@@ -455,7 +430,7 @@ const User = () => {
                     }}
                     loading={tableLoading}
                     columns={userColumns}
-                    dataSource={dataSource}
+                    dataSource={userPageList}
                     pagination={{
                       position: ['bottomLeft'],
                       showQuickJumper: false, // 跳转指定页面
@@ -463,7 +438,6 @@ const User = () => {
                       hideOnSinglePage: false,
                       pageSizeOptions: [10, 20, 50],
                       onChange: onChangePageInfo,
-                      onShowSizeChange: onShowSizeChange,
                       pageSize: tablePageInfo.pageSize, // 每页条数
                       total: tablePageInfo.totalSize // 总条数
                     }}

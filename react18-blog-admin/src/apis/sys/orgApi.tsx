@@ -1,7 +1,7 @@
 import { baseAxiosRequest } from '@/utils/http/request'
 import { PREFIX_URL_SYS_ORG } from '@/config'
 import {
-  SysOrgAllResp,
+  SysOrgListResp,
   SysOrgApi,
   SysOrgDelReq,
   SysOrgEditReq,
@@ -20,7 +20,7 @@ const orgApi: SysOrgApi = {
     return baseAxiosRequest.post<ResultPage<SysOrgResp>>(PREFIX_URL_SYS_ORG + '/pageOrgList', req)
   },
   orgAllList(req: SysOrgListAllReq) {
-    return baseAxiosRequest.post<Result<SysOrgAllResp[]>>(PREFIX_URL_SYS_ORG + '/list', req)
+    return baseAxiosRequest.post<Result<SysOrgListResp[]>>(PREFIX_URL_SYS_ORG + '/list', req)
   },
   add(req: SysOrgSaveReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ORG + '/add', req)

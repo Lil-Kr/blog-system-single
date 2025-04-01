@@ -106,7 +106,7 @@ const CategoryModal = () => {
         // afterClose={resetForm}
         // forceRender={true} // 强制渲染
       >
-        <Form form={categoryModalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
+        <Form form={categoryModalForm} disabled={inputDisabled} labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
           <Form.Item name={'key'} hidden>
             <Input />
           </Form.Item>

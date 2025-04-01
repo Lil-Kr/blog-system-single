@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { TreeDataNode } from 'antd/lib'
-import { OrgTableType, SysOrgAllResp, SysOrgApi } from '@/types/apis/sys/org/orgType'
+import { OrgTableType, SysOrgListResp, SysOrgApi } from '@/types/apis/sys/org/orgType'
 import { TablePageInfoType } from '@/types/base'
 import { Key } from 'antd/lib/table/interface'
 import { OptionType } from '@/types/apis'

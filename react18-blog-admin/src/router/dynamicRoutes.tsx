@@ -7,7 +7,7 @@ import { getBreadCrumbItems, getRouterMenuItems, getTabsMap } from '@/utils/comm
 import { BreadcrumbType } from '@/types/common/breadcrumbType'
 import { useTokenStore } from '@/store/login'
 import { RouterItemType, RouterMetaType } from '@/types/router/routeType'
-import { transformMenuTree, transformTypeToSeletor, transformTypeToSeletorById } from '@/utils/sys/treeUtils'
+import { transformMenuTree } from '@/utils/sys/treeUtils'
 import { useBreadcrumbStore, useMenuStore, useTabsStore } from '@/store/global'
 import { DictMapType } from '@/types/apis/sys/dict/dictType'
 import { dictApi } from '@/apis/sys/dictApi'
@@ -16,6 +16,7 @@ import { aclModuleApi } from '@/apis/sys'
 import { useAclModuleStore } from '@/store/global/initDictStore'
 import { usePermissionsStore } from '@/store/sys/authStore'
 import { useDictDetailStore } from '@/store/sys/dictStore'
+import { transformDictTypeToSeletor, transformTypeToSeletorById } from '@/utils/sys/transform'
 
 /**
  * 创建路由
@@ -71,21 +72,21 @@ const initDictMap = async () => {
    * 初始化数据字典[状态类型]
    */
   const statusTypes: DictMapType[] = dictMap.get('状态类型') ?? []
-  const statusTypeSelecor = transformTypeToSeletor(statusTypes)
+  const statusTypeSelecor = transformDictTypeToSeletor(statusTypes)
   setDictStatueType(statusTypeSelecor)
 
   /**
    * 初始化数据字典[权限类型]
    */
   const aclTypes: DictMapType[] = dictMap.get('权限点类型') ?? []
-  const aclTypeSelecor = transformTypeToSeletor(aclTypes)
+  const aclTypeSelecor = transformDictTypeToSeletor(aclTypes)
   setAclType(aclTypeSelecor)
 
   /**
    * 查询数据字典[角色类型]
    */
   const roleTypes = dictMap.get('角色类型') ?? []
-  const roleType = transformTypeToSeletor(roleTypes)
+  const roleType = transformDictTypeToSeletor(roleTypes)
   setRoleType(roleType)
 
   /**

@@ -1,7 +1,7 @@
 import { aclApi, aclModuleApi } from '@/apis/sys'
 import { OptionType } from '@/types/apis'
 import { create } from 'zustand'
-import { AclApi, AclModalType, AclModuleApi, AclModuleTableType, TableAclListType } from '@/types/apis/sys/acl/aclType'
+import { AclApi, AclModalType, AclModuleApi, AclModuleTableType, AclTableListType } from '@/types/apis/sys/acl/aclType'
 
 /**
  * 权限模块modal框
@@ -96,7 +96,7 @@ type AclModalState = {
 
 type AclModalAction = {
   setAclModalState: (modalParams: AclModalState) => void
-  setAclModal: (data: TableAclListType) => void
+  setAclModal: (data: AclTableListType) => void
   setOpenModal: (openModal: boolean) => void
   setInputDisabled: (inputDisabled: boolean) => void
   setModalSelector: (aclModuleInfo: OptionType, statusInfo: OptionType, aclTypeInfo: OptionType) => void
@@ -111,7 +111,7 @@ const initAclModal = {
   openModal: false,
   modalStyle: { maxWidth: '100vw' },
   inputDisabled: false,
-  data: {} as TableAclListType,
+  data: {} as AclTableListType,
   modalSelector: {
     aclModuleInfo: { label: '', value: '' },
     statusInfo: { label: '', value: '' },
@@ -128,7 +128,7 @@ const useAclModalStore = create<AclModalState & AclModalAction>()(set => ({
       ...state,
       ...modalParams
     })),
-  setAclModal: (data: TableAclListType) =>
+  setAclModal: (data: AclTableListType) =>
     set(state => ({
       ...state,
       data

@@ -20,11 +20,11 @@ import { Key, TableRowSelection } from 'antd/lib/table/interface'
 import { OrgTableType, SysOrgPageReq } from '@/types/apis/sys/org/orgType'
 import { ColumnsType } from 'antd/es/table'
 import OrgModal from '@/components/modal/OrgModal'
-import { transformOrgTreeExpandeKeys, transformToTreeData } from '@/utils/sys/treeUtils'
+import { transformOrgTreeExpandeKeys, transformOrgListToTreeData } from '@/utils/sys/treeUtils'
 import { orgApi } from '@/apis/sys'
 import { initOrgData, useOrgModalStore, useOrgStore } from '@/store/sys/orgStore'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
-import { transformOrgInfoToSeletor } from '@/utils/sys/transform'
+import { transformOrgListToSeletor, transformOrgListToTable } from '@/utils/sys/transform'
 import { OptionType } from '@/types/apis'
 
 /**
@@ -204,7 +204,7 @@ const Org = () => {
     if (code !== 200) {
       return
     }
-    const res = transformToTreeData(data)
+    const res = transformOrgListToTreeData(data)
     // 加载组织树
     setOrgTree(res)
 
@@ -235,14 +235,10 @@ const Org = () => {
       setOrgPageList([])
       return
     }
+    const list = transformOrgListToTable(data.list ?? [])
 
-    const list: OrgTableType[] = data.list.map(({ surrogateId, ...rest }) => ({
-      key: surrogateId,
-      ...rest
-    }))
     setOrgPageList(list)
     setTablePageInfo({
-      ...tablePageInfo,
       totalSize: data.total,
       pageSize: req.pageSize,
       currentPageNum: req.currentPageNum
@@ -270,12 +266,8 @@ const Org = () => {
       return
     }
 
-    const list: OrgTableType[] = data.list.map(({ surrogateId, ...rest }) => ({
-      key: surrogateId,
-      ...rest
-    }))
+    const list: OrgTableType[] = transformOrgListToTable(data.list ?? [])
     setOrgPageList(list)
-
     setTablePageInfo({ ...tablePageInfo, totalSize: data.total })
   }
 
@@ -292,7 +284,7 @@ const Org = () => {
     if (code !== 200) {
       orgSelectorInfo = []
     } else {
-      orgSelectorInfo = transformOrgInfoToSeletor(data)
+      orgSelectorInfo = transformOrgListToSeletor(data)
     }
 
     setOrgModalState({
@@ -327,7 +319,7 @@ const Org = () => {
     if (code !== 200) {
       orgSelectorInfo = []
     } else {
-      orgSelectorInfo = transformOrgInfoToSeletor(data)
+      orgSelectorInfo = transformOrgListToSeletor(data)
     }
     setOrgModalState({
       api: orgApi,

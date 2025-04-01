@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { EditableProTable, ProColumns } from '@ant-design/pro-components'
 import { Button } from 'antd'
-import { TableRoleType } from '@/types/apis/sys/role/roleType'
+import { RoleTableType } from '@/types/apis/sys/role/roleType'
 import { TablePageInfoType } from '@/types/base'
 import { PaginationProps, Popconfirm, Space } from 'antd/lib'
 import { SizeType } from 'antd/lib/config-provider/SizeContext'
@@ -26,7 +26,7 @@ const ProTableDemo = () => {
   /**
    * 表格为checkbox时启用
    */
-  const rowSelection: TableRowSelection<TableRoleType> = {
+  const rowSelection: TableRowSelection<RoleTableType> = {
     onChange: (selectedRowKeys, selectedRows) => {},
     onSelect: (record, selected, selectedRows) => {},
     onSelectAll: (selected, selectedRows, changeRows) => {}

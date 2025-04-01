@@ -141,7 +141,7 @@ export interface SysAclModuleListResp {
 }
 
 /** ================ table-type ================ */
-export interface TableAclListType extends SysAcl {
+export interface AclTableListType extends SysAcl {
   key: string
   aclModuleName: string
   creatorName: string
@@ -171,7 +171,7 @@ export interface AclModalType {
   url?: string
   menuName?: string
   menuUrl?: string
-  btnSign?:string
+  btnSign?: string
   seq?: number
   status?: number
   remark?: string

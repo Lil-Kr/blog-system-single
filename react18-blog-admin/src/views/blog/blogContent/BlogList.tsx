@@ -16,7 +16,7 @@ import { BlogContentModalType, useBlogModalStore, useBlogStore } from '@/store/b
 import BlogModal from './BlogModal'
 import { useDictDetailStore } from '@/store/sys/dictStore'
 import labelApi from '@/apis/blog/label/labelApi'
-import { LabelListReq, LabelPageListReq } from '@/types/apis/blog/labelType'
+import { LabelListReq } from '@/types/apis/blog/labelType'
 import { SelectProps, Tooltip } from 'antd/lib'
 import { useLabelStore } from '@/store/blog/labelStore'
 // api
@@ -27,13 +27,13 @@ import blogContentApi, {
   BlogContentResq
 } from '@/apis/blog/content/blogContentApi'
 import { transformBlogToTable, transformCategoryToSelector, transformTopicToSelector } from '@/utils/blog/blogTransform'
-import { transformTypeToSeletorById } from '@/utils/sys/treeUtils'
 import blogCategoryApi from '@/apis/blog/category/categoryApi'
 import { BlogCategoryReq, BlogCategoryVO } from '@/types/apis/blog/category'
 import blogTopicApi from '@/apis/blog/topic/topicApi'
 import { BlogTopicListReq, BlogTopicVO } from '@/types/apis/blog/topicType'
 import { useMessage } from '@/components/message/MessageProvider'
 import Link from 'antd/lib/typography/Link'
+import { transformTypeToSeletorById } from '@/utils/sys/transform'
 
 const BlogList = () => {
   const columnsBlog: ColumnsType<BlogContentTableType> = [

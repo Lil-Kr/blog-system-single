@@ -59,7 +59,7 @@ export interface SysOrgListAllReq {
   status?: number
 }
 
-export interface SysOrgAllResp extends SysOrg {}
+export interface SysOrgListResp extends SysOrg {}
 
 export interface SysOrgSaveReq {
   name: string
@@ -92,7 +92,7 @@ export interface SysOrgDelReq {
 export interface SysOrgApi extends BaseApi {
   retrieveOrgTreeList(): Promise<Result<SysOrgResp[]>>
   pageOrgList(req: SysOrgPageReq): Promise<ResultPage<SysOrgResp>>
-  orgAllList(req: SysOrgListAllReq): Promise<Result<SysOrgAllResp[]>>
+  orgAllList(req: SysOrgListAllReq): Promise<Result<SysOrgListResp[]>>
   add(req: SysOrgSaveReq): Promise<Result<string>>
   edit(req: SysOrgEditReq): Promise<Result<string>>
   delete(req: SysOrgDelReq): Promise<Result<string>>

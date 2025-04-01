@@ -86,7 +86,7 @@ const TopicModal = () => {
         // afterClose={resetForm}
         // forceRender={true} // 强制渲染
       >
-        <Form form={topicModalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
+        <Form form={topicModalForm} disabled={inputDisabled} labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
           <Form.Item name={'key'} hidden>
             <Input />
           </Form.Item>

@@ -265,7 +265,13 @@ const BlogModal = () => {
           getContainer={false} // 让 Modal 渲染在当前 DOM 结构
           maskClosable={false} // 禁止点击遮罩层关闭
         >
-          <Form form={blogForm} disabled={inputDisabled} preserve={false}>
+          <Form
+            form={blogForm}
+            disabled={inputDisabled}
+            preserve={false}
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 18 }}
+          >
             <Row gutter={16} justify={'start'}>
               <Col span={12}>
                 <Form.Item name={'key'} hidden>

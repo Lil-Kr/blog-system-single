@@ -116,7 +116,7 @@ const BaseModal = (props: ModalType.BaseModalType) => {
         // forceRender={true} // 强制渲染
         maskClosable={false}
       >
-        <Form form={baseModalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
+        <Form form={baseModalForm} disabled={inputDisabled} labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
           <Form.Item name={'key'} hidden>
             <Input />
           </Form.Item>

@@ -215,7 +215,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
         // afterClose={resetForm}
         // forceRender={true} // 强制渲染
       >
-        <Form form={modalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
+        <Form form={modalForm} disabled={inputDisabled} labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
           <Form.Item name={'key'} hidden>
             <Input />
           </Form.Item>
@@ -255,7 +255,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
               options={dictStatues}
             />
           </Form.Item>
-          <Form.Item key={6} name={'menusOpt'} label={'作为父级菜单'}>
+          <Form.Item key={6} name={'menusOpt'} label={'是否为父级菜单'}>
             <Select
               onChange={value => handleMenus(value)}
               placeholder={'构成菜单时无需跳转页面'}
@@ -279,7 +279,7 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
             label={'备注'}
             rules={[{ required: false, message: '备注不超过200个字符' }]}
           >
-            <TextArea rows={4} placeholder='备注不超过200个字符' style={{ width: '100%' }} />
+            <TextArea rows={6} placeholder='备注不超过200个字符' style={{ width: '100%' }} />
           </Form.Item>
         </Form>
       </Modal>

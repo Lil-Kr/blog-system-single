@@ -112,9 +112,9 @@ const AclModal = (props: ModalType.CustomModal) => {
 
       // 绑定初始值
       modalForm.setFieldsValue({
-        aclModuleInfo: aclModuleInfo,
-        aclTypeInfo: aclTypeInfo,
-        statusInfo: statusInfo,
+        aclModuleInfo,
+        aclTypeInfo,
+        statusInfo,
         ...data
       })
       setModalSelector(aclModuleInfo, statusInfo, aclTypeInfo)
@@ -251,7 +251,7 @@ const AclModal = (props: ModalType.CustomModal) => {
     <div className='baseModal'>
       <Modal
         title={title}
-        width={'50vw'}
+        width={'40vw'}
         okText={'确定'}
         cancelText={'取消'}
         open={openModal}
@@ -263,7 +263,7 @@ const AclModal = (props: ModalType.CustomModal) => {
         // afterClose={resetForm}
         // forceRender={true} // 强制渲染
       >
-        <Form form={modalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
+        <Form form={modalForm} disabled={inputDisabled} labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
           <Form.Item name={'key'} hidden>
             <Input />
           </Form.Item>

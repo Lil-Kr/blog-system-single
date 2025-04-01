@@ -15,9 +15,9 @@ import LazyLoad from '@/components/router/LazyLoad'
  * @param data
  * @returns
  */
-export const transformToTreeData = (data: SysOrgResp[]): TreeDataNode[] => {
+export const transformOrgListToTreeData = (data: SysOrgResp[]): TreeDataNode[] => {
   return data.map(item => {
-    const children = item.orgList ? transformToTreeData(item.orgList) : [] // 递归处理子节点
+    const children = item.orgList ? transformOrgListToTreeData(item.orgList) : [] // 递归处理子节点
     return {
       key: item.surrogateId, // 使用 surrogateId 作为 key
       title: item.name, // 使用 name 作为 title
@@ -180,37 +180,6 @@ export const processAclModuleTreeData = (
     processedTree
   }
 }
-
-/**
- * 字典类型数组
- * @param statusDict
- * @returns
- */
-const transformTypeToSeletor = (statusDict: DictMapType[]): OptionType[] => {
-  const res: OptionType[] = statusDict.map(({ type, name }) => ({
-    value: type.toString() ?? '',
-    label: name
-  }))
-  return res
-}
-
-export { transformTypeToSeletor }
-
-/**
- * 字典类型数组
- * @param statusDict
- * @returns
- */
-const transformTypeToSeletorById = (statusDict: DictMapType[]): OptionType[] => {
-  const res: OptionType[] = statusDict.map(({ surrogateId, name, type }) => ({
-    value: surrogateId,
-    label: name,
-    type: type.toString()
-  }))
-  return res
-}
-
-export { transformTypeToSeletorById }
 
 /**
  * 菜单转换
