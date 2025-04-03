@@ -43,7 +43,7 @@ const initUserPermission = async (): Promise<PermissionType> => {
  * 初始化字典数据
  */
 const initDictList = async (): Promise<Map<string, DictMapType[]>> => {
-  const dictTree = await dictApi.dictDetailTree()
+  const dictTree = await dictApi.dictDetailMapping()
   const { code, data } = dictTree
 
   if (code !== 200) {

@@ -65,7 +65,7 @@
         </where>
     </select>
 
-    <select id="dictDetailTree" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp">
+    <select id="dictDetailList" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp">
         select
             a.name as 'parentName',
             b.surrogate_id,

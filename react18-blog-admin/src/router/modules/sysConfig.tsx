@@ -66,7 +66,7 @@ const sysConfig: RouterItemType[] = [
           icon: <MergeCellsOutlined />
         },
         path: '/admin/sys/acl',
-        element: LazyLoad(lazy(() => import('@/views/sys/Acl')))
+        element: LazyLoad(lazy(() => import('@/views/sys/acl/Acl')))
       },
       {
         meta: {

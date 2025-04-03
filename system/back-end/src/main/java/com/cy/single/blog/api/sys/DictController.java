@@ -70,14 +70,14 @@ public class DictController {
 	}
 
 	/**
-	 * 获取字典明细树
+	 * 获取字典明细树, mapping [key, SysDictDetailResp]
 	 * @return
 	 */
 	@CheckAuth
 	@RecordLogger
-	@GetMapping("/dictDetailTree")
-	public ApiResp<Map<String, List<SysDictDetailResp>>> dictDetailTree() {
-		return dictService.dictDetailTree();
+	@GetMapping("/dictDetailMapping")
+	public ApiResp<Map<String, List<SysDictDetailResp>>> dictDetailMapping() {
+		return dictService.dictDetailMapping();
 	}
 
 	/**

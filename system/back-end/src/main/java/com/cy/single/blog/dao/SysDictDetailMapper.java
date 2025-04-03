@@ -21,5 +21,5 @@ public interface SysDictDetailMapper extends BaseMapper<SysDictDetail> {
 
 	Integer countPageDictDetail(@Param("param") DictDetailPageListReq req);
 
-	List<SysDictDetailResp> dictDetailTree();
+	List<SysDictDetailResp> dictDetailList();
 }

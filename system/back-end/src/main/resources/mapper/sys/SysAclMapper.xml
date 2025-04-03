@@ -151,4 +151,10 @@
             </if>
         </where>
     </select>
+
+    <select id="selectAclListByUrl" resultType="com.cy.single.blog.pojo.entity.sys.SysAcl">
+        select <include refid="Base_Column_List" />
+        from <include refid="Table_Name" />
+        where url = #{url}
+    </select>
 </mapper>

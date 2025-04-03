@@ -70,7 +70,7 @@ public class PostConstructComponent {
 
 		// 数据字典
 		List<SysDict> dictList = dictMapper.selectDictList();
-		List<SysDictDetailResp> dictDetailListVO = dictDetailMapper.dictDetailTree();
+		List<SysDictDetailResp> dictDetailListVO = dictDetailMapper.dictDetailList();
 		List<SysDictDetail> dictDetailList = dictDetailListVO.stream().map(item -> {
 			SysDictDetail dictDetail = new SysDictDetail();
 			BeanUtils.copyProperties(item, dictDetail);

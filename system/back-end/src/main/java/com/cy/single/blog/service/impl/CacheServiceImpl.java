@@ -278,6 +278,7 @@ public class CacheServiceImpl implements CacheService, Serializable {
 	/**
 	 * ================================== admin acl ===============================
 	 */
+	// <userId, List<SysAcl>>
 	private static Cache<Long, List<SysAcl>> adminAclCache = CacheBuilder.newBuilder().build();
 
 	/**
@@ -305,5 +306,10 @@ public class CacheServiceImpl implements CacheService, Serializable {
 			return;
 		}
 		userIdList.forEach(userId-> adminAclCache.invalidate(userId));
+	}
+
+	@Override
+	public void invalidAllUserAclCache() {
+		adminAclCache.invalidateAll();
 	}
 }

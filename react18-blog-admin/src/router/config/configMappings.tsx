@@ -1,6 +1,7 @@
 import {
   ApartmentOutlined,
   BookOutlined,
+  DatabaseOutlined,
   FileImageOutlined,
   HomeOutlined,
   MergeCellsOutlined,
@@ -16,6 +17,7 @@ import { lazy } from 'react'
 
 /**
  * 路由渲染页面
+ * key: 路由路径, 由后端拼接而成
  */
 export const componentMap = {
   _admin_home: lazy(() => import('@/views/home')),
@@ -36,7 +38,8 @@ export const componentMap = {
   _admin_sys_user: lazy(() => import('@/views/sys/user/User')),
   _admin_sys_org: lazy(() => import('@/views/sys/Org')),
   _admin_sys_role: lazy(() => import('@/views/sys/role/Role')),
-  _admin_sys_acl: lazy(() => import('@/views/sys/Acl')),
+  _admin_sys_acl: lazy(() => import('@/views/sys/acl/Acl')),
+  _admin_sys_acl_data: lazy(() => import('@/views/sys/acl_data/AclData')),
   _admin_sys_dict: lazy(() => import('@/views/sys/Dict'))
 } as const
 
@@ -65,5 +68,6 @@ export const iconMap = {
   _admin_sys_org: <ApartmentOutlined />,
   _admin_sys_role: <UserSwitchOutlined />,
   _admin_sys_acl: <MergeCellsOutlined />,
+  _admin_sys_acl_data: <DatabaseOutlined />,
   _admin_sys_dict: <SlidersOutlined />
 } as const

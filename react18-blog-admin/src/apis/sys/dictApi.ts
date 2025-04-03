@@ -46,8 +46,8 @@ const dictApi: DictApi = {
   deleteDictDetail(req: DictDetailDeleteReq) {
     return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_SYS_DICT + '/deleteDetail', req)
   },
-  dictDetailTree() {
-    return baseAxiosRequest.get<Result<Map<string, DictMapType[]>>>(PREFIX_URL_SYS_DICT + '/dictDetailTree', {})
+  dictDetailMapping() {
+    return baseAxiosRequest.get<Result<Map<string, DictMapType[]>>>(PREFIX_URL_SYS_DICT + '/dictDetailMapping', {})
   }
 }
 

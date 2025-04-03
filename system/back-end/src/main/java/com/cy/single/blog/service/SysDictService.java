@@ -34,5 +34,5 @@ public interface SysDictService extends IService<SysDict> {
 
 	ApiResp<String> delete(Long surrogateId);
 
-	ApiResp<Map<String, List<SysDictDetailResp>>> dictDetailTree();
+	ApiResp<Map<String, List<SysDictDetailResp>>> dictDetailMapping();
 }

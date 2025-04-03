@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.single.blog.dao.SysAclDataMapper">
+
+  <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.sys.SysAclData">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="acl_id" jdbcType="BIGINT" property="aclId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="param" jdbcType="VARCHAR" property="param" />
+    <result column="operation" jdbcType="INTEGER" property="operation" />
+    <result column="value1" jdbcType="VARCHAR" property="value1" />
+    <result column="value2" jdbcType="VARCHAR" property="value2" />
+    <result column="next_param_op" jdbcType="INTEGER" property="nextParamOp" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, acl_id, `status`, param, `operation`, value1, value2, next_param_op, seq, remark
+  </sql>
+
+  <sql id="Table_Name">
+    sys_acl_data
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_acl_data
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_acl_data
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.cy.single.blog.pojo.entity.sys.SysAclData">
+    insert into sys_acl_data (id, acl_id, `status`, 
+      param, `operation`, value1, 
+      value2, next_param_op, seq
+      )
+    values (#{id,jdbcType=BIGINT}, #{aclId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, 
+      #{param,jdbcType=VARCHAR}, #{operation,jdbcType=INTEGER}, #{value1,jdbcType=VARCHAR}, 
+      #{value2,jdbcType=VARCHAR}, #{nextParamOp,jdbcType=INTEGER}, #{seq,jdbcType=INTEGER}
+    )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.cy.single.blog.pojo.entity.sys.SysAclData">
+    insert into sys_acl_data
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="aclId != null">
+        acl_id,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="param != null">
+        param,
+      </if>
+      <if test="operation != null">
+        `operation`,
+      </if>
+      <if test="value1 != null">
+        value1,
+      </if>
+      <if test="value2 != null">
+        value2,
+      </if>
+      <if test="nextParamOp != null">
+        next_param_op,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="aclId != null">
+        #{aclId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="param != null">
+        #{param,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null">
+        #{operation,jdbcType=INTEGER},
+      </if>
+      <if test="value1 != null">
+        #{value1,jdbcType=VARCHAR},
+      </if>
+      <if test="value2 != null">
+        #{value2,jdbcType=VARCHAR},
+      </if>
+      <if test="nextParamOp != null">
+        #{nextParamOp,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.cy.single.blog.pojo.entity.sys.SysAclData">
+    update sys_acl_data
+    <set>
+      <if test="aclId != null">
+        acl_id = #{aclId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="param != null">
+        param = #{param,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null">
+        `operation` = #{operation,jdbcType=INTEGER},
+      </if>
+      <if test="value1 != null">
+        value1 = #{value1,jdbcType=VARCHAR},
+      </if>
+      <if test="value2 != null">
+        value2 = #{value2,jdbcType=VARCHAR},
+      </if>
+      <if test="nextParamOp != null">
+        next_param_op = #{nextParamOp,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null">
+        seq = #{seq,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.cy.single.blog.pojo.entity.sys.SysAclData">
+    update sys_acl_data
+      set acl_id = #{aclId,jdbcType=BIGINT},
+        `status` = #{status,jdbcType=INTEGER},
+        param = #{param,jdbcType=VARCHAR},
+        `operation` = #{operation,jdbcType=INTEGER},
+        value1 = #{value1,jdbcType=VARCHAR},
+        value2 = #{value2,jdbcType=VARCHAR},
+        next_param_op = #{nextParamOp,jdbcType=INTEGER},
+        seq = #{seq,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectAclDataListByAclIds" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from <include refid="Table_Name" />
+    <where>
+      acl_id in (
+        <foreach collection="aclList" index="index" item="aclId" separator=",">
+          #{aclId}
+        </foreach>
+      )
+    </where>
+  </select>
+</mapper>

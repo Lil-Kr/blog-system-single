@@ -217,8 +217,8 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	 * @return
 	 */
 	@Override
-	public ApiResp<Map<String, List<SysDictDetailResp>>> dictDetailTree() {
-		List<SysDictDetailResp> dictDetailTree = dictDetailMapper.dictDetailTree();
+	public ApiResp<Map<String, List<SysDictDetailResp>>> dictDetailMapping() {
+		List<SysDictDetailResp> dictDetailTree = dictDetailMapper.dictDetailList();
 		Map<String, List<SysDictDetailResp>> collect = dictDetailTree.stream().collect(Collectors.groupingBy(SysDictDetailResp::getParentName));
 		return ApiResp.success(MapUtils.isEmpty(collect) ? Maps.newHashMap() : collect);
 	}

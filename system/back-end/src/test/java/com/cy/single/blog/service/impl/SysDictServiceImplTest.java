@@ -22,7 +22,7 @@ class SysDictServiceImplTest {
 
 	@Test
 	public void test1() {
-		ApiResp<Map<String, List<SysDictDetailResp>>> mapApiResp = dictService.dictDetailTree();
+		ApiResp<Map<String, List<SysDictDetailResp>>> mapApiResp = dictService.dictDetailMapping();
 		Map<String, List<SysDictDetailResp>> data = mapApiResp.getData();
 	}
 

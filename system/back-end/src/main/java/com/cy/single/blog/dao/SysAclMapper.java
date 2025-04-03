@@ -25,4 +25,6 @@ public interface SysAclMapper extends BaseMapper<SysAcl> {
 	List<Long> selectAclIdAllList(@Param("param") AclReq req);
 
 	SysAcl getAcl(@Param("param") AclReq req);
+
+	List<SysAcl> selectAclListByUrl(@Param("url") String url);
 }

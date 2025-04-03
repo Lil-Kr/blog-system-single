@@ -15,7 +15,6 @@ const UserModal = (props: ModalType.CustomModal) => {
   const [title, setTitle] = useState('')
   const [openModal, setOpenModal] = useState(false)
   const [inputDisabled, setInputDisabled] = useState<boolean>(false)
-  const [modalStyle, setmdalStyle] = useState<IModalStyle>()
   const [requestParams, setRequestParams] = useState<IModalRequestAction>({
     api: {}
   })
@@ -57,7 +56,6 @@ const UserModal = (props: ModalType.CustomModal) => {
     setAction(action)
     setTitle(title)
     setRequestParams(requestParams)
-    setmdalStyle(modalStyle)
   }
 
   /**
@@ -132,9 +130,8 @@ const UserModal = (props: ModalType.CustomModal) => {
   return (
     <div className='baseModal'>
       <Modal
-        style={{ maxWidth: '30vw' }}
         title={title}
-        width={'100vw'}
+        width={'50vw'}
         okText={'确定'}
         cancelText={'取消'}
         open={openModal}
@@ -150,21 +147,6 @@ const UserModal = (props: ModalType.CustomModal) => {
           <Form.Item name={'key'} hidden>
             <Input />
           </Form.Item>
-          <Form.Item key={1} name={'account'} label={'账号'} rules={[{ required: true, message: '账号不能为空' }]}>
-            <Input placeholder={'账号必填'} style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item key={2} name={'userName'} label={'昵称'} rules={[{ required: true, message: '昵称不能为空' }]}>
-            <Input placeholder={'昵称必填'} style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item key={3} name={'email'} label={'邮箱'} rules={[{ required: true, message: '邮箱不能为空' }]}>
-            <Input placeholder={'邮箱必填'} style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item key={4} name={'telephone'} label={'联系方式'}>
-            <Input placeholder={'联系方式'} style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item key={5} name={'status'} label={'状态'} rules={[{ required: true, message: '状态不能为空' }]}>
-            <InputNumber placeholder={'状态必填, 0:正常, 1:冻结, 2: 其他'} style={{ width: '100%' }} min={0} max={2} />
-          </Form.Item>
           <Form.Item
             key={6}
             name={'orgInfo'}
@@ -179,6 +161,21 @@ const UserModal = (props: ModalType.CustomModal) => {
               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
               options={orgList}
             />
+          </Form.Item>
+          <Form.Item key={1} name={'account'} label={'账号'} rules={[{ required: true, message: '账号不能为空' }]}>
+            <Input placeholder={'账号必填'} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item key={2} name={'userName'} label={'昵称'} rules={[{ required: true, message: '昵称不能为空' }]}>
+            <Input placeholder={'昵称必填'} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item key={3} name={'email'} label={'邮箱'} rules={[{ required: true, message: '邮箱不能为空' }]}>
+            <Input placeholder={'邮箱必填'} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item key={4} name={'telephone'} label={'联系方式'}>
+            <Input placeholder={'联系方式'} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item key={5} name={'status'} label={'状态'} rules={[{ required: true, message: '状态不能为空' }]}>
+            <InputNumber placeholder={'状态必填, 0:正常, 1:冻结, 2: 其他'} style={{ width: '100%' }} min={0} max={2} />
           </Form.Item>
           <Form.Item
             key={7}

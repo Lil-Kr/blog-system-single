@@ -129,5 +129,5 @@ export interface DictApi extends BaseApi {
   addDictDetail(req: DictDetailAddReq): Promise<Result<string>>
   editDictDetail(req: DictDetailEditReq): Promise<Result<string>>
   deleteDictDetail(req: DictDetailDeleteReq): Promise<Result<string>>
-  dictDetailTree(): Promise<Result<Map<string, DictMapType[]>>>
+  dictDetailMapping(): Promise<Result<Map<string, DictMapType[]>>>
 }

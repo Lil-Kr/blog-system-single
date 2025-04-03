@@ -74,11 +74,13 @@ public interface CacheService {
 	List<BlogTopic> getTopicListCache(String key);
 
 	/**
-	 * ================================== sys user acl ===============================
+	 * ================================== sys admin-user acl ===============================
 	 */
 	void saveUserAclCache(Long surrogateId, List<SysAcl> aclList);
 
 	List<SysAcl> getUserAclListCache(Long userId);
 
 	void invalidUserAclCache(List<Long> userIdList);
+
+	void invalidAllUserAclCache();
 }

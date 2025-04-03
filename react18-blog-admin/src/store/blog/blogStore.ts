@@ -14,6 +14,7 @@ interface BlogState {
 
 interface BlogAction {
   setBlogPageList: (blogPageTableList: BlogContentTableType[]) => void
+  clearBlogPageList: () => void
 }
 
 const initBlogData = {
@@ -26,6 +27,11 @@ const useBlogStore = create<BlogState & BlogAction>()(set => ({
     set(state => ({
       ...state,
       blogPageTableList: blogPageTableList
+    })),
+  clearBlogPageList: () =>
+    set(state => ({
+      ...state,
+      blogPageTableList: []
     }))
 }))
 
@@ -84,7 +90,7 @@ export type BlogMoadlAction = {
 }
 
 const initBlogModalData = {
-  api: blogContentApi,
+  api: {} as BlogContentApi,
   openModal: false,
   title: '创建博客',
   action: 'create',
@@ -117,4 +123,3 @@ const useBlogModalStore = create<BlogMoadlState & BlogMoadlAction>()(set => ({
 }))
 
 export { useBlogModalStore }
-

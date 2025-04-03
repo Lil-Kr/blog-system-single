@@ -11,6 +11,7 @@ import com.cy.single.blog.pojo.entity.sys.*;
 import com.cy.single.blog.pojo.req.acl.AclPageReq;
 import com.cy.single.blog.pojo.req.acl.AclReq;
 import com.cy.single.blog.pojo.resp.sys.acl.SysAclResp;
+import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.SysAclService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
@@ -51,6 +52,9 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 
 	@Autowired
 	private SysUserMapper userMapper;
+
+	@Autowired
+	private CacheService cacheService;
 
 	/**
 	 * 添加权限点
@@ -107,6 +111,9 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 		if (insert < 1) {
 			return ApiResp.failure(SAVE_ERROR);
 		}
+
+		// 更新缓存
+		cacheService.invalidAllUserAclCache();
 		return ApiResp.success("添加权限点成功");
 	}
 
@@ -163,6 +170,8 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 		if (update < 1) {
 			return ApiResp.warning(EDITE_ERROR);
 		}
+		// 更新缓存
+		cacheService.invalidAllUserAclCache();
 		return ApiResp.success(SUCCESS);
 	}
 
@@ -235,6 +244,8 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 		if (delete < 1) {
 			return ApiResp.failure(DEL_ERROR);
 		}
+		// 更新缓存
+		cacheService.invalidAllUserAclCache();
 		return ApiResp.success();
 	}
 
