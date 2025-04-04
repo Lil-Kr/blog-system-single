@@ -1,23 +1,36 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Card, Col, Flex, Row, Table, Tree } from 'antd/lib'
-import { Form, Input, PaginationProps, Popconfirm, Space, Tag, type TreeDataNode } from 'antd'
+import {
+  Button,
+  Card,
+  Col,
+  Flex,
+  Row,
+  Table,
+  Tree,
+  Form,
+  Input,
+  PaginationProps,
+  Popconfirm,
+  Tag,
+  TreeDataNode
+} from 'antd/lib'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { TablePageInfoType } from '@/types/base'
 import { IModalRequestAction, IModalParams, IAction, IModalStyle } from '@/types/component/modal'
 import { useForm } from 'antd/es/form/Form'
 import { transformOrgTreeExpandeKeys, transformOrgListToTreeData } from '@/utils/sys/treeUtils'
 import { UserListPageReq, UserTableType } from '@/types/apis/sys/user/userType'
-import UserModal from '@/components/modal/UserModal'
 import { orgApi, userApi } from '@/apis/sys'
 import { OptionType } from '@/types/apis'
 import { Key } from 'antd/lib/table/interface'
 import { AddUserButtonAcl, DelUserButtonAcl, EditUserButtonAcl } from './auth/authButton'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { transformUserListToTable } from '@/utils/sys/transform'
+import UserModal from '@/components/modal/UserModal'
 
 const User = () => {
-  const userColumns: ColumnsType<any> = [
+  const userColumns: ColumnsType<UserTableType> = [
     {
       key: 'number',
       dataIndex: 'number',
@@ -35,7 +48,7 @@ const User = () => {
       dataIndex: 'orgName',
       title: '所属组织',
       width: '10%',
-      render: (_, record: UserTableType) => <Tag color='geekblue'>{record.orgName}</Tag>
+      render: (_, record) => <Tag color='geekblue'>{record.orgName}</Tag>
     },
     {
       key: 'telephone',
@@ -48,7 +61,7 @@ const User = () => {
       dataIndex: 'status',
       title: '状态',
       width: '5%',
-      render: (_, record: UserTableType) => {
+      render: (_, record) => {
         let tagColor = 'green' // 默认颜色
         let statusText = '正常' // 默认文本
         // 根据状态设置不同的颜色和文本
@@ -66,7 +79,6 @@ const User = () => {
             statusText = '未知'
             break
         }
-
         return (
           <Tag key={record.key} color={tagColor}>
             {statusText}
@@ -104,14 +116,14 @@ const User = () => {
       title: '操作',
       width: '10%',
       render: (_: object, record: UserTableType) => (
-        <Space size='middle'>
+        <Flex vertical={false} gap={8}>
           <Button
             size={btnSize}
             name='look'
             type='link'
             shape='circle'
             icon={<SearchOutlined />}
-            onClick={() => lookItem(record.key ?? '', record)}
+            onClick={() => lookUser(record.key ?? '', record)}
           />
           <EditUserButtonAcl
             size={btnSize}
@@ -119,12 +131,12 @@ const User = () => {
             type='link'
             shape='circle'
             icon={<EditOutlined />}
-            onClick={() => editItem(record.key ?? '', record)}
+            onClick={() => editUser(record.key ?? '', record)}
           />
           <Popconfirm
             title='删除用户'
             description={`确定要删除 [${record.userName}] 这个用户吗?`}
-            onConfirm={() => deleteItemConfirm(record)}
+            onConfirm={() => deleteUserConfirm(record)}
             onCancel={() => {}}
             okText='确定'
             cancelText='取消'
@@ -138,7 +150,7 @@ const User = () => {
               icon={<DeleteOutlined />}
             />
           </Popconfirm>
-        </Space>
+        </Flex>
       )
     }
   ]
@@ -190,11 +202,11 @@ const User = () => {
   }
 
   /**
-   * lookItem
+   * lookUser
    * @param key
    * @param record
    */
-  const lookItem = (key: string, record: UserTableType) => {
+  const lookUser = (key: string, record: UserTableType) => {
     const modalData: UserTableType = {
       orgInfo: {
         value: record.orgId,
@@ -216,7 +228,7 @@ const User = () => {
    * @param key
    * @param record
    */
-  const editItem = (key: string, record: UserTableType) => {
+  const editUser = (key: string, record: UserTableType) => {
     const modalData: UserTableType = {
       orgInfo: {
         value: record.orgId,
@@ -238,18 +250,19 @@ const User = () => {
    * @param record
    * @returns
    */
-  const deleteItemConfirm = async (record: UserTableType) => {
+  const deleteUserConfirm = async (record: UserTableType) => {
     const res = await userApi.delete({ surrogateId: record.key ?? '' })
     if (res.code !== 200) {
       return
     }
-    retirevePageUserList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    retirevePageUserList({ currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
+
   /**
    * 搜索
    */
   const search = () => {
-    let data = form.getFieldsValue()
+    const data = form.getFieldsValue()
     const searchParam = { ...data, currentPageNum: 1, pageSize: tablePageInfo.pageSize }
     retirevePageUserList({ ...searchParam })
   }
@@ -299,9 +312,7 @@ const User = () => {
   const retirevePageUserList = async (req: UserListPageReq) => {
     // 加载当前组织下的子节点数据
     const res = await userApi.pageUserList({
-      ...req,
-      currentPageNum: req.currentPageNum,
-      pageSize: req.pageSize
+      ...req
     })
     const { code, data } = res
     if (code !== 200) {
@@ -310,6 +321,7 @@ const User = () => {
 
     const list: UserTableType[] = transformUserListToTable(data.list ?? [])
     setUserPageList(list)
+
     // 设置分页信息
     setTablePageInfo(prevState => ({
       ...prevState,
@@ -375,7 +387,7 @@ const User = () => {
                 blockNode={true} // 是否节点占据一行
                 treeData={orgTree}
                 selectedKeys={selectedKeys}
-                expandedKeys={expandedKeys} // （受控）展开指定的树节点
+                expandedKeys={expandedKeys} // (受控) 展开指定的树节点
                 onExpand={onExpand}
                 // defaultExpandAll={true}
                 // defaultExpandedKeys={[]}
