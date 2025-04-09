@@ -2,79 +2,80 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.SysDictDetailMapper">
 
-    <!-- 通用查询结果列 -->
-    <sql id="Table_Name">
-        sys_dict_detail
-    </sql>
+	<!-- 通用查询结果列 -->
+	<sql id="Table_Name">
+		sys_dict_detail
+	</sql>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        surrogate_id, parent_id, `name`, `type`, remark
-    </sql>
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		surrogate_id, parent_id, `name`, `type`, remark
+	</sql>
 
-    <select id="getDictDetailListByParentId" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp">
-        select <include refid="Base_Column_List"/>
-        from <include refid="Table_Name"/>
-        where parent_id = #{dictSurrogateId}
-    </select>
+	<select id="getDictDetailListByParentId" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp">
+		select
+		<include refid="Base_Column_List"/>
+		from sys_dict_detail
+		where parent_id = #{dictSurrogateId}
+	</select>
 
-    <!--  -->
-    <select id="pageDictDetailListById" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp">
-        select <include refid="Base_Column_List"/>
-        from <include refid="Table_Name"/>
-        <where>
-            <if test="param.name != null and param.name != ''">
-                and name = #{param.name}
-            </if>
-            <if test="param.type != null">
-                and `type` = #{param.type}
-            </if>
-            <if test="param.dictId != null">
-                and parent_id = #{param.dictId}
-            </if>
-            <if test="param.keyWords!=null and param.keyWords!=''">
-                and (
-                `type` like concat('%',#{param.keyWords},'%')
-                or
-                `name` like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-    </select>
+	<!--  -->
+	<select id="pageDictDetailListById" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp">
+		select
+		<include refid="Base_Column_List"/>
+		from sys_dict_detail
+		<where>
+			<if test="param.name != null and param.name != ''">
+				and name = #{param.name}
+			</if>
+			<if test="param.type != null">
+				and `type` = #{param.type}
+			</if>
+			<if test="param.dictId != null">
+				and parent_id = #{param.dictId}
+			</if>
+			<if test="param.keyWords!=null and param.keyWords!=''">
+				and (
+				`type` like concat('%',#{param.keyWords},'%')
+				or
+				`name` like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+	</select>
 
-    <select id="countPageDictDetail" resultType="java.lang.Integer">
-        select count(1)
-        from <include refid="Table_Name"/>
-        <where>
-            <if test="param.name != null and param.name != ''">
-                and name = #{param.name}
-            </if>
-            <if test="param.type != null">
-                and `type` = #{param.type}
-            </if>
-            <if test="param.dictId != null">
-                and parent_id = #{param.dictId}
-            </if>
-            <if test="param.keyWords!=null and param.keyWords!=''">
-                and (
-                `type` like concat('%',#{param.keyWords},'%')
-                or
-                `name` like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-    </select>
+	<select id="countPageDictDetail" resultType="java.lang.Integer">
+		select count(1)
+		from sys_dict_detail
+		<where>
+			<if test="param.name != null and param.name != ''">
+				and name = #{param.name}
+			</if>
+			<if test="param.type != null">
+				and `type` = #{param.type}
+			</if>
+			<if test="param.dictId != null">
+				and parent_id = #{param.dictId}
+			</if>
+			<if test="param.keyWords!=null and param.keyWords!=''">
+				and (
+				`type` like concat('%',#{param.keyWords},'%')
+				or
+				`name` like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+	</select>
 
-    <select id="dictDetailList" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp">
-        select
-            a.name as 'parentName',
-            b.surrogate_id,
-            b.parent_id,
-            b.`name`,
-            b.`type`,
-            b.remark
-        from sys_dict as a
-        inner join sys_dict_detail as b on (a.surrogate_id = b.parent_id)
-    </select>
+	<select id="dictDetailList" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp">
+		select a.name as 'parentName',
+		       b.surrogate_id,
+		       b.parent_id,
+		       b.`name`,
+		       b.`type`,
+		       b.remark
+		from sys_dict as a
+			     inner join sys_dict_detail as b on (a.surrogate_id = b.parent_id)
+	</select>
 
 </mapper>

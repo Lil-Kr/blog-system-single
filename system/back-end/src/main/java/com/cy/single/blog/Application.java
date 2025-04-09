@@ -9,9 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @MapperScan(basePackages = {"com.cy.single.blog.dao"})
 @EnableMongoRepositories(basePackages = "com.cy.single.blog.dao")
 public class Application {
-
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-
 }

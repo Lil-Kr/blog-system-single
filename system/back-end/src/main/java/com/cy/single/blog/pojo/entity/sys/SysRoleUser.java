@@ -12,7 +12,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Lil-Kr
@@ -26,49 +26,49 @@ import java.util.Date;
 @TableName("sys_role_user")
 public class SysRoleUser extends Model<SysRoleUser> {
 
-    private static final long serialVersionUID = -9053806943463971084L;
-    /**
-     * 自增主键
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+  private static final long serialVersionUID = -9053806943463971084L;
+  /**
+   * 自增主键
+   */
+  @TableId(value = "id", type = IdType.AUTO)
+  private Long id;
 
-    /**
-     * 角色-用户id唯一主键
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long surrogateId;
+  /**
+   * 角色-用户id唯一主键
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long surrogateId;
 
-    /**
-     * 角色id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long roleId;
+  /**
+   * 角色id
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long roleId;
 
-    /**
-     * 用户id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long userId;
+  /**
+   * 用户id
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long userId;
 
-    /**
-     * 操作ip
-     */
-    private String operateIp;
+  /**
+   * 操作ip
+   */
+  private String operateIp;
 
-    /**
-     * 操作人
-     */
-    private Long operator;
+  /**
+   * 操作人
+   */
+  private Long operator;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+  /**
+   * 创建时间
+   */
+  private Date createTime;
 
-    /**
-     * 更改时间
-     */
-    private Date updateTime;
+  /**
+   * 更改时间
+   */
+  private Date updateTime;
 
 }

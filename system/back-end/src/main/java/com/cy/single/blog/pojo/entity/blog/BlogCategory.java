@@ -25,62 +25,62 @@ import static com.cy.single.blog.common.constants.CommonConstants.DEFAULT_COLOR;
 @Data
 public class BlogCategory implements Serializable {
 
-	private static final long serialVersionUID = -9049411642335166764L;
+  private static final long serialVersionUID = -9049411642335166764L;
 
-	@TableId(value = "id", type = IdType.AUTO)
-	private Integer id;
+  @TableId(value = "id", type = IdType.AUTO)
+  private Integer id;
 
-	/**
-	 * 唯一键
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long surrogateId;
+  /**
+   * 唯一键
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long surrogateId;
 
-	/**
-	 * 编号
-	 */
-	private String number;
+  /**
+   * 编号
+   */
+  private String number;
 
-	/**
-	 * 类别名称
-	 */
-	private String name;
+  /**
+   * 类别名称
+   */
+  private String name;
 
-	/**
-	 * 颜色
-	 */
-	private String color = DEFAULT_COLOR;
+  /**
+   * 颜色
+   */
+  private String color = DEFAULT_COLOR;
 
-	/**
-	 * 状态: 未使用
-	 */
-	private Integer status;
+  /**
+   * 状态: 未使用
+   */
+  private Integer status;
 
-	/**
-	 * 备注
-	 */
-	private String remark;
+  /**
+   * 备注
+   */
+  private String remark;
 
-	/**
-	 * 创建人
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long creatorId;
+  /**
+   * 创建人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long creatorId;
 
-	/**
-	 * 操作人
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long operator;
+  /**
+   * 操作人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long operator;
 
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
+  /**
+   * 创建时间
+   */
+  private Date createTime;
 
-	/**
-	 * 更改时间
-	 */
-	private Date updateTime;
+  /**
+   * 更改时间
+   */
+  private Date updateTime;
 
 }

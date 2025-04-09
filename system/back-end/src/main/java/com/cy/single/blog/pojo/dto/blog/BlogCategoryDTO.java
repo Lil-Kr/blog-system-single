@@ -19,24 +19,24 @@ import static com.cy.single.blog.common.constants.CommonConstants.DEFAULT_COLOR;
  * @Description:
  */
 public class BlogCategoryDTO {
-    /**
-     * blog save
-     * @param req
-     * @param blogCategory
-     * @return
-     */
-    public static BlogCategory convertSaveCategoryReq(BlogCategoryReq req, BlogCategory blogCategory) {
-        BeanUtils.copyProperties(req, blogCategory);
-        blogCategory.setSurrogateId(IdWorker.getSnowFlakeId());
+  /**
+   * blog save
+   * @param req
+   * @param blogCategory
+   * @return
+   */
+  public static BlogCategory convertSaveCategoryReq(BlogCategoryReq req, BlogCategory blogCategory) {
+    BeanUtils.copyProperties(req, blogCategory);
+    blogCategory.setSurrogateId(IdWorker.getSnowFlakeId());
 
-        Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
-        blogCategory.setStatus(0);
-        blogCategory.setColor(StringUtils.isBlank(req.getColor()) ? DEFAULT_COLOR : req.getColor());
-        blogCategory.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
-        blogCategory.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
-        blogCategory.setCreateTime(nowDateTime);
-        blogCategory.setUpdateTime(nowDateTime);
-        return blogCategory;
-    }
+    Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
+    blogCategory.setStatus(0);
+    blogCategory.setColor(StringUtils.isBlank(req.getColor()) ? DEFAULT_COLOR : req.getColor());
+    blogCategory.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
+    blogCategory.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
+    blogCategory.setCreateTime(nowDateTime);
+    blogCategory.setUpdateTime(nowDateTime);
+    return blogCategory;
+  }
 }
 

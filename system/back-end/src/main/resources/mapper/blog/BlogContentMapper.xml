@@ -2,189 +2,197 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.BlogContentMapper">
 
-    <sql id="Table_Name">
-        blog_content
-    </sql>
+	<sql id="Table_Name">
+		blog_content
+	</sql>
 
-    <sql id="Base_Column_List">
-        id, surrogate_id, category_id, label_ids, topic_id, `number`, original, recommend,
+	<sql id="Base_Column_List">
+		id, surrogate_id, category_id, label_ids, topic_id, `number`, original, recommend,
     title, introduction, img_url, paragraph, publish_time, `status`, remark, deleted, creator_id,
     operator, create_time, update_time
-    </sql>
+	</sql>
 
-    <select id="pageContentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
-        select <include refid="Base_Column_List" />
-        from <include refid="Table_Name" />
-        <where>
-            <if test="param.surrogateId != null and param.surrogateId != ''">
-                and surrogate_id = #{param.surrogateId}
-            </if>
-            <if test="param.original != null and param.original != ''">
-                and original = #{param.original}
-            </if>
-            <if test="param.recommend != null and param.recommend != ''">
-                and recommend = #{param.recommend}
-            </if>
-            <if test="param.status != null and param.status != ''">
-                and status = #{param.status}
-            </if>
-            <if test="param.keyWords != null and param.keyWords != ''">
-                and (
-                `number` like concat('%',#{param.keyWords},'%')
-                or
-                `name` like concat('%',#{param.keyWords},'%')
-                or
-                remark like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-        <if test="param.isOrder != null and param.isOrder != ''">
-            order by create_time
-            <if test="param.isOrder == 0">
-                asc
-            </if>
-            <if test="param.isOrder == 1">
-                desc
-            </if>
-        </if>
-    </select>
+	<select id="pageContentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
+		select
+		<include refid="Base_Column_List"/>
+		from blog_content
+		<where>
+			<if test="param.surrogateId != null and param.surrogateId != ''">
+				and surrogate_id = #{param.surrogateId}
+			</if>
+			<if test="param.original != null and param.original != ''">
+				and original = #{param.original}
+			</if>
+			<if test="param.recommend != null and param.recommend != ''">
+				and recommend = #{param.recommend}
+			</if>
+			<if test="param.status != null and param.status != ''">
+				and status = #{param.status}
+			</if>
+			<if test="param.keyWords != null and param.keyWords != ''">
+				and (
+				`number` like concat('%',#{param.keyWords},'%')
+				or
+				`name` like concat('%',#{param.keyWords},'%')
+				or
+				remark like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+		<if test="param.isOrder != null and param.isOrder != ''">
+			order by create_time
+			<if test="param.isOrder == 0">
+				asc
+			</if>
+			<if test="param.isOrder == 1">
+				desc
+			</if>
+		</if>
+	</select>
 
-    <select id="contentCount" resultType="java.lang.Integer">
-        select count(1)
-        from <include refid="Table_Name" />
-        <where>
-            <if test="param.surrogateId != null and param.surrogateId != ''">
-                and surrogate_id = #{param.surrogateId}
-            </if>
-            <if test="param.original != null and param.original != ''">
-                and original = #{param.original}
-            </if>
-            <if test="param.recommend != null and param.recommend != ''">
-                and recommend = #{param.recommend}
-            </if>
-            <if test="param.status != null and param.status != ''">
-                and status = #{param.status}
-            </if>
-            <if test="param.keyWords != null and param.keyWords != ''">
-                and (
-                `number` like concat('%',#{param.keyWords},'%')
-                or
-                `title` like concat('%',#{param.keyWords},'%')
-                or
-                `name` like concat('%',#{param.keyWords},'%')
-                or
-                remark like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-        <if test="param.isOrder != null and param.isOrder != ''">
-            order by create_time
-            <if test="param.isOrder == 0">
-                asc
-            </if>
-            <if test="param.isOrder == 1">
-                desc
-            </if>
-        </if>
-    </select>
+	<select id="contentCount" resultType="java.lang.Integer">
+		select count(1)
+		from blog_content
+		<where>
+			<if test="param.surrogateId != null and param.surrogateId != ''">
+				and surrogate_id = #{param.surrogateId}
+			</if>
+			<if test="param.original != null and param.original != ''">
+				and original = #{param.original}
+			</if>
+			<if test="param.recommend != null and param.recommend != ''">
+				and recommend = #{param.recommend}
+			</if>
+			<if test="param.status != null and param.status != ''">
+				and status = #{param.status}
+			</if>
+			<if test="param.keyWords != null and param.keyWords != ''">
+				and (
+				`number` like concat('%',#{param.keyWords},'%')
+				or
+				`title` like concat('%',#{param.keyWords},'%')
+				or
+				`name` like concat('%',#{param.keyWords},'%')
+				or
+				remark like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+		<if test="param.isOrder != null and param.isOrder != ''">
+			order by create_time
+			<if test="param.isOrder == 0">
+				asc
+			</if>
+			<if test="param.isOrder == 1">
+				desc
+			</if>
+		</if>
+	</select>
 
-    <select id="contentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
-        select <include refid="Base_Column_List" />
-        from <include refid="Table_Name" />
-        <where>
-            <if test="param.surrogateId != null and param.surrogateId != ''">
-                and surrogate_id = #{param.surrogateId}
-            </if>
-            <if test="param.original != null and param.original != ''">
-                and original = #{param.original}
-            </if>
-            <if test="param.recommend != null and param.recommend != ''">
-                and recommend = #{param.recommend}
-            </if>
-            <if test="param.status != null and param.status != ''">
-                and status = #{param.status}
-            </if>
-            <if test="param.keyWords!=null and param.keyWords!=''">
-                and (
-                `number` like concat('%',#{param.keyWords},'%')
-                or
-                `name` like concat('%',#{param.keyWords},'%')
-                or
-                remark like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-        <if test="param.isOrder != null and param.isOrder != ''">
-            order by create_time
-            <if test="param.isOrder == 0">
-                asc
-            </if>
-            <if test="param.isOrder == 1">
-                desc
-            </if>
-        </if>
-    </select>
+	<select id="contentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
+		select
+		<include refid="Base_Column_List"/>
+		from blog_content
+		<where>
+			<if test="param.surrogateId != null and param.surrogateId != ''">
+				and surrogate_id = #{param.surrogateId}
+			</if>
+			<if test="param.original != null and param.original != ''">
+				and original = #{param.original}
+			</if>
+			<if test="param.recommend != null and param.recommend != ''">
+				and recommend = #{param.recommend}
+			</if>
+			<if test="param.status != null and param.status != ''">
+				and status = #{param.status}
+			</if>
+			<if test="param.keyWords!=null and param.keyWords!=''">
+				and (
+				`number` like concat('%',#{param.keyWords},'%')
+				or
+				`name` like concat('%',#{param.keyWords},'%')
+				or
+				remark like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+		<if test="param.isOrder != null and param.isOrder != ''">
+			order by create_time
+			<if test="param.isOrder == 0">
+				asc
+			</if>
+			<if test="param.isOrder == 1">
+				desc
+			</if>
+		</if>
+	</select>
 
-    <update id="updateStatusBySurrogateId">
-        update <include refid="Table_Name" />
-        set status = #{param.status}
-            and publish_time = #{param.publishTime}
-            and update_time = #{param.updateTime}
-        <where>
-            surrogate_id = #{param.surrogateId}
-        </where>
-    </update>
+	<update id="updateStatusBySurrogateId">
+		update blog_content
+		set
+		status = #{param.status}
+		and publish_time = #{param.publishTime}
+		and update_time = #{param.updateTime}
+		<where>
+			surrogate_id = #{param.surrogateId}
+		</where>
+	</update>
 
-    <select id="frontContentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
-        select <include refid="Base_Column_List" />
-        from <include refid="Table_Name" />
-        order by publish_time desc
-        limit 50
-    </select>
+	<select id="frontContentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
+		select
+		<include refid="Base_Column_List"/>
+		from
+		<include refid="Table_Name"/>
+		order by publish_time desc
+		limit 50
+	</select>
 
-    <select id="frontContentByGroupCategory" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp">
-        select category_id, count(1) as 'category_count'
-        from <include refid="Table_Name" />
-        where `status` = 1
-        group by category_id
-    </select>
+	<select id="frontContentByGroupCategory" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp">
+		select category_id, count(1) as 'category_count'
+		from
+		<include refid="Table_Name"/>
+		where `status` = 1
+		group by category_id
+	</select>
 
-    <select id="frontContentPageList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
-        select <include refid="Base_Column_List" />
-        from <include refid="Table_Name" />
-        <where>
-            <if test="param.surrogateId != null and param.surrogateId != ''">
-                and surrogate_id = #{param.surrogateId}
-            </if>
-            <if test="param.original != null and param.original != ''">
-                and original = #{param.original}
-            </if>
-            <if test="param.recommend != null and param.recommend != ''">
-                and recommend = #{param.recommend}
-            </if>
-            <if test="param.status != null and param.status != ''">
-                and status = #{param.status}
-            </if>
-            <if test="param.keyWords != null and param.keyWords != ''">
-                and (
-                `number` like concat('%',#{param.keyWords},'%')
-                or
-                `title` like concat('%',#{param.keyWords},'%')
-                or
-                `name` like concat('%',#{param.keyWords},'%')
-                or
-                remark like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-        <if test="param.isOrder != null and param.isOrder != ''">
-            order by publish_time
-            <if test="param.isOrder == 0">
-                asc
-            </if>
-            <if test="param.isOrder == 1">
-                desc
-            </if>
-        </if>
-    </select>
+	<select id="frontContentPageList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
+		select
+		<include refid="Base_Column_List"/>
+		from
+		<include refid="Table_Name"/>
+		<where>
+			<if test="param.surrogateId != null and param.surrogateId != ''">
+				and surrogate_id = #{param.surrogateId}
+			</if>
+			<if test="param.original != null and param.original != ''">
+				and original = #{param.original}
+			</if>
+			<if test="param.recommend != null and param.recommend != ''">
+				and recommend = #{param.recommend}
+			</if>
+			<if test="param.status != null and param.status != ''">
+				and status = #{param.status}
+			</if>
+			<if test="param.keyWords != null and param.keyWords != ''">
+				and (
+				`number` like concat('%',#{param.keyWords},'%')
+				or
+				`title` like concat('%',#{param.keyWords},'%')
+				or
+				`name` like concat('%',#{param.keyWords},'%')
+				or
+				remark like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+		<if test="param.isOrder != null and param.isOrder != ''">
+			order by publish_time
+			<if test="param.isOrder == 0">
+				asc
+			</if>
+			<if test="param.isOrder == 1">
+				desc
+			</if>
+		</if>
+	</select>
 </mapper>

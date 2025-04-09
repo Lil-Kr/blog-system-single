@@ -6,20 +6,23 @@ import com.cy.single.blog.pojo.req.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.org.OrgPageReq;
 import com.cy.single.blog.pojo.resp.sys.org.SysOrgResp;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 /**
  *
  */
+@Repository
 public interface SysOrgMapper extends BaseMapper<SysOrg> {
 
-	List<SysOrg> selectChildOrgList(@Param("level") String oldLevelPrefix);
+  List<SysOrg> selectChildOrgList(@Param("level") String oldLevelPrefix);
 
-	List<SysOrg> selectChildOrgListByParentId(@Param("parentId") Long parentId);
+  List<SysOrg> selectChildOrgListByParentId(@Param("parentId") Long parentId);
 
-	List<SysOrgResp> pageList(@Param("param") OrgPageReq req);
+  List<SysOrgResp> pageList(@Param("param") OrgPageReq req);
 
-	Integer countByList(@Param("param") OrgPageReq req);
+  Integer countByList(@Param("param") OrgPageReq req);
 
-	List<SysOrgResp> retrieveAllList(@Param("param") OrgListAllReq req);
+  List<SysOrgResp> retrieveAllList(@Param("param") OrgListAllReq req);
 }

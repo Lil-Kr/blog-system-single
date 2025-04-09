@@ -13,7 +13,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Lil-K
@@ -29,57 +29,57 @@ import java.util.Date;
 @TableName("blog_topic")
 public class BlogTopic implements Serializable {
 
-    private static final long serialVersionUID = 1667561250559378031L;
+  private static final long serialVersionUID = 1667561250559378031L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+  @TableId(value = "id", type = IdType.AUTO)
+  private Long id;
 
-    /**
-     * 唯一键
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long surrogateId;
+  /**
+   * 唯一键
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long surrogateId;
 
-    /**
-     * 编号
-     */
-    private String number;
+  /**
+   * 编号
+   */
+  private String number;
 
-    /**
-     * 专题名
-     */
-    private String name;
+  /**
+   * 专题名
+   */
+  private String name;
 
-    private Integer status;
+  private Integer status;
 
-    private String color;
+  private String color;
 
-    private String remark;
+  private String remark;
 
-    /**
-     * 默认 0
-     */
-    private Integer deleted = 0;
+  /**
+   * 默认 0
+   */
+  private Integer deleted = 0;
 
-    /**
-     * 创建人
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long creatorId;
+  /**
+   * 创建人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long creatorId;
 
-    /**
-     * 修改人
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long operator;
+  /**
+   * 修改人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long operator;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+  /**
+   * 创建时间
+   */
+  private Date createTime;
 
-    /**
-     * 更改时间
-     */
-    private Date updateTime;
+  /**
+   * 更改时间
+   */
+  private Date updateTime;
 }

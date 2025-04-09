@@ -12,20 +12,20 @@ import org.springframework.beans.BeanUtils;
 @ToString
 public class OrgDto extends SysOrg {
 
-    /**
-     * 参数转换为实体类
-     * @param param
-     * @return
-     */
-    public static SysOrg paramToSysOrg(OrgReq param) {
-        SysOrg org = SysOrg.builder().build();
-        BeanUtils.copyProperties(param,org);
-        return org;
-    }
+  /**
+   * 参数转换为实体类
+   * @param param
+   * @return
+   */
+  public static SysOrg paramToSysOrg(OrgReq param) {
+    SysOrg org = SysOrg.builder().build();
+    BeanUtils.copyProperties(param,org);
+    return org;
+  }
 
-    public static SysOrg paramToSysOrg(SysOrg param) {
-        SysOrg org = SysOrg.builder().build();
-        BeanUtils.copyProperties(param,org);
-        return org;
-    }
+  public static SysOrg paramToSysOrg(SysOrg param) {
+    SysOrg org = SysOrg.builder().build();
+    BeanUtils.copyProperties(param,org);
+    return org;
+  }
 }

@@ -13,5 +13,4 @@ import java.util.List;
 public interface SysAclDataMapper {
 
 	List<SysAclData> selectAclDataListByAclIds(@Param("aclList") List<Long> aclList);
-
 }

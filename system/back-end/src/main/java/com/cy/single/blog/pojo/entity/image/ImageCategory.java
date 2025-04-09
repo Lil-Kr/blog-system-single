@@ -10,8 +10,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author 
- * 
+ * @author
+ *
  */
 @EqualsAndHashCode(callSuper = false)
 @Data
@@ -22,52 +22,52 @@ import java.util.Date;
 @TableName("image_category")
 public class ImageCategory implements Serializable {
 
-    private static final long serialVersionUID = 8790752325866544648L;
-    /**
-     * 唯一键
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long surrogateId;
+  private static final long serialVersionUID = 8790752325866544648L;
+  /**
+   * 唯一键
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long surrogateId;
 
-    /**
-     * image全名称
-     */
-    private String name;
+  /**
+   * image全名称
+   */
+  private String name;
 
-    /**
-     * 标题图url
-     */
-    private String imageUrl;
+  /**
+   * 标题图url
+   */
+  private String imageUrl;
 
-    private String remark;
+  private String remark;
 
-    private Integer status;
+  private Integer status;
 
-    /**
-     * 默认 0
-     */
-    private Integer deleted = 0;
+  /**
+   * 默认 0
+   */
+  private Integer deleted = 0;
 
-    /**
-     * 创建人
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long creatorId;
+  /**
+   * 创建人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long creatorId;
 
-    /**
-     * 修改人
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long operator;
+  /**
+   * 修改人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long operator;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+  /**
+   * 创建时间
+   */
+  private Date createTime;
 
-    /**
-     * 更改时间
-     */
-    private Date updateTime;
+  /**
+   * 更改时间
+   */
+  private Date updateTime;
 
 }

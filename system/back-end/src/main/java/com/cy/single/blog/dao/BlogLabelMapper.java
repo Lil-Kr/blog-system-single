@@ -7,6 +7,7 @@ import com.cy.single.blog.pojo.req.blog.label.BlogLabelPageReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
 import com.cy.single.blog.pojo.resp.blog.BlogLabelResp;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @Date: 2025/3/24
  * @Description:
  */
+@Repository
 public interface BlogLabelMapper extends BaseMapper<com.cy.single.blog.pojo.entity.blog.BlogLabel> {
 
 	Integer editBySurrogateId(@Param("param") BlogLabelReq req);

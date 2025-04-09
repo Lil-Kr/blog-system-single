@@ -28,85 +28,85 @@ import java.util.Date;
 @TableName("blog_content")
 public class BlogContent implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@TableId(value = "id", type = IdType.AUTO)
-	private Long id;
+  @TableId(value = "id", type = IdType.AUTO)
+  private Long id;
 
-	/**
-	 * 唯一键
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long surrogateId;
+  /**
+   * 唯一键
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long surrogateId;
 
-	/**
-	 * 编号
-	 */
-	private String number;
+  /**
+   * 编号
+   */
+  private String number;
 
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long original;
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long original;
 
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long recommend;
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long recommend;
 
-	/**
-	 * 博客文章标题
-	 */
-	private String title;
+  /**
+   * 博客文章标题
+   */
+  private String title;
 
-	private String introduction;
+  private String introduction;
 
-	private String imgUrl;
+  private String imgUrl;
 
-	private String paragraph;
+  private String paragraph;
 
-	private String contentText;
+  private String contentText;
 
-	private Date publishTime;
+  private Date publishTime;
 
-	/**
-	 * 博客分类id
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long categoryId;
+  /**
+   * 博客分类id
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long categoryId;
 
-	/**
-	 * 博客标签ids, ","分隔
-	 */
-	private String labelIds;
+  /**
+   * 博客标签ids, ","分隔
+   */
+  private String labelIds;
 
-	/**
-	 * 博客专题id
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long topicId;
+  /**
+   * 博客专题id
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long topicId;
 
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long status;
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long status;
 
-	private String remark;
+  private String remark;
 
-	private Integer deleted = 0;
-	/**
-	 * 创建人
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long creatorId;
+  private Integer deleted = 0;
+  /**
+   * 创建人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long creatorId;
 
-	/**
-	 * 修改人
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long operator;
+  /**
+   * 修改人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long operator;
 
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
+  /**
+   * 创建时间
+   */
+  private Date createTime;
 
-	/**
-	 * 更改时间
-	 */
-	private Date updateTime;
+  /**
+   * 更改时间
+   */
+  private Date updateTime;
 }

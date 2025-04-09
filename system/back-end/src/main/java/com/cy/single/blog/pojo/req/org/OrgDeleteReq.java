@@ -9,15 +9,15 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class OrgDeleteReq {
 
-    /**
-     * 自增主键
-     */
-    @NotNull(message = "自增id不能为空")
-    private Long id;
+  /**
+   * 自增主键
+   */
+  @NotNull(message = "自增id不能为空")
+  private Long id;
 
-    /**
-     * 组织唯一主键
-     */
-    @NotNull(message = "组织surrogateId不能为空")
-    private Long surrogateId;
+  /**
+   * 组织唯一主键
+   */
+  @NotNull(message = "组织surrogateId不能为空")
+  private Long surrogateId;
 }

@@ -12,18 +12,18 @@ import java.util.List;
  */
 public class PathUtil {
 
-    /**
-     * 匹配路径
-     */
-    private static final PathMatcher pathMatcher = new AntPathMatcher();
+  /**
+   * 匹配路径
+   */
+  private static final PathMatcher pathMatcher = new AntPathMatcher();
 
-    public static boolean matche(String compareUrl, String targetUrl) {
-        return pathMatcher.match(compareUrl, targetUrl);
-    }
+  public static boolean matche(String compareUrl, String targetUrl) {
+    return pathMatcher.match(compareUrl, targetUrl);
+  }
 
-    public static boolean matches(List<String> compareUrls, String targetUrl) {
-        return compareUrls.stream()
-                .anyMatch(compareUrl -> pathMatcher.match(compareUrl, targetUrl));
-    }
+  public static boolean matches(List<String> compareUrls, String targetUrl) {
+    return compareUrls.stream()
+      .anyMatch(compareUrl -> pathMatcher.match(compareUrl, targetUrl));
+  }
 
 }

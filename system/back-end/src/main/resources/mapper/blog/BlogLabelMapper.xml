@@ -2,114 +2,111 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.BlogLabelMapper">
 
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id, surrogate_id, `number`, `name`, color, color_text, `status`, remark, deleted, creator_id, operator, create_time, update_time
+	</sql>
 
-    <sql id="Table_Name">
-        blog_label
-    </sql>
-
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id,surrogate_id, `number`, `name`, color, color_text, `status`, remark, deleted, creator_id, operator, create_time, update_time
-    </sql>
-
-    <update id="editBySurrogateId">
-        update <include refid="Table_Name" />
-        <set>
-            <if test="param.number != null and param.number != ''">
-                `number` = #{param.number},
-            </if>
-            <if test="param.name != null and param.name != ''">
-                `name` = #{param.name},
-            </if>
-            <if test="param.color != null and param.color != ''">
-                color = #{param.color},
-            </if>
-            <if test="param.colorText != null and param.colorText != ''">
-                color_text = #{param.colorText},
-            </if>
-            <if test="param.remark != null and param.remark != ''">
-                remark = #{param.remark},
-            </if>
-            <if test="param.operator != null and param.operator != ''">
-                operator = #{param.operator},
-            </if>
-            <if test="param.updateTime != null">
-                update_time = #{param.updateTime},
-            </if>
-        </set>
-        <where>
-            surrogate_id = #{param.surrogateId}
-        </where>
-    </update>
+	<update id="editBySurrogateId">
+		update blog_label
+		<set>
+			<if test="param.number != null and param.number != ''">
+				`number` = #{param.number},
+			</if>
+			<if test="param.name != null and param.name != ''">
+				`name` = #{param.name},
+			</if>
+			<if test="param.color != null and param.color != ''">
+				color = #{param.color},
+			</if>
+			<if test="param.colorText != null and param.colorText != ''">
+				color_text = #{param.colorText},
+			</if>
+			<if test="param.remark != null and param.remark != ''">
+				remark = #{param.remark},
+			</if>
+			<if test="param.operator != null and param.operator != ''">
+				operator = #{param.operator},
+			</if>
+			<if test="param.updateTime != null">
+				update_time = #{param.updateTime},
+			</if>
+		</set>
+		<where>
+			surrogate_id = #{param.surrogateId}
+		</where>
+	</update>
 
 
-    <delete id="deleteBySurrogateId">
-        delete from <include refid="Table_Name"/>
-        <where>
-            surrogate_id = #{surrogateId}
-        </where>
-    </delete>
+	<delete id="deleteBySurrogateId">
+		delete from blog_label
+		<where>
+			surrogate_id = #{surrogateId}
+		</where>
+	</delete>
 
-    <select id="labelList" resultType="com.cy.single.blog.pojo.entity.blog.BlogLabel">
-        select <include refid="Base_Column_List" />
-        from <include refid="Table_Name"/>
-        <where>
-            <if test="param.keyWords!=null and param.keyWords!=''">
-                and (
-                    `number` like concat('%',#{param.keyWords},'%')
-                    or
-                    `name` like concat('%',#{param.keyWords},'%')
-                    or
-                    remark like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-            order by create_time desc
-    </select>
+	<select id="labelList" resultType="com.cy.single.blog.pojo.entity.blog.BlogLabel">
+		select
+		<include refid="Base_Column_List"/>
+		from blog_label
+		<where>
+			<if test="param.keyWords!=null and param.keyWords!=''">
+				and (
+				`number` like concat('%',#{param.keyWords},'%')
+				or
+				`name` like concat('%',#{param.keyWords},'%')
+				or
+				remark like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+		order by create_time desc
+	</select>
 
-    <delete id="deleteBatch">
-        DELETE FROM <include refid="Table_Name"/>
-        WHERE surrogate_id IN
-        <foreach item="surrogate_id" collection="list" open="(" separator="," close=")">
-            #{surrogate_id}
-        </foreach>
-    </delete>
+	<delete id="deleteBatch">
+		DELETE FROM blog_label
+		WHERE surrogate_id IN
+		<foreach item="surrogate_id" collection="list" open="(" separator="," close=")">
+			#{surrogate_id}
+		</foreach>
+	</delete>
 
-    <select id="pageList" resultType="com.cy.single.blog.pojo.resp.blog.BlogLabelResp">
-        select <include refid="Base_Column_List" />
-        from <include refid="Table_Name"/>
-        <where>
-            <if test="param.surrogateId != null and param.surrogateId != ''">
-                and surrogate_id = #{param.surrogateId}
-            </if>
-            <if test="param.keyWords!=null and param.keyWords!=''">
-                and (
-                `number` like concat('%',#{param.keyWords},'%')
-                or
-                `name` like concat('%',#{param.keyWords},'%')
-                or
-                remark like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-    </select>
+	<select id="pageList" resultType="com.cy.single.blog.pojo.resp.blog.BlogLabelResp">
+		select
+		<include refid="Base_Column_List"/>
+		from blog_label
+		<where>
+			<if test="param.surrogateId != null and param.surrogateId != ''">
+				and surrogate_id = #{param.surrogateId}
+			</if>
+			<if test="param.keyWords!=null and param.keyWords!=''">
+				and (
+				`number` like concat('%',#{param.keyWords},'%')
+				or
+				`name` like concat('%',#{param.keyWords},'%')
+				or
+				remark like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+	</select>
 
-    <select id="getCountByList" resultType="java.lang.Integer">
-        select count(1)
-        from <include refid="Table_Name"/>
-        <where>
-            <if test="param.surrogateId != null and param.surrogateId != ''">
-                and surrogate_id = #{param.surrogateId}
-            </if>
-            <if test="param.keyWords!=null and param.keyWords!=''">
-                and (
-                `number` like concat('%',#{param.keyWords},'%')
-                or
-                `name` like concat('%',#{param.keyWords},'%')
-                or
-                remark like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-    </select>
+	<select id="getCountByList" resultType="java.lang.Integer">
+		select count(1)
+		from blog_label
+		<where>
+			<if test="param.surrogateId != null and param.surrogateId != ''">
+				and surrogate_id = #{param.surrogateId}
+			</if>
+			<if test="param.keyWords!=null and param.keyWords!=''">
+				and (
+				`number` like concat('%',#{param.keyWords},'%')
+				or
+				`name` like concat('%',#{param.keyWords},'%')
+				or
+				remark like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+	</select>
 </mapper>

@@ -2,367 +2,369 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.SysUserMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.sys.SysUser">
-        <id column="id" property="id" />
-        <result column="surrogate_id" property="surrogateId" />
-        <result column="token" property="token" />
-        <result column="number" property="number" />
-        <result column="account" property="account" />
-        <result column="user_name" property="userName" />
-        <result column="telephone" property="telephone" />
-        <result column="mail" property="email" />
-        <result column="password" property="password" />
-        <result column="org_id" property="orgId" />
-        <result column="status" property="status" />
-        <result column="deleted" property="deleted" />
-        <result column="operator" property="operator" />
-        <result column="operate_ip" property="operateIp" />
-        <result column="remark" property="remark" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-    </resultMap>
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.sys.SysUser">
+		<id column="id" property="id"/>
+		<result column="surrogate_id" property="surrogateId"/>
+		<result column="token" property="token"/>
+		<result column="number" property="number"/>
+		<result column="account" property="account"/>
+		<result column="user_name" property="userName"/>
+		<result column="telephone" property="telephone"/>
+		<result column="mail" property="email"/>
+		<result column="password" property="password"/>
+		<result column="org_id" property="orgId"/>
+		<result column="status" property="status"/>
+		<result column="deleted" property="deleted"/>
+		<result column="operator" property="operator"/>
+		<result column="operate_ip" property="operateIp"/>
+		<result column="remark" property="remark"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
 
-    <sql id="Table_Name">
-        sys_user
-    </sql>
+	<sql id="Table_Name">
+		sys_user
+	</sql>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id, surrogate_id, token, `number`, account, password, user_name, telephone, email, org_id, status, deleted, remark, operate_ip, creator_id, operator, create_time, update_time
-    </sql>
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id, surrogate_id, token, `number`, `account`, `password`, user_name, telephone, email, org_id, `status`, deleted, remark, operate_ip, creator_id, operator, create_time, update_time
+	</sql>
 
-    <sql id="Base_Join_Column_List">
-        a.id, a.surrogate_id, a.token, a.`number`, a.account, a.password, a.user_name, a.telephone, a.email, a.org_id, a.status, a.deleted, a.remark, a.operate_ip, a.creator_id, a.operator, a.create_time, a.update_time
-    </sql>
+	<sql id="Base_Join_Column_List">
+		a.id, a.surrogate_id, a.token, a.`number`, a.account, a.password, a.user_name, a.telephone, a.email, a.org_id, a.status, a.deleted, a.remark, a.operate_ip, a.creator_id, a.operator, a.create_time, a.update_time
+	</sql>
 
-    <sql id="Column_1_List">
-        id, surrogate_id, token, account, user_name, email
-    </sql>
 
-    <update id="updatePasswordById">
-        update <include refid="Table_Name"/>
-        set
-            password = #{param.newPassword}
-        where surrogate_id = #{param.surrogateId}
-            and password = #{param.oldPassword}
-    </update>
+	<update id="updatePasswordById">
+		update sys_user
+		set password = #{param.newPassword}
+		where surrogate_id = #{param.surrogateId}
+			and password = #{param.oldPassword}
+	</update>
 
-    <select id="selectUserPage" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
-        select <include refid="Base_Column_List"/>
-        from <include refid="Table_Name"/>
-        <where>
-            <if test="param.userName != null">
-                user_name like concat('%',#{param.userName},'%')
-            </if>
-        </where>
+	<select id="selectUserPage" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
+		select
+		<include refid="Base_Column_List"/>
+		from sys_user
+		<where>
+			<if test="param.userName != null">
+				user_name like concat('%',#{param.userName},'%')
+			</if>
+		</where>
 
-        <if test="param.createTime != null">
-            order by ${param.createTime} desc
-        </if>
-    </select>
+		<if test="param.createTime != null">
+			order by ${param.createTime} desc
+		</if>
+	</select>
 
-    <select id="getUserById" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
-        select <include refid="Base_Column_List"/>
-        from <include refid="Table_Name"/>
-        <where>
-            id = #{id}
-        </where>
-    </select>
+	<select id="getUserById" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
+		select
+		<include refid="Base_Column_List"/>
+		from sys_user
+		<where>
+			id = #{id}
+		</where>
+	</select>
 
-    <select id="getUserBySurrogateId" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
-        select
-            a.id,
-            a.surrogate_id,
-            a.token,
-            a.`number`,
-            a.account,
-            a.password,
-            a.user_name,
-            a.telephone,
-            a.email,
-            a.org_id,
-            a.status,
-            a.deleted,
-            a.remark,
-            a.operate_ip,
-            a.creator_id,
-            a.operator,
-            a.create_time,
-            a.update_time,
-            b.name as 'orgName'
-        from sys_user as a
-        left join sys_org as b on (a.org_id = b.surrogate_id)
-        <where>
-            a.surrogate_id = #{surrogateId}
-        </where>
-    </select>
+	<select id="getUserBySurrogateId" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
+		select
+		a.id,
+		a.surrogate_id,
+		a.token,
+		a.`number`,
+		a.account,
+		a.password,
+		a.user_name,
+		a.telephone,
+		a.email,
+		a.org_id,
+		a.status,
+		a.deleted,
+		a.remark,
+		a.operate_ip,
+		a.creator_id,
+		a.operator,
+		a.create_time,
+		a.update_time,
+		b.name as 'orgName'
+		from sys_user as a
+		left join sys_org as b on (a.org_id = b.surrogate_id)
+		<where>
+			a.surrogate_id = #{surrogateId}
+		</where>
+	</select>
 
-    <select id="getUserByToken" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List"/>
-        from <include refid="Table_Name"/>
-        <where>
-            token = #{token}
-        </where>
-    </select>
+	<select id="getUserByToken" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from sys_user
+		<where>
+			token = #{token}
+		</where>
+	</select>
 
-    <select id="getUserByKeyword" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
-        select <include refid="Column_1_List"/>
-        from <include refid="Table_Name"/>
-        <where>
-            <if test="param.token != null">
-                token = #{param.token}
-            </if>
-            <if test="param.account != null">
-                and account = #{param.account}
-            </if>
-            <if test="param.email != null">
-                and email = #{param.email}
-            </if>
-            <if test="param.password != null">
-                and password = #{param.password}
-            </if>
-        </where>
-    </select>
+	<select id="getUserByKeyword" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
+		select
+		id, surrogate_id, token, account, user_name, email
+		from sys_user
+		<where>
+			<if test="param.token != null">
+				and token = #{param.token}
+			</if>
+			<if test="param.account != null">
+				and account = #{param.account}
+			</if>
+			<if test="param.email != null">
+				and email = #{param.email}
+			</if>
+			<if test="param.password != null">
+				and password = #{param.password}
+			</if>
+		</where>
+	</select>
 
-    <!-- 根据账号查询用户 -->
-    <select id="getUserByAccount" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List"/>
-        from <include refid="Table_Name"/>
-        <where>
-            account = #{account}
-        </where>
-    </select>
+	<!-- 根据账号查询用户 -->
+	<select id="getUserByAccount" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from sys_user
+		<where>
+			account = #{account}
+		</where>
+	</select>
 
-    <update id="updateUserBySurrogateId">
-        update <include refid="Table_Name"/>
-        <set>
-            <if test="param.number != null and param.number != ''">
-                `number` = #{param.number},
-            </if>
-            <if test="param.account != null and param.account != ''">
-                account = #{param.account},
-            </if>
-            <if test="param.userName != null and param.userName != ''">
-                user_name = #{param.userName},
-            </if>
-            <if test="param.telephone != null and param.telephone != ''">
-                telephone = #{param.telephone},
-            </if>
-            <if test="param.email != null and param.email != ''">
-                email = #{param.email},
-            </if>
-            <if test="param.password != null and param.password != ''">
-                password = #{param.password},
-            </if>
-            <if test="param.status != null">
-                status = #{param.status},
-            </if>
-            <if test="param.remark != null and param.remark != ''">
-                remark = #{param.remark},
-            </if>
-            <if test="param.deleted != null and param.deleted != ''">
-                deleted = #{param.deleted},
-            </if>
-            <if test="param.operateIp != null and param.operateIp != ''">
-                operate_ip = #{param.operateIp},
-            </if>
-            <if test="param.creatorId != null and param.creatorId != ''">
-                creator_id = #{param.creatorId},
-            </if>
-            <if test="param.operator != null and param.operator != ''">
-                operator = #{param.operator},
-            </if>
-            <if test="param.createTime != null">
-                create_time = #{param.createTime},
-            </if>
-            <if test="param.updateTime != null">
-                update_time = #{param.updateTime},
-            </if>
-        </set>
-        <where>
-            surrogate_id = #{param.surrogateId}
-        </where>
-    </update>
+	<update id="updateUserBySurrogateId">
+		update
+		<include refid="Table_Name"/>
+		<set>
+			<if test="param.number != null and param.number != ''">
+				`number` = #{param.number},
+			</if>
+			<if test="param.account != null and param.account != ''">
+				account = #{param.account},
+			</if>
+			<if test="param.userName != null and param.userName != ''">
+				user_name = #{param.userName},
+			</if>
+			<if test="param.telephone != null and param.telephone != ''">
+				telephone = #{param.telephone},
+			</if>
+			<if test="param.email != null and param.email != ''">
+				email = #{param.email},
+			</if>
+			<if test="param.password != null and param.password != ''">
+				password = #{param.password},
+			</if>
+			<if test="param.status != null">
+				status = #{param.status},
+			</if>
+			<if test="param.remark != null and param.remark != ''">
+				remark = #{param.remark},
+			</if>
+			<if test="param.deleted != null and param.deleted != ''">
+				deleted = #{param.deleted},
+			</if>
+			<if test="param.operateIp != null and param.operateIp != ''">
+				operate_ip = #{param.operateIp},
+			</if>
+			<if test="param.creatorId != null and param.creatorId != ''">
+				creator_id = #{param.creatorId},
+			</if>
+			<if test="param.operator != null and param.operator != ''">
+				operator = #{param.operator},
+			</if>
+			<if test="param.createTime != null">
+				create_time = #{param.createTime},
+			</if>
+			<if test="param.updateTime != null">
+				update_time = #{param.updateTime},
+			</if>
+		</set>
+		<where>
+			surrogate_id = #{param.surrogateId}
+		</where>
+	</update>
 
-    <select id="loginAdmin" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List"/>
-        from <include refid="Table_Name"/>
-        <where>
-            account = #{param.account}
-            and password = #{param.password}
-        </where>
-    </select>
+	<select id="loginAdmin" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from sys_user
+		<where>
+			account = #{param.account}
+			and password = #{param.password}
+		</where>
+	</select>
 
-    <select id="pageUserListByOrgId1" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
-        select
-            a.id,
-            a.surrogate_id,
-            a.token,
-            a.`number`,
-            a.account,
-            a.password,
-            a.user_name,
-            a.telephone,
-            a.email,
-            a.org_id,
-            a.status,
-            a.deleted,
-            a.remark,
-            a.operate_ip,
-            a.creator_id,
-            a.operator,
-            a.create_time,
-            a.update_time,
-            b.name as 'orgName'
-        from sys_user as a
-        inner join sys_org as b on (a.org_id = b.surrogate_id)
-        <where>
-            a.org_id = #{param}
-        </where>
-    </select>
+	<select id="pageUserListByOrgId1" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
+		select
+		a.id,
+		a.surrogate_id,
+		a.token,
+		a.`number`,
+		a.account,
+		a.password,
+		a.user_name,
+		a.telephone,
+		a.email,
+		a.org_id,
+		a.status,
+		a.deleted,
+		a.remark,
+		a.operate_ip,
+		a.creator_id,
+		a.operator,
+		a.create_time,
+		a.update_time,
+		b.name as 'orgName'
+		from sys_user as a
+		inner join sys_org as b on (a.org_id = b.surrogate_id)
+		<where>
+			a.org_id = #{param}
+		</where>
+	</select>
 
-    <select id="countUserListByOrgId1" resultType="java.lang.Integer">
-        select count(1)
-        from sys_user as a
-        inner join sys_org as b on (a.org_id = b.surrogate_id)
-        <where>
-            a.org_id = #{param}
-        </where>
-    </select>
+	<select id="countUserListByOrgId1" resultType="java.lang.Integer">
+		select count(1)
+		from sys_user as a
+		inner join sys_org as b on (a.org_id = b.surrogate_id)
+		<where>
+			a.org_id = #{param}
+		</where>
+	</select>
 
-    <select id="pageUserList" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
-        select
-            a.id,
-            a.surrogate_id,
-            a.token,
-            a.`number`,
-            a.account,
-            a.password,
-            a.user_name,
-            a.telephone,
-            a.email,
-            a.org_id,
-            a.status,
-            a.deleted,
-            a.remark,
-            a.operate_ip,
-            a.creator_id,
-            a.operator,
-            a.create_time,
-            a.update_time,
-            b.name as 'orgName',
-            c.user_name as 'creator_name',
-            d.account as 'operatorName'
-        from sys_user as a
-        inner join sys_org as b on (a.org_id = b.surrogate_id)
-        inner join sys_user as c on (a.creator_id = c.surrogate_id)
-        inner join sys_user as d on (a.operator = d.surrogate_id)
-        <where>
-            <if test="param.surrogateId != null and param.surrogateId != ''">
-                and a.org_id = #{param.surrogateId}
-            </if>
-            <if test="param.userName != null and param.userName != ''">
-                and a.user_name = #{param.userName}
-            </if>
-            <if test="param.telephone != null and param.telephone != ''">
-                and a.telephone = #{param.telephone}
-            </if>
-            <if test="param.keyWords != null and param.keyWords !='' ">
-                and (
-                    a.`number` like concat('%',#{param.keyWords},'%')
-                    or
-                    a.`user_name` like concat('%',#{param.keyWords},'%')
-                    or
-                    a.remark like concat('%',#{param.keyWords},'%')
-                    or
-                    b.name like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-        order by a.create_time desc
-    </select>
+	<select id="pageUserList" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
+		select
+		a.id,
+		a.surrogate_id,
+		a.token,
+		a.`number`,
+		a.account,
+		a.password,
+		a.user_name,
+		a.telephone,
+		a.email,
+		a.org_id,
+		a.status,
+		a.deleted,
+		a.remark,
+		a.operate_ip,
+		a.creator_id,
+		a.operator,
+		a.create_time,
+		a.update_time,
+		b.name as 'orgName',
+		c.user_name as 'creator_name',
+		d.account as 'operatorName'
+		from sys_user as a
+		inner join sys_org as b on (a.org_id = b.surrogate_id)
+		inner join sys_user as c on (a.creator_id = c.surrogate_id)
+		inner join sys_user as d on (a.operator = d.surrogate_id)
+		<where>
+			<if test="param.surrogateId != null and param.surrogateId != ''">
+				and a.org_id = #{param.surrogateId}
+			</if>
+			<if test="param.userName != null and param.userName != ''">
+				and a.user_name = #{param.userName}
+			</if>
+			<if test="param.telephone != null and param.telephone != ''">
+				and a.telephone = #{param.telephone}
+			</if>
+			<if test="param.keyWords != null and param.keyWords !='' ">
+				and (
+				a.`number` like concat('%',#{param.keyWords},'%')
+				or
+				a.`user_name` like concat('%',#{param.keyWords},'%')
+				or
+				a.remark like concat('%',#{param.keyWords},'%')
+				or
+				b.name like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+		order by a.create_time desc
+	</select>
 
-    <select id="countUserList" resultType="java.lang.Integer">
-        select count(1)
-        from sys_user as a
-        inner join sys_org as b on (a.org_id = b.surrogate_id)
-        inner join sys_user as c on (a.creator_id = c.surrogate_id)
-        inner join sys_user as d on (a.operator = d.surrogate_id)
-        <where>
-            <if test="param.surrogateId != null and param.surrogateId != ''">
-                and a.org_id = #{param.surrogateId}
-            </if>
-            <if test="param.userName != null and param.userName != ''">
-                and a.user_name = #{param.userName}
-            </if>
-            <if test="param.telephone != null and param.telephone != ''">
-                and a.telephone = #{param.telephone}
-            </if>
-            <if test="param.keyWords != null and param.keyWords !='' ">
-                and (
-                    a.`number` like concat('%',#{param.keyWords},'%')
-                    or
-                    a.`user_name` like concat('%',#{param.keyWords},'%')
-                    or
-                    a.remark like concat('%',#{param.keyWords},'%')
-                    or
-                    b.name like concat('%',#{param.keyWords},'%')
-                    or
-                    a.user_name like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-    </select>
+	<select id="countUserList" resultType="java.lang.Integer">
+		select count(1)
+		from sys_user as a
+		inner join sys_org as b on (a.org_id = b.surrogate_id)
+		inner join sys_user as c on (a.creator_id = c.surrogate_id)
+		inner join sys_user as d on (a.operator = d.surrogate_id)
+		<where>
+			<if test="param.surrogateId != null and param.surrogateId != ''">
+				and a.org_id = #{param.surrogateId}
+			</if>
+			<if test="param.userName != null and param.userName != ''">
+				and a.user_name = #{param.userName}
+			</if>
+			<if test="param.telephone != null and param.telephone != ''">
+				and a.telephone = #{param.telephone}
+			</if>
+			<if test="param.keyWords != null and param.keyWords !='' ">
+				and (
+				a.`number` like concat('%',#{param.keyWords},'%')
+				or
+				a.`user_name` like concat('%',#{param.keyWords},'%')
+				or
+				a.remark like concat('%',#{param.keyWords},'%')
+				or
+				b.name like concat('%',#{param.keyWords},'%')
+				or
+				a.user_name like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+	</select>
 
-    <select id="selectUserInfoExist" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
-        SELECT
-            account,
-            email,
-            user_name,
-            COUNT(1) as 'count'
-        FROM sys_user
-        WHERE
-            account = #{param.account} OR email = #{param.email} OR user_name = #{param.userName}
-        GROUP BY
-            account, email, user_name;
-    </select>
+	<select id="selectUserInfoExist" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
+		SELECT account,
+		       email,
+		       user_name,
+		       COUNT(1) as 'count'
+		FROM sys_user
+		WHERE account = #{param.account}
+			 OR email = #{param.email}
+			 OR user_name = #{param.userName}
+		GROUP BY account, email, user_name;
+	</select>
 
-    <!--  根据userIds, 查询用户列表  -->
-    <select id="selectUserListByIds" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
-        select
-            a.surrogate_id,
-            a.account,
-            a.user_name,
-            a.remark,
-            a.create_time,
-            a.update_time
-        from sys_user as a
-        <where>
-            a.status = 0
-            and
-            a.surrogate_id in (
-                <foreach collection="userIdList" index="index" item="userId" separator=",">
-                    #{userId}
-                </foreach>
-            )
-        </where>
-        order by a.create_time desc
-    </select>
+	<!--  根据userIds, 查询用户列表  -->
+	<select id="selectUserListByIds" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
+		select
+		a.surrogate_id,
+		a.account,
+		a.user_name,
+		a.remark,
+		a.create_time,
+		a.update_time
+		from sys_user as a
+		<where>
+			a.status = 0
+			and
+			a.surrogate_id in (
+			<foreach collection="userIdList" index="index" item="userId" separator=",">
+				#{userId}
+			</foreach>
+			)
+		</where>
+		order by a.create_time desc
+	</select>
 
-    <!--  查询所有用户列表, 与上一条sql一起使用  -->
-    <select id="selectUserList" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
-        select
-            a.surrogate_id,
-            a.account,
-            a.user_name,
-            a.remark,
-            a.create_time,
-            a.update_time
-        from sys_user as a
-        <where>
-            a.status = 0
-        </where>
-        order by a.create_time desc
-    </select>
+	<!--  查询所有用户列表, 与上一条sql一起使用  -->
+	<select id="selectUserList" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
+		select
+		a.surrogate_id,
+		a.account,
+		a.user_name,
+		a.remark,
+		a.create_time,
+		a.update_time
+		from sys_user as a
+		<where>
+			a.status = 0
+		</where>
+		order by a.create_time desc
+	</select>
 </mapper>

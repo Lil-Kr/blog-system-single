@@ -27,53 +27,53 @@ import java.util.Date;
 @TableName("sys_dict")
 public class SysDict extends Model<SysDict> {
 
-    private static final long serialVersionUID = 3907370379306169949L;
-    /**
-     * 自增主键
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+  private static final long serialVersionUID = 3907370379306169949L;
+  /**
+   * 自增主键
+   */
+  @TableId(value = "id", type = IdType.AUTO)
+  private Long id;
 
-    /**
-     * 数据字典id唯一主键
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long surrogateId;
+  /**
+   * 数据字典id唯一主键
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long surrogateId;
 
-    /**
-     * 数据字典名称
-     */
-    private String name;
+  /**
+   * 数据字典名称
+   */
+  private String name;
 
-    /**
-     * 备注
-     */
-    private String remark;
+  /**
+   * 备注
+   */
+  private String remark;
 
-    /**
-     * 删除状态, 0正常, 1删除
-     */
-    private Integer deleted;
+  /**
+   * 删除状态, 0正常, 1删除
+   */
+  private Integer deleted;
 
-    /**
-     * 操作人
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long operator;
+  /**
+   * 操作人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long operator;
 
-    /**
-     * 操作ip
-     */
-    private String operateIp;
+  /**
+   * 操作ip
+   */
+  private String operateIp;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+  /**
+   * 创建时间
+   */
+  private Date createTime;
 
-    /**
-     * 更改时间
-     */
-    private Date  updateTime;
+  /**
+   * 更改时间
+   */
+  private Date  updateTime;
 
 }

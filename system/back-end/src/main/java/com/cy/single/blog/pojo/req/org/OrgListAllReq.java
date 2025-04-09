@@ -8,15 +8,15 @@ import lombok.ToString;
 @ToString
 public class OrgListAllReq extends BasePageReq {
 
-    private Long surrogateId;
+  private Long surrogateId;
 
-    // org number
-    private String number;
+  // org number
+  private String number;
 
-    // org name
-    private String name;
+  // org name
+  private String name;
 
-    private Integer seq;
+  private Integer seq;
 
-    private String remark;
+  private String remark;
 }

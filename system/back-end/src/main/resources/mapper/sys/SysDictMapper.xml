@@ -2,60 +2,63 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.SysDictMapper">
 
-    <!-- 通用查询结果列 -->
-    <sql id="Table_Name">
-        sys_dict
-    </sql>
+	<!-- 通用查询结果列 -->
+	<sql id="Table_Name">
+		sys_dict
+	</sql>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id, surrogate_id, `name`, remark, operator, operate_ip, deleted, create_time, update_time
-    </sql>
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id, surrogate_id, `name`, remark, operator, operate_ip, deleted, create_time, update_time
+	</sql>
 
-    <select id="getDict" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictResp">
-        select <include refid="Base_Column_List" />
-        from <include refid="Table_Name" />
-        where surrogate_id = #{surrogateId}
-    </select>
+	<select id="getDict" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictResp">
+		select
+		<include refid="Base_Column_List"/>
+		from sys_dict
+		where surrogate_id = #{surrogateId}
+	</select>
 
-    <select id="pageDictList" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictResp">
-        select <include refid="Base_Column_List" />
-        from <include refid="Table_Name" />
-        <where>
-            <if test="param.name != null and param.name != ''">
-                and `name` = #{param.name}
-            </if>
-            <if test="param.keyWords!=null and param.keyWords!=''">
-                and (
-                    `name` like concat('%',#{param.keyWords},'%')
-                    or
-                    remark like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-        order by update_time desc
-    </select>
+	<select id="pageDictList" resultType="com.cy.single.blog.pojo.resp.sys.dic.SysDictResp">
+		select
+		<include refid="Base_Column_List"/>
+		from sys_dict
+		<where>
+			<if test="param.name != null and param.name != ''">
+				and `name` = #{param.name}
+			</if>
+			<if test="param.keyWords!=null and param.keyWords!=''">
+				and (
+				`name` like concat('%',#{param.keyWords},'%')
+				or
+				remark like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+		order by update_time desc
+	</select>
 
-    <select id="countPageDict" resultType="java.lang.Integer">
-        select count(1)
-        from <include refid="Table_Name" />
-        <where>
-            <if test="param.name != null and param.name != ''">
-                and `name` = #{param.name}
-            </if>
-            <if test="param.keyWords!=null and param.keyWords!=''">
-                and (
-                `name` like concat('%',#{param.keyWords},'%')
-                or
-                remark like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-    </select>
+	<select id="countPageDict" resultType="java.lang.Integer">
+		select count(1)
+		from sys_dict
+		<where>
+			<if test="param.name != null and param.name != ''">
+				and `name` = #{param.name}
+			</if>
+			<if test="param.keyWords!=null and param.keyWords!=''">
+				and (
+				`name` like concat('%',#{param.keyWords},'%')
+				or
+				remark like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+	</select>
 
-    <select id="selectDictList" resultType="com.cy.single.blog.pojo.entity.sys.SysDict">
-        select <include refid="Base_Column_List" />
-        from <include refid="Table_Name" />
-    </select>
+	<select id="selectDictList" resultType="com.cy.single.blog.pojo.entity.sys.SysDict">
+		select
+		<include refid="Base_Column_List"/>
+		from sys_dict
+	</select>
 
 </mapper>

@@ -17,15 +17,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public interface SysAclService extends IService<SysAcl> {
 
-	ApiResp<String> add(AclReq req);
+  ApiResp<String> add(AclReq req);
 
-	ApiResp<String> edit(AclReq req);
+  ApiResp<String> edit(AclReq req);
 
-	PageResult<SysAclResp> pageList(AclPageReq req);
+  PageResult<SysAclResp> pageList(AclPageReq req);
 
-	ApiResp<ConcurrentHashMap<String, Object>> acls(AclReq req);
+  ApiResp<ConcurrentHashMap<String, Object>> acls(AclReq req);
 
-	ApiResp<String> delete(Long surrogateId);
+  ApiResp<String> delete(Long id);
 
-	Long getAclCountByAclModuleId(Long aclModuleId);
+  Long getAclCountByAclModuleId(Long aclModuleId);
 }

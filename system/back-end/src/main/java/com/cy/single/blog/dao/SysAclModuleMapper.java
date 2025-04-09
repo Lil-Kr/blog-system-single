@@ -5,6 +5,7 @@ import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleListReq;
 import com.cy.single.blog.pojo.resp.sys.aclmodule.SysAclModuleResp;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Set;
@@ -17,11 +18,12 @@ import java.util.Set;
  * @author Lil-Kr
  * @since 2020-11-24
  */
+@Repository
 public interface SysAclModuleMapper extends BaseMapper<SysAclModule> {
 
-	List<SysAclModule> selectChildAclModuleListByParentId(@Param("parentId") Long surrogateId);
+  List<SysAclModule> selectChildAclModuleListByParentId(@Param("parentId") Long surrogateId);
 
-	List<SysAclModuleResp> selectAclModuleList(@Param("param") AclModuleListReq req);
+  List<SysAclModuleResp> selectAclModuleList(@Param("param") AclModuleListReq req);
 
-	List<SysAclModule> selectAclModuleListByIds(@Param("aclModuleIds") Set<Long> aclModuleIds);
+  List<SysAclModule> selectAclModuleListByIds(@Param("aclModuleIds") Set<Long> aclModuleIds);
 }

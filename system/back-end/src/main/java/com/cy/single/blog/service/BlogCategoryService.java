@@ -15,17 +15,17 @@ import java.util.List;
  */
 public interface BlogCategoryService {
 
-    PageResult<BlogCategoryResp> pageCategoryList(BlogCategoryPageReq req);
+  PageResult<BlogCategoryResp> pageCategoryList(BlogCategoryPageReq req);
 
-    PageResult<BlogCategoryResp> list(BlogCategoryPageReq req);
+  PageResult<BlogCategoryResp> list(BlogCategoryPageReq req);
 
-    ApiResp<String> add(BlogCategoryReq req);
+  ApiResp<String> add(BlogCategoryReq req);
 
-    ApiResp<String> edit(BlogCategoryReq req);
+  ApiResp<String> edit(BlogCategoryReq req);
 
-    ApiResp<String> delete(Long surrogateId);
+  ApiResp<String> delete(Long surrogateId);
 
-    ApiResp<String> deleteBatch(BlogCategoryReq req);
+  ApiResp<String> deleteBatch(BlogCategoryReq req);
 
-    List<BlogCategoryResp> frontList();
+  List<BlogCategoryResp> frontList();
 }

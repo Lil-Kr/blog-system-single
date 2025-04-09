@@ -9,6 +9,6 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class RoleDeleteParam {
 
-    @NotNull(message = "surrogateId不能为空")
-    private Long surrogateId;
+  @NotNull(message = "surrogateId不能为空")
+  private Long surrogateId;
 }

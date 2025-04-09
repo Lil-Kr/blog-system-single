@@ -28,72 +28,72 @@ import java.util.Date;
 @TableName("blog_label")
 public class BlogLabel implements Serializable {
 
-	private static final long serialVersionUID = -3659470283029206105L;
+  private static final long serialVersionUID = -3659470283029206105L;
 
-	@TableId(value = "id", type = IdType.AUTO)
-	private Long id;
+  @TableId(value = "id", type = IdType.AUTO)
+  private Long id;
 
-	/**
-	 * 唯一键
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long surrogateId;
+  /**
+   * 唯一键
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long surrogateId;
 
-	/**
-	 * 编号
-	 */
-	private String number;
+  /**
+   * 编号
+   */
+  private String number;
 
-	/**
-	 * 标签名
-	 */
-	private String name;
+  /**
+   * 标签名
+   */
+  private String name;
 
-	/**
-	 * 标签颜色
-	 */
-	private String color;
+  /**
+   * 标签颜色
+   */
+  private String color;
 
-	/**
-	 * 前端展示颜色
-	 */
-	private String colorText;
+  /**
+   * 前端展示颜色
+   */
+  private String colorText;
 
-	/**
-	 *
-	 */
-	private Integer status;
+  /**
+   *
+   */
+  private Integer status;
 
-	/**
-	 * 备注
-	 */
-	private String remark;
+  /**
+   * 备注
+   */
+  private String remark;
 
-	/**
-	 * 默认 0
-	 */
-	private Integer deleted = 0;
+  /**
+   * 默认 0
+   */
+  private Integer deleted = 0;
 
-	/**
-	 * 创建人
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long creatorId;
+  /**
+   * 创建人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long creatorId;
 
-	/**
-	 * 修改人
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long operator;
+  /**
+   * 修改人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long operator;
 
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
+  /**
+   * 创建时间
+   */
+  private Date createTime;
 
-	/**
-	 * 更改时间
-	 */
-	private Date updateTime;
+  /**
+   * 更改时间
+   */
+  private Date updateTime;
 
 }

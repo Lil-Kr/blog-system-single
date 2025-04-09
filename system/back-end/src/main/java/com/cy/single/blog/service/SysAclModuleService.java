@@ -2,6 +2,7 @@ package com.cy.single.blog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cy.single.blog.base.ApiResp;
+import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleListReq;
 import com.cy.single.blog.pojo.req.aclmodule.AclModuleReq;
@@ -20,9 +21,9 @@ public interface SysAclModuleService extends IService<SysAclModule> {
 
     ApiResp<String> edit(AclModuleReq req);
 
-    ApiResp aclModuleTree();
+  ApiResp<List<AclModuleDto>> aclModuleTree();
 
-    ApiResp delete(Long surrogateId);
+  ApiResp<String> delete(Long surrogateId);
 
     ApiResp<SysAclModuleResp> getAclModule(Long surrogateId);
 

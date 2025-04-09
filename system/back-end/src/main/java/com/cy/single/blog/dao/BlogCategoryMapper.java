@@ -5,6 +5,7 @@ import com.cy.single.blog.pojo.entity.blog.BlogCategory;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryPageReq;
 import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -13,23 +14,25 @@ import java.util.List;
  * @Date: 2025/3/28
  * @Description:
  */
+@Repository
 public interface BlogCategoryMapper extends BaseMapper<BlogCategory> {
 
-	Integer editBySurrogateId(@Param("param") BlogCategory req);
+  Integer editBySurrogateId(@Param("param") BlogCategory req);
 
-	BlogCategory selectBySurrogateId(Long surrogateId);
+  BlogCategory selectBySurrogateId(Long surrogateId);
 
-	BlogCategory selectByNumber(String Number);
+  BlogCategory selectByNumber(String Number);
 
-	List<BlogCategoryResp> pageCategoryList(@Param("param") BlogCategoryPageReq req);
+  List<BlogCategoryResp> pageCategoryList(@Param("param") BlogCategoryPageReq req);
 
-	List<BlogCategoryResp> categoryList(@Param("param") BlogCategoryPageReq req);
+  List<BlogCategoryResp> categoryList(@Param("param") BlogCategoryPageReq req);
 
-	Integer getCountByList(@Param("param") BlogCategoryPageReq req);
+  Integer getCountByList(@Param("param") BlogCategoryPageReq req);
 
-	Integer deleteBySurrogateId(Long surrogateId);
+  Integer deleteBySurrogateId(Long surrogateId);
 
-	Integer deleteBatch(List<Long> surrogateIds);
+  Integer deleteBatch(List<Long> surrogateIds);
 
-	List<BlogCategoryResp> frontList();
+  List<BlogCategoryResp> frontList();
+
 }

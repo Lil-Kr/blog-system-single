@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class OrgGetChildrenReq {
 
-    @NotNull(message = "组织surrogateId不能为空")
-    private Long surrogateId;
+  @NotNull(message = "组织surrogateId不能为空")
+  private Long surrogateId;
 
 }

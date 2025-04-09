@@ -22,77 +22,77 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @TableName("image_info")
 public class ImageInfo implements Serializable {
-	private static final long serialVersionUID = 2803225574295718845L;
+  private static final long serialVersionUID = 2803225574295718845L;
 
-	/**
-	 * 主键
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long surrogateId;
+  /**
+   * 主键
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long surrogateId;
 
-	/**
-	 * 图片分类id
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long imageCategoryId;
+  /**
+   * 图片分类id
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long imageCategoryId;
 
-	/**
-	 * image全名称
-	 */
-	private String name;
+  /**
+   * image全名称
+   */
+  private String name;
 
-	/**
-	 * image原名
-	 */
-	private String imageOriginalName;
+  /**
+   * image原名
+   */
+  private String imageOriginalName;
 
-	/**
-	 * image 类型后缀名
-	 */
-	private String imageType;
+  /**
+   * image 类型后缀名
+   */
+  private String imageType;
 
-	/**
-	 * image url link
-	 */
-	private String imageUrl;
+  /**
+   * image url link
+   */
+  private String imageUrl;
 
-	/**
-	 * 备注
-	 */
-	private String remark;
+  /**
+   * 备注
+   */
+  private String remark;
 
-	/**
-	 * 状态
-	 */
-	private Integer status;
+  /**
+   * 状态
+   */
+  private Integer status;
 
-	/**
-	 * 删除状态
-	 */
-	private Integer deleted;
+  /**
+   * 删除状态
+   */
+  private Integer deleted;
 
-	/**
-	 * 创建人
-	 */
-	private Long creatorId;
+  /**
+   * 创建人
+   */
+  private Long creatorId;
 
-	/**
-	 * 修改人
-	 */
-	private Long operator;
+  /**
+   * 修改人
+   */
+  private Long operator;
 
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
+  /**
+   * 创建时间
+   */
+  private Date createTime;
 
-	/**
-	 * 更改时间
-	 */
-	private Date updateTime;
+  /**
+   * 更改时间
+   */
+  private Date updateTime;
 
-	/**
-	 * image base64 code
-	 */
-	private String imageBase64;
+  /**
+   * image base64 code
+   */
+  private String imageBase64;
 }

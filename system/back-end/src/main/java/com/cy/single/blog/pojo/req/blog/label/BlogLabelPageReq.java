@@ -13,11 +13,11 @@ import lombok.ToString;
 @Data
 public class BlogLabelPageReq extends BasePageReq {
 
-    private Long surrogateId;
+  private Long surrogateId;
 
-    private Integer number;
+  private Integer number;
 
-    private String name;
+  private String name;
 
-    private String remark;
+  private String remark;
 }

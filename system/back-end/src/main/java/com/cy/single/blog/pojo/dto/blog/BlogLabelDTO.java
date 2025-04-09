@@ -21,58 +21,58 @@ import java.util.stream.Collectors;
  */
 public class BlogLabelDTO {
 
-    /** ======================= blog-label  ======================= **/
-    public static BlogLabel convertSaveLabelReq(BlogLabelReq baseReq) {
-        com.cy.single.blog.pojo.entity.blog.BlogLabel req = new com.cy.single.blog.pojo.entity.blog.BlogLabel();
-        BeanUtils.copyProperties(baseReq, req);
+  /** ======================= blog-label  ======================= **/
+  public static BlogLabel convertSaveLabelReq(BlogLabelReq baseReq) {
+    com.cy.single.blog.pojo.entity.blog.BlogLabel req = new com.cy.single.blog.pojo.entity.blog.BlogLabel();
+    BeanUtils.copyProperties(baseReq, req);
 
-        req.setSurrogateId(IdWorker.getSnowFlakeId());
-        Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
+    req.setSurrogateId(IdWorker.getSnowFlakeId());
+    Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
 
-        req.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
-        req.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
-        req.setCreateTime(nowDateTime);
-        req.setUpdateTime(nowDateTime);
+    req.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
+    req.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
+    req.setCreateTime(nowDateTime);
+    req.setUpdateTime(nowDateTime);
+    return req;
+  }
+
+  public static BlogLabel convertEditLabelReq(BlogLabelReq baseReq) {
+    com.cy.single.blog.pojo.entity.blog.BlogLabel req = new com.cy.single.blog.pojo.entity.blog.BlogLabel();
+    BeanUtils.copyProperties(baseReq, req);
+
+    Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
+    req.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
+    req.setUpdateTime(nowDateTime);
+    return req;
+  }
+
+
+  public static BlogLabel convertDelLabelReq(BlogLabelReq baseReq) {
+    com.cy.single.blog.pojo.entity.blog.BlogLabel req = new com.cy.single.blog.pojo.entity.blog.BlogLabel();
+    BeanUtils.copyProperties(baseReq, req);
+    return req;
+  }
+
+  public static BlogLabel convertQueryLabelReq(BlogLabelListReq baseReq) {
+    com.cy.single.blog.pojo.entity.blog.BlogLabel req = new com.cy.single.blog.pojo.entity.blog.BlogLabel();
+    BeanUtils.copyProperties(baseReq, req);
+    return req;
+  }
+
+  /**
+   *
+   * @param blogLabels
+   * @return
+   */
+  public static List<BlogLabelResp> convertLabelsToVO(List<com.cy.single.blog.pojo.entity.blog.BlogLabel> blogLabels) {
+    return blogLabels.stream()
+      .map(blogLabel -> {
+        BlogLabelResp req = new BlogLabelResp();
+        BeanUtils.copyProperties(blogLabel, req);
         return req;
-    }
+      })
+      .collect(Collectors.toList());
+  }
 
-    public static BlogLabel convertEditLabelReq(BlogLabelReq baseReq) {
-        com.cy.single.blog.pojo.entity.blog.BlogLabel req = new com.cy.single.blog.pojo.entity.blog.BlogLabel();
-        BeanUtils.copyProperties(baseReq, req);
-
-        Date nowDateTime = DateUtil.localDateTimeToDate(LocalDateTime.now());
-        req.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
-        req.setUpdateTime(nowDateTime);
-        return req;
-    }
-
-
-    public static BlogLabel convertDelLabelReq(BlogLabelReq baseReq) {
-        com.cy.single.blog.pojo.entity.blog.BlogLabel req = new com.cy.single.blog.pojo.entity.blog.BlogLabel();
-        BeanUtils.copyProperties(baseReq, req);
-        return req;
-    }
-
-    public static BlogLabel convertQueryLabelReq(BlogLabelListReq baseReq) {
-        com.cy.single.blog.pojo.entity.blog.BlogLabel req = new com.cy.single.blog.pojo.entity.blog.BlogLabel();
-        BeanUtils.copyProperties(baseReq, req);
-        return req;
-    }
-
-    /**
-     *
-     * @param blogLabels
-     * @return
-     */
-    public static List<BlogLabelResp> convertLabelsToVO(List<com.cy.single.blog.pojo.entity.blog.BlogLabel> blogLabels) {
-        return blogLabels.stream()
-                .map(blogLabel -> {
-                    BlogLabelResp req = new BlogLabelResp();
-                    BeanUtils.copyProperties(blogLabel, req);
-                    return req;
-                })
-                .collect(Collectors.toList());
-    }
-
-    /** ======================= blog-topic  ======================= **/
+  /** ======================= blog-topic  ======================= **/
 }

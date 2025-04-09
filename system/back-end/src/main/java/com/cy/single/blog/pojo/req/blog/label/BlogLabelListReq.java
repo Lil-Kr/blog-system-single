@@ -13,12 +13,12 @@ import lombok.ToString;
 @Data
 public class BlogLabelListReq extends BaseReq {
 
-    private Long surrogateId;
+  private Long surrogateId;
 
-    private Integer number;
+  private Integer number;
 
-    private String name;
+  private String name;
 
-    private String remark;
+  private String remark;
 
 }

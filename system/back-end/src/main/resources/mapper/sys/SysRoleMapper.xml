@@ -1,81 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.SysRoleMapper">
+	<sql id="Table_Name">
+		sys_role
+	</sql>
 
-    <sql id="Table_Name">
-        sys_role
-    </sql>
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id, surrogate_id, `name`, `type`, remark, status, deleted, operate_ip, creator_id, operator, create_time, update_time
+	</sql>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id, surrogate_id, `name`, `type`, remark, status, deleted, operate_ip, creator_id, operator, create_time, update_time
-    </sql>
+	<delete id="deleteBySurrogateId">
+		delete
+		from sys_role
+		where surrogate_id = #{surrogateId}
+	</delete>
 
-    <delete id="deleteBySurrogateId">
-        delete from <include refid="Table_Name"/>
-        where surrogate_id = #{surrogateId}
-    </delete>
+	<select id="pageRoleList" resultType="com.cy.single.blog.pojo.resp.sys.role.SysRoleResp">
+		select
+		<include refid="Base_Column_List"/>
+		from sys_role
+		<where>
+			<if test="param.name != null">
+				and `name` = #{param.name}
+			</if>
+			<if test="param.type != null">
+				and `type` = #{param.type}
+			</if>
+			<if test="param.status != null">
+				and status = #{param.status}
+			</if>
+			<if test="param.keyWords != null and param.keyWords != ''">
+				and (
+				`type` like concat('%',#{param.keyWords},'%')
+				or
+				`name` like concat('%',#{param.keyWords},'%')
+				or
+				remark like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+		order by create_time desc
+	</select>
 
-    <select id="pageRoleList" resultType="com.cy.single.blog.pojo.resp.sys.role.SysRoleResp">
-        select <include refid="Base_Column_List" />
-        from <include refid="Table_Name" />
-        <where>
-            <if test="param.name != null">
-                and `name` = #{param.name}
-            </if>
-            <if test="param.type != null">
-                and `type` = #{param.type}
-            </if>
-            <if test="param.status != null">
-                and status = #{param.status}
-            </if>
-            <if test="param.keyWords != null and param.keyWords != ''">
-                and (
-                    `type` like concat('%',#{param.keyWords},'%')
-                    or
-                    `name` like concat('%',#{param.keyWords},'%')
-                    or
-                    remark like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-        order by create_time desc
-    </select>
+	<select id="countRolePage" resultType="java.lang.Integer">
+		select count(1)
+		from sys_role
+		<where>
+			<if test="param.name != null">
+				and `name` = #{param.name}
+			</if>
+			<if test="param.type != null">
+				and `type` = #{param.type}
+			</if>
+			<if test="param.status != null">
+				and status = #{param.status}
+			</if>
+			<if test="param.keyWords != null and param.keyWords != ''">
+				and (
+				`type` like concat('%',#{param.keyWords},'%')
+				or
+				`name` like concat('%',#{param.keyWords},'%')
+				or
+				remark like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+	</select>
 
-    <select id="countRolePage" resultType="java.lang.Integer">
-        select count(1)
-        from <include refid="Table_Name" />
-        <where>
-            <if test="param.name != null">
-                and `name` = #{param.name}
-            </if>
-            <if test="param.type != null">
-                and `type` = #{param.type}
-            </if>
-            <if test="param.status != null">
-                and status = #{param.status}
-            </if>
-            <if test="param.keyWords != null and param.keyWords != ''">
-                and (
-                `type` like concat('%',#{param.keyWords},'%')
-                or
-                `name` like concat('%',#{param.keyWords},'%')
-                or
-                remark like concat('%',#{param.keyWords},'%')
-                )
-            </if>
-        </where>
-    </select>
-
-    <select id="selectRoleLIstByIds" resultType="com.cy.single.blog.pojo.resp.sys.role.SysRoleResp">
-        select <include refid="Base_Column_List" />
-        from <include refid="Table_Name" />
-        <where>
-            surrogate_id in (
-            <foreach collection="roleIdList" index="index" item="roleId" separator=",">
-                #{roleId}
-            </foreach>
-            )
-        </where>
-    </select>
+	<select id="selectRoleLIstByIds" resultType="com.cy.single.blog.pojo.resp.sys.role.SysRoleResp">
+		select
+		<include refid="Base_Column_List"/>
+		from sys_role
+		<where>
+			surrogate_id in (
+			<foreach collection="roleIdList" index="index" item="roleId" separator=",">
+				#{roleId}
+			</foreach>
+			)
+		</where>
+	</select>
 </mapper>

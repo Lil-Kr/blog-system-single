@@ -9,7 +9,7 @@ import lombok.*;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Lil-Kr
@@ -24,30 +24,30 @@ import lombok.*;
 @TableName("sys_dict_detail")
 public class SysDictDetail extends Model<SysDictDetail> {
 
-    private static final long serialVersionUID = -1734025655498001710L;
-    /**
-     * 数据字典id唯一主键
-     */
-    @TableId(value = "surrogate_id")
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long surrogateId;
+  private static final long serialVersionUID = -1734025655498001710L;
+  /**
+   * 数据字典id唯一主键
+   */
+  @TableId(value = "surrogate_id")
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long surrogateId;
 
-    /**
-     * 数据字典主表id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long parentId;
+  /**
+   * 数据字典主表id
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long parentId;
 
-    /**
-     * 数据字典明细名称
-     */
-    private String name;
+  /**
+   * 数据字典明细名称
+   */
+  private String name;
 
-    private Integer type;
+  private Integer type;
 
-    /**
-     * 备注
-     */
-    private String remark;
+  /**
+   * 备注
+   */
+  private String remark;
 
 }

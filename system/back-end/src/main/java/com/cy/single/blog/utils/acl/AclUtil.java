@@ -11,13 +11,13 @@ import java.util.Comparator;
  */
 public class AclUtil {
 
-    /**
-     * 以AclDto排序, 权限点列表根据seq排序
-     */
-    public static Comparator<AclDto> aclDtoComparator = new Comparator<AclDto>() {
-        @Override
-        public int compare(AclDto o1, AclDto o2) {
-            return o1.getSeq() - o2.getSeq();
-        }
-    };
+  /**
+   * 以AclDto排序, 权限点列表根据seq排序
+   */
+  public static Comparator<AclDto> aclDtoComparator = new Comparator<AclDto>() {
+    @Override
+    public int compare(AclDto o1, AclDto o2) {
+      return o1.getSeq() - o2.getSeq();
+    }
+  };
 }

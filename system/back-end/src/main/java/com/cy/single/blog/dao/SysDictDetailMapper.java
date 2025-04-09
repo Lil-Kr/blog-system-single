@@ -5,6 +5,7 @@ import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.req.dict.DictDetailPageListReq;
 import com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -13,13 +14,14 @@ import java.util.List;
  * @Date: 2025/3/9
  * @Description:
  */
+@Repository
 public interface SysDictDetailMapper extends BaseMapper<SysDictDetail> {
 
-	List<SysDictDetailResp> getDictDetailListByParentId(@Param("dictSurrogateId") Long dictSurrogateId);
+  List<SysDictDetailResp> getDictDetailListByParentId(@Param("dictSurrogateId") Long dictSurrogateId);
 
-	List<SysDictDetailResp> pageDictDetailListById(@Param("param") DictDetailPageListReq req);
+  List<SysDictDetailResp> pageDictDetailListById(@Param("param") DictDetailPageListReq req);
 
-	Integer countPageDictDetail(@Param("param") DictDetailPageListReq req);
+  Integer countPageDictDetail(@Param("param") DictDetailPageListReq req);
 
-	List<SysDictDetailResp> dictDetailList();
+  List<SysDictDetailResp> dictDetailList();
 }

@@ -2,39 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.SysRoleUserMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.sys.SysRoleUser">
-        <id column="id" property="id" />
-        <result column="surrogate_id" property="surrogateId" />
-        <result column="role_id" property="roleId" />
-        <result column="user_id" property="userId" />
-        <result column="operate_ip" property="operateIp" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-    </resultMap>
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.sys.SysRoleUser">
+		<id column="id" property="id"/>
+		<result column="surrogate_id" property="surrogateId"/>
+		<result column="role_id" property="roleId"/>
+		<result column="user_id" property="userId"/>
+		<result column="operate_ip" property="operateIp"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
 
-    <!--表名-->
-    <sql id="Table_Name">
-        sys_role_user
-    </sql>
+	<!--表名-->
+	<sql id="Table_Name">
+		sys_role_user
+	</sql>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id, surrogate_id, role_id, user_id, operate_ip, create_time, update_time
-    </sql>
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id, surrogate_id, role_id, user_id, operate_ip, create_time, update_time
+	</sql>
 
-    <!--根据用户id查询用户所分配的角色id列表-->
-    <select id="selectRoleIdListByUserId" resultType="java.lang.Long">
-        select role_id
-        from <include refid="Table_Name"/>
-        where user_id = #{userId}
-    </select>
+	<!--根据用户id查询用户所分配的角色id列表-->
+	<select id="selectRoleIdListByUserId" resultType="java.lang.Long">
+		select role_id
+		from sys_role_user
+		where user_id = #{userId}
+	</select>
 
-    <!--根据角色id查询被分配的用户id-->
-    <select id="selectUserIdListByRoleId" resultType="java.lang.Long">
-        select
-            user_id
-        from <include refid="Table_Name"/>
-        where role_id = #{roleId}
-    </select>
+	<!--根据角色id查询被分配的用户id-->
+	<select id="selectUserIdListByRoleId" resultType="java.lang.Long">
+		select user_id
+		from sys_role_user
+		where role_id = #{roleId}
+	</select>
 </mapper>

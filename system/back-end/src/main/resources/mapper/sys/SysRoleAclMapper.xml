@@ -2,45 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.SysRoleAclMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.sys.SysRoleAcl">
-        <id column="id" property="id" />
-        <result column="surrogate_id" property="surrogateId" />
-        <result column="role_id" property="roleId" />
-        <result column="acl_id" property="aclId" />
-        <result column="operate_ip" property="operateIp" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-    </resultMap>
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.sys.SysRoleAcl">
+		<id column="id" property="id"/>
+		<result column="surrogate_id" property="surrogateId"/>
+		<result column="role_id" property="roleId"/>
+		<result column="acl_id" property="aclId"/>
+		<result column="operate_ip" property="operateIp"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
 
-    <sql id="Table_Name">
-        sys_role_acl
-    </sql>
+	<sql id="Table_Name">
+		sys_role_acl
+	</sql>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id, surrogate_id, role_id, acl_id, operate_ip, create_time, update_time
-    </sql>
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id, surrogate_id, role_id, acl_id, operate_ip, create_time, update_time
+	</sql>
 
-    <!--根据角色id获取权限列表id(acl_id)-->
-    <select id="selectAclIdListByRoleIdList" resultType="java.lang.Long">
-        select acl_id
-        from <include refid="Table_Name"/>
-        <where>
-            role_id in (
-                <foreach collection="userRoleIdList" index="index" item="roleId" separator=",">
-                    #{roleId}
-                </foreach>
-            )
-        </where>
-    </select>
+	<!--根据角色id获取权限列表id(acl_id)-->
+	<select id="selectAclIdListByRoleIdList" resultType="java.lang.Long">
+		select acl_id
+		from sys_role_acl
+		<where>
+			role_id in (
+			<foreach collection="userRoleIdList" index="index" item="roleId" separator=",">
+				#{roleId}
+			</foreach>
+			)
+		</where>
+	</select>
 
-    <!--根据角色id查询权限id列表-->
-    <select id="selectAclIdListByRoleId" resultType="java.lang.Long">
-        select acl_id
-        from <include refid="Table_Name"/>
-        <where>
-            role_id = #{roleSurrogateId}
-        </where>
-    </select>
+	<!--根据角色id查询权限id列表-->
+	<select id="selectAclIdListByRoleId" resultType="java.lang.Long">
+		select acl_id
+		from sys_role_acl
+		<where>
+			role_id = #{roleSurrogateId}
+		</where>
+	</select>
 </mapper>

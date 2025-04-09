@@ -6,6 +6,7 @@ import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp;
 import com.cy.single.blog.pojo.resp.blog.BlogContentResp;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @author Lil-K
  * @since 2024-03-31
  */
+@Repository
 public interface BlogContentMapper extends BaseMapper<BlogContent> {
 
   List<BlogContentResp> pageContentList(@Param("param") BlogContentPageReq req);

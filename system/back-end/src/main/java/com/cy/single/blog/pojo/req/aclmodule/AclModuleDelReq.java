@@ -9,11 +9,11 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class AclModuleDelReq {
 
-    private Long id;
+  private Long id;
 
-    /**
-     * 权限模块surrogateId,唯一主键
-     */
-    @NotNull(message = "权限模块surrogateId不能为空")
-    private Long surrogateId;
+  /**
+   * 权限模块surrogateId,唯一主键
+   */
+  @NotNull(message = "权限模块surrogateId不能为空")
+  private Long surrogateId;
 }

@@ -3,6 +3,7 @@ package com.cy.single.blog.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.sys.SysRoleUser;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -14,9 +15,10 @@ import java.util.List;
  * @author Lil-Kr
  * @since 2020-11-24
  */
+@Repository
 public interface SysRoleUserMapper extends BaseMapper<SysRoleUser> {
 
-    List<Long> selectRoleIdListByUserId(@Param("userId") Long userId);
+  List<Long> selectRoleIdListByUserId(@Param("userId") Long userId);
 
-    List<Long> selectUserIdListByRoleId(@Param("roleId") Long roleId);
+  List<Long> selectUserIdListByRoleId(@Param("roleId") Long roleId);
 }
