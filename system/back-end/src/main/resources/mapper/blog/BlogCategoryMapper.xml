@@ -12,8 +12,7 @@
 	</sql>
 
 	<update id="editBySurrogateId">
-		update
-		<include refid="Table_Name"/>
+		update <include refid="Table_Name"/>
 		<set>
 			<if test="param.number != null and param.number != ''">
 				`number` = #{param.number},
@@ -40,15 +39,13 @@
 	</update>
 
 	<delete id="deleteBySurrogateId">
-		delete
-		from blog_category
+		delete from <include refid="Table_Name"/>
 		where surrogate_id = #{surrogateId}
 	</delete>
 
 	<select id="getTypeList" resultType="com.cy.single.blog.pojo.resp.blog.BlogCategoryResp">
-		select
-		<include refid="Base_Column_List"/>
-		from blog_category
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name"/>
 		<where>
 			<if test="param.surrogateId != null and param.surrogateId != ''">
 				and surrogate_id = #{param.surrogateId}
@@ -75,7 +72,7 @@
 	</select>
 
 	<delete id="deleteBatch">
-		DELETE FROM blog_category
+		DELETE FROM <include refid="Table_Name"/>
 		WHERE surrogate_id IN
 		<foreach item="surrogate_id" collection="list" open="(" separator="," close=")">
 			#{surrogate_id}
@@ -83,9 +80,8 @@
 	</delete>
 
 	<select id="pageCategoryList" resultType="com.cy.single.blog.pojo.resp.blog.BlogCategoryResp">
-		select
-		<include refid="Base_Column_List"/>
-		from blog_category
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name"/>
 		<where>
 			<if test="param.surrogateId != null and param.surrogateId != ''">
 				and surrogate_id = #{param.surrogateId}
@@ -113,7 +109,7 @@
 
 	<select id="getCountByList" resultType="java.lang.Integer">
 		select count(1)
-		from blog_category
+		from <include refid="Table_Name"/>
 		<where>
 			<if test="param.surrogateId != null and param.surrogateId != ''">
 				and surrogate_id = #{param.surrogateId}
@@ -131,27 +127,24 @@
 	</select>
 
 	<select id="selectBySurrogateId" resultType="com.cy.single.blog.pojo.entity.blog.BlogCategory">
-		select
-		<include refid="Base_Column_List"/>
-		from blog_category
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name"/>
 		<where>
 			surrogate_id = #{surrogateId}
 		</where>
 	</select>
 
 	<select id="selectByNumber" resultType="com.cy.single.blog.pojo.entity.blog.BlogCategory">
-		select
-		<include refid="Base_Column_List"/>
-		from blog_category
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name"/>
 		<where>
 			number = #{number}
 		</where>
 	</select>
 
 	<select id="categoryList" resultType="com.cy.single.blog.pojo.resp.blog.BlogCategoryResp">
-		select
-		<include refid="Base_Column_List"/>
-		from blog_category
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name"/>
 		<where>
 			<if test="param.surrogateId != null and param.surrogateId != ''">
 				and surrogate_id = #{param.surrogateId}

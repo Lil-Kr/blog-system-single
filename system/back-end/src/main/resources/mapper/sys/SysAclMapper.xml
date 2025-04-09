@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.SysAclMapper">
 
+	<sql id="Table_Name">
+		sys_acl
+	</sql>
+
 	<!-- 通用查询结果列 -->
 	<sql id="Base_Column_List">
 		id, surrogate_id, `number`, `name`, acl_module_id, url, `type`, menu_name, menu_url, btn_sign, status, seq, remark, operate_ip, creator_id, operator, create_time, update_time

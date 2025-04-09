@@ -16,9 +16,8 @@
 	</sql>
 
 	<select id="pageImageInfoList" resultType="com.cy.single.blog.pojo.resp.image.ImageInfoResp">
-		select
-		<include refid="Base_Column_List"/>
-		from image_info
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name"/>
 		<where>
 			<if test="param.surrogateId != null and param.surrogateId != ''">
 				and surrogate_id = #{param.surrogateId}

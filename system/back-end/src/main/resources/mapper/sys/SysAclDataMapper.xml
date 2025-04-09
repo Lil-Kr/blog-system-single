@@ -15,20 +15,23 @@
 		<result column="remark" jdbcType="VARCHAR" property="remark"/>
 	</resultMap>
 
+	<sql id="Table_Name">
+		sys_acl_data
+	</sql>
+
 	<sql id="Base_Column_List">
 		id, acl_id, `status`, param, `operation`, value1, value2, next_param_op, seq, remark
 	</sql>
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List"/>
-		from sys_acl_data
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name" />
 		where id = #{id,jdbcType=BIGINT}
 	</select>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
 		delete
-		from sys_acl_data
+		from <include refid="Table_Name" />
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
 
@@ -148,9 +151,8 @@
 	</update>
 
 	<select id="selectAclDataListByAclIds" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List"/>
-		from sys_acl_data
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name" />
 		<where>
 			acl_id in (
 			<foreach collection="aclList" index="index" item="aclId" separator=",">

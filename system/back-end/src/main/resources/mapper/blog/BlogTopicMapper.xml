@@ -2,15 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.BlogTopicMapper">
 
+	<sql id="Table_Name">
+		blog_topic
+	</sql>
+
 	<sql id="Base_Column_List">
 		id, surrogate_id, `number`, `name`, status, color,  remark, deleted, creator_id, operator, create_time,update_time
 	</sql>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-		delete
-		from blog_topic
+		delete from <include refid="Table_Name"/>
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
+
 	<insert id="insertSelective" keyColumn="id" keyProperty="id"
 	        parameterType="com.cy.single.blog.pojo.entity.blog.BlogTopic" useGeneratedKeys="true">
 		insert into blog_topic
@@ -122,9 +126,8 @@
 	</update>
 
 	<select id="pageTopicList" resultType="com.cy.single.blog.pojo.resp.blog.BlogTopicResp">
-		select
-		<include refid="Base_Column_List"/>
-		from blog_topic
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name"/>
 		<where>
 			<if test="param.surrogateId != null and param.surrogateId != ''">
 				and surrogate_id = #{param.surrogateId}
@@ -142,9 +145,8 @@
 	</select>
 
 	<select id="topicList" resultType="com.cy.single.blog.pojo.entity.blog.BlogTopic">
-		select
-		<include refid="Base_Column_List"/>
-		from blog_topic
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name"/>
 		<where>
 			<if test="param.keyWords!=null and param.keyWords!=''">
 				and (
@@ -159,9 +161,8 @@
 	</select>
 
 	<select id="selectByNumber" resultType="com.cy.single.blog.pojo.entity.blog.BlogTopic">
-		select
-		<include refid="Base_Column_List"/>
-		from blog_topic
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name"/>
 		<where>
 			number = #{number}
 		</where>

@@ -13,9 +13,8 @@
 	</sql>
 
 	<select id="pageList" resultType="com.cy.single.blog.pojo.resp.image.ImageCategoryResp">
-		select
-		<include refid="Base_Column_List"/>
-		from image_category
+		select <include refid="Base_Column_List" />
+		from <include refid="Table_Name" />
 		<where>
 			<if test="param.keyWords != null and param.keyWords != ''">
 				and (
@@ -40,7 +39,7 @@
 
 	<select id="total" resultType="java.lang.Integer">
 		select count(1)
-		from image_category
+		from <include refid="Table_Name" />
 		<where>
 			<if test="param.keyWords != null and param.keyWords != ''">
 				and (
@@ -55,15 +54,14 @@
 	</select>
 
 	<select id="imageCategoryList" resultType="com.cy.single.blog.pojo.resp.image.ImageCategoryResp">
-		select
-		<include refid="Base_Column_List"/>
-		from image_category
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name" />
 		<where>
 			<if test="param.keyWords != null and param.keyWords != ''">
 				and (
-				`name` like concat('%',#{param.keyWords},'%')
-				or
-				remark like concat('%',#{param.keyWords},'%')
+					`name` like concat('%',#{param.keyWords},'%')
+					or
+					remark like concat('%',#{param.keyWords},'%')
 				)
 			</if>
 		</where>
@@ -79,9 +77,8 @@
 	</select>
 
 	<select id="get" resultType="com.cy.single.blog.pojo.resp.image.ImageCategoryResp">
-		select
-		<include refid="Base_Column_List"/>
-		from image_category
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name" />
 		where surrogate_id = #{surrogateId}
 	</select>
 

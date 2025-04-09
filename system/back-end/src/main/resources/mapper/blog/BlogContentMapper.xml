@@ -13,9 +13,8 @@
 	</sql>
 
 	<select id="pageContentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
-		select
-		<include refid="Base_Column_List"/>
-		from blog_content
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name"/>
 		<where>
 			<if test="param.surrogateId != null and param.surrogateId != ''">
 				and surrogate_id = #{param.surrogateId}
@@ -52,7 +51,7 @@
 
 	<select id="contentCount" resultType="java.lang.Integer">
 		select count(1)
-		from blog_content
+		from <include refid="Table_Name"/>
 		<where>
 			<if test="param.surrogateId != null and param.surrogateId != ''">
 				and surrogate_id = #{param.surrogateId}
@@ -92,7 +91,7 @@
 	<select id="contentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
 		select
 		<include refid="Base_Column_List"/>
-		from blog_content
+		from <include refid="Table_Name"/>
 		<where>
 			<if test="param.surrogateId != null and param.surrogateId != ''">
 				and surrogate_id = #{param.surrogateId}
@@ -128,7 +127,7 @@
 	</select>
 
 	<update id="updateStatusBySurrogateId">
-		update blog_content
+		update <include refid="Table_Name"/>
 		set
 		status = #{param.status}
 		and publish_time = #{param.publishTime}
