@@ -1,7 +1,6 @@
 import { Middleware, MiddlewareContext } from 'oh-router'
-import { useRouterStore } from '@/store/router/routerStore'
 import { useTokenStore } from '@/store/login'
-import { usePermissionsStore } from '@/store/sys/authStore'
+import { resetPermissionRouters } from '@/router/dynamicRoutes'
 import { rootRouterConfig } from '@/router/dynamicRoutes'
 
 /**

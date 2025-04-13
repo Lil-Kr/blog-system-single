@@ -7,11 +7,18 @@ import { BlogCategoryPageReq, CategoryTableType } from '@/types/apis/blog/catego
 import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { Tag } from 'antd/lib'
+import CategoryModal from './CategoryModal'
+import { useCategoryModalStore, useCategoryStore } from '@/store/blog/categoryStore'
 
 // api
 import blogCategoryApi from '@/apis/blog/category/categoryApi'
-import CategoryModal from './CategoryModal'
-import { useCategoryModalStore, useCategoryStore } from '@/store/blog/categoryStore'
+import {
+  AddCategoryButtonAcl,
+  DelCategoryButtonAcl,
+  EditCategoryButtonAcl,
+  LookCategoryButtonAcl,
+  QueryCategoryButtonAcl
+} from './auth/authButton'
 
 const BlogCategory = () => {
   const columnsBlogCategory: ColumnsType<CategoryTableType> = [
@@ -47,7 +54,7 @@ const BlogCategory = () => {
       width: '20%',
       render: (_: object, record) => (
         <Space size='middle'>
-          <Button
+          <LookCategoryButtonAcl
             size={btnSize}
             name='look'
             type='link'
@@ -55,7 +62,7 @@ const BlogCategory = () => {
             icon={<SearchOutlined />}
             onClick={() => lookItem(record.key, record)}
           />
-          <Button
+          <EditCategoryButtonAcl
             size={btnSize}
             name='edit'
             type='link'
@@ -71,7 +78,14 @@ const BlogCategory = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
+            <DelCategoryButtonAcl
+              size={btnSize}
+              name='delete'
+              type='link'
+              shape='circle'
+              danger
+              icon={<DeleteOutlined />}
+            />
           </Popconfirm>
         </Space>
       )
@@ -185,18 +199,18 @@ const BlogCategory = () => {
 
   const resetSearch = () => {
     form.resetFields()
-    getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    getCategoryPageList({ currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }
 
   /**
    * 初始化数据
    */
   useEffect(() => {
-    getCategoryPageList({ keyWords: '', currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    getCategoryPageList({ currentPageNum: 1, pageSize: tablePageInfo.pageSize })
   }, [])
 
   /**
-   * 获取标签列表, 不分页
+   * 获取标签列表
    */
   const getCategoryPageList = async (req: BlogCategoryPageReq) => {
     const blogTypesRes = await blogCategoryApi.getCategoryPageList({ ...req })
@@ -238,23 +252,23 @@ const BlogCategory = () => {
               <Input size={inputSize} placeholder='搜索关键字' />
             </Form.Item>
             <Form.Item>
-              <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+              <QueryCategoryButtonAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
             </Form.Item>
             <Form.Item>
-              <Button size={btnSize} type='primary' onClick={resetSearch}>
-                {'重置'}
-              </Button>
+              <QueryCategoryButtonAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
             </Form.Item>
           </Flex>
         </Form>
 
-        <div className='operation-btn'>
-          <Flex gap='small'>
-            <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createType}>
-              {'添加'}
-            </Button>
-          </Flex>
-        </div>
+        <Flex gap='small'>
+          <AddCategoryButtonAcl
+            text='添加'
+            size={btnSize}
+            type='primary'
+            icon={<PlusOutlined />}
+            onClick={createType}
+          />
+        </Flex>
 
         <div className='list'>
           <Table

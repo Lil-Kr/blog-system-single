@@ -42,3 +42,24 @@ const DelUserButton: React.FC<Props> = ({ text, ...props }) => {
 }
 const DelUserButtonAcl = withPermission(DelUserButton, '_del_user')
 export { DelUserButtonAcl }
+
+/**
+ * 查看按钮
+ * @returns
+ */
+const LookUserBtn: React.FC<Props> = ({ text, ...props }) => {
+  return <Button {...props}>{text}</Button>
+}
+const LookUserBtnAcl = withPermission(LookUserBtn, '_look_user')
+export { LookUserBtnAcl }
+
+/**
+ * 条件查询
+ * @returns
+ */
+
+const QueryUserBtn: React.FC<Props> = ({ text, ...props }) => {
+  return <Button {...props}>{text}</Button>
+}
+const QueryUserBtnAcl = withPermission(QueryUserBtn, '_query_user')
+export { QueryUserBtnAcl }

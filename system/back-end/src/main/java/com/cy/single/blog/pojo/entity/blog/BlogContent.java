@@ -82,8 +82,7 @@ public class BlogContent implements Serializable {
   @JsonSerialize(using = ToStringSerializer.class)
   private Long topicId;
 
-  @JsonSerialize(using = ToStringSerializer.class)
-  private Long status;
+  private Integer status;
 
   private String remark;
 

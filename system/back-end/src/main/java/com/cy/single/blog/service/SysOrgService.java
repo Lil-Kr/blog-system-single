@@ -25,7 +25,7 @@ public interface SysOrgService {
 
 	ApiResp<String> delete(Long surrogateId);
 
-	PageResult<SysOrgResp> pageOrgList(OrgPageReq req);
+	PageResult<SysOrgResp> pageList(OrgPageReq req);
 
 	List<SysOrgResp> list(OrgListAllReq req);
 

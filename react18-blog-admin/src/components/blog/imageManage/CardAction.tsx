@@ -2,7 +2,8 @@ import { imageInfoApi } from '@/apis/image/imageInfoApi'
 import { CardActionProps } from '@/types/component/card'
 import { CopyFilled, CopyOutlined, DeleteOutlined, PictureOutlined } from '@ant-design/icons'
 import { useMessage } from '@/components/message/MessageProvider'
-import { Card } from 'antd/lib'
+import { Card, Popconfirm } from 'antd/lib'
+import { DelImageButtonAcl } from '@/views/image/auth/authImageButton'
 const { Meta } = Card
 
 const env = import.meta.env
@@ -15,7 +16,7 @@ const CardAction = (props: { cardItem: CardActionProps }) => {
     console.log('copy')
   }
 
-  const del = async () => {
+  const del = async (cardItem: CardActionProps) => {
     const res = await imageInfoApi.delete({ surrogateId: cardItem.id })
     const { code, msg } = res
     if (code !== 200) {
@@ -41,7 +42,16 @@ const CardAction = (props: { cardItem: CardActionProps }) => {
         <PictureOutlined alt='设为封面' onClick={setFacePicture} />,
         <CopyOutlined onClick={copy} />,
         <CopyFilled onClick={copyLink} />,
-        <DeleteOutlined onClick={del} />
+
+        <Popconfirm
+          title='删除图片分类'
+          description={`确定要删除 [${cardItem.imageName}] 这张图片吗?`}
+          onConfirm={() => del(cardItem)}
+          okText='确定'
+          cancelText='取消'
+        >
+          <DelImageButtonAcl danger type='link' size={'small'} icon={<DeleteOutlined />} />
+        </Popconfirm>
       ]}
     >
       <Meta title={cardItem.imageName} />

@@ -33,9 +33,9 @@ public class TopicController {
 
   @RecordLogger
   @CheckAuth
-  @PostMapping("/pageTopicList")
-  public ApiResp<PageResult<BlogTopicResp>> pageTopicList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogTopicPageReq req) {
-    PageResult<BlogTopicResp> blogTopicVOPageResult = blogTopicService.pageTopicList(req);
+  @PostMapping("/pageList")
+  public ApiResp<PageResult<BlogTopicResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogTopicPageReq req) {
+    PageResult<BlogTopicResp> blogTopicVOPageResult = blogTopicService.pageList(req);
     return ApiResp.success(blogTopicVOPageResult);
   }
 

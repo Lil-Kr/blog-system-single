@@ -43,6 +43,15 @@ import { Key } from 'antd/lib/table/interface'
 import { useAclModalStore, useAclModuleModalStore } from '@/store/sys/aclStore'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { transformAclListToTable } from '@/utils/sys/transform'
+import {
+  AddAclBtnAcl,
+  AddAclModuleBtnAcl,
+  DelAclBtnAcl,
+  DelAclModuleBtnAcl,
+  EditAclBtnAcl,
+  EditAclModuleBtnAcl,
+  QueryAclBtnAcl
+} from './auth/authButton'
 
 const Acl = () => {
   const columnAcl: ColumnsType<AclTableListType> = [
@@ -180,7 +189,7 @@ const Acl = () => {
       width: '5%',
       render: (_: object, record: AclTableListType) => (
         <Flex vertical={false} gap={8}>
-          <Button
+          <EditAclBtnAcl
             size={btnSize}
             name='edit'
             type='link'
@@ -196,7 +205,7 @@ const Acl = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
+            <DelAclBtnAcl size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Flex>
       )
@@ -539,7 +548,7 @@ const Acl = () => {
               <Flex vertical gap={'small'}>
                 <Flex vertical={false} gap={'middle'}>
                   <Tooltip title='添加权限模块'>
-                    <Button
+                    <AddAclModuleBtnAcl
                       size={btnSize}
                       color='primary'
                       variant='solid'
@@ -548,7 +557,7 @@ const Acl = () => {
                     />
                   </Tooltip>
                   <Tooltip title='编辑权限模块'>
-                    <Button
+                    <EditAclModuleBtnAcl
                       size={btnSize}
                       color='primary'
                       variant='solid'
@@ -566,7 +575,7 @@ const Acl = () => {
                       okText='确定'
                       cancelText='取消'
                     >
-                      <Button size={btnSize} color='red' variant='solid' icon={<DeleteOutlined />} />
+                      <DelAclModuleBtnAcl size={btnSize} color='red' variant='solid' icon={<DeleteOutlined />} />
                     </Popconfirm>
                   </Tooltip>
                 </Flex>
@@ -585,10 +594,10 @@ const Acl = () => {
                   // defaultExpandParent={true}
                   onExpand={handleExpand} // 控制展开后收缩树节点
                   // 鼠标悬停出提示
-                  titleRender={item => {
-                    const title = item.title as React.ReactNode
-                    return <MemoTooltip title={title}>{title}</MemoTooltip>
-                  }}
+                  // titleRender={item => {
+                  //   const title = item.title as React.ReactNode
+                  //   return <MemoTooltip title={title}>{title}</MemoTooltip>
+                  // }}
                   onSelect={(key, info) =>
                     selectTreeNode({
                       key: info.node.key.toString(),
@@ -601,26 +610,22 @@ const Acl = () => {
           </Col>
           <Col span={20} style={{ width: '100%', height: '100%' }}>
             <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
-              <Flex vertical={true} gap={4}>
-                <Flex className='operation-btn' vertical={false} gap={4}>
-                  <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createAcl}>
-                    {'添加'}
-                  </Button>
-                  <Form form={form}>
-                    <Flex gap='small'>
-                      <Form.Item name={'keyWords'} label={'关键字'}>
-                        <Input size={inputSize} placeholder={'搜索关键字'} />
-                      </Form.Item>
-                      <Form.Item>
-                        <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
-                      </Form.Item>
-                      <Form.Item>
-                        <Button size={btnSize} type='primary' onClick={resetSearch}>
-                          {'重置'}
-                        </Button>
-                      </Form.Item>
-                    </Flex>
-                  </Form>
+              <Flex vertical={true} gap={'small'}>
+                <Form form={form}>
+                  <Flex gap='small'>
+                    <Form.Item name={'keyWords'} label={'关键字'}>
+                      <Input size={inputSize} placeholder={'搜索关键字'} />
+                    </Form.Item>
+                    <Form.Item>
+                      <QueryAclBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+                    </Form.Item>
+                    <Form.Item>
+                      <QueryAclBtnAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
+                    </Form.Item>
+                  </Flex>
+                </Form>
+                <Flex gap='small'>
+                  <AddAclBtnAcl text='添加' size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createAcl} />
                 </Flex>
                 <div className='list'>
                   <Table<AclTableListType>

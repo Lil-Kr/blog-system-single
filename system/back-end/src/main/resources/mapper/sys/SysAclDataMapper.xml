@@ -2,19 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.SysAclDataMapper">
 
-	<resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.sys.SysAclData">
-		<id column="id" jdbcType="BIGINT" property="id"/>
-		<result column="acl_id" jdbcType="BIGINT" property="aclId"/>
-		<result column="status" jdbcType="INTEGER" property="status"/>
-		<result column="param" jdbcType="VARCHAR" property="param"/>
-		<result column="operation" jdbcType="INTEGER" property="operation"/>
-		<result column="value1" jdbcType="VARCHAR" property="value1"/>
-		<result column="value2" jdbcType="VARCHAR" property="value2"/>
-		<result column="next_param_op" jdbcType="INTEGER" property="nextParamOp"/>
-		<result column="seq" jdbcType="INTEGER" property="seq"/>
-		<result column="remark" jdbcType="VARCHAR" property="remark"/>
-	</resultMap>
-
 	<sql id="Table_Name">
 		sys_acl_data
 	</sql>
@@ -23,7 +10,7 @@
 		id, acl_id, `status`, param, `operation`, value1, value2, next_param_op, seq, remark
 	</sql>
 
-	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.cy.single.blog.pojo.entity.sys.SysAclData">
 		select <include refid="Base_Column_List"/>
 		from <include refid="Table_Name" />
 		where id = #{id,jdbcType=BIGINT}
@@ -150,7 +137,7 @@
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 
-	<select id="selectAclDataListByAclIds" resultMap="BaseResultMap">
+	<select id="selectAclDataListByAclIds" resultType="com.cy.single.blog.pojo.entity.sys.SysAclData">
 		select <include refid="Base_Column_List"/>
 		from <include refid="Table_Name" />
 		<where>

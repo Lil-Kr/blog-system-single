@@ -37,7 +37,7 @@ export interface BlogContentTableType {
   recommend: string
   categoryId: string
   topicId: string
-  status: string // 发布状态
+  status: number // 发布状态
   remark: string
   publishTime: string
   contentText?: string
@@ -98,7 +98,7 @@ export interface BlogContentResq {
   recommend: string
   categoryId: string
   topicId: string
-  status: string // 发布状态
+  status: number // 发布状态
   remark: string
   publishTime: string
   contentText?: string

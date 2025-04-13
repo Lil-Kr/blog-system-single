@@ -12,15 +12,12 @@ import com.cy.single.blog.pojo.req.blog.label.BlogLabelReq;
 import com.cy.single.blog.pojo.resp.blog.BlogLabelResp;
 import com.cy.single.blog.service.BlogLabelService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-
-import static com.cy.single.blog.utils.checkUtil.ParamValidator.checkSurrogateIds;
 
 /**
  * @Author: Lil-K
@@ -32,62 +29,61 @@ import static com.cy.single.blog.utils.checkUtil.ParamValidator.checkSurrogateId
 @RequestMapping("/blog/label")
 public class LabelController {
 
-	@Autowired
-	private BlogLabelService blogLabelService;
+  @Autowired
+  private BlogLabelService blogLabelService;
 
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("/pageList")
-	public ApiResp<PageResult<BlogLabelResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogLabelPageReq req) {
-		PageResult<BlogLabelResp> list = blogLabelService.pageList(req);
-		return ApiResp.success(list);
-	}
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/pageList")
+  public ApiResp<PageResult<BlogLabelResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogLabelPageReq req) {
+    PageResult<BlogLabelResp> list = blogLabelService.pageList(req);
+    return ApiResp.success(list);
+  }
 
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("/list")
-	public ApiResp<PageResult<BlogLabel>> list(@RequestBody @Valid BlogLabelListReq req) {
-		PageResult<BlogLabel> list = blogLabelService.list(req);
-		return ApiResp.success(list);
-	}
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/list")
+  public ApiResp<PageResult<BlogLabel>> list(@RequestBody @Valid BlogLabelListReq req) {
+    PageResult<BlogLabel> list = blogLabelService.list(req);
+    return ApiResp.success(list);
+  }
 
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("/add")
-	public ApiResp<String> add(@RequestBody @Validated({BlogLabelReq.GroupLabelSave.class}) BlogLabelReq req) {
-		return blogLabelService.add(req);
-	}
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/add")
+  public ApiResp<String> add(@RequestBody @Validated({BlogLabelReq.GroupLabelSave.class}) BlogLabelReq req) {
+    return blogLabelService.add(req);
+  }
 
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("/edit")
-	public ApiResp<String> edit(@RequestBody @Validated({BlogLabelReq.GroupLabelSave.class}) BlogLabelReq req) {
-		return blogLabelService.edit(req);
-	}
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/edit")
+  public ApiResp<String> edit(@RequestBody @Validated({BlogLabelReq.GroupLabelSave.class}) BlogLabelReq req) {
+    return blogLabelService.edit(req);
+  }
 
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("/delete")
-	public ApiResp<String> delete(@RequestBody @Validated({BlogLabelReq.GroupLabelDel.class}) BlogLabelReq req) {
-		return blogLabelService.delete(req);
-	}
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/delete")
+  public ApiResp<String> delete(@RequestBody @Validated({BlogLabelReq.GroupLabelDel.class}) BlogLabelReq req) {
+    return blogLabelService.delete(req);
+  }
 
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("/deleteBatch")
-	public ApiResp<String> deleteBatch(@RequestBody @Validated({BlogLabelReq.GroupLabelDelBatch.class}) BlogLabelReq req) {
-		if (CollectionUtils.isEmpty(req.getSurrogateIds())) return ApiResp.failure("surrogateIds不能为空");
-		if (!checkSurrogateIds(req.getSurrogateIds())) return ApiResp.failure("surrogateIds不规范");
-		return blogLabelService.deleteBatch(req);
-	}
+//	@RecordLogger
+//	@CheckAuth
+//	@PostMapping("/deleteBatch")
+//	public ApiResp<String> deleteBatch(@RequestBody @Validated({BlogLabelReq.GroupLabelDelBatch.class}) BlogLabelReq req) {
+//		if (CollectionUtils.isEmpty(req.getSurrogateIds())) return ApiResp.failure("surrogateIds不能为空");
+//		if (!checkSurrogateIds(req.getSurrogateIds())) return ApiResp.failure("surrogateIds不规范");
+//		return blogLabelService.deleteBatch(req);
+//	}
 
-
-	/** =============== 门户网站接口 ===============**/
-	@RecordLogger
-	@GetMapping("/frontLabelList")
-	public ApiResp<List<BlogLabel>> frontLabelList() {
-		PageResult<BlogLabel> list = blogLabelService.list(new BlogLabelListReq());
-		return ApiResp.success(list.getList());
-	}
+  /** =============== 门户网站接口 ===============**/
+  @RecordLogger
+  @GetMapping("/frontLabelList")
+  public ApiResp<List<BlogLabel>> frontLabelList() {
+    PageResult<BlogLabel> list = blogLabelService.list(new BlogLabelListReq());
+    return ApiResp.success(list.getList());
+  }
 
 }

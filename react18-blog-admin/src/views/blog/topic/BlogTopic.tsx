@@ -13,6 +13,13 @@ import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { Tag } from 'antd/lib'
 import { TopicModalState, useBlogTopicModalStore, useBlogTopicStore } from '@/store/blog/tobpicStore'
 import TopicModal from './TopicModal'
+import {
+  AddTopicButtonAcl,
+  DelTopicButtonAcl,
+  EditTopicButtonAcl,
+  LookTopicButtonAcl,
+  QueryTopicButtonAcl
+} from './auth/authButton'
 
 const BlogTopic = () => {
   const columnsBlogTopic: ColumnsType<TopiciTableType> = [
@@ -61,7 +68,7 @@ const BlogTopic = () => {
       width: '10%',
       render: (_: object, record) => (
         <Flex vertical={false} gap={4}>
-          <Button
+          <LookTopicButtonAcl
             size={btnSize}
             name='look'
             type='link'
@@ -69,7 +76,7 @@ const BlogTopic = () => {
             icon={<SearchOutlined />}
             onClick={() => lookItem(record.key, record)}
           />
-          <Button
+          <EditTopicButtonAcl
             size={btnSize}
             name='edit'
             type='link'
@@ -85,7 +92,14 @@ const BlogTopic = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
+            <DelTopicButtonAcl
+              size={btnSize}
+              name='delete'
+              type='link'
+              shape='circle'
+              danger
+              icon={<DeleteOutlined />}
+            />
           </Popconfirm>
         </Flex>
       )
@@ -187,7 +201,6 @@ const BlogTopic = () => {
       inputDisabled: false,
       update: () => {
         retrieveTopicPageList({
-          keyWords: '',
           currentPageNum: tablePageInfo.currentPageNum,
           pageSize: tablePageInfo.pageSize
         })
@@ -211,7 +224,6 @@ const BlogTopic = () => {
       modalReq: record,
       update: () => {
         retrieveTopicPageList({
-          keyWords: '',
           currentPageNum: tablePageInfo.currentPageNum,
           pageSize: tablePageInfo.pageSize
         })
@@ -250,7 +262,6 @@ const BlogTopic = () => {
     }
     messageApi?.success(msg)
     retrieveTopicPageList({
-      keyWords: '',
       currentPageNum: tablePageInfo.currentPageNum,
       pageSize: tablePageInfo.pageSize
     })
@@ -264,20 +275,16 @@ const BlogTopic = () => {
             <Input size={inputSize} placeholder='搜索关键字' />
           </Form.Item>
           <Form.Item>
-            <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+            <QueryTopicButtonAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
           </Form.Item>
           <Form.Item>
-            <Button size={btnSize} type='primary' onClick={resetSearch}>
-              {'重置'}
-            </Button>
+            <QueryTopicButtonAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
           </Form.Item>
         </Flex>
       </Form>
 
       <Flex className='blog-topic-operation' gap={4}>
-        <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createTopic}>
-          {'添加'}
-        </Button>
+        <AddTopicButtonAcl text='添加' size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createTopic} />
       </Flex>
 
       <div className='blog-topic-table-list'>

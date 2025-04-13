@@ -26,6 +26,7 @@ import { initOrgData, useOrgModalStore, useOrgStore } from '@/store/sys/orgStore
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { transformOrgListToSeletor, transformOrgListToTable } from '@/utils/sys/transform'
 import { OptionType } from '@/types/apis'
+import { AddOrgBtnAcl, DelOrgBtnAcl, EditOrgBtnAcl, LookOrgBtnAcl, QueryUserBtnAcl } from './auth/authButton'
 
 /**
  * org page
@@ -122,7 +123,7 @@ const Org = () => {
       width: '10%',
       render: (_: object, record: OrgTableType) => (
         <Flex vertical={false} gap={8}>
-          <Button
+          <LookOrgBtnAcl
             size={btnSize}
             name='look'
             type='link'
@@ -130,7 +131,7 @@ const Org = () => {
             icon={<SearchOutlined />}
             onClick={() => lookItem(record.key ?? '', record)}
           />
-          <Button
+          <EditOrgBtnAcl
             size={btnSize}
             name='edit'
             type='link'
@@ -146,7 +147,7 @@ const Org = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
+            <DelOrgBtnAcl size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Flex>
       )
@@ -155,7 +156,7 @@ const Org = () => {
 
   const MemoTooltip = Tooltip || React.memo(Tooltip)
   const [form] = useForm()
-  const { btnSize, tableSize } = useGlobalStyleStore()
+  const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
   const {
     orgTree,
     orgPageList,
@@ -451,28 +452,22 @@ const Org = () => {
           <Col span={20} style={{ width: '100%', height: '100%' }}>
             <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
               <Flex vertical={true} gap={'small'}>
-                <div className='operation-btn'>
-                  <Flex vertical={false} gap='small'>
-                    <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createOrg}>
-                      {'新增'}
-                    </Button>
-                    <Form form={form}>
-                      <Flex gap='small'>
-                        <Form.Item name={'keyWords'} label={'搜索关键字'}>
-                          <Input placeholder={'搜索关键字'} />
-                        </Form.Item>
-                        <Form.Item>
-                          <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
-                        </Form.Item>
-                        <Form.Item>
-                          <Button size={btnSize} type='primary' onClick={resetSearch}>
-                            {'重置'}
-                          </Button>
-                        </Form.Item>
-                      </Flex>
-                    </Form>
+                <Form form={form}>
+                  <Flex gap='small'>
+                    <Form.Item name={'keyWords'} label={'关键字'}>
+                      <Input size={inputSize} placeholder={'搜索关键字'} />
+                    </Form.Item>
+                    <Form.Item>
+                      <QueryUserBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+                    </Form.Item>
+                    <Form.Item>
+                      <QueryUserBtnAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
+                    </Form.Item>
                   </Flex>
-                </div>
+                </Form>
+                <Flex gap={'small'}>
+                  <AddOrgBtnAcl text='添加' size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createOrg} />
+                </Flex>
                 {/* show table info */}
                 <div className='list'>
                   <Table

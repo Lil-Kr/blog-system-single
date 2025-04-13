@@ -13,7 +13,7 @@ import {
 
 const blogCategoryApi: BlogCategoryApi = {
   getCategoryPageList(req: BlogCategoryPageReq) {
-    return baseAxiosRequest.post<ResultPage<BlogCategoryVO>>(PREFIX_URL_BLOG_CATEGORY + '/pageCategoryList', req)
+    return baseAxiosRequest.post<ResultPage<BlogCategoryVO>>(PREFIX_URL_BLOG_CATEGORY + '/pageList', req)
   },
   retrieveCategoryList(req: BlogCategoryReq) {
     return baseAxiosRequest.post<ResultPage<BlogCategoryVO>>(PREFIX_URL_BLOG_CATEGORY + '/list', req)

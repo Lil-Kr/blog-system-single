@@ -3,7 +3,6 @@ package com.cy.single.blog.pojo.req.blog.content;
 import lombok.Data;
 import lombok.ToString;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -23,7 +22,7 @@ public class BlogContentReq {
   public interface GroupBlogContentDelete {}
   public interface GroupBlogContentPublish {}
 
-  @NotNull(groups = {GroupBlogContentEdit.class, GroupBlogContentDelete.class, GroupBlogContentPublish.class}, message = "surrogateId是必须的")
+  @NotNull(groups = {GroupBlogContentEdit.class, GroupBlogContentDelete.class, GroupBlogContentPublish.class}, message = "博客id是必须的")
   private Long surrogateId;
 
   private String introduction;
@@ -52,5 +51,5 @@ public class BlogContentReq {
   private String contentText;
 
   @NotNull(groups = {GroupBlogContentPublish.class}, message = "status是必须的")
-  private Long status;
+  private Integer status;
 }

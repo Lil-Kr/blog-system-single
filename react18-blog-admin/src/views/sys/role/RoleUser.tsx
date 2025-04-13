@@ -6,6 +6,7 @@ import TableTransfer from './TableTransfer'
 import { useRoleAclStore } from '@/store/sys/roleStore'
 import roleApi from '@/apis/sys/roleApi'
 import { useMessage } from '@/components/message/MessageProvider'
+import { UpdateRoleUserBtnAcl } from './auth/authButton'
 
 const columnsAclUser: TableColumnsType<RoleUserTableType> = [
   {
@@ -129,7 +130,7 @@ const RoleUser = () => {
           rightColumns={columnsAclUser}
         />
         <Flex justify={'flex-start'} align={'center'} gap={'middle'}>
-          <Button onClick={updateRoleUsers}>{'更新用户'}</Button>
+          <UpdateRoleUserBtnAcl text='更新用户' onClick={updateRoleUsers} />
         </Flex>
       </Flex>
     </div>

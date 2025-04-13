@@ -19,6 +19,15 @@ import {
 import { EditableProTable, ProColumns } from '@ant-design/pro-components'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
+import {
+  AddDictBtnAcl,
+  DelDetailBtnAcl,
+  DelDictBtnAcl,
+  EditDetailBtnAcl,
+  EditDictBtnAcl,
+  QueryDictBtnAcl,
+  QueryDictDetailBtnAcl
+} from './auth/authDictButton'
 
 const Dict = () => {
   const messageApi = useMessage()
@@ -80,7 +89,7 @@ const Dict = () => {
       width: '10%',
       render: (_: object, record: TableDictType) => (
         <Flex key={`edit-${record.key}`} vertical={false} gap={2}>
-          <Button
+          <QueryDictDetailBtnAcl
             name='detail'
             type='link'
             shape='circle'
@@ -88,7 +97,7 @@ const Dict = () => {
             onClick={() => dictDetial(record)}
           />
 
-          <Button
+          <EditDictBtnAcl
             size={btnSize}
             name='edit'
             type='link'
@@ -105,7 +114,7 @@ const Dict = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
+            <DelDictBtnAcl size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Flex>
       )
@@ -150,7 +159,7 @@ const Dict = () => {
       width: '20%',
       render: (text, record, _, action) => [
         <Flex key={`edit-${record.key}`} vertical={false} gap={4}>
-          <Button
+          <EditDetailBtnAcl
             size={tableSize}
             name='edit'
             type='link'
@@ -169,7 +178,7 @@ const Dict = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button size={'small'} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
+            <DelDetailBtnAcl size={'small'} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Flex>
       ]
@@ -252,10 +261,12 @@ const Dict = () => {
     }))
   }
 
-  // 置空
+  /**
+   * 置空
+   * @returns
+   */
   const resetDict = async () => {
     form.resetFields()
-
     const dictPageList = await dictApi.retrieveDictPageList({
       keyWords: '',
       currentPageNum: 1,
@@ -425,7 +436,7 @@ const Dict = () => {
    */
   const retrieveDictDetailPageList = async (req: PageDictDetailReq): Promise<PageDictDetailResp[]> => {
     const res = await dictApi.retrievePageDictDetailList({ ...req })
-    const { code, msg, data } = res
+    const { code, data } = res
     if (code !== 200) {
       return []
     }
@@ -502,54 +513,48 @@ const Dict = () => {
   return (
     <div className='sys-dict-warpper' style={{ height: '100%', width: '100%' }}>
       <Flex gap='middle' vertical={true} style={{ height: '100%', width: '100%' }}>
-        <div className='operation-btn'>
-          <Flex vertical={false} gap='small'>
-            <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={addDict}>
-              {'添加'}
-            </Button>
-            <Form form={form}>
-              <Flex gap='small'>
-                <Form.Item name={'keyWords'} label={'关键字'}>
-                  <Input size={inputSize} placeholder={'搜索关键字'} />
-                </Form.Item>
-                <Form.Item>
-                  <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={searchDict} />
-                </Form.Item>
-                <Form.Item>
-                  <Button size={btnSize} type='primary' onClick={resetDict}>
-                    {'重置'}
-                  </Button>
-                </Form.Item>
-              </Flex>
-            </Form>
+        <Form className='operation-btn' form={form}>
+          <Flex gap='small'>
+            <Form.Item name={'keyWords'} label={'关键字'}>
+              <Input size={inputSize} placeholder={'搜索关键字'} />
+            </Form.Item>
+            <Form.Item>
+              <QueryDictBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={searchDict} />
+            </Form.Item>
+            <Form.Item>
+              <QueryDictBtnAcl text='重置' size={btnSize} type='primary' onClick={resetDict} />
+            </Form.Item>
           </Flex>
+        </Form>
+        <Flex gap='small'>
+          <AddDictBtnAcl text='添加' size={btnSize} type='primary' icon={<PlusOutlined />} onClick={addDict} />
+        </Flex>
+        <div className='list'>
+          <Table
+            key={1}
+            bordered={true}
+            size={tableSize}
+            rowSelection={{
+              type: 'checkbox',
+              ...rowSelection
+            }}
+            loading={tableLoading}
+            columns={columnsDict}
+            dataSource={dictPageList}
+            pagination={{
+              size: 'small',
+              position: ['bottomLeft'],
+              showQuickJumper: false, // 跳转指定页面
+              showSizeChanger: true,
+              hideOnSinglePage: false,
+              pageSizeOptions: [10, 20, 50],
+              onChange: onChangePageInfo,
+              onShowSizeChange: onShowSizeChange,
+              pageSize: tablePageInfo.pageSize, // 每页条数
+              total: tablePageInfo.totalSize // 总条数
+            }}
+          />
         </div>
-        {/* <div className='list'>
-        </div> */}
-        <Table
-          key={1}
-          bordered={true}
-          size={tableSize}
-          rowSelection={{
-            type: 'checkbox',
-            ...rowSelection
-          }}
-          loading={tableLoading}
-          columns={columnsDict}
-          dataSource={dictPageList}
-          pagination={{
-            size: 'small',
-            position: ['bottomLeft'],
-            showQuickJumper: false, // 跳转指定页面
-            showSizeChanger: true,
-            hideOnSinglePage: false,
-            pageSizeOptions: [10, 20, 50],
-            onChange: onChangePageInfo,
-            onShowSizeChange: onShowSizeChange,
-            pageSize: tablePageInfo.pageSize, // 每页条数
-            total: tablePageInfo.totalSize // 总条数
-          }}
-        />
         <div className='dict-detail-warpper'>
           <Drawer
             title={'[' + dict.name + '] 明细'}
@@ -583,7 +588,7 @@ const Dict = () => {
               value={dictDetailDataSource}
               onChange={refreash}
               editable={{
-                type: 'multiple',
+                type: 'single',
                 editableKeys: editableKeys, // 控制数据行是否可编辑的函数
                 onSave: async (rowKey, rowData, row) => {
                   // 保存字典明细

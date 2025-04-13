@@ -29,7 +29,7 @@ const dictApi: DictApi = {
     return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_SYS_DICT + '/delete', req)
   },
   retrieveDictPageList(req: DictPageListReq) {
-    return baseAxiosRequest.post<ResultPage<DictPageListResp>>(PREFIX_URL_SYS_DICT + '/pageDictList', req)
+    return baseAxiosRequest.post<ResultPage<DictPageListResp>>(PREFIX_URL_SYS_DICT + '/pageList', req)
   },
   dictDetail(req: DictDetailListReq) {
     return baseAxiosRequest.post<Result<DictDetailResp>>(PREFIX_URL_SYS_DICT + '/dictDetail', req)

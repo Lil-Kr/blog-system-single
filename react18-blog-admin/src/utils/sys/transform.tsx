@@ -86,9 +86,11 @@ export { transformAclListToTable }
  * @returns
  */
 const transformDictTypeToSeletor = (statusDict: DictMapType[]): OptionType[] => {
-  const res: OptionType[] = statusDict.map(({ type, name }) => ({
+  const res: OptionType[] = statusDict.map(({ surrogateId, type, name }) => ({
+    id: surrogateId,
     value: type.toString() ?? '',
-    label: name
+    label: name,
+    type: type.toString() ?? ''
   }))
   return res
 }
@@ -100,6 +102,7 @@ const transformDictTypeToSeletor = (statusDict: DictMapType[]): OptionType[] => 
  */
 const transformTypeToSeletorById = (statusDict: DictMapType[]): OptionType[] => {
   const res: OptionType[] = statusDict.map(({ surrogateId, name, type }) => ({
+    id: surrogateId,
     value: surrogateId,
     label: name,
     type: type.toString()

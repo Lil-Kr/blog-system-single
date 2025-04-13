@@ -38,9 +38,9 @@ public class CategoryController {
 
 	@RecordLogger
 	@CheckAuth
-	@PostMapping("/pageCategoryList")
-	public ApiResp<PageResult<BlogCategoryResp>> pageCategoryList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogCategoryPageReq req) {
-		PageResult<BlogCategoryResp> list = blogCategoryService.pageCategoryList(req);
+	@PostMapping("/pageList")
+	public ApiResp<PageResult<BlogCategoryResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogCategoryPageReq req) {
+		PageResult<BlogCategoryResp> list = blogCategoryService.pageList(req);
 		return ApiResp.success(list);
 	}
 

@@ -17,7 +17,6 @@ const Login = () => {
   const [btnSize] = useState<SizeType>('large')
   const [loading] = useState<boolean>(false)
   const { setToken } = useTokenStore()
-  const navigateTo = useNavigate()
 
   const onFinish = async (loginInfo: LoginTpye.LoginFormType) => {
     let { password } = loginInfo
@@ -27,11 +26,9 @@ const Login = () => {
     if (code === 200) {
       const { token } = data
       setToken(token, true)
-      navigateTo('/')
       messageApi?.success(msg)
     } else {
-      resetPermissionRouters()
-      navigateTo('/login')
+      resetPermissionRouters('')
     }
   }
 

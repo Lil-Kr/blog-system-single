@@ -108,9 +108,9 @@ public class UserController {
 	 */
 	@CheckAuth
 	@RecordLogger
-	@PostMapping("/pageUserList")
-	public ApiResp<PageResult<SysUserResp>> pageUserList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) UserListPageReq req) {
-		PageResult<SysUserResp> result = userService.pageUserList(req);
+	@PostMapping("/pageList")
+	public ApiResp<PageResult<SysUserResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) UserListPageReq req) {
+		PageResult<SysUserResp> result = userService.pageList(req);
 		return ApiResp.success(result);
 	}
 

@@ -182,7 +182,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	 * @return
 	 */
 	@Override
-	public PageResult<SysDictResp> pageDictList(DictListPageReq req) {
+	public PageResult<SysDictResp> pageList(DictListPageReq req) {
 		List<SysDictResp> pageList = dictMapper.pageDictList(req);
 		Integer count = dictMapper.countPageDict(req);
 		if (CollectionUtils.isNotEmpty(pageList)) {

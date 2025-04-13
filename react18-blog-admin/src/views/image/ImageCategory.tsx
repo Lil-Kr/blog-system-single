@@ -11,6 +11,12 @@ import { useGlobalStyleStore } from '@/store/global/globalStore'
 import imageCategoryApi from '@/apis/image/imageCategoryApi'
 import { ImageCategoryModalState, useImageCategoryModalStore, useImageCategoryStore } from '@/store/blog/imageStore'
 import { ImageCategoryModal } from '@/components/blog/imageManage/indext'
+import {
+  AddImageCategoryButtonAcl,
+  DelImageCategoryButtonAcl,
+  EditImageCategoryButtonAcl,
+  QueryImageCategoryButtonAcl
+} from './auth/authImageCategoryButton'
 
 const env = import.meta.env
 
@@ -73,7 +79,7 @@ const ImageCategory = () => {
       width: '10%',
       render: (_, record) => (
         <Flex vertical={false} gap={4}>
-          <Button
+          <EditImageCategoryButtonAcl
             size={btnSize}
             name='edit'
             type='link'
@@ -88,7 +94,14 @@ const ImageCategory = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
+            <DelImageCategoryButtonAcl
+              size={btnSize}
+              name='delete'
+              type='link'
+              shape='circle'
+              danger
+              icon={<DeleteOutlined />}
+            />
           </Popconfirm>
         </Flex>
       )
@@ -98,7 +111,6 @@ const ImageCategory = () => {
   const messageApi = useMessage()
   const [form] = useForm()
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
-  // const [rowKeys, setRowKeys] = useState<React.Key[]>([])
   const {
     imageCategoryPageList,
     setImageCategoryPageList,
@@ -111,7 +123,7 @@ const ImageCategory = () => {
   const { title, openModal, inputDisabled, setOpenModal, setImageCategoryModalState } = useImageCategoryModalStore()
 
   useEffect(() => {
-    pageImageCategoryList({ currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    pageImageCategoryList({ currentPageNum: tablePageInfo.currentPageNum, pageSize: tablePageInfo.pageSize })
   }, [])
 
   /**
@@ -119,7 +131,7 @@ const ImageCategory = () => {
    */
   const search = () => {
     const values = form.getFieldsValue()
-    pageImageCategoryList({ ...values, currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    pageImageCategoryList({ ...values, currentPageNum: tablePageInfo.currentPageNum, pageSize: tablePageInfo.pageSize })
   }
 
   /**
@@ -236,19 +248,21 @@ const ImageCategory = () => {
               <Input size={inputSize} placeholder='搜索关键字' />
             </Form.Item>
             <Form.Item>
-              <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+              <QueryImageCategoryButtonAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
             </Form.Item>
             <Form.Item>
-              <Button size={btnSize} type='primary' onClick={resetSearch}>
-                {'置空'}
-              </Button>
+              <QueryImageCategoryButtonAcl text='置空' size={btnSize} type='primary' onClick={resetSearch} />
             </Form.Item>
           </Flex>
         </Form>
         <Flex className='operation-btn' vertical={false} gap='small'>
-          <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={create}>
-            {'添加'}
-          </Button>
+          <AddImageCategoryButtonAcl
+            text='添加'
+            size={btnSize}
+            type='primary'
+            icon={<PlusOutlined />}
+            onClick={create}
+          />
         </Flex>
 
         <Flex className='list' gap={4} vertical={true}>

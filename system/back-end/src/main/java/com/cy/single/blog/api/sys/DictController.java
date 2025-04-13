@@ -29,119 +29,119 @@ import java.util.Map;
 @Slf4j
 public class DictController {
 
-	@Autowired
-	private SysDictService dictService;
+  @Autowired
+  private SysDictService dictService;
 
-	@Autowired
-	private SysDictDetailService dictDetailService;
+  @Autowired
+  private SysDictDetailService dictDetailService;
 
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/add")
-	public ApiResp<String> add (@RequestBody @Validated({DictSaveReq.DictAddGroup.class}) DictSaveReq req) {
-		return dictService.add(req);
-	}
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/add")
+  public ApiResp<String> add (@RequestBody @Validated({DictSaveReq.DictAddGroup.class}) DictSaveReq req) {
+    return dictService.add(req);
+  }
 
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/edit")
-	public ApiResp<String> edit (@RequestBody @Validated({DictSaveReq.DictEditGroup.class}) DictSaveReq req) {
-		return dictService.edit(req);
-	}
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/edit")
+  public ApiResp<String> edit (@RequestBody @Validated({DictSaveReq.DictEditGroup.class}) DictSaveReq req) {
+    return dictService.edit(req);
+  }
 
-	@CheckAuth
-	@RecordLogger
-	@DeleteMapping("/delete")
-	public ApiResp<String> delete (@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
-		return dictService.delete(surrogateId);
-	}
+  @CheckAuth
+  @RecordLogger
+  @DeleteMapping("/delete")
+  public ApiResp<String> delete (@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+    return dictService.delete(surrogateId);
+  }
 
-	/**
-	 * 数据字典列表
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/pageDictList")
-	public ApiResp<PageResult<SysDictResp>> pageDictList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictListPageReq req) {
-		PageResult<SysDictResp> res = dictService.pageDictList(req);
-		return ApiResp.success(res);
-	}
+  /**
+   * 数据字典列表
+   * @return
+   * @throws Exception
+   */
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/pageList")
+  public ApiResp<PageResult<SysDictResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictListPageReq req) {
+    PageResult<SysDictResp> res = dictService.pageList(req);
+    return ApiResp.success(res);
+  }
 
-	/**
-	 * 获取字典明细树, mapping [key, SysDictDetailResp]
-	 * @return
-	 */
-	@CheckAuth
-	@RecordLogger
-	@GetMapping("/dictDetailMapping")
-	public ApiResp<Map<String, List<SysDictDetailResp>>> dictDetailMapping() {
-		return dictService.dictDetailMapping();
-	}
+  /**
+   * 获取字典明细树, mapping [key, SysDictDetailResp]
+   * @return
+   */
+  @CheckAuth
+  @RecordLogger
+  @GetMapping("/dictDetailMapping")
+  public ApiResp<Map<String, List<SysDictDetailResp>>> dictDetailMapping() {
+    return dictService.dictDetailMapping();
+  }
 
-	/**
-	 * 字典明细分页查询
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/pageDictDetailList")
-	public ApiResp<PageResult<SysDictDetailResp>> pageDictDetailList (@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictDetailPageListReq req) {
-		PageResult<SysDictDetailResp> res = dictDetailService.pageDictDetailList(req);
-		return ApiResp.success(res);
-	}
+  /**
+   * 字典明细分页查询
+   * @param req
+   * @return
+   * @throws Exception
+   */
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/pageDictDetailList")
+  public ApiResp<PageResult<SysDictDetailResp>> pageDictDetailList (@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictDetailPageListReq req) {
+    PageResult<SysDictDetailResp> res = dictDetailService.pageDictDetailList(req);
+    return ApiResp.success(res);
+  }
 
-	/**
-	 * 新增字典明细
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/addDetail")
-	public ApiResp<String> addDetail (@RequestBody @Validated({SaveDictDetailReq.AddDictDetail.class}) SaveDictDetailReq req) {
-		return dictDetailService.addDetail(req);
-	}
+  /**
+   * 新增字典明细
+   * @param req
+   * @return
+   * @throws Exception
+   */
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/addDetail")
+  public ApiResp<String> addDetail (@RequestBody @Validated({SaveDictDetailReq.AddDictDetail.class}) SaveDictDetailReq req) {
+    return dictDetailService.addDetail(req);
+  }
 
-	/**
-	 * 新增字典明细
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/editDetail")
-	public ApiResp<String> editDetail (@RequestBody @Validated({SaveDictDetailReq.EditDictDetail.class}) SaveDictDetailReq req) {
-		return dictDetailService.editDetail(req);
-	}
+  /**
+   * 新增字典明细
+   * @param req
+   * @return
+   * @throws Exception
+   */
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/editDetail")
+  public ApiResp<String> editDetail (@RequestBody @Validated({SaveDictDetailReq.EditDictDetail.class}) SaveDictDetailReq req) {
+    return dictDetailService.editDetail(req);
+  }
 
-	/**
-	 * 删除字典明细明细
-	 * @param surrogateId
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@DeleteMapping("/deleteDetail")
-	public ApiResp<String> deleteDetail (@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
-		return dictDetailService.deleteDetail(surrogateId);
-	}
+  /**
+   * 删除字典明细明细
+   * @param surrogateId
+   * @return
+   * @throws Exception
+   */
+  @CheckAuth
+  @RecordLogger
+  @DeleteMapping("/deleteDetail")
+  public ApiResp<String> deleteDetail (@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+    return dictDetailService.deleteDetail(surrogateId);
+  }
 
-	/**
-	 * 根据 字典主表id, 获取分组的字典明细信息
-	 * @param req
-	 * @return
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/dictDetail")
-	public ApiResp<SysDictResp> dictDetail(@RequestBody @Validated({DictDetailReq.GroupGetDictDetail.class}) DictDetailReq req) {
-		return dictService.dictDetail(req);
-	}
+  /**
+   * 根据 字典主表id, 获取分组的字典明细信息
+   * @param req
+   * @return
+   */
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/dictDetail")
+  public ApiResp<SysDictResp> dictDetail(@RequestBody @Validated({DictDetailReq.GroupGetDictDetail.class}) DictDetailReq req) {
+    return dictService.dictDetail(req);
+  }
 }

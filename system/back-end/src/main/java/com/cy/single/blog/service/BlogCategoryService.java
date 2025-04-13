@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface BlogCategoryService {
 
-  PageResult<BlogCategoryResp> pageCategoryList(BlogCategoryPageReq req);
+  PageResult<BlogCategoryResp> pageList(BlogCategoryPageReq req);
 
   PageResult<BlogCategoryResp> list(BlogCategoryPageReq req);
 

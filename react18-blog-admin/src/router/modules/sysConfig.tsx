@@ -46,7 +46,7 @@ const sysConfig: RouterItemType[] = [
           icon: <ApartmentOutlined />
         },
         path: '/admin/sys/org',
-        element: LazyLoad(lazy(() => import('@/views/sys/Org')))
+        element: LazyLoad(lazy(() => import('@/views/sys/org/Org')))
       },
       {
         meta: {
@@ -76,7 +76,7 @@ const sysConfig: RouterItemType[] = [
           icon: <SlidersOutlined />
         },
         path: '/admin/sys/dict',
-        element: LazyLoad(lazy(() => import('@/views/sys/Dict')))
+        element: LazyLoad(lazy(() => import('@/views/sys/dict/Dict')))
       }
     ]
   }

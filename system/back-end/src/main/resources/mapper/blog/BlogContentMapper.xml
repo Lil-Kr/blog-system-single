@@ -16,25 +16,27 @@
 		select <include refid="Base_Column_List"/>
 		from <include refid="Table_Name"/>
 		<where>
-			<if test="param.surrogateId != null and param.surrogateId != ''">
+			<if test="param.surrogateId != null">
 				and surrogate_id = #{param.surrogateId}
 			</if>
-			<if test="param.original != null and param.original != ''">
+			<if test="param.original != null">
 				and original = #{param.original}
 			</if>
-			<if test="param.recommend != null and param.recommend != ''">
+			<if test="param.recommend != null">
 				and recommend = #{param.recommend}
 			</if>
-			<if test="param.status != null and param.status != ''">
+			<if test="param.status != null">
 				and status = #{param.status}
 			</if>
 			<if test="param.keyWords != null and param.keyWords != ''">
 				and (
-				`number` like concat('%',#{param.keyWords},'%')
-				or
-				`name` like concat('%',#{param.keyWords},'%')
-				or
-				remark like concat('%',#{param.keyWords},'%')
+					`number` like concat('%',#{param.keyWords},'%')
+					or
+					`name` like concat('%',#{param.keyWords},'%')
+					or
+					`title` like concat('%',#{param.keyWords},'%')
+					or
+					remark like concat('%',#{param.keyWords},'%')
 				)
 			</if>
 		</where>
@@ -49,31 +51,31 @@
 		</if>
 	</select>
 
-	<select id="contentCount" resultType="java.lang.Integer">
+	<select id="pageContentCount" resultType="java.lang.Integer">
 		select count(1)
 		from <include refid="Table_Name"/>
 		<where>
-			<if test="param.surrogateId != null and param.surrogateId != ''">
+			<if test="param.surrogateId != null">
 				and surrogate_id = #{param.surrogateId}
 			</if>
-			<if test="param.original != null and param.original != ''">
+			<if test="param.original != null">
 				and original = #{param.original}
 			</if>
-			<if test="param.recommend != null and param.recommend != ''">
+			<if test="param.recommend != null">
 				and recommend = #{param.recommend}
 			</if>
-			<if test="param.status != null and param.status != ''">
+			<if test="param.status != null">
 				and status = #{param.status}
 			</if>
 			<if test="param.keyWords != null and param.keyWords != ''">
 				and (
-				`number` like concat('%',#{param.keyWords},'%')
-				or
-				`title` like concat('%',#{param.keyWords},'%')
-				or
-				`name` like concat('%',#{param.keyWords},'%')
-				or
-				remark like concat('%',#{param.keyWords},'%')
+					`number` like concat('%',#{param.keyWords},'%')
+					or
+					`title` like concat('%',#{param.keyWords},'%')
+					or
+					`name` like concat('%',#{param.keyWords},'%')
+					or
+					remark like concat('%',#{param.keyWords},'%')
 				)
 			</if>
 		</where>
@@ -93,25 +95,27 @@
 		<include refid="Base_Column_List"/>
 		from <include refid="Table_Name"/>
 		<where>
-			<if test="param.surrogateId != null and param.surrogateId != ''">
+			<if test="param.surrogateId != null">
 				and surrogate_id = #{param.surrogateId}
 			</if>
-			<if test="param.original != null and param.original != ''">
+			<if test="param.original != null">
 				and original = #{param.original}
 			</if>
-			<if test="param.recommend != null and param.recommend != ''">
+			<if test="param.recommend != null">
 				and recommend = #{param.recommend}
 			</if>
-			<if test="param.status != null and param.status != ''">
+			<if test="param.status != null">
 				and status = #{param.status}
 			</if>
 			<if test="param.keyWords!=null and param.keyWords!=''">
 				and (
-				`number` like concat('%',#{param.keyWords},'%')
-				or
-				`name` like concat('%',#{param.keyWords},'%')
-				or
-				remark like concat('%',#{param.keyWords},'%')
+					`number` like concat('%',#{param.keyWords},'%')
+					or
+					`title` like concat('%',#{param.keyWords},'%')
+					or
+					`name` like concat('%',#{param.keyWords},'%')
+					or
+					remark like concat('%',#{param.keyWords},'%')
 				)
 			</if>
 		</where>
@@ -129,9 +133,9 @@
 	<update id="updateStatusBySurrogateId">
 		update <include refid="Table_Name"/>
 		set
-		status = #{param.status}
-		and publish_time = #{param.publishTime}
-		and update_time = #{param.updateTime}
+				status = #{param.status},
+				publish_time = #{param.publishTime},
+				update_time = #{param.updateTime}
 		<where>
 			surrogate_id = #{param.surrogateId}
 		</where>

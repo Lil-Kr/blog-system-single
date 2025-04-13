@@ -149,7 +149,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	}
 
 	@Override
-	public PageResult<SysUserResp> pageUserList(UserListPageReq req) {
+	public PageResult<SysUserResp> pageList(UserListPageReq req) {
 		List<SysUserResp> list =  userMapper.pageUserList(req);
 		Integer count = userMapper.countUserList(req);
 		if (CollectionUtils.isNotEmpty(list)) {

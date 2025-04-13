@@ -30,7 +30,7 @@ public interface SysDictService extends IService<SysDict> {
 
 	SysDictResp getDict(Long surrogateId);
 
-	PageResult<SysDictResp> pageDictList(DictListPageReq req);
+	PageResult<SysDictResp> pageList(DictListPageReq req);
 
 	ApiResp<String> delete(Long surrogateId);
 

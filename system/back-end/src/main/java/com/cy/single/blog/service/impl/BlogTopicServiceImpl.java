@@ -43,7 +43,7 @@ public class BlogTopicServiceImpl implements BlogTopicService {
   private CacheService cacheService;
 
   @Override
-  public PageResult<BlogTopicResp> pageTopicList(BlogTopicPageReq req) {
+  public PageResult<BlogTopicResp> pageList(BlogTopicPageReq req) {
     List<BlogTopicResp> blogTopicList = blogTopicMapper.pageTopicList(req);
     if (CollectionUtils.isEmpty(blogTopicList)) {
       return new PageResult<>(new ArrayList<>(0), 0);

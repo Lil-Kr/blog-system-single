@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Table, Tag } from 'antd'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import {
+  ApiTwoTone,
   CheckCircleTwoTone,
-  CheckOutlined,
-  CloudUploadOutlined,
   DeleteOutlined,
+  DownCircleTwoTone,
   EditOutlined,
+  RocketTwoTone,
+  RollbackOutlined,
   SearchOutlined,
-  UploadOutlined
+  ToTopOutlined,
+  UploadOutlined,
+  UpSquareTwoTone,
+  VerticalAlignTopOutlined
 } from '@ant-design/icons'
 import { useForm } from 'antd/es/form/Form'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
@@ -17,23 +22,19 @@ import BlogModal from './BlogModal'
 import { useDictDetailStore } from '@/store/sys/dictStore'
 import labelApi from '@/apis/blog/label/labelApi'
 import { LabelListReq } from '@/types/apis/blog/labelType'
-import { SelectProps, Tooltip } from 'antd/lib'
+import { Radio, Select, Tooltip } from 'antd/lib'
 import { useLabelStore } from '@/store/blog/labelStore'
-// api
-import blogContentApi, {
-  BlogContent,
-  BlogContentTableType,
-  BlogContentReq,
-  BlogContentResq
-} from '@/apis/blog/content/blogContentApi'
 import { transformBlogToTable, transformCategoryToSelector, transformTopicToSelector } from '@/utils/blog/blogTransform'
 import blogCategoryApi from '@/apis/blog/category/categoryApi'
-import { BlogCategoryReq, BlogCategoryVO } from '@/types/apis/blog/category'
+import { BlogCategoryReq } from '@/types/apis/blog/category'
 import blogTopicApi from '@/apis/blog/topic/topicApi'
-import { BlogTopicListReq, BlogTopicVO } from '@/types/apis/blog/topicType'
+import { BlogTopicListReq } from '@/types/apis/blog/topicType'
 import { useMessage } from '@/components/message/MessageProvider'
-import Link from 'antd/lib/typography/Link'
-import { transformTypeToSeletorById } from '@/utils/sys/transform'
+import { transformDictTypeToSeletor, transformTypeToSeletorById } from '@/utils/sys/transform'
+
+// api
+import blogContentApi, { BlogContent, BlogContentTableType, BlogContentReq } from '@/apis/blog/content/blogContentApi'
+import { AddBlogButtonAcl, EditBlogButtonAcl, PublishBlogButtonAcl, QueryBlogButtonAcl } from './auth/authButton'
 
 const BlogList = () => {
   const columnsBlog: ColumnsType<BlogContentTableType> = [
@@ -123,27 +124,31 @@ const BlogList = () => {
         )
     },
     {
-      key: 'statusName',
-      dataIndex: 'statusName',
+      key: 'status',
+      dataIndex: 'status',
       title: '发布状态',
       width: '5%',
       render: (_: object, record) => {
-        let statueType = record.statusType
-        let colorText = 'green'
-        switch (statueType) {
-          case 0:
-            colorText = 'blue'
-            break
-          case 1:
-            colorText = 'green'
-            break
-          case 2:
-            colorText = 'red'
-            break
+        const statueType = record.status
+        let colorText = ''
+        let statusName = ''
+        if (statueType === 0) {
+          colorText = 'blue'
+          statusName = '草稿'
+        } else if (statueType === 1) {
+          colorText = 'green'
+          statusName = '已发布'
+        } else if (statueType === 2) {
+          colorText = 'red'
+          statusName = '下架'
+        } else {
+          colorText = 'green'
+          statusName = '草稿'
         }
+
         return (
           <Tag key={record.key} color={colorText}>
-            {record.statusName}
+            {statusName}
           </Tag>
         )
       }
@@ -171,95 +176,117 @@ const BlogList = () => {
       dataIndex: 'oparet',
       title: '操作',
       width: '10%',
-      render: (_: object, record) => (
-        <Flex vertical={false} gap={4}>
-          {record.statusType !== 1 ? (
-            <Tooltip title='未发布'>
-              <Button
+      render: (_: object, record) => {
+        const renderStatusButton = () => {
+          switch (record.status) {
+            case 0:
+              return (
+                <Tooltip title='发布'>
+                  <PublishBlogButtonAcl
+                    size={btnSize}
+                    type='link'
+                    icon={<RocketTwoTone twoToneColor='#c41d7f' />}
+                    onClick={() => publishBlog(record)}
+                  />
+                </Tooltip>
+              )
+            case 1:
+              return (
+                <Tooltip title='下架'>
+                  <PublishBlogButtonAcl
+                    size={btnSize}
+                    type='link'
+                    icon={<DownCircleTwoTone twoToneColor='#f5222d' />}
+                    onClick={() => publishBlog(record)}
+                  />
+                </Tooltip>
+              )
+            case 2:
+              return (
+                <Tooltip title='上线'>
+                  <PublishBlogButtonAcl
+                    size={btnSize}
+                    type='link'
+                    icon={<ApiTwoTone twoToneColor='#ffa940' />}
+                    onClick={() => publishBlog(record)}
+                  />
+                </Tooltip>
+              )
+            default:
+              return null // 如果没有匹配的状态, 返回 null
+          }
+        }
+
+        return (
+          <Flex vertical={false} gap={4}>
+            {renderStatusButton()}
+
+            <Tooltip title='编辑博客'>
+              <EditBlogButtonAcl
                 size={btnSize}
+                name='edit'
                 type='link'
-                color='red'
-                icon={<UploadOutlined twoToneColor='#52c41a' />}
-                onClick={() => publishBlog(record)}
+                shape='circle'
+                icon={<EditOutlined />}
+                onClick={() => editBlog(record.key as string, record)}
               />
             </Tooltip>
-          ) : (
-            <Tooltip title='已发布'>
-              <Button size={btnSize} type='link' icon={<CheckCircleTwoTone twoToneColor='#52c41a' />} />
+
+            <Tooltip title='删除博客'>
+              <Popconfirm
+                title='删除博客'
+                description={`确定要删除 [${record.title}] 这篇博客吗?`}
+                onConfirm={() => deleteBlogonfirm(record)}
+                okText='确定'
+                cancelText='取消'
+              >
+                <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
+              </Popconfirm>
             </Tooltip>
-          )}
-
-          <Tooltip title='编辑博客'>
-            <Button
-              size={btnSize}
-              name='edit'
-              type='link'
-              shape='circle'
-              icon={<EditOutlined />}
-              onClick={() => editBlog(record.key as string, record)}
-            />
-          </Tooltip>
-
-          <Tooltip title='删除博客'>
-            <Popconfirm
-              title='删除博客'
-              description={`确定要删除 [${record.title}] 这篇博客吗?`}
-              onConfirm={() => deleteBlogonfirm(record)}
-              okText='确定'
-              cancelText='取消'
-            >
-              <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
-            </Popconfirm>
-          </Tooltip>
-        </Flex>
-      )
+          </Flex>
+        )
+      }
     }
   ]
 
+  const [form] = useForm()
   const messageApi = useMessage()
   const { dictMap, blogTypes, setBlogType, setBlogTopic, blogPublisStatue, setBlogPublisStatue, switchStatue } =
     useDictDetailStore()
-  const [form] = useForm()
-  const { blogPageTableList, setBlogPageList } = useBlogStore()
+  const { blogPageTableList, setBlogPageList, tablePageInfo, setTablePageInfo } = useBlogStore()
   const { setBlogModalData } = useBlogModalStore()
-  const [pageSize, setPageSize] = useState<number>(20)
-  const [totalSize, setTotalSize] = useState<number>(0)
-  const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
   const { setLabelList } = useLabelStore()
+  const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
   /**
    * 初始化数据
    */
   useEffect(() => {
     const initBolgContentData = async () => {
-      const bolgList = await getBlogContentPageList({ keyWords: '', currentPageNum: 1, pageSize: pageSize })
-      const blogs = transformBlogToTable(bolgList)
-      setBlogPageList(blogs)
+      await retrieveBlogContentPageList({
+        currentPageNum: tablePageInfo.currentPageNum,
+        pageSize: tablePageInfo.pageSize
+      })
 
       /**
        * 加载博客标签
        */
-      const labelRes = await retrieveLableList({} as LabelListReq)
-      setLabelList(labelRes)
+      await retrieveLableList({} as LabelListReq)
 
       /**
        * 加载博客分类
        */
-      const blogTypes = await retrieveCategoryList({})
-      const blogType = transformCategoryToSelector(blogTypes)
-      setBlogType(blogType)
+      await retrieveCategoryList({})
 
       /**
        * 博客专题
        */
-      const blogTopics = await retrieveTopicList({})
-      const blogTopic = transformTopicToSelector(blogTopics)
-      setBlogTopic(blogTopic)
+      await retrieveTopicList({})
 
       /**
        * 博客发布状态
        */
       const blogPublisStatueDict = dictMap.get('博客发布状态') ?? []
-      const publishStatue = transformTypeToSeletorById(blogPublisStatueDict)
+      const publishStatue = transformDictTypeToSeletor(blogPublisStatueDict)
       setBlogPublisStatue(publishStatue)
     }
     initBolgContentData()
@@ -268,44 +295,49 @@ const BlogList = () => {
   /**
    * 查询标签列表
    */
-  const retrieveLableList = async (req: LabelListReq): Promise<SelectProps['options']> => {
+  const retrieveLableList = async (req: LabelListReq) => {
     const res = await labelApi.retrieveLabelList(req)
     const { code, data } = res
     if (code !== 200) {
       return []
     }
-    return data.list.map(({ surrogateId, name, ...rest }) => ({
+    const labelRes = data.list.map(({ surrogateId, name, ...rest }) => ({
       key: surrogateId,
       label: name,
       value: surrogateId,
       ...rest
     }))
+
+    setLabelList(labelRes)
   }
 
   /**
    * 查询[博客-分类]列表
    * @returns
    */
-  const retrieveTopicList = async (req: BlogTopicListReq): Promise<BlogTopicVO[]> => {
+  const retrieveTopicList = async (req: BlogTopicListReq) => {
     const res = await blogTopicApi.retrieveTopicList({ ...req })
-    const { code, data, msg } = res
+    const { code, data } = res
     if (code !== 200) {
       return []
     }
-    return data.list
+
+    const blogTopic = transformTopicToSelector(data.list)
+    setBlogTopic(blogTopic)
   }
 
   /**
    * 查询[博客-专题]列表
    * @returns
    */
-  const retrieveCategoryList = async (req: BlogCategoryReq): Promise<BlogCategoryVO[]> => {
+  const retrieveCategoryList = async (req: BlogCategoryReq) => {
     const res = await blogCategoryApi.retrieveCategoryList({ ...req })
     const { code, data } = res
     if (code !== 200) {
       return []
     }
-    return data.list
+    const blogType = transformCategoryToSelector(data.list)
+    setBlogType(blogType)
   }
 
   /**
@@ -315,13 +347,15 @@ const BlogList = () => {
     onChange: (selectedRowKeys: React.Key[], selectedRows: BlogContentTableType[]) => {},
     getCheckboxProps: (record: BlogContentTableType) => ({})
   }
+
   /**
    * 页码或 pageSize 改变的回调, 参数是改变后的页码及每页条数
    * @param page
    * @param pageSize
    */
-  const onChangePageInfo: PaginationProps['onChange'] = (page, pageSize) => {
-    setPageSize(pageSize)
+  const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
+    const values = form.getFieldsValue()
+    retrieveBlogContentPageList({ ...values, currentPageNum, pageSize })
   }
 
   /**
@@ -332,7 +366,7 @@ const BlogList = () => {
       categoryInfo: blogTypes.find(item => item.type === '0') ?? blogTypes[0], // 默认分类
       original: switchStatue.find(item => item.type === '1')?.value ?? '', // 给默认值
       recommend: switchStatue.find(item => item.type === '0')?.value ?? '', // 给默认值
-      publishStatue: blogPublisStatue.find(item => item.type === '0')?.value ?? '' // 给默认值
+      publishStatue: blogPublisStatue.find(item => item.type === '0')?.type ?? '0' // 给默认值
     }
 
     setBlogModalData({
@@ -371,7 +405,7 @@ const BlogList = () => {
       },
       original: switchStatue.find(item => item.value === record.original)?.value ?? '',
       recommend: switchStatue.find(item => item.value === record.recommend)?.value ?? '',
-      publishStatue: blogPublisStatue.find(item => item.value === record.status)?.value ?? '',
+      publishStatue: blogPublisStatue.find(item => item.type === record.status.toString())?.type ?? '',
       contentText: blogContent.contentText ?? ''
     }
 
@@ -388,10 +422,22 @@ const BlogList = () => {
     })
   }
 
+  /**
+   * 发布博客
+   */
   const publishBlog = async (record: BlogContentTableType) => {
-    // 获取发布状态
-    const status = blogPublisStatue.find(item => item.type === '1')?.value ?? ''
-    const res = await blogContentApi.publish({ surrogateId: record.key, status })
+    // 获取[发布]状态
+    let status = ''
+    if (record.status === 0) {
+      status = '1'
+    } else if (record.status === 1) {
+      status = '2'
+    } else if (record.status === 2) {
+      status = '1'
+    } else {
+      status = '0'
+    }
+    const res = await blogContentApi.publish({ surrogateId: record.key, status: status })
     const { code, msg } = res
     if (code !== 200) {
       return
@@ -404,9 +450,12 @@ const BlogList = () => {
    * 刷新博客列表
    */
   const refreshBlogContentPageList = async () => {
-    const bolgList = await getBlogContentPageList({ keyWords: '', currentPageNum: 1, pageSize: 20 })
-    const blogs = transformBlogToTable(bolgList)
-    setBlogPageList(blogs)
+    const values = form.getFieldsValue()
+    await retrieveBlogContentPageList({
+      ...values,
+      currentPageNum: tablePageInfo.currentPageNum,
+      pageSize: tablePageInfo.pageSize
+    })
   }
 
   /**
@@ -414,16 +463,20 @@ const BlogList = () => {
    * @param req
    * @returns
    */
-  const getBlogContentPageList = async (req: BlogContentReq): Promise<BlogContentResq[]> => {
-    const values = form.getFieldsValue()
-    const blogContent = await blogContentApi.getBlogContentPageList({ ...req, ...values })
-    const { code, data, msg } = blogContent
+  const retrieveBlogContentPageList = async (req: BlogContentReq) => {
+    const blogContent = await blogContentApi.getBlogContentPageList({ ...req })
+    const { code, data } = blogContent
     if (code !== 200) {
       return []
     }
-
-    setTotalSize(data.total)
-    return data.list
+    const blogs = transformBlogToTable(data.list)
+    setBlogPageList(blogs)
+    setTablePageInfo({
+      ...tablePageInfo,
+      totalSize: data.total,
+      pageSize: req.pageSize,
+      currentPageNum: req.currentPageNum
+    })
   }
 
   /**
@@ -439,7 +492,17 @@ const BlogList = () => {
     return blogContent.data as BlogContent
   }
 
-  const search = () => {}
+  /**
+   * 条件搜索
+   */
+  const search = async () => {
+    const values = form.getFieldsValue()
+    await retrieveBlogContentPageList({
+      ...values,
+      currentPageNum: tablePageInfo.currentPageNum,
+      pageSize: tablePageInfo.pageSize
+    })
+  }
 
   /**
    * 删除博客
@@ -456,23 +519,50 @@ const BlogList = () => {
     refreshBlogContentPageList()
   }
 
+  /**
+   * 重置搜索条件
+   */
+  const resetSearch = async () => {
+    form.resetFields()
+    await retrieveBlogContentPageList({
+      currentPageNum: tablePageInfo.currentPageNum,
+      pageSize: tablePageInfo.pageSize
+    })
+  }
+
+  const handleChangeCategory = (value: string) => {}
+
   return (
     <div className='blogs-publish-index-warpper'>
-      <Flex gap='middle' vertical={true}>
+      <Flex gap={2} vertical={true}>
         <Form form={form}>
-          <Flex gap='small'>
-            <Form.Item name={'keyWords'} label='关键字'>
+          <Flex vertical={false} gap={10}>
+            <Form.Item key={0} name={'keyWords'} label='关键字'>
               <Input size={inputSize} placeholder='搜索关键字' />
             </Form.Item>
-            <Form.Item>
-              <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+
+            <Form.Item key={1} name={'status'} label={'发布状态'}>
+              <Select
+                style={{ width: 150 }}
+                size={inputSize}
+                showSearch
+                placeholder='选择发布状态'
+                optionFilterProp='children'
+                options={blogPublisStatue}
+                onChange={value => handleChangeCategory(value)}
+              />
+            </Form.Item>
+            <Form.Item key={2}>
+              <QueryBlogButtonAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+            </Form.Item>
+            <Form.Item key={3}>
+              <QueryBlogButtonAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
             </Form.Item>
           </Flex>
         </Form>
+
         <Flex gap='small'>
-          <Button size={btnSize} type='primary' onClick={createBlog}>
-            {'创建博客'}
-          </Button>
+          <AddBlogButtonAcl text={'创建博客'} size={btnSize} type='primary' onClick={createBlog} />
         </Flex>
         <div className='blog-table-wapper'>
           <Table
@@ -492,8 +582,8 @@ const BlogList = () => {
               onChange: onChangePageInfo,
               // onShowSizeChange: onShowSizeChange,
               showSizeChanger: true,
-              pageSize: pageSize,
-              total: totalSize
+              pageSize: tablePageInfo.pageSize,
+              total: tablePageInfo.totalSize
             }}
           />
         </div>

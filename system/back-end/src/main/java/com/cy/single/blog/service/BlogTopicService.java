@@ -17,7 +17,7 @@ import com.cy.single.blog.pojo.resp.blog.BlogTopicResp;
  */
 public interface BlogTopicService {
 
-  PageResult<BlogTopicResp> pageTopicList(BlogTopicPageReq req);
+  PageResult<BlogTopicResp> pageList(BlogTopicPageReq req);
 
   PageResult<BlogTopic> list(BlogTopicReq req);
 

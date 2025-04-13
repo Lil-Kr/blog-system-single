@@ -34,138 +34,138 @@ import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 @Slf4j
 public class RoleController {
 
-	@Autowired
-	private SysRoleService roleService;
+  @Autowired
+  private SysRoleService roleService;
 
-	@Autowired
-	private SysTreeService treeService;
+  @Autowired
+  private SysTreeService treeService;
 
-	@Autowired
-	private SysRoleUserService roleUserService;
+  @Autowired
+  private SysRoleUserService roleUserService;
 
-	@Autowired
-	private SysRoleAclService roleAclService;
+  @Autowired
+  private SysRoleAclService roleAclService;
 
-	@Autowired
-	private MessageLangService msgLangService;
+  @Autowired
+  private MessageLangService msgLangService;
 
-	/**
-	 * page role info list
-	 * @param req
-	 * @return
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/pageList")
-	public ApiResp<PageResult<SysRoleResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) RoleListPageReq req) {
-		PageResult<SysRoleResp> res = roleService.pageList(req);
-		return ApiResp.success(res);
-	}
+  /**
+   * page role info list
+   * @param req
+   * @return
+   */
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/pageList")
+  public ApiResp<PageResult<SysRoleResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) RoleListPageReq req) {
+    PageResult<SysRoleResp> res = roleService.pageList(req);
+    return ApiResp.success(res);
+  }
 
-	/**
-	 * add role info
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/add")
-	public ApiResp<String> add(@RequestBody @Validated({RoleSaveReq.GroupAdd.class}) RoleSaveReq req) {
-		return roleService.add(req);
-	}
+  /**
+   * add role info
+   * @param req
+   * @return
+   * @throws Exception
+   */
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/add")
+  public ApiResp<String> add(@RequestBody @Validated({RoleSaveReq.GroupAdd.class}) RoleSaveReq req) {
+    return roleService.add(req);
+  }
 
-	/**
-	 * edit role info
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/edit")
-	public ApiResp<String> edit (@RequestBody @Validated({RoleSaveReq.GroupEdite.class}) RoleSaveReq req) throws Exception {
-		return roleService.edit(req);
-	}
+  /**
+   * edit role info
+   * @param req
+   * @return
+   * @throws Exception
+   */
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/edit")
+  public ApiResp<String> edit (@RequestBody @Validated({RoleSaveReq.GroupEdite.class}) RoleSaveReq req) throws Exception {
+    return roleService.edit(req);
+  }
 
-	/**
-	 * freeze role info
-	 * @param req
-	 * @return
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/freeze")
-	public ApiResp<String> freeze (@RequestBody @Validated({RoleSaveReq.GroupFreeze.class}) RoleSaveReq req) {
-		return roleService.freeze(req);
-	}
+  /**
+   * freeze role info
+   * @param req
+   * @return
+   */
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/freeze")
+  public ApiResp<String> freeze (@RequestBody @Validated({RoleSaveReq.GroupFreeze.class}) RoleSaveReq req) {
+    return roleService.freeze(req);
+  }
 
-	/**
-	 * delete role info
-	 * @param surrogateId
-	 */
-	@CheckAuth
-	@RecordLogger
-	@DeleteMapping("/delete")
-	public ApiResp<String> delete (@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
-		return roleService.delete(surrogateId);
-	}
+  /**
+   * delete role info
+   * @param surrogateId
+   */
+  @CheckAuth
+  @RecordLogger
+  @DeleteMapping("/delete")
+  public ApiResp<String> delete (@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+    return roleService.delete(surrogateId);
+  }
 
-	/**
-	 * 获取当前用户所拥有的[角色-权限]树
-	 * retrieve current user`s [role-acl] tree
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/roleAclTree")
-	public ApiResp<List<AclModuleDto>> roleAclTree (@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
-		List<AclModuleDto> aclModuleDtoList = treeService.roleAclTree(req.getRoleId());
-		if (CollectionUtils.isEmpty(aclModuleDtoList)) {
-			return ApiResp.failure(msgLangService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg1"));
-		}
-		return ApiResp.success(aclModuleDtoList);
-	}
+  /**
+   * 获取当前用户所拥有的[角色-权限]树
+   * retrieve current user`s [role-acl] tree
+   * @param req
+   * @return
+   * @throws Exception
+   */
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/roleAclTree")
+  public ApiResp<List<AclModuleDto>> roleAclTree (@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
+    List<AclModuleDto> aclModuleDtoList = treeService.roleAclTree(req.getRoleId());
+    if (CollectionUtils.isEmpty(aclModuleDtoList)) {
+      return ApiResp.failure(msgLangService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg1"));
+    }
+    return ApiResp.success(aclModuleDtoList);
+  }
 
-	/**
-	 * 查询[角色-用户]列表
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/roleUserList")
-	public ApiResp<RoleUserResp> roleUserList(@RequestBody @Validated({RoleUserReq.GroupRoleUserPageList.class}) RoleUserReq req) {
-		return roleUserService.roleUserList(req);
-	}
+  /**
+   * 查询[角色-用户]列表
+   * @param req
+   * @return
+   * @throws Exception
+   */
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/roleUserList")
+  public ApiResp<RoleUserResp> roleUserList(@RequestBody @Validated({RoleUserReq.GroupRoleUserPageList.class}) RoleUserReq req) {
+    return roleUserService.roleUserList(req);
+  }
 
-	/**
-	 * 修改[角色-权限点]关系接口
-	 * update
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/updateRoleAcls")
-	public ApiResp<String> updateRoleAcls(@RequestBody @Validated({RoleAclSaveReq.GroupUpdateRoleAcls.class}) RoleAclSaveReq req) {
-		return roleAclService.updateRoleAcls(req);
-	}
+  /**
+   * 修改[角色-权限点]关系接口
+   * update
+   * @param req
+   * @return
+   * @throws Exception
+   */
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/updateRoleAcls")
+  public ApiResp<String> updateRoleAcls(@RequestBody @Validated({RoleAclSaveReq.GroupUpdateRoleAcls.class}) RoleAclSaveReq req) {
+    return roleAclService.updateRoleAcls(req);
+  }
 
-	/**
-	 * 修改[角色-用户]关系接口
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/updateRoleUsers")
-	public ApiResp<String> updateRoleUsers(@RequestBody @Validated({RoleUserReq.GroupChangeRoleUsers.class}) RoleUserReq req) {
-		return roleUserService.updateRoleUsers(req);
-	}
+  /**
+   * 修改[角色-用户]关系接口
+   * @param req
+   * @return
+   * @throws Exception
+   */
+  @CheckAuth
+  @RecordLogger
+  @PostMapping("/updateRoleUsers")
+  public ApiResp<String> updateRoleUsers(@RequestBody @Validated({RoleUserReq.GroupChangeRoleUsers.class}) RoleUserReq req) {
+    return roleUserService.updateRoleUsers(req);
+  }
 }

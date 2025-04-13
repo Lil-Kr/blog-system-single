@@ -12,10 +12,8 @@ import com.cy.single.blog.pojo.entity.blog.BlogContent;
 import com.cy.single.blog.pojo.entity.blog.BlogContentMongo;
 import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.entity.blog.BlogTopic;
-import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
-import com.cy.single.blog.pojo.req.dict.SaveDictDetailReq;
 import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
 import com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp;
 import com.cy.single.blog.pojo.resp.blog.BlogContentResp;
@@ -109,7 +107,7 @@ public class BlogContentServiceImpl implements BlogContentService {
   @Override
   public PageResult<BlogContentResp> pageContentList(BlogContentPageReq req) {
     List<BlogContentResp> pageList = blogContentMapper.pageContentList(req);
-    Integer count = blogContentMapper.contentCount(req);
+    Integer count = blogContentMapper.pageContentCount(req);
     if (CollectionUtils.isEmpty(pageList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
@@ -138,11 +136,6 @@ public class BlogContentServiceImpl implements BlogContentService {
 
       // 是否推荐
       item.setRecommendType(cacheService.getDictDetailCache(item.getRecommend()).getType());
-
-      // 发布状态
-      SysDictDetail dictDetail = cacheService.getDictDetailCache(item.getStatus());
-      item.setStatusType(dictDetail.getType());
-      item.setStatusName(dictDetail.getName());
     });
     return new PageResult<>(pageList, count);
   }
@@ -175,16 +168,17 @@ public class BlogContentServiceImpl implements BlogContentService {
 
       // 是否推荐
       item.setRecommendType(cacheService.getDictDetailCache(item.getRecommend()).getType());
-
-      // 发布状态
-      item.setStatusType(cacheService.getDictDetailCache(item.getStatus()).getType());
     });
     return new PageResult<>(list, list.size());
   }
 
-
+  /**
+   * 获取单条博客信息, 包括博客内容
+   * @param surrogateId
+   * @return
+   */
   @Override
-  public ApiResp<BlogContentResp> get(Long surrogateId) {
+  public ApiResp<BlogContentResp> getBlog(Long surrogateId) {
     QueryWrapper<BlogContent> queryWrapper = new QueryWrapper<>();
     queryWrapper.eq("surrogate_id", surrogateId);
     BlogContent blogContent = blogContentMapper.selectOne(queryWrapper);
@@ -244,14 +238,6 @@ public class BlogContentServiceImpl implements BlogContentService {
    */
   @Override
   public ApiResp<String> publishBlog(BlogContentReq req) {
-    // 检查在字典中是否存在该数据
-    SaveDictDetailReq dictDetailReq = new SaveDictDetailReq();
-    dictDetailReq.setSurrogateId(req.getSurrogateId());
-    SysDictDetail dictDetail = dictDetailService.get(dictDetailReq);
-    if (Objects.isNull(dictDetail)) {
-      return ApiResp.warning(INFO_NOT_EXIST);
-    }
-
     BlogContent content = new BlogContent();
     BeanUtils.copyProperties(req, content);
     Date nowDate = DateUtil.localDateTimeNow();
@@ -271,7 +257,6 @@ public class BlogContentServiceImpl implements BlogContentService {
     res.setSurrogateId(blogId);
 
     if (Objects.isNull(blogContentMongo)) {
-      res.setContentText("");
       return ApiResp.success(res);
     }
 
@@ -299,7 +284,7 @@ public class BlogContentServiceImpl implements BlogContentService {
     if (CollectionUtils.isEmpty(pageList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
-    Integer count = blogContentMapper.contentCount(req);
+    Integer count = blogContentMapper.pageContentCount(req);
 
     // 设置缓存--作废
 //    pageList.stream().forEach(item -> {

@@ -6,6 +6,7 @@ import { AclModuleTreeResp } from '@/types/apis/sys/acl/aclType'
 import { transformAclModuleTreeExpandeKeys, processAclModuleTreeData } from '@/utils/sys/treeUtils'
 import { UpdateRoleAclsReq } from '@/types/apis/sys/role/roleType'
 import { useMessage } from '@/components/message/MessageProvider'
+import { UpdateRoleAclsBtnAcl } from './auth/authButton'
 
 const RoleAcl = ({ roleId }: { roleId: string }) => {
   const messageApi = useMessage()
@@ -102,7 +103,7 @@ const RoleAcl = ({ roleId }: { roleId: string }) => {
           // selectedKeys={selectedKeys}
         />
         <Flex justify={'flex-start'} align={'center'} gap={'middle'}>
-          <Button onClick={updateRoleAcls}>{'更新权限'}</Button>
+          <UpdateRoleAclsBtnAcl text='更新权限' onClick={updateRoleAcls} />
         </Flex>
       </Flex>
     </div>

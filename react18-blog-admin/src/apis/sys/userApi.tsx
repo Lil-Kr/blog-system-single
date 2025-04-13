@@ -13,7 +13,7 @@ import { baseAxiosRequest } from '@/utils/http/request'
 
 const userApi: SysUserApi = {
   pageUserList(req: UserListPageReq) {
-    return baseAxiosRequest.post<ResultPage<UserPageListByOrgIdResp>>(PREFIX_URL_SYS_USER + '/pageUserList', req)
+    return baseAxiosRequest.post<ResultPage<UserPageListByOrgIdResp>>(PREFIX_URL_SYS_USER + '/pageList', req)
   },
   get() {
     return baseAxiosRequest.get<Result<SysUser>>(PREFIX_URL_SYS_USER + '/get', {})

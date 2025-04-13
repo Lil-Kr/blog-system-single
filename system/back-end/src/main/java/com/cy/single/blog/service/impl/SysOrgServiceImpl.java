@@ -213,7 +213,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 	 * @return
 	 */
 	@Override
-	public PageResult<SysOrgResp> pageOrgList(OrgPageReq req) {
+	public PageResult<SysOrgResp> pageList(OrgPageReq req) {
 		List<SysOrgResp> pageList = orgMapper.pageList(req);
 		Integer count = orgMapper.countByList(req);
 		if (CollectionUtils.isEmpty(pageList)) {

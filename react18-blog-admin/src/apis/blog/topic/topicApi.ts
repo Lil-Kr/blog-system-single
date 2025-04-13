@@ -13,7 +13,7 @@ import {
 
 const blogTopicApi: BlogTopicApi = {
   retrieveTopicPageList(req: BlogTopicPageReq) {
-    return baseAxiosRequest.post<ResultPage<BlogTopicVO>>(PREFIX_URL_BLOG_TOPIC + '/pageTopicList', req)
+    return baseAxiosRequest.post<ResultPage<BlogTopicVO>>(PREFIX_URL_BLOG_TOPIC + '/pageList', req)
   },
   retrieveTopicList(req: BlogTopicListReq) {
     return baseAxiosRequest.post<ResultPage<BlogTopicVO>>(PREFIX_URL_BLOG_TOPIC + '/list', req)

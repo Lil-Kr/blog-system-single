@@ -1,24 +1,29 @@
-import blogContentApi, {
-  BlogContentAddReq,
-  BlogContentApi,
-  BlogContentEditeReq,
-  BlogContentTableType
-} from '@/apis/blog/content/blogContentApi'
+import { BlogContentApi, BlogContentTableType } from '@/apis/blog/content/blogContentApi'
 import { OptionType } from '@/types/apis'
+import { TablePageInfoType } from '@/types/base'
 import { SelectProps } from 'antd/lib'
 import { create } from 'zustand'
 
 interface BlogState {
   blogPageTableList: BlogContentTableType[]
+  tablePageInfo: TablePageInfoType
+  tableLoading: boolean
 }
 
 interface BlogAction {
   setBlogPageList: (blogPageTableList: BlogContentTableType[]) => void
+  setTablePageInfo: (tablePageInfo: TablePageInfoType) => void
   clearBlogPageList: () => void
 }
 
 const initBlogData = {
-  blogPageTableList: []
+  blogPageTableList: [],
+  tablePageInfo: {
+    currentPageNum: 1,
+    pageSize: 20,
+    totalSize: 0
+  },
+  tableLoading: false
 }
 
 const useBlogStore = create<BlogState & BlogAction>()(set => ({
@@ -28,6 +33,13 @@ const useBlogStore = create<BlogState & BlogAction>()(set => ({
       ...state,
       blogPageTableList: blogPageTableList
     })),
+  setTablePageInfo: (tablePageInfo: TablePageInfoType) =>
+    set(state => {
+      return {
+        ...state,
+        tablePageInfo
+      }
+    }),
   clearBlogPageList: () =>
     set(state => ({
       ...state,

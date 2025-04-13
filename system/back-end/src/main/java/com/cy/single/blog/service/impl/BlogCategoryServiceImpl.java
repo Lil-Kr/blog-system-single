@@ -43,7 +43,7 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
   private CacheService cacheService;
 
   @Override
-  public PageResult<BlogCategoryResp> pageCategoryList(BlogCategoryPageReq req) {
+  public PageResult<BlogCategoryResp> pageList(BlogCategoryPageReq req) {
     List<BlogCategoryResp> pageList = blogCategoryMapper.pageCategoryList(req);
     Integer count = blogCategoryMapper.getCountByList(req);
     if (CollectionUtils.isEmpty(pageList)) {

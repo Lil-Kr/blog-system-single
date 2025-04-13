@@ -56,13 +56,6 @@ public class BlogController {
 
   @RecordLogger
   @CheckAuth
-  @GetMapping("/get")
-  public ApiResp<BlogContentResp> get(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
-    return blogContentService.get(surrogateId);
-  }
-
-  @RecordLogger
-  @CheckAuth
   @GetMapping("/getContent/{blogId}")
   public ApiResp<BlogContentResp> getContent(@PathVariable("blogId") @Valid @NotNull(message = "blogId是必须的") Long blogId) {
     return blogContentService.getContent(blogId);
@@ -106,6 +99,6 @@ public class BlogController {
   @RecordLogger
   @GetMapping("/frontGetBlog")
   public ApiResp<BlogContentResp> frontGetBlog(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
-    return blogContentService.get(surrogateId);
+    return blogContentService.getBlog(surrogateId);
   }
 }

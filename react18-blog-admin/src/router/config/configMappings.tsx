@@ -36,11 +36,11 @@ export const componentMap = {
 
   // 系统管理
   _admin_sys_user: lazy(() => import('@/views/sys/user/User')),
-  _admin_sys_org: lazy(() => import('@/views/sys/Org')),
+  _admin_sys_org: lazy(() => import('@/views/sys/org/Org')),
   _admin_sys_role: lazy(() => import('@/views/sys/role/Role')),
   _admin_sys_acl: lazy(() => import('@/views/sys/acl/Acl')),
   _admin_sys_acl_data: lazy(() => import('@/views/sys/acl_data/AclData')),
-  _admin_sys_dict: lazy(() => import('@/views/sys/Dict'))
+  _admin_sys_dict: lazy(() => import('@/views/sys/dict/Dict'))
 } as const
 
 /**

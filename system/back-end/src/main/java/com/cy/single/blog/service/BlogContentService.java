@@ -28,7 +28,7 @@ public interface BlogContentService {
 
   PageResult<BlogContentResp> contentList(BlogContentPageReq req);
 
-  ApiResp<BlogContentResp> get(Long surrogateId);
+  ApiResp<BlogContentResp> getBlog(Long surrogateId);
 
   ApiResp<String> edit(BlogContentReq req);
 

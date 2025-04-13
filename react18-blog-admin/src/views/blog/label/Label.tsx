@@ -10,6 +10,13 @@ import labelApi from '@/apis/blog/label/labelApi'
 import { labelTransformToTable } from '@/utils/blog/labelTransform'
 import { useLabelModalStore, useLabelStore } from '@/store/blog/labelStore'
 import LabelModal from './LabelModal'
+import {
+  AddLabelButtonAcl,
+  DelLabelButtonAcl,
+  EditLabelButtonAcl,
+  LookLabelButtonAcl,
+  QueryLabelButtonAcl
+} from './auth/authButton'
 
 const BlogLabel = () => {
   const messageApi = useMessage()
@@ -67,7 +74,7 @@ const BlogLabel = () => {
       width: '20%',
       render: (_: object, record) => (
         <Space size='middle'>
-          <Button
+          <LookLabelButtonAcl
             size={btnSize}
             name='look'
             type='link'
@@ -75,7 +82,7 @@ const BlogLabel = () => {
             icon={<SearchOutlined />}
             onClick={() => lookItem(record.key, record)}
           />
-          <Button
+          <EditLabelButtonAcl
             size={btnSize}
             name='edit'
             type='link'
@@ -83,6 +90,7 @@ const BlogLabel = () => {
             icon={<EditOutlined />}
             onClick={() => editItem(record.key, record)}
           />
+
           <Popconfirm
             title='删除标签'
             description={`确定要删除 [${record.name}] 这个标签吗?`}
@@ -91,7 +99,14 @@ const BlogLabel = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
+            <DelLabelButtonAcl
+              size={btnSize}
+              name='delete'
+              type='link'
+              shape='circle'
+              danger
+              icon={<DeleteOutlined />}
+            />
           </Popconfirm>
         </Space>
       )
@@ -170,27 +185,16 @@ const BlogLabel = () => {
   }
 
   /**
-   * deleteBatch
-   */
-  const deleteBatch = async () => {
-    if (!rowKeys || rowKeys.length < 1) {
-      messageApi?.warning('请选择待删除项')
-      return
-    }
-
-    const ids = rowKeys.join(',')
-    const res = await labelApi.deleteBatch({ surrogateId: ids })
-    if (res.code !== 200) {
-      messageApi?.error(res.msg)
-      return
-    }
-    initLabelList({ keyWords: '', pageSize: tablePageInfo.pageSize, currentPageNum: tablePageInfo.currentPageNum })
-  }
-
-  /**
    * 搜索
    */
   const search = () => {}
+
+  /**
+   * 重置搜索条件
+   */
+  const resetSearch = async () => {
+    form.resetFields()
+  }
 
   /**
    * 多选
@@ -254,18 +258,22 @@ const BlogLabel = () => {
               <Input size={inputSize} placeholder='搜索关键字' />
             </Form.Item>
             <Form.Item>
-              <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+              <QueryLabelButtonAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+            </Form.Item>
+            <Form.Item>
+              <QueryLabelButtonAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
             </Form.Item>
           </Flex>
         </Form>
         <div className='operation-btn'>
           <Flex gap='small'>
-            <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createLabel}>
-              {'新增'}
-            </Button>
-            <Button size={btnSize} type='primary' icon={<DeleteOutlined />} danger onClick={deleteBatch}>
-              {'删除'}
-            </Button>
+            <AddLabelButtonAcl
+              text='新增'
+              size={btnSize}
+              type='primary'
+              icon={<PlusOutlined />}
+              onClick={createLabel}
+            />
           </Flex>
         </div>
         <Flex className='list' gap='middle' vertical={true}>

@@ -4,6 +4,7 @@ import type { SizeType } from 'antd/lib/config-provider/SizeContext'
 
 type Actions = {
   setLanguage: (language: string) => void
+  clearAllState: () => void
 }
 
 type GlobalState = {
@@ -28,6 +29,10 @@ const useSystemStore = create<GlobalState & Actions>()(set => ({
     set(state => ({
       ...state,
       language
+    })),
+  clearAllState: () =>
+    set(state => ({
+      ...state
     }))
 }))
 

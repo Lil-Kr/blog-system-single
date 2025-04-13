@@ -22,15 +22,15 @@ const axiosInstance: AxiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config: any) => {
     const { token, lastActiveTime, loginStatue, clearToken } = useTokenStore.getState()
-    if (!loginStatue) {
-      config.headers['authorization'] = token
-      return config
-    }
+    // if (!loginStatue) {
+    //   config.headers['authorization'] = token
+    //   return config
+    // }
 
-    if (Date.now() - lastActiveTime > AUTO_LOGOUT_TIME) {
-      clearToken()
-      return Promise.reject(new Error('登录超时, 请重新登录'))
-    }
+    // if (Date.now() - lastActiveTime > AUTO_LOGOUT_TIME) {
+    //   clearToken()
+    //   return Promise.reject(new Error('登录超时, 请重新登录'))
+    // }
 
     config.headers['authorization'] = token
     return config
@@ -43,7 +43,7 @@ axiosInstance.interceptors.request.use(
 )
 
 /**
- * 统一拦截 response
+ * 统一拦截: response
  */
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {

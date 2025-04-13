@@ -25,12 +25,11 @@ function App() {
   /**
    * 全局使用主题
    */
-  useTheme()
+  // useTheme()
 
   /**
    * 设置 antd 语言国际化
    */
-
   useEffect(() => {
     // token有效时执行
     if (token && token !== '') {

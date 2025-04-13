@@ -13,6 +13,7 @@ import { ListCardPage } from '@/components/blog/imageManage/indext'
 
 // api
 import imageCategoryApi from '@/apis/image/imageCategoryApi'
+import { AddImageButtonAcl } from './auth/authImageButton'
 
 const ImageManage = () => {
   const { btnSize, tableSize } = useGlobalStyleStore()
@@ -121,15 +122,21 @@ const ImageManage = () => {
     return data
   }
 
-  const onTabChange = (activeKey: string) => {}
+  const onTabChange = (activeKey: string) => {
+    
+  }
 
   return (
     <>
       <Flex gap={'middle'} vertical={true}>
         <Flex className='operation-btn' vertical={false} gap='small'>
-          <Button size={btnSize} type='primary' icon={<PlusOutlined />} onClick={() => create(activeKey as string)}>
-            {'添加'}
-          </Button>
+          <AddImageButtonAcl
+            text={'添加'}
+            size={btnSize}
+            type='primary'
+            icon={<PlusOutlined />}
+            onClick={() => create(activeKey as string)}
+          />
         </Flex>
         <Tabs
           activeKey={activeKey}

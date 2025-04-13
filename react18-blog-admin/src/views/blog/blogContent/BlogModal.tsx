@@ -74,7 +74,7 @@ const BlogModal = () => {
         categoryId: modalReq?.categoryInfo?.value ?? '',
         original: modalReq?.original ?? '',
         recommend: modalReq?.recommend ?? '',
-        status: modalReq?.publishStatue ?? ''
+        status: modalReq?.publishStatue
       }
       setSaveReq(saveReq)
     } else if (action === 'edit') {
@@ -430,7 +430,7 @@ const BlogModal = () => {
                     {blogPublisStatue.length &&
                       blogPublisStatue.map(item => {
                         return (
-                          <Radio key={item.value} value={item.value}>
+                          <Radio key={item.value} value={item.type}>
                             {item.label}
                           </Radio>
                         )

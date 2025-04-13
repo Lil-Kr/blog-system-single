@@ -26,7 +26,7 @@ public interface SysUserService {
 
 	ApiResp<String> add(UserSaveReq req);
 
-	PageResult<SysUserResp> pageUserList(UserListPageReq req);
+	PageResult<SysUserResp> pageList(UserListPageReq req);
 
 	ApiResp<String> edit(UserSaveReq req);
 

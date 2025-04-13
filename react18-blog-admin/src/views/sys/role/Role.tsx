@@ -12,12 +12,15 @@ import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { useDictDetailStore } from '@/store/sys/dictStore'
 import { transformRoleListToTable } from '@/utils/sys/transform'
+import { _SHOW_ROLE_ACL, _SHOW_ROLE_USER, DelRoleBtnAcl, EditRoleBtnAcl } from './auth/authButton'
+import { usePermissionsStore } from '@/store/sys/authStore'
 
 const Role = () => {
   const messageApi = useMessage()
   const { btnSize, tableSize } = useGlobalStyleStore()
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([])
   const { dictStatues } = useDictDetailStore()
+  const { btnSignSet } = usePermissionsStore()
 
   /**
    * role-acl store
@@ -138,7 +141,7 @@ const Role = () => {
       width: '20%',
       render: (text, record, _, action) => [
         <Flex key={`edit-${record.key}`} vertical={false} gap={4}>
-          <Button
+          <EditRoleBtnAcl
             size={btnSize}
             name='edit'
             type='link'
@@ -157,7 +160,7 @@ const Role = () => {
             okText='确定'
             cancelText='取消'
           >
-            <Button size={'small'} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
+            <DelRoleBtnAcl size={'small'} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Flex>
       ]
@@ -167,7 +170,7 @@ const Role = () => {
   /**
    * tab component
    */
-  const tabsItem: TabsProps['items'] = [
+  const allTabs: TabsProps['items'] = [
     {
       key: '1',
       label: '角色与权限',
@@ -179,6 +182,17 @@ const Role = () => {
       children: <RoleUser />
     }
   ]
+
+  // 根据权限过滤 tabs
+  const tabsItem = allTabs.filter(tab => {
+    if (tab.key === '1') {
+      return btnSignSet.has(_SHOW_ROLE_ACL)
+    }
+    if (tab.key === '2') {
+      return btnSignSet.has(_SHOW_ROLE_USER)
+    }
+    return false // 默认不显示
+  })
 
   /**
    * 初始化数据
@@ -240,15 +254,6 @@ const Role = () => {
   const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
     retrievePageRoleList({ currentPageNum, pageSize })
   }
-
-  // /**
-  //  * page component
-  //  * @param currentPageNum
-  //  * @param pageSize
-  //  */
-  // const onShowSizeChange: PaginationProps['onShowSizeChange'] = (currentPageNum, pageSize) => {
-  //   setTablePageInfo({ ...tablePageInfo, pageSize })
-  // }
 
   /**
    * 删除角色

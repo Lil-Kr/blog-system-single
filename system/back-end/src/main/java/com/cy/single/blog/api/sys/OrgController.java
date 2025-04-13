@@ -75,9 +75,9 @@ public class OrgController {
 	 */
 	@RecordLogger
 	@CheckAuth
-	@PostMapping("/pageOrgList")
-	public ApiResp<PageResult<SysOrgResp>> pageOrgList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) OrgPageReq req) {
-		PageResult<SysOrgResp> list = orgService.pageOrgList(req);
+	@PostMapping("/pageList")
+	public ApiResp<PageResult<SysOrgResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) OrgPageReq req) {
+		PageResult<SysOrgResp> list = orgService.pageList(req);
 		return ApiResp.success(list);
 	}
 

@@ -132,16 +132,12 @@ const initAclModule = async () => {
  * @param token
  */
 const resetPermissionRouters = async (token?: string) => {
-  // const setMenuTree = usePermissionsStore.getState().setMenuTree
-  const setMenuItems = usePermissionsStore.getState().setMenuItems
-  const setBtnSignSet = usePermissionsStore.getState().setBtnSign
-  const setBreadcrumbMap = useBreadcrumbStore.getState().setBreadcrumbMap
-  const setTabMap = usePermissionsStore.getState().setTabMap
-  const clearToken = useTokenStore.getState().clearToken
-  const restMenuState = useMenuStore.getState().restMenuState
-  const resetTabs = useTabsStore.getState().resetTabs
-
   if (token && token !== '') {
+    const setMenuItems = usePermissionsStore.getState().setMenuItems
+    const setBtnSignSet = usePermissionsStore.getState().setBtnSign
+    const setBreadcrumbMap = useBreadcrumbStore.getState().setBreadcrumbMap
+    const setTabMap = usePermissionsStore.getState().setTabMap
+
     // 请求后端权限数据
     const resPermission = await initUserPermission()
     const { menuList, btnSignList } = resPermission
@@ -181,6 +177,10 @@ const resetPermissionRouters = async (token?: string) => {
      */
     initAclModule()
   } else {
+    const clearToken = useTokenStore.getState().clearToken
+    const restMenuState = useMenuStore.getState().restMenuState
+    const resetTabs = useTabsStore.getState().resetTabs
+
     rootRouterConfig.setRoutes(baseRouterConfig)
     // 退出登陆时重置所有信息
     clearToken()

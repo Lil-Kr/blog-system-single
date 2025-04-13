@@ -24,7 +24,13 @@ import { UserListPageReq, UserTableType } from '@/types/apis/sys/user/userType'
 import { orgApi, userApi } from '@/apis/sys'
 import { OptionType } from '@/types/apis'
 import { Key } from 'antd/lib/table/interface'
-import { AddUserButtonAcl, DelUserButtonAcl, EditUserButtonAcl } from './auth/authButton'
+import {
+  AddUserButtonAcl,
+  DelUserButtonAcl,
+  EditUserButtonAcl,
+  LookUserBtnAcl,
+  QueryUserBtnAcl
+} from './auth/authButton'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { transformUserListToTable } from '@/utils/sys/transform'
 import UserModal from '@/components/modal/UserModal'
@@ -117,7 +123,7 @@ const User = () => {
       width: '10%',
       render: (_: object, record: UserTableType) => (
         <Flex vertical={false} gap={8}>
-          <Button
+          <LookUserBtnAcl
             size={btnSize}
             name='look'
             type='link'
@@ -125,6 +131,7 @@ const User = () => {
             icon={<SearchOutlined />}
             onClick={() => lookUser(record.key ?? '', record)}
           />
+
           <EditUserButtonAcl
             size={btnSize}
             name='edit'
@@ -402,33 +409,29 @@ const User = () => {
           </Col>
           <Col span={20} style={{ width: '100%', height: '100%' }}>
             <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
-              <Flex vertical={true} gap={'small'}>
-                <div className='operation-btn'>
-                  <Flex vertical={false} gap='small'>
-                    <AddUserButtonAcl
-                      text={'添加'}
-                      size={btnSize}
-                      type='primary'
-                      icon={<PlusOutlined />}
-                      onClick={createUser}
-                    />
-                    <Form form={form}>
-                      <Flex gap={8}>
-                        <Form.Item name={'keyWords'} label={'搜索关键字'}>
-                          <Input style={{ width: '10vw' }} size={inputSize} placeholder={'搜索关键字'} />
-                        </Form.Item>
-                        <Form.Item>
-                          <Button size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
-                        </Form.Item>
-                        <Form.Item>
-                          <Button size={btnSize} type='primary' onClick={resetSearch}>
-                            {'重置'}
-                          </Button>
-                        </Form.Item>
-                      </Flex>
-                    </Form>
+              <Flex className='operation-btn' vertical={true} gap={'small'}>
+                <Form form={form}>
+                  <Flex gap={8}>
+                    <Form.Item name={'keyWords'} label={'关键字'}>
+                      <Input style={{ width: '10vw' }} size={inputSize} placeholder={'搜索关键字'} />
+                    </Form.Item>
+                    <Form.Item>
+                      <QueryUserBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+                    </Form.Item>
+                    <Form.Item>
+                      <QueryUserBtnAcl text={'重置'} size={btnSize} type='primary' onClick={resetSearch} />
+                    </Form.Item>
                   </Flex>
-                </div>
+                </Form>
+                <Flex gap='small'>
+                  <AddUserButtonAcl
+                    text={'添加'}
+                    size={btnSize}
+                    type='primary'
+                    icon={<PlusOutlined />}
+                    onClick={createUser}
+                  />
+                </Flex>
                 {/* show table info */}
                 <div className='list'>
                   <Table

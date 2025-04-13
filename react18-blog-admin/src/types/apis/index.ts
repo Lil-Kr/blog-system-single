@@ -10,6 +10,7 @@ type BaseApi = {
 }
 
 type OptionType = {
+  id?: string
   value?: string
   label?: string
   type?: string
