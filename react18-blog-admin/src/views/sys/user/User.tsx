@@ -25,6 +25,7 @@ import { orgApi, userApi } from '@/apis/sys'
 import { OptionType } from '@/types/apis'
 import { Key } from 'antd/lib/table/interface'
 import {
+  _QUERY_USER_ACL,
   AddUserButtonAcl,
   DelUserButtonAcl,
   EditUserButtonAcl,
@@ -34,6 +35,7 @@ import {
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { transformUserListToTable } from '@/utils/sys/transform'
 import UserModal from '@/components/modal/UserModal'
+import { usePermissionsStore } from '@/store/sys/authStore'
 
 const User = () => {
   const userColumns: ColumnsType<UserTableType> = [
@@ -177,6 +179,7 @@ const User = () => {
   // 默认展开所有节点
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
   const [selectedInfo, setSelectedInfo] = useState<OptionType>({} as OptionType)
+  const { btnSignSet } = usePermissionsStore()
 
   /**
    * 初始化数据
@@ -410,19 +413,21 @@ const User = () => {
           <Col span={20} style={{ width: '100%', height: '100%' }}>
             <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
               <Flex className='operation-btn' vertical={true} gap={'small'}>
-                <Form form={form}>
-                  <Flex gap={8}>
-                    <Form.Item name={'keyWords'} label={'关键字'}>
-                      <Input style={{ width: '10vw' }} size={inputSize} placeholder={'搜索关键字'} />
-                    </Form.Item>
-                    <Form.Item>
-                      <QueryUserBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
-                    </Form.Item>
-                    <Form.Item>
-                      <QueryUserBtnAcl text={'重置'} size={btnSize} type='primary' onClick={resetSearch} />
-                    </Form.Item>
-                  </Flex>
-                </Form>
+                {btnSignSet.has(_QUERY_USER_ACL) ? (
+                  <Form form={form}>
+                    <Flex gap={8}>
+                      <Form.Item name={'keyWords'} label={'关键字'}>
+                        <Input style={{ width: '10vw' }} size={inputSize} placeholder={'搜索关键字'} />
+                      </Form.Item>
+                      <Form.Item>
+                        <QueryUserBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+                      </Form.Item>
+                      <Form.Item>
+                        <QueryUserBtnAcl text={'重置'} size={btnSize} type='primary' onClick={resetSearch} />
+                      </Form.Item>
+                    </Flex>
+                  </Form>
+                ) : null}
                 <Flex gap='small'>
                   <AddUserButtonAcl
                     text={'添加'}

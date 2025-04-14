@@ -17,48 +17,49 @@ interface Props {
  * [新增]博客按钮
  * @returns
  */
-const AddBlogButton: React.FC<Props> = ({ text, ...props }) => {
+const AddBlogBtn: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
-const AddBlogButtonAcl = withPermission(AddBlogButton, '_add_blog')
-export { AddBlogButtonAcl }
+const AddBlogBtnAcl = withPermission(AddBlogBtn, '_add_blog')
+export { AddBlogBtnAcl }
 
 /**
  * [编辑]博客信息
  * @returns
  */
-const EditBlogButton: React.FC<Props> = ({ text, ...props }) => {
+const EditBlogBtn: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
-const EditBlogButtonAcl = withPermission(EditBlogButton, '_edit_blog')
-export { EditBlogButtonAcl }
+const EditBlogBtnAcl = withPermission(EditBlogBtn, '_edit_blog')
+export { EditBlogBtnAcl }
 
 /**
  * [删除]博客信息
  * @returns
  */
-const DelBlogButton: React.FC<Props> = ({ text, ...props }) => {
+const DelBlogBtn: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
-const DelBlogButtonAcl = withPermission(DelBlogButton, '_del_blog')
-export { DelBlogButtonAcl }
+const DelBlogBtnAcl = withPermission(DelBlogBtn, '_del_blog')
+export { DelBlogBtnAcl }
 
 /**
  * [删除]博客信息
  * @returns
  */
-const PublishBlogButton: React.FC<Props> = ({ text, ...props }) => {
+const PublishBlogBtn: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
-const PublishBlogButtonAcl = withPermission(PublishBlogButton, '_publish_blog')
-export { PublishBlogButtonAcl }
+const PublishBlogBtnAcl = withPermission(PublishBlogBtn, '_publish_blog')
+export { PublishBlogBtnAcl }
 
 /**
  * [分页查询]博客信息
  * @returns
  */
-const QueryBlogButton: React.FC<Props> = ({ text, ...props }) => {
+const QueryBlogBtn: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
-const QueryBlogButtonAcl = withPermission(QueryBlogButton, '_query_blog')
-export { QueryBlogButtonAcl }
+const QueryBlogBtnAcl = withPermission(QueryBlogBtn, '_query_blog')
+const _QUERY_BLOG_ACL = '_query_blog'
+export { QueryBlogBtnAcl, _QUERY_BLOG_ACL }

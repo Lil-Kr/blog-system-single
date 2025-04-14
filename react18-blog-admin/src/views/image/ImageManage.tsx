@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons'
-import { Button, Flex, Tabs } from 'antd'
+import { Flex, Tabs } from 'antd'
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import type { Tab } from 'node_modules/rc-tabs/lib/interface'
 import { GetImageCategoryReq, ImageCategoryReq, ImageCategory, ImageCategoryVO } from '@/types/apis/image/imageType'
@@ -122,9 +122,7 @@ const ImageManage = () => {
     return data
   }
 
-  const onTabChange = (activeKey: string) => {
-    
-  }
+  const onTabChange = (activeKey: string) => {}
 
   return (
     <>

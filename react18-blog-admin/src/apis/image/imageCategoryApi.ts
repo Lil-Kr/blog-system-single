@@ -11,7 +11,6 @@ import {
   DelImageCategoryReq,
   ImageCategoryEditReq
 } from '@/types/apis/image/imageType'
-import { BaseDelReq } from '@/types/base'
 
 const imageCategoryApi: ImageCategoryApi = {
   pageImageCategoryList(req: ImageCategoryPageReq) {

@@ -84,7 +84,7 @@ public class RoleController {
   @CheckAuth
   @RecordLogger
   @PostMapping("/edit")
-  public ApiResp<String> edit (@RequestBody @Validated({RoleSaveReq.GroupEdite.class}) RoleSaveReq req) throws Exception {
+  public ApiResp<String> edit (@RequestBody @Validated({RoleSaveReq.GroupEdite.class}) RoleSaveReq req) {
     return roleService.edit(req);
   }
 
@@ -112,8 +112,7 @@ public class RoleController {
   }
 
   /**
-   * 获取当前用户所拥有的[角色-权限]树
-   * retrieve current user`s [role-acl] tree
+   * retrieve current user have [role-acl] tree
    * @param req
    * @return
    * @throws Exception
@@ -130,7 +129,7 @@ public class RoleController {
   }
 
   /**
-   * 查询[角色-用户]列表
+   * query[role-user] list
    * @param req
    * @return
    * @throws Exception
@@ -143,8 +142,7 @@ public class RoleController {
   }
 
   /**
-   * 修改[角色-权限点]关系接口
-   * update
+   * update[role-acl]
    * @param req
    * @return
    * @throws Exception
@@ -157,7 +155,7 @@ public class RoleController {
   }
 
   /**
-   * 修改[角色-用户]关系接口
+   * update[role-user]
    * @param req
    * @return
    * @throws Exception

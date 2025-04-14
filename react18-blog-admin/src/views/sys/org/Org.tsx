@@ -26,7 +26,15 @@ import { initOrgData, useOrgModalStore, useOrgStore } from '@/store/sys/orgStore
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { transformOrgListToSeletor, transformOrgListToTable } from '@/utils/sys/transform'
 import { OptionType } from '@/types/apis'
-import { AddOrgBtnAcl, DelOrgBtnAcl, EditOrgBtnAcl, LookOrgBtnAcl, QueryUserBtnAcl } from './auth/authButton'
+import {
+  _QUERY_ORG_ACL,
+  AddOrgBtnAcl,
+  DelOrgBtnAcl,
+  EditOrgBtnAcl,
+  LookOrgBtnAcl,
+  QueryUserBtnAcl
+} from './auth/authButton'
+import { usePermissionsStore } from '@/store/sys/authStore'
 
 /**
  * org page
@@ -175,6 +183,7 @@ const Org = () => {
   } = useOrgStore()
 
   const { setOrgModalState } = useOrgModalStore()
+  const { btnSignSet } = usePermissionsStore()
 
   /**
    * 初始化数据
@@ -452,19 +461,21 @@ const Org = () => {
           <Col span={20} style={{ width: '100%', height: '100%' }}>
             <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
               <Flex vertical={true} gap={'small'}>
-                <Form form={form}>
-                  <Flex gap='small'>
-                    <Form.Item name={'keyWords'} label={'关键字'}>
-                      <Input size={inputSize} placeholder={'搜索关键字'} />
-                    </Form.Item>
-                    <Form.Item>
-                      <QueryUserBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
-                    </Form.Item>
-                    <Form.Item>
-                      <QueryUserBtnAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
-                    </Form.Item>
-                  </Flex>
-                </Form>
+                {btnSignSet.has(_QUERY_ORG_ACL) ? (
+                  <Form form={form}>
+                    <Flex gap='small'>
+                      <Form.Item name={'keyWords'} label={'关键字'}>
+                        <Input size={inputSize} placeholder={'搜索关键字'} />
+                      </Form.Item>
+                      <Form.Item>
+                        <QueryUserBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+                      </Form.Item>
+                      <Form.Item>
+                        <QueryUserBtnAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
+                      </Form.Item>
+                    </Flex>
+                  </Form>
+                ) : null}
                 <Flex gap={'small'}>
                   <AddOrgBtnAcl text='添加' size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createOrg} />
                 </Flex>

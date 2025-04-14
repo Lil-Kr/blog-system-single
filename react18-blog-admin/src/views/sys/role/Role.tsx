@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons/lib/icons'
-import { Button, Flex, PaginationProps, Popconfirm, Splitter, Tabs, TabsProps, Tag } from 'antd/lib'
+import { Flex, PaginationProps, Popconfirm, Splitter, Tabs, TabsProps, Tag } from 'antd/lib'
 import { TableRowSelection } from 'antd/lib/table/interface'
 import { RoleAddReq, RoleEditReq, RoleListPageReq, RoleTableType } from '@/types/apis/sys/role/roleType'
 import roleApi from '@/apis/sys/roleApi'
@@ -12,7 +12,7 @@ import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { useDictDetailStore } from '@/store/sys/dictStore'
 import { transformRoleListToTable } from '@/utils/sys/transform'
-import { _SHOW_ROLE_ACL, _SHOW_ROLE_USER, DelRoleBtnAcl, EditRoleBtnAcl } from './auth/authButton'
+import { _ADD_ROLE, _SHOW_ROLE_ACL, _SHOW_ROLE_USER, DelRoleBtnAcl, EditRoleBtnAcl } from './auth/authButton'
 import { usePermissionsStore } from '@/store/sys/authStore'
 
 const Role = () => {
@@ -274,7 +274,7 @@ const Role = () => {
     <div className='sys-role-warpper' style={{ height: '100%', width: '100%' }}>
       <Flex gap='middle' vertical={true} style={{ height: '100%', width: '100%' }}>
         <Splitter style={{ height: '100%', width: '100%', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', flex: 'auto' }}>
-          <Splitter.Panel defaultSize='40%' min='20%' max='60%'>
+          <Splitter.Panel defaultSize='30%' min='20%' max='70%'>
             <EditableProTable
               rowKey='key'
               headerTitle={'角色管理'}
@@ -284,23 +284,27 @@ const Role = () => {
               loading={tableLoading}
               columns={roleColumns}
               value={roleList}
-              recordCreatorProps={{
-                position: 'bottom',
-                creatorButtonText: '新增角色',
-                // 默认值
-                record: () => ({
-                  key: (Math.random() * 1000000).toFixed(0), // 生成唯一的 key
-                  surrogateId: '',
-                  name: '',
-                  type: 2,
-                  status: 0,
-                  remark: ''
-                })
-              }}
+              recordCreatorProps={
+                btnSignSet.has(_ADD_ROLE)
+                  ? {
+                      position: 'bottom',
+                      creatorButtonText: '新增角色',
+                      // 默认值
+                      record: () => ({
+                        key: (Math.random() * 1000000).toFixed(0), // 生成唯一的 key
+                        surrogateId: '',
+                        name: '',
+                        type: 2,
+                        status: 0,
+                        remark: ''
+                      })
+                    }
+                  : false
+              }
               tableAlertRender={false} // 直接隐藏 "已选择 X 项"
               tableAlertOptionRender={false} // 隐藏操作选项
               editable={{
-                type: 'multiple',
+                type: 'single',
                 editableKeys,
                 onSave: async (rowKey, rowData, row) => {
                   const typeValue =

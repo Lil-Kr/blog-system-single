@@ -68,7 +68,7 @@ const ImageCategoryModal = () => {
   }
 
   return (
-    <div>
+    <div className='image-category-modal'>
       <Modal
         title={title}
         width={'50vw'}
@@ -83,7 +83,13 @@ const ImageCategoryModal = () => {
         // afterClose={resetForm}
         // forceRender={true} // 强制渲染
       >
-        <Form form={modalForm} disabled={inputDisabled} labelCol={{ flex: '100px' }}>
+        <Form
+          form={modalForm}
+          preserve={false}
+          disabled={inputDisabled}
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 18 }}
+        >
           <Form.Item name={'key'} hidden>
             <Input />
           </Form.Item>

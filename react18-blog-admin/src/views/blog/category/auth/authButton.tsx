@@ -61,4 +61,5 @@ const QueryCategoryButton: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
 const QueryCategoryButtonAcl = withPermission(QueryCategoryButton, '_query_category')
-export { QueryCategoryButtonAcl }
+const _QUERY_CATEGORY_ACL = '_query_category'
+export { QueryCategoryButtonAcl, _QUERY_CATEGORY_ACL }

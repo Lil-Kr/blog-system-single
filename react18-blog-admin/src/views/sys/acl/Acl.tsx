@@ -44,6 +44,7 @@ import { useAclModalStore, useAclModuleModalStore } from '@/store/sys/aclStore'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { transformAclListToTable } from '@/utils/sys/transform'
 import {
+  _QUERY_ACL_ACL,
   AddAclBtnAcl,
   AddAclModuleBtnAcl,
   DelAclBtnAcl,
@@ -52,6 +53,8 @@ import {
   EditAclModuleBtnAcl,
   QueryAclBtnAcl
 } from './auth/authButton'
+import { usePermissionsStore } from '@/store/sys/authStore'
+import { transformToDay } from '@/utils/sys/timeTransform'
 
 const Acl = () => {
   const columnAcl: ColumnsType<AclTableListType> = [
@@ -60,21 +63,23 @@ const Acl = () => {
       dataIndex: 'name',
       title: '权限点名',
       width: '8%',
-      render: (_, record: AclTableListType) => <Tag color='purple'>{record.name}</Tag>
+      fixed: 'left',
+      render: (_, record) => <Tag color='purple'>{record.name}</Tag>
     },
     {
       key: 'aclModuleName',
       dataIndex: 'aclModuleName',
       title: '权限模块',
       width: '5%',
-      render: (_, record: AclTableListType) => <Tag color='magenta'>{record.aclModuleName}</Tag>
+      fixed: 'left',
+      render: (_, record) => <Tag color='magenta'>{record.aclModuleName}</Tag>
     },
     {
       key: 'type',
       dataIndex: 'type',
       title: '权限类型',
       width: '5%',
-      render: (_, record: AclTableListType) => {
+      render: (_, record) => {
         let color = 'volcano'
         switch (record.type) {
           case 1:
@@ -97,7 +102,7 @@ const Acl = () => {
       key: 'menuName',
       dataIndex: 'menuName',
       title: '菜单名称',
-      width: '8%',
+      width: '6%',
       render: (_, record: AclTableListType) => {
         if (record.menuName.startsWith('-')) {
           return record.menuName
@@ -110,13 +115,13 @@ const Acl = () => {
       key: 'menuUrl',
       dataIndex: 'menuUrl',
       title: '路由url',
-      width: '7%'
+      width: '8%'
     },
     {
       key: 'btnSign',
       dataIndex: 'btnSign',
       title: '按钮权限点',
-      width: '7%'
+      width: '8%'
     },
     {
       key: 'url',
@@ -135,7 +140,7 @@ const Acl = () => {
       dataIndex: 'status',
       title: '状态',
       width: '5%',
-      render: (_, record: AclTableListType) => {
+      render: (_, record) => {
         // 默认颜色
         let tagColor = 'green'
         const statusType = dictStatues.find(item => item.value === record.status.toString())
@@ -168,13 +173,15 @@ const Acl = () => {
       key: 'createTime',
       dataIndex: 'createTime',
       title: '创建时间',
-      width: '10%'
+      width: '10%',
+      render: (_, record) => transformToDay(record.createTime)
     },
     {
       key: 'updateTime',
       dataIndex: 'updateTime',
       title: '修改时间',
-      width: '10%'
+      width: '10%',
+      render: (_, record) => transformToDay(record.createTime)
     },
     {
       key: 'operatorName',
@@ -187,7 +194,8 @@ const Acl = () => {
       dataIndex: 'oparet',
       title: '操作',
       width: '5%',
-      render: (_: object, record: AclTableListType) => (
+      fixed: 'right',
+      render: (_: object, record) => (
         <Flex vertical={false} gap={8}>
           <EditAclBtnAcl
             size={btnSize}
@@ -213,7 +221,6 @@ const Acl = () => {
   ]
 
   const messageApi = useMessage()
-  const MemoTooltip = Tooltip || React.memo(Tooltip)
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
   const [form] = useForm()
   const [tableLoading, setTableLoading] = useState<boolean>(true)
@@ -234,6 +241,7 @@ const Acl = () => {
   const { setAclModuelState } = useAclModuleModalStore()
   const { setAclModalState } = useAclModalStore()
   const { setIsMenu } = useAclModuleStore()
+  const { btnSignSet } = usePermissionsStore()
 
   /**
    * 初始化数据
@@ -359,7 +367,6 @@ const Acl = () => {
 
     /**
      * 加载当前选中的权限模块信息, 并保存到状态中
-     * // todo 优化此处代码, 减少不必要的请求
      */
     const aclModule = await getAclModule({ surrogateId: selectKey })
     setSelectedInfo(prevState => ({
@@ -611,19 +618,21 @@ const Acl = () => {
           <Col span={20} style={{ width: '100%', height: '100%' }}>
             <Card style={{ height: '100%', overflowY: 'auto', overflowX: 'auto', whiteSpace: 'nowrap', flex: '1 1 0' }}>
               <Flex vertical={true} gap={'small'}>
-                <Form form={form}>
-                  <Flex gap='small'>
-                    <Form.Item name={'keyWords'} label={'关键字'}>
-                      <Input size={inputSize} placeholder={'搜索关键字'} />
-                    </Form.Item>
-                    <Form.Item>
-                      <QueryAclBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
-                    </Form.Item>
-                    <Form.Item>
-                      <QueryAclBtnAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
-                    </Form.Item>
-                  </Flex>
-                </Form>
+                {btnSignSet.has(_QUERY_ACL_ACL) ? (
+                  <Form form={form}>
+                    <Flex gap='small'>
+                      <Form.Item name={'keyWords'} label={'关键字'}>
+                        <Input size={inputSize} placeholder={'搜索关键字'} />
+                      </Form.Item>
+                      <Form.Item>
+                        <QueryAclBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+                      </Form.Item>
+                      <Form.Item>
+                        <QueryAclBtnAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
+                      </Form.Item>
+                    </Flex>
+                  </Form>
+                ) : null}
                 <Flex gap='small'>
                   <AddAclBtnAcl text='添加' size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createAcl} />
                 </Flex>
@@ -640,6 +649,7 @@ const Acl = () => {
                       type: 'checkbox',
                       ...rowSelection
                     }}
+                    scroll={{ x: 'max-content', y: '50vh' }}
                     pagination={{
                       position: ['bottomLeft'],
                       showQuickJumper: false, // 跳转指定页面

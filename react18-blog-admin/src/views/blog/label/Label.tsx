@@ -11,12 +11,14 @@ import { labelTransformToTable } from '@/utils/blog/labelTransform'
 import { useLabelModalStore, useLabelStore } from '@/store/blog/labelStore'
 import LabelModal from './LabelModal'
 import {
+  _QUERY_LABEL_ACL,
   AddLabelButtonAcl,
   DelLabelButtonAcl,
   EditLabelButtonAcl,
   LookLabelButtonAcl,
   QueryLabelButtonAcl
 } from './auth/authButton'
+import { usePermissionsStore } from '@/store/sys/authStore'
 
 const BlogLabel = () => {
   const messageApi = useMessage()
@@ -25,6 +27,7 @@ const BlogLabel = () => {
     useLabelStore()
   const { setLabelState } = useLabelModalStore()
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
+  const { btnSignSet } = usePermissionsStore()
 
   const columnsLable: ColumnsType<LabelListTableType> = [
     {
@@ -252,19 +255,21 @@ const BlogLabel = () => {
   return (
     <div className='blog-label-warpper'>
       <Flex gap='middle' vertical={true}>
-        <Form form={form}>
-          <Flex gap='small'>
-            <Form.Item name={'keyWord'} label='搜索关键字'>
-              <Input size={inputSize} placeholder='搜索关键字' />
-            </Form.Item>
-            <Form.Item>
-              <QueryLabelButtonAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
-            </Form.Item>
-            <Form.Item>
-              <QueryLabelButtonAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
-            </Form.Item>
-          </Flex>
-        </Form>
+        {btnSignSet.has(_QUERY_LABEL_ACL) ? (
+          <Form form={form}>
+            <Flex gap='small'>
+              <Form.Item name={'keyWord'} label='关键字'>
+                <Input size={inputSize} placeholder='搜索关键字' />
+              </Form.Item>
+              <Form.Item>
+                <QueryLabelButtonAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+              </Form.Item>
+              <Form.Item>
+                <QueryLabelButtonAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
+              </Form.Item>
+            </Flex>
+          </Form>
+        ) : null}
         <div className='operation-btn'>
           <Flex gap='small'>
             <AddLabelButtonAcl

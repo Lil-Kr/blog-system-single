@@ -1,19 +1,13 @@
 import React, { useEffect } from 'react'
-import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Table, Tag } from 'antd'
+import { Flex, Form, Input, PaginationProps, Popconfirm, Table, Tag } from 'antd'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import {
   ApiTwoTone,
-  CheckCircleTwoTone,
   DeleteOutlined,
   DownCircleTwoTone,
   EditOutlined,
   RocketTwoTone,
-  RollbackOutlined,
-  SearchOutlined,
-  ToTopOutlined,
-  UploadOutlined,
-  UpSquareTwoTone,
-  VerticalAlignTopOutlined
+  SearchOutlined
 } from '@ant-design/icons'
 import { useForm } from 'antd/es/form/Form'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
@@ -22,7 +16,7 @@ import BlogModal from './BlogModal'
 import { useDictDetailStore } from '@/store/sys/dictStore'
 import labelApi from '@/apis/blog/label/labelApi'
 import { LabelListReq } from '@/types/apis/blog/labelType'
-import { Radio, Select, Tooltip } from 'antd/lib'
+import { Select, Tooltip } from 'antd/lib'
 import { useLabelStore } from '@/store/blog/labelStore'
 import { transformBlogToTable, transformCategoryToSelector, transformTopicToSelector } from '@/utils/blog/blogTransform'
 import blogCategoryApi from '@/apis/blog/category/categoryApi'
@@ -30,11 +24,19 @@ import { BlogCategoryReq } from '@/types/apis/blog/category'
 import blogTopicApi from '@/apis/blog/topic/topicApi'
 import { BlogTopicListReq } from '@/types/apis/blog/topicType'
 import { useMessage } from '@/components/message/MessageProvider'
-import { transformDictTypeToSeletor, transformTypeToSeletorById } from '@/utils/sys/transform'
+import { transformDictTypeToSeletor } from '@/utils/sys/transform'
 
 // api
 import blogContentApi, { BlogContent, BlogContentTableType, BlogContentReq } from '@/apis/blog/content/blogContentApi'
-import { AddBlogButtonAcl, EditBlogButtonAcl, PublishBlogButtonAcl, QueryBlogButtonAcl } from './auth/authButton'
+import {
+  _QUERY_BLOG_ACL,
+  AddBlogBtnAcl,
+  DelBlogBtnAcl,
+  EditBlogBtnAcl,
+  PublishBlogBtnAcl,
+  QueryBlogBtnAcl
+} from './auth/authButton'
+import { usePermissionsStore } from '@/store/sys/authStore'
 
 const BlogList = () => {
   const columnsBlog: ColumnsType<BlogContentTableType> = [
@@ -182,7 +184,7 @@ const BlogList = () => {
             case 0:
               return (
                 <Tooltip title='发布'>
-                  <PublishBlogButtonAcl
+                  <PublishBlogBtnAcl
                     size={btnSize}
                     type='link'
                     icon={<RocketTwoTone twoToneColor='#c41d7f' />}
@@ -193,10 +195,10 @@ const BlogList = () => {
             case 1:
               return (
                 <Tooltip title='下架'>
-                  <PublishBlogButtonAcl
+                  <PublishBlogBtnAcl
                     size={btnSize}
                     type='link'
-                    icon={<DownCircleTwoTone twoToneColor='#f5222d' />}
+                    icon={<DownCircleTwoTone twoToneColor='#52c41a' />}
                     onClick={() => publishBlog(record)}
                   />
                 </Tooltip>
@@ -204,7 +206,7 @@ const BlogList = () => {
             case 2:
               return (
                 <Tooltip title='上线'>
-                  <PublishBlogButtonAcl
+                  <PublishBlogBtnAcl
                     size={btnSize}
                     type='link'
                     icon={<ApiTwoTone twoToneColor='#ffa940' />}
@@ -222,7 +224,7 @@ const BlogList = () => {
             {renderStatusButton()}
 
             <Tooltip title='编辑博客'>
-              <EditBlogButtonAcl
+              <EditBlogBtnAcl
                 size={btnSize}
                 name='edit'
                 type='link'
@@ -240,7 +242,14 @@ const BlogList = () => {
                 okText='确定'
                 cancelText='取消'
               >
-                <Button size={btnSize} name='delete' type='link' shape='circle' danger icon={<DeleteOutlined />} />
+                <DelBlogBtnAcl
+                  size={btnSize}
+                  name='delete'
+                  type='link'
+                  shape='circle'
+                  danger
+                  icon={<DeleteOutlined />}
+                />
               </Popconfirm>
             </Tooltip>
           </Flex>
@@ -257,6 +266,8 @@ const BlogList = () => {
   const { setBlogModalData } = useBlogModalStore()
   const { setLabelList } = useLabelStore()
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
+  const { btnSignSet } = usePermissionsStore()
+
   /**
    * 初始化数据
    */
@@ -535,34 +546,35 @@ const BlogList = () => {
   return (
     <div className='blogs-publish-index-warpper'>
       <Flex gap={2} vertical={true}>
-        <Form form={form}>
-          <Flex vertical={false} gap={10}>
-            <Form.Item key={0} name={'keyWords'} label='关键字'>
-              <Input size={inputSize} placeholder='搜索关键字' />
-            </Form.Item>
-
-            <Form.Item key={1} name={'status'} label={'发布状态'}>
-              <Select
-                style={{ width: 150 }}
-                size={inputSize}
-                showSearch
-                placeholder='选择发布状态'
-                optionFilterProp='children'
-                options={blogPublisStatue}
-                onChange={value => handleChangeCategory(value)}
-              />
-            </Form.Item>
-            <Form.Item key={2}>
-              <QueryBlogButtonAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
-            </Form.Item>
-            <Form.Item key={3}>
-              <QueryBlogButtonAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
-            </Form.Item>
-          </Flex>
-        </Form>
+        {btnSignSet.has(_QUERY_BLOG_ACL) ? (
+          <Form form={form}>
+            <Flex vertical={false} gap={10}>
+              <Form.Item key={0} name={'keyWords'} label='关键字'>
+                <Input size={inputSize} placeholder='搜索关键字' />
+              </Form.Item>
+              <Form.Item key={1} name={'status'} label={'发布状态'}>
+                <Select
+                  style={{ width: 150 }}
+                  size={inputSize}
+                  showSearch
+                  placeholder='选择发布状态'
+                  optionFilterProp='children'
+                  options={blogPublisStatue}
+                  onChange={value => handleChangeCategory(value)}
+                />
+              </Form.Item>
+              <Form.Item key={2}>
+                <QueryBlogBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+              </Form.Item>
+              <Form.Item key={3}>
+                <QueryBlogBtnAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
+              </Form.Item>
+            </Flex>
+          </Form>
+        ) : null}
 
         <Flex gap='small'>
-          <AddBlogButtonAcl text={'创建博客'} size={btnSize} type='primary' onClick={createBlog} />
+          <AddBlogBtnAcl text={'创建博客'} size={btnSize} type='primary' onClick={createBlog} />
         </Flex>
         <div className='blog-table-wapper'>
           <Table
@@ -580,7 +592,6 @@ const BlogList = () => {
               hideOnSinglePage: false, // only one pageSize then hidden Paginator
               pageSizeOptions: [10, 20, 50], // specify how many items can be displayed on each page
               onChange: onChangePageInfo,
-              // onShowSizeChange: onShowSizeChange,
               showSizeChanger: true,
               pageSize: tablePageInfo.pageSize,
               total: tablePageInfo.totalSize

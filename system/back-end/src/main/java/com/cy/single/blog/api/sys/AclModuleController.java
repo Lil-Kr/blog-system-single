@@ -16,9 +16,9 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * 权限模块管理
- * @author Lil-Kr
- * @since 2020-11-28
+ * @Author: Lil-K
+ * @Date: 2025/3/5
+ * @Description: acl-module api
  */
 @RestController
 @RequestMapping("/sys/aclModule")
@@ -28,7 +28,7 @@ public class AclModuleController {
 	private SysAclModuleService aclModuleService;
 
 	/**
-	 * 新增权限模块
+	 * create acl module
 	 * @param req
 	 * @return
 	 * @throws Exception
@@ -41,7 +41,7 @@ public class AclModuleController {
 	}
 
 	/**
-	 * 更新权限模块
+	 * edit acl module
 	 * @param req
 	 * @return
 	 * @throws Exception
@@ -54,7 +54,7 @@ public class AclModuleController {
 	}
 
 	/**
-	 * 获取单个权限模块信息
+	 * get one record acl module
 	 * @param surrogateId
 	 * @return
 	 */
@@ -66,7 +66,7 @@ public class AclModuleController {
 	}
 
 	/**
-	 * 获得权限模块树
+	 * retrieve acl module tree
 	 * @throws Exception
 	 */
 	@CheckAuth
@@ -77,7 +77,7 @@ public class AclModuleController {
 	}
 
 	/**
-	 * 删除权限模块功能
+	 * delete acl module
 	 * @return
 	 * @throws Exception
 	 */
@@ -89,7 +89,7 @@ public class AclModuleController {
 	}
 
 	/**
-	 * 查询权限模块列表
+	 * query acl module all list
 	 * @return
 	 */
 	@CheckAuth

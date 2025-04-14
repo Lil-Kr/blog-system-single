@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @Author: Lil-K
  * @Date: 2025/3/16
- * @Description: 菜单api
+ * @Description: auth for user-admin api
  */
 @RestController
 @RequestMapping("/sys/auth")
@@ -24,7 +24,7 @@ public class AuthController {
 	private SysPermissionService permissionService;
 
 	/**
-	 * 当前用户对应菜单,
+	 * current user-admin has menu and button permission
 	 * @return
 	 */
 	@CheckAuth

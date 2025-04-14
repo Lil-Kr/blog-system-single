@@ -63,4 +63,5 @@ const QueryUserBtn: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
 const QueryUserBtnAcl = withPermission(QueryUserBtn, '_query_org')
-export { QueryUserBtnAcl }
+const _QUERY_ORG_ACL = '_query_org'
+export { QueryUserBtnAcl, _QUERY_ORG_ACL }

@@ -61,4 +61,5 @@ const QueryTopicButton: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
 const QueryTopicButtonAcl = withPermission(QueryTopicButton, '_query_topic')
-export { QueryTopicButtonAcl }
+const _QUERY_TOPIC_ACL = '_query_topic'
+export { QueryTopicButtonAcl, _QUERY_TOPIC_ACL }

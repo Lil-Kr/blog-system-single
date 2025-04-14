@@ -1,4 +1,8 @@
 export default {
+  system: {
+    errorMsg1: 'network exception',
+    errorMsg2: 'network exception, please try again later!'
+  },
   test: {
     btn: 'click me'
   },
@@ -15,9 +19,6 @@ export default {
     username_message: 'Please input your username!',
     password_message: 'Please input your password!',
     login_failed: 'username or password error!'
-  },
-  home: {
-    welcome: 'Welcome'
   },
   tabs: {
     more: 'More',
@@ -38,5 +39,11 @@ export default {
     changePassword: 'Change Password',
     logout: 'Logout'
   },
-  router: {}
+  router: {},
+  home: {
+    welcome: 'Welcome'
+  },
+  blog: {
+    
+  }
 }

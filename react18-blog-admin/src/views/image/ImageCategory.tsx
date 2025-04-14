@@ -12,11 +12,13 @@ import imageCategoryApi from '@/apis/image/imageCategoryApi'
 import { ImageCategoryModalState, useImageCategoryModalStore, useImageCategoryStore } from '@/store/blog/imageStore'
 import { ImageCategoryModal } from '@/components/blog/imageManage/indext'
 import {
-  AddImageCategoryButtonAcl,
+  _QUERY_IMAGE_CATEGORY_ACL,
+  AddImageCategoryBtnAcl,
   DelImageCategoryButtonAcl,
   EditImageCategoryButtonAcl,
-  QueryImageCategoryButtonAcl
+  QueryImageCategoryBtnAcl
 } from './auth/authImageCategoryButton'
+import { usePermissionsStore } from '@/store/sys/authStore'
 
 const env = import.meta.env
 
@@ -120,7 +122,8 @@ const ImageCategory = () => {
     setTablePageInfo,
     selectionType
   } = useImageCategoryStore()
-  const { title, openModal, inputDisabled, setOpenModal, setImageCategoryModalState } = useImageCategoryModalStore()
+  const { setImageCategoryModalState } = useImageCategoryModalStore()
+  const { btnSignSet } = usePermissionsStore()
 
   useEffect(() => {
     pageImageCategoryList({ currentPageNum: tablePageInfo.currentPageNum, pageSize: tablePageInfo.pageSize })
@@ -242,27 +245,23 @@ const ImageCategory = () => {
   return (
     <div className='image-category-warpper'>
       <Flex gap='small' vertical={true}>
-        <Form form={form}>
-          <Flex vertical={false} gap={8}>
-            <Form.Item name={'keyWords'} label='关键字'>
-              <Input size={inputSize} placeholder='搜索关键字' />
-            </Form.Item>
-            <Form.Item>
-              <QueryImageCategoryButtonAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
-            </Form.Item>
-            <Form.Item>
-              <QueryImageCategoryButtonAcl text='置空' size={btnSize} type='primary' onClick={resetSearch} />
-            </Form.Item>
-          </Flex>
-        </Form>
+        {btnSignSet.has(_QUERY_IMAGE_CATEGORY_ACL) ? (
+          <Form form={form}>
+            <Flex vertical={false} gap={8}>
+              <Form.Item name={'keyWords'} label='关键字'>
+                <Input size={inputSize} placeholder='搜索关键字' />
+              </Form.Item>
+              <Form.Item>
+                <QueryImageCategoryBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+              </Form.Item>
+              <Form.Item>
+                <QueryImageCategoryBtnAcl text='置空' size={btnSize} type='primary' onClick={resetSearch} />
+              </Form.Item>
+            </Flex>
+          </Form>
+        ) : null}
         <Flex className='operation-btn' vertical={false} gap='small'>
-          <AddImageCategoryButtonAcl
-            text='添加'
-            size={btnSize}
-            type='primary'
-            icon={<PlusOutlined />}
-            onClick={create}
-          />
+          <AddImageCategoryBtnAcl text='添加' size={btnSize} type='primary' icon={<PlusOutlined />} onClick={create} />
         </Flex>
 
         <Flex className='list' gap={4} vertical={true}>

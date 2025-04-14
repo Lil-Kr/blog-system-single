@@ -1,13 +1,4 @@
-import type {
-  AnimatedConfig,
-  EditableConfig,
-  OnTabScroll,
-  RenderTabBar,
-  Tab,
-  TabBarExtraContent,
-  TabPosition,
-  TabsLocale
-} from 'node_modules/rc-tabs/lib/interface'
+import type { Tab } from 'node_modules/rc-tabs/lib/interface'
 /**
  * Tabs type
  */

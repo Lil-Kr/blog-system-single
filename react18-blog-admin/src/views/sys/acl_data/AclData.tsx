@@ -9,8 +9,6 @@ import {
   Form,
   Input,
   PaginationProps,
-  Popconfirm,
-  PopconfirmProps,
   Row,
   Table,
   Tag,
@@ -24,13 +22,7 @@ import { TablePageInfoType } from '@/types/base'
 import { aclApi, aclModuleApi } from '@/apis/sys'
 import { transformAclModuleTreeExpandeKeys, transformToAclModuleTreeData } from '@/utils/sys/treeUtils'
 import { AclModuleModal } from '@/components/modal'
-import {
-  AclModuleReq,
-  AclModuleTableType,
-  AclPageListReq,
-  SysAclModule,
-  AclTableListType
-} from '@/types/apis/sys/acl/aclType'
+import { AclModuleReq, AclPageListReq, SysAclModule, AclTableListType } from '@/types/apis/sys/acl/aclType'
 import { SelectOptionType, SelectTreeNodeType } from '@/types/apis'
 import { TableRowSelection } from 'antd/es/table/interface'
 import { ColumnsType } from 'antd/lib/table'
@@ -41,6 +33,7 @@ import { Key } from 'antd/lib/table/interface'
 import { useAclModalStore } from '@/store/sys/aclStore'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { transformAclListToTable } from '@/utils/sys/transform'
+import { transformToDay } from '@/utils/sys/timeTransform'
 
 const AclData = () => {
   const columnAcl: ColumnsType<AclTableListType> = [
@@ -49,6 +42,7 @@ const AclData = () => {
       dataIndex: 'name',
       title: '权限点名',
       width: '8%',
+      fixed: 'left',
       render: (_, record: AclTableListType) => <Tag color='purple'>{record.name}</Tag>
     },
     {
@@ -56,6 +50,7 @@ const AclData = () => {
       dataIndex: 'aclModuleName',
       title: '权限模块',
       width: '5%',
+      fixed: 'left',
       render: (_, record: AclTableListType) => <Tag color='magenta'>{record.aclModuleName}</Tag>
     },
     {
@@ -86,7 +81,7 @@ const AclData = () => {
       key: 'menuName',
       dataIndex: 'menuName',
       title: '菜单名称',
-      width: '8%',
+      width: '6%',
       render: (_, record: AclTableListType) => {
         if (record.menuName.startsWith('-')) {
           return record.menuName
@@ -99,13 +94,13 @@ const AclData = () => {
       key: 'menuUrl',
       dataIndex: 'menuUrl',
       title: '路由url',
-      width: '7%'
+      width: '8%'
     },
     {
       key: 'btnSign',
       dataIndex: 'btnSign',
       title: '按钮权限点',
-      width: '7%'
+      width: '8%'
     },
     {
       key: 'url',
@@ -157,13 +152,15 @@ const AclData = () => {
       key: 'createTime',
       dataIndex: 'createTime',
       title: '创建时间',
-      width: '10%'
+      width: '10%',
+      render: (_, record) => transformToDay(record.createTime)
     },
     {
       key: 'updateTime',
       dataIndex: 'updateTime',
       title: '修改时间',
-      width: '10%'
+      width: '10%',
+      render: (_, record) => transformToDay(record.createTime)
     },
     {
       key: 'operatorName',
@@ -176,6 +173,7 @@ const AclData = () => {
       dataIndex: 'oparet',
       title: '操作',
       width: '5%',
+      fixed: 'right',
       render: (_: object, record: AclTableListType) => (
         <Flex vertical={false} gap={8}>
           <Tooltip key={record.key} title='配置数据权限'>
@@ -263,7 +261,6 @@ const AclData = () => {
 
     /**
      * 加载当前选中的权限模块信息, 并保存到状态中
-     * // todo 优化此处代码, 减少不必要的请求
      */
     const aclModule = await getAclModule({ surrogateId: selectKey })
     setSelectedInfo(prevState => ({
@@ -475,6 +472,7 @@ const AclData = () => {
                       type: 'checkbox',
                       ...rowSelection
                     }}
+                    scroll={{ x: 'max-content', y: '50vh' }}
                     pagination={{
                       position: ['bottomLeft'],
                       showQuickJumper: false, // 跳转指定页面

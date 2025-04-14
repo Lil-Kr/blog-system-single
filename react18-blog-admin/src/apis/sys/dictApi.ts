@@ -32,7 +32,7 @@ const dictApi: DictApi = {
     return baseAxiosRequest.post<ResultPage<DictPageListResp>>(PREFIX_URL_SYS_DICT + '/pageList', req)
   },
   dictDetail(req: DictDetailListReq) {
-    return baseAxiosRequest.post<Result<DictDetailResp>>(PREFIX_URL_SYS_DICT + '/dictDetail', req)
+    return baseAxiosRequest.post<Result<DictDetailResp>>(PREFIX_URL_SYS_DICT + '/dictDetailList', req)
   },
   retrievePageDictDetailList(req: PageDictDetailReq) {
     return baseAxiosRequest.post<ResultPage<PageDictDetailResp>>(PREFIX_URL_SYS_DICT + '/pageDictDetailList', req)

@@ -155,7 +155,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	 * @return
 	 */
 	@Override
-	public ApiResp<SysDictResp> dictDetail(DictDetailReq req) {
+	public ApiResp<SysDictResp> dictDetailList(DictDetailReq req) {
 		SysDictResp dict = this.getDict(req.getDictSurrogateId());
 		if (Objects.isNull(dict)) {
 			return ApiResp.failure(INFO_NOT_EXIST);

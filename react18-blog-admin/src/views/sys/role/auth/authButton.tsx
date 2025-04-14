@@ -19,14 +19,10 @@ interface Props {
 
 /**
  * _add_role
- * // todo: 权限按钮未绑定
  * @returns
  */
-const AddRoleBtn: React.FC<Props> = ({ text, ...props }) => {
-  return <Button {...props}>{text}</Button>
-}
-const AddRoleBtnAcl = withPermission(AddRoleBtn, '_add_role')
-export { AddRoleBtnAcl }
+const _ADD_ROLE = '_add_role'
+export { _ADD_ROLE }
 
 /**
  * _edit_role
@@ -50,7 +46,7 @@ export { DelRoleBtnAcl }
 
 /**
  * _freeze_role
- * // todo: 权限按钮未绑定, 未规划该功能
+ * currently not used
  * @returns
  */
 const FreezeRoleBtn: React.FC<Props> = ({ text, ...props }) => {

@@ -65,7 +65,7 @@ const baseRouterConfig: RouterItemType[] = [
     name:'admin-base',
     path: '/admin',
     element: LazyLoad(lazy(() => import('@/layout/MainLayout'))),
-    children: [...homeConfig]
+    children: []
   }
 ]
 

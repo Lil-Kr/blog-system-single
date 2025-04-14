@@ -127,7 +127,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 	@Override
 	public ApiResp<String> deleteDetail(Long surrogateId) {
 		QueryWrapper<SysDictDetail> query = new QueryWrapper<>();
-		query.eq("surrogate_id",surrogateId);
+		query.eq("surrogate_id", surrogateId);
 		int delete = dictDetailMapper.delete(query);
 		if (delete >= 1) {
 			// 更新缓存

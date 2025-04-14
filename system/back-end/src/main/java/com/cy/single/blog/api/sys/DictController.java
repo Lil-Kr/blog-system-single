@@ -134,14 +134,15 @@ public class DictController {
   }
 
   /**
-   * 根据 字典主表id, 获取分组的字典明细信息
+   * 不分页
+   * 根据 字典主表id 查询相应的字典明细信息
    * @param req
    * @return
    */
   @CheckAuth
   @RecordLogger
-  @PostMapping("/dictDetail")
-  public ApiResp<SysDictResp> dictDetail(@RequestBody @Validated({DictDetailReq.GroupGetDictDetail.class}) DictDetailReq req) {
-    return dictService.dictDetail(req);
+  @PostMapping("/dictDetailList")
+  public ApiResp<SysDictResp> dictDetailList(@RequestBody @Validated({DictDetailReq.GroupGetDictDetail.class}) DictDetailReq req) {
+    return dictService.dictDetailList(req);
   }
 }

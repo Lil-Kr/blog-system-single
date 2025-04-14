@@ -55,7 +55,8 @@ const QueryAclBtn: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
 const QueryAclBtnAcl = withPermission(QueryAclBtn, '_query_acl')
-export { QueryAclBtnAcl }
+const _QUERY_ACL_ACL = '_query_acl'
+export { QueryAclBtnAcl, _QUERY_ACL_ACL }
 
 /**
  * _add_acl_module

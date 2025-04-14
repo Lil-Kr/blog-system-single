@@ -166,6 +166,10 @@ const resetPermissionRouters = async (token?: string) => {
     // 构建Tabs数据
     const tabMap = getTabsMap(breadcrumbMap)
     setTabMap(tabMap)
+    // const firstEntry = Array.from(tabMap.entries())[0]
+    // const [key, value] = firstEntry // 解构赋值
+    // console.log('--> tab:', value)
+    // setTabActive(value)
 
     /**
      * 初始化字典数据

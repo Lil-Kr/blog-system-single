@@ -53,17 +53,15 @@ const QueryDictBtn: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
 const QueryDictBtnAcl = withPermission(QueryDictBtn, '_query_dict')
-export { QueryDictBtnAcl }
+const _QUERY_DICT_ACL = '_query_dict'
+export { QueryDictBtnAcl, _QUERY_DICT_ACL }
 
 /**
  * _add_dict_detail
  * @returns
  */
-const AddDetailBtn: React.FC<Props> = ({ text, ...props }) => {
-  return <Button {...props}>{text}</Button>
-}
-const AddDetailBtnAcl = withPermission(AddDetailBtn, '_add_dict_detail')
-export { AddDetailBtnAcl }
+const _ADD_DICT_DETAIL_ACL = '_add_dict_detail'
+export { _ADD_DICT_DETAIL_ACL }
 
 /**
  * _edit_dict_detail

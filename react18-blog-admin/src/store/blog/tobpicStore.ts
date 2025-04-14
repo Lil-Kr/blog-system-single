@@ -69,11 +69,11 @@ export type TopicModalState = {
 }
 
 export type TopicModalAction = {
-  setTopicModalData: (topicModalData: TopicModalState) => void
+  setTopicModalState: (topicModalState: TopicModalState) => void
   setOpenModal: (openModal: boolean) => void
 }
 
-const initTopicModalData = {
+const initTopicModalState = {
   api: blogTopicApi,
   title: '添加专题',
   action: 'create',
@@ -83,11 +83,11 @@ const initTopicModalData = {
 }
 
 const useBlogTopicModalStore = create<TopicModalState & TopicModalAction>()(set => ({
-  ...initTopicModalData,
-  setTopicModalData: (topicModalData: TopicModalState) =>
+  ...initTopicModalState,
+  setTopicModalState: (topicModalState: TopicModalState) =>
     set(state => ({
       ...state,
-      ...topicModalData
+      ...topicModalState
     })),
   setOpenModal: (openModal: boolean) =>
     set(state => ({

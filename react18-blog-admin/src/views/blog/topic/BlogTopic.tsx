@@ -1,9 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { BaseModal } from '@/components/modal'
+import React, { useEffect, useState } from 'react'
 import { BlogTopicPageReq, TopiciTableType } from '@/types/apis/blog/topicType'
-import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Flex, Form, Input, PaginationProps, Popconfirm } from 'antd'
+import { Flex, Form, Input, PaginationProps, Popconfirm } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import Table, { ColumnsType } from 'antd/es/table'
 import { TableRowSelection } from 'antd/es/table/interface'
@@ -14,12 +12,14 @@ import { Tag } from 'antd/lib'
 import { TopicModalState, useBlogTopicModalStore, useBlogTopicStore } from '@/store/blog/tobpicStore'
 import TopicModal from './TopicModal'
 import {
+  _QUERY_TOPIC_ACL,
   AddTopicButtonAcl,
   DelTopicButtonAcl,
   EditTopicButtonAcl,
   LookTopicButtonAcl,
   QueryTopicButtonAcl
 } from './auth/authButton'
+import { usePermissionsStore } from '@/store/sys/authStore'
 
 const BlogTopic = () => {
   const columnsBlogTopic: ColumnsType<TopiciTableType> = [
@@ -111,8 +111,9 @@ const BlogTopic = () => {
   const [selectionType] = useState<'checkbox' | 'radio'>('checkbox')
   const [rowKeys, setRowKeys] = useState<React.Key[]>([])
   const { topicPageList, setTopicPageList, tablePageInfo, setTablePageInfo } = useBlogTopicStore()
-  const { setTopicModalData } = useBlogTopicModalStore()
+  const { setTopicModalState } = useBlogTopicModalStore()
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
+  const { btnSignSet } = usePermissionsStore()
 
   /**
    * 初始化
@@ -206,7 +207,7 @@ const BlogTopic = () => {
         })
       }
     }
-    setTopicModalData(reqModal)
+    setTopicModalState(reqModal)
   }
 
   /**
@@ -229,7 +230,7 @@ const BlogTopic = () => {
         })
       }
     }
-    setTopicModalData(reqModal)
+    setTopicModalState(reqModal)
   }
 
   /**
@@ -247,7 +248,7 @@ const BlogTopic = () => {
       modalReq: record,
       update: () => {}
     }
-    setTopicModalData(reqModal)
+    setTopicModalState(reqModal)
   }
 
   /**
@@ -269,19 +270,21 @@ const BlogTopic = () => {
 
   return (
     <Flex className='blog-topic-warrper' gap='small' vertical={true}>
-      <Form form={form}>
-        <Flex gap='small'>
-          <Form.Item name={'keyWords'} label='搜索关键字'>
-            <Input size={inputSize} placeholder='搜索关键字' />
-          </Form.Item>
-          <Form.Item>
-            <QueryTopicButtonAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
-          </Form.Item>
-          <Form.Item>
-            <QueryTopicButtonAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
-          </Form.Item>
-        </Flex>
-      </Form>
+      {btnSignSet.has(_QUERY_TOPIC_ACL) ? (
+        <Form form={form}>
+          <Flex gap='small'>
+            <Form.Item name={'keyWords'} label='搜索关键字'>
+              <Input size={inputSize} placeholder='搜索关键字' />
+            </Form.Item>
+            <Form.Item>
+              <QueryTopicButtonAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+            </Form.Item>
+            <Form.Item>
+              <QueryTopicButtonAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
+            </Form.Item>
+          </Flex>
+        </Form>
+      ) : null}
 
       <Flex className='blog-topic-operation' gap={4}>
         <AddTopicButtonAcl text='添加' size={btnSize} type='primary' icon={<PlusOutlined />} onClick={createTopic} />

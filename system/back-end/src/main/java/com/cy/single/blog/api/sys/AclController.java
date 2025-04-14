@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 /**
  * @Author: Lil-K
  * @Date: 2025/3/5
- * @Description: 权限管理模块
+ * @Description: acl api
  */
 @RestController
 @RequestMapping("/sys/acl")

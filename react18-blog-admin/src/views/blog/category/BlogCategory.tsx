@@ -13,12 +13,14 @@ import { useCategoryModalStore, useCategoryStore } from '@/store/blog/categorySt
 // api
 import blogCategoryApi from '@/apis/blog/category/categoryApi'
 import {
+  _QUERY_CATEGORY_ACL,
   AddCategoryButtonAcl,
   DelCategoryButtonAcl,
   EditCategoryButtonAcl,
   LookCategoryButtonAcl,
   QueryCategoryButtonAcl
 } from './auth/authButton'
+import { usePermissionsStore } from '@/store/sys/authStore'
 
 const BlogCategory = () => {
   const columnsBlogCategory: ColumnsType<CategoryTableType> = [
@@ -99,6 +101,8 @@ const BlogCategory = () => {
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
   const { setCategoryModal } = useCategoryModalStore()
   const { tablePageInfo, setTablePageInfo, categoryPageList, setCategoryPageList } = useCategoryStore()
+
+  const { btnSignSet } = usePermissionsStore()
 
   /**
    * 删除确认提示
@@ -246,19 +250,21 @@ const BlogCategory = () => {
   return (
     <div className='blog-category-warpper'>
       <Flex gap='middle' vertical={true}>
-        <Form form={form}>
-          <Flex gap='small'>
-            <Form.Item name={'keyWords'} label='搜索关键字'>
-              <Input size={inputSize} placeholder='搜索关键字' />
-            </Form.Item>
-            <Form.Item>
-              <QueryCategoryButtonAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
-            </Form.Item>
-            <Form.Item>
-              <QueryCategoryButtonAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
-            </Form.Item>
-          </Flex>
-        </Form>
+        {btnSignSet.has(_QUERY_CATEGORY_ACL) ? (
+          <Form form={form}>
+            <Flex gap='small'>
+              <Form.Item name={'keyWords'} label='搜索关键字'>
+                <Input size={inputSize} placeholder='搜索关键字' />
+              </Form.Item>
+              <Form.Item>
+                <QueryCategoryButtonAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={search} />
+              </Form.Item>
+              <Form.Item>
+                <QueryCategoryButtonAcl text='重置' size={btnSize} type='primary' onClick={resetSearch} />
+              </Form.Item>
+            </Flex>
+          </Form>
+        ) : null}
 
         <Flex gap='small'>
           <AddCategoryButtonAcl
@@ -269,7 +275,6 @@ const BlogCategory = () => {
             onClick={createType}
           />
         </Flex>
-
         <div className='list'>
           <Table
             key={1}

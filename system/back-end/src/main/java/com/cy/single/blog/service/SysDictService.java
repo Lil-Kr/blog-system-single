@@ -26,7 +26,7 @@ public interface SysDictService extends IService<SysDict> {
 
 	PageResult<SysDictResp> listAll();
 
-	ApiResp<SysDictResp> dictDetail(DictDetailReq req);
+	ApiResp<SysDictResp> dictDetailList(DictDetailReq req);
 
 	SysDictResp getDict(Long surrogateId);
 

@@ -2,11 +2,11 @@ import React from 'react'
 import { Tabs } from 'antd'
 import { useNavigate } from 'oh-router-react'
 import { TabType } from '@/types/common/tabType'
+import { useMenuStore, useTabsStore } from '@/store/global/globalStore'
+import { getMenuOpenKeysUtil } from '@/utils/common'
 
 // css
 import './index.scss'
-import { useMenuStore, useTabsStore } from '@/store/global/globalStore'
-import { getMenuOpenKeysUtil } from '@/utils/common'
 
 /**
  *

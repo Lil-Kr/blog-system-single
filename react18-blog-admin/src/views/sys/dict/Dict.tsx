@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { TablePageInfoType } from '@/types/base'
 import { AlignLeftOutlined, DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Drawer, Flex, Form, Input, PaginationProps, Popconfirm, Tag } from 'antd/lib'
+import { Drawer, Flex, Form, Input, PaginationProps, Popconfirm, Tag } from 'antd/lib'
 import Table, { ColumnsType } from 'antd/lib/table'
 import { useForm } from 'antd/lib/form/Form'
 import { TableRowSelection } from 'antd/es/table/interface'
@@ -20,6 +20,8 @@ import { EditableProTable, ProColumns } from '@ant-design/pro-components'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import {
+  _ADD_DICT_DETAIL_ACL,
+  _QUERY_DICT_ACL,
   AddDictBtnAcl,
   DelDetailBtnAcl,
   DelDictBtnAcl,
@@ -28,6 +30,7 @@ import {
   QueryDictBtnAcl,
   QueryDictDetailBtnAcl
 } from './auth/authDictButton'
+import { usePermissionsStore } from '@/store/sys/authStore'
 
 const Dict = () => {
   const messageApi = useMessage()
@@ -37,6 +40,7 @@ const Dict = () => {
   const [dictPageList, setDictPageList] = useState<TableDictType[]>([] as TableDictType[])
   const [dict, setDict] = useState<TableDictType>({} as TableDictType)
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
+  const { btnSignSet } = usePermissionsStore()
 
   /**
    * 处理字典明细的状态
@@ -513,19 +517,23 @@ const Dict = () => {
   return (
     <div className='sys-dict-warpper' style={{ height: '100%', width: '100%' }}>
       <Flex gap='middle' vertical={true} style={{ height: '100%', width: '100%' }}>
-        <Form className='operation-btn' form={form}>
-          <Flex gap='small'>
-            <Form.Item name={'keyWords'} label={'关键字'}>
-              <Input size={inputSize} placeholder={'搜索关键字'} />
-            </Form.Item>
-            <Form.Item>
-              <QueryDictBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={searchDict} />
-            </Form.Item>
-            <Form.Item>
-              <QueryDictBtnAcl text='重置' size={btnSize} type='primary' onClick={resetDict} />
-            </Form.Item>
-          </Flex>
-        </Form>
+        {btnSignSet.has(_QUERY_DICT_ACL) ? (
+          <Form className='operation-btn' form={form}>
+            <Flex gap='small'>
+              <Form.Item name={'keyWords'} label={'关键字'}>
+                <Input size={inputSize} placeholder={'搜索关键字'} />
+              </Form.Item>
+              <Form.Item>
+                <QueryDictBtnAcl size={btnSize} icon={<SearchOutlined />} type='primary' onClick={searchDict} />
+              </Form.Item>
+              <Form.Item>
+                <QueryDictBtnAcl text='重置' size={btnSize} type='primary' onClick={resetDict} />
+              </Form.Item>
+            </Flex>
+          </Form>
+        ) : (
+          <></>
+        )}
         <Flex gap='small'>
           <AddDictBtnAcl text='添加' size={btnSize} type='primary' icon={<PlusOutlined />} onClick={addDict} />
         </Flex>
@@ -572,18 +580,22 @@ const Dict = () => {
               bordered={true}
               loading={tableLoading}
               size={tableSize}
-              recordCreatorProps={{
-                position: 'bottom',
-                creatorButtonText: '新增字典明细',
-                record: () => ({
-                  key: Date.now().toString(), // 生成唯一的 key, 默认 create
-                  surrogateId: null,
-                  parentId: dict.surrogateId,
-                  name: '',
-                  type: 0,
-                  remark: ''
-                })
-              }}
+              recordCreatorProps={
+                btnSignSet.has(_ADD_DICT_DETAIL_ACL)
+                  ? {
+                      position: 'bottom',
+                      creatorButtonText: '新增字典明细',
+                      record: () => ({
+                        key: Date.now().toString(), // 生成唯一的 key, 默认 create
+                        surrogateId: null,
+                        parentId: dict.surrogateId,
+                        name: '',
+                        type: 0,
+                        remark: ''
+                      })
+                    }
+                  : false
+              }
               columns={columnsDetail}
               value={dictDetailDataSource}
               onChange={refreash}

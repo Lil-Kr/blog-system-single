@@ -61,4 +61,5 @@ const QueryLabelButton: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
 const QueryLabelButtonAcl = withPermission(QueryLabelButton, '_query_label')
-export { QueryLabelButtonAcl }
+const _QUERY_LABEL_ACL = '_query_label'
+export { QueryLabelButtonAcl, _QUERY_LABEL_ACL }

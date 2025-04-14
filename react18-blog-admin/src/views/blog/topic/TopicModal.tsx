@@ -24,6 +24,7 @@ const TopicModal = () => {
     } else if (action === 'edit') {
       topicModalForm.setFieldsValue(modalReq)
     } else {
+      topicModalForm.setFieldsValue(modalReq)
     }
   }
 

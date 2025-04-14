@@ -17,11 +17,11 @@ interface Props {
  * 新增 图片分类
  * @returns
  */
-const AddImageCategoryButton: React.FC<Props> = ({ text, ...props }) => {
+const AddImageCategoryBtn: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
-const AddImageCategoryButtonAcl = withPermission(AddImageCategoryButton, '_add_image_category')
-export { AddImageCategoryButtonAcl }
+const AddImageCategoryBtnAcl = withPermission(AddImageCategoryBtn, '_add_image_category')
+export { AddImageCategoryBtnAcl }
 
 /**
  * 编辑 图片分类
@@ -47,8 +47,9 @@ export { DelImageCategoryButtonAcl }
  * 条件查询 图片分类
  * @returns
  */
-const QueryImageCategoryButton: React.FC<Props> = ({ text, ...props }) => {
+const QueryImageCategoryBtn: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
-const QueryImageCategoryButtonAcl = withPermission(QueryImageCategoryButton, '_query_image_category')
-export { QueryImageCategoryButtonAcl }
+const QueryImageCategoryBtnAcl = withPermission(QueryImageCategoryBtn, '_query_image_category')
+const _QUERY_IMAGE_CATEGORY_ACL = '_query_image_category'
+export { QueryImageCategoryBtnAcl, _QUERY_IMAGE_CATEGORY_ACL }
