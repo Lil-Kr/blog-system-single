@@ -23,4 +23,6 @@ public interface ImageCategoryMapper extends BaseMapper<ImageCategory> {
   List<ImageCategoryResp> imageCategoryList(@Param("param") ImageCategoryListReq req);
 
   ImageCategoryResp get(Long surrogateId);
+
+  List<ImageCategoryResp> imageCategoryNameList(@Param("param") ImageCategoryListReq req);
 }

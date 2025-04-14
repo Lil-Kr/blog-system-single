@@ -1,6 +1,6 @@
 import { PageData, Result, ResultPage } from '@/types/base/response'
 import { BaseApi } from '..'
-import { BaseDelReq, BaseEntityPageType, BaseEntityType } from '@/types/base'
+import { BaseEntityPageType, BaseEntityType } from '@/types/base'
 import { ImageInfoVO } from '@/apis/image/imageInfoApi'
 
 /**
@@ -10,8 +10,7 @@ export interface ImageCategory extends BaseEntityType {
   surrogateId: string
   name: string
   imageUrl: string
-  deleted: number // 未使用
-  status: number // 未使用
+  status: number
   remark: string
 }
 
@@ -68,6 +67,7 @@ export interface ImageCategoryVO extends ImageCategory {
 export interface ImageCategoryApi extends BaseApi {
   pageImageCategoryList(req: ImageCategoryPageReq): Promise<ResultPage<ImageCategoryVO>>
   imageCategoryList(req: ImageCategoryReq): Promise<ResultPage<ImageCategoryVO>>
+  nameList(req: ImageCategoryReq): Promise<Result<ImageCategoryVO[]>>
   add(req: ImageCategoryAddReq): Promise<Result<string>>
   get(req: GetImageCategoryReq): Promise<Result<ImageCategoryVO>>
   edit(req: ImageCategoryEditReq): Promise<Result<string>>

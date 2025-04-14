@@ -13,7 +13,11 @@ import lombok.ToString;
 @Data
 public class ImageCategoryListReq extends BaseReq {
 
-	private String name;
+  private static final long serialVersionUID = -3408442223614600984L;
 
-	private String remark;
+  private String name;
+
+  private String remark;
+
+  private Integer status;
 }

@@ -46,7 +46,7 @@ public class ImageCategory implements Serializable {
   /**
    * 默认 0
    */
-  private Integer deleted = 0;
+  private Integer deleted;
 
   /**
    * 创建人

@@ -193,13 +193,15 @@ const BlogModal = () => {
    * 移除图片
    */
   const handleRemoveImage = () => {
-    // setRadioValue('')
+    setRadioValue('abc')
   }
 
   /**
    * 选择图片时打开
    */
-  const openImageListModal = () => {}
+  const openImageListModal = () => {
+    console.log('--> openImageListModal:')
+  }
 
   /**
    * 选择标签
@@ -296,7 +298,10 @@ const BlogModal = () => {
               </Col>
               <Col span={12}>
                 <Form.Item key={3} name={'imgUrl'} label={'博客封面'}>
-                  {radioValue !== '' ? (
+                  <Button type='dashed' onClick={openImageListModal}>
+                    {'+'}
+                  </Button>
+                  {/* {radioValue !== '' ? (
                     <div
                       style={{
                         display: 'flex',
@@ -325,9 +330,9 @@ const BlogModal = () => {
                     </div>
                   ) : (
                     <Button type='dashed' onClick={openImageListModal}>
-                      +
+                      {'+'}
                     </Button>
-                  )}
+                  )} */}
                 </Form.Item>
               </Col>
             </Row>

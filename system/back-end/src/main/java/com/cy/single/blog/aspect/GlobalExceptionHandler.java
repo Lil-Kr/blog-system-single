@@ -28,72 +28,71 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
 
-    /**
-     * com.fasterxml.jackson.databind.exc.InvalidFormatException
-     * @param request
-     * @param exception
-     * @return
-     */
-    @ExceptionHandler(value = MissingServletRequestParameterException.class)
-    @ResponseBody
-    public ApiResp<String> validateParameterException(HttpServletRequest request,
-                                                      MissingServletRequestParameterException exception) {
-        String message = exception.getMessage();
-        return ApiResp.warning(message);
+  /**
+   * com.fasterxml.jackson.databind.exc.InvalidFormatException
+   * @param request
+   * @param exception
+   * @return
+   */
+  @ExceptionHandler(value = MissingServletRequestParameterException.class)
+  @ResponseBody
+  public ApiResp<String> validateParameterException(HttpServletRequest request,
+                                                    MissingServletRequestParameterException exception) {
+    String message = exception.getMessage();
+    return ApiResp.warning(message);
+  }
+
+  /**
+   * 校验参数类型不一致
+   * @param request
+   * @param exception
+   * @return
+   */
+  @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+  public ApiResp<String> validateNumberFormatException(HttpServletRequest request,
+                                                       MethodArgumentTypeMismatchException exception) {
+    String message = exception.getMessage();
+    return ApiResp.warning(message);
+  }
+
+  /**
+   * 参数校验异常捕获
+   * @param request
+   * @param exception
+   * @return
+   * @throws Exception
+   */
+  @ExceptionHandler(value = MethodArgumentNotValidException.class)
+  @ResponseBody
+  public ApiResp<String> validateException(HttpServletRequest request,
+                                           MethodArgumentNotValidException exception) throws Exception {
+    BindingResult bindingResult = exception.getBindingResult();
+
+    List<String> errorMsgList = new ArrayList<>();
+    List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+    for (int i = 0; i < fieldErrors.size(); i++) {
+      errorMsgList.add(fieldErrors.get(i).getField() + ": " + fieldErrors.get(i).getDefaultMessage());
     }
 
-    /**
-     * 校验参数类型不一致
-     * @param request
-     * @param exception
-     * @return
-     */
-    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
-    public ApiResp<String> validateNumberFormatException(HttpServletRequest request,
-                                                         MethodArgumentTypeMismatchException exception) {
-        String message = exception.getMessage();
-        return ApiResp.warning(message);
-    }
+    return ApiResp.warning(errorMsgList.toString());
+  }
 
-
-    /**
-     * 参数校验异常捕获
-     * @param request
-     * @param exception
-     * @return
-     * @throws Exception
-     */
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    @ResponseBody
-    public ApiResp<String> validateException(HttpServletRequest request,
-                                             MethodArgumentNotValidException exception) throws Exception {
-        BindingResult bindingResult = exception.getBindingResult();
-
-        List<String> errorMsgList = new ArrayList<>();
-        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-        for (int i = 0; i < fieldErrors.size(); i++) {
-            errorMsgList.add(fieldErrors.get(i).getField() + ": " + fieldErrors.get(i).getDefaultMessage());
-        }
-
-        return ApiResp.warning(errorMsgList.toString());
-    }
-
-    /**
-     * 请求内容无法正确解析或读取异常捕获
-     * @param request
-     * @param exception
-     * @return
-     * @throws Exception
-     */
-    @ExceptionHandler(value = HttpMessageNotReadableException.class)
-    @ResponseBody
-    public ApiResp<String> validateException(HttpServletRequest request,
-                                             HttpMessageNotReadableException exception) throws Exception {
-        String message = exception.getMessage();
+  /**
+   * 请求内容无法正确解析或读取异常捕获
+   * @param request
+   * @param exception
+   * @return
+   * @throws Exception
+   */
+  @ExceptionHandler(value = HttpMessageNotReadableException.class)
+  @ResponseBody
+  public ApiResp<String> validateException(HttpServletRequest request,
+                                           HttpMessageNotReadableException exception) throws Exception {
+    String message = exception.getMessage();
         /*Map errorMesssageMap = Maps.newHashMap();
         errorMesssageMap.put(msg, message);*/
-        return ApiResp.warning(message);
-    }
+    return ApiResp.warning(message);
+  }
 
 //    /**
 //     * 目前不生效, 使用AOP解决

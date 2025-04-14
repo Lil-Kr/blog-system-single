@@ -82,4 +82,10 @@
 		where surrogate_id = #{surrogateId}
 	</select>
 
+	<select id="imageCategoryNameList" resultType="com.cy.single.blog.pojo.resp.image.ImageCategoryResp">
+		select surrogate_id, `name`
+		from <include refid="Table_Name" />
+		where status = 0
+	</select>
+
 </mapper>

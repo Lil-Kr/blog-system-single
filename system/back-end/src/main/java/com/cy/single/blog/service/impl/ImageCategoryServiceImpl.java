@@ -138,4 +138,9 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
     return ApiResp.success();
   }
 
+  @Override
+  public List<ImageCategoryResp> nameList(ImageCategoryListReq req) {
+    return imageCategoryMapper.imageCategoryNameList(req);
+  }
+
 }

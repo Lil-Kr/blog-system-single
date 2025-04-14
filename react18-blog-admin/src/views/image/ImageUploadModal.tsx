@@ -6,8 +6,11 @@ import { ImageInfoUploadReq } from '@/apis/image/imageInfoApi'
 import { RcFile, UploadRequestOption } from 'rc-upload/lib/interface'
 import { imageInfoApi } from '@/apis/image/imageInfoApi'
 import { AxiosProgressEvent, AxiosRequestConfig } from 'axios'
-import { FileImageOutlined } from '@ant-design/icons'
+import { FileImageOutlined, UploadOutlined } from '@ant-design/icons'
 import { useMessage } from '@/components/message/MessageProvider'
+import { Image } from 'antd/lib'
+import { useUploadImageModalStateStore } from '@/store/blog/imageStore'
+import { useTokenStore } from '@/store/login'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 const fileMaxSize = 1024 * 1024 * 2 // 2M
@@ -20,101 +23,89 @@ type UploadImageType = {
 
 const env = import.meta.env
 
-const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
-  const { mRef, update } = props
+const ImageUploadModal = () => {
+  // const { mRef, update } = props
+  // const [imageUploadForm] = Form.useForm()
+  // const [openModal, setOpenModal] = useState(false)
+  // const [imageInfo, setImageInfo] = useState<ImageInfoUploadReq>({ imageCategoryId: '' })
+  // const [fileList, setFileList] = useState<UploadFile[]>([])
+  // const [previewOpen, setPreviewOpen] = useState<boolean>(false)
+  // const [previewImage, setPreviewImage] = useState<string>('')
+  // const [uploading, setUploading] = useState(false)
+  // const [uploadFiles, setUploadFiles] = useState<UploadImageType[]>([])
   const messageApi = useMessage()
-  const [action, setAction] = useState('create')
-  const [imageUploadForm] = Form.useForm()
-  const [openModal, setOpenModal] = useState(false)
-  const [fileList, setFileList] = useState<UploadFile[]>([
-    // {
-    //   uid: '-1',
-    //   name: 'image.png',
-    //   status: 'done',
-    //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-    // }
-  ])
-  const [uploadFiles, setUploadFiles] = useState<UploadImageType[]>([])
-  const [imageInfo, setImageInfo] = useState<ImageInfoUploadReq>({ imageCategoryId: '' })
-  const [uploadPercent, setUploadPercent] = useState(0)
-  const [uploading, setUploading] = useState(false)
+  const { token } = useTokenStore()
+  const {
+    title,
+    openModal,
+    setOpenModal,
+    modalReq,
+    update,
+    fileList,
+    setFileList,
+    previewOpen,
+    setPreviewOpen,
+    previewImage,
+    setPreviewImage,
+    uploading,
+    setUploading,
+    uploadFiles,
+    setUploadFiles,
 
-  useImperativeHandle(mRef, () => ({
-    form: imageUploadForm,
-    open
-  }))
+    clearModalData
+  } = useUploadImageModalStateStore()
 
-  const open = (requestParams: IModalRequestAction, params: IModalParams, type: IAction, data?: any) => {
-    setOpenModal(true)
-    const imageInfo = data as ImageInfoUploadReq
-    setImageInfo(imageInfo)
-  }
+  // useImperativeHandle(mRef, () => ({
+  //   form: imageUploadForm,
+  //   open
+  // }))
+
+  // const open = (requestParams: IModalRequestAction, params: IModalParams, type: IAction, data?: any) => {
+  //   setOpenModal(true)
+  //   const imageInfo = data as ImageInfoUploadReq
+  //   setImageInfo(imageInfo)
+  // }
 
   const handleCancel = () => {
-    setFileList([])
-    setUploading(false)
-    setOpenModal(false)
+    clearModalData()
   }
 
-  const handleOk = () => {
-    setFileList([])
-    setOpenModal(false)
-    setUploading(false)
-    update()
-  }
+  // const handleOk = async () => {
+  // const resp = await imageInfoApi.imageUpload({
+  //   formData,
+  //   config
+  // })
 
-  const handleChange: UploadProps['onChange'] = info => {
-    const { file, fileList, event } = info
-    setFileList([...fileList])
+  // const { code, msg, data } = resp
+  // if (code !== 200) {
+  //   return
+  // }
 
-    if (file.status === 'done') {
-      const { code, msg } = file.response
-      /**
-       * handle error case by server return
-       * then re-set fileList
-       */
-      if (code !== 200) {
-        messageApi?.error(msg)
-        // filter success image
-        const newFileList = fileList.filter(item => item.response.code === 200)
-        setFileList(newFileList)
-      }
-    }
+  // setFileList([])
+  // setOpenModal(false)
+  // setUploading(false)
+  // update()
+  // }
 
-    if (file.status === 'uploading') {
-      console.log('--> handleChange uploading: ', fileList, { ...event })
-    }
-
-    if (file.status === 'error') {
-      console.log('--> handleChange error: ', fileList)
-    }
-
-    /**
-     * remove can trigger this method
-     * or call back-end delete api
-     */
-    if (file.status === 'removed') {
-      console.log('--> handleChange removed: ', fileList)
-    }
-  }
+  const getBase64 = (file: FileType): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = error => reject(error)
+    })
 
   /**
    * 点击图片预览的回调
    * @param file
    */
   const onPreview = async (file: UploadFile) => {
-    let src = file.url as string
-    if (!src) {
-      src = await new Promise(resolve => {
-        const reader = new FileReader()
-        reader.readAsDataURL(file.originFileObj as FileType)
-        reader.onload = () => resolve(reader.result as string)
-      })
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as FileType)
     }
-    const image = new Image()
-    image.src = src
-    const imgWindow = window.open(src)
-    imgWindow?.document.write(image.outerHTML)
+
+    setPreviewImage(file.url || (file.preview as string))
+    setPreviewOpen(true)
   }
 
   /**
@@ -123,29 +114,28 @@ const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
    * @param params
    * @returns
    */
-  const handleCustomRequest = async (options: UploadRequestOption<any>, params: ImageInfoUploadReq) => {
+  const handleCustomRequest = async (options: UploadRequestOption<any>) => {
     const { onSuccess, onError, file, filename, onProgress } = options
-
     const formData = new FormData()
     formData.append('image', file)
-    formData.append('imageCategoryId', params.imageCategoryId)
-
+    formData.append('imageCategoryId', modalReq.imageCategoryId ?? '')
     // 进度条百分比计算逻辑
     const getImageUploadInfo = (progress: number): UploadImageType => {
       return {
         uid: (file as RcFile).uid,
         name: (file as RcFile).name,
-        progress: progress
+        progress
       }
     }
 
     const config: AxiosRequestConfig = {
-      headers: { 'content-type': 'multipart/form-data' },
+      headers: { 'Content-Type': 'multipart/form-data' },
+      data: formData,
       onUploadProgress(event: AxiosProgressEvent) {
         if (event.total) {
           // 进图条值的计算
           const percentCompleted = Math.floor((event.loaded / event.total) * 100)
-          setUploadFiles(prevFiles => [...prevFiles, getImageUploadInfo(percentCompleted)])
+          setUploadFiles([...(uploadFiles ?? []), getImageUploadInfo(percentCompleted)])
         }
       }
     }
@@ -154,58 +144,94 @@ const ImageUploadModal = (props: ModalType.ImageUploadModal) => {
     setUploading(true)
 
     const resp = await imageInfoApi.imageUpload({
-      formData,
       config
     })
 
     const { code, msg, data } = resp
     if (code !== 200) {
-      messageApi?.error('上传失败')
       return
     }
-    data.url = env.VITE_BACKEND_IMAGE_BASE_API + data.url
+    // data.url = env.VITE_BACKEND_IMAGE_BASE_API + data.url
     messageApi?.success(msg)
-    setFileList(prevFiles => [...prevFiles, data as UploadFile])
+    setFileList([...(fileList ?? []), file as UploadFile])
+  }
+
+  /**
+   * 上传时的回调, 此处只处理显示待上传的图片缩略图
+   */
+  const handleChange: UploadProps['onChange'] = info => {
+    const { file, fileList, event } = info
+    // const newFileList: UploadFile[] = fileList.map(file => {
+    //   return { ...file, status: 'done' }
+    // })
+    // setFileList([...newFileList])
+
+    /**
+     * remove can trigger this method
+     * or call back-end delete api
+     */
+    if (file.status === 'removed') {
+      //
+      console.log('--> 删除图片:')
+      const removeFileList = fileList.filter(item => item.uid !== file.uid)
+      setFileList([...removeFileList])
+    }
+  }
+
+  const uploadImage = () => {
+    console.log('--> fileList:', fileList)
   }
 
   return (
     <div className='image-upload-warrper'>
       <Modal
-        title={'上传图片'}
-        width={800}
-        okText={'确定'}
-        cancelText={'取消'}
+        title={title}
+        width={'20vw'}
+        cancelText={'关闭'}
         open={openModal}
-        onOk={handleOk}
         onCancel={handleCancel}
         destroyOnClose={false}
         maskClosable={false}
+        footer={null}
+        // okText={'确定'}
+        // onOk={handleOk}
         // confirmLoading={confirmLoading}
         // afterClose={resetForm}
         // forceRender={true} // 强制渲染
       >
         <Flex vertical={true} gap={16}>
-          <ImgCrop quality={0.2} showGrid rotationSlider aspectSlider showReset resetText={'reset'}>
-            <Upload
-              listType='picture-card'
-              fileList={fileList}
-              onPreview={onPreview}
-              showUploadList={true}
-              customRequest={e => handleCustomRequest(e, imageInfo)}
-              // {...uploadProps}
-              // action={'http://localhost:7010/api/image/info/upload'}
-              // onChange={handleChange}
-              // customRequest={e => customRequest(e, imageInfo)}
-              // beforeUpload={}
-            >
-              {/* {fileList.length < 3 && '+ Upload'} */}
-              {'+ Upload'}
-            </Upload>
-          </ImgCrop>
-
+          {/* <ImgCrop quality={0.2} showGrid rotationSlider aspectSlider showReset resetText={'reset'}>
+          </ImgCrop> */}
+          <Upload
+            listType='picture'
+            fileList={fileList}
+            onPreview={onPreview}
+            // onChange={handleChange}
+            showUploadList={true}
+            // maxCount={4}
+            // multiple={true}
+            customRequest={e => handleCustomRequest(e)}
+            // {...uploadProps}
+            // beforeUpload={}
+          >
+            {fileList!.length < 5 && <Button icon={<UploadOutlined />}>{'选择图片'}</Button>}
+          </Upload>
+          <Button onClick={uploadImage}>{'点击上传'}</Button>
+          {/* {previewImage &&
+            fileList!.map(file => (
+              <Image
+                wrapperStyle={{ display: 'none' }}
+                preview={{
+                  visible: previewOpen,
+                  onVisibleChange: visible => setPreviewOpen(visible),
+                  afterOpenChange: visible => !visible && setPreviewImage('')
+                }}
+                src={previewImage}
+              />
+            ))} */}
           <Flex vertical={true} gap={14}>
             {uploading &&
-              uploadFiles.map((item, index) => (
+              uploadFiles?.map((item, index) => (
                 <div key={item.uid}>
                   <Flex vertical={false} gap={16}>
                     <FileImageOutlined />

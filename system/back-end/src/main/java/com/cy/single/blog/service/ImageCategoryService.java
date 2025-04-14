@@ -7,6 +7,8 @@ import com.cy.single.blog.pojo.req.image.ImageCategoryPageListReq;
 import com.cy.single.blog.pojo.req.image.ImageCategoryReq;
 import com.cy.single.blog.pojo.resp.image.ImageCategoryResp;
 
+import java.util.List;
+
 /**
  * @Author: Lil-K
  * @Date: 2024/5/29
@@ -25,4 +27,6 @@ public interface ImageCategoryService {
   ApiResp<ImageCategoryResp> get(Long surrogateId);
 
   ApiResp<String> delete(Long surrogateId);
+
+  List<ImageCategoryResp> nameList(ImageCategoryListReq req);
 }

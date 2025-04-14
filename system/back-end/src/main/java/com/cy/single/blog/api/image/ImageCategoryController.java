@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 
 /**
@@ -46,6 +47,13 @@ public class ImageCategoryController {
   public ApiResp<PageResult<ImageCategoryResp>> list(@RequestBody @Valid ImageCategoryListReq req) {
     PageResult<ImageCategoryResp> blogTopicVOPageResult = imageCategoryService.list(req);
     return ApiResp.success(blogTopicVOPageResult);
+  }
+
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/nameList")
+  public ApiResp<List<ImageCategoryResp>> nameList(@RequestBody @Valid ImageCategoryListReq req) {
+    return ApiResp.success(imageCategoryService.nameList(req));
   }
 
   @RecordLogger

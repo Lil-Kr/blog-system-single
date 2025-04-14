@@ -1,8 +1,12 @@
+import { create } from 'zustand'
 import imageCategoryApi from '@/apis/image/imageCategoryApi'
 import { ImageCategoryApi, ImageCategoryTableType } from '@/types/apis/image/imageType'
 import { TablePageInfoType } from '@/types/base'
 import { RowSelectionType } from 'antd/lib/table/interface'
-import { create } from 'zustand'
+import { ImageInfoUploadReq } from '@/apis/image/imageInfoApi'
+import { IModalStyle } from '@/types/component/modal'
+import { updateCenterAndZoom } from 'echarts/types/src/action/roamHelper.js'
+import { UploadFile } from 'antd/lib'
 
 /**
  * 图片分类状态管理
@@ -51,7 +55,6 @@ export { useImageCategoryStore }
 /**
  * 图片分类 Modal 状态管理
  */
-
 export type ImageCategoryModalState = {
   api: ImageCategoryApi // 调用api
   title: string // Modal框标题
@@ -97,3 +100,97 @@ const useImageCategoryModalStore = create<ImageCategoryModalState & ImageCategor
 }))
 
 export { useImageCategoryModalStore }
+
+/**
+ * 图片管理Modal状态管理
+ */
+export type UploadImageType = {
+  uid: string
+  name: string
+  progress: number
+}
+
+export interface UploadImageModalState {
+  api: ImageCategoryApi
+  openModal: boolean
+  title: string
+  action?: string
+  modalReq: ImageInfoUploadReq
+  previewOpen?: boolean
+  previewImage?: string
+  uploading?: boolean
+  fileList: UploadFile[]
+  uploadFiles?: UploadImageType[]
+  update: () => void
+}
+
+export interface UploadImageModalAction {
+  setUploadImageModalState: (modalData: UploadImageModalState) => void
+  setOpenModal: (openModal: boolean) => void
+  setFileList: (fileList: UploadFile[]) => void
+  setPreviewOpen: (previewOpen: boolean) => void
+  setPreviewImage: (previewImage: string) => void
+  setUploading: (uploading: boolean) => void
+  setUploadFiles: (uploadFiles: UploadImageType[]) => void
+  clearModalData: () => void
+}
+
+const initUploadImageModalData = {
+  api: {} as ImageCategoryApi,
+  openModal: false,
+  title: '',
+  action: '',
+  previewOpen: false,
+  previewImage: '',
+  uploading: false,
+  fileList: [],
+  uploadFiles: [],
+  modalReq: { imageCategoryId: '' },
+  update: () => {}
+}
+
+const useUploadImageModalStateStore = create<UploadImageModalState & UploadImageModalAction>()(set => ({
+  ...initUploadImageModalData,
+  setOpenModal: (openModal: boolean) =>
+    set(state => ({
+      ...state,
+      openModal
+    })),
+  setUploadImageModalState: (modalData: UploadImageModalState) =>
+    set(state => ({
+      ...state,
+      ...modalData
+    })),
+  setFileList: (fileList: UploadFile[]) =>
+    set(state => ({
+      ...state,
+      fileList
+    })),
+  setPreviewOpen: (previewOpen: boolean) =>
+    set(state => ({
+      ...state,
+      previewOpen
+    })),
+  setPreviewImage: (previewImage: string) =>
+    set(state => ({
+      ...state,
+      previewImage
+    })),
+  setUploading: (uploading: boolean) =>
+    set(state => ({
+      ...state,
+      uploading
+    })),
+  setUploadFiles: (uploadFiles: UploadImageType[]) =>
+    set(state => ({
+      ...state,
+      uploadFiles
+    })),
+  clearModalData: () =>
+    set(state => ({
+      ...state,
+      ...initUploadImageModalData
+    }))
+}))
+
+export { useUploadImageModalStateStore }

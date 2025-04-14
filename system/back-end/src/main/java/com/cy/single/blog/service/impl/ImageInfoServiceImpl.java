@@ -159,7 +159,7 @@ public class ImageInfoServiceImpl implements ImageInfoService {
     MultipartFile imageFile = req.getImage();
     // 检查文件大小，限制为 15MB
     long maxSizeInBytes = 10 * 1024 * 1024; // 15MB
-    if (imageFile.getSize() > maxSizeInBytes) {
+    if (imageFile == null || imageFile.getSize() > maxSizeInBytes) {
       return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "image.upload.size.error"));
     }
 
@@ -182,7 +182,7 @@ public class ImageInfoServiceImpl implements ImageInfoService {
     }
 
     String imageReName = imageName + "_" + IdWorker.getSnowFlakeId() + "." + imageTypeSuffix;
-    resourcePath.append(moduleImagePath + "/" + imageReName);
+    resourcePath.append(moduleImagePath).append("/").append(imageReName);
 
     ImageUploadResp imageUploadResp = new ImageUploadResp();
     try(InputStream inputStream = imageFile.getInputStream()) {

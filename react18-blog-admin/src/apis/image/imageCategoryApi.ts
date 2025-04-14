@@ -19,6 +19,9 @@ const imageCategoryApi: ImageCategoryApi = {
   imageCategoryList(req: ImageCategoryReq) {
     return baseAxiosRequest.post<ResultPage<ImageCategoryVO>>(PREFIX_URL_IMAGE_CATEGORY + '/list', req)
   },
+  nameList(req: ImageCategoryReq) {
+    return baseAxiosRequest.post<Result<ImageCategoryVO[]>>(PREFIX_URL_IMAGE_CATEGORY + '/nameList', req)
+  },
   get(req: GetImageCategoryReq) {
     return baseAxiosRequest.get<Result<ImageCategoryVO>>(PREFIX_URL_IMAGE_CATEGORY + '/get', req)
   },

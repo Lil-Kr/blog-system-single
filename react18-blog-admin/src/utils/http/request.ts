@@ -1,7 +1,8 @@
 import { PREFIX_BASE_BACKEND_URL } from '@/config'
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import { getGlobalMessage } from '@/components/message/MessageProvider'
 import { useTokenStore } from '@/store/login'
+import { ImageUploadReq } from '@/apis/image/imageInfoApi'
 
 const AUTO_LOGOUT_TIME = 2 * 60 * 60 * 1000 // 2 hour
 
@@ -20,18 +21,31 @@ const axiosInstance: AxiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use(
-  (config: any) => {
+  (config: InternalAxiosRequestConfig) => {
     const { token, lastActiveTime, loginStatue, clearToken } = useTokenStore.getState()
-    if (!loginStatue) {
-      config.headers['authorization'] = token
-      return config
-    }
+    // if (!loginStatue) {
+    //   config.headers = {
+    //     ...config.headers,
+    //     authorization: token
+    //   }
+    //   return config
+    // }
 
-    if (Date.now() - lastActiveTime > AUTO_LOGOUT_TIME) {
-      clearToken()
-      return Promise.reject(new Error('登录超时, 请重新登录'))
-    }
+    // if (Date.now() - lastActiveTime > AUTO_LOGOUT_TIME) {
+    //   clearToken()
+    //   return Promise.reject(new Error('登录超时, 请重新登录'))
+    // }
 
+    //
+    // if (!config.headers?.['Content-Type']) {
+    //   config.headers = {
+    //     ...config.headers,
+    //     'Content-Type': 'multipart/form-data'
+    //   }
+    // }
+    if (config.data instanceof FormData) {
+      config.headers['Content-Type'] = 'multipart/form-data'
+    }
     config.headers['authorization'] = token
     return config
   },
@@ -100,7 +114,7 @@ const baseAxiosRequest = {
   delete<T>(url: string, params?: object): Promise<T> {
     return axiosInstance.delete(url, { params })
   },
-  postUpload<T>(url: string, body?: object, config?: object | {}): Promise<T> {
+  postUpload<T>(url: string, body?: object, config?: AxiosRequestConfig): Promise<T> {
     return axiosInstance.post(url, body, config)
   }
 }
