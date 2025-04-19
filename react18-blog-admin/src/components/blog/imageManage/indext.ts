@@ -1,4 +1,4 @@
-import ListCardPage from '@/components/blog/imageManage/ListCardPage'
-import ImageCategoryModal from '@/components/blog/imageManage/ImageCategoryModal'
+import ListCardPage from '@/components/blog/imageManage/manage/ListCardPage'
+import ImageCategoryModal from '@/components/blog/imageManage/manage/ImageCategoryModal'
 
 export { ListCardPage, ImageCategoryModal }

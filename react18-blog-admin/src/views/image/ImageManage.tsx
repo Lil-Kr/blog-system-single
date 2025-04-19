@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons'
 import { Flex, Tabs } from 'antd/lib'
-import React, { useEffect, useRef, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import type { Tab } from 'node_modules/rc-tabs/lib/interface'
 import { GetImageCategoryReq, ImageCategoryReq, ImageCategory, ImageCategoryVO } from '@/types/apis/image/imageType'
 import { CardActionProps } from '@/types/component/card'
@@ -15,7 +15,7 @@ import { UploadImageModalState, useUploadImageModalStateStore } from '@/store/bl
 import imageCategoryApi from '@/apis/image/imageCategoryApi'
 
 const ImageManage = () => {
-  const { btnSize, tableSize } = useGlobalStyleStore()
+  const { btnSize } = useGlobalStyleStore()
   const [activeKey, setActiveKey] = useState<string>('')
   const [tabsItem, setTabsItem] = useState<Tab[]>([])
   const { setUploadImageModalState } = useUploadImageModalStateStore()
@@ -97,14 +97,14 @@ const ImageManage = () => {
       imageName: name,
       imageUrl
     }))
-    const ListCardPageItem: PageData<CardActionProps> = {
+    const listCardPageItem: PageData<CardActionProps> = {
       list: cardActionList,
       total: data.imageInfo?.total ?? 0
     }
 
     setTabsItem(pre =>
       pre.map(item =>
-        item.key === req.surrogateId ? { ...item, children: <ListCardPage data={ListCardPageItem} /> } : item
+        item.key === req.surrogateId ? { ...item, children: <ListCardPage data={listCardPageItem} /> } : item
       )
     )
     return data
@@ -112,8 +112,8 @@ const ImageManage = () => {
 
   return (
     <>
-      <Flex gap={'middle'} vertical={true}>
-        <Flex className='operation-btn' vertical={false} gap='small'>
+      <Flex gap={8} vertical={true}>
+        <Flex className='operation-btn' vertical={false} gap={10}>
           <AddImageButtonAcl text={'添加'} size={btnSize} type='primary' icon={<PlusOutlined />} onClick={create} />
         </Flex>
         <Tabs

@@ -8,10 +8,11 @@ import { blogContentApi, BlogContentReqParams } from '@/apis/contentApi'
 import { PageResult, PaginationType } from '@/types/base/response'
 const env = import.meta.env
 
+// todo: need change to from DB
 const images = [
-  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/Jay1_20240422212922_1894388366645006336.webp' },
+  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/Jay1_20240422212922_1911784719964573696.webp' },
   { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/寻找周杰伦_109951165564941972_1894396427136798720.webp' },
-  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/微信图片_20240424184905_1894389253811605504.webp' },
+  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/最伟大的作品_109951167891239729_1894400569746001920.webp' },
   { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/微信图片_202404241849052_1894389626563596288.webp' }
 ]
 

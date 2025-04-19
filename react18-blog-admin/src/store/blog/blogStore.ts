@@ -57,6 +57,7 @@ export interface BlogContentModalType {
   key?: string
   surrogateId?: string
   title?: string
+  imgUrl?: string
   introduction?: string
   blogLabelList?: SelectProps['options']
   categoryInfo?: OptionType
@@ -92,12 +93,15 @@ export type BlogMoadlState = {
   modalReq?: BlogContentModalType
   saveReq?: BlogContentModalSaveReq
   update: () => void
+  openImageModal: boolean
+  imageModaltitle: string
 }
 
 export type BlogMoadlAction = {
   setBlogModalData: (blogModalData: BlogMoadlState) => void
   setOpenModal: (openModal: boolean) => void
   setSaveReq: (req: BlogContentModalSaveReq) => void
+  setOpenImageModal: (openImageModal: boolean) => void
   clearSaveReq: () => void
 }
 
@@ -107,7 +111,9 @@ const initBlogModalData = {
   title: '创建博客',
   action: 'create',
   inputDisabled: false,
-  update: () => {}
+  update: () => {},
+  openImageModal: false,
+  imageModaltitle: ''
 }
 
 const useBlogModalStore = create<BlogMoadlState & BlogMoadlAction>()(set => ({
@@ -121,6 +127,11 @@ const useBlogModalStore = create<BlogMoadlState & BlogMoadlAction>()(set => ({
     set(state => ({
       ...state,
       openModal
+    })),
+  setOpenImageModal: (openImageModal: boolean) =>
+    set(state => ({
+      ...state,
+      openImageModal
     })),
   setSaveReq: (req: BlogContentModalSaveReq) =>
     set(state => ({

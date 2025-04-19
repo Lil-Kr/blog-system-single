@@ -37,6 +37,7 @@ import {
   QueryBlogBtnAcl
 } from './auth/authButton'
 import { usePermissionsStore } from '@/store/sys/authStore'
+import { useImageManageStore } from '@/store/blog/imageStore'
 
 const BlogList = () => {
   const columnsBlog: ColumnsType<BlogContentTableType> = [
@@ -267,6 +268,7 @@ const BlogList = () => {
   const { setLabelList } = useLabelStore()
   const { btnSize, tableSize, inputSize } = useGlobalStyleStore()
   const { btnSignSet } = usePermissionsStore()
+  const { setIsCopy } = useImageManageStore()
 
   /**
    * 初始化数据
@@ -389,8 +391,12 @@ const BlogList = () => {
       modalReq,
       update: () => {
         refreshBlogContentPageList()
-      }
+      },
+      openImageModal: false,
+      imageModaltitle: '选择图片'
     })
+    // 打开图片选择器
+    setIsCopy(true)
   }
 
   /**
@@ -429,8 +435,12 @@ const BlogList = () => {
       modalReq,
       update: () => {
         refreshBlogContentPageList()
-      }
+      },
+      openImageModal: false,
+      imageModaltitle: '选择图片'
     })
+    // 打开图片选择器
+    setIsCopy(true)
   }
 
   /**

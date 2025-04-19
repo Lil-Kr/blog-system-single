@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion, Variants } from 'framer-motion'
-import { Image } from "@heroui/react"
+import { Image } from '@heroui/react'
 
 const variants: Variants = {
   hidden: { opacity: 0, x: -100 },
@@ -12,11 +12,11 @@ interface CarouselProps {
 }
 
 const images = [
-  'http://localhost:8089/upload/image/Jay1_20240422212922_1894388366645006336.webp',
-  'http://localhost:8089/upload/image/微信图片_20240424184905_1894389253811605504.webp',
-  'http://localhost:8089/upload/image/微信图片_202404241849051_1894389542744625152.webp',
-  'http://localhost:8089/upload/image/微信图片_202404241849052_1894389626563596288.webp',
-  'http://localhost:8089/upload/image/微信图片_202404241849053_1894389691717914624.webp',
+  'http://localhost:8089//upload/image/微信图片_202404241849051_1894389542744625152.webp',
+  'http://localhost:8089//upload/image/微信图片_202404241849052_1894389626563596288.webp',
+  'http://localhost:8089//upload/image/微信图片_202404241849054_1894389722516688896.webp',
+  'http://localhost:8089//upload/image/11月的萧邦_109951167749320136_1894396375513305088.webp',
+  'http://localhost:8089//upload/image/寻找周杰伦_109951165564941972_1894396427136798720.webp'
 ]
 
 const Carousel = (props: CarouselProps) => {
@@ -35,7 +35,10 @@ const Carousel = (props: CarouselProps) => {
 
   return (
     <div className='carousel-container overflow-hidden relative'>
-      <div className='flex transition-transform ease-in-out duration-300' style={{transform:`translateX(-${currentIndex * 100}%)`}}>
+      <div
+        className='flex transition-transform ease-in-out duration-300'
+        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+      >
         {images.map((image, index) => (
           <img key={index} src={image} width={'200px'} alt='a' />
         ))}
@@ -58,8 +61,10 @@ const Carousel = (props: CarouselProps) => {
 
       <div className='absolute bottom-4 right-0 left-0'>
         <div className='flex item-center justify-center gap-2'>
-          {images.map((_,i) => (
-            <div className={`transition-all w-3 h-3 bg-white rounded-full ${currentIndex === i ? 'p-2' : 'bg-opacity-50'}`}></div>
+          {images.map((_, i) => (
+            <div
+              className={`transition-all w-3 h-3 bg-white rounded-full ${currentIndex === i ? 'p-2' : 'bg-opacity-50'}`}
+            ></div>
           ))}
         </div>
       </div>

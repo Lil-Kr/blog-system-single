@@ -23,6 +23,8 @@ import { BlogContentModalSaveReq, useBlogModalStore } from '@/store/blog/blogSto
 import { useLabelStore } from '@/store/blog/labelStore'
 import { BlogContentAddReq, BlogContentEditeReq } from '@/apis/blog/content/blogContentApi'
 import { useMessage } from '@/components/message/MessageProvider'
+import ImageSelectModal from './ImageSelectModal'
+import { useImageManageStore } from '@/store/blog/imageStore'
 
 const env = import.meta.env
 const modalStyles = {
@@ -35,7 +37,7 @@ const modalStyles = {
 const BlogModal = () => {
   const messageApi = useMessage()
   const [blogForm] = Form.useForm()
-  const [radioValue, setRadioValue] = useState<string>('')
+  // const [radioValue, setRadioValue] = useState<string>('')
   const editorRef = useRef<EditorInstance>()
   const { blogTypes, blogTopics, blogPublisStatue, switchStatue } = useDictDetailStore()
   const { labelList } = useLabelStore()
@@ -50,8 +52,10 @@ const BlogModal = () => {
     update,
     saveReq,
     setSaveReq,
-    clearSaveReq
+    clearSaveReq,
+    setOpenImageModal
   } = useBlogModalStore()
+  const { imageUrl, setImageUrl, clearImageData } = useImageManageStore()
 
   useEffect(() => {
     if (openModal) {
@@ -100,10 +104,10 @@ const BlogModal = () => {
         recommend: modalReq?.recommend ?? '',
         topicId: modalReq?.topicInfo?.value ?? '',
         status: modalReq?.publishStatue ?? '',
-        contentText: modalReq?.contentText ?? '',
-        imgUrl: ''
+        contentText: modalReq?.contentText ?? ''
       }
       setSaveReq(saveReq)
+      setImageUrl(modalReq?.imgUrl ?? '')
     } else {
       messageApi?.error('操作错误')
       return
@@ -143,7 +147,7 @@ const BlogModal = () => {
         labelIds: saveReq?.labelIds ?? [],
         topicId: saveReq?.topicId ?? '',
         contentText: saveReq?.contentText ?? '',
-        imgUrl: saveReq?.imgUrl ?? ''
+        imgUrl: imageUrl
       }
       const res = await api.add(req)
       const { code, msg } = res
@@ -163,7 +167,7 @@ const BlogModal = () => {
         labelIds: saveReq?.labelIds ?? [],
         topicId: saveReq?.topicId ?? '',
         contentText: saveReq?.contentText ?? '',
-        imgUrl: saveReq?.imgUrl ?? ''
+        imgUrl: imageUrl
       }
       const res = await api.edit(req)
       const { code, msg } = res
@@ -175,32 +179,33 @@ const BlogModal = () => {
       messageApi?.error('操作异常')
       return
     }
-    update()
     handleBlogCancel()
   }
 
   /**
-   * 关门-Modal
+   * 关闭-Modal
    */
   const handleBlogCancel = () => {
-    blogForm.resetFields()
     setOpenModal(false)
     clearSaveReq()
+    clearImageData()
     editorRef.current?.setContent('')
+    blogForm.resetFields()
+    update()
   }
 
   /**
    * 移除图片
    */
   const handleRemoveImage = () => {
-    setRadioValue('abc')
+    setImageUrl('')
   }
 
   /**
    * 选择图片时打开
    */
   const openImageListModal = () => {
-    console.log('--> openImageListModal:')
+    setOpenImageModal(true)
   }
 
   /**
@@ -298,10 +303,7 @@ const BlogModal = () => {
               </Col>
               <Col span={12}>
                 <Form.Item key={3} name={'imgUrl'} label={'博客封面'}>
-                  <Button type='dashed' onClick={openImageListModal}>
-                    {'+'}
-                  </Button>
-                  {/* {radioValue !== '' ? (
+                  {imageUrl !== '' ? (
                     <div
                       style={{
                         display: 'flex',
@@ -316,7 +318,7 @@ const BlogModal = () => {
                             <Flex vertical={false} gap={8}>
                               <EyeOutlined style={{ color: 'white', fontSize: '20px' }} />
                               <DeleteOutlined
-                                style={{ fontSize: '20px' }}
+                                style={{ fontSize: '1.5rem' }}
                                 onClick={e => {
                                   e.stopPropagation() // 防止触发预览
                                   handleRemoveImage()
@@ -325,14 +327,14 @@ const BlogModal = () => {
                             </Flex>
                           )
                         }}
-                        src={`${env.VITE_BACKEND_IMAGE_BASE_API}${radioValue}`}
+                        src={`${env.VITE_BACKEND_IMAGE_BASE_API}${imageUrl}`}
                       />
                     </div>
                   ) : (
                     <Button type='dashed' onClick={openImageListModal}>
                       {'+'}
                     </Button>
-                  )} */}
+                  )}
                 </Form.Item>
               </Col>
             </Row>
@@ -455,7 +457,7 @@ const BlogModal = () => {
                     editorRef.current = editor
                   }}
                   init={{
-                    height: '50vh',
+                    height: '60vh',
                     menubar: true, // menu bar
                     statusbar: false, // status bar
                     promotion: false, // upgrade the pro version
@@ -544,6 +546,7 @@ const BlogModal = () => {
             </Row>
           </Form>
         </Modal>
+        <ImageSelectModal />
       </ConfigProvider>
     </div>
   )

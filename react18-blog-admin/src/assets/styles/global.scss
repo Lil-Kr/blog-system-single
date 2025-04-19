@@ -1,12 +1,12 @@
 $color: #fff;
 
-body{
+body {
   background-color: $color;
   // 禁用文字选中
   // user-select: none;
 }
 
-img{
+img {
   // 禁止图片拖动
   -webkit-user-drag: none;
 }

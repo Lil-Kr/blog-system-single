@@ -4,12 +4,10 @@ import { ImageCategoryApi, ImageCategoryTableType } from '@/types/apis/image/ima
 import { TablePageInfoType } from '@/types/base'
 import { RowSelectionType } from 'antd/lib/table/interface'
 import { ImageInfoUploadReq } from '@/apis/image/imageInfoApi'
-import { IModalStyle } from '@/types/component/modal'
-import { updateCenterAndZoom } from 'echarts/types/src/action/roamHelper.js'
 import { UploadFile } from 'antd/lib'
 
 /**
- * 图片分类状态管理
+ * =========================== 图片分类状态管理 ===========================
  */
 type ImageCategoryState = {
   tableLoading: boolean
@@ -53,7 +51,7 @@ const useImageCategoryStore = create<ImageCategoryState & ImageCategoryAction>()
 export { useImageCategoryStore }
 
 /**
- * 图片分类 Modal 状态管理
+ * =========================== 图片分类 Modal 状态管理 ===========================
  */
 export type ImageCategoryModalState = {
   api: ImageCategoryApi // 调用api
@@ -102,7 +100,7 @@ const useImageCategoryModalStore = create<ImageCategoryModalState & ImageCategor
 export { useImageCategoryModalStore }
 
 /**
- * 图片管理Modal状态管理
+ * =========================== 图片管理Modal状态管理 ===========================
  */
 export type UploadImageType = {
   uid: string
@@ -194,3 +192,58 @@ const useUploadImageModalStateStore = create<UploadImageModalState & UploadImage
 }))
 
 export { useUploadImageModalStateStore }
+
+/**
+ * =========================== 图片管理列表 ===========================
+ * 注意这里不能与其他组件同时使用
+ */
+export interface ImageManageState {
+  imageUrl: string
+  imageName: string
+  isCopy: boolean
+}
+
+export interface ImageManageAction {
+  setImageUrl: (imageUrl: string) => void
+  setImageName: (imageName: string) => void
+  setFacePicture: (imageUrl: string) => void
+  setIsCopy: (isCopy: boolean) => void
+  clearImageData: () => void
+}
+
+const initImageManageData = {
+  imageUrl: '',
+  imageName: '',
+  isCopy: false
+}
+
+const useImageManageStore = create<ImageManageState & ImageManageAction>()(set => ({
+  ...initImageManageData,
+  setImageUrl: (imageUrl: string) =>
+    set(state => ({
+      ...state,
+      imageUrl
+    })),
+  setImageName: (imageName: string) =>
+    set(state => ({
+      ...state,
+      imageName
+    })),
+  setFacePicture: (imageUrl: string) =>
+    set(state => ({
+      ...state,
+      imageUrl
+    })),
+  setIsCopy: (isCopy: boolean) =>
+    set(state => ({
+      ...state,
+      isCopy
+    })),
+  clearImageData: () =>
+    set(state => ({
+      ...state,
+      ...initImageManageData
+    }))
+}))
+
+export { useImageManageStore }

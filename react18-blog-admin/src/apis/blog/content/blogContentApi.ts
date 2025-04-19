@@ -33,6 +33,7 @@ export interface BlogContentTableType {
   key: string
   title: string
   introduction: string
+  imgUrl: string
   original: string
   recommend: string
   categoryId: string
@@ -94,6 +95,7 @@ export interface BlogContentResq {
   number: string
   title: string
   introduction: string
+  imgUrl: string
   original: string
   recommend: string
   categoryId: string

@@ -1,8 +1,4 @@
-import { Button, Flex, Form, GetProp, Modal, Progress, Upload, UploadFile, UploadProps } from 'antd/lib'
-import ImgCrop from 'antd-img-crop'
-import React, { useImperativeHandle, useState } from 'react'
-import { IAction, IModalParams, IModalRequestAction, ModalType } from '@/types/component/modal'
-import { ImageInfoUploadReq } from '@/apis/image/imageInfoApi'
+import { Button, Flex, GetProp, Modal, Progress, Upload, UploadFile, UploadProps } from 'antd/lib'
 import { RcFile, UploadRequestOption } from 'rc-upload/lib/interface'
 import { imageInfoApi } from '@/apis/image/imageInfoApi'
 import { AxiosProgressEvent, AxiosRequestConfig } from 'axios'
@@ -51,7 +47,6 @@ const ImageUploadModal = () => {
     setUploading,
     uploadFiles,
     setUploadFiles,
-
     clearModalData
   } = useUploadImageModalStateStore()
 
