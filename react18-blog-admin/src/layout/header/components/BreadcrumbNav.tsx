@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useLocation } from 'oh-router-react'
-import { Breadcrumb } from 'antd'
+import { Breadcrumb } from 'antd/lib'
 import { useBreadcrumbStore } from '@/store/global'
 import { BreadcrumbType } from '@/types/common/breadcrumbType'
 

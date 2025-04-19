@@ -1,6 +1,6 @@
 import { BaseApi } from '@/types/apis'
 import { IAction, IModalParams, IModalRequestAction, IModalStyle, ModalType } from '@/types/component/modal'
-import { ConfigProvider, Form, Input, Modal } from 'antd'
+import { ConfigProvider, Form, Input, Modal } from 'antd/lib'
 import { createStyles, useTheme } from 'antd-style'
 import { useImperativeHandle, useState } from 'react'
 

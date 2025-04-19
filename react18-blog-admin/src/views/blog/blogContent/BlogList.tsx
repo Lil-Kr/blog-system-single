@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Flex, Form, Input, PaginationProps, Popconfirm, Table, Tag } from 'antd'
+import { Flex, Form, Input, PaginationProps, Popconfirm, Table, Tag } from 'antd/lib'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import {
   ApiTwoTone,

@@ -1,19 +1,15 @@
 import { useEffect, useState } from 'react'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider } from 'antd/lib'
 import { RouterView } from 'oh-router-react'
-import useTheme from './hooks/useTheme'
 import zhCN from 'antd/lib/locale/zh_CN'
-import enUS from 'antd/lib/locale/en_US'
 import { useSystemStore } from './store/global'
 import MessageProvider from '@/components/message/MessageProvider'
-import { getBrowserLang } from './utils/common'
 import { Spin } from 'antd/lib'
 import { resetPermissionRouters, rootRouterConfig } from '@/router/dynamicRoutes'
 import { useTokenStore } from './store/login'
 import { useAdminLoginStore } from './store/sys/adminStore'
 import { SysUser } from './types/apis/sys/user/userType'
 import { userApi } from './apis/sys'
-import { useTranslation } from 'react-i18next'
 import './locales/index' // 导入i18n配置
 
 function App() {
@@ -57,7 +53,7 @@ function App() {
   return (
     <>
       <ConfigProvider
-        locale={i18nLocale}
+        locale={i18nLocale} // 必填参数，用来设置国际化语言
         componentSize={assemblySize}
         theme={{
           components: {

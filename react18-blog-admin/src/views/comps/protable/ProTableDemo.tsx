@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { EditableProTable, ProColumns } from '@ant-design/pro-components'
-import { Button } from 'antd'
+import { Button } from 'antd/lib'
 import { RoleTableType } from '@/types/apis/sys/role/roleType'
 import { TablePageInfoType } from '@/types/base'
 import { PaginationProps, Popconfirm, Space } from 'antd/lib'

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTokenStore } from '@/store/login'
-import { Button, Result } from 'antd'
+import { Button, Result } from 'antd/lib'
 import { useNavigate } from 'oh-router-react'
 import { useMenuStore, useTabsStore } from '@/store/global'
 import { resetPermissionRouters } from '@/router/dynamicRoutes'

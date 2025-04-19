@@ -119,20 +119,29 @@ export { useLoadingStore }
 
 interface GlobalStyleState {
   btnSize: SizeType
+  linkSize: SizeType
   tableSize: SizeType
   inputSize: SizeType
+  formSize: SizeType
+  loginFormSize: SizeType
 }
 
 interface GlobalStyleAction {
   setBtnSize: (btnSize: SizeType) => void
+  setLinkSize: (linkSize: SizeType) => void
   setTableSize: (tableSize: SizeType) => void
   setInputSize: (inputSize: SizeType) => void
+  setFormSize: (formSize: SizeType) => void
+  setLoginFormSize: (loginFormSize: SizeType) => void
 }
 
 const initGlobalStyleData = {
   btnSize: 'small' as SizeType,
+  linkSize: 'small' as SizeType,
   tableSize: 'small' as SizeType,
-  inputSize: 'small' as SizeType
+  inputSize: 'small' as SizeType,
+  formSize: 'small' as SizeType,
+  loginFormSize: 'large' as SizeType
 }
 
 const useGlobalStyleStore = create<GlobalStyleState & GlobalStyleAction>()(set => ({
@@ -142,6 +151,13 @@ const useGlobalStyleStore = create<GlobalStyleState & GlobalStyleAction>()(set =
       return {
         ...state,
         btnSize
+      }
+    }),
+  setLinkSize: (linkSize: SizeType) =>
+    set(state => {
+      return {
+        ...state,
+        linkSize
       }
     }),
   setTableSize: (tableSize: SizeType) =>
@@ -156,6 +172,20 @@ const useGlobalStyleStore = create<GlobalStyleState & GlobalStyleAction>()(set =
       return {
         ...state,
         inputSize
+      }
+    }),
+  setFormSize: (formSize: SizeType) =>
+    set(state => {
+      return {
+        ...state,
+        formSize
+      }
+    }),
+  setLoginFormSize: (loginFormSize: SizeType) =>
+    set(state => {
+      return {
+        ...state,
+        loginFormSize
       }
     })
 }))

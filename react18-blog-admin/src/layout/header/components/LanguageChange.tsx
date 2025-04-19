@@ -1,37 +1,42 @@
 import { Dropdown, MenuProps } from 'antd'
+import { TranslationOutlined } from '@ant-design/icons'
 import { useSystemStore } from '@/store/global'
+import { useTranslation } from 'react-i18next'
+import { Button } from 'antd/lib'
 
 const LanguageChange = () => {
   const { language, setLanguage } = useSystemStore()
+  const { t, i18n } = useTranslation()
+
+  const changeLanguage = (lang: string) => {
+    lang = lang !== '' ? lang : 'zh'
+    setLanguage(lang)
+    i18n.changeLanguage(lang)
+  }
 
   const items: MenuProps['items'] = [
     {
-      key: '1',
-      label: <span>{'简体中文'}</span>,
-      onClick: () => setLanguage('zh'),
-      disabled: language === 'zh'
+      key: 'zh',
+      label: <span>{t('language.zh_CN')}</span>,
+      icon: <div>{'CN'}</div>,
+      onClick: () => changeLanguage('zh')
     },
     {
-      key: '2',
-      label: <span>{'English'}</span>,
-      onClick: () => setLanguage('zh'),
-      disabled: language === 'en'
+      key: 'en',
+      label: <span>{t('language.en_US')}</span>,
+      icon: <div>{'EN'}</div>,
+      onClick: () => changeLanguage('en')
     }
   ]
 
-  const handleMenuClick: MenuProps['onClick'] = event => {}
-
-  const menuProps = {
+  const menuProps: MenuProps = {
     items,
-    onClick: handleMenuClick
+    selectable: true
   }
-
   return (
-    <div>
-      <Dropdown menu={menuProps} placement='bottom' trigger={['click']} arrow={true}>
-        <i className='icon-style iconfont icon-zhongyingwen'></i>
-      </Dropdown>
-    </div>
+    <Dropdown menu={menuProps} placement='bottom' trigger={['hover']} arrow={{ pointAtCenter: true }}>
+      <Button color='default' variant='text' icon={<TranslationOutlined style={{ fontSize: '1.3rem' }} />}></Button>
+    </Dropdown>
   )
 }
 

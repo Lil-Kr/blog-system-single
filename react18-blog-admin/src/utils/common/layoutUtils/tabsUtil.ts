@@ -5,7 +5,7 @@
 import { HOME_ROUTER_URL } from '@/config'
 import { BreadcrumbType } from '@/types/common/breadcrumbType'
 import { TabType } from '@/types/common/tabType'
-import { TabsProps } from 'antd'
+import { TabsProps } from 'antd/lib'
 
 /**
  * 将 面包屑 转换为 ant tab 需要的结构

@@ -3,7 +3,7 @@ import { ModalType } from '@/types/component/modal'
 import { colorsOptions } from '@/components/color/color'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useLabelModalStore } from '@/store/blog/labelStore'
-import { Col, Form, Input, Modal, Row, Select } from 'antd'
+import { Col, Form, Input, Modal, Row, Select } from 'antd/lib'
 
 const LabelDetail = (props: ModalType.CustomModal) => {
   const { update } = props

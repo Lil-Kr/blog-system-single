@@ -1,4 +1,4 @@
-import { Button, Flex, Form, GetProp, Modal, Progress, Upload, UploadFile, UploadProps } from 'antd'
+import { Button, Flex, Form, GetProp, Modal, Progress, Upload, UploadFile, UploadProps } from 'antd/lib'
 import ImgCrop from 'antd-img-crop'
 import React, { useImperativeHandle, useState } from 'react'
 import { IAction, IModalParams, IModalRequestAction, ModalType } from '@/types/component/modal'

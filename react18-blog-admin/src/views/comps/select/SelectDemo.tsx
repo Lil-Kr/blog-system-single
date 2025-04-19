@@ -1,4 +1,4 @@
-import { Button, Flex, Form, Select, SelectProps, Tag } from 'antd'
+import { Button, Flex, Form, Select, SelectProps, Tag } from 'antd/lib'
 import React, { useEffect, useState } from 'react'
 import { defineConfig } from 'vite'
 

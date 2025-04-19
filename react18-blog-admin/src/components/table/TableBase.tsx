@@ -1,5 +1,5 @@
 import { TableBaseParames } from '@/types/component/table'
-import { PaginationProps, Table } from 'antd'
+import { PaginationProps, Table } from 'antd/lib'
 import React, { useState } from 'react'
 
 const TableBase = (props: TableBaseParames) => {

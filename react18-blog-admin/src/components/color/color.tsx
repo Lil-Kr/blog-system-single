@@ -1,4 +1,4 @@
-import { Tag } from 'antd'
+import { Tag } from 'antd/lib'
 
 const colors = [
   'primary',

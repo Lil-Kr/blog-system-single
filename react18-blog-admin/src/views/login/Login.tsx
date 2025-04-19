@@ -1,22 +1,21 @@
-import { UserOutlined } from '@ant-design/icons'
+import { Form, Input, Button, Typography, Flex } from 'antd/lib'
+const { Title, Link } = Typography
+import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import md5 from 'js-md5'
-import { SizeType } from 'antd/es/config-provider/SizeContext'
-import { useState } from 'react'
-import { useTokenStore } from '@/store/login'
 import loginApi from '@/apis/sys/loginApi'
-import { Form, Input, Button, Flex } from 'antd'
-import { useNavigate } from 'oh-router-react'
+import { useTokenStore } from '@/store/login'
+import { resetPermissionRouters } from '@/router/dynamicRoutes'
 import { LoginTpye } from '@/types/apis/sys/user/userType'
 import { useMessage } from '@/components/message/MessageProvider'
-import { resetPermissionRouters } from '@/router/dynamicRoutes'
+import { useGlobalStyleStore } from '@/store/global/globalStore'
 
-import './css/login.css'
+import './scss/loginForm.scss'
 
-const Login = () => {
+const LoginForm = () => {
   const messageApi = useMessage()
-  const [btnSize] = useState<SizeType>('large')
-  const [loading] = useState<boolean>(false)
+  const [form] = Form.useForm()
   const { setToken } = useTokenStore()
+  const { btnSize, loginFormSize } = useGlobalStyleStore()
 
   const onFinish = async (loginInfo: LoginTpye.LoginFormType) => {
     let { password } = loginInfo
@@ -32,55 +31,57 @@ const Login = () => {
     }
   }
 
-  const onFinishFailed = () => {}
-
   return (
-    <Flex
-      className='login-warrper'
-      vertical={true}
-      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}
-    >
-      <Form
-        className='login-form'
-        name='basic'
-        layout='horizontal'
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete='off'
-      >
-        <Flex vertical={true} gap={4}>
-          <div className='login-title'>{'博客后台管理系统'}</div>
-          <Form.Item name={'account'} rules={[{ required: true, message: '不能为空' }]}>
-            <Input
-              autoComplete='username'
-              prefix={<UserOutlined className='site-form-item-icon' />}
-              placeholder={'用户名'}
-            />
+    <Flex justify='center' align='center' className='login-container'>
+      <Flex vertical className='login-form'>
+        <Title level={2} className='login-title'>
+          {'博客系统登录'}
+        </Title>
+        <Form form={form} name='login' onFinish={onFinish} autoComplete='off' layout='vertical' size={loginFormSize}>
+          <Form.Item
+            name='account'
+            rules={[
+              {
+                required: true,
+                message: <>{'请输入用户名'}</>
+              }
+            ]}
+          >
+            <Input prefix={<UserOutlined />} placeholder={'管理员账号'} autoComplete='account' />
           </Form.Item>
 
-          <Form.Item name={'password'} rules={[{ required: true, message: '密码不能为空' }]}>
-            <Input.Password autoComplete='current-password' type='password' placeholder={'密码'} />
-          </Form.Item>
-
-          <Form.Item>
-            <Button type='primary' loading={loading} htmlType='submit' className='login-form-button'>
-              {'登陆'}
-            </Button>
+          <Form.Item
+            name='password'
+            rules={[
+              {
+                required: true,
+                message: <>{'请输入密码'}</>
+              }
+            ]}
+          >
+            <Input.Password prefix={<LockOutlined />} placeholder={'密码'} autoComplete='current-password' />
           </Form.Item>
 
           <Form.Item>
-            <Button type='link' size={btnSize}>
-              {'注册'}
-            </Button>
-            <Button type='link' size={btnSize}>
-              {'忘记密码?'}
+            <Button type='primary' htmlType='submit' block>
+              {'登录'}
             </Button>
           </Form.Item>
-        </Flex>
-      </Form>
+
+          <Form.Item style={{ marginBottom: 0 }}>
+            <Flex justify='space-between' align='center'>
+              <Button type='link' size={btnSize}>
+                {'注册账号'}
+              </Button>
+              <Button type='link' size={btnSize}>
+                {'忘记密码?'}
+              </Button>
+            </Flex>
+          </Form.Item>
+        </Form>
+      </Flex>
     </Flex>
   )
 }
 
-export default Login
+export default LoginForm

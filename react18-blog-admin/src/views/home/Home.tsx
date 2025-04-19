@@ -17,21 +17,9 @@ const Home = () => {
   }
 
   return (
-    <div className='home-warpper'>
-      <Flex vertical={false} gap={16} justify={'flex-start'}>
-        <Switch
-          checkedChildren='中文'
-          unCheckedChildren='英文'
-          disabled={false}
-          checked={checkedState}
-          onChange={handleOnChange}
-          onClick={() => {
-            i18n.changeLanguage(checkedState ? 'en' : 'zh')
-          }}
-        />
-        <span>{t('home.welcome')}</span>
-      </Flex>
-    </div>
+    <Flex className='home-warpper' vertical={false} gap={16} justify={'flex-start'}>
+      <div></div>
+    </Flex>
   )
 }
 

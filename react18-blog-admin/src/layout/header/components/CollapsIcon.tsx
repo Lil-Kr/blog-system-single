@@ -1,7 +1,6 @@
 import React from 'react'
-
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
-import { Button } from 'antd'
+import { Button } from 'antd/lib'
 import { useMenuStore } from '@/store/global'
 
 const CollapsIcon = () => {
@@ -14,9 +13,9 @@ const CollapsIcon = () => {
   return (
     <div className='trigger collapsed' onClick={onChange}>
       {collapsed ? (
-        <Button type='text' icon={<MenuUnfoldOutlined />} />
+        <Button size={'large'} type='text' icon={<MenuUnfoldOutlined />} />
       ) : (
-        <Button type='text' icon={<MenuFoldOutlined />} />
+        <Button size={'large'} type='text' icon={<MenuFoldOutlined />} />
       )}
     </div>
   )

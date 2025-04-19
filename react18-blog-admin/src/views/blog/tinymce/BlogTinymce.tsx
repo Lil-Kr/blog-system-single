@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { Editor as EditorInstance, EditorEvent } from 'node_modules/tinymce/tinymce'
-import { Button, Flex } from 'antd'
+import { Button, Flex } from 'antd/lib'
 import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
 
 const TinymceLocal = () => {

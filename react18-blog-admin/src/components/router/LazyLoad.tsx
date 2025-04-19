@@ -1,8 +1,8 @@
 import React, { Suspense } from 'react'
-import { Spin } from 'antd'
+import { Spin } from 'antd/lib'
 
 // css
-import styles from './index.module.scss'
+// import styles from './index.module.scss'
 
 const LazyLoad = (Comp: React.LazyExoticComponent<any>) => {
   const LazyComponent = (props: any) => {

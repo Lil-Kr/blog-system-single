@@ -1,27 +1,26 @@
 import React from 'react'
 // import { useRoutes, Outlet } from 'react-router-dom'
-import {Outlet} from 'oh-router-react'
-import { Layout } from 'antd'
-
+import { Outlet } from 'oh-router-react'
+import { Layout } from 'antd/lib'
 
 const { Content } = Layout
 
 const ContentLayout = () => {
-	return (
-		<>
-			<Content
-				className="site-layout-background content-layout"
-				style={{
+  return (
+    <>
+      <Content
+        className='site-layout-background content-layout'
+        style={{
           padding: 15,
           margin: 0,
-          maxHeight:'calc(100vh - 160px)',
+          maxHeight: 'calc(100vh - 160px)',
           overflow: 'auto'
-				}}
-			>
-				<Outlet />
-			</Content>
-		</>
-	)
+        }}
+      >
+        <Outlet />
+      </Content>
+    </>
+  )
 }
 
 export default ContentLayout

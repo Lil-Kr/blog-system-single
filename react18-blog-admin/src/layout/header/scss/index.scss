@@ -1,0 +1,96 @@
+.layout-header {
+  height: 55px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #f6f6f6;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  height: 100%;
+  padding: 0 20px;
+  width: 100%;
+
+  :global {
+    .ant-flex {
+      gap: 16px !important; // 统一设置间距
+    }
+  }
+}
+
+// 全局样式
+:global {
+  // 左侧样式
+  .collapsed {
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+  }
+
+  .ant-breadcrumb {
+    color: #000000;
+    margin-left: 8px;
+  }
+
+  // 右侧样式
+  .icon-style {
+    font-size: 20px;
+    color: rgb(77 77 77);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #1890ff;
+    }
+  }
+
+  .username {
+    font-size: 15px;
+    color: #000000;
+  }
+
+  .ant-avatar {
+    cursor: pointer;
+  }
+}
+
+// 响应式布局
+@media screen and (max-width: 768px) {
+  .header-content {
+    padding: 0 12px;
+    :global {
+      .ant-flex {
+        gap: 12px !important;
+      }
+    }
+  }
+
+  .ant-breadcrumb {
+    display: none; // 在小屏幕上隐藏面包屑
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .header-content {
+    padding: 0 8px;
+
+    :global {
+      .ant-flex {
+        gap: 8px !important;
+      }
+    }
+  }
+
+  // 在超小屏幕上可以隐藏一些次要功能
+  .icon-style.language-icon,
+  .icon-style.fullscreen-icon {
+    display: none;
+  }
+}

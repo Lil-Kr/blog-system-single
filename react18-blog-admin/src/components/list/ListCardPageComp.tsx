@@ -1,4 +1,4 @@
-import { Card, List } from 'antd'
+import { Card, List } from 'antd/lib'
 import React from 'react'
 import { CardAction } from '../card'
 import { CardActionProps } from '@/types/component/card'

@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react'
-import { message } from 'antd'
+import { message } from 'antd/lib'
 import { MessageInstance } from 'antd/lib/message/interface'
 
 const MessageContext = createContext<MessageInstance | null>(null)

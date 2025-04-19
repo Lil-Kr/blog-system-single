@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Flex, TableColumnsType, Tag } from 'antd/lib'
-import { Button } from 'antd'
+import { Button } from 'antd/lib'
 import { RoleUserTableType, TableTransferProps } from '@/types/apis/sys/role/roleType'
 import TableTransfer from './TableTransfer'
 import { useRoleAclStore } from '@/store/sys/roleStore'

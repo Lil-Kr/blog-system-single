@@ -1,4 +1,4 @@
-import { Button, Result } from 'antd'
+import { Button, Result } from 'antd/lib'
 import { useNavigate } from 'oh-router-react'
 import { resetPermissionRouters } from '@/router/dynamicRoutes'
 

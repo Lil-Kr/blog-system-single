@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table, Tag } from 'antd'
+import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table, Tag } from 'antd/lib'
 import { LabelListTableType, LabelPageListReq, LabelListReq, LabelTableResq } from '@/types/apis/blog/labelType'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'

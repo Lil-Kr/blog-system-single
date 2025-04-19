@@ -41,7 +41,7 @@ public class UserController {
 	private SysUserService userService;
 
 	/**
-	 * admin 登录
+	 * admin login
 	 * @param req
 	 * @return
 	 */
@@ -51,6 +51,17 @@ public class UserController {
 		return userService.adminLogin(req);
 	}
 
+	/**
+	 * admin register
+	 * @param req
+	 * @return
+	 */
+	@RecordLogger
+	@PostMapping("/register")
+	public ApiResp<Integer> register(@RequestBody @Valid UserRegisterReq req) {
+		return userService.registerAdmin(req);
+	}
+
 	@CheckAuth
 	@RecordLogger
 	@DeleteMapping("/logout")
@@ -58,13 +69,6 @@ public class UserController {
 		// 移除用户
 		RequestHolder.remove();
 		return ApiResp.success(messageLangService.getGreetingMessage(LANG_ZH, "admin.logout.success"));
-	}
-
-	@CheckAuth
-	@RecordLogger
-	@PostMapping("/register")
-	public ApiResp<Integer> register(@RequestBody @Valid UserRegisterReq req) {
-		return userService.registerAdmin(req);
 	}
 
 	@CheckAuth

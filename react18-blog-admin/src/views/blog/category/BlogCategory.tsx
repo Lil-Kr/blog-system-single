@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table } from 'antd'
+import { Button, Flex, Form, Input, PaginationProps, Popconfirm, Space, Table } from 'antd/lib'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 import { useForm } from 'antd/es/form/Form'
 import { BlogCategoryPageReq, CategoryTableType } from '@/types/apis/blog/category'

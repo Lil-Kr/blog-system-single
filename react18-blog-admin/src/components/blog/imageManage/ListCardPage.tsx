@@ -1,4 +1,4 @@
-import { List } from 'antd'
+import { List } from 'antd/lib'
 import { CardActionProps } from '@/types/component/card'
 import { PageData } from '@/types/base/response'
 import CardAction from './CardAction'

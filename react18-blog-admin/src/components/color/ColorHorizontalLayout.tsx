@@ -16,7 +16,7 @@ import {
   generate,
   presetPalettes
 } from '@ant-design/colors'
-import { Col, ColorPicker, ColorPickerProps, Divider, Row, theme } from 'antd'
+import { Col, ColorPicker, ColorPickerProps, Divider, Row, theme } from 'antd/lib'
 import { useColorStore } from '@/store/blog/colorStore'
 
 type Presets = Required<ColorPickerProps>['presets'][number]

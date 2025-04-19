@@ -5,14 +5,14 @@ import HeaderLayout from './header'
 import ContentLayout from './content'
 import FooterLayout from './footer/FooterLayout'
 import TabsLayout from './tabs'
-import { Layout } from 'antd'
+import { Layout } from 'antd/lib'
 const { Sider } = Layout
 import { useLocation } from 'oh-router-react'
 import { getMenuOpenKeysUtil } from '@/utils/common'
 import { useTokenStore } from '@/store/login'
 
 // css
-import styles from '@/layout/css/index.module.scss'
+import styles from '@/layout/scss/index.module.scss'
 
 const MainLayout = () => {
   const { pathname } = useLocation()

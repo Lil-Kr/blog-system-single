@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { BlogTopicPageReq, TopiciTableType } from '@/types/apis/blog/topicType'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Flex, Form, Input, PaginationProps, Popconfirm } from 'antd'
+import { Flex, Form, Input, PaginationProps, Popconfirm } from 'antd/lib'
 import { useForm } from 'antd/es/form/Form'
 import Table, { ColumnsType } from 'antd/es/table'
 import { TableRowSelection } from 'antd/es/table/interface'

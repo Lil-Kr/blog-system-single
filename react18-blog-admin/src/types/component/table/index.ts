@@ -1,4 +1,4 @@
-import { TablePaginationConfig } from 'antd'
+import { TablePaginationConfig } from 'antd/lib'
 import { ColumnsType, TableRowSelection } from 'antd/es/table/interface'
 
 export interface TableBaseParames<T = any> {

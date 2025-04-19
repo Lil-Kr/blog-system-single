@@ -7,7 +7,12 @@ export default {
     btn: 'click me'
   },
   logo: {
-    title: 'system-manager'
+    title: 'Blog System'
+  },
+  language: {
+    changeLang: 'Switch Language',
+    zh_CN: 'Simple Chinese',
+    en_US: 'English'
   },
   login: {
     title: 'Login System',
@@ -43,7 +48,5 @@ export default {
   home: {
     welcome: 'Welcome'
   },
-  blog: {
-    
-  }
+  blog: {}
 }

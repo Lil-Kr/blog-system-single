@@ -9,6 +9,11 @@ export default {
   logo: {
     title: '博客后台管理'
   },
+  language: {
+    changeLang: '切换语言',
+    zh_CN: '简体中文',
+    en_US: 'English'
+  },
   login: {
     title: '博客后台系统登陆',
     confirm: '登录',

@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { Editor as EditorInstance } from 'node_modules/tinymce/tinymce'
-import { Button } from 'antd'
+import { Button } from 'antd/lib'
 import { useTinymceStore } from '@/store/richTextEditor/richTextEditorStore'
 
 interface Anchor {
@@ -16,8 +16,7 @@ const TinymceLocal = () => {
   const { tinyMceContents, setTinyMCEContents } = useTinymceStore()
   const [anchors, setAnchors] = useState<{ name: string | null; text: string }[]>([])
 
-  const getEditorContent = () => {
-  }
+  const getEditorContent = () => {}
 
   const onSetContentHandler = () => {
     if (editorRef.current !== null) {

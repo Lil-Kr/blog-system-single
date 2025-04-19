@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { ThemeConfigProp } from '@/types/common'
 import type { SizeType } from 'antd/lib/config-provider/SizeContext'
+import { useTranslation } from 'react-i18next'
 
 type Actions = {
   setLanguage: (language: string) => void

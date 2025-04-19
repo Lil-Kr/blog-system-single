@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Transfer } from 'antd'
-import type { GetProp, TableColumnsType, TableProps, TransferProps } from 'antd'
+import { Table, Transfer } from 'antd/lib'
+import type { GetProp, TableColumnsType, TableProps, TransferProps } from 'antd/lib'
 import { RoleUserTableType, TableRowSelection, TableTransferProps } from '@/types/apis/sys/role/roleType'
 import { SizeType } from 'antd/lib/config-provider/SizeContext'
 import { TablePageInfoType } from '@/types/base'

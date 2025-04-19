@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tabs } from 'antd'
+import { Tabs } from 'antd/lib'
 import { useNavigate } from 'oh-router-react'
 import { TabType } from '@/types/common/tabType'
 import { useMenuStore, useTabsStore } from '@/store/global/globalStore'

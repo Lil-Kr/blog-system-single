@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Layout } from 'antd'
+import { Layout } from 'antd/lib'
 const { Footer } = Layout
 
 const FooterLayout = () => {

@@ -1,8 +1,8 @@
-import { Menu, Spin } from 'antd'
+import { Menu, Spin } from 'antd/lib'
 import { useNavigate, useLocation } from 'oh-router-react'
 import { SubMenuType } from '@/types/common'
 import { useMenuStore, useTabsStore } from '@/store/global/globalStore'
-import Logo from './logo/Logo'
+import Logo from './components/logo/Logo'
 import { usePermissionsStore } from '@/store/sys/authStore'
 
 const MenuLayout = () => {

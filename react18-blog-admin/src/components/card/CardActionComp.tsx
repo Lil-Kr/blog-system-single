@@ -1,6 +1,6 @@
 import { CardActionProps } from '@/types/component/card'
 import { CopyFilled, CopyOutlined, DeleteOutlined, PictureOutlined } from '@ant-design/icons'
-import { Card, Image } from 'antd'
+import { Card, Image } from 'antd/lib'
 const { Meta } = Card
 import React from 'react'
 
