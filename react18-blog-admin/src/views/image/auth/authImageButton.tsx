@@ -33,7 +33,8 @@ const DelImageButton: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
 const DelImageButtonAcl = withPermission(DelImageButton, '_del_image')
-export { DelImageButtonAcl }
+const _DEL_IMAGE_ACL = '_del_image'
+export { DelImageButtonAcl, _DEL_IMAGE_ACL }
 
 /**
  * 复制 图片信息
@@ -43,4 +44,5 @@ const CopyImageButton: React.FC<Props> = ({ text, ...props }) => {
   return <Button {...props}>{text}</Button>
 }
 const CopyImageCategoryButtonAcl = withPermission(CopyImageButton, '_copy_image')
-export { CopyImageCategoryButtonAcl }
+const _COPY_IMAGE_ACL = '_copy_image'
+export { CopyImageCategoryButtonAcl, _COPY_IMAGE_ACL }

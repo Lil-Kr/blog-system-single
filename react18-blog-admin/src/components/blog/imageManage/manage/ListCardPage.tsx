@@ -3,8 +3,8 @@ import { CardActionProps } from '@/types/component/card'
 import { PageData } from '@/types/base/response'
 import CardAction from './CardAction'
 
-const ListCardPage = (props: { data: PageData }) => {
-  const { data } = props
+const ListCardPage = (props: { data: PageData; update: () => void }) => {
+  const { data, update } = props
   return (
     <>
       <List
@@ -20,7 +20,7 @@ const ListCardPage = (props: { data: PageData }) => {
         dataSource={data.list}
         renderItem={item => (
           <List.Item>
-            <CardAction cardItem={item as CardActionProps} />
+            <CardAction cardItem={item as CardActionProps} update={update} />
           </List.Item>
         )}
         pagination={{

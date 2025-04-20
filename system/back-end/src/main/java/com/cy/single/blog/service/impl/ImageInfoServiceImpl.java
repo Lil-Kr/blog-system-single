@@ -209,6 +209,8 @@ public class ImageInfoServiceImpl implements ImageInfoService {
         imageUploadResp.setMessage(e.getMessage());
         imageUploadResp.setStatus(UPLOAD_IMAGE_ERROR);
         return ApiResp.failure(imageUploadResp);
+      } finally {
+        writer.dispose();
       }
 
       /**
@@ -227,7 +229,7 @@ public class ImageInfoServiceImpl implements ImageInfoService {
         return ApiResp.failure(imageUploadResp);
       }
       imageUploadResp.setStatus(UPLOAD_IMAGE_DONE);
-      return ApiResp.success(imageUploadResp);
+      return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "image.upload.success.info"), imageUploadResp);
     } catch (Exception e) {
       log.info("upload image error: {}", e.getMessage());
       imageUploadResp.setMessage(e.getMessage());

@@ -4,28 +4,35 @@ import { BlogItemsType } from '@/types/blog'
 import { PaginationBase } from '@/components/pagination'
 import { CarouselBase } from '@/components/imageCarousel'
 import { baseUrl } from '@/constant'
-import { blogContentApi, BlogContentReqParams } from '@/apis/contentApi'
+import { blogContentApi, BlogContentReq } from '@/apis/contentApi'
 import { PageResult, PaginationType } from '@/types/base/response'
+import { transformToDay } from '@/utils/date/dateTimeUtil'
+
 const env = import.meta.env
 
 // todo: need change to from DB
-const images = [
-  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/Jay1_20240422212922_1911784719964573696.webp' },
-  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/寻找周杰伦_109951165564941972_1894396427136798720.webp' },
-  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/最伟大的作品_109951167891239729_1894400569746001920.webp' },
-  { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/微信图片_202404241849052_1894389626563596288.webp' }
-]
+// const images = [
+//   { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/Jay1_20240422212922_1911784719964573696.webp' },
+//   { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/寻找周杰伦_109951165564941972_1894396427136798720.webp' },
+//   { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/最伟大的作品_109951167891239729_1894400569746001920.webp' },
+//   { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/微信图片_202404241849052_1894389626563596288.webp' }
+// ]
 
 export type btnStatueProp = {
   prevBtn: boolean
   nextBtn: boolean
 }
 
+export type imageUrlProp = {
+  url: string
+}
+
 const Home = () => {
   const [contents, setContents] = useState<PageResult<BlogItemsType>>()
+  const [images, setImages] = useState<imageUrlProp[]>([])
   const [pagination, setPagination] = useState<PaginationType>({
     currentPageNum: 1,
-    pageSize: 9,
+    pageSize: 10,
     total: 0,
     totalPage: 0
   })
@@ -35,23 +42,30 @@ const Home = () => {
    * 初始化数据
    */
   useEffect(() => {
-    initContentPageList()
+    initBlogPageList()
   }, [])
 
   /**
    * init data
    */
-  const initContentPageList = async () => {
-    const param = {
-      keyWords: '',
+  const initBlogPageList = async () => {
+    const req = {
       currentPageNum: pagination.currentPageNum,
       pageSize: pagination.pageSize
     }
-    const resData = await frontContentPageList({ ...param })
-    setContents(resData)
+    const blogPageList = await frontContentPageList({ ...req })
+    setContents(blogPageList)
 
-    const totalPage = calculateTotalPages(resData.total, pagination.pageSize)
-    setPagination({ ...param, total: resData.total, totalPage })
+    // set 图片轮播内容
+    const imageUrls: imageUrlProp[] = blogPageList.list
+      .filter(item => item.image?.url)
+      .map(({ image }) => ({
+        url: image.url
+      }))
+    setImages(imageUrls)
+
+    const totalPage = calculateTotalPages(blogPageList.total, pagination.pageSize)
+    setPagination({ ...req, total: blogPageList.total, totalPage })
 
     let newState = { ...btnDisable }
     if (pagination.currentPageNum <= 1) {
@@ -70,35 +84,33 @@ const Home = () => {
 
   /**
    * fetch content data list
-   * @param params
+   * @param req
    * @returns
    */
-  const frontContentPageList = async (params: BlogContentReqParams): Promise<PageResult<BlogItemsType>> => {
-    const contentPageList = await blogContentApi.frontContentPageList({ ...params })
-    const { code, data, msg } = contentPageList
+  const frontContentPageList = async (req: BlogContentReq): Promise<PageResult<BlogItemsType>> => {
+    const contentPageList = await blogContentApi.frontContentPageList({ ...req })
+    const { code, data } = contentPageList
     if (code !== 200) {
       return {} as PageResult<BlogItemsType>
     }
 
-    const contentPageData = data.list.map(
-      ({ id, surrogateId, number, title, original, recommend, imgUrl, labels, publishTime }) => ({
-        key: surrogateId,
-        image: {
-          alt: '',
-          url: env.VITE_BACKEND_IMAGE_BASE_API + imgUrl
-        },
-        tags: labels,
-        blogTitle: title,
-        publishTime,
-        backendApi: `${baseUrl}/blog/${surrogateId}`
-      })
-    )
+    const blogPageList = data.list.map(({ surrogateId, title, imgUrl, labels, publishTime }) => ({
+      key: surrogateId,
+      image: {
+        alt: '',
+        url: env.VITE_BACKEND_IMAGE_BASE_API + imgUrl
+      },
+      tags: labels,
+      blogTitle: title,
+      publishTime: transformToDay(publishTime),
+      backendApi: `${baseUrl}/blog/${surrogateId}`
+    }))
 
-    const resData: PageResult<BlogItemsType> = {
-      list: contentPageData,
+    const res: PageResult<BlogItemsType> = {
+      list: blogPageList,
       total: data.total
     }
-    return resData
+    return res
   }
 
   const pageChange = async (currentPageNum: number, pageSize: number) => {
@@ -136,9 +148,7 @@ const Home = () => {
     <>
       {/* 右侧主体内容 */}
       <div className='flex flex-col w-full gap-y-4'>
-        <div className='flex w-full'>
-          <CarouselBase images={images} />
-        </div>
+        <div className='flex w-full'>{images.length > 0 && <CarouselBase images={images} />}</div>
         <div className='grid grid-cols-4 gap-2'>
           {contents?.list.map((blogItem, index) => (
             <CardBlogListItem key={index} blogItem={blogItem} />

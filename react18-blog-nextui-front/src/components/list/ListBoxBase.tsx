@@ -1,7 +1,6 @@
 import React from 'react'
-import { Link, Listbox, ListboxItem } from "@heroui/react"
+import { Listbox, ListboxItem } from '@heroui/react'
 import { ListBoxItemType, CompType } from '@/types/components/ListBoxType'
-import { clearScreenDown } from 'readline'
 
 const textLength = 32
 

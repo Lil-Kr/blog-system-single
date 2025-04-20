@@ -280,11 +280,13 @@ public class BlogContentServiceImpl implements BlogContentService {
 
   @Override
   public PageResult<BlogContentResp> frontContentPageList(BlogContentPageReq req) {
-    List<BlogContentResp> pageList = blogContentMapper.frontContentPageList(req);
+    req.setStatus(1);
+    req.setIsOrder(1);
+    List<BlogContentResp> pageList = blogContentMapper.pageFrontContentList(req);
     if (CollectionUtils.isEmpty(pageList)) {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
-    Integer count = blogContentMapper.pageContentCount(req);
+    Integer count = blogContentMapper.pageFrontContentCount(req);
 
     // 设置缓存--作废
 //    pageList.stream().forEach(item -> {

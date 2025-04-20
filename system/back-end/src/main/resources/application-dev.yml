@@ -14,12 +14,10 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/blog
 
-
 ## mybatis-plus
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
 
 ## upload config
 upload:
@@ -27,4 +25,3 @@ upload:
   uploadDir: /upload
   requestMappingPath: /upload/**
   moduleImagePath: /image
-  moduleBlogPath: /blog

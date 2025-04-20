@@ -91,8 +91,7 @@
 	</select>
 
 	<select id="contentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
-		select
-		<include refid="Base_Column_List"/>
+		select <include refid="Base_Column_List"/>
 		from <include refid="Table_Name"/>
 		<where>
 			<if test="param.surrogateId != null">
@@ -120,7 +119,7 @@
 			</if>
 		</where>
 		<if test="param.isOrder != null and param.isOrder != ''">
-			order by create_time
+			order by publish_time
 			<if test="param.isOrder == 0">
 				asc
 			</if>
@@ -142,12 +141,10 @@
 	</update>
 
 	<select id="frontContentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
-		select
-		<include refid="Base_Column_List"/>
-		from
-		<include refid="Table_Name"/>
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name"/>
 		order by publish_time desc
-		limit 50
+		limit 10
 	</select>
 
 	<select id="frontContentByGroupCategory" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp">
@@ -158,31 +155,68 @@
 		group by category_id
 	</select>
 
-	<select id="frontContentPageList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
-		select
-		<include refid="Base_Column_List"/>
-		from
-		<include refid="Table_Name"/>
+	<select id="pageFrontContentList" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentResp">
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name"/>
 		<where>
-			<if test="param.surrogateId != null and param.surrogateId != ''">
+			<if test="param.surrogateId != null">
 				and surrogate_id = #{param.surrogateId}
 			</if>
-			<if test="param.original != null and param.original != ''">
+			<if test="param.original != null">
 				and original = #{param.original}
 			</if>
-			<if test="param.recommend != null and param.recommend != ''">
+			<if test="param.recommend != null">
 				and recommend = #{param.recommend}
 			</if>
-			<if test="param.status != null and param.status != ''">
+			<if test="param.status != null">
+				and status = #{param.status}
+			</if>
+			<if test="param.keyWords != null and param.keyWords != ''">
+				and (
+					`number` like concat('%',#{param.keyWords},'%')
+					or
+					`name` like concat('%',#{param.keyWords},'%')
+					or
+					`title` like concat('%',#{param.keyWords},'%')
+					or
+					remark like concat('%',#{param.keyWords},'%')
+				)
+			</if>
+		</where>
+		<if test="param.isOrder != null and param.isOrder != ''">
+			order by publish_time
+			<if test="param.isOrder == 0">
+				asc
+			</if>
+			<if test="param.isOrder == 1">
+				desc
+			</if>
+		</if>
+	</select>
+
+	<select id="pageFrontContentCount" resultType="java.lang.Integer">
+		select count(1)
+		from <include refid="Table_Name" />
+		<where>
+			<if test="param.surrogateId != null">
+				and surrogate_id = #{param.surrogateId}
+			</if>
+			<if test="param.original != null">
+				and original = #{param.original}
+			</if>
+			<if test="param.recommend != null">
+				and recommend = #{param.recommend}
+			</if>
+			<if test="param.status != null">
 				and status = #{param.status}
 			</if>
 			<if test="param.keyWords != null and param.keyWords != ''">
 				and (
 				`number` like concat('%',#{param.keyWords},'%')
 				or
-				`title` like concat('%',#{param.keyWords},'%')
-				or
 				`name` like concat('%',#{param.keyWords},'%')
+				or
+				`title` like concat('%',#{param.keyWords},'%')
 				or
 				remark like concat('%',#{param.keyWords},'%')
 				)

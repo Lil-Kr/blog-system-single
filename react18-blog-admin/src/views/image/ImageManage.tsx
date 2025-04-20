@@ -26,9 +26,10 @@ const ImageManage = () => {
       openModal: true,
       title: '图片上传',
       fileList: [],
+      uploadFiles: [],
       modalReq: { imageCategoryId: activeKey },
       update: () => {
-        imageCategoryDetial({ surrogateId: activeKey })
+        retireveImageCategoryDetial({ surrogateId: activeKey })
       }
     }
     setUploadImageModalState(modalReq)
@@ -44,7 +45,7 @@ const ImageManage = () => {
     const tabKey = tabsData[0].key
     setActiveKey(tabKey)
 
-    await imageCategoryDetial({ surrogateId: tabKey })
+    await retireveImageCategoryDetial({ surrogateId: tabKey })
   }
 
   /**
@@ -55,7 +56,7 @@ const ImageManage = () => {
   const tabOnClick = (activeKey: string, e: React.KeyboardEvent<Element> | React.MouseEvent<Element, MouseEvent>) => {
     // 处理 tab 点击事件, 这里可以根据 activeKey 和事件类型 e 进行相应逻辑处理
     setActiveKey(activeKey)
-    imageCategoryDetial({ surrogateId: activeKey })
+    retireveImageCategoryDetial({ surrogateId: activeKey })
   }
 
   /**
@@ -70,13 +71,20 @@ const ImageManage = () => {
       return []
     }
 
-    const tabsData: Tab[] = data.map(({ surrogateId, name, ...rest }) => ({
+    const tabs: Tab[] = data.map(({ surrogateId, name, ...rest }) => ({
       key: surrogateId,
       label: name,
       ...rest
     }))
-    setTabsItem(tabsData)
-    return tabsData
+    setTabsItem(tabs)
+    return tabs
+  }
+
+  /**
+   * 刷新图片列表
+   */
+  const refreshImageList = async () => {
+    await retireveImageCategoryDetial({ surrogateId: activeKey })
   }
 
   /**
@@ -84,12 +92,11 @@ const ImageManage = () => {
    * @param req
    * @returns
    */
-  const imageCategoryDetial = async (req: GetImageCategoryReq): Promise<ImageCategoryVO> => {
+  const retireveImageCategoryDetial = async (req: GetImageCategoryReq) => {
     const imageCategoryDetial = await imageCategoryApi.get({ ...req })
     const { code, data } = imageCategoryDetial
-
     if (code !== 200) {
-      return {} as ImageCategory
+      return {} as PageData<CardActionProps>
     }
 
     const cardActionList: CardActionProps[] = (data.imageInfo?.list ?? []).map(({ surrogateId, name, imageUrl }) => ({
@@ -104,10 +111,14 @@ const ImageManage = () => {
 
     setTabsItem(pre =>
       pre.map(item =>
-        item.key === req.surrogateId ? { ...item, children: <ListCardPage data={listCardPageItem} /> } : item
+        item.key === req.surrogateId
+          ? {
+              ...item,
+              children: <ListCardPage data={listCardPageItem} update={() => refreshImageList()} />
+            }
+          : item
       )
     )
-    return data
   }
 
   return (
@@ -116,14 +127,7 @@ const ImageManage = () => {
         <Flex className='operation-btn' vertical={false} gap={10}>
           <AddImageButtonAcl text={'添加'} size={btnSize} type='primary' icon={<PlusOutlined />} onClick={create} />
         </Flex>
-        <Tabs
-          activeKey={activeKey}
-          type='card'
-          tabPosition={'left'}
-          // onChange={onTabChange}
-          onTabClick={tabOnClick}
-          items={tabsItem}
-        />
+        <Tabs activeKey={activeKey} type='card' tabPosition={'left'} onTabClick={tabOnClick} items={tabsItem} />
       </Flex>
       <ImageUploadModal />
     </>

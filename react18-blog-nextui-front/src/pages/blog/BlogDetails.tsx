@@ -4,7 +4,7 @@ import { CardBlogItem, CardBlogListItem, CardSimple } from '@/components/card'
 import { CardBaseDataType } from '@/types/components/CardType'
 import SvgIcon from '@/components/svg/SvgIcon'
 import { AnchorPointBase } from '@/components/anchor'
-import { BlogContentGetReqParams, BlogContentVO } from '@/apis/contentApi'
+import { BlogContentGetReq, BlogContentVO } from '@/apis/contentApi'
 import { blogContentApi } from '@/apis/contentApi'
 import { CardBlogItemProps } from '@/components/card/CardBlogItem'
 import { getFontRandomColorClass } from '@/utils/colors'
@@ -31,7 +31,7 @@ const BlogDetails = () => {
     }
   }, [])
 
-  const getBlogDetail = async (params: BlogContentGetReqParams): Promise<BlogContentVO> => {
+  const getBlogDetail = async (params: BlogContentGetReq): Promise<BlogContentVO> => {
     const blogDetail = await blogContentApi.frontGetBlog({ ...params })
     const { code, data } = blogDetail
     if (code !== 200) {

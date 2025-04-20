@@ -7,7 +7,7 @@ import { ListItemBase } from '@/components/list'
 import { BlogItemsType } from '@/types/blog'
 
 const blogItem: BlogItemsType = {
-  key: 1,
+  key: '1',
   image: {
     alt: 'test image',
     url: 'http://localhost:8089/upload/image/Jay1_20240422212922_1894388366645006336.webp'
@@ -46,7 +46,7 @@ const CategoryDetail = () => {
           <ListItemBase
             key={index}
             blogItem={{
-              key: 1,
+              key: '1',
               image: {
                 alt: 'test image',
                 url: 'http://localhost:8089/upload/image/Jay1_20240422212922_1894388366645006336.webp'

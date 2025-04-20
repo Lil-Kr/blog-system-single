@@ -2,7 +2,7 @@
  * home page blog items type
  */
 export type BlogItemsType = {
-  key: string | number
+  key: string
   image: {
     alt: string
     url: string

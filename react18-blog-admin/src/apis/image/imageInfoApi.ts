@@ -24,6 +24,7 @@ export interface ImageInfoUploadReq {
 }
 
 export interface ImageUploadReq {
+  data: FormData
   config: AxiosRequestConfig
 }
 
@@ -80,10 +81,8 @@ export const imageInfoApi: ImageInfoApi = {
     return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_IMAGE_INFO + `/delete/${req.surrogateId}`, {})
   },
   imageUpload(req: ImageUploadReq) {
-    return baseAxiosRequest.postUpload<Result<ImageUploadResp>>(
-      PREFIX_URL_IMAGE_INFO + '/upload',
-      {},
-      { ...req.config }
-    )
+    return baseAxiosRequest.postUpload<Result<ImageUploadResp>>(PREFIX_URL_IMAGE_INFO + '/upload', req.data, {
+      ...req.config
+    })
   }
 }

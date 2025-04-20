@@ -15,7 +15,6 @@ import { baseUrl } from '@/constant'
 import { getFontRandomColorClass } from '@/utils/colors'
 import LinkListArchive from '@/components/link/LinkListArchive'
 
-
 // const newBlogs: ListBoxItemType[] = [
 //   { text: '聊一聊微服务架构与k8s的优劣势', url: '#' },
 //   {
@@ -136,17 +135,31 @@ const Main = () => {
   const [labels, setLabel] = useState<LinkBaseType[]>([])
   const [contents, setContents] = useState<ListBoxItemType[]>([])
 
+  /**
+   * 初始化数据
+   */
+  useEffect(() => {
+    // 近期文章
+    frontContentRecentList()
+
+    // 分类列表
+    // frontCategoryCountList()
+
+    // 标签列表
+    // frontLabelList()
+  }, [])
+
   const cardList: CardBaseDataType[] = [
     {
       key: 1,
-      headTitle: '近期文章',
+      headTitle: '最新文章',
       headRightContent: {
         headMoreText: '更多',
         moreUrl: `${baseUrl}/blogs`
       },
       svgIcon: <SvgIcon name='book' />,
       content: <ListBoxBase type={'link'} items={contents} />
-    },
+    }
     // {
     //   key: 2,
     //   headTitle: '分类',
@@ -175,20 +188,6 @@ const Main = () => {
     // }
   ]
 
-  /**
-   * 初始化数据
-   */
-  useEffect(() => {
-    // 近期文章
-    frontContentRecentList()
-
-    // 分类列表
-    // frontCategoryCountList()
-
-    // 标签列表
-    // frontLabelList()
-  }, [])
-
   const frontCategoryCountList = async () => {
     const categorys = await categoryApi.frontCategoryCountList()
     const { code, data, msg } = categorys
@@ -208,12 +207,12 @@ const Main = () => {
 
   const frontLabelList = async () => {
     const labels = await labelApi.frontLabelList()
-    const { code, data, msg } = labels
+    const { code, data } = labels
     if (code !== 200) {
       return []
     }
 
-    const labelData = data.map(({ id, surrogateId, number, name, color, colorText }) => ({
+    const labelData = data.map(({ surrogateId, name }) => ({
       key: surrogateId,
       text: name,
       textColor: getFontRandomColorClass(),
@@ -229,17 +228,17 @@ const Main = () => {
    */
   const frontContentRecentList = async () => {
     const contents = await blogContentApi.frontContentRecentList()
-    const { code, data, msg } = contents
+    const { code, data } = contents
     if (code !== 200) {
       return []
     }
 
-    const contentData = data.map(({ id, surrogateId, number, title, original, recommend }) => ({
+    const blogList = data.map(({ surrogateId, title }) => ({
       id: surrogateId,
       text: title,
       url: `${baseUrl}/blog/${surrogateId}`
     }))
-    setContents(contentData)
+    setContents(blogList)
   }
 
   return (

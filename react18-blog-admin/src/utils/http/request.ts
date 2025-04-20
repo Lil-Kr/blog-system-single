@@ -10,8 +10,8 @@ const AUTO_LOGOUT_TIME = 2 * 60 * 60 * 1000 // 2 hour
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: PREFIX_BASE_BACKEND_URL,
   headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json'
+    Accept: 'application/json'
+    // 'Content-Type': 'application/json'
   },
   timeoutErrorMessage: '请求超时',
   // 设置超时时间(10s)
@@ -43,9 +43,9 @@ axiosInstance.interceptors.request.use(
     //     'Content-Type': 'multipart/form-data'
     //   }
     // }
-    if (config.data instanceof FormData) {
-      config.headers['Content-Type'] = 'multipart/form-data'
-    }
+    // if (config.data instanceof FormData) {
+    //   config.headers['Content-Type'] = 'multipart/form-data'
+    // }
     config.headers['authorization'] = token
     return config
   },
@@ -71,7 +71,7 @@ axiosInstance.interceptors.response.use(
 
       if (code >= 500) {
         messageApi?.error(msg)
-        throw Error(msg)
+        return Error(msg)
       } else if (code >= 400 && code < 500) {
         messageApi?.warning(msg)
         throw Error(msg)
@@ -88,15 +88,13 @@ axiosInstance.interceptors.response.use(
     const { response } = error
     const messageApi = getGlobalMessage()
     if (response) {
-      // 请求已发出, 但是不在2xx的范围
       // 请求已发出, 但是不在2xx的范围 -> response.code:', response.data.status
-      // const errorResp = Promise.reject(response.data)
       messageApi?.error(`${response.status} ->  ${response.statusText}`)
-
       const respData = { code: response.status, msg: response.statusText, data: '' }
       return respData
     } else {
       messageApi?.error('网络连接异常, 请稍后再试!')
+      return Promise.reject(error)
     }
   }
 )
@@ -106,16 +104,16 @@ const baseAxiosRequest = {
     return axiosInstance.get(url, { params })
   },
   post<T>(url: string, body?: object): Promise<T> {
-    return axiosInstance.post(url, body)
+    return axiosInstance.post(url, body, { headers: { 'Content-Type': 'application/json' } })
   },
   put<T>(url: string, body?: object): Promise<T> {
-    return axiosInstance.put(url, body)
+    return axiosInstance.put(url, body, { headers: { 'Content-Type': 'application/json' } })
   },
   delete<T>(url: string, params?: object): Promise<T> {
     return axiosInstance.delete(url, { params })
   },
   postUpload<T>(url: string, body?: object, config?: AxiosRequestConfig): Promise<T> {
-    return axiosInstance.post(url, body, config)
+    return axiosInstance.post(url, body, { ...config })
   }
 }
 

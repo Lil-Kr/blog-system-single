@@ -2,6 +2,7 @@ package com.cy.single.blog.aspect;
 
 import com.cy.single.blog.base.ApiResp;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +95,29 @@ public class GlobalExceptionHandler {
         /*Map errorMesssageMap = Maps.newHashMap();
         errorMesssageMap.put(msg, message);*/
     return ApiResp.warning(message);
+  }
+
+  /**
+   * 上传文件大小判断的异常捕获
+   * @param exception
+   * @param response
+   * @return
+   */
+  @ExceptionHandler(MaxUploadSizeExceededException.class)
+  public ApiResp<?> handleMaxSizeException(MaxUploadSizeExceededException exception, HttpServletResponse response) {
+    String msg = exception.getMessage();
+    return ApiResp.failure("上传文件过大, 最大允许 10MB, " + msg);
+  }
+
+  /**
+   * 如果底层抛的是这个也可以一起拦
+   * @param exception
+   * @return
+   */
+  @ExceptionHandler(SizeLimitExceededException.class)
+  public ApiResp<?> handleSizeLimitExceeded(SizeLimitExceededException exception) {
+    String msg = exception.getMessage();
+    return ApiResp.failure("请求体大小超过限制, " + msg);
   }
 
 //    /**

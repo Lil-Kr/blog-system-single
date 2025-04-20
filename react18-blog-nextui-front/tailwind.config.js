@@ -9,7 +9,7 @@ export default {
   darkMode: 'class',
   plugins: [
     heroui({
-      prefix: 'nextui',
+      prefix: 'heroui',
       addCommonColors: false, // override common colors (e.g. "blue", "green", "pink").
       defaultTheme: 'light', // default theme from the themes object
       defaultExtendTheme: 'light',

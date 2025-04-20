@@ -25,7 +25,6 @@ import java.io.IOException;
  * @Date: 2024/5/29
  * @Description: 图片相关
  */
-
 @Slf4j
 @RestController
 @RequestMapping("/image/info")
@@ -74,8 +73,8 @@ public class ImageInfoController {
   @RecordLogger
   @CheckAuth
   @DeleteMapping("/delete/{imageId}")
-  public ApiResp<String> delete(@PathVariable("imageId") @Valid @NotNull(message = "imageId是必须的") Long surrogateId) {
-    return imageInfoService.delete(surrogateId);
+  public ApiResp<String> delete(@PathVariable("imageId") @Valid @NotNull(message = "imageId是必须的") Long imageId) {
+    return imageInfoService.delete(imageId);
   }
 
   /**
@@ -87,7 +86,7 @@ public class ImageInfoController {
   @RecordLogger
   @CheckAuth
   @PostMapping("/upload")
-  public ApiResp<ImageUploadResp> upload(@ModelAttribute ImageUploadReq req) throws IOException {
+  public ApiResp<ImageUploadResp> upload(@ModelAttribute ImageUploadReq req) throws Exception {
     return imageInfoService.imageUpload(req);
   }
 

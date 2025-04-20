@@ -33,5 +33,7 @@ public interface BlogContentMapper extends BaseMapper<BlogContent> {
 
   List<BlogContentGroupResp> frontContentByGroupCategory();
 
-  List<BlogContentResp> frontContentPageList(@Param("param") BlogContentPageReq req);
+  List<BlogContentResp> pageFrontContentList(@Param("param") BlogContentPageReq req);
+
+  Integer pageFrontContentCount(@Param("param") BlogContentPageReq req);
 }

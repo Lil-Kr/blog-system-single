@@ -5,6 +5,7 @@ import { TablePageInfoType } from '@/types/base'
 import { RowSelectionType } from 'antd/lib/table/interface'
 import { ImageInfoUploadReq } from '@/apis/image/imageInfoApi'
 import { UploadFile } from 'antd/lib'
+import { RcFile } from 'antd/lib/upload'
 
 /**
  * =========================== 图片分类状态管理 ===========================
@@ -118,7 +119,7 @@ export interface UploadImageModalState {
   previewImage?: string
   uploading?: boolean
   fileList: UploadFile[]
-  uploadFiles?: UploadImageType[]
+  uploadFiles: RcFile[]
   update: () => void
 }
 
@@ -129,7 +130,7 @@ export interface UploadImageModalAction {
   setPreviewOpen: (previewOpen: boolean) => void
   setPreviewImage: (previewImage: string) => void
   setUploading: (uploading: boolean) => void
-  setUploadFiles: (uploadFiles: UploadImageType[]) => void
+  setUploadFiles: (uploadFile: RcFile) => void
   clearModalData: () => void
 }
 
@@ -179,11 +180,14 @@ const useUploadImageModalStateStore = create<UploadImageModalState & UploadImage
       ...state,
       uploading
     })),
-  setUploadFiles: (uploadFiles: UploadImageType[]) =>
-    set(state => ({
-      ...state,
-      uploadFiles
-    })),
+  setUploadFiles: (uploadFiles: RcFile) =>
+    set(state => {
+      state.uploadFiles.push(uploadFiles)
+      return {
+        ...state,
+        uploadFiles: state.uploadFiles
+      }
+    }),
   clearModalData: () =>
     set(state => ({
       ...state,

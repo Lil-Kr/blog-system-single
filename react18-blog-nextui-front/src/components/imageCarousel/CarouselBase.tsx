@@ -1,13 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
-import { RxDotFilled } from 'react-icons/rx'
+import { imageUrlProp } from '@/pages/home/Home'
 
-interface imageType {
-  url: string
-}
-
-const CarouselBase = (props: { images: imageType[] }) => {
+const CarouselBase = (props: { images: imageUrlProp[] }) => {
   const { images } = props
   const [currentIndex, setCurrentIndex] = useState(0)
 

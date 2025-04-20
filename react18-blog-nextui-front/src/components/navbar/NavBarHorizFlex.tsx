@@ -12,12 +12,12 @@ type AboutMeProps = {
 }
 
 const NavBarHorizFlex = () => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
 
   const navItems: AboutMeProps[] = [
     { name: t('header.recommend'), url: '/recommend' },
     { name: '系列文章', url: '/article' },
-    { name: '精彩留言', url: '/article' },
+    { name: '精选留言', url: '/article' },
     { name: '本站插件', url: '/plugins' },
     { name: t('header.webstation'), url: '/article' },
     { name: t('header.aboutme'), url: '/about' }
@@ -84,7 +84,7 @@ const NavBarHorizFlex = () => {
                 className='hidden lg:text-md lg:text-default-400 lg:pointer-events-none lg:flex-shrink-0 lg:flex md:text-sm md:text-default-400 md:pointer-events-none md:flex-shrink-0 md:flex'
                 keys={['command']}
               >
-                K
+                {'K'}
               </Kbd>
             }
           />

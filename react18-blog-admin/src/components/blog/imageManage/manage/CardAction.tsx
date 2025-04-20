@@ -3,17 +3,19 @@ import { CardActionProps } from '@/types/component/card'
 import { CopyFilled, CopyOutlined, DeleteOutlined, PictureOutlined } from '@ant-design/icons'
 import { useMessage } from '@/components/message/MessageProvider'
 import { Card, Popconfirm, Tooltip } from 'antd/lib'
-import { DelImageButtonAcl } from '@/views/image/auth/authImageButton'
+import { DelImageButtonAcl, _DEL_IMAGE_ACL, _COPY_IMAGE_ACL } from '@/views/image/auth/authImageButton'
 import { useImageManageStore } from '@/store/blog/imageStore'
 import { useBlogModalStore } from '@/store/blog/blogStore'
+import { usePermissionsStore } from '@/store/sys/authStore'
 const { Meta } = Card
 
 const env = import.meta.env
-const CardAction = (props: { cardItem: CardActionProps }) => {
-  const { cardItem } = props
+const CardAction = (props: { cardItem: CardActionProps; update: () => void }) => {
+  const { cardItem, update } = props
   const messageApi = useMessage()
   const { setImageUrl, setImageName, setFacePicture, isCopy } = useImageManageStore()
   const { setOpenImageModal } = useBlogModalStore()
+  const { btnSignSet } = usePermissionsStore()
 
   const del = async (cardItem: CardActionProps) => {
     const res = await imageInfoApi.delete({ surrogateId: cardItem.id })
@@ -22,6 +24,7 @@ const CardAction = (props: { cardItem: CardActionProps }) => {
       return
     }
     messageApi?.success(msg)
+    update()
   }
 
   const copy = (imageName: string) => {
@@ -57,23 +60,35 @@ const CardAction = (props: { cardItem: CardActionProps }) => {
         <Tooltip placement='top' title={'设为博客封面'} arrow={true}>
           <PictureOutlined alt='设为封面' onClick={() => setBlogFacePicture(cardItem.imageUrl)} />
         </Tooltip>,
-        <Tooltip placement='top' title={'复制图片名称'} arrow={true}>
-          <CopyOutlined onClick={() => copy(cardItem.imageName)} />
-        </Tooltip>,
-        <Tooltip placement='top' title={'复制图片url'} arrow={true}>
-          <CopyFilled onClick={() => copyLink(cardItem.imageUrl)} />
-        </Tooltip>,
-        <Tooltip placement='top' title={'删除图片'} arrow={true}>
-          <Popconfirm
-            title='删除图片'
-            description={`确定要删除 [${cardItem.imageName}] 这张图片吗?`}
-            onConfirm={() => del(cardItem)}
-            okText='确定'
-            cancelText='取消'
-          >
-            <DelImageButtonAcl danger type='link' size={'small'} icon={<DeleteOutlined />} />
-          </Popconfirm>
-        </Tooltip>
+        btnSignSet.has(_COPY_IMAGE_ACL) ? (
+          <>
+            <Tooltip placement='top' title={'复制图片名称'} arrow={true}>
+              <CopyOutlined onClick={() => copy(cardItem.imageName)} />
+            </Tooltip>
+            ,
+            <Tooltip placement='top' title={'复制图片url'} arrow={true}>
+              <CopyFilled onClick={() => copyLink(cardItem.imageUrl)} />
+            </Tooltip>
+            ,
+          </>
+        ) : (
+          <></>
+        ),
+        btnSignSet.has(_DEL_IMAGE_ACL) ? (
+          <Tooltip placement='top' title={'删除图片'} arrow={true}>
+            <Popconfirm
+              title='删除图片'
+              description={`确定要删除 [${cardItem.imageName}] 这张图片吗?`}
+              onConfirm={() => del(cardItem)}
+              okText='确定'
+              cancelText='取消'
+            >
+              <DelImageButtonAcl danger type='link' size={'small'} icon={<DeleteOutlined />} />
+            </Popconfirm>
+          </Tooltip>
+        ) : (
+          <></>
+        )
       ]}
     >
       <Meta description={cardItem.imageName} />

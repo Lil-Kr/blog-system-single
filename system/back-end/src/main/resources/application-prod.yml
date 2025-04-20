@@ -21,4 +21,3 @@ upload:
   uploadDir: /upload
   requestMappingPath: /upload/**
   moduleImagePath: /image
-  moduleBlogPath: /blog
