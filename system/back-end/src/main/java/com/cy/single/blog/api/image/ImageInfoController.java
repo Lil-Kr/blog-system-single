@@ -79,6 +79,7 @@ public class ImageInfoController {
 
   /**
    * TODO: check image size(2M)
+   * upload image
    * @param
    * @return
    * @throws IOException

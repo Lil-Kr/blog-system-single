@@ -2,6 +2,7 @@ package com.cy.single.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
+import com.cy.single.blog.pojo.req.user.AvatarUploadReq;
 import com.cy.single.blog.pojo.req.user.UserListPageReq;
 import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
 import com.cy.single.blog.pojo.req.user.UserSaveReq;
@@ -42,4 +43,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
   List<SysUserResp> selectUserListByIds(@Param("userIdList") List<Long> userIdList);
 
   List<SysUserResp> selectUserList();
+
+  int updateAvatar(@Param("param") AvatarUploadReq req);
 }

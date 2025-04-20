@@ -4,27 +4,43 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
+import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysUserMapper;
 import com.cy.single.blog.enums.ReturnCodeEnum;
 import com.cy.single.blog.pojo.dto.sys.user.UserDTO;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
-import com.cy.single.blog.pojo.req.user.UserListPageReq;
-import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
-import com.cy.single.blog.pojo.req.user.UserRegisterReq;
-import com.cy.single.blog.pojo.req.user.UserSaveReq;
+import com.cy.single.blog.pojo.req.user.*;
 import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
 import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysUserService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
+import com.cy.single.blog.utils.keyUtil.IdWorker;
+import com.luciad.imageio.webp.WebPWriteParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+
 import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 import static com.cy.single.blog.pojo.dto.sys.user.UserDTO.convertAddUserReq;
@@ -38,6 +54,15 @@ import static com.cy.single.blog.pojo.dto.sys.user.UserDTO.convertEditUserReq;
 @Service
 @Slf4j
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
+
+	@Value("${upload.rootDir}")
+	private String rootDir;
+
+	@Value("${upload.uploadDir}")
+	private String uploadDir;
+
+	@Value("${upload.adminUserPath}")
+	private String adminUserPath;
 
 	@Autowired
 	private MessageLangService msgService;
@@ -102,10 +127,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		}
 	}
 
-	@Override
-	public SysUser getUserById(Long id) {
-		return userMapper.getUserById(id);
-	}
+  @Override
+  public SysUser getUserById(Long id) {
+	  return userMapper.getUserById(id);
+  }
 
 	@Override
 	public SysUserResp getUserBySurrogateId(Long surrogateId) {
@@ -156,6 +181,90 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			return new PageResult<>(list, count);
 		}else {
 			return new PageResult<>(new ArrayList<>(0), 0);
+		}
+	}
+
+	/**
+	 * upload avatar
+	 * @param req
+	 * @return
+	 */
+	@Override
+	public ApiResp<String> uploadAvatar(AvatarUploadReq req) throws IOException {
+		MultipartFile avatar = req.getAvatarFile();
+		long maxSizeInBytes = 1 * 1024 * 1024; // 1MB
+		if (avatar == null || avatar.getSize() > maxSizeInBytes) {
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "admin.upload.avatar.size.error1"));
+		}
+		String imageOriginalFullName = avatar.getOriginalFilename();
+		String[] imageFileNames = imageOriginalFullName.split("\\.");
+		if (imageFileNames.length > 2) {
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "admin.upload.avatar.size.error2"));
+		}
+
+		String imageName = imageFileNames[0];
+		String imageTypeSuffix = "webp";
+
+		StringBuffer resourcePath = new StringBuffer(rootDir);
+		resourcePath.append(uploadDir);
+
+		/**
+		 * create Path object
+		 */
+		Path rootPath = Paths.get(resourcePath.toString());
+		if (!Files.exists(rootPath)) {
+			Files.createDirectories(rootPath);
+		}
+
+		String imageReName = imageName + "_" + IdWorker.getSnowFlakeId() + "." + imageTypeSuffix;
+		SysUser currentUser = RequestHolder.getCurrentUser();
+		resourcePath.append(adminUserPath).append("/")
+			.append(currentUser.getAccount()).append("/")
+			.append(imageReName);
+
+		try(InputStream inputStream = avatar.getInputStream()) {
+			/**
+			 * write image to disk
+			 */
+			BufferedImage originalImage = ImageIO.read(inputStream);
+			Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType("image/webp");
+			if (!writers.hasNext()) {
+				return ApiResp.failure("No writers found for format: webp");
+			}
+
+			ImageWriter writer = writers.next();
+			try (ImageOutputStream ios = ImageIO.createImageOutputStream(Files.newOutputStream(Paths.get(resourcePath.toString())))) {
+				WebPWriteParam writeParam = new WebPWriteParam(writer.getLocale());
+				writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+				writeParam.setCompressionType(writeParam.getCompressionTypes()[WebPWriteParam.LOSSY_COMPRESSION]); // lossy compression
+				writeParam.setCompressionQuality(0.75f);
+				writer.setOutput(ios);
+				writer.write(null, new IIOImage(originalImage, null, null), writeParam);
+			} catch (Exception e) {
+				log.info("avatar format webp error: {}", e.getMessage());
+				return ApiResp.failure();
+			} finally {
+				writer.dispose();
+			}
+
+			/**
+			 * update from DB
+			 */
+			StringBuffer imageUrl = new StringBuffer(uploadDir)
+				.append(adminUserPath)
+				.append("/").append(currentUser.getAccount())
+				.append("/").append(imageReName);
+			req.setUserId(currentUser.getSurrogateId());
+			req.setAvatar(imageUrl.toString());
+			// update from DB
+			int update = userMapper.updateAvatar(req);
+			if (update < 1) {
+				return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "admin.upload.avatar.error"));
+			}
+			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "admin.upload.avatar.success"));
+		} catch (Exception e) {
+			log.info("upload image error: {}", e.getMessage());
+			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "admin.upload.avatar.error"));
 		}
 	}
 

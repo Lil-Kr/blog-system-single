@@ -2,38 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cy.single.blog.dao.SysUserMapper">
 
-	<!-- 通用查询映射结果 -->
-	<resultMap id="BaseResultMap" type="com.cy.single.blog.pojo.entity.sys.SysUser">
-		<id column="id" property="id"/>
-		<result column="surrogate_id" property="surrogateId"/>
-		<result column="token" property="token"/>
-		<result column="number" property="number"/>
-		<result column="account" property="account"/>
-		<result column="user_name" property="userName"/>
-		<result column="telephone" property="telephone"/>
-		<result column="mail" property="email"/>
-		<result column="password" property="password"/>
-		<result column="org_id" property="orgId"/>
-		<result column="status" property="status"/>
-		<result column="deleted" property="deleted"/>
-		<result column="operator" property="operator"/>
-		<result column="operate_ip" property="operateIp"/>
-		<result column="remark" property="remark"/>
-		<result column="create_time" property="createTime"/>
-		<result column="update_time" property="updateTime"/>
-	</resultMap>
-
 	<sql id="Table_Name">
 		sys_user
 	</sql>
 
 	<!-- 通用查询结果列 -->
 	<sql id="Base_Column_List">
-		id, surrogate_id, token, `number`, `account`, `password`, user_name, telephone, email, org_id, `status`, deleted, remark, operate_ip, creator_id, operator, create_time, update_time
+		surrogate_id, token, `number`, `account`, `password`, user_name, telephone, email, avatar, org_id, `status`, deleted, remark, operate_ip, creator_id, operator, create_time, update_time
 	</sql>
 
 	<sql id="Base_Join_Column_List">
-		a.id, a.surrogate_id, a.token, a.`number`, a.account, a.password, a.user_name, a.telephone, a.email, a.org_id, a.status, a.deleted, a.remark, a.operate_ip, a.creator_id, a.operator, a.create_time, a.update_time
+		a.surrogate_id, a.token, a.`number`, a.account, a.password, a.user_name, a.telephone, a.email, a.avatar, a.org_id, a.status, a.deleted, a.remark, a.operate_ip, a.creator_id, a.operator, a.create_time, a.update_time
 	</sql>
 
 
@@ -96,7 +75,7 @@
 		</where>
 	</select>
 
-	<select id="getUserByToken" resultMap="BaseResultMap">
+	<select id="getUserByToken" resultType="com.cy.single.blog.pojo.entity.sys.SysUser">
 		select
 		<include refid="Base_Column_List"/>
 		from sys_user
@@ -126,7 +105,7 @@
 	</select>
 
 	<!-- 根据账号查询用户 -->
-	<select id="getUserByAccount" resultMap="BaseResultMap">
+	<select id="getUserByAccount" resultType="com.cy.single.blog.pojo.entity.sys.SysUser">
 		select
 		<include refid="Base_Column_List"/>
 		from sys_user
@@ -187,7 +166,7 @@
 		</where>
 	</update>
 
-	<select id="loginAdmin" resultMap="BaseResultMap">
+	<select id="loginAdmin" resultType="com.cy.single.blog.pojo.entity.sys.SysUser">
 		select
 		<include refid="Base_Column_List"/>
 		from sys_user
@@ -367,4 +346,10 @@
 		</where>
 		order by a.create_time desc
 	</select>
+
+	<update id="updateAvatar">
+		update sys_user
+		set avatar = #{param.avatar}
+		where surrogate_id = #{param.userId}
+	</update>
 </mapper>

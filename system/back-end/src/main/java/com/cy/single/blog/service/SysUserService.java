@@ -3,11 +3,10 @@ package com.cy.single.blog.service;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
-import com.cy.single.blog.pojo.req.user.UserListPageReq;
-import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
-import com.cy.single.blog.pojo.req.user.UserRegisterReq;
-import com.cy.single.blog.pojo.req.user.UserSaveReq;
+import com.cy.single.blog.pojo.req.user.*;
 import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
+
+import java.io.IOException;
 
 /**
  * @Author: Lil-K
@@ -31,4 +30,6 @@ public interface SysUserService {
 	ApiResp<String> edit(UserSaveReq req);
 
 	ApiResp<String> delete(Long surrogateId);
+
+  ApiResp<String> uploadAvatar(AvatarUploadReq req) throws IOException;
 }

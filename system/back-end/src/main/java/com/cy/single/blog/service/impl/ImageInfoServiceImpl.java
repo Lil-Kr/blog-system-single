@@ -158,7 +158,7 @@ public class ImageInfoServiceImpl implements ImageInfoService {
   public ApiResp<ImageUploadResp> imageUpload(ImageUploadReq req) throws IOException {
     MultipartFile imageFile = req.getImage();
     // 检查文件大小，限制为 15MB
-    long maxSizeInBytes = 10 * 1024 * 1024; // 15MB
+    long maxSizeInBytes = 2 * 1024 * 1024; // 2MB
     if (imageFile == null || imageFile.getSize() > maxSizeInBytes) {
       return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "image.upload.size.error"));
     }

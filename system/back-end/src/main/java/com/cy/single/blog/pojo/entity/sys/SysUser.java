@@ -30,11 +30,6 @@ import java.util.Date;
 public class SysUser extends Model<SysUser> {
 
   private static final long serialVersionUID = 524430714788503694L;
-  /**
-   * 自增主键
-   */
-  @TableId(value = "id", type = IdType.AUTO)
-  private Long id;
 
   /**
    * 唯一主键
@@ -71,6 +66,11 @@ public class SysUser extends Model<SysUser> {
    * 邮箱
    */
   private String email;
+
+  /**
+   * avatar
+   */
+  private String avatar;
 
   /**
    * 密码
