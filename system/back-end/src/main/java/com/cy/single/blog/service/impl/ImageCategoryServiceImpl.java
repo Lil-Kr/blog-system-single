@@ -86,13 +86,13 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
     wrapper.eq("name", req.getName());
     ImageCategory before = imageCategoryMapper.selectOne(wrapper);
     if (Objects.nonNull(before)) {
-      return ApiResp.warning(SAVE_ERROR);
+      return ApiResp.warning(Add_ERROR);
     }
 
     ImageCategory imageCategory = ImageDTO.convertSaveImageCategory(req);
     int insert = imageCategoryMapper.insert(imageCategory);
     if (insert < 1) {
-      return ApiResp.failure(SAVE_ERROR);
+      return ApiResp.failure(Add_ERROR);
     }
 
     return ApiResp.success();
@@ -118,7 +118,7 @@ public class ImageCategoryServiceImpl implements ImageCategoryService {
     int update = imageCategoryMapper.update(before, updateWrapper);
 
     if (update < 1) {
-      return ApiResp.failure(SAVE_ERROR);
+      return ApiResp.failure(Add_ERROR);
     }
     return ApiResp.success();
   }

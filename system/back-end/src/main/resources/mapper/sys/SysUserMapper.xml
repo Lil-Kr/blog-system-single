@@ -49,25 +49,23 @@
 
 	<select id="getUserBySurrogateId" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
 		select
-		a.id,
-		a.surrogate_id,
-		a.token,
-		a.`number`,
-		a.account,
-		a.password,
-		a.user_name,
-		a.telephone,
-		a.email,
-		a.org_id,
-		a.status,
-		a.deleted,
-		a.remark,
-		a.operate_ip,
-		a.creator_id,
-		a.operator,
-		a.create_time,
-		a.update_time,
-		b.name as 'orgName'
+			a.surrogate_id,
+			a.token,
+			a.`number`,
+			a.account,
+			a.user_name,
+			a.telephone,
+			a.email,
+			a.org_id,
+			a.status,
+			a.deleted,
+			a.remark,
+			a.operate_ip,
+			a.creator_id,
+			a.operator,
+			a.create_time,
+			a.update_time,
+			b.name as 'orgName'
 		from sys_user as a
 		left join sys_org as b on (a.org_id = b.surrogate_id)
 		<where>
@@ -85,8 +83,7 @@
 	</select>
 
 	<select id="getUserByKeyword" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
-		select
-		id, surrogate_id, token, account, user_name, email
+		select surrogate_id, token, account, user_name, email
 		from sys_user
 		<where>
 			<if test="param.token != null">
@@ -178,25 +175,23 @@
 
 	<select id="pageUserListByOrgId1" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
 		select
-		a.id,
-		a.surrogate_id,
-		a.token,
-		a.`number`,
-		a.account,
-		a.password,
-		a.user_name,
-		a.telephone,
-		a.email,
-		a.org_id,
-		a.status,
-		a.deleted,
-		a.remark,
-		a.operate_ip,
-		a.creator_id,
-		a.operator,
-		a.create_time,
-		a.update_time,
-		b.name as 'orgName'
+			a.surrogate_id,
+			a.token,
+			a.`number`,
+			a.account,
+			a.user_name,
+			a.telephone,
+			a.email,
+			a.org_id,
+			a.status,
+			a.deleted,
+			a.remark,
+			a.operate_ip,
+			a.creator_id,
+			a.operator,
+			a.create_time,
+			a.update_time,
+			b.name as 'orgName'
 		from sys_user as a
 		inner join sys_org as b on (a.org_id = b.surrogate_id)
 		<where>
@@ -215,27 +210,25 @@
 
 	<select id="pageUserList" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
 		select
-		a.id,
-		a.surrogate_id,
-		a.token,
-		a.`number`,
-		a.account,
-		a.password,
-		a.user_name,
-		a.telephone,
-		a.email,
-		a.org_id,
-		a.status,
-		a.deleted,
-		a.remark,
-		a.operate_ip,
-		a.creator_id,
-		a.operator,
-		a.create_time,
-		a.update_time,
-		b.name as 'orgName',
-		c.user_name as 'creator_name',
-		d.account as 'operatorName'
+			a.surrogate_id,
+			a.token,
+			a.`number`,
+			a.account,
+			a.user_name,
+			a.telephone,
+			a.email,
+			a.org_id,
+			a.status,
+			a.deleted,
+			a.remark,
+			a.operate_ip,
+			a.creator_id,
+			a.operator,
+			a.create_time,
+			a.update_time,
+			b.name as 'orgName',
+			c.user_name as 'creator_name',
+			d.account as 'operatorName'
 		from sys_user as a
 		inner join sys_org as b on (a.org_id = b.surrogate_id)
 		inner join sys_user as c on (a.creator_id = c.surrogate_id)
@@ -252,13 +245,13 @@
 			</if>
 			<if test="param.keyWords != null and param.keyWords !='' ">
 				and (
-				a.`number` like concat('%',#{param.keyWords},'%')
-				or
-				a.`user_name` like concat('%',#{param.keyWords},'%')
-				or
-				a.remark like concat('%',#{param.keyWords},'%')
-				or
-				b.name like concat('%',#{param.keyWords},'%')
+					a.`number` like concat('%',#{param.keyWords},'%')
+					or
+					a.`user_name` like concat('%',#{param.keyWords},'%')
+					or
+					a.remark like concat('%',#{param.keyWords},'%')
+					or
+					b.name like concat('%',#{param.keyWords},'%')
 				)
 			</if>
 		</where>
@@ -283,15 +276,15 @@
 			</if>
 			<if test="param.keyWords != null and param.keyWords !='' ">
 				and (
-				a.`number` like concat('%',#{param.keyWords},'%')
-				or
-				a.`user_name` like concat('%',#{param.keyWords},'%')
-				or
-				a.remark like concat('%',#{param.keyWords},'%')
-				or
-				b.name like concat('%',#{param.keyWords},'%')
-				or
-				a.user_name like concat('%',#{param.keyWords},'%')
+					a.`number` like concat('%',#{param.keyWords},'%')
+					or
+					a.`user_name` like concat('%',#{param.keyWords},'%')
+					or
+					a.remark like concat('%',#{param.keyWords},'%')
+					or
+					b.name like concat('%',#{param.keyWords},'%')
+					or
+					a.user_name like concat('%',#{param.keyWords},'%')
 				)
 			</if>
 		</where>
@@ -312,12 +305,12 @@
 	<!--  根据userIds, 查询用户列表  -->
 	<select id="selectUserListByIds" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
 		select
-		a.surrogate_id,
-		a.account,
-		a.user_name,
-		a.remark,
-		a.create_time,
-		a.update_time
+			a.surrogate_id,
+			a.account,
+			a.user_name,
+			a.remark,
+			a.create_time,
+			a.update_time
 		from sys_user as a
 		<where>
 			a.status = 0
@@ -334,12 +327,12 @@
 	<!--  查询所有用户列表, 与上一条sql一起使用  -->
 	<select id="selectUserList" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
 		select
-		a.surrogate_id,
-		a.account,
-		a.user_name,
-		a.remark,
-		a.create_time,
-		a.update_time
+			a.surrogate_id,
+			a.account,
+			a.user_name,
+			a.remark,
+			a.create_time,
+			a.update_time
 		from sys_user as a
 		<where>
 			a.status = 0

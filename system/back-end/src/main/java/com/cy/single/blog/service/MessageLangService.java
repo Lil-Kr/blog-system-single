@@ -7,5 +7,5 @@ package com.cy.single.blog.service;
  */
 public interface MessageLangService {
 
-	String getGreetingMessage(String lang, String key);
+	String getMessage(String lang, String key);
 }

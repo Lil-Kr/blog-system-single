@@ -45,7 +45,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 	@Override
 	public ApiResp<String> addDetail(SaveDictDetailReq req) {
 		if (checkDetailExist(req.getParentId(), req.getName(), req.getType())) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg1"));
+			return ApiResp.failure(msgService.getMessage(LANG_ZH, "sys.dict.resp.msg1"));
 		}
 
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
@@ -59,9 +59,9 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 		int insert = dictDetailMapper.insert(dictDetail);
 		if (insert >= 1) {
 			cacheService.updateDictDetailCache(dictDetail.getSurrogateId(), dictDetail, BUS_CREATE);
-			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg2"));
+			return ApiResp.success(msgService.getMessage(LANG_ZH, "sys.dict.resp.msg2"));
 		} else {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg3"));
+			return ApiResp.failure(msgService.getMessage(LANG_ZH, "sys.dict.resp.msg3"));
 		}
 	}
 
@@ -93,13 +93,13 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 	@Override
 	public ApiResp<String> editDetail(SaveDictDetailReq req) {
 		if (checkDetailExist(req.getSurrogateId(), req.getName(), req.getType())) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg1"));
+			return ApiResp.failure(msgService.getMessage(LANG_ZH, "sys.dict.resp.msg1"));
 		}
 		QueryWrapper<SysDictDetail> query = new QueryWrapper<>();
 		query.eq("surrogate_id", req.getSurrogateId());
 		SysDictDetail before = dictDetailMapper.selectOne(query);
 		if (Objects.isNull(before)) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg4"));
+			return ApiResp.failure(msgService.getMessage(LANG_ZH, "sys.dict.resp.msg4"));
 		}
 
 		SysDictDetail after = SysDictDetail.builder()
@@ -112,9 +112,9 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 		int update = dictDetailMapper.update(after, query);
 		if (update >= 1) {
 			cacheService.updateDictDetailCache(after.getSurrogateId(), after, BUS_EDIT);
-			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg5"));
+			return ApiResp.success(msgService.getMessage(LANG_ZH, "sys.dict.resp.msg5"));
 		}else {
-			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.dict.resp.msg6"));
+			return ApiResp.success(msgService.getMessage(LANG_ZH, "sys.dict.resp.msg6"));
 		}
 	}
 

@@ -31,15 +31,11 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
@@ -73,6 +69,28 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Autowired
 	private CacheService cacheService;
 
+	/**
+	 * register admin
+	 * @param req
+	 * @return
+	 */
+	@Override
+	public ApiResp<Integer> registerAdmin(UserRegisterReq req) {
+		SysUser admin = userMapper.getUserByAccount(req.getAccount());
+		if (Objects.nonNull(admin)) {
+			return ApiResp.failure(ReturnCodeEnum.INFO_NOT_EXIST);
+		}
+
+		SysUser user = UserDTO.convertSaveAdminReq(req);
+
+		int count = userMapper.insert(user);
+		if (count < 1) {
+			return ApiResp.failure(Add_ERROR);
+		}
+
+		return ApiResp.success(ReturnCodeEnum.SUCCESS);
+	}
+
 	@Override
 	public ApiResp<String> add(UserSaveReq req) {
 		List<SysUserResp> checkRes = userMapper.selectUserInfoExist(req);
@@ -82,13 +100,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 		SysUser user = convertAddUserReq(req);
 		int insert = userMapper.insert(user);
-		if (insert >= 1) {
-			// 更新缓存
-			cacheService.setUserCache(user.getToken(), user);
-			return ApiResp.success();
-		} else {
-			return ApiResp.failure(SAVE_ERROR);
+		if (insert < 1) {
+			return ApiResp.failure(Add_ERROR);
 		}
+		// 更新缓存
+		cacheService.setUserCache(user.getToken(), user);
+		return ApiResp.success();
 	}
 
 	/**
@@ -147,30 +164,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		user.setUpdateTime(DateUtil.localDateTimeNow());
 		Integer update = userMapper.updateUserBySurrogateId(user);
 		if (update >= 1)
-			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "admin.login.success"), user);
+			return ApiResp.success(msgService.getMessage(LANG_ZH, "admin.login.success"), user);
 		else
 			return ApiResp.failure();
-	}
-
-	/**
-	 * register admin
-	 * @param req
-	 * @return
-	 */
-	@Override
-	public ApiResp<Integer> registerAdmin(UserRegisterReq req) {
-		SysUser admin = userMapper.getUserByAccount(req.getAccount());
-		if (Objects.nonNull(admin)) {
-			return ApiResp.failure(ReturnCodeEnum.INFO_NOT_EXIST);
-		}
-
-		SysUser user = UserDTO.convertSaveAdminReq(req);
-		int count = userMapper.insert(user);
-		if (count <= 0) {
-			return ApiResp.failure(SAVE_ERROR);
-		}
-
-		return ApiResp.success(ReturnCodeEnum.SUCCESS);
 	}
 
 	@Override
@@ -179,7 +175,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		Integer count = userMapper.countUserList(req);
 		if (CollectionUtils.isNotEmpty(list)) {
 			return new PageResult<>(list, count);
-		}else {
+		} else {
 			return new PageResult<>(new ArrayList<>(0), 0);
 		}
 	}
@@ -190,16 +186,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	 * @return
 	 */
 	@Override
-	public ApiResp<String> uploadAvatar(AvatarUploadReq req) throws IOException {
+	public ApiResp<String> uploadAvatar(AvatarUploadReq req) throws Exception {
 		MultipartFile avatar = req.getAvatarFile();
 		long maxSizeInBytes = 1 * 1024 * 1024; // 1MB
 		if (avatar == null || avatar.getSize() > maxSizeInBytes) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "admin.upload.avatar.size.error1"));
+			return ApiResp.failure(msgService.getMessage(LANG_ZH, "admin.upload.avatar.size.error1"));
 		}
-		String imageOriginalFullName = avatar.getOriginalFilename();
+		String imageOriginalFullName = Optional.ofNullable(avatar.getOriginalFilename()).orElse("");
 		String[] imageFileNames = imageOriginalFullName.split("\\.");
 		if (imageFileNames.length > 2) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "admin.upload.avatar.size.error2"));
+			return ApiResp.failure(msgService.getMessage(LANG_ZH, "admin.upload.avatar.size.error2"));
 		}
 
 		String imageName = imageFileNames[0];
@@ -259,12 +255,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			// update from DB
 			int update = userMapper.updateAvatar(req);
 			if (update < 1) {
-				return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "admin.upload.avatar.error"));
+				return ApiResp.failure(msgService.getMessage(LANG_ZH, "admin.upload.avatar.error"));
 			}
-			return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "admin.upload.avatar.success"));
+			return ApiResp.success(msgService.getMessage(LANG_ZH, "admin.upload.avatar.success"));
 		} catch (Exception e) {
 			log.info("upload image error: {}", e.getMessage());
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "admin.upload.avatar.error"));
+			return ApiResp.failure(msgService.getMessage(LANG_ZH, "admin.upload.avatar.error"));
 		}
 	}
 

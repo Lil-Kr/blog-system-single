@@ -97,7 +97,7 @@ public class ImageInfoServiceImpl implements ImageInfoService {
     if (insert > 0) {
       return ApiResp.success();
     }else {
-      return ApiResp.failure(SAVE_ERROR);
+      return ApiResp.failure(Add_ERROR);
     }
   }
 
@@ -160,13 +160,13 @@ public class ImageInfoServiceImpl implements ImageInfoService {
     // 检查文件大小，限制为 15MB
     long maxSizeInBytes = 2 * 1024 * 1024; // 2MB
     if (imageFile == null || imageFile.getSize() > maxSizeInBytes) {
-      return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "image.upload.size.error"));
+      return ApiResp.failure(msgService.getMessage(LANG_ZH, "image.upload.size.error"));
     }
 
     String imageOriginalFullName = imageFile.getOriginalFilename();
     String[] imageFileNames = imageOriginalFullName.split("\\.");
     if (imageFileNames.length > 2) {
-      return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "image.upload.error.info"));
+      return ApiResp.failure(msgService.getMessage(LANG_ZH, "image.upload.error.info"));
     }
 
     String imageName = imageFileNames[0];
@@ -229,7 +229,7 @@ public class ImageInfoServiceImpl implements ImageInfoService {
         return ApiResp.failure(imageUploadResp);
       }
       imageUploadResp.setStatus(UPLOAD_IMAGE_DONE);
-      return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "image.upload.success.info"), imageUploadResp);
+      return ApiResp.success(msgService.getMessage(LANG_ZH, "image.upload.success.info"), imageUploadResp);
     } catch (Exception e) {
       log.info("upload image error: {}", e.getMessage());
       imageUploadResp.setMessage(e.getMessage());

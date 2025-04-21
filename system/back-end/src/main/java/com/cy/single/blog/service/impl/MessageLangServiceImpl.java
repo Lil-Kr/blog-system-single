@@ -19,7 +19,7 @@ public class MessageLangServiceImpl implements MessageLangService {
 	private MessageSource messageSource;
 
 	@Override
-	public String getGreetingMessage(String lang, String key) {
+	public String getMessage(String lang, String key) {
 		Locale locale = lang != null ? new Locale(lang) : Locale.getDefault();
 		return messageSource.getMessage(key, null, locale);
 	}

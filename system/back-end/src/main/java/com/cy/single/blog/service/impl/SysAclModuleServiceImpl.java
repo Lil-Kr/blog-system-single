@@ -33,7 +33,7 @@ import java.util.Optional;
 import static com.cy.single.blog.common.constants.CommonConstants.ACLM_PREV_NUMBER_INFO;
 import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
-import static com.cy.single.blog.enums.ReturnCodeEnum.SAVE_ERROR;
+import static com.cy.single.blog.enums.ReturnCodeEnum.Add_ERROR;
 
 /**
  * @Author: Lil-K
@@ -67,7 +67,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
      * 检查权限模块名是否相同
      */
     if (checkAclModuleExist(req.getParentSurrogateId(), req.getName(), req.getSurrogateId())) {
-      return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg2"));
+      return ApiResp.failure(msgService.getMessage(LANG_ZH, "sys.acl.module.resp.msg2"));
     }
 
     /** 计算层级 **/
@@ -103,9 +103,9 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
       .build();
     int insert = aclModuleMapper.insert(aclModule);
     if (insert >= 1) {
-      return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg1"));
+      return ApiResp.success(msgService.getMessage(LANG_ZH, "sys.acl.module.resp.msg1"));
     } else {
-      return ApiResp.failure(SAVE_ERROR);
+      return ApiResp.failure(Add_ERROR);
     }
   }
 
@@ -198,7 +198,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
 
     // 更新子组织信息
     this.updateWithChildAclModule(before, after);
-    return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg3"));
+    return ApiResp.success(msgService.getMessage(LANG_ZH, "sys.acl.module.resp.msg3"));
   }
 
 
@@ -264,7 +264,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
     query.eq("surrogate_id", surrogateId);
     SysAclModule aclModule = aclModuleMapper.selectOne(query);
     if (Objects.isNull(aclModule)) {
-      return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg4"));
+      return ApiResp.failure(msgService.getMessage(LANG_ZH, "sys.acl.module.resp.msg4"));
     }
 
     // 检查要删除的权限模块下是否还有子权限模块
@@ -272,17 +272,17 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
     query1.eq("parent_id", surrogateId);
     Long count = aclModuleMapper.selectCount(query1);
     if (count >= 1) {
-      return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg5"));
+      return ApiResp.failure(msgService.getMessage(LANG_ZH, "sys.acl.module.resp.msg5"));
     }
 
     // 检查待删除的权限模块下是否还存在权限点(包括所有状态的权限点数量), 如存在将不能删除
     Long aclCount = aclService.getAclCountByAclModuleId(surrogateId);
     if (aclCount >= 1) {
-      return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg6"));
+      return ApiResp.failure(msgService.getMessage(LANG_ZH, "sys.acl.module.resp.msg6"));
     }
 
     aclModuleMapper.deleteById(aclModule.getId());
-    return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.acl.module.resp.msg7"));
+    return ApiResp.success(msgService.getMessage(LANG_ZH, "sys.acl.module.resp.msg7"));
   }
 
   /**

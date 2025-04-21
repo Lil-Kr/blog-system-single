@@ -15,7 +15,7 @@ public enum ReturnCodeEnum {
 	SEND_MAIL_ERROR(417, "调用邮件服务器错误"),
 	DATA_INFO_REPEAT(418, "数据重复, 请求失败"),
 	DATA_INFO_UNUSUAL(419, "数据异常或操作不规范"),
-	SAVE_ERROR(421, "新增失败"),
+	Add_ERROR(421, "添加失败"),
 	EDITE_ERROR(422, "修改失败"),
 	DEL_ERROR(423, "删除失败"),
 	OPERATE_ERROR(424, "请求失败"),

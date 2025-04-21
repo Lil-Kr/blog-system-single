@@ -259,7 +259,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 		query2.eq("parent_id", surrogateId);
 		Long count = orgMapper.selectCount(query2);
 		if (count >= 1) {
-			return ApiResp.warning(msgService.getGreetingMessage(LANG_ZH, "sys.org.api.resp.msg2"));
+			return ApiResp.warning(msgService.getMessage(LANG_ZH, "sys.org.api.resp.msg2"));
 		}
 
 		/**
@@ -269,7 +269,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 		queryWrapperUser.eq("org_id", surrogateId);
 		Long userCount = userMapper.selectCount(queryWrapperUser);
 		if (userCount >= 1) {
-			return ApiResp.warning(msgService.getGreetingMessage(LANG_ZH, "sys.org.api.resp.msg1"));
+			return ApiResp.warning(msgService.getMessage(LANG_ZH, "sys.org.api.resp.msg1"));
 		}
 
 		int delete = orgMapper.deleteById(org.getId());

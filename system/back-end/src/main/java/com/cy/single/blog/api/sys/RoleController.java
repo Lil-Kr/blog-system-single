@@ -123,7 +123,7 @@ public class RoleController {
   public ApiResp<List<AclModuleDto>> roleAclTree (@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
     List<AclModuleDto> aclModuleDtoList = treeService.roleAclTree(req.getRoleId());
     if (CollectionUtils.isEmpty(aclModuleDtoList)) {
-      return ApiResp.failure(msgLangService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg1"));
+      return ApiResp.failure(msgLangService.getMessage(LANG_ZH, "sys.role.api.resp.msg1"));
     }
     return ApiResp.success(aclModuleDtoList);
   }

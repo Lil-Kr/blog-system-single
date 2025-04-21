@@ -1,0 +1,58 @@
+/* 博客内容 */
+.blog-content-wrapper {
+  /** 代码片段样式 */
+  pre[class^='language-'] {
+    margin: 1em 0.5em;
+    padding: 1em;
+    border-radius: 0.5em;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 30em; // 30
+    line-height: 1.5em;
+  }
+
+  // code
+  pre[class^='language-'] code {
+    background: none;
+    padding: 0;
+    color: var(--font-color);
+  }
+
+  /* 博客中的图片 */
+  img {
+    display: block;
+    margin: 0 auto;
+  }
+
+  &.light {
+    --pre-bg: #27272a;
+    --font-color: #fff;
+  }
+
+  // 深色主题(purple-dark)
+  &.purple-dark {
+    --pre-bg: #27272a;
+    --font-color: #fff;
+  }
+}
+
+// fixed copy button
+.code-block-wrapper {
+  position: relative;
+
+  .copy-btn {
+    position: absolute;
+    display: flex;
+    background-color: #1f2937;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    top: 1em;
+    right: 1em;
+    z-index: 1000;
+    padding: 0.25em;
+    border-radius: 0.25em;
+    width: 1.75em;
+    height: 1.75em;
+  }
+}

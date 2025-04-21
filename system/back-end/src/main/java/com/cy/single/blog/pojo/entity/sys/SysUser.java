@@ -125,6 +125,5 @@ public class SysUser extends Model<SysUser> {
    */
   private Date updateTime;
 
-  private Integer count;
 
 }

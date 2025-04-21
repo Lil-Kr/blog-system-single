@@ -74,7 +74,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		 * check supper admin is or not exist
 		 */
 		if (checkSupperAdminExist() && req.getType() == 1) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg2"));
+			return ApiResp.failure(msgService.getMessage(LANG_ZH, "sys.role.api.resp.msg2"));
 		}
 
 		Long surrogateId = IdWorker.getSnowFlakeId(); // surrogateId
@@ -97,7 +97,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		if (insert >= 1) {
 			return ApiResp.success();
 		} else {
-			return ApiResp.failure(SAVE_ERROR);
+			return ApiResp.failure(Add_ERROR);
 		}
 	}
 
@@ -157,11 +157,11 @@ public class SysRoleServiceImpl implements SysRoleService {
 		 * supper admin must be only one
 		 */
 		if (before.getType() == 1 && req.getType() != 1) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg2"));
+			return ApiResp.failure(msgService.getMessage(LANG_ZH, "sys.role.api.resp.msg2"));
 		}
 
 		if (before.getType() != 1 && req.getType() == 1 && checkSupperAdminExist()) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg2"));
+			return ApiResp.failure(msgService.getMessage(LANG_ZH, "sys.role.api.resp.msg2"));
 		}
 
 		SysRole after = SysRole.builder()
@@ -195,7 +195,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		queryWrapper.eq("surrogate_id", req.getRoleId());
 		SysRole before = roleMapper.selectOne(queryWrapper);
 		if (before.getType() == 1) {
-			return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg4"));
+			return ApiResp.failure(msgService.getMessage(LANG_ZH, "sys.role.api.resp.msg4"));
 		}
 
 		UpdateWrapper<SysRole> updateWrapper = new UpdateWrapper<>();
@@ -220,7 +220,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		QueryWrapper queryRoleUser = new QueryWrapper<>();
 		queryRoleUser.eq("role_id", surrogateId);
 		Long countRoleUser = roleUserMapper.selectCount(queryRoleUser);
-		if (countRoleUser >= 1) return ApiResp.failure(msgService.getGreetingMessage(LANG_ZH, "sys.role.api.resp.msg3"));
+		if (countRoleUser >= 1) return ApiResp.failure(msgService.getMessage(LANG_ZH, "sys.role.api.resp.msg3"));
 
 		QueryWrapper queryRoleAcl = new QueryWrapper<>();
 		queryRoleAcl.eq("role_id", surrogateId);

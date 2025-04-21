@@ -1,7 +1,7 @@
 import AcmeLogo from '@/components/navbar/icon/AcmeLogo'
 import SearchIcon from '@/components/navbar/icon/SearchIcon'
 import { ThemeSwitcher } from '@/components/themeSwitcher'
-import { Input, Link } from "@heroui/react"
+import { Input, Link } from '@heroui/react'
 import { it } from 'node:test'
 import { NavBarSubMenuItem } from '@/types/components/MenuType'
 import MenuIncludeSub from './MenuIncludeSub'
@@ -68,7 +68,6 @@ const navbarItems: NavBarSubMenuItem[] = [
   }
 ]
 
-
 /**
  * support submenu navbar
  * @returns
@@ -79,12 +78,12 @@ const NavBarHorizSubMenu = () => {
       <div className='flex flex-row w-full h-full basis-5/6 justify-between'>
         <div className='flex flex-row w-auto h-auto items-center'>
           <a className='font-bold hover:bg-success px-2 py-2 rounded-lg' href='#'>
-            Placeholder
+            {'Placeholder'}
           </a>
         </div>
         <MenuIncludeSub items={navbarItems} />
         <div className='flex flex-row w-auto items-center'>
-          <span>Placeholder</span>
+          <span>{'Placeholder'}</span>
         </div>
       </div>
     </div>

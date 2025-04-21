@@ -65,7 +65,7 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 		 */
 		List<Long> originUserIdList = roleUserMapper.selectUserIdListByRoleId(req.getRoleId());
 		if (CollectionUtils.isEmpty(originUserIdList)) {
-			return ApiResp.warning(msgService.getGreetingMessage(LANG_ZH, "sys.role.user.resp.msg1"));
+			return ApiResp.warning(msgService.getMessage(LANG_ZH, "sys.role.user.resp.msg1"));
 		}
 
 		/**
@@ -73,7 +73,7 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 		 */
 		List<Long> userIdList = req.getUserIdList();
 		if (CollectionUtils.isEmpty(userIdList)) {
-			return ApiResp.warning(msgService.getGreetingMessage(LANG_ZH, "sys.role.user.resp.msg2"));
+			return ApiResp.warning(msgService.getMessage(LANG_ZH, "sys.role.user.resp.msg2"));
 		}
 
 		/**
@@ -84,7 +84,7 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 			Set<Long> userIdSet = Sets.newHashSet(userIdList);
 			originUserIdSet.removeAll(userIdSet);
 			if (CollectionUtils.isEmpty(originUserIdSet)) {
-				return ApiResp.warning(msgService.getGreetingMessage(LANG_ZH, "sys.role.user.resp.msg3"));
+				return ApiResp.warning(msgService.getMessage(LANG_ZH, "sys.role.user.resp.msg3"));
 			}
 		}
 
@@ -97,7 +97,7 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 		 * 缓存失效: 用户的权限点失效
 		 */
 		cacheService.invalidUserAclCache(userIdList);
-		return ApiResp.success(msgService.getGreetingMessage(LANG_ZH, "sys.role.user.resp.msg4"));
+		return ApiResp.success(msgService.getMessage(LANG_ZH, "sys.role.user.resp.msg4"));
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
 		wrapper.eq("role_id",roleId);
 		int delete = roleUserMapper.delete(wrapper);
 		if (delete < 1) {
-			throw new BusinessException(msgService.getGreetingMessage(LANG_ZH, "sys.role.user.resp.msg5"));
+			throw new BusinessException(msgService.getMessage(LANG_ZH, "sys.role.user.resp.msg5"));
 		}
 
 		Date currentTime = DateUtil.localDateTimeNow();

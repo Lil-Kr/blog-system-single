@@ -4,6 +4,7 @@ import com.cy.single.blog.utils.checkUtil.CheckUtil;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -20,8 +21,6 @@ public class UserSaveReq {
   public interface GroupAddUser {}
   public interface GroupEditUser {}
 
-  private Long id;
-
   @NotNull(groups = {GroupGetUserAcl.class, Default.class, GroupEditUser.class}, message = "surrogateId不能为空")
   private Long surrogateId;
 
@@ -29,14 +28,15 @@ public class UserSaveReq {
    * 用户注册账号
    */
   @NotNull(groups = {Default.class},message = "用户账号不能为空")
-  @Length(groups = {Default.class}, max = 15, message = "用户账号长度必须在15个字符以内")
+  @Length(min = 5, max = 20, message = "账号长度范围在 5~20 个字符之间")
+  @Pattern(regexp = CheckUtil.ACCOUNT_REGEXP, message = "账号必须以下划线字母数字开头")
   private String account;
 
   /**
    * 用户姓名
    */
-  @NotNull(groups = {Default.class, GroupAddUser.class},message = "昵称不能为空")
-  @Length(groups = {Default.class, GroupAddUser.class},min = 2,max = 20, message = "昵称长度必须在2到20个字符之间")
+  @NotNull(groups = {Default.class, GroupAddUser.class}, message = "昵称不能为空")
+  @Length(groups = {Default.class, GroupAddUser.class}, min = 2,max = 20, message = "昵称长度必须在2到20个字符之间")
   private String userName;
 
   /**
@@ -73,4 +73,7 @@ public class UserSaveReq {
   @Length(groups = {Default.class}, max = 100, message = "备注不能超过100个字符")
   private String remark;
 
+  private MultipartFile avatarFile;
+
+  private String avatar;
 }

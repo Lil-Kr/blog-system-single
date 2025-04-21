@@ -110,7 +110,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 
     int insert = aclMapper.insert(build);
     if (insert < 1) {
-      return ApiResp.failure(SAVE_ERROR);
+      return ApiResp.failure(Add_ERROR);
     }
 
     // 更新缓存

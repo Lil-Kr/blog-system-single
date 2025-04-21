@@ -19,65 +19,77 @@ import java.util.Date;
  */
 public class UserDTO {
 
-	private static final String ACCOUNT_RANDOM = "blog-";
-	private static final String NUMBER_PREFIX = "R";
-	private static final String DEFAULT_PWD = "123456";
+  private static final String ACCOUNT_RANDOM = "blog-";
+  private static final String NUMBER_PREFIX = "R";
+  private static final String DEFAULT_PWD = "123456";
 
-	/**
-	 * request param convert to save admin object
-	 * @param baseReq
-	 * @return
-	 */
-	public static SysUser convertSaveAdminReq(UserRegisterReq baseReq) {
-		SysUser req = SysUser.builder().build();
-		BeanUtils.copyProperties(baseReq, req);
+  /**
+   * request param convert to save admin object
+   * @param baseReq
+   * @return
+   */
+  public static SysUser convertSaveAdminReq(UserRegisterReq baseReq) {
+    SysUser adminUser = SysUser.builder().build();
+    BeanUtils.copyProperties(baseReq, adminUser);
 
-		req.setSurrogateId(IdWorker.getSnowFlakeId());
-		req.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
+    adminUser.setNumber(ACCOUNT_RANDOM + IdWorker.generateRandomStr(10));
 
-		Date nowDateTime = DateUtil.localDateTimeNow();
-		req.setCreateTime(nowDateTime);
-		req.setUpdateTime(nowDateTime);
-		req.setToken(IdWorker.generateUUID());
-		return req;
-	}
+    // 默认密码
+    adminUser.setPassword(EncryptUtils.md5(DEFAULT_PWD));
+    // token
+    adminUser.setToken(IdWorker.generateUUID());
 
+    Long id = IdWorker.getSnowFlakeId();
+    adminUser.setSurrogateId(id);
+    adminUser.setCreatorId(id);
+    adminUser.setOperator(id);
 
-	public static SysUser convertAddUserReq(UserSaveReq req) {
-		SysUser build = SysUser.builder().build();
-		BeanUtils.copyProperties(req, build);
+    adminUser.setStatus(0);
+    adminUser.setDeleted(0);
+    adminUser.setOperateIp("0.0.0.0");
 
-		if (StringUtils.isBlank(build.getNumber()))
-			build.setNumber(ACCOUNT_RANDOM + IdWorker.generateRandomStr(10));
+    Date nowDateTime = DateUtil.localDateTimeNow();
+    adminUser.setCreateTime(nowDateTime);
+    adminUser.setUpdateTime(nowDateTime);
+    return adminUser;
+  }
 
-		if (StringUtils.isBlank(build.getAccount()))
-			build.setAccount(ACCOUNT_RANDOM + IdWorker.generateUUID());
+  public static SysUser convertAddUserReq(UserSaveReq req) {
+    SysUser build = SysUser.builder().build();
+    BeanUtils.copyProperties(req, build);
 
-		build.setSurrogateId(IdWorker.getSnowFlakeId());
+    if (StringUtils.isBlank(build.getNumber()))
+      build.setNumber(ACCOUNT_RANDOM + IdWorker.generateRandomStr(10));
 
-		build.setToken(IdWorker.generateUUID());
+    if (StringUtils.isBlank(build.getAccount()))
+      build.setAccount(ACCOUNT_RANDOM + IdWorker.generateUUID());
 
-		if (StringUtils.isBlank(build.getPassword()))
-			build.setPassword(EncryptUtils.md5(DEFAULT_PWD));
+    build.setSurrogateId(IdWorker.getSnowFlakeId());
 
-		build.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
-		build.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
-		build.setOperateIp("0.0.0.0");
-		build.setDeleted(0);
+    build.setToken(IdWorker.generateUUID());
 
-		Date nowDateTime = DateUtil.localDateTimeNow();
-		build.setCreateTime(nowDateTime);
-		build.setUpdateTime(nowDateTime);
-		return build;
-	}
+    if (StringUtils.isBlank(build.getPassword()))
+      build.setPassword(EncryptUtils.md5(DEFAULT_PWD));
 
-	public static SysUser convertEditUserReq(UserSaveReq req) {
-		SysUser build = SysUser.builder().build();
-		BeanUtils.copyProperties(req, build);
+    build.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
+    build.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
+    build.setOperateIp("0.0.0.0");
+    build.setStatus(0);
+    build.setDeleted(0);
 
-		build.setToken(RequestHolder.getCurrentUser().getToken());
-		build.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
-		build.setUpdateTime(DateUtil.localDateTimeNow());
-		return build;
-	}
+    Date nowDateTime = DateUtil.localDateTimeNow();
+    build.setCreateTime(nowDateTime);
+    build.setUpdateTime(nowDateTime);
+    return build;
+  }
+
+  public static SysUser convertEditUserReq(UserSaveReq req) {
+    SysUser build = SysUser.builder().build();
+    BeanUtils.copyProperties(req, build);
+
+    build.setToken(RequestHolder.getCurrentUser().getToken());
+    build.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
+    build.setUpdateTime(DateUtil.localDateTimeNow());
+    return build;
+  }
 }

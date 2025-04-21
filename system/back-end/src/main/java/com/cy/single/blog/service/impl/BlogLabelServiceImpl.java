@@ -78,7 +78,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 			cacheService.updateLabelCache(CACHE_KEY_BLOG_LABEL_LIST, BUS_CREATE, saveEntity);
 			return ApiResp.success();
 		}else {
-			return ApiResp.failure(SAVE_ERROR);
+			return ApiResp.failure(Add_ERROR);
 		}
 	}
 
@@ -102,7 +102,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 			cacheService.updateLabelCache(CACHE_KEY_BLOG_LABEL_LIST, BUS_CREATE, cache);
 			return ApiResp.success();
 		}else {
-			return ApiResp.failure(SAVE_ERROR);
+			return ApiResp.failure(Add_ERROR);
 		}
 	}
 

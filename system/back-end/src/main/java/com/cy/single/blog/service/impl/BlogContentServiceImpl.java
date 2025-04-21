@@ -61,7 +61,7 @@ public class BlogContentServiceImpl implements BlogContentService {
     // insert into mysql
     int insert = blogContentMapper.insert(blogContent);
     if (insert < 1) {
-      return ApiResp.failure(SAVE_ERROR);
+      return ApiResp.failure(Add_ERROR);
     }
 
     if (StringUtils.isBlank(req.getContentText())) {

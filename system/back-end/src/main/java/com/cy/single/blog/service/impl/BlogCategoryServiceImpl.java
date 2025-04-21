@@ -86,7 +86,7 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
       cacheService.updateBlogCategoryCache(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryResp, BUS_CREATE);
       return ApiResp.success();
     }else {
-        return ApiResp.failure(SAVE_ERROR);
+        return ApiResp.failure(Add_ERROR);
     }
   }
 
@@ -114,7 +114,7 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
         cacheService.updateBlogCategoryCache(CACHE_KEY_BLOG_CATEGORY_LIST, blogCategoryResp, BUS_EDIT);
         return ApiResp.success();
       }else {
-        return ApiResp.failure(SAVE_ERROR);
+        return ApiResp.failure(Add_ERROR);
       }
     }
 

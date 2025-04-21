@@ -6,8 +6,6 @@ import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.user.*;
 import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
 
-import java.io.IOException;
-
 /**
  * @Author: Lil-K
  * @Date: 2025/3/7
@@ -31,5 +29,5 @@ public interface SysUserService {
 
 	ApiResp<String> delete(Long surrogateId);
 
-  ApiResp<String> uploadAvatar(AvatarUploadReq req) throws IOException;
+  ApiResp<String> uploadAvatar(AvatarUploadReq req) throws Exception;
 }

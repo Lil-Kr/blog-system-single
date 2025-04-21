@@ -1,13 +1,14 @@
-const { heroui } = require("@heroui/react")
+const { heroui } = require('@heroui/react')
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}', "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}"],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}', './node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {}
   },
   darkMode: 'class',
   plugins: [
+    // require('@tailwindcss/typography'),
     heroui({
       prefix: 'heroui',
       addCommonColors: false, // override common colors (e.g. "blue", "green", "pink").
@@ -41,21 +42,6 @@ export default {
       },
       themes: {
         light: {
-          layout: {
-            disabledOpacity: '0.3',
-            hoverOpacity: 0.8, //  this value is applied as opacity-[value] when the component is hovered
-            boxShadow: {
-              // shadow-small
-              small:
-                '0px 0px 5px 0px rgb(0 0 0 / 0.02), 0px 2px 10px 0px rgb(0 0 0 / 0.06), 0px 0px 1px 0px rgb(0 0 0 / 0.3)',
-              // shadow-medium
-              medium:
-                '0px 0px 15px 0px rgb(0 0 0 / 0.03), 0px 2px 30px 0px rgb(0 0 0 / 0.08), 0px 0px 1px 0px rgb(0 0 0 / 0.3)',
-              // shadow-large
-              large:
-                '0px 0px 30px 0px rgb(0 0 0 / 0.04), 0px 30px 60px 0px rgb(0 0 0 / 0.12), 0px 0px 1px 0px rgb(0 0 0 / 0.3)'
-            }
-          },
           colors: {
             white: '#FFFFFF',
             black: '#000000',
@@ -102,6 +88,21 @@ export default {
             hoverFontColor: {
               100: '#ffffff',
               DEFAULT: '#ffffff'
+            }
+          },
+          layout: {
+            disabledOpacity: '0.3',
+            hoverOpacity: 0.8, //  this value is applied as opacity-[value] when the component is hovered
+            boxShadow: {
+              // shadow-small
+              small:
+                '0px 0px 5px 0px rgb(0 0 0 / 0.02), 0px 2px 10px 0px rgb(0 0 0 / 0.06), 0px 0px 1px 0px rgb(0 0 0 / 0.3)',
+              // shadow-medium
+              medium:
+                '0px 0px 15px 0px rgb(0 0 0 / 0.03), 0px 2px 30px 0px rgb(0 0 0 / 0.08), 0px 0px 1px 0px rgb(0 0 0 / 0.3)',
+              // shadow-large
+              large:
+                '0px 0px 30px 0px rgb(0 0 0 / 0.04), 0px 30px 60px 0px rgb(0 0 0 / 0.12), 0px 0px 1px 0px rgb(0 0 0 / 0.3)'
             }
           }
         },

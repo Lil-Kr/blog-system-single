@@ -477,13 +477,14 @@ const BlogModal = () => {
                       'fullscreen',
                       'emoticons',
                       'insertdatetime',
-                      'anchor'
+                      'anchor',
+                      'indent2em'
                     ],
                     toolbar:
                       'undo redo |' +
                       'styleselect |' +
                       // 'blocks |' +
-                      'bold italic underline strikethrough forecolor backcolor |' +
+                      'indent2em bold italic underline strikethrough forecolor backcolor |' +
                       'alignleft aligncenter alignright alignjustify |' +
                       'bullist numlist outdent indent |' +
                       // 'code codesample |' +
@@ -492,6 +493,28 @@ const BlogModal = () => {
                       'searchreplace fullscreen |' +
                       'emoticons anchor insertdatetime |' +
                       'removeformat',
+                    codesample_languages: [
+                      { text: 'Java', value: 'java' },
+                      { text: 'JavaScript', value: 'javascript' },
+                      { text: 'TypeScript', value: 'typescript' },
+                      { text: 'JSON', value: 'json' },
+                      { text: 'SQL', value: 'sql' },
+                      { text: 'Bash', value: 'bash' },
+                      { text: 'Shell', value: 'shell' },
+                      { text: 'YAML', value: 'yaml' },
+                      { text: 'HTML/XML', value: 'markup' },
+                      { text: 'CSS', value: 'css' },
+                      { text: 'JSX', value: 'jsx' },
+                      { text: 'TSX', value: 'tsx' },
+                      { text: 'Properties', value: 'properties' },
+                      { text: 'Python', value: 'python' },
+                      { text: 'Scala', value: 'scala' },
+                      { text: 'C', value: 'c' },
+                      { text: 'C++', value: 'cpp' },
+                      { text: 'C#', value: 'csharp' },
+                      { text: 'Rust', value: 'rust' },
+                      { text: 'Ruby', value: 'ruby' }
+                    ],
                     advlist_bullet_styles: 'square',
                     paste_data_images: true,
                     image_advtab: true, // add advanced image tab

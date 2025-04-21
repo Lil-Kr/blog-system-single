@@ -90,7 +90,7 @@ public class BlogTopicServiceImpl implements BlogTopicService {
       cacheService.updateBlogTopicCache(CACHE_KEY_BLOG_TOPIC_LIST, blogTopic, BUS_CREATE, 0l);
       return ApiResp.success();
     }else {
-      return ApiResp.failure(SAVE_ERROR);
+      return ApiResp.failure(Add_ERROR);
     }
   }
 
@@ -118,7 +118,7 @@ public class BlogTopicServiceImpl implements BlogTopicService {
       cacheService.updateBlogTopicCache(CACHE_KEY_BLOG_TOPIC_LIST, blogTopic, BUS_EDIT, 0l);
       return ApiResp.success();
     } else {
-      return ApiResp.failure(SAVE_ERROR);
+      return ApiResp.failure(Add_ERROR);
     }
   }
 

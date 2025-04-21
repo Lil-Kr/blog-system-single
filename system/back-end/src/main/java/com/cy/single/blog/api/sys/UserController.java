@@ -32,7 +32,7 @@ import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 public class UserController {
 
   @Autowired
-  private MessageLangService messageLangService;
+  private MessageLangService msgLangService;
 
   @Autowired
   private SysUserService userService;
@@ -59,13 +59,17 @@ public class UserController {
     return userService.registerAdmin(req);
   }
 
+  /**
+   * admin-user logout
+   * @return
+   */
   @CheckAuth
   @RecordLogger
   @DeleteMapping("/logout")
   public ApiResp<Integer> logout() {
     // 移除用户
     RequestHolder.remove();
-    return ApiResp.success(messageLangService.getGreetingMessage(LANG_ZH, "admin.logout.success"));
+    return ApiResp.success(msgLangService.getMessage(LANG_ZH, "admin.logout.success"));
   }
 
   /**
@@ -115,7 +119,6 @@ public class UserController {
   @RecordLogger
   @GetMapping("/get")
   public ApiResp<SysUser> get() {
-    // 如果能通过验证, 说明AOP中token校验已经通过
     SysUser currentUser = RequestHolder.getCurrentUser();
     return ApiResp.success(currentUser);
   }

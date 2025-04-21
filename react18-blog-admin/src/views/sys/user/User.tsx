@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import {
-  Button,
   Card,
   Col,
   Flex,
@@ -40,9 +39,9 @@ import { usePermissionsStore } from '@/store/sys/authStore'
 const User = () => {
   const userColumns: ColumnsType<UserTableType> = [
     {
-      key: 'number',
-      dataIndex: 'number',
-      title: '编号',
+      key: 'account',
+      dataIndex: 'account',
+      title: '账号',
       width: '10%'
     },
     {
@@ -292,7 +291,7 @@ const User = () => {
    */
   const onChangePageInfo: PaginationProps['onChange'] = (currentPageNum, pageSize) => {
     const values = form.getFieldsValue()
-    retirevePageUserList({ ...values, currentPageNum, pageSize })
+    retirevePageUserList({ ...values, surrogateId: selectedKeys[0], currentPageNum, pageSize })
   }
 
   /**
@@ -312,7 +311,7 @@ const User = () => {
     retrieveOrgTreeList()
 
     // loading user list page
-    retirevePageUserList({ currentPageNum: 1, pageSize: tablePageInfo.pageSize })
+    retirevePageUserList({ currentPageNum: tablePageInfo.currentPageNum, pageSize: tablePageInfo.pageSize })
   }
 
   /**
@@ -367,14 +366,14 @@ const User = () => {
    * retrieve user info of children list by node key
    */
   const pageUserListByOrgId = async (node: any) => {
-    // 选中当前key
+    // 选中当前选中的tree key
     setSelectedKeys([node.key])
     // 设置选中的组织信息
     setSelectedInfo({ label: node.title, value: node.key })
 
     await retirevePageUserList({
       surrogateId: node.key,
-      currentPageNum: 1,
+      currentPageNum: tablePageInfo.currentPageNum,
       pageSize: tablePageInfo.pageSize
     })
   }

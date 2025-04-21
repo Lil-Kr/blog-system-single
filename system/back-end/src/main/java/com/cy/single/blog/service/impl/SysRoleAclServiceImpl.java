@@ -140,7 +140,7 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 		wrapper.eq("role_id",roleId);
 		int delete = roleAclMapper.delete(wrapper);
 		if (delete < 1) {
-			throw new BusinessException(msgService.getGreetingMessage(LANG_ZH, "sys.role.acl.resp.msg5"));
+			throw new BusinessException(msgService.getMessage(LANG_ZH, "sys.role.acl.resp.msg5"));
 		}
 
 		// 构建新的角色-权限点对象, 然后批量插入

@@ -89,24 +89,4 @@
     color: inherit;
     font-style: italic;
   }
-
-  code {
-    font-family: monospace;
-    font-size: 0.875rem; /* 14px */
-    line-height: 1.25rem; /* 20px */
-    padding: 0.125rem 0.25rem; /* 2px 4px */
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 0.25rem; /* 4px */
-    /* font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace; */
-  }
-
-  pre {
-    font-family: monospace;
-    font-size: 0.875rem; /* 14px */
-    line-height: 1.25rem; /* 20px */
-    padding: 1rem; /* 16px */
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 0.25rem; /* 4px */
-    overflow: auto;
-  }
 }

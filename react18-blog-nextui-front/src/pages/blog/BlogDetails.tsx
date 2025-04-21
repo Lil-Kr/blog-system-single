@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'oh-router-react'
-import { CardBlogItem, CardBlogListItem, CardSimple } from '@/components/card'
+import { CardBlogItem, CardSimple } from '@/components/card'
 import { CardBaseDataType } from '@/types/components/CardType'
 import SvgIcon from '@/components/svg/SvgIcon'
 import { AnchorPointBase } from '@/components/anchor'
@@ -9,6 +9,14 @@ import { blogContentApi } from '@/apis/contentApi'
 import { CardBlogItemProps } from '@/components/card/CardBlogItem'
 import { getFontRandomColorClass } from '@/utils/colors'
 import { formatDate } from '@/utils/date/dateTimeUtil'
+import { CheckIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline'
+import { Button } from '@heroui/react'
+import { addCopyButtons } from './addCopyButtons'
+
+// blog code segmentation
+import '@/utils/prism/prism-langs'
+import './styles/blog-content.scss'
+import Prism from 'prismjs'
 
 const cardItem: CardBaseDataType = {
   key: '1',
@@ -20,19 +28,28 @@ const cardItem: CardBaseDataType = {
 const BlogDetails = () => {
   const { blogId } = useParams()
   const [contents, setContents] = useState<CardBlogItemProps>({} as CardBlogItemProps)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    if (blogId) {
+    if (blogId && blogId !== '') {
       const fetchBlogDetail = async () => {
         const blogDetail = await getBlogDetail({ surrogateId: blogId })
         setContents(mappingContent(blogDetail))
       }
       fetchBlogDetail()
     }
-  }, [])
+  }, [blogId])
 
-  const getBlogDetail = async (params: BlogContentGetReq): Promise<BlogContentVO> => {
-    const blogDetail = await blogContentApi.frontGetBlog({ ...params })
+  useEffect(() => {
+    // 在 contents 更新后调用 Prism.highlightAll()
+    if (contents.contentText) {
+      Prism.highlightAll()
+      addCopyButtons()
+    }
+  }, [contents])
+
+  const getBlogDetail = async (req: BlogContentGetReq): Promise<BlogContentVO> => {
+    const blogDetail = await blogContentApi.frontGetBlog({ ...req })
     const { code, data } = blogDetail
     if (code !== 200) {
       return {} as BlogContentVO
@@ -40,17 +57,17 @@ const BlogDetails = () => {
     return data
   }
 
-  const mappingContent = (params: BlogContentVO): CardBlogItemProps => {
+  const mappingContent = (req: BlogContentVO): CardBlogItemProps => {
     const cardBlogItem: CardBlogItemProps = {
-      surrogateId: params.surrogateId,
-      title: params.title,
-      original: params.original,
-      recommend: params.recommend,
-      introduction: params.introduction,
-      publishTime: formatDate(params.publishTime),
-      updateTime: formatDate(params.updateTime),
-      contentText: params.contentText,
-      tags: params.labels?.map(({ surrogateId, name }) => ({
+      surrogateId: req.surrogateId,
+      title: req.title,
+      original: req.original,
+      recommend: req.recommend,
+      introduction: req.introduction,
+      publishTime: formatDate(req.publishTime),
+      updateTime: formatDate(req.updateTime),
+      contentText: req.contentText,
+      tags: req.labels?.map(({ surrogateId, name }) => ({
         key: surrogateId,
         text: name,
         url: '',
