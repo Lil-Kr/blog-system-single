@@ -1,7 +1,7 @@
 package com.cy.single.blog.service;
 
 import com.cy.single.blog.base.ApiResp;
-import com.cy.single.blog.pojo.req.roleacl.RoleAclSaveReq;
+import com.cy.single.blog.pojo.req.sys.roleacl.RoleAclSaveReq;
 
 /**
  * @Author: Lil-K

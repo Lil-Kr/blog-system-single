@@ -3,8 +3,10 @@ package com.cy.single.blog.service;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.entity.blog.BlogContentMongo;
+import com.cy.single.blog.pojo.entity.blog.BlogRichEditorResp;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
+import com.cy.single.blog.pojo.req.blog.content.BlogRichEditorImageReq;
 import com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp;
 import com.cy.single.blog.pojo.resp.blog.BlogContentResp;
 
@@ -43,4 +45,6 @@ public interface BlogContentService {
   PageResult<BlogContentResp> frontContentPageList(BlogContentPageReq req);
 
 	ApiResp<String> delete(Long surrogateId);
+
+  ApiResp<BlogRichEditorResp> uploadBlogContentImage(BlogRichEditorImageReq req) throws Exception;
 }

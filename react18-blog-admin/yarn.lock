@@ -1240,13 +1240,13 @@
   dependencies:
     "@swc/counter" "^0.1.3"
 
-"@tinymce/tinymce-react@^5.0.1":
-  version "5.1.1"
-  resolved "https://registry.npmmirror.com/@tinymce/tinymce-react/-/tinymce-react-5.1.1.tgz#3b8555ceaccfa6bb8bb03c3b0c8baaccde138bde"
-  integrity sha512-DQ0wpvnf/9z8RsOEAmrWZ1DN1PKqcQHfU+DpM3llLze7FHmxVtzuN8O+FYh0oAAF4stzAXwiCIVacfqjMwRieQ==
+"@tinymce/tinymce-react@^4.3.2":
+  version "4.3.2"
+  resolved "https://registry.npmmirror.com/@tinymce/tinymce-react/-/tinymce-react-4.3.2.tgz#fbe05e35e948b0e577eddf639bfe7ee2158fdc10"
+  integrity sha512-wJHZhPf2Mk3yTtdVC/uIGh+kvDgKuTw/qV13uzdChTNo68JI1l7jYMrSQOpyimDyn5LHAw0E1zFByrm1WHAVeA==
   dependencies:
     prop-types "^15.6.2"
-    tinymce "^7.0.0 || ^6.0.0 || ^5.5.1"
+    tinymce "^6.0.0 || ^5.5.1"
 
 "@types/babel__core@^7.20.5":
   version "7.20.5"
@@ -4607,10 +4607,10 @@ tinymce-plugin@^0.0.3-beta.22:
   resolved "https://registry.npmmirror.com/tinymce-plugin/-/tinymce-plugin-0.0.3-beta.22.tgz#3766193592df7c636dc8a4aaa06e0d1dad6efbf1"
   integrity sha512-TplhnAlYguOROSQ86x7COOFCI5uZT3l2QxTL0Euq+Mar4SI5VlVzUHi3Ix7lrvrXGGOHtt3SYS533R7ujYaVOg==
 
-"tinymce@^7.0.0 || ^6.0.0 || ^5.5.1":
-  version "7.7.2"
-  resolved "https://registry.npmmirror.com/tinymce/-/tinymce-7.7.2.tgz#7d8f70be804474c8d4249dad21356ce5d42b17fe"
-  integrity sha512-GX7Jd0ac9ph3QM2yei4uOoxytKX096CyG6VkkgQNikY39T6cDldoNgaqzHHlcm62WtdBMCd7Ch+PYaRnQo+NLA==
+"tinymce@^6.0.0 || ^5.5.1":
+  version "6.8.5"
+  resolved "https://registry.npmmirror.com/tinymce/-/tinymce-6.8.5.tgz#aa9a711c4e0b59d506dd281bade857d35a7b3c59"
+  integrity sha512-qAL/FxL7cwZHj4BfaF818zeJJizK9jU5IQzTcSLL4Rj5MaJdiVblEj7aDr80VCV1w9h4Lak9hlnALhq/kVtN1g==
 
 to-regex-range@^5.0.1:
   version "5.0.1"

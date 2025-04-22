@@ -26,3 +26,4 @@ upload:
   requestMappingPath: /upload/**
   moduleImagePath: /image
   adminUserPath: /avatar
+  blogContentImagePath: /blog_image

@@ -3,7 +3,7 @@ package com.cy.single.blog.service;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
-import com.cy.single.blog.pojo.req.user.*;
+import com.cy.single.blog.pojo.req.sys.user.*;
 import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
 
 /**

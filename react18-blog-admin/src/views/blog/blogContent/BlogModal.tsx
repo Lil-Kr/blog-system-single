@@ -21,7 +21,7 @@ import { Editor as EditorInstance } from 'node_modules/tinymce/tinymce'
 import { useDictDetailStore } from '@/store/sys/dictStore'
 import { BlogContentModalSaveReq, useBlogModalStore } from '@/store/blog/blogStore'
 import { useLabelStore } from '@/store/blog/labelStore'
-import { BlogContentAddReq, BlogContentEditeReq } from '@/apis/blog/content/blogContentApi'
+import blogContentApi, { BlogContentAddReq, BlogContentEditeReq } from '@/apis/blog/content/blogContentApi'
 import { useMessage } from '@/components/message/MessageProvider'
 import ImageSelectModal from './ImageSelectModal'
 import { useImageManageStore } from '@/store/blog/imageStore'
@@ -37,7 +37,6 @@ const modalStyles = {
 const BlogModal = () => {
   const messageApi = useMessage()
   const [blogForm] = Form.useForm()
-  // const [radioValue, setRadioValue] = useState<string>('')
   const editorRef = useRef<EditorInstance>()
   const { blogTypes, blogTopics, blogPublisStatue, switchStatue } = useDictDetailStore()
   const { labelList } = useLabelStore()
@@ -52,8 +51,8 @@ const BlogModal = () => {
     update,
     saveReq,
     setSaveReq,
-    clearSaveReq,
-    setOpenImageModal
+    setOpenImageModal,
+    clearSaveReq
   } = useBlogModalStore()
   const { imageUrl, setImageUrl, clearImageData } = useImageManageStore()
 
@@ -245,6 +244,88 @@ const BlogModal = () => {
 
   const onChangePublishStatue = (event: RadioChangeEvent) => {
     setSaveReq({ ...saveReq, status: event.target.value })
+  }
+
+  /**
+   * 扩展设置事件
+   * 去除p标签等操作
+   * @param editor
+   */
+  const handleSetup = (editor: any) => {
+    /**
+     * 粘贴图片时触发上传事件
+     */
+    editor.on('Paste', async (e: ClipboardEvent) => {
+      const clipboardData = e.clipboardData
+      if (!clipboardData?.items) return
+
+      const items = clipboardData.items
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i]
+        if (!item.type.startsWith('image')) continue
+
+        const file = item.getAsFile()
+        if (!file) continue
+
+        // 阻止默认插入 base64
+        e.preventDefault()
+
+        const formData = new FormData()
+        formData.append('image', file)
+
+        try {
+          const { code, data } = await blogContentApi.upload({
+            data: formData,
+            config: {
+              headers: { 'Content-Type': 'multipart/form-data' }
+            }
+          })
+
+          if (code === 200 && data?.url) {
+            // 上传成功后插入
+            const finalImg = `<div><img src="${env.VITE_BACKEND_IMAGE_BASE_API}${data.url}" /></div>`
+            editor.insertContent(finalImg)
+          } else {
+            throw new Error('上传失败')
+          }
+        } catch (err) {
+          console.error('图片上传失败:', err)
+          editor.notificationManager.open({
+            text: '图片上传失败，请稍后再试',
+            type: 'error'
+          })
+        }
+        // 只处理一张图片
+        break
+      }
+    })
+
+    /**
+     * 添加结构处理 用于替换 <p><img>、<p><a>
+     * 替换 <p><img /></p> 为 <div><img /></div>
+     */
+    editor.on('PreProcess', (e: any) => {
+      const doc = e.node as HTMLElement
+
+      doc.querySelectorAll('p > img:only-child').forEach(img => {
+        const p = img.parentElement
+        if (p?.tagName.toLowerCase() === 'p') {
+          const div = document.createElement('div')
+          div.appendChild(img.cloneNode(true))
+          p.replaceWith(div)
+        }
+      })
+
+      // 替换 <p><a></a></p> 为 <div><a></a></div>
+      doc.querySelectorAll('p > a:only-child').forEach(a => {
+        const p = a.parentElement
+        if (p?.tagName.toLowerCase() === 'p') {
+          const div = document.createElement('div')
+          div.appendChild(a.cloneNode(true))
+          p.replaceWith(div)
+        }
+      })
+    })
   }
 
   return (
@@ -483,16 +564,14 @@ const BlogModal = () => {
                     toolbar:
                       'undo redo |' +
                       'styleselect |' +
-                      // 'blocks |' +
                       'indent2em bold italic underline strikethrough forecolor backcolor |' +
                       'alignleft aligncenter alignright alignjustify |' +
                       'bullist numlist outdent indent |' +
-                      // 'code codesample |' +
                       'code preview  codesample |' +
-                      'link image |' +
+                      'link image imagetools |' +
                       'searchreplace fullscreen |' +
                       'emoticons anchor insertdatetime |' +
-                      'removeformat',
+                      'removeformat ',
                     codesample_languages: [
                       { text: 'Java', value: 'java' },
                       { text: 'JavaScript', value: 'javascript' },
@@ -516,44 +595,84 @@ const BlogModal = () => {
                       { text: 'Ruby', value: 'ruby' }
                     ],
                     advlist_bullet_styles: 'square',
-                    paste_data_images: true,
                     image_advtab: true, // add advanced image tab
                     image_title: true,
-                    image_caption: true, // image caption
+                    image_caption: false, // image caption
+                    paste_data_images: true, // paste image data
+                    automatic_uploads: true,
+                    // images_upload_handler: async (blobInfo, progress) => {
+                    //   try {
+                    //     // 模拟真实的图片路径，确保它是有效的
+                    //     const url =
+                    //       env.VITE_BACKEND_IMAGE_BASE_API + '/upload/blog_image/admin/image_1914691349060390912.webp'
+
+                    //     // 检查 URL 是否有效
+                    //     const response = await fetch(url)
+                    //     if (!response.ok) {
+                    //       throw new Error('Image URL is not valid.')
+                    //     }
+
+                    //     console.log('--> images_upload_handler: ', url)
+
+                    //     // 返回 URL
+                    //     return url // Ensure this is correctly returned
+                    //   } catch (error) {
+                    //     console.error('Image upload failed:', error)
+                    //     throw new Error('Failed to upload image')
+                    //   }
+                    // },
+                    setup: editor => {
+                      handleSetup(editor)
+                    },
                     file_picker_callback: (callback, value, meta) => {
                       // Provide image and alt text for the image dialog
-                      if (meta.filetype == 'image') {
-                        const input = document.createElement('input')
-                        input.setAttribute('type', 'file')
-                        input.setAttribute('accpet', 'image/*') // 只接受图片文件
-
-                        input.addEventListener('change', (e: Event) => {
-                          const target = e.target as HTMLInputElement
-                          const files = target.files
-                          if (!files || files.length === 0) {
-                            return
-                          }
-
-                          const file = files[0]
-                          // 在这里可以对选中的文件进行处理, 例如上传到服务器等操作
-                          if (!file.type.startsWith('image/')) {
-                            return
-                          }
-
-                          const reader = new FileReader()
-                          reader.addEventListener('load', () => {
-                            const id = 'blobid' + new Date().getTime()
-                            const blobCache = editorRef.current?.editorUpload.blobCache
-                            const base64 = (reader.result as string).split(',')[1]
-                            const blobInfo = blobCache?.create(id, file, base64)
-                            blobCache?.add(blobInfo!)
-                            callback(blobInfo?.blobUri()!, { title: file.name })
-                          })
-                          reader.readAsDataURL(file)
-                        })
-                        input.click()
+                      if (meta.filetype !== 'image') {
+                        return
                       }
+
+                      // 创建上传按钮, 并实现上传逻辑
+                      const input = document.createElement('input')
+                      input.setAttribute('type', 'file')
+                      // 只接受图片文件
+                      input.setAttribute('accpet', 'image/*')
+                      input.addEventListener('change', async (e: Event) => {
+                        const target = e.target as HTMLInputElement
+                        const files = target.files
+                        if (!files || files.length === 0) {
+                          return
+                        }
+
+                        const file = files[0]
+                        // 判断图片大小, 2MB
+                        const maxSize = 1024 * 1024 * 2
+                        if (file.size > maxSize) {
+                          messageApi?.warning('文件大小不能超过 2MB')
+                          return
+                        }
+                        // 在这里可以对选中的文件进行处理, 例如上传到服务器等操作
+                        if (!file.type.startsWith('image/')) {
+                          return
+                        }
+                        const formData = new FormData()
+                        formData.append('image', file)
+
+                        const { code, data } = await blogContentApi.upload({
+                          data: formData,
+                          config: {
+                            headers: { 'Content-Type': 'multipart/form-data' }
+                          }
+                        })
+
+                        if (code !== 200 || !data?.url) {
+                          messageApi?.error('上传失败')
+                          throw new Error('上传失败')
+                        }
+                        callback(env.VITE_BACKEND_IMAGE_BASE_API + data?.url, { title: file.name })
+                      })
+                      input.click()
                     },
+                    // language: 'zh_CN',
+                    // language_url: import.meta.env.BASE_URL + 'tinymce/langs/zh_CN.js',
                     insertdatetime_formats: ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d', '%Y/%m/%d', '%H:%M:%S', '%D'],
                     insertdatetime_element: true // insert time/date plugin
                     // content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px } h2 { font-size:24px; font-weight:bold; margin:20px 0; }'
@@ -561,7 +680,8 @@ const BlogModal = () => {
                     // content_css: 'dark'
                   }}
                   initialValue={modalReq?.contentText || ''}
-                  onEditorChange={(newValue, editor) => {
+                  // 失焦时触发
+                  onBlur={(e, editor) => {
                     setSaveReq({ ...saveReq, contentText: editor.getContent() })
                   }}
                 />

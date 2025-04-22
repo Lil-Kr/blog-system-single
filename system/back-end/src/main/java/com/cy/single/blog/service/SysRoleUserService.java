@@ -1,7 +1,7 @@
 package com.cy.single.blog.service;
 
 import com.cy.single.blog.base.ApiResp;
-import com.cy.single.blog.pojo.req.roleuser.RoleUserReq;
+import com.cy.single.blog.pojo.req.sys.roleuser.RoleUserReq;
 import com.cy.single.blog.pojo.resp.sys.role.RoleUserResp;
 
 /**

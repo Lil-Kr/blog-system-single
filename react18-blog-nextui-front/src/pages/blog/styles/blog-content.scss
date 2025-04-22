@@ -1,6 +1,16 @@
 /* 博客内容 */
 .blog-content-wrapper {
-  /** 代码片段样式 */
+  // clear float
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    clear: both;
+  }
+
+  /** code Snippet style */
   pre[class^='language-'] {
     margin: 1em 0.5em;
     padding: 1em;
@@ -21,7 +31,7 @@
   /* 博客中的图片 */
   img {
     display: block;
-    margin: 0 auto;
+    margin: 1em auto;
   }
 
   &.light {

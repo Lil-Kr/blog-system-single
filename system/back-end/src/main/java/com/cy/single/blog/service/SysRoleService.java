@@ -2,8 +2,8 @@ package com.cy.single.blog.service;
 
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.pojo.req.role.RoleListPageReq;
-import com.cy.single.blog.pojo.req.role.RoleSaveReq;
+import com.cy.single.blog.pojo.req.sys.role.RoleListPageReq;
+import com.cy.single.blog.pojo.req.sys.role.RoleSaveReq;
 import com.cy.single.blog.pojo.resp.sys.role.SysRoleResp;
 
 /**

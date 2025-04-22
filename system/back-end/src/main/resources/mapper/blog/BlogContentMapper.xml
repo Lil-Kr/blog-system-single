@@ -7,7 +7,7 @@
 	</sql>
 
 	<sql id="Base_Column_List">
-		id, surrogate_id, category_id, label_ids, topic_id, `number`, original, recommend,
+		surrogate_id, category_id, label_ids, topic_id, `number`, original, recommend,
     title, introduction, img_url, paragraph, publish_time, `status`, remark, deleted, creator_id,
     operator, create_time, update_time
 	</sql>

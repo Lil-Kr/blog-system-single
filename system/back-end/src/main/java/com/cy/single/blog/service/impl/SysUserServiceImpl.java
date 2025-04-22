@@ -9,7 +9,7 @@ import com.cy.single.blog.dao.SysUserMapper;
 import com.cy.single.blog.enums.ReturnCodeEnum;
 import com.cy.single.blog.pojo.dto.sys.user.UserDTO;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
-import com.cy.single.blog.pojo.req.user.*;
+import com.cy.single.blog.pojo.req.sys.user.*;
 import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
 import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.MessageLangService;

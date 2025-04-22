@@ -2,10 +2,10 @@ package com.cy.single.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
-import com.cy.single.blog.pojo.req.user.AvatarUploadReq;
-import com.cy.single.blog.pojo.req.user.UserListPageReq;
-import com.cy.single.blog.pojo.req.user.UserLoginAdminReq;
-import com.cy.single.blog.pojo.req.user.UserSaveReq;
+import com.cy.single.blog.pojo.req.sys.user.AvatarUploadReq;
+import com.cy.single.blog.pojo.req.sys.user.UserListPageReq;
+import com.cy.single.blog.pojo.req.sys.user.UserLoginAdminReq;
+import com.cy.single.blog.pojo.req.sys.user.UserSaveReq;
 import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

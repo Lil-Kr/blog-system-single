@@ -3,9 +3,9 @@ package com.cy.single.blog.service;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
-import com.cy.single.blog.pojo.req.org.OrgListAllReq;
-import com.cy.single.blog.pojo.req.org.OrgPageReq;
-import com.cy.single.blog.pojo.req.org.OrgReq;
+import com.cy.single.blog.pojo.req.sys.org.OrgListAllReq;
+import com.cy.single.blog.pojo.req.sys.org.OrgPageReq;
+import com.cy.single.blog.pojo.req.sys.org.OrgReq;
 import com.cy.single.blog.pojo.resp.sys.org.SysOrgResp;
 
 import java.util.List;

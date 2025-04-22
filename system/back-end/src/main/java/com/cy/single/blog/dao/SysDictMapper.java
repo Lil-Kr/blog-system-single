@@ -2,7 +2,7 @@ package com.cy.single.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
-import com.cy.single.blog.pojo.req.dict.DictListPageReq;
+import com.cy.single.blog.pojo.req.sys.dict.DictListPageReq;
 import com.cy.single.blog.pojo.resp.sys.dic.SysDictResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

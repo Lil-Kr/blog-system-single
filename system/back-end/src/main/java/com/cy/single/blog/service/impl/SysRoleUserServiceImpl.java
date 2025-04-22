@@ -8,7 +8,7 @@ import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysRoleUserMapper;
 import com.cy.single.blog.dao.SysUserMapper;
 import com.cy.single.blog.pojo.entity.sys.SysRoleUser;
-import com.cy.single.blog.pojo.req.roleuser.RoleUserReq;
+import com.cy.single.blog.pojo.req.sys.roleuser.RoleUserReq;
 import com.cy.single.blog.pojo.resp.sys.role.RoleUserResp;
 import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
 import com.cy.single.blog.service.CacheService;

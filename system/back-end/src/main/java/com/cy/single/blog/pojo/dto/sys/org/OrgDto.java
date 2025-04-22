@@ -1,7 +1,7 @@
 package com.cy.single.blog.pojo.dto.sys.org;
 
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
-import com.cy.single.blog.pojo.req.org.OrgReq;
+import com.cy.single.blog.pojo.req.sys.org.OrgReq;
 import lombok.Data;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;

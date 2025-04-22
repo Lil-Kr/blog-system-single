@@ -2,8 +2,8 @@ package com.cy.single.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
-import com.cy.single.blog.pojo.req.acl.AclPageReq;
-import com.cy.single.blog.pojo.req.acl.AclReq;
+import com.cy.single.blog.pojo.req.sys.acl.AclPageReq;
+import com.cy.single.blog.pojo.req.sys.acl.AclReq;
 import com.cy.single.blog.pojo.resp.sys.acl.SysAclResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

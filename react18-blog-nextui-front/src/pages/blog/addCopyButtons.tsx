@@ -2,7 +2,6 @@ export const addCopyButtons = () => {
   const pres = document.querySelectorAll('pre[class^="language-"]')
 
   pres.forEach(pre => {
-    // 如果已处理，跳过
     if (pre.parentElement?.classList.contains('code-block-wrapper')) return
 
     const wrapper = document.createElement('div')
@@ -10,17 +9,15 @@ export const addCopyButtons = () => {
     wrapper.style.position = 'relative'
     wrapper.style.marginBottom = '1em'
 
-    // 插入 wrapper 并把 pre 移进去
     pre.parentElement?.insertBefore(wrapper, pre)
     wrapper.appendChild(pre)
 
-    // 创建按钮
     const button = document.createElement('button')
     button.className = 'copy-btn'
     button.setAttribute('aria-label', 'Copy code')
-    button.innerHTML = `
-      <svg fill="none"
-        viewBox="0 0 24 24" stroke-width="1.5"
+
+    const duplicateIcon = `
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"
         stroke="currentColor" class="w-4 h-4">
         <path stroke-linecap="round" stroke-linejoin="round"
           d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125
@@ -35,26 +32,38 @@ export const addCopyButtons = () => {
           0-3.375-3.375H9.75" />
       </svg>
     `
-    // 按钮功能
+    const checkIcon = `
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+        stroke="currentColor" class="w-4 h-4">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="m4.5 12.75 6 6 9-13.5" />
+      </svg>
+    `
+
+    button.innerHTML = duplicateIcon
+
+    // 独立状态控制
+    let restoreTimer: number | null = null
+    let isCopied = false
+
     button.addEventListener('click', () => {
+      if (isCopied) return
+
       const code = pre.querySelector('code')?.textContent || ''
       navigator.clipboard.writeText(code).then(() => {
-        const original = button.innerHTML
-        button.innerHTML = `
-          <svg fill="none"
-            viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="w-4 h-4">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="m4.5 12.75 6 6 9-13.5" />
-          </svg>
-        `
-        setTimeout(() => {
-          button.innerHTML = original
+        isCopied = true
+        button.innerHTML = checkIcon
+
+        if (restoreTimer) {
+          clearTimeout(restoreTimer)
+        }
+        restoreTimer = window.setTimeout(() => {
+          button.innerHTML = duplicateIcon
+          isCopied = false
         }, 1500)
       })
     })
 
-    // 添加按钮到 wrapper 顶部
     wrapper.appendChild(button)
   })
 }

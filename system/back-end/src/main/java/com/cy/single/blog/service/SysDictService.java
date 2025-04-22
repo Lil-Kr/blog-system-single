@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
-import com.cy.single.blog.pojo.req.dict.DictDetailReq;
-import com.cy.single.blog.pojo.req.dict.DictListPageReq;
-import com.cy.single.blog.pojo.req.dict.DictSaveReq;
+import com.cy.single.blog.pojo.req.sys.dict.DictDetailReq;
+import com.cy.single.blog.pojo.req.sys.dict.DictListPageReq;
+import com.cy.single.blog.pojo.req.sys.dict.DictSaveReq;
 import com.cy.single.blog.pojo.resp.sys.dic.SysDictDetailResp;
 import com.cy.single.blog.pojo.resp.sys.dic.SysDictResp;
 

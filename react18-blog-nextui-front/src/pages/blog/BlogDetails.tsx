@@ -9,8 +9,6 @@ import { blogContentApi } from '@/apis/contentApi'
 import { CardBlogItemProps } from '@/components/card/CardBlogItem'
 import { getFontRandomColorClass } from '@/utils/colors'
 import { formatDate } from '@/utils/date/dateTimeUtil'
-import { CheckIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline'
-import { Button } from '@heroui/react'
 import { addCopyButtons } from './addCopyButtons'
 
 // blog code segmentation
@@ -28,7 +26,6 @@ const cardItem: CardBaseDataType = {
 const BlogDetails = () => {
   const { blogId } = useParams()
   const [contents, setContents] = useState<CardBlogItemProps>({} as CardBlogItemProps)
-  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     if (blogId && blogId !== '') {

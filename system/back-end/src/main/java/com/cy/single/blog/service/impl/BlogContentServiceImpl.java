@@ -5,33 +5,50 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.common.holder.RequestHolder;
+import com.cy.single.blog.dao.BlogContentImageMapper;
 import com.cy.single.blog.dao.BlogContentMapper;
 import com.cy.single.blog.dao.BlogContentMongoMapper;
 import com.cy.single.blog.pojo.dto.blog.BlogContentDTO;
-import com.cy.single.blog.pojo.entity.blog.BlogContent;
-import com.cy.single.blog.pojo.entity.blog.BlogContentMongo;
-import com.cy.single.blog.pojo.entity.blog.BlogLabel;
-import com.cy.single.blog.pojo.entity.blog.BlogTopic;
+import com.cy.single.blog.pojo.entity.blog.*;
+import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
+import com.cy.single.blog.pojo.req.blog.content.BlogRichEditorImageReq;
 import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
 import com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp;
 import com.cy.single.blog.pojo.resp.blog.BlogContentResp;
 import com.cy.single.blog.service.BlogContentService;
 import com.cy.single.blog.service.CacheService;
-import com.cy.single.blog.service.SysDictDetailService;
+import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
+import com.cy.single.blog.utils.keyUtil.IdWorker;
+import com.luciad.imageio.webp.WebPWriteParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.cy.single.blog.enums.ReturnCodeEnum.*;
+import static com.cy.single.blog.common.constants.CommonConstants.IMAGE_TYPE_SUFFIX;
+import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
+import static com.cy.single.blog.enums.ReturnCodeEnum.Add_ERROR;
+import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
 
 /**
  * @Author: Lil-K
@@ -42,6 +59,16 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 @Slf4j
 public class BlogContentServiceImpl implements BlogContentService {
 
+
+  @Value("${upload.rootDir}")
+  private String rootDir;
+
+  @Value("${upload.uploadDir}")
+  private String uploadDir;
+
+  @Value("${upload.blogContentImagePath}")
+  private String blogContentImagePath;
+
   @Autowired
   private BlogContentMapper blogContentMapper;
 
@@ -49,7 +76,10 @@ public class BlogContentServiceImpl implements BlogContentService {
   private BlogContentMongoMapper blogContentMongoMapper;
 
   @Autowired
-  private SysDictDetailService dictDetailService;
+  private BlogContentImageMapper blogContentImageMapper;
+
+  @Autowired
+  private MessageLangService msgService;
 
   @Autowired
   private CacheService cacheService;
@@ -307,16 +337,102 @@ public class BlogContentServiceImpl implements BlogContentService {
       return ApiResp.warning(INFO_NOT_EXIST);
     }
 
-    int delete = blogContentMapper.delete(query);
-    if (delete < 1) {
-      return ApiResp.warning(DEL_ERROR);
-    }
-
+    blogContentMapper.delete(query);
     BlogContentMongo blogContentMongo = BlogContentMongo.builder()
       .id(String.valueOf(blogContent.getSurrogateId()))
       .build();
     blogContentMongoMapper.delete(blogContentMongo);
     return ApiResp.success();
+  }
+
+  /**
+   * 富文本编辑器中上传的图片
+   * @param req
+   * @return
+   * @throws Exception
+   */
+  @Override
+  public ApiResp<BlogRichEditorResp> uploadBlogContentImage(BlogRichEditorImageReq req) throws Exception {
+    MultipartFile imageFile = req.getImage();
+    // 检查文件大小，限制为 2MB
+    long maxSizeInBytes = 2 * 1024 * 1024; // 2MB
+    if (imageFile == null || imageFile.getSize() > maxSizeInBytes) {
+      return ApiResp.failure(msgService.getMessage(LANG_ZH, "blog.image.upload.error1"));
+    }
+
+    String imageOriginalFullName = imageFile.getOriginalFilename();
+    String[] imageFileNames = imageOriginalFullName.split("\\.");
+    if (imageFileNames.length > 2) {
+      return ApiResp.failure(msgService.getMessage(LANG_ZH, "blog.image.upload.error2"));
+    }
+
+    String imageName = imageFileNames[0];
+
+    SysUser currentUser = RequestHolder.getCurrentUser();
+    StringBuffer resourcePath = new StringBuffer(rootDir);
+    resourcePath.append(uploadDir)
+      .append(blogContentImagePath).append("/")
+      .append(currentUser.getAccount()).append("/");
+
+    /**
+     * create Path into disk
+     */
+    Path rootPath = Paths.get(resourcePath.toString());
+    if (!Files.exists(rootPath)) {
+      Files.createDirectories(rootPath);
+    }
+
+    /**
+     * re-name
+     */
+    StringBuffer imageReName = new StringBuffer(imageName).append("_")
+      .append(IdWorker.getSnowFlakeId())
+      .append(".")
+      .append(IMAGE_TYPE_SUFFIX);
+
+    /**
+     * full-path
+     */
+    resourcePath.append(imageReName);
+
+    try(InputStream inputStream = imageFile.getInputStream()) {
+      /**
+       * write image to disk
+       */
+      BufferedImage originalImage = ImageIO.read(inputStream);
+      Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType("image/webp");
+      if (!writers.hasNext()) {
+        return ApiResp.failure("No writers found for format: webp");
+      }
+
+      ImageWriter writer = writers.next();
+      // writer webp to disk
+      try (ImageOutputStream ios = ImageIO.createImageOutputStream(Files.newOutputStream(Paths.get(resourcePath.toString())))) {
+        WebPWriteParam writeParam = new WebPWriteParam(writer.getLocale());
+        writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        writeParam.setCompressionType(writeParam.getCompressionTypes()[WebPWriteParam.LOSSY_COMPRESSION]); // lossy compression
+        writeParam.setCompressionQuality(0.75f);
+        writer.setOutput(ios);
+        writer.write(null, new IIOImage(originalImage, null, null), writeParam);
+      } catch (Exception e) {
+        log.info("image format webp error: {}", e.getMessage());
+        e.printStackTrace();
+        return ApiResp.failure(e.getMessage());
+      } finally {
+        writer.dispose();
+      }
+
+      StringBuffer imageUrl = new StringBuffer(uploadDir)
+        .append(blogContentImagePath).append("/")
+        .append(currentUser.getAccount()).append("/")
+        .append(imageReName);
+      BlogRichEditorResp res = new BlogRichEditorResp();
+      res.setUrl(imageUrl.toString());
+      return ApiResp.success(res);
+    } catch (Exception e) {
+      log.info("upload image error: {}", e.getMessage());
+      return ApiResp.failure(e.getMessage());
+    }
   }
 
 }

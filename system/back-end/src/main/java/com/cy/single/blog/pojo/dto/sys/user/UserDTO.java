@@ -2,8 +2,8 @@ package com.cy.single.blog.pojo.dto.sys.user;
 
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
-import com.cy.single.blog.pojo.req.user.UserRegisterReq;
-import com.cy.single.blog.pojo.req.user.UserSaveReq;
+import com.cy.single.blog.pojo.req.sys.user.UserRegisterReq;
+import com.cy.single.blog.pojo.req.sys.user.UserSaveReq;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.cy.single.blog.utils.secret.EncryptUtils;

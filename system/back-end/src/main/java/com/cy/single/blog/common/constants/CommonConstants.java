@@ -14,6 +14,10 @@ public class CommonConstants {
 	public static final String LANG_EN = "en";
 
 	/**
+	 * image
+	 */
+	public static final String IMAGE_TYPE_SUFFIX = "webp";
+	/**
 	 * bus type
 	 */
 	public static final String BUS_CREATE = "create";

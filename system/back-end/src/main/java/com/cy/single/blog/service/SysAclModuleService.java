@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
-import com.cy.single.blog.pojo.req.aclmodule.AclModuleListReq;
-import com.cy.single.blog.pojo.req.aclmodule.AclModuleReq;
+import com.cy.single.blog.pojo.req.sys.aclmodule.AclModuleListReq;
+import com.cy.single.blog.pojo.req.sys.aclmodule.AclModuleReq;
 import com.cy.single.blog.pojo.resp.sys.aclmodule.SysAclModuleResp;
 
 import java.util.List;

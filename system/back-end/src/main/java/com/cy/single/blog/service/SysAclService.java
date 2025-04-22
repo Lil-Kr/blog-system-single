@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
-import com.cy.single.blog.pojo.req.acl.AclPageReq;
-import com.cy.single.blog.pojo.req.acl.AclReq;
+import com.cy.single.blog.pojo.req.sys.acl.AclPageReq;
+import com.cy.single.blog.pojo.req.sys.acl.AclReq;
 import com.cy.single.blog.pojo.resp.sys.acl.SysAclResp;
 
 import java.util.concurrent.ConcurrentHashMap;

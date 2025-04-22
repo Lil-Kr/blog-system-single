@@ -1,7 +1,7 @@
 package com.cy.single.blog.service;
 
 import com.cy.single.blog.pojo.req.image.ImageUploadReq;
-import com.cy.single.blog.pojo.req.user.AvatarUploadReq;
+import com.cy.single.blog.pojo.req.sys.user.AvatarUploadReq;
 
 import java.io.IOException;
 

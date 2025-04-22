@@ -20,10 +20,6 @@ const CardBlogItem = (props: { content: CardBlogItemProps }) => {
   const { content } = props
   const { theme } = useTheme()
 
-  function renderCopyButton(arg0: string): import('react').ReactNode {
-    throw new Error('Function not implemented.')
-  }
-
   return (
     <Card key={1} className='flex flex-col gap-y-6 p-4' radius='sm' fullWidth={true}>
       <div className='blog-info flex flex-col gap-y-4'>

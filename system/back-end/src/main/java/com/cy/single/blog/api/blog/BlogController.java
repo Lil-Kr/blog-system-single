@@ -5,8 +5,10 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
+import com.cy.single.blog.pojo.entity.blog.BlogRichEditorResp;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
+import com.cy.single.blog.pojo.req.blog.content.BlogRichEditorImageReq;
 import com.cy.single.blog.pojo.resp.blog.BlogContentResp;
 import com.cy.single.blog.service.BlogContentService;
 import lombok.extern.slf4j.Slf4j;
@@ -80,6 +82,19 @@ public class BlogController {
   @DeleteMapping("/delete")
   public ApiResp<String> delete(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
     return blogContentService.delete(surrogateId);
+  }
+
+  /**
+   * blog rich editor img upload
+   * @param req
+   * @return
+   * @throws Exception
+   */
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/upload")
+  public ApiResp<BlogRichEditorResp> upload(@ModelAttribute BlogRichEditorImageReq req) throws Exception {
+    return blogContentService.uploadBlogContentImage(req);
   }
 
   /** ================== 门户网站接口 =============== **/

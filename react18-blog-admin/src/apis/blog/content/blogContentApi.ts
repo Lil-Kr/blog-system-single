@@ -4,6 +4,7 @@ import { PREFIX_URL_BLOG_CONTENT } from '@/config'
 import { BaseApi, OptionType } from '@/types/apis'
 import { LabelTableResq } from '@/types/apis/blog/labelType'
 import { BaseEntityPageType } from '@/types/base'
+import { AxiosRequestConfig } from 'axios'
 
 export interface BlogContent {
   id: string
@@ -90,7 +91,6 @@ export interface GetBlogContentReq {
 }
 
 export interface BlogContentResq {
-  id: string
   surrogateId: string
   number: string
   title: string
@@ -126,6 +126,15 @@ interface BlogPublishReq {
   status: string
 }
 
+interface BlogRichEditorImageReq {
+  data: FormData
+  config: AxiosRequestConfig
+}
+
+interface BlogRichEditorResp {
+  url: string
+}
+
 /**
  * blog label request API type
  */
@@ -136,6 +145,7 @@ export interface BlogContentApi extends BaseApi {
   edit(req: BlogContentEditeReq): Promise<Result<string>>
   delete(req: BlogDelReq): Promise<Result<string>>
   publish(req: BlogPublishReq): Promise<Result<string>>
+  upload(req: BlogRichEditorImageReq): Promise<Result<BlogRichEditorResp>>
 }
 
 const blogContentApi: BlogContentApi = {
@@ -156,6 +166,11 @@ const blogContentApi: BlogContentApi = {
   },
   publish(req: BlogPublishReq) {
     return baseAxiosRequest.post<Result<string>>(PREFIX_URL_BLOG_CONTENT + '/publish', req)
+  },
+  upload(req: BlogRichEditorImageReq) {
+    return baseAxiosRequest.postUpload<Result<BlogRichEditorResp>>(PREFIX_URL_BLOG_CONTENT + '/upload', req.data, {
+      ...req.config
+    })
   }
 }
 

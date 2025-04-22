@@ -2,6 +2,7 @@ import { BlogContentApi, BlogContentTableType } from '@/apis/blog/content/blogCo
 import { OptionType } from '@/types/apis'
 import { TablePageInfoType } from '@/types/base'
 import { SelectProps } from 'antd/lib'
+import { stat } from 'fs'
 import { create } from 'zustand'
 
 interface BlogState {
@@ -95,17 +96,20 @@ export type BlogMoadlState = {
   update: () => void
   openImageModal: boolean
   imageModaltitle: string
+  uploadImageRichEditor?: string[]
 }
 
 export type BlogMoadlAction = {
   setBlogModalData: (blogModalData: BlogMoadlState) => void
   setOpenModal: (openModal: boolean) => void
   setSaveReq: (req: BlogContentModalSaveReq) => void
+  setBlogContent: (content: string) => void
   setOpenImageModal: (openImageModal: boolean) => void
+  setUploadImageRichEditor: (url: string) => void
   clearSaveReq: () => void
 }
 
-const initBlogModalData = {
+const initBlogModalData: BlogMoadlState = {
   api: {} as BlogContentApi,
   openModal: false,
   title: '创建博客',
@@ -113,7 +117,8 @@ const initBlogModalData = {
   inputDisabled: false,
   update: () => {},
   openImageModal: false,
-  imageModaltitle: ''
+  imageModaltitle: '',
+  uploadImageRichEditor: []
 }
 
 const useBlogModalStore = create<BlogMoadlState & BlogMoadlAction>()(set => ({
@@ -138,6 +143,23 @@ const useBlogModalStore = create<BlogMoadlState & BlogMoadlAction>()(set => ({
       ...state,
       saveReq: req
     })),
+  setBlogContent: (content: string) =>
+    set(state => ({
+      ...state,
+      saveReq: {
+        ...state.saveReq,
+        contentText: content
+      }
+    })),
+  setUploadImageRichEditor: (url: string) =>
+    set(state => {
+      // let uploadImageRichEditor: string[] = state.uploadImageRichEditor
+      // uploadImageRichEditor.push(url)
+      return {
+        ...state,
+        uploadImageRichEditor: [...(state.uploadImageRichEditor ?? []), url]
+      }
+    }),
   clearSaveReq: () =>
     set(state => ({
       ...state,

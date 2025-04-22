@@ -2,7 +2,7 @@ package com.cy.single.blog.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cy.single.blog.pojo.entity.sys.SysRole;
-import com.cy.single.blog.pojo.req.role.RoleListPageReq;
+import com.cy.single.blog.pojo.req.sys.role.RoleListPageReq;
 import com.cy.single.blog.pojo.resp.sys.role.SysRoleResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

@@ -7,7 +7,7 @@ import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
-import com.cy.single.blog.pojo.req.user.*;
+import com.cy.single.blog.pojo.req.sys.user.*;
 import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
 import com.cy.single.blog.service.MessageLangService;
 import com.cy.single.blog.service.SysUserService;
