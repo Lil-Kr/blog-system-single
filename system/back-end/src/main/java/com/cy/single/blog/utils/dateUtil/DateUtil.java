@@ -10,7 +10,7 @@ public class DateUtil {
 
   private static final String YYYY_MM_DD = "yyyy-MM-dd";
 
-  private static final String YYYYMMDDD = "YYYYMMDDD";
+  private static final String YYYYMMDD = "YYYYMMDDD";
 
   private static DateTimeFormatter formatterForTime = DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS);
 
@@ -33,17 +33,17 @@ public class DateUtil {
    * @return
    */
   public static Long getCurrentDateTimeMilli() {
-    long l = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
-    return l;
+    return LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
   }
 
   /**
    * 获得当前时间
-   * 格式: yyyy-MM-dd HH:mm:ss
-   * @return 当前时间戳
+   * 格式: yyyy-MM-dd
+   * @return 当天时间
    */
-  public static String getNowDateTime(){
-    return formatterForTime.format(LocalDateTime.now());
+  public static String getNowDateTimeForYMD() {
+    String format = DateTimeFormatter.ofPattern(YYYY_MM_DD).format(LocalDateTime.now());
+    return format.replaceAll("-", "");
   }
 
   /**
@@ -51,8 +51,8 @@ public class DateUtil {
    * @param date
    * @return
    */
-  public static LocalDate strToLocalDate(String date){
-    return LocalDate.parse(date,formatterForDate);
+  public static LocalDate localDateToStr(String date) {
+    return LocalDate.parse(date, formatterForDate);
   }
 
   /**
@@ -60,12 +60,12 @@ public class DateUtil {
    * @param date
    * @return
    */
-  public static LocalDateTime strToLocalDateTime(String date){
-    return LocalDateTime.parse(date,formatterForTime);
+  public static LocalDateTime localDateTimeToStr(String date){
+    return LocalDateTime.parse(date, formatterForTime);
   }
 
   /**
-   * Date 转化成 LocalDateTime
+   * Date -> LocalDateTime
    * @param date
    * @return
    */
@@ -77,7 +77,6 @@ public class DateUtil {
 
   /**
    * LocalDateTime 转化成 Date
-   *
    * @return
    */
   public static Date localDateTimeNow() {

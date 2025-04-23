@@ -10,6 +10,7 @@ const ThemeSwitcher = () => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.checked ? setTheme('purple-dark') : setTheme('light')
   }
+
   return (
     <Switch
       defaultSelected={theme === 'purple-dark' ? true : false}

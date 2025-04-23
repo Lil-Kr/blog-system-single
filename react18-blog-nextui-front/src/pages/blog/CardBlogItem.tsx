@@ -1,7 +1,7 @@
 import { LinkBaseType } from '@/types/components/LinkType'
 import { Card, Divider } from '@heroui/react'
-import { LinkBase } from '../link'
-import SvgIcon from '../svg/SvgIcon'
+import { LinkBase } from '../../components/link'
+import SvgIcon from '../../components/svg/SvgIcon'
 import { useTheme } from 'next-themes'
 
 export type CardBlogItemProps = {
@@ -13,6 +13,7 @@ export type CardBlogItemProps = {
   publishTime: string
   updateTime: string
   contentText: string
+  paragraph: string
   tags: LinkBaseType[]
 }
 

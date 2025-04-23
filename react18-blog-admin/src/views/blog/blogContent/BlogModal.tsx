@@ -56,6 +56,9 @@ const BlogModal = () => {
   } = useBlogModalStore()
   const { imageUrl, setImageUrl, clearImageData } = useImageManageStore()
 
+  // 控制图片混排模式, 默认 false
+  // const [mixtypography, setMixtypography] = useState<boolean>(false)
+
   useEffect(() => {
     if (openModal) {
       initData()
@@ -134,6 +137,22 @@ const BlogModal = () => {
     if (!valid) {
       return
     }
+    let contentText = saveReq?.contentText ?? ''
+    /**
+     * 处理锚点
+     */
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(contentText, 'text/html')
+    const headers = Array.from(doc.querySelectorAll('h1, h2, h3, h4, h5, h6'))
+    const toc = headers
+      .filter(header => header.id)
+      .map(header => ({
+        id: header.id,
+        text: '#' + header.textContent?.replace(/^#+/, '').trim() || '',
+        level: parseInt(header.tagName[1], 10)
+      }))
+
+    console.log('--> toc:', toc)
 
     if (action === 'create') {
       const req: BlogContentAddReq = {
@@ -145,8 +164,9 @@ const BlogModal = () => {
         categoryId: saveReq?.categoryId ?? '',
         labelIds: saveReq?.labelIds ?? [],
         topicId: saveReq?.topicId ?? '',
-        contentText: saveReq?.contentText ?? '',
-        imgUrl: imageUrl
+        contentText: contentText,
+        imgUrl: imageUrl,
+        paragraph: JSON.stringify(toc)
       }
       const res = await api.add(req)
       const { code, msg } = res
@@ -165,8 +185,9 @@ const BlogModal = () => {
         categoryId: saveReq?.categoryId ?? '',
         labelIds: saveReq?.labelIds ?? [],
         topicId: saveReq?.topicId ?? '',
-        contentText: saveReq?.contentText ?? '',
-        imgUrl: imageUrl
+        contentText: contentText,
+        imgUrl: imageUrl,
+        paragraph: JSON.stringify(toc)
       }
       const res = await api.edit(req)
       const { code, msg } = res
@@ -178,7 +199,6 @@ const BlogModal = () => {
       messageApi?.error('操作异常')
       return
     }
-    handleBlogCancel()
   }
 
   /**
@@ -238,22 +258,28 @@ const BlogModal = () => {
     setSaveReq({ ...saveReq, original: event.target.value })
   }
 
+  /**
+   *
+   * @param event
+   */
   const onChangeRecommend = (event: RadioChangeEvent) => {
     setSaveReq({ ...saveReq, recommend: event.target.value })
   }
 
+  /**
+   * 博客发布状态
+   */
   const onChangePublishStatue = (event: RadioChangeEvent) => {
     setSaveReq({ ...saveReq, status: event.target.value })
   }
 
   /**
    * 扩展设置事件
-   * 去除p标签等操作
    * @param editor
    */
   const handleSetup = (editor: any) => {
     /**
-     * 粘贴图片时触发上传事件
+     * 粘贴方式: 图片时触发上传事件
      */
     editor.on('Paste', async (e: ClipboardEvent) => {
       const clipboardData = e.clipboardData
@@ -281,17 +307,15 @@ const BlogModal = () => {
             }
           })
 
-          if (code === 200 && data?.url) {
-            // 上传成功后插入
-            const finalImg = `<div><img src="${env.VITE_BACKEND_IMAGE_BASE_API}${data.url}" /></div>`
-            editor.insertContent(finalImg)
-          } else {
+          if (code !== 200 || !data?.url) {
             throw new Error('上传失败')
           }
+          // 上传成功后插入 image-block
+          const finalImg = `<img src='${env.VITE_BACKEND_IMAGE_BASE_API}${data.url}' />`
+          editor.insertContent(finalImg)
         } catch (err) {
-          console.error('图片上传失败:', err)
           editor.notificationManager.open({
-            text: '图片上传失败，请稍后再试',
+            text: '图片上传失败, 请稍后再试',
             type: 'error'
           })
         }
@@ -307,29 +331,37 @@ const BlogModal = () => {
     editor.on('PreProcess', (e: any) => {
       const doc = e.node as HTMLElement
 
-      doc.querySelectorAll('p > img:only-child').forEach(img => {
-        const p = img.parentElement
-        if (p?.tagName.toLowerCase() === 'p') {
-          const div = document.createElement('div')
-          div.appendChild(img.cloneNode(true))
-          p.replaceWith(div)
-        }
+      doc.querySelectorAll('img').forEach(img => {
+        const parent = img.parentElement
+
+        // 如果父节点已经是 image-block 就跳过，避免重复包裹
+        if (parent?.classList.contains('image-block')) return
+
+        // 创建新的 div 包裹 img
+        const wrapper = document.createElement('div')
+        wrapper.className = 'image-block'
+
+        // 替换 img -> wrapper(img)
+        parent?.replaceChild(wrapper, img)
+        wrapper.appendChild(img)
       })
 
-      // 替换 <p><a></a></p> 为 <div><a></a></div>
-      doc.querySelectorAll('p > a:only-child').forEach(a => {
-        const p = a.parentElement
-        if (p?.tagName.toLowerCase() === 'p') {
-          const div = document.createElement('div')
-          div.appendChild(a.cloneNode(true))
-          p.replaceWith(div)
+      /**
+       * 处理锚点链接
+       * <h3 id="create-thread-4-way"></h3>
+       */
+      doc.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(header => {
+        const anchor = header.querySelector('a[id]')
+        if (anchor && anchor.id && header.childNodes.length === 2) {
+          header.id = anchor.id
+          anchor.remove()
         }
       })
     })
   }
 
   return (
-    <div className='saveBlogModal'>
+    <div className='save-blog-modal'>
       <ConfigProvider
         modal={{
           styles: modalStyles
@@ -347,7 +379,7 @@ const BlogModal = () => {
           open={openModal}
           width={'100vw'}
           okText={'保存'}
-          cancelText={'取消'}
+          cancelText={'关闭'}
           onOk={handleBlogOk}
           onCancel={handleBlogCancel}
           getContainer={false} // 让 Modal 渲染在当前 DOM 结构
@@ -600,28 +632,7 @@ const BlogModal = () => {
                     image_caption: false, // image caption
                     paste_data_images: true, // paste image data
                     automatic_uploads: true,
-                    // images_upload_handler: async (blobInfo, progress) => {
-                    //   try {
-                    //     // 模拟真实的图片路径，确保它是有效的
-                    //     const url =
-                    //       env.VITE_BACKEND_IMAGE_BASE_API + '/upload/blog_image/admin/image_1914691349060390912.webp'
-
-                    //     // 检查 URL 是否有效
-                    //     const response = await fetch(url)
-                    //     if (!response.ok) {
-                    //       throw new Error('Image URL is not valid.')
-                    //     }
-
-                    //     console.log('--> images_upload_handler: ', url)
-
-                    //     // 返回 URL
-                    //     return url // Ensure this is correctly returned
-                    //   } catch (error) {
-                    //     console.error('Image upload failed:', error)
-                    //     throw new Error('Failed to upload image')
-                    //   }
-                    // },
-                    setup: editor => {
+                    setup: (editor: any) => {
                       handleSetup(editor)
                     },
                     file_picker_callback: (callback, value, meta) => {
@@ -630,11 +641,14 @@ const BlogModal = () => {
                         return
                       }
 
-                      // 创建上传按钮, 并实现上传逻辑
+                      /**
+                       * 创建上传按钮, 并实现上传逻辑
+                       * 只接受图片文件
+                       */
                       const input = document.createElement('input')
                       input.setAttribute('type', 'file')
-                      // 只接受图片文件
                       input.setAttribute('accpet', 'image/*')
+
                       input.addEventListener('change', async (e: Event) => {
                         const target = e.target as HTMLInputElement
                         const files = target.files
@@ -653,6 +667,8 @@ const BlogModal = () => {
                         if (!file.type.startsWith('image/')) {
                           return
                         }
+
+                        // 上传图片
                         const formData = new FormData()
                         formData.append('image', file)
 
@@ -662,17 +678,19 @@ const BlogModal = () => {
                             headers: { 'Content-Type': 'multipart/form-data' }
                           }
                         })
-
                         if (code !== 200 || !data?.url) {
                           messageApi?.error('上传失败')
                           throw new Error('上传失败')
                         }
-                        callback(env.VITE_BACKEND_IMAGE_BASE_API + data?.url, { title: file.name })
+
+                        const imageUrl: string = env.VITE_BACKEND_IMAGE_BASE_API + data?.url
+
+                        callback(imageUrl, { title: file.name })
                       })
                       input.click()
                     },
-                    // language: 'zh_CN',
-                    // language_url: import.meta.env.BASE_URL + 'tinymce/langs/zh_CN.js',
+                    language: 'zh_CN',
+                    language_url: import.meta.env.BASE_URL + 'tinymce/langs/zh_CN.js',
                     insertdatetime_formats: ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d', '%Y/%m/%d', '%H:%M:%S', '%D'],
                     insertdatetime_element: true // insert time/date plugin
                     // content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px } h2 { font-size:24px; font-weight:bold; margin:20px 0; }'

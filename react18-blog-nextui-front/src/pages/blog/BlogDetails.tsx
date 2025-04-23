@@ -6,7 +6,7 @@ import SvgIcon from '@/components/svg/SvgIcon'
 import { AnchorPointBase } from '@/components/anchor'
 import { BlogContentGetReq, BlogContentVO } from '@/apis/contentApi'
 import { blogContentApi } from '@/apis/contentApi'
-import { CardBlogItemProps } from '@/components/card/CardBlogItem'
+import { CardBlogItemProps } from '@/pages/blog/CardBlogItem'
 import { getFontRandomColorClass } from '@/utils/colors'
 import { formatDate } from '@/utils/date/dateTimeUtil'
 import { addCopyButtons } from './addCopyButtons'
@@ -15,13 +15,7 @@ import { addCopyButtons } from './addCopyButtons'
 import '@/utils/prism/prism-langs'
 import './styles/blog-content.scss'
 import Prism from 'prismjs'
-
-const cardItem: CardBaseDataType = {
-  key: '1',
-  svgIcon: <SvgIcon name='catalog-2' />,
-  headTitle: '文章目录',
-  content: <AnchorPointBase />
-}
+import CardDirectory from './CardDirectory'
 
 const BlogDetails = () => {
   const { blogId } = useParams()
@@ -30,8 +24,8 @@ const BlogDetails = () => {
   useEffect(() => {
     if (blogId && blogId !== '') {
       const fetchBlogDetail = async () => {
-        const blogDetail = await getBlogDetail({ surrogateId: blogId })
-        setContents(mappingContent(blogDetail))
+        // 查询博客详情
+        await getBlogDetail({ surrogateId: blogId })
       }
       fetchBlogDetail()
     }
@@ -45,13 +39,13 @@ const BlogDetails = () => {
     }
   }, [contents])
 
-  const getBlogDetail = async (req: BlogContentGetReq): Promise<BlogContentVO> => {
+  const getBlogDetail = async (req: BlogContentGetReq) => {
     const blogDetail = await blogContentApi.frontGetBlog({ ...req })
     const { code, data } = blogDetail
     if (code !== 200) {
       return {} as BlogContentVO
     }
-    return data
+    setContents(mappingContent(data))
   }
 
   const mappingContent = (req: BlogContentVO): CardBlogItemProps => {
@@ -64,6 +58,7 @@ const BlogDetails = () => {
       publishTime: formatDate(req.publishTime),
       updateTime: formatDate(req.updateTime),
       contentText: req.contentText,
+      paragraph: req.paragraph,
       tags: req.labels?.map(({ surrogateId, name }) => ({
         key: surrogateId,
         text: name,
@@ -74,13 +69,20 @@ const BlogDetails = () => {
     return cardBlogItem
   }
 
+  const cardItem: CardBaseDataType = {
+    key: '1',
+    svgIcon: <SvgIcon name='catalog-2' />,
+    headTitle: <div className='text-stone-600 dark:text-stone-300 font-bold'>{'文章目录'}</div>,
+    content: <AnchorPointBase paragraph={contents.paragraph} />
+  }
+
   return (
     <>
-      <div className='col-span-3 flex flex-col gap-y-4'>
+      <div className='col-span-2 flex flex-col gap-y-4 sticky top-16'>
         {/* 文章目录 */}
-        <CardSimple cardItem={cardItem} />
+        <CardDirectory cardItem={cardItem} />
       </div>
-      <div className='col-span-9'>
+      <div className='col-span-8'>
         <CardBlogItem content={contents} />
       </div>
     </>

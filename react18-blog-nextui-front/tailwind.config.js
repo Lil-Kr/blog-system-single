@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {}
   },
-  darkMode: 'class',
+  darkMode: ['class', '.purple-dark'],
   plugins: [
     // require('@tailwindcss/typography'),
     heroui({

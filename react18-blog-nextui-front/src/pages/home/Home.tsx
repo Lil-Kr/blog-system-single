@@ -4,7 +4,7 @@ import { BlogItemsType } from '@/types/blog'
 import { PaginationBase } from '@/components/pagination'
 import { CarouselBase } from '@/components/imageCarousel'
 import { baseUrl } from '@/constant'
-import { blogContentApi, BlogContentReq } from '@/apis/contentApi'
+import { blogContentApi, BlogContentReq, BlogContentVO } from '@/apis/contentApi'
 import { PageResult, PaginationType } from '@/types/base/response'
 import { transformToDay } from '@/utils/date/dateTimeUtil'
 
@@ -28,8 +28,8 @@ export type imageUrlProp = {
 }
 
 const Home = () => {
-  const [contents, setContents] = useState<PageResult<BlogItemsType>>()
   const [images, setImages] = useState<imageUrlProp[]>([])
+  const [contents, setContents] = useState<PageResult<BlogItemsType>>()
   const [pagination, setPagination] = useState<PaginationType>({
     currentPageNum: 1,
     pageSize: 10,
@@ -54,6 +54,7 @@ const Home = () => {
       pageSize: pagination.pageSize
     }
     const blogPageList = await frontContentPageList({ ...req })
+    console.log('--> blogPageList:', blogPageList)
     setContents(blogPageList)
 
     // set 图片轮播内容
@@ -94,7 +95,7 @@ const Home = () => {
       return {} as PageResult<BlogItemsType>
     }
 
-    const blogPageList = data.list.map(({ surrogateId, title, imgUrl, labels, publishTime }) => ({
+    const blogPageList = data.list.map(({ surrogateId, title, imgUrl, labels, publishTime, ...rest }) => ({
       key: surrogateId,
       image: {
         alt: '',
@@ -103,7 +104,8 @@ const Home = () => {
       tags: labels,
       blogTitle: title,
       publishTime: transformToDay(publishTime),
-      backendApi: `${baseUrl}/blog/${surrogateId}`
+      backendApi: `${baseUrl}/blog/${surrogateId}`,
+      ...rest
     }))
 
     const res: PageResult<BlogItemsType> = {

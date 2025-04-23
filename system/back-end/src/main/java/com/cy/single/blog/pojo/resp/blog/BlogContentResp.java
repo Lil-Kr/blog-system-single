@@ -19,6 +19,7 @@ public class BlogContentResp extends BlogContent implements Serializable {
 
   private static final long serialVersionUID = -6216586260975821759L;
 
+  private String contentText;
   /**
    * label
    */

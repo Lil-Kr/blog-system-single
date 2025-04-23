@@ -10,7 +10,16 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <HeroUIProvider>
-    <ThemeProvider attribute='class' defaultTheme='purple-dark' themes={['light', 'dark', 'purple-dark']}>
+    <ThemeProvider
+      attribute='class'
+      defaultTheme='purple-dark'
+      value={{
+        light: 'light',
+        dark: 'dark',
+        'purple-dark': 'purple-dark'
+      }}
+      themes={['light', 'dark', 'purple-dark']} // 合法的主题列表
+    >
       <App />
     </ThemeProvider>
   </HeroUIProvider>

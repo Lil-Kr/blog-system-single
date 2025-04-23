@@ -41,6 +41,7 @@ export interface BlogContentVO {
   original: number
   recommend: number
   imgUrl: string
+  paragraph: string
   introduction: string
   labels: {
     surrogateId: string

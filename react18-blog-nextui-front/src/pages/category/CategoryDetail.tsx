@@ -27,6 +27,7 @@ const blogItem: BlogItemsType = {
     }
   ],
   blogTitle: 'React8 hook 学习经验分享',
+  paragraph: 'React8 hook 学习经验分享',
   publishTime: '2022-02-22'
 }
 
@@ -54,6 +55,7 @@ const CategoryDetail = () => {
               // todo: 删除id选项, 测试使用
               tags: blogItem.tags,
               blogTitle: 'React18 hook 学习经验分享',
+              paragraph: 'React18 hook 学习经验分享',
               publishTime: '2022-02-22'
             }}
           />

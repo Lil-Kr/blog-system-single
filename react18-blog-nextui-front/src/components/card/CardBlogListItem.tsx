@@ -1,4 +1,4 @@
-import { Card, Image, Link } from "@heroui/react"
+import { Card, Image, Link } from '@heroui/react'
 import { BlogItemsType } from '@/types/blog'
 import { useNavigate } from 'oh-router-react'
 
@@ -35,11 +35,17 @@ const CardBlogListItem = (props: { blogItem: BlogItemsType }) => {
           ))}
         </div>
         <div key={blogItem.key} className='blog-title flex px-1 py-1'>
-          <Link className='text-lg text-stone-700 font-bold' underline='hover' href={blogItem.backendApi}>
+          <Link
+            className='text-lg text-stone-700 dark:text-purple-400 font-bold'
+            underline='hover'
+            href={blogItem.backendApi}
+          >
             {blogItem.blogTitle}
           </Link>
         </div>
-        <div className='blog-publish-date flex px-1 py-1 text-md font-bold text-zinc-400'>{blogItem.publishTime}</div>
+        <Link className='blog-publish-date flex px-1 py-1 text-md font-bold text-zinc-400' underline='hover'>
+          {blogItem.publishTime}
+        </Link>
       </div>
     </Card>
   )

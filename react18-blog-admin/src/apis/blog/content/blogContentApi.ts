@@ -69,6 +69,7 @@ export interface BlogContentAddReq {
   labelIds: string[]
   topicId?: string
   imgUrl?: string
+  paragraph?:string
   contentText: string
 }
 
@@ -83,6 +84,7 @@ export interface BlogContentEditeReq {
   labelIds: string[]
   topicId?: string
   imgUrl?: string
+  paragraph?:string
   contentText: string
 }
 

@@ -10,8 +10,6 @@ const ThemeSwitcherDemo = () => {
       <br />
       <Button onPress={() => setTheme('light')}>Light Mode</Button>
       <br />
-      <Button onPress={() => setTheme('dark')}>Dark Mode</Button>
-      <br />
       <Button onPress={() => setTheme('purple-dark')}>purple Dark Mode</Button>
     </div>
   )

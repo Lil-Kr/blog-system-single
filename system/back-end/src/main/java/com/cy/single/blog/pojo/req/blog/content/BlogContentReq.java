@@ -47,6 +47,8 @@ public class BlogContentReq {
 
   private String imgUrl;
 
+  private String paragraph;
+
   @NotNull(groups = {GroupBlogContentAdd.class, GroupBlogContentEdit.class}, message = "contentText是必须的")
   private String contentText;
 

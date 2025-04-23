@@ -109,7 +109,6 @@ public class BlogContentServiceImpl implements BlogContentService {
 
   /**
    * 保存博客内容
-   *
    * @param entity
    * @return
    */
@@ -120,7 +119,6 @@ public class BlogContentServiceImpl implements BlogContentService {
 
   /**
    * 获取博客内容
-   *
    * @param surrogateId
    * @return
    */
@@ -130,7 +128,6 @@ public class BlogContentServiceImpl implements BlogContentService {
 
   /**
    * 分页查询博客列表
-   *
    * @param req
    * @return
    */
@@ -222,11 +219,11 @@ public class BlogContentServiceImpl implements BlogContentService {
       return ApiResp.failure(INFO_NOT_EXIST);
     }
 
-    BlogContentResp res = new BlogContentResp();
-    BeanUtils.copyProperties(blogContent, res);
-    res.setContentText(blogContentMongo.getContentText());
+    BlogContentResp resp = new BlogContentResp();
+    BeanUtils.copyProperties(blogContent, resp);
+    resp.setContentText(blogContentMongo.getContentText());
 
-    return ApiResp.success(res);
+    return ApiResp.success(resp);
   }
 
   @Override
@@ -372,7 +369,8 @@ public class BlogContentServiceImpl implements BlogContentService {
     StringBuffer resourcePath = new StringBuffer(rootDir);
     resourcePath.append(uploadDir)
       .append(blogContentImagePath).append("/")
-      .append(currentUser.getAccount()).append("/");
+      .append(currentUser.getAccount()).append("/")
+      .append(DateUtil.getNowDateTimeForYMD()).append("/");
 
     /**
      * create Path into disk
@@ -425,6 +423,7 @@ public class BlogContentServiceImpl implements BlogContentService {
       StringBuffer imageUrl = new StringBuffer(uploadDir)
         .append(blogContentImagePath).append("/")
         .append(currentUser.getAccount()).append("/")
+        .append(DateUtil.getNowDateTimeForYMD()).append("/")
         .append(imageReName);
       BlogRichEditorResp res = new BlogRichEditorResp();
       res.setUrl(imageUrl.toString());

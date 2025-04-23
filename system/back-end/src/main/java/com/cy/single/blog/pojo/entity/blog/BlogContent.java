@@ -56,8 +56,6 @@ public class BlogContent implements Serializable {
 
   private String paragraph;
 
-  private String contentText;
-
   private Date publishTime;
 
   /**

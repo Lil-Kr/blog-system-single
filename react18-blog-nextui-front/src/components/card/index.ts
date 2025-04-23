@@ -7,5 +7,5 @@ export { CardSimple }
 import CardBlogListItem from './CardBlogListItem'
 export { CardBlogListItem }
 
-import CardBlogItem from './CardBlogItem'
+import CardBlogItem from '../../pages/blog/CardBlogItem'
 export { CardBlogItem }

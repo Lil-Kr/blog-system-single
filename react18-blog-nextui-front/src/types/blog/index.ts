@@ -13,5 +13,6 @@ export type BlogItemsType = {
   }[]
   blogTitle: string
   publishTime: string
+  paragraph: string
   backendApi?: string
 }
