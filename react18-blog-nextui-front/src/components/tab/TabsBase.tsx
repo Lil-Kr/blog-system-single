@@ -30,7 +30,7 @@ const blogItem: BlogItemsType = {
 }
 
 const TabsBase = () => {
-  const [selectKey, setSelectKey] = useState<number | string>(0)
+  const [selectKey, setSelectKey] = useState<string>('0')
 
   let tabs = Array.from({ length: 3 }).map((item, index) => {
     let value = {
@@ -53,7 +53,7 @@ const TabsBase = () => {
    */
   const selectChange = (key: Key) => {
     // alert(key)
-    setSelectKey(key)
+    setSelectKey(key.toString())
   }
 
   return (

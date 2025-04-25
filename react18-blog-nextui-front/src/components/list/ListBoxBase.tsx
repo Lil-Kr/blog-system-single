@@ -12,7 +12,7 @@ const textLength = 32
 const ListBoxBase = (props: { items: ListBoxItemType[]; type: CompType }) => {
   const { items, type } = props
   return (
-    <div className='grid grid-cols-1 w-full'>
+    <div className='grid grid-cols-1 w-full text-fontColor'>
       <Listbox aria-label='actions' color='primary' onAction={key => console.log(key)}>
         {type === 'link'
           ? items.map((item, index) => (

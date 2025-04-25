@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardFooter, Image } from '@heroui/react'
+import { Card, CardFooter, Image, Tooltip } from '@heroui/react'
 import SvgIcon from '../svg/SvgIcon'
 
 const env = import.meta.env
@@ -8,7 +8,7 @@ const CardMe = () => {
     <Card
       className='flex flex-col items-center gap-y-4'
       isPressable={true}
-      onPress={() => console.log('')} // 点击头像出发 action
+      // onPress={() => console.log('')} // 点击头像出发 action
       radius='sm'
       shadow='sm'
       fullWidth={true}
@@ -17,20 +17,28 @@ const CardMe = () => {
         <Image
           alt='me'
           className='object-cover'
-          // isZoomed={true}
-          width={200}
-          height={200}
+          isZoomed={true}
+          width={150}
+          height={150}
           // shadow='sm'
           radius='full'
-          src={env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/11月的萧邦_109951167749320136_1894396375513305088.webp'}
+          src={env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/流川枫-1_1915216468627296256.webp'}
         />
       </div>
 
-      {/* <div className='text-large'>{'Full-Stack Developer'}</div> */}
+      <div className='text-sm text-fontColor'>{'消失的下雨天, 好想再淋一遍'}</div>
       <div className='flex flex-row items-center gap-4'>
-        <SvgIcon name='github' style={'w-8 h-10'} />
-        <SvgIcon name='twitter' style={'w-8 h-10'} />
-        <SvgIcon name='facebook' style={'w-8 h-10'} />
+        <Tooltip key={1} color={'secondary'} content={'github'}>
+          <a href='https://github.com/Lil-Kr' target='blank'>
+            <SvgIcon name='github' style={'w-6 h-6'} />
+          </a>
+        </Tooltip>
+
+        <Tooltip key={1} color={'secondary'} content={'cxqybox@gmail.com'}>
+          <div>
+            <SvgIcon name='envelope' style={'w-6 h-6'} />
+          </div>
+        </Tooltip>
       </div>
       <CardFooter />
     </Card>

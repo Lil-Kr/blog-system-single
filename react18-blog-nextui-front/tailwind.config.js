@@ -8,7 +8,6 @@ export default {
   },
   darkMode: ['class', '.purple-dark'],
   plugins: [
-    // require('@tailwindcss/typography'),
     heroui({
       prefix: 'heroui',
       addCommonColors: false, // override common colors (e.g. "blue", "green", "pink").
@@ -43,6 +42,7 @@ export default {
       themes: {
         light: {
           colors: {
+            background: '#F4F4F5',
             white: '#FFFFFF',
             black: '#000000',
             primary: {
@@ -59,27 +59,13 @@ export default {
               DEFAULT: '#4757d5',
               foreground: '#ffffff'
             },
-            purplePrimary: {
-              50: '#FEECFE',
-              100: '#FDD5F9',
-              200: '#FCADF9',
-              300: '#F182F6',
-              400: '#DD62ED',
-              500: '#c031e2',
-              600: '#9823C2',
-              700: '#7318A2',
-              800: '#520F83',
-              900: '#3B096C',
-              DEFAULT: '#DD62ED',
-              foreground: '#ffffff'
-            },
             borderColor: {
-              100: '#E7E7E9',
-              DEFAULT: '#E7E7E9'
+              100: '#F4F4F5',
+              DEFAULT: '#FAFAFA'
             },
             fontColor: {
-              100: '#000000',
-              DEFAULT: '#000000'
+              100: '#f4f4f5',
+              DEFAULT: '#27272A'
             },
             hoverBackground: {
               100: '#ffffff',
@@ -138,20 +124,6 @@ export default {
               900: '#312e81',
               DEFAULT: '#4757d5',
               foreground: '#ffffff'
-            },
-            purplePrimary: {
-              50: '#FEECFE',
-              100: '#FDD5F9',
-              200: '#FCADF9',
-              300: '#F182F6',
-              400: '#DD62ED',
-              500: '#c031e2',
-              600: '#9823C2',
-              700: '#7318A2',
-              800: '#520F83',
-              900: '#3B096C',
-              DEFAULT: '#DD62ED',
-              foreground: '#ffffff'
             }
           }
         },
@@ -177,27 +149,13 @@ export default {
               DEFAULT: '#4757d5',
               foreground: '#ffffff'
             },
-            purplePrimary: {
-              50: '#FEECFE',
-              100: '#FDD5F9',
-              200: '#FCADF9',
-              300: '#F182F6',
-              400: '#DD62ED',
-              500: '#c031e2',
-              600: '#9823C2',
-              700: '#7318A2',
-              800: '#520F83',
-              900: '#3B096C',
-              DEFAULT: '#DD62ED',
-              foreground: '#ffffff'
-            },
             borderColor: {
-              100: '#30243C',
-              DEFAULT: '#30243C'
+              100: '#E4D4F4',
+              DEFAULT: '#481878'
             },
             fontColor: {
-              100: '#FFFFFF',
-              DEFAULT: '#FFFFFF'
+              100: '#F4F4F5',
+              DEFAULT: '#D4D4D8'
             },
             hoverFontColor: {
               100: '#FFFFFF',

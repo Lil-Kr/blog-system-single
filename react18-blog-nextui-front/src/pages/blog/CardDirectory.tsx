@@ -3,6 +3,11 @@ import { Card, CardBody, CardHeader } from '@heroui/react'
 import { CardBaseDataType } from '@/types/components/CardType'
 import { useNavigate } from 'oh-router-react'
 
+/**
+ * 
+ * @param props
+ * @returns
+ */
 const CardDirectory = (props: { cardItem: CardBaseDataType }) => {
   const { cardItem } = props
   const navigateTo = useNavigate()
@@ -18,7 +23,7 @@ const CardDirectory = (props: { cardItem: CardBaseDataType }) => {
           {cardItem.svgIcon}
           <p className='text-large font-bolb'>{cardItem.headTitle}</p>
         </div>
-        <div className='flex flex-col px-2 '>
+        <div className='flex flex-col px-2 text-fontColor'>
           {cardItem.headRightContent && (
             <span
               className='text-medium hover:text-primary cursor-pointer'

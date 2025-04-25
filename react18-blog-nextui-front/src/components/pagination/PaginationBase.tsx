@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Pagination } from "@heroui/react"
+import { Button, Pagination } from '@heroui/react'
 import { PaginationType } from '@/types/base/response'
 
 export type btnStatueProp = {
@@ -33,24 +33,24 @@ const PaginationBase = (props: {
     <div className='flex flex-col gap-4'>
       <div className='flex flex-row gap-x-6'>
         <Button
-          className='border-1 border-borderColor hover:border-borderColor'
+          className='border-1 border-borderColor hover:border-borderColor font-bold'
           size='md'
           isDisabled={btnDisable.prevBtn}
           variant='ghost'
           color='primary'
           onPress={() => handlePageChange(currentPageNum > 1 ? currentPageNum - 1 : currentPageNum, pageSize)}
         >
-          {`Prev Page`}
+          <span>{`Prev Page`}</span>
         </Button>
         <Button
-          className='border-1 border-borderColor hover:border-borderColor'
+          className='border-1 border-borderColor hover:border-borderColor font-bold'
           isDisabled={btnDisable.nextBtn}
           size='md'
           variant='ghost'
           color='primary'
           onPress={() => handlePageChange(currentPageNum < totalPage ? currentPageNum + 1 : currentPageNum, pageSize)}
         >
-          {`Next Page`}
+          <span>{`Next Page`}</span>
         </Button>
       </div>
     </div>

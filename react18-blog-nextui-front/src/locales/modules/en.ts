@@ -1,7 +1,19 @@
 export default {
   header: {
+    home: 'HOME',
     recommend: 'Recommend',
-    webstation: 'Webstation',
-    aboutme: 'About'
+    logs: 'Logs',
+    about: 'About'
+  },
+  home: {
+    main: {
+      left: {
+        recent: 'recent'
+      },
+      more: 'more'
+    }
+  },
+  blogcontent: {
+    paragraph: 'paragraph'
   }
 }

@@ -79,6 +79,16 @@ const rootConfig: RouterItemType[] = [
                 element: LazyLoad(lazy(() => import('@/pages/category/CategoryDetail')))
               }
             ]
+          },
+          {
+            meta: {
+              key: '/logs',
+              title: '日志',
+              layout: false,
+              icon: ''
+            },
+            path: 'logs',
+            element: LazyLoad(lazy(() => import('@/pages/logrecord/Logs')))
           }
         ]
       },
@@ -90,7 +100,6 @@ const rootConfig: RouterItemType[] = [
           icon: ''
         },
         path: 'blog',
-        // element: LazyLoad(lazy(() => import('@/pages/blog/BlogDetails'))),
         children: [
           {
             meta: {
@@ -106,18 +115,8 @@ const rootConfig: RouterItemType[] = [
       },
       {
         meta: {
-          key: '/article',
-          title: '关于本站',
-          layout: false,
-          icon: ''
-        },
-        path: 'article',
-        element: LazyLoad(lazy(() => import('@/pages/article/Article')))
-      },
-      {
-        meta: {
           key: '/about',
-          title: '关于我',
+          title: '关于',
           layout: false,
           icon: ''
         },

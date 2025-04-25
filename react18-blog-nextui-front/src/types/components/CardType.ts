@@ -5,7 +5,7 @@ type CardBaseDataType = {
   svgIcon: ReactNode
   headTitle: ReactNode
   headRightContent?: {
-    headMoreText: string
+    headMoreText: ReactNode
     moreUrl: string
   }
   content: ReactNode

@@ -7,10 +7,6 @@ export interface BlogContentApi {
   frontContentRecentList(): Promise<Result<BlogContentVO[]>>
   frontContentPageList(req: BlogContentReq): Promise<ResultPage<BlogContentVO>>
   frontGetBlog(req: BlogContentGetReq): Promise<Result<BlogContentVO>>
-  // save(params: CreateLabelReq): Promise<Result<string>>
-  // edit(params: EditLabelReq): Promise<Result<string>>
-  // delete(params: DelLabelReq): Promise<Result<string>>
-  // deleteBatch(params: DelLabelReq): Promise<Result<string>>
 }
 
 export const blogContentApi: BlogContentApi = {

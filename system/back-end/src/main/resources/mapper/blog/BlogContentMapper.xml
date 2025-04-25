@@ -149,8 +149,7 @@
 
 	<select id="frontContentByGroupCategory" resultType="com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp">
 		select category_id, count(1) as 'category_count'
-		from
-		<include refid="Table_Name"/>
+		from <include refid="Table_Name"/>
 		where `status` = 1
 		group by category_id
 	</select>

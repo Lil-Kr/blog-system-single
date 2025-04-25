@@ -61,19 +61,16 @@ const CardAction = (props: { cardItem: CardActionProps; update: () => void }) =>
           <PictureOutlined alt='设为封面' onClick={() => setBlogFacePicture(cardItem.imageUrl)} />
         </Tooltip>,
         btnSignSet.has(_COPY_IMAGE_ACL) ? (
-          <>
-            <Tooltip placement='top' title={'复制图片名称'} arrow={true}>
-              <CopyOutlined onClick={() => copy(cardItem.imageName)} />
-            </Tooltip>
-            ,
-            <Tooltip placement='top' title={'复制图片url'} arrow={true}>
-              <CopyFilled onClick={() => copyLink(cardItem.imageUrl)} />
-            </Tooltip>
-            ,
-          </>
-        ) : (
-          <></>
-        ),
+          <Tooltip placement='top' title={'复制图片名称'} arrow={true}>
+            <CopyOutlined onClick={() => copy(cardItem.imageName)} />
+          </Tooltip>
+        ) : null,
+
+        btnSignSet.has(_COPY_IMAGE_ACL) ? (
+          <Tooltip placement='top' title={'复制图片url'} arrow={true}>
+            <CopyFilled onClick={() => copyLink(cardItem.imageUrl)} />
+          </Tooltip>
+        ) : null,
         btnSignSet.has(_DEL_IMAGE_ACL) ? (
           <Tooltip placement='top' title={'删除图片'} arrow={true}>
             <Popconfirm
@@ -86,12 +83,10 @@ const CardAction = (props: { cardItem: CardActionProps; update: () => void }) =>
               <DelImageButtonAcl danger type='link' size={'small'} icon={<DeleteOutlined />} />
             </Popconfirm>
           </Tooltip>
-        ) : (
-          <></>
-        )
+        ) : null
       ]}
     >
-      <Meta description={cardItem.imageName} />
+      {/* <Meta description={cardItem.imageName} /> */}
     </Card>
   )
 }

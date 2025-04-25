@@ -4,7 +4,6 @@ import CardMe from '@/components/card/CardMe'
 import { CardBaseDataType } from '@/types/components/CardType'
 import SvgIcon from '@/components/svg/SvgIcon'
 import { ListBoxBase } from '@/components/list'
-import { LinkListBase } from '@/components/link'
 import { LinkArchiveType, LinkBaseType } from '@/types/components/LinkType'
 import { ListBoxItemType } from '@/types/components/ListBoxType'
 import { Outlet } from 'oh-router-react'
@@ -13,7 +12,7 @@ import labelApi from '@/apis/labelApi'
 import { blogContentApi } from '@/apis/contentApi'
 import { baseUrl } from '@/constant'
 import { getFontRandomColorClass } from '@/utils/colors'
-import LinkListArchive from '@/components/link/LinkListArchive'
+import { useTranslation } from 'react-i18next'
 
 // const newBlogs: ListBoxItemType[] = [
 //   { text: '聊一聊微服务架构与k8s的优劣势', url: '#' },
@@ -134,6 +133,7 @@ const Main = () => {
   const [categorys, setCategory] = useState<ListBoxItemType[]>([])
   const [labels, setLabel] = useState<LinkBaseType[]>([])
   const [contents, setContents] = useState<ListBoxItemType[]>([])
+  const { t } = useTranslation()
 
   /**
    * 初始化数据
@@ -152,9 +152,9 @@ const Main = () => {
   const cardList: CardBaseDataType[] = [
     {
       key: 1,
-      headTitle: '最新文章',
+      headTitle: <span className='text-fontColor'>{t('home.main.left.recent')}</span>,
       headRightContent: {
-        headMoreText: '更多',
+        headMoreText: <span className='text-fontColor'>{t('home.main.more')}</span>,
         moreUrl: `${baseUrl}/blogs`
       },
       svgIcon: <SvgIcon name='book' />,
@@ -190,7 +190,7 @@ const Main = () => {
 
   const frontCategoryCountList = async () => {
     const categorys = await categoryApi.frontCategoryCountList()
-    const { code, data, msg } = categorys
+    const { code, data } = categorys
     if (code !== 200) {
       return []
     }
@@ -243,17 +243,17 @@ const Main = () => {
 
   return (
     <>
-      {/* 左侧侧边栏 */}
-      <div className='col-span-2'>
-        <div className='sider-left-warpper flex-col hidden lg:basis-1/4 md:basis-1/4 lg:flex md:flex items-center gap-y-4'>
+      {/* 左侧侧边栏 响应式布局 */}
+      <div className='hidden lg:flex lg:flex-col col-span-2 items-center gap-y-4'>
+        <div className='sider-left-warpper flex flex-col items-center gap-y-4'>
           <CardMe />
           {cardList.map(item => (
             <CardSimple key={item.key} cardItem={item} />
           ))}
         </div>
       </div>
-      {/* 右侧主体内容 */}
-      <div className='col-span-8'>
+      {/* 右侧主体内容 响应式布局配合上面的样式 */}
+      <div className='col-span-12 bg-background lg:col-span-8'>
         <Outlet />
       </div>
     </>

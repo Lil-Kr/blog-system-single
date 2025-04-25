@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'oh-router-react'
-import { CardBlogItem, CardSimple } from '@/components/card'
+import { CardBlogItem } from '@/components/card'
 import { CardBaseDataType } from '@/types/components/CardType'
 import SvgIcon from '@/components/svg/SvgIcon'
-import { AnchorPointBase } from '@/components/anchor'
 import { BlogContentGetReq, BlogContentVO } from '@/apis/contentApi'
 import { blogContentApi } from '@/apis/contentApi'
 import { CardBlogItemProps } from '@/pages/blog/CardBlogItem'
 import { getFontRandomColorClass } from '@/utils/colors'
-import { formatDate } from '@/utils/date/dateTimeUtil'
-import { addCopyButtons } from './addCopyButtons'
+import { formatDate, transformToDay } from '@/utils/date/dateTimeUtil'
+import { addCopyButtons } from '../../components/blog/addCopyButtons'
+import CardDirectory from './CardDirectory'
+import AnchorPoint from './AnchorPoint'
 
 // blog code segmentation
 import '@/utils/prism/prism-langs'
 import './styles/blog-content.scss'
 import Prism from 'prismjs'
-import CardDirectory from './CardDirectory'
 
 const BlogDetails = () => {
   const { blogId } = useParams()
-  const [contents, setContents] = useState<CardBlogItemProps>({} as CardBlogItemProps)
+  const [content, setContent] = useState<CardBlogItemProps>({} as CardBlogItemProps)
 
   useEffect(() => {
     if (blogId && blogId !== '') {
@@ -33,11 +33,11 @@ const BlogDetails = () => {
 
   useEffect(() => {
     // 在 contents 更新后调用 Prism.highlightAll()
-    if (contents.contentText) {
+    if (content.contentText) {
       Prism.highlightAll()
       addCopyButtons()
     }
-  }, [contents])
+  }, [content])
 
   const getBlogDetail = async (req: BlogContentGetReq) => {
     const blogDetail = await blogContentApi.frontGetBlog({ ...req })
@@ -45,7 +45,8 @@ const BlogDetails = () => {
     if (code !== 200) {
       return {} as BlogContentVO
     }
-    setContents(mappingContent(data))
+    const mapping = mappingContent(data)
+    setContent(mapping)
   }
 
   const mappingContent = (req: BlogContentVO): CardBlogItemProps => {
@@ -55,8 +56,8 @@ const BlogDetails = () => {
       original: req.original,
       recommend: req.recommend,
       introduction: req.introduction,
-      publishTime: formatDate(req.publishTime),
-      updateTime: formatDate(req.updateTime),
+      publishTime: transformToDay(req.publishTime),
+      updateTime: req.updateTime,
       contentText: req.contentText,
       paragraph: req.paragraph,
       tags: req.labels?.map(({ surrogateId, name }) => ({
@@ -73,17 +74,17 @@ const BlogDetails = () => {
     key: '1',
     svgIcon: <SvgIcon name='catalog-2' />,
     headTitle: <div className='text-stone-600 dark:text-stone-300 font-bold'>{'文章目录'}</div>,
-    content: <AnchorPointBase paragraph={contents.paragraph} />
+    content: <AnchorPoint paragraph={content.paragraph} />
   }
 
   return (
     <>
-      <div className='col-span-2 flex flex-col gap-y-4 sticky top-16'>
+      <div className='col-span-2 hidden lg:flex flex-col gap-y-4 '>
         {/* 文章目录 */}
         <CardDirectory cardItem={cardItem} />
       </div>
-      <div className='col-span-8'>
-        <CardBlogItem content={contents} />
+      <div className='col-span-12 gap-y-4 lg:col-span-8'>
+        <CardBlogItem content={content} />
       </div>
     </>
   )

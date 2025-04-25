@@ -292,40 +292,6 @@ public class BlogContentServiceImpl implements BlogContentService {
   }
 
   @Override
-  public ApiResp<List<BlogContentResp>> frontContentList() {
-    List<BlogContentResp> res = blogContentMapper.frontContentList();
-    if (CollectionUtils.isEmpty(res)) {
-      return ApiResp.success(new ArrayList<>());
-    }
-    return ApiResp.success(res);
-  }
-
-  @Override
-  public List<BlogContentGroupResp> frontContentByGroupCategory() {
-    return blogContentMapper.frontContentByGroupCategory();
-  }
-
-  @Override
-  public PageResult<BlogContentResp> frontContentPageList(BlogContentPageReq req) {
-    req.setStatus(1);
-    req.setIsOrder(1);
-    List<BlogContentResp> pageList = blogContentMapper.pageFrontContentList(req);
-    if (CollectionUtils.isEmpty(pageList)) {
-      return new PageResult<>(new ArrayList<>(0), 0);
-    }
-    Integer count = blogContentMapper.pageFrontContentCount(req);
-
-    // 设置缓存--作废
-//    pageList.stream().forEach(item -> {
-//      item.setBlogLabelList(CacheManager.getBlogLabelNameListCache(item.getLabelIds()));
-//      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
-//      item.setBlogTopicVO(CacheManager.getBlogTopicInfoCacheMap().getOrDefault(item.getTopicId(), new BlogTopicVO()));
-//    });
-
-    return new PageResult<>(new ArrayList<>(pageList), count);
-  }
-
-  @Override
   public ApiResp<String> delete(Long surrogateId) {
     QueryWrapper<BlogContent> query = new QueryWrapper<>();
     query.eq("surrogate_id", surrogateId);
@@ -434,4 +400,41 @@ public class BlogContentServiceImpl implements BlogContentService {
     }
   }
 
+  /**
+   *
+   * @return
+   */
+  @Override
+  public ApiResp<List<BlogContentResp>> frontContentList() {
+    List<BlogContentResp> res = blogContentMapper.frontContentList();
+    if (CollectionUtils.isEmpty(res)) {
+      return ApiResp.success(new ArrayList<>());
+    }
+    return ApiResp.success(res);
+  }
+
+  @Override
+  public List<BlogContentGroupResp> frontContentByGroupCategory() {
+    return blogContentMapper.frontContentByGroupCategory();
+  }
+
+  @Override
+  public PageResult<BlogContentResp> frontContentPageList(BlogContentPageReq req) {
+    req.setStatus(1);
+    req.setIsOrder(1);
+    List<BlogContentResp> pageList = blogContentMapper.pageFrontContentList(req);
+    if (CollectionUtils.isEmpty(pageList)) {
+      return new PageResult<>(new ArrayList<>(0), 0);
+    }
+    Integer count = blogContentMapper.pageFrontContentCount(req);
+
+    // 设置缓存--作废
+//    pageList.stream().forEach(item -> {
+//      item.setBlogLabelList(CacheManager.getBlogLabelNameListCache(item.getLabelIds()));
+//      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
+//      item.setBlogTopicVO(CacheManager.getBlogTopicInfoCacheMap().getOrDefault(item.getTopicId(), new BlogTopicVO()));
+//    });
+
+    return new PageResult<>(new ArrayList<>(pageList), count);
+  }
 }

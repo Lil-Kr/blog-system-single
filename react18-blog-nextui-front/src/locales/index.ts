@@ -17,8 +17,8 @@ i18n
   .init({
     resources,
     debug: false,
-    lng: 'zh', // 默认语言
-    fallbackLng: 'en', // 回退语言
+    lng: 'en', // 默认语言
+    fallbackLng: 'zh', // 回退语言
     interpolation: {
       escapeValue: false // React 已经安全处理了
     }

@@ -10,14 +10,6 @@ import { transformToDay } from '@/utils/date/dateTimeUtil'
 
 const env = import.meta.env
 
-// todo: need change to from DB
-// const images = [
-//   { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/Jay1_20240422212922_1911784719964573696.webp' },
-//   { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/寻找周杰伦_109951165564941972_1894396427136798720.webp' },
-//   { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/最伟大的作品_109951167891239729_1894400569746001920.webp' },
-//   { url: env.VITE_BACKEND_IMAGE_BASE_API + '/upload/image/微信图片_202404241849052_1894389626563596288.webp' }
-// ]
-
 export type btnStatueProp = {
   prevBtn: boolean
   nextBtn: boolean
@@ -54,7 +46,6 @@ const Home = () => {
       pageSize: pagination.pageSize
     }
     const blogPageList = await frontContentPageList({ ...req })
-    console.log('--> blogPageList:', blogPageList)
     setContents(blogPageList)
 
     // set 图片轮播内容
@@ -151,7 +142,7 @@ const Home = () => {
       {/* 右侧主体内容 */}
       <div className='flex flex-col w-full gap-y-4'>
         <div className='flex w-full'>{images.length > 0 && <CarouselBase images={images} />}</div>
-        <div className='grid grid-cols-4 gap-2'>
+        <div className='grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-2'>
           {contents?.list.map((blogItem, index) => (
             <CardBlogListItem key={index} blogItem={blogItem} />
           ))}

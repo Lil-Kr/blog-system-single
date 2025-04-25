@@ -1,19 +1,17 @@
 import React from 'react'
 import { VisuallyHidden, useSwitch } from '@heroui/react'
 import SvgIcon from '@/components/svg/SvgIcon'
-import { useTranslation } from 'react-i18next'
+import { useSystemConfigStore } from '@/store/system/systemStore'
 
 const LanguageSwitcher = () => {
-  const { t, i18n } = useTranslation()
   const { Component, slots, isSelected, getBaseProps, getInputProps, getWrapperProps } = useSwitch()
-
+  const { setLanguage } = useSystemConfigStore()
   const handleClick = (e: any) => {
-    console.log('开关状态:', e.target.checked)
-    console.log('isSelected:', isSelected)
+    const lang: string = isSelected ? 'en' : 'zh'
+    setLanguage(lang)
   }
 
   return (
-    <div className='flex flex-col gap-2'>
       <Component {...getBaseProps()}>
         <VisuallyHidden>
           <input {...getInputProps({ onClick: handleClick })} checked={isSelected} />
@@ -27,7 +25,6 @@ const LanguageSwitcher = () => {
           {isSelected ? <SvgIcon name='lang-change' /> : <SvgIcon name='lang-change' />}
         </div>
       </Component>
-    </div>
   )
 }
 
