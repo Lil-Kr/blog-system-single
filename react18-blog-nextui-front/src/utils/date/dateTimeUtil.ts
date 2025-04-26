@@ -12,4 +12,8 @@ const transformToDay = (timestamp: string): string => {
   return dayjs(timestamp).format('YYYY-MM-DD')
 }
 
-export { transformToDay, formatDate }
+const transformToYear = (timestamp: string): string => {
+  return dayjs(timestamp).format('YYYY')
+}
+
+export { transformToDay, formatDate, transformToYear }

@@ -1,3 +1,4 @@
+import { transformToYear } from '@/utils/date/dateTimeUtil'
 import React from 'react'
 
 /**
@@ -10,7 +11,11 @@ const Footer = () => {
       <div className='flex flex-col sm:flex-col md:flex-col lg:flex-row justify-around items-center w-full bg-zinc-800 py-4 flex-wrap'>
         <div className='flex text-white text-sm'>
           <span>
-            Copyright <span className='font-semibold text-indigo-400 dark:text-purple-400'>© 2023 - 2025</span> Lil-K{' '}
+            Copyright{' '}
+            <span className='font-semibold text-indigo-400 dark:text-purple-400'>
+              © 2023 - {transformToYear(new Date().toDateString())}
+            </span>{' '}
+            Lil-K{' '}
           </span>
         </div>
         <div className='flex text-white text-sm'>

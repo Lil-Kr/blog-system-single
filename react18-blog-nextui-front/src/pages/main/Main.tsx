@@ -245,12 +245,10 @@ const Main = () => {
     <>
       {/* 左侧侧边栏 响应式布局 */}
       <div className='hidden lg:flex lg:flex-col col-span-2 items-center gap-y-4'>
-        <div className='sider-left-warpper flex flex-col items-center gap-y-4'>
-          <CardMe />
-          {cardList.map(item => (
-            <CardSimple key={item.key} cardItem={item} />
-          ))}
-        </div>
+        <CardMe />
+        {cardList.map(item => (
+          <CardSimple key={item.key} cardItem={item} />
+        ))}
       </div>
       {/* 右侧主体内容 响应式布局配合上面的样式 */}
       <div className='col-span-12 bg-background lg:col-span-8'>

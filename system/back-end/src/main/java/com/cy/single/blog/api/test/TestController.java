@@ -32,7 +32,7 @@ public class TestController {
 	public String test1() {
 		SysUser user = RequestHolder.getCurrentUser();
 		log.info(JSONObject.toJSONString(user));
-		return "abc";
+		return "test1";
 	}
 
 	@GetMapping("/test2")
