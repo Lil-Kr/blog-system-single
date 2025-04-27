@@ -4,7 +4,16 @@ const { heroui } = require('@heroui/react')
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}', './node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {}
+    extend: {
+      // screens: {
+      //   'xs': '480px',  // 自定义小屏断点
+      //   'sm': '640px',
+      //   'md': '768px',
+      //   'lg': '1024px',
+      //   'xl': '1280px',
+      //   '2xl': '1536px',
+      // }
+    }
   },
   darkMode: ['class', '.purple-dark'],
   plugins: [

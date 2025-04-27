@@ -3,6 +3,7 @@ import { RouterView } from 'oh-router-react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSystemConfigStore } from './store/system/systemStore'
+import { useTheme } from 'next-themes'
 
 function App() {
   const { i18n } = useTranslation()

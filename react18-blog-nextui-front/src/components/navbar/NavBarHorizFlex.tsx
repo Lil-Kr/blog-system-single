@@ -20,6 +20,8 @@ type NavProps = {
  */
 const NavBarHorizFlex = () => {
   const { t } = useTranslation()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const navigateTo = useNavigate()
 
   const navItems: NavProps[] = [
     // { name: t('header.recommend'), url: '/recommend' },
@@ -29,8 +31,6 @@ const NavBarHorizFlex = () => {
     { name: t('header.logs'), url: '/logs' },
     { name: t('header.about'), url: '/about' }
   ]
-  const { theme, setTheme } = useTheme()
-  const navigateTo = useNavigate()
 
   /**
    * skip to about me page
@@ -43,7 +43,6 @@ const NavBarHorizFlex = () => {
   const backHome = () => {
     navigateTo('')
   }
-  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   return (
     <div className='flex flex-row w-full h-16 justify-center shadow-sm border-b bg-background'>
@@ -84,7 +83,7 @@ const NavBarHorizFlex = () => {
           <ThemeSwitcher />
           <LanguageSwitcher />
         </div>
-        {/* 响应式的样式内容, 与上面的内容一直 */}
+        {/* 响应式的样式内容, 与上面的内容一致 */}
         <div className='lg:hidden md:hidden flex flex-row w-auto h-auto items-center gap-x-4'>
           <Button className='flex border rounded-md text-fontColor' onPress={() => setIsOpen(!isOpen)}>
             <SvgIcon name={'bars-3'} style='w-15 h-15' />

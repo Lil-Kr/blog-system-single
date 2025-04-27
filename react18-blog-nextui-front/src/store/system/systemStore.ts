@@ -9,7 +9,9 @@ interface SystemConfigAction {
   setLanguage: (language: string) => void
 }
 
-const initSystemConfig = { language: 'en' }
+const initSystemConfig = {
+  language: 'en'
+}
 
 const useSystemConfigStore = create<SystemConfigState & SystemConfigAction>()(
   persist(

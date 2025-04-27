@@ -8,13 +8,14 @@ const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme()
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target.checked ? setTheme('purple-dark') : setTheme('light')
+    const theme = e.target.checked ? 'purple-dark' : 'light'
+    setTheme(theme)
   }
 
   return (
     <Switch
-      defaultSelected={theme === 'purple-dark' ? true : false}
-      size='md'
+      size={'md'}
+      isSelected={theme === 'purple-dark'}
       color='secondary'
       thumbIcon={({ isSelected, className }) =>
         isSelected ? <MoonIcon className={className} /> : <SunIcon className={className} />
