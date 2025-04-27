@@ -25,24 +25,17 @@ const env = import.meta.env
 const ImageCategory = () => {
   const columnsImageCategory: ColumnsType<ImageCategoryTableType> = [
     {
-      key: 'imageUrl',
-      dataIndex: 'imageUrl',
-      title: '标题图',
-      width: '30%',
-      render: (_, record) => <img height={100} style={{ objectFit: 'cover' }} src={record.imageUrl} />
-    },
-    {
       key: 'name',
       dataIndex: 'name',
       title: '分类名',
-      width: '20%',
+      width: '30%',
       render: (_, record) => <Tag color={'pink'}>{record.name}</Tag>
     },
     {
       key: 'status',
       dataIndex: 'status',
       title: '状态',
-      width: '0%',
+      width: '20%',
       render: (_, record) => {
         let text = ''
         let color = ''
@@ -60,7 +53,7 @@ const ImageCategory = () => {
       key: 'remark',
       dataIndex: 'remark',
       title: '备注',
-      width: '10%'
+      width: '20%'
     },
     {
       key: 'createTime',

@@ -565,7 +565,7 @@ const BlogModal = () => {
               <Col span={24}>
                 <Editor
                   id={'editor-local'}
-                  tinymceScriptSrc={import.meta.env.BASE_URL + 'tinymce/tinymce.min.js'}
+                  tinymceScriptSrc={env.BASE_URL + 'tinymce/tinymce.min.js'}
                   onInit={(_evt, editor) => {
                     editorRef.current = editor
                   }}

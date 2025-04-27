@@ -1,7 +1,7 @@
 import { RouterItemType } from '@/types/router/routeType'
 import { lazy } from 'react'
 import LazyLoad from '@/components/router/LazyLoad'
-import Router from 'oh-router'
+import Router, { createBrowserHistory } from 'oh-router'
 
 const rootConfig: RouterItemType[] = [
   {
@@ -11,8 +11,7 @@ const rootConfig: RouterItemType[] = [
       layout: false,
       icon: ''
     },
-    path: '/',
-    redirect: '/blog/home'
+    path: '/'
   },
   {
     meta: {
@@ -124,26 +123,6 @@ const rootConfig: RouterItemType[] = [
         element: LazyLoad(lazy(() => import('@/pages/about/About')))
       }
     ]
-  },
-  {
-    meta: {
-      key: '/navbar',
-      title: '测试导航条',
-      layout: false,
-      icon: ''
-    },
-    path: 'navbar',
-    element: LazyLoad(lazy(() => import('@/components/menu/NavBarHorizSubMenu')))
-  },
-  {
-    meta: {
-      key: '/imageCarouse',
-      title: '测试图片轮播',
-      layout: false,
-      icon: ''
-    },
-    path: 'imageCarouse',
-    element: LazyLoad(lazy(() => import('@/components/imageCarousel/CarouselBase')))
   }
 ]
 

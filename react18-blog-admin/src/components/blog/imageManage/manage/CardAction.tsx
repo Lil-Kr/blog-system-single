@@ -7,7 +7,6 @@ import { DelImageButtonAcl, _DEL_IMAGE_ACL, _COPY_IMAGE_ACL } from '@/views/imag
 import { useImageManageStore } from '@/store/blog/imageStore'
 import { useBlogModalStore } from '@/store/blog/blogStore'
 import { usePermissionsStore } from '@/store/sys/authStore'
-const { Meta } = Card
 
 const env = import.meta.env
 const CardAction = (props: { cardItem: CardActionProps; update: () => void }) => {
