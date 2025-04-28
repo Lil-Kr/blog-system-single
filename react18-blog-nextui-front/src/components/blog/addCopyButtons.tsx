@@ -46,22 +46,72 @@ export const addCopyButtons = () => {
     let restoreTimer: number | null = null
     let isCopied = false
 
-    button.addEventListener('click', () => {
+    button.addEventListener('click', async () => {
       if (isCopied) return
 
       const code = pre.querySelector('code')?.textContent || ''
-      navigator.clipboard.writeText(code).then(() => {
-        isCopied = true
-        button.innerHTML = checkIcon
+      /**
+       * 复制按钮在 HTTP/HTTPS 下的兼容性问题
+       * navigator.clipboard.writeText() 是 现代浏览器提供的剪贴板 API
+       * 但浏览器要求:
+          必须在 用户触发的事件内（如 click）
+          且在受信任环境下，通常是 HTTPS 页面。
+          如果是 HTTP 页面（比如你服务器上用 nginx 简单部署的 IP 访问），浏览器可能会禁止直接访问剪贴板，导致复制按钮失效。
 
-        if (restoreTimer) {
-          clearTimeout(restoreTimer)
+          总结: 先用新API，失败时用老办法兜底，保证复制功能在所有环境下正常运行
+       * @param text
+       */
+      const copyText = async (text: string) => {
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text)
+          } else {
+            throw new Error('Clipboard API not supported')
+          }
+        } catch (err) {
+          // fallback 方式
+          const textarea = document.createElement('textarea')
+          textarea.value = text
+          textarea.style.position = 'fixed'
+          textarea.style.top = '-9999px'
+          textarea.style.left = '-9999px'
+          document.body.appendChild(textarea)
+          textarea.focus()
+          textarea.select()
+          try {
+            // 这里使用 document.execCommand('copy') 来实现复制, 旧的API
+            document.execCommand('copy')
+          } catch (err) {
+            console.error('Fallback: Copy failed', err)
+          }
+          document.body.removeChild(textarea)
         }
-        restoreTimer = window.setTimeout(() => {
-          button.innerHTML = duplicateIcon
-          isCopied = false
-        }, 1500)
-      })
+      }
+
+      await copyText(code)
+
+      isCopied = true
+      button.innerHTML = checkIcon
+
+      if (restoreTimer) {
+        clearTimeout(restoreTimer)
+      }
+      restoreTimer = window.setTimeout(() => {
+        button.innerHTML = duplicateIcon
+        isCopied = false
+      }, 1500)
+      // navigator.clipboard.writeText(code).then(() => {
+      //   isCopied = true
+      //   button.innerHTML = checkIcon
+
+      //   if (restoreTimer) {
+      //     clearTimeout(restoreTimer)
+      //   }
+      //   restoreTimer = window.setTimeout(() => {
+      //     button.innerHTML = duplicateIcon
+      //     isCopied = false
+      //   }, 1500)
+      // })
     })
 
     wrapper.appendChild(button)
