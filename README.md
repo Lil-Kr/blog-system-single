@@ -1,68 +1,70 @@
-# 博客系统项目信息
+English | [简体中文](./README.zh.md)
 
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+# Blog System
 
-<!-- code_chunk_output -->
+A dynamic blog system independently developed by the author for personal use and open-sourced for learning and communication purposes.
 
-- [博客系统项目信息](#博客系统项目信息)
-  - [项目开发版本说明](#项目开发版本说明)
-    - [VM 虚拟机搭建](#vm-虚拟机搭建)
-    - [前端架构](#前端架构)
-    - [后端架构](#后端架构)
-  - [后端服务端口规划](#后端服务端口规划)
-  - [docker支持](#docker支持)
-  - [docer部署说明](#docer部署说明)
+There are still many features to improve, and the author will continue refining the system over time.  
+Currently, it is maintained and used by the author alone.
 
-<!-- /code_chunk_output -->
+## Technology Stack
 
-## 项目开发版本说明
+### Frontend
 
-### VM 虚拟机搭建
+**Technology** | **Version** | **Official Website**
+:---|:---|:---
+React.js | v18.2.0 | [reactjs.org](https://reactjs.org/)
+TypeScript | v5.4.3 | [typescriptlang.org](https://www.typescriptlang.org/)
+Node.js | v18.20.0 | [nodejs.org](https://nodejs.org/en/)
+npm | 10.5.0 | 
+oh-router | v0.4.0 | [github.com/lblblong/oh-router](https://github.com/lblblong/oh-router)
+zustand | v4.5.2 | [docs.pmnd.rs/zustand](https://docs.pmnd.rs/zustand/getting-started/introduction)
+TinyMCE | v5.10.9 | [tiny.cloud](https://www.tiny.cloud/)
+Ant Design | v5.24.3 | [ant.design](https://ant.design/)
+NextUI | v2.3.6 | [heroui.com](https://www.heroui.com/)
+Tailwind CSS | v3.4.3 | [tailwindcss.com](https://tailwindcss.com/)
+Vite | v5.2.0 | [vitejs.dev](https://vitejs.dev/guide/)
 
-* **暂时规划5个虚拟机节点**
-  * **存储相关的服务器1台**
-  * **中间件1台**
-  * **3台业务服务器**
+### Backend
 
-### 前端架构
+**Technology** | **Version** | **Official Website**
+:---|:---|:---
+Spring Boot | v2.7.18 | [spring.io](https://spring.io/projects/spring-boot)
+MyBatis-Plus | v3.5.5 | [mybatis.org](https://mybatis.org/mybatis-3/) / [baomidou.com](https://baomidou.com/)
+MySQL | v8.0.x | [dev.mysql.com](https://dev.mysql.com/downloads/mysql/)
+Nginx | - | [nginx.org](https://nginx.org/)
+Docker | - | [docker.com](https://www.docker.com/)
 
-技术 | 版本 | 官网链接
----------|----------|---------
- reactjs | v18.2.0 | https://reactjs.org/
- typescript | v5.4.3 | 
- nodejs | v18.20.0 | https://nodejs.ogr/en/
- npm | 10.5.0 | xx
- router | v0.4.0 | oh-router
- zustand | v4.5.2 | [https://docs.pmnd.rs/zustand/getting-started/introduction](https://docs.pmnd.rs/zustand/getting-started/introduction)
- antd | v5.16.0 | xx
- nextui | v2.3.6 | xx
- vite | v2.0 | https://vitejs.dev/guide/
+## Features
 
-### 后端架构
+### Blog Portal
 
-技术 | 版本 | 官网链接
----------|----------|---------
-spring-boot | 2.7.18 | https://spring.io/projects/spring-boot#learn
-mybatis-plus | 3.5.5 | 
-MySQL | v8.0.36 | 
+- Browse the latest published blogs.
+- Support for theme switching and language switching.
+- Fully responsive design for different devices.
 
-------------------------
+### Admin Dashboard
 
-## 后端服务端口规划
+- Complete RBAC (Role-Based Access Control) implementation, including user, menu, role, and permission management. Ready for future multi-user expansion.
+- Blog management: create, publish, edit, and delete articles, integrated with TinyMCE rich text editor.
+- Tag management, category management, and topic management.
+- Image management: upload images and manage image categories.
 
+## Future Plans
 
+### Blog Portal
 
-------------------------
+- Add a commenting system.
+- Add RSS feed support.
+- Further optimize and polish the codebase.
 
-## docker支持
+### Admin Dashboard
 
+- Implement API rate limiting.
+- Add user registration and password recovery features.
+- Add comment management module (to match the frontend comment functionality).
+- Integrate email sending capabilities.
+- Track IP access records.
+- Add operation and permission logging.
 
-------------------------
-
-## docer部署说明
-
-
-
-
-
-
+_And more features coming soon..._
