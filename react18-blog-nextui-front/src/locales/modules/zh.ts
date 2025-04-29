@@ -14,6 +14,8 @@ export default {
     }
   },
   blogcontent: {
-    paragraph: '文章目录'
+    paragraph: '文章目录',
+    prev: '上一篇',
+    next: '下一篇'
   }
 }

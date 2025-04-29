@@ -211,13 +211,13 @@
 			</if>
 			<if test="param.keyWords != null and param.keyWords != ''">
 				and (
-				`number` like concat('%',#{param.keyWords},'%')
-				or
-				`name` like concat('%',#{param.keyWords},'%')
-				or
-				`title` like concat('%',#{param.keyWords},'%')
-				or
-				remark like concat('%',#{param.keyWords},'%')
+					`number` like concat('%',#{param.keyWords},'%')
+					or
+					`name` like concat('%',#{param.keyWords},'%')
+					or
+					`title` like concat('%',#{param.keyWords},'%')
+					or
+					remark like concat('%',#{param.keyWords},'%')
 				)
 			</if>
 		</where>
@@ -230,5 +230,29 @@
 				desc
 			</if>
 		</if>
+	</select>
+
+	<!-- 上一篇	">" -->
+	<select id="prevBlog" resultType="com.cy.single.blog.pojo.resp.blog.PrevAndNext">
+		select surrogate_id, title from blog_content
+		where `status` = 1
+		and publish_time &gt; (
+			select publish_time from blog_content
+			where `status` = 1 and surrogate_id = #{blogId}
+		)
+		order by publish_time asc
+		limit 1
+	</select>
+
+	<!-- 下一篇	"<" -->
+	<select id="nextBlog" resultType="com.cy.single.blog.pojo.resp.blog.PrevAndNext">
+		select surrogate_id, title from blog_content
+		where `status` = 1
+		and publish_time &lt; (
+			select publish_time from blog_content
+			where `status` = 1 and surrogate_id = #{blogId}
+		)
+		order by publish_time desc
+		limit 1
 	</select>
 </mapper>

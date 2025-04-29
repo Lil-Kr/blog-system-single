@@ -14,6 +14,8 @@ export default {
     }
   },
   blogcontent: {
-    paragraph: 'paragraph'
+    paragraph: 'Paragraph',
+    prev: 'Previous',
+    next: 'Next'
   }
 }

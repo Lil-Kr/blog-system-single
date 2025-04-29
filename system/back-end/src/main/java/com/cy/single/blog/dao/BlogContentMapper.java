@@ -5,6 +5,7 @@ import com.cy.single.blog.pojo.entity.blog.BlogContent;
 import com.cy.single.blog.pojo.req.blog.content.BlogContentPageReq;
 import com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp;
 import com.cy.single.blog.pojo.resp.blog.BlogContentResp;
+import com.cy.single.blog.pojo.resp.blog.PrevAndNext;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -36,4 +37,8 @@ public interface BlogContentMapper extends BaseMapper<BlogContent> {
   List<BlogContentResp> pageFrontContentList(@Param("param") BlogContentPageReq req);
 
   Integer pageFrontContentCount(@Param("param") BlogContentPageReq req);
+
+  PrevAndNext prevBlog(Long blogId);
+
+  PrevAndNext nextBlog(Long blogId);
 }

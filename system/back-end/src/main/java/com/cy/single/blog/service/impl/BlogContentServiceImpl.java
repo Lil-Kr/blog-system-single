@@ -17,6 +17,7 @@ import com.cy.single.blog.pojo.req.blog.content.BlogRichEditorImageReq;
 import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
 import com.cy.single.blog.pojo.resp.blog.BlogContentGroupResp;
 import com.cy.single.blog.pojo.resp.blog.BlogContentResp;
+import com.cy.single.blog.pojo.resp.blog.PrevAndNext;
 import com.cy.single.blog.service.BlogContentService;
 import com.cy.single.blog.service.CacheService;
 import com.cy.single.blog.service.MessageLangService;
@@ -201,29 +202,48 @@ public class BlogContentServiceImpl implements BlogContentService {
 
   /**
    * 获取单条博客信息, 包括博客内容
-   * @param surrogateId
+   * @param blogId
    * @return
    */
   @Override
-  public ApiResp<BlogContentResp> getBlog(Long surrogateId) {
+  public ApiResp<BlogContentResp> getBlog(Long blogId) {
     QueryWrapper<BlogContent> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("surrogate_id", surrogateId);
+    queryWrapper.eq("surrogate_id", blogId);
     BlogContent blogContent = blogContentMapper.selectOne(queryWrapper);
     if (Objects.isNull(blogContent)) {
       return ApiResp.failure(INFO_NOT_EXIST);
     }
 
     // get blog info from mongodb
-    BlogContentMongo blogContentMongo = getBlogContentMongo(surrogateId);
-    if (Objects.isNull(blogContentMongo) || !String.valueOf(blogContent.getSurrogateId()).equals(blogContentMongo.getId())) {
+    BlogContentMongo blogContentMongo = getBlogContentMongo(blogId);
+    if (Objects.isNull(blogContentMongo) || ! String.valueOf(blogContent.getSurrogateId()).equals(blogContentMongo.getId())) {
       return ApiResp.failure(INFO_NOT_EXIST);
     }
+
+    // get post blog and next blog
+    PrevAndNext prev = this.prevBlog(blogId);
+    PrevAndNext next = this.nextBlog(blogId);
 
     BlogContentResp resp = new BlogContentResp();
     BeanUtils.copyProperties(blogContent, resp);
     resp.setContentText(blogContentMongo.getContentText());
+    resp.setPrev(prev);
+    resp.setNext(next);
 
     return ApiResp.success(resp);
+  }
+
+  /**
+   * get post blog and next blog info
+   * @param blogId
+   * @return
+   */
+  private PrevAndNext prevBlog(Long blogId) {
+    return Optional.ofNullable(blogContentMapper.prevBlog(blogId)).orElse(new PrevAndNext());
+  }
+
+  private PrevAndNext nextBlog(Long blogId) {
+    return Optional.ofNullable(blogContentMapper.nextBlog(blogId)).orElse(new PrevAndNext());
   }
 
   @Override
@@ -427,13 +447,6 @@ public class BlogContentServiceImpl implements BlogContentService {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
     Integer count = blogContentMapper.pageFrontContentCount(req);
-
-    // 设置缓存--作废
-//    pageList.stream().forEach(item -> {
-//      item.setBlogLabelList(CacheManager.getBlogLabelNameListCache(item.getLabelIds()));
-//      item.setBlogCategoryVO(CacheManager.getBlogCategoryAllMapCache().getOrDefault(item.getCategoryId(), new BlogCategoryVO()));
-//      item.setBlogTopicVO(CacheManager.getBlogTopicInfoCacheMap().getOrDefault(item.getTopicId(), new BlogTopicVO()));
-//    });
 
     return new PageResult<>(new ArrayList<>(pageList), count);
   }

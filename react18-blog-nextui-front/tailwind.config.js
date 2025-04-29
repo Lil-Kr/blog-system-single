@@ -74,7 +74,7 @@ export default {
             },
             fontColor: {
               100: '#f4f4f5',
-              DEFAULT: '#27272A'
+              DEFAULT: '##27272a'
             },
             hoverBackground: {
               100: '#ffffff',

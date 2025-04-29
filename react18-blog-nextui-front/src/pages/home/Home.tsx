@@ -4,9 +4,10 @@ import { BlogItemsType } from '@/types/blog'
 import { PaginationBase } from '@/components/pagination'
 import { CarouselBase } from '@/components/imageCarousel'
 import { baseUrl } from '@/constant'
-import { blogContentApi, BlogContentReq, BlogContentVO } from '@/apis/contentApi'
+import { blogContentApi } from '@/apis/contentApi'
 import { PageResult, PaginationType } from '@/types/base/response'
 import { transformToDay } from '@/utils/date/dateTimeUtil'
+import { BlogContentReq } from '@/types/apis/blog/blogTypes'
 
 const env = import.meta.env
 

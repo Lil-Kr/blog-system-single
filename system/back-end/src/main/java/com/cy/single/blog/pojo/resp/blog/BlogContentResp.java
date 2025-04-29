@@ -40,4 +40,8 @@ public class BlogContentResp extends BlogContent implements Serializable {
   private Integer statusType;
 
   private String statusName;
+
+  private PrevAndNext prev;
+
+  private PrevAndNext next;
 }

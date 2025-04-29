@@ -1,13 +1,7 @@
 import { baseAxiosRequest } from '@/utils/http/request'
 import { PREFIX_URL_BLOG_CONTENT } from '@/config'
 import { Result, ResultPage } from '@/types/base/response'
-import { BasePageReq } from '@/types/base'
-
-export interface BlogContentApi {
-  frontContentRecentList(): Promise<Result<BlogContentVO[]>>
-  frontContentPageList(req: BlogContentReq): Promise<ResultPage<BlogContentVO>>
-  frontGetBlog(req: BlogContentGetReq): Promise<Result<BlogContentVO>>
-}
+import { BlogContentApi, BlogContentGetReq, BlogContentReq, BlogContentVO } from '@/types/apis/blog/blogTypes'
 
 export const blogContentApi: BlogContentApi = {
   frontContentRecentList() {
@@ -18,40 +12,5 @@ export const blogContentApi: BlogContentApi = {
   },
   frontGetBlog(req: BlogContentGetReq) {
     return baseAxiosRequest.get<Result<BlogContentVO>>(PREFIX_URL_BLOG_CONTENT + '/frontGetBlog', req)
-  }
-}
-
-export interface BlogContentReq extends BasePageReq {
-  keyWords?: string
-}
-
-export interface BlogContentGetReq {
-  surrogateId: string
-}
-
-export interface BlogContentVO {
-  id: string
-  surrogateId: string
-  number: string
-  title: string
-  original: number
-  recommend: number
-  imgUrl: string
-  paragraph: string
-  introduction: string
-  labels: {
-    surrogateId: string
-    name: string
-  }[]
-  publishTime: string
-  updateTime: string
-  contentText: string
-  category: {
-    surrogateId: string
-    name: string
-  }
-  topic?: {
-    surrogateId: string
-    name: string
   }
 }
