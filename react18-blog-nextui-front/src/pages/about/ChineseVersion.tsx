@@ -2,7 +2,7 @@ import React from 'react'
 
 const ChineseVersion = () => {
   return (
-    <div className='bg-white dark:bg-zinc-800 rounded-lg text-fontColor shadow-md p-8'>
+    <div className='flex w-full flex-col bg-white dark:bg-zinc-800 rounded-lg text-fontColor shadow-md p-8'>
       <h1 className='text-3xl font-bold text-indigo-600 dark:text-purple-400 mb-4'>关于博主</h1>
 
       <p className='text-gray-700 dark:text-gray-300 text-base leading-relaxed mb-6'>
