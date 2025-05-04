@@ -19,13 +19,6 @@ const CarouselBase = (props: { images: imageUrlProp[] }) => {
     setCurrentIndex(index)
   }
 
-  useEffect(() => {
-    const interval = setTimeout(() => {
-      goToNext()
-    }, 3000) // Change image every 3 seconds
-    return () => clearTimeout(interval)
-  }, [currentIndex])
-
   return (
     <div className='hidden sm:flex flex-col w-full h-[50vh] m-auto relative group'>
       <div

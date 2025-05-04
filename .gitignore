@@ -98,4 +98,7 @@ hs_err_pid*
 *.tsbuildinfo
 
 # prod files
-**/application-prod.yml
+**/*-prod.yml
+**/*-test.yml
+**/*.env.test
+**/*.env.production

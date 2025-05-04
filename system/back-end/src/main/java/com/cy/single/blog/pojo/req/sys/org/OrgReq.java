@@ -3,20 +3,11 @@ package com.cy.single.blog.pojo.req.sys.org;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-/**
- * <p>
- *
- * </p>
- *
- * @author Lil-Kr
- * @since 2020-11-24
- */
 @Data
 @ToString
 public class OrgReq {
@@ -30,7 +21,7 @@ public class OrgReq {
 //    private Long id;
 
   /**
-   * 组织唯一主键
+   * 组织主键
    */
   @NotNull(groups = {GroupEdit.class}, message = "组织surrogateId不能为空")
   private Long surrogateId;

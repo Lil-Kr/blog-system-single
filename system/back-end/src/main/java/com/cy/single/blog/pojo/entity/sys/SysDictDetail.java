@@ -26,7 +26,7 @@ public class SysDictDetail extends Model<SysDictDetail> {
 
   private static final long serialVersionUID = -1734025655498001710L;
   /**
-   * 数据字典id唯一主键
+   * 数据字典id主键
    */
   @TableId(value = "surrogate_id")
   @JsonSerialize(using = ToStringSerializer.class)
