@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { CardBlogListItem } from '@/components/card'
 import { BlogItemsType } from '@/types/blog'
 import { PaginationBase } from '@/components/pagination'
-import { CarouselBase } from '@/components/imageCarousel'
+import { CarouselBase, CarouselMotion } from '@/components/imageCarousel'
 import { baseUrl } from '@/constant'
 import { blogContentApi } from '@/apis/contentApi'
 import { PageResult, PaginationType } from '@/types/base/response'
 import { transformToDay } from '@/utils/date/dateTimeUtil'
 import { BlogContentReq } from '@/types/apis/blog/blogTypes'
+import { motion } from 'framer-motion'
 
 const env = import.meta.env
 
@@ -141,7 +142,18 @@ const Home = () => {
   return (
     <>
       {/* 右侧主体内容 */}
-      <div className='flex flex-col w-full gap-y-4'>
+      <motion.div
+        className='flex flex-col w-full gap-y-4'
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.8,
+          ease: 'easeOut'
+        }}
+      >
+        {/* <div className='flex flex-col w-full gap-y-4'>
+        </div> */}
+        {/* <div className='flex w-full'>{images.length > 0 && <CarouselBase images={images} />}</div> */}
         <div className='flex w-full'>{images.length > 0 && <CarouselBase images={images} />}</div>
         <div className='grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-2'>
           {contents?.list.map((blogItem, index) => (
@@ -156,7 +168,7 @@ const Home = () => {
             pageChange={(currentPageNum: number, pageSize: number) => pageChange(currentPageNum, pageSize)}
           />
         </div>
-      </div>
+      </motion.div>
     </>
   )
 }

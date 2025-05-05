@@ -13,6 +13,7 @@ import { blogContentApi } from '@/apis/contentApi'
 import { baseUrl } from '@/constant'
 import { getFontRandomColorClass } from '@/utils/colors'
 import { useTranslation } from 'react-i18next'
+import { motion } from 'framer-motion'
 
 // const newBlogs: ListBoxItemType[] = [
 //   { text: '聊一聊微服务架构与k8s的优劣势', url: '#' },

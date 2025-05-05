@@ -81,13 +81,13 @@ const rootConfig: RouterItemType[] = [
           },
           {
             meta: {
-              key: '/logs',
-              title: '日志',
+              key: '/timeline',
+              title: '时间轴',
               layout: false,
               icon: ''
             },
-            path: 'logs',
-            element: LazyLoad(lazy(() => import('@/pages/logrecord/Logs')))
+            path: 'timeline',
+            element: LazyLoad(lazy(() => import('@/pages/timeline/Timeline')))
           }
         ]
       },

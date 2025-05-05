@@ -28,7 +28,8 @@ const NavBarHorizFlex = () => {
     // { name: '专题文章', url: '/article' },
     // { name: '精选留言', url: '/article' },
     // { name: '本站插件', url: '/plugins' },
-    { name: t('header.logs'), url: '/logs' },
+    { name: t('header.favorites'), url: '/favorites' },
+    { name: t('header.timeline'), url: '/timeline' },
     { name: t('header.about'), url: '/about' }
   ]
 

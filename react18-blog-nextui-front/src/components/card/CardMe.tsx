@@ -34,9 +34,15 @@ const CardMe = () => {
           </a>
         </Tooltip>
 
-        <Tooltip key={1} color={'secondary'} content={'cxqybox@gmail.com'}>
+        <Tooltip key={1} color={'secondary'} content={'Email'}>
           <div>
             <SvgIcon name='envelope' style={'w-6 h-6'} />
+          </div>
+        </Tooltip>
+
+        <Tooltip key={1} color={'secondary'} content={'Gmail'}>
+          <div>
+            <SvgIcon name='google' style={'w-6 h-6'} />
           </div>
         </Tooltip>
       </div>

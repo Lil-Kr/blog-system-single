@@ -2,13 +2,16 @@ export default {
   header: {
     home: 'HOME',
     recommend: 'Recommend',
-    logs: 'Logs',
+    timeline: 'Timeline',
+    site: 'Site',
+    life: 'Life',
+    favorites: 'Favorites',
     about: 'About'
   },
   home: {
     main: {
       left: {
-        recent: 'recent'
+        recent: 'Recent'
       },
       more: 'more'
     }
