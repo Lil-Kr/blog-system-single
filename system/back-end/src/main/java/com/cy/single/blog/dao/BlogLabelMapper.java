@@ -17,7 +17,7 @@ import java.util.List;
  * @Description:
  */
 @Repository
-public interface BlogLabelMapper extends BaseMapper<com.cy.single.blog.pojo.entity.blog.BlogLabel> {
+public interface BlogLabelMapper extends BaseMapper<BlogLabel> {
 
 	Integer editBySurrogateId(@Param("param") BlogLabelReq req);
 

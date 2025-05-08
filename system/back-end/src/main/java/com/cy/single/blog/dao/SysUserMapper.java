@@ -44,5 +44,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
   List<SysUserResp> selectUserList();
 
+  List<SysUser> selectUserAllList();
+
   int updateAvatar(@Param("param") AvatarUploadReq req);
 }

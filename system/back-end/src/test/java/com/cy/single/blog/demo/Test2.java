@@ -67,7 +67,6 @@ public class Test2 {
 		Set<String> olds = Sets.newHashSet("1899061262042664960","1334005930790096896","1900500831460003840", "1898645243616694272");
 		news.removeAll(olds);
 		a.removeAll(news);
-		System.out.println(JSONArray.toJSONString(a));
 	}
 
 }

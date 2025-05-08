@@ -55,7 +55,7 @@ const BlogCategory = () => {
       title: '操作',
       width: '20%',
       render: (_: object, record) => (
-        <Space size='middle'>
+        <Flex vertical={false} gap={8}>
           <LookCategoryButtonAcl
             size={btnSize}
             name='look'
@@ -89,7 +89,7 @@ const BlogCategory = () => {
               icon={<DeleteOutlined />}
             />
           </Popconfirm>
-        </Space>
+        </Flex>
       )
     }
   ]
@@ -111,7 +111,6 @@ const BlogCategory = () => {
   const deleteItemConfirm = async (record: CategoryTableType) => {
     const res = await blogCategoryApi.delete!({ surrogateId: record.key })
     if (res.code !== 200) {
-      messageApi?.error(res.msg)
       return
     }
 

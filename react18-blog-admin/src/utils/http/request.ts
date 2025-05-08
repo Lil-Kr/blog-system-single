@@ -109,8 +109,8 @@ const baseAxiosRequest = {
   put<T>(url: string, body?: object): Promise<T> {
     return axiosInstance.put(url, body, { headers: { 'Content-Type': 'application/json' } })
   },
-  delete<T>(url: string, params?: object): Promise<T> {
-    return axiosInstance.delete(url, { params })
+  delete<T>(url: string, req?: object): Promise<T> {
+    return axiosInstance.delete(url, { params: req })
   },
   postUpload<T>(url: string, body?: object, config?: AxiosRequestConfig): Promise<T> {
     return axiosInstance.post(url, body, { ...config })

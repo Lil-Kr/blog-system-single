@@ -137,7 +137,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		int delete = userMapper.delete(wrapper);
 		if (delete >= 1) {
 			// 移除缓存
-			cacheService.removeCache(StringUtils.isNotBlank(user.getToken()) ? user.getToken() : "");
+			cacheService.removeUserCache(StringUtils.isNotBlank(user.getToken()) ? user.getToken() : "");
 			return ApiResp.success();
 		} else {
 			return ApiResp.failure(DEL_ERROR);

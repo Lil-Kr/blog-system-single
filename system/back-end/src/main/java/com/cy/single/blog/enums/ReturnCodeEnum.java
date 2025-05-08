@@ -16,7 +16,7 @@ public enum ReturnCodeEnum {
 	DATA_INFO_REPEAT(418, "数据重复, 请求失败"),
 	DATA_INFO_UNUSUAL(419, "数据异常或操作不规范"),
 	Add_ERROR(421, "添加失败"),
-	EDITE_ERROR(422, "修改失败"),
+	EDITE_ERROR(422, "更新失败"),
 	DEL_ERROR(423, "删除失败"),
 	OPERATE_ERROR(424, "请求失败"),
 	SYSTEM_ERROR(500, "系统异常"),

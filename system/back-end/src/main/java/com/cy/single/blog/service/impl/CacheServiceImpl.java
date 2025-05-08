@@ -29,7 +29,7 @@ public class CacheServiceImpl implements CacheService, Serializable {
 
 	private static final long serialVersionUID = -3794279386684757741L;
 
-	/** ================= admin cache ============== **/
+	/** ================= admin cache by token ============== **/
 	private static Cache<String, SysUser> userCache = CacheBuilder.newBuilder().build();
 
 	@Override
@@ -43,18 +43,39 @@ public class CacheServiceImpl implements CacheService, Serializable {
 	}
 
 	@Override
-	public void removeCache(String key) {
+	public void removeUserCache(String key) {
 		userCache.invalidate(key);
 	}
 
-	/**
-	 * blog-label cache
-	 */
+	/** ================= admin cache by id ============== **/
+	private static Cache<Long, SysUser> userAdminCache = CacheBuilder.newBuilder().build();
+
+	@Override
+	public void saveUserAdminCache(List<SysUser> list) {
+		list.parallelStream().forEach(user -> userAdminCache.put(user.getSurrogateId(), user));
+	}
+
+	@Override
+	public void setUserAdminCache(Long id, SysUser user) {
+		userAdminCache.put(id, user);
+	}
+
+	@Override
+	public SysUser getUserAdminCache(Long id) {
+		return userAdminCache.getIfPresent(id);
+	}
+
+	@Override
+	public void removeUserAdminCache(Long id) {
+		userAdminCache.invalidate(id);
+	}
+
+	/** ================= blog-label cache ============== **/
 	private static Cache<String, List<BlogLabel>> blogLabelListCache = CacheBuilder.newBuilder().build();
 	private static Cache<Long, BlogLabel> blogLabelCache = CacheBuilder.newBuilder().build();
 
 	/**
-	 * 获取 label list
+	 * get label list
 	 * @param key
 	 * @return
 	 */
@@ -64,7 +85,7 @@ public class CacheServiceImpl implements CacheService, Serializable {
 	}
 
 	/**
-	 * 获取单条 label
+	 * get single label
 	 * @param surrogateId
 	 * @return
 	 */

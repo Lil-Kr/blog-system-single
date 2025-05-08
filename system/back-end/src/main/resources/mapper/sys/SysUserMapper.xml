@@ -302,7 +302,7 @@
 		GROUP BY account, email, user_name;
 	</select>
 
-	<!--  根据userIds, 查询用户列表  -->
+	<!--  根据 userIds, 查询用户列表  -->
 	<select id="selectUserListByIds" resultType="com.cy.single.blog.pojo.resp.sys.user.SysUserResp">
 		select
 			a.surrogate_id,
@@ -338,6 +338,21 @@
 			a.status = 0
 		</where>
 		order by a.create_time desc
+	</select>
+
+	<!--  no need order by create_time -->
+	<select id="selectUserAllList" resultType="com.cy.single.blog.pojo.entity.sys.SysUser">
+		select
+			a.surrogate_id,
+			a.account,
+			a.user_name,
+			a.remark,
+			a.create_time,
+			a.update_time
+		from sys_user as a
+		<where>
+			a.status = 0
+		</where>
 	</select>
 
 	<update id="updateAvatar">

@@ -9,7 +9,7 @@ import blogTopicApi from '@/apis/blog/topic/topicApi'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
 import { Tag } from 'antd/lib'
-import { TopicModalState, useBlogTopicModalStore, useBlogTopicStore } from '@/store/blog/tobpicStore'
+import { TopicModalState, useBlogTopicModalStore, useBlogTopicStore } from '@/store/blog/topicStore'
 import TopicModal from './TopicModal'
 import {
   _QUERY_TOPIC_ACL,

@@ -5,6 +5,7 @@ import com.cy.single.blog.pojo.entity.blog.BlogLabel;
 import com.cy.single.blog.pojo.entity.blog.BlogTopic;
 import com.cy.single.blog.pojo.entity.sys.SysDict;
 import com.cy.single.blog.pojo.entity.sys.SysDictDetail;
+import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.blog.category.BlogCategoryPageReq;
 import com.cy.single.blog.pojo.req.blog.label.BlogLabelListReq;
 import com.cy.single.blog.pojo.req.blog.topic.BlogTopicReq;
@@ -33,6 +34,9 @@ public class PostConstructComponent {
 	private CacheService cacheService;
 
 	@Autowired
+	private BlogTopicMapper blogTopicMapper;
+
+	@Autowired
 	private BlogLabelMapper blogLabelMapper;
 
 	@Autowired
@@ -45,7 +49,7 @@ public class PostConstructComponent {
 	private BlogCategoryMapper blogCategoryMapper;
 
 	@Autowired
-	private BlogTopicMapper blogTopicMapper;
+	private SysUserMapper userMapper;
 
 	/**
 	 * 初始化:
@@ -56,6 +60,10 @@ public class PostConstructComponent {
 	 */
 	@PostConstruct
 	public void initBlogLabel() {
+		// 用户数据
+		List<SysUser> users = userMapper.selectUserAllList();
+		cacheService.saveUserAdminCache(users);
+
 		// 博客标签数据
 		List<BlogLabel> labelList = blogLabelMapper.labelList(new BlogLabelListReq());
 		cacheService.saveLabelCache(CACHE_KEY_BLOG_LABEL_LIST, labelList);

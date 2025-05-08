@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { OptionType } from '@/types/apis'
 import { ModalType } from '@/types/component/modal'
 import { Form, Input, InputNumber, Modal, Select } from 'antd/lib'
 const { TextArea } = Input
-import { AclAddReq, AclEditReq, CallBackType } from '@/types/apis/sys/acl/aclType'
+import { AclAddReq, AclEditReq } from '@/types/apis/sys/acl/aclType'
 import { DictMapType } from '@/types/apis/sys/dict/dictType'
 import { useAclModuleStore } from '@/store/global/initDictStore'
 import { useDictDetailStore } from '@/store/sys/dictStore'
@@ -346,7 +346,7 @@ const AclModal = (props: ModalType.CustomModal) => {
             </div>
           )}
           <Form.Item key={3} name={'url'} label={'服务端API'} rules={[{ required: true, message: '访问url不能为空' }]}>
-            <Input placeholder={'服务端API必填'} style={{ width: '100%' }} />
+            <Input placeholder={'服务端API必填(全路径)'} style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item
             key={7}

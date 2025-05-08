@@ -42,6 +42,11 @@ export const PREFIX_URL_BLOG_TOPIC = '/blog/topic'
 export const PREFIX_URL_BLOG_CONTENT = '/blog/content'
 
 /**
+ * blog-diary
+ */
+export const PREFIX_URL_BLOG_DIARY = '/blog/diary'
+
+/**
  * image-category
  */
 export const PREFIX_URL_IMAGE_CATEGORY = '/image/category'

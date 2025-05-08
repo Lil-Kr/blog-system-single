@@ -27,8 +27,14 @@ const Timeline = () => {
       title: '评论突破',
       time: '2025-04-15',
       description: '评论数量突破 100 条'
+    },
+    {
+      title: '评论突破',
+      time: '2025-04-15',
+      description: '评论数量突破 100 条'
     }
   ]
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -44,7 +50,8 @@ const Timeline = () => {
             <span
               className={`absolute -left-3 flex items-center justify-center w-6 h-6 text-white rounded-full bg-indigo-500 dark:bg-purple-600`}
             >
-              <CheckBadgeIcon className='h-4 w-4' />
+              {/* <CheckBadgeIcon className='h-4 w-4' /> */}
+              <CheckCircleIcon className='h-4 w-4' />
             </span>
             <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>{item.title}</h3>
             <time className='block mb-2 text-sm font-normal leading-none text-gray-500 dark:text-gray-400'>

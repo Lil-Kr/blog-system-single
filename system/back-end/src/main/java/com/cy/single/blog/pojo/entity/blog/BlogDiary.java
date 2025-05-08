@@ -5,13 +5,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Author: Lil-K
- * @Date: 2025/4/22
- * @Description:
+ * @author
+ *
  */
 @EqualsAndHashCode(callSuper = false)
 @Data
@@ -19,26 +20,43 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@TableName("blog_content_image")
-public class BlogContentImage implements Serializable {
+@TableName("blog_diary")
+public class BlogDiary implements Serializable {
 
-  private static final long serialVersionUID = -1765843272122530575L;
+  private static final long serialVersionUID = 5631880568908183310L;
 
   @JsonSerialize(using = ToStringSerializer.class)
   private Long id;
 
-  @JsonSerialize(using = ToStringSerializer.class)
-  private Long blogId;
+  /**
+   * 标题
+   */
+  private String title;
 
-  private String imageUrl;
+  /**
+   * 日记内容
+   */
+  private String content;
 
+  /**
+   * 创建人
+   */
   @JsonSerialize(using = ToStringSerializer.class)
   private Long creatorId;
 
+  /**
+   * 操作人
+   */
   @JsonSerialize(using = ToStringSerializer.class)
   private Long operator;
 
+  /**
+   * 创建时间
+   */
   private Date createTime;
 
+  /**
+   * 更改时间
+   */
   private Date updateTime;
 }

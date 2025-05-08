@@ -85,50 +85,50 @@ import { motion } from 'framer-motion'
 //   { text: '操作系统', url: '#', extend: { node: <div>{'4'}</div> } }
 // ]
 
-const archives: LinkArchiveType[] = [
-  {
-    key: 1,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  },
-  {
-    key: 2,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  },
-  {
-    key: 3,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  },
-  {
-    key: 4,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  },
-  {
-    key: 5,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  },
-  {
-    key: 6,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  },
-  {
-    key: 7,
-    url: '#',
-    date: 'Dec 21th 2021',
-    depict: '9 篇文章'
-  }
-]
+// const archives: LinkArchiveType[] = [
+//   {
+//     key: 1,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   },
+//   {
+//     key: 2,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   },
+//   {
+//     key: 3,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   },
+//   {
+//     key: 4,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   },
+//   {
+//     key: 5,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   },
+//   {
+//     key: 6,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   },
+//   {
+//     key: 7,
+//     url: '#',
+//     date: 'Dec 21th 2021',
+//     depict: '9 篇文章'
+//   }
+// ]
 
 const Main = () => {
   const [categorys, setCategory] = useState<ListBoxItemType[]>([])
@@ -154,10 +154,10 @@ const Main = () => {
     {
       key: 1,
       headTitle: <span className='text-fontColor'>{t('home.main.left.recent')}</span>,
-      headRightContent: {
-        headMoreText: <span className='text-fontColor'>{t('home.main.more')}</span>,
-        moreUrl: `${baseUrl}/blogs`
-      },
+      // headRightContent: {
+      //   headMoreText: <span className='text-fontColor'>{t('home.main.more')}</span>,
+      //   moreUrl: `${baseUrl}/blogs`
+      // },
       svgIcon: <SvgIcon name='book' />,
       content: <ListBoxBase type={'link'} items={contents} />
     }
@@ -189,6 +189,10 @@ const Main = () => {
     // }
   ]
 
+  /**
+   * 获取文章分类
+   * @returns 获取文章分类
+   */
   const frontCategoryCountList = async () => {
     const categorys = await categoryApi.frontCategoryCountList()
     const { code, data } = categorys

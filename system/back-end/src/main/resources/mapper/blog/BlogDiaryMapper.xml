@@ -1,0 +1,148 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.single.blog.dao.BlogDiaryMapper">
+
+  <sql id="Base_Column_List">
+    id, title, content, creator_id, `operator`, create_time, update_time
+  </sql>
+
+  <sql id="Base_Table">
+    blog_diary
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.cy.single.blog.pojo.entity.blog.BlogDiary">
+    select 
+    <include refid="Base_Column_List" />
+    from blog_diary
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from blog_diary
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.cy.single.blog.pojo.entity.blog.BlogDiary" useGeneratedKeys="true">
+    insert into blog_diary (title, content, creator_id, 
+      `operator`, create_time, update_time
+      )
+    values (#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{creatorId,jdbcType=BIGINT}, 
+      #{operator,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.cy.single.blog.pojo.entity.blog.BlogDiary" useGeneratedKeys="true">
+    insert into blog_diary
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null || title != ''">
+        title,
+      </if>
+      <if test="content != null || content != ''">
+        content,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="operator != null">
+        `operator`,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.cy.single.blog.pojo.entity.blog.BlogDiary">
+    update blog_diary
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        creator_id = #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="operator != null">
+        `operator` = #{operator,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.cy.single.blog.pojo.entity.blog.BlogDiary">
+    update blog_diary
+    set title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      creator_id = #{creatorId,jdbcType=BIGINT},
+      operator = #{operator,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="pageDiaryList" resultType="com.cy.single.blog.pojo.resp.blog.BlogDiaryPageListResp">
+    select
+      id,
+      title,
+      content,
+      creator_id,
+      operator,
+      create_time,
+      update_time
+    from blog_diary
+    <where>
+      <if test="param.creatorId != null">
+        creator_id = #{param.creatorId}
+      </if>
+    </where>
+    order by create_time desc
+  </select>
+
+  <select id="countPageDiaryList" resultType="java.lang.Integer">
+    select count(1)
+    from blog_diary
+    <where>
+      <if test="param.creatorId != null">
+        creator_id = #{param.creatorId}
+      </if>
+    </where>
+  </select>
+
+
+</mapper>
