@@ -14,6 +14,8 @@ import { baseUrl } from '@/constant'
 import { getFontRandomColorClass } from '@/utils/colors'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
+import MusicPlayer from '@/components/musicplayer/MusicPlayer'
+import StickyMusicPlayer from '@/components/musicplayer/StickyMusicPlayer'
 
 // const newBlogs: ListBoxItemType[] = [
 //   { text: '聊一聊微服务架构与k8s的优劣势', url: '#' },

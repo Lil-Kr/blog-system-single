@@ -8,6 +8,8 @@ import { useNavigate } from 'oh-router-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SvgIcon from '../svg/SvgIcon'
+import StickyMusicPlayer from '../musicplayer/StickyMusicPlayer'
+import { cn } from '@/components/navbar/cn'
 
 type NavProps = {
   name: string
@@ -24,19 +26,11 @@ const NavBarHorizFlex = () => {
   const navigateTo = useNavigate()
 
   const navItems: NavProps[] = [
-    // { name: t('header.recommend'), url: '/recommend' },
-    // { name: '专题文章', url: '/article' },
-    // { name: '精选留言', url: '/article' },
-    // { name: '本站插件', url: '/plugins' },
     { name: t('header.favorites'), url: '/favorites' },
     { name: t('header.timeline'), url: '/timeline' },
     { name: t('header.about'), url: '/about' }
   ]
 
-  /**
-   * skip to about me page
-   * @req req
-   */
   const handleNavClick = (req: NavProps) => {
     navigateTo(req.url)
   }
@@ -56,6 +50,8 @@ const NavBarHorizFlex = () => {
             {t('header.home')}
           </a>
         </div>
+
+        {/* 导航菜单 - 在移动端隐藏 */}
         <div className='hidden lg:flex md:flex flex-row w-auto items-center gap-x-2'>
           {navItems.map((item, index) => {
             return (
@@ -69,56 +65,70 @@ const NavBarHorizFlex = () => {
             )
           })}
         </div>
-        <div className='hidden md:flex lg:flex flex-row w-auto h-auto items-center gap-x-4'>
-          <Input
-            type='search'
-            placeholder='Search Something...'
-            labelPlacement='outside'
-            startContent={<SearchIcon className='flex text-2xl text-default-400 pointer-events-none flex-shrink-0' />}
-            endContent={
-              <Kbd className='text-sm text-default-400 pointer-events-none flex-shrink-0 flex' keys={['command']}>
-                {'K'}
-              </Kbd>
-            }
-          />
+
+        {/* 右侧工具栏 */}
+        <div className='flex flex-row w-auto h-auto items-center gap-x-4'>
+          {/* 搜索框 */}
+          <div className='hidden md:block'>
+            <Input
+              type='search'
+              placeholder='Search Something...'
+              labelPlacement='outside'
+              startContent={<SearchIcon className='flex text-2xl text-default-400 pointer-events-none flex-shrink-0' />}
+              endContent={
+                <Kbd className='text-sm text-default-400 pointer-events-none flex-shrink-0 flex' keys={['command']}>
+                  {'K'}
+                </Kbd>
+              }
+            />
+          </div>
+
+          {/* 主题和语言切换器 */}
+          <div className='hidden md:flex items-center gap-x-4'>
+            <ThemeSwitcher />
+            <LanguageSwitcher />
+          </div>
+
+          {/* 移动端菜单按钮 */}
+          <div className='md:hidden'>
+            <Button className='flex border rounded-md text-fontColor' onPress={() => setIsOpen(!isOpen)}>
+              <SvgIcon name={'bars-3'} style='w-15 h-15' />
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* 移动端菜单 - 使用相同的组件, 通过CSS控制显示方式 */}
+      <div
+        className={cn(
+          'md:hidden absolute top-16 left-0 w-full bg-background shadow-lg p-4 space-y-4 z-50',
+          isOpen ? 'block' : 'hidden'
+        )}
+      >
+        <Input
+          type='search'
+          placeholder='Search Something...'
+          labelPlacement='outside'
+          startContent={<SearchIcon className='flex text-2xl text-default-400 pointer-events-none flex-shrink-0' />}
+          endContent={
+            <Kbd className='text-sm text-default-400 pointer-events-none flex-shrink-0 flex' keys={['command']}>
+              {'K'}
+            </Kbd>
+          }
+        />
+        <div className='flex items-center gap-x-4'>
           <ThemeSwitcher />
           <LanguageSwitcher />
         </div>
-        {/* 响应式的样式内容, 与上面的内容一致 */}
-        <div className='lg:hidden md:hidden flex flex-row w-auto h-auto items-center gap-x-4'>
-          <Button className='flex border rounded-md text-fontColor' onPress={() => setIsOpen(!isOpen)}>
-            <SvgIcon name={'bars-3'} style='w-15 h-15' />
-          </Button>
-
-          {/* Dropdown 内容 */}
-          {isOpen && (
-            <div className='absolute flex flex-col top-full left-0 w-full bg-background shadow-lg p-4 space-y-4'>
-              <Input
-                type='search'
-                placeholder='Search Something...'
-                labelPlacement='outside'
-                startContent={
-                  <SearchIcon className='flex text-2xl text-default-400 pointer-events-none flex-shrink-0' />
-                }
-                endContent={
-                  <Kbd className='text-sm text-default-400 pointer-events-none flex-shrink-0 flex' keys={['command']}>
-                    {'K'}
-                  </Kbd>
-                }
-              />
-              <ThemeSwitcher />
-              <LanguageSwitcher />
-              {navItems.map(({ name, url }) => (
-                <div
-                  className='flex p-2 rounded-lg cursor-pointer text-fontColor hover:text-hoverFontColor hover:bg-[#4757d5]'
-                  onClick={() => handleNavClick({ name, url })}
-                >
-                  {name}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        {navItems.map(({ name, url }, index) => (
+          <div
+            key={index}
+            className='flex p-2 rounded-lg cursor-pointer text-fontColor hover:text-hoverFontColor hover:bg-[#4757d5]'
+            onClick={() => handleNavClick({ name, url })}
+          >
+            {name}
+          </div>
+        ))}
       </div>
     </div>
   )
