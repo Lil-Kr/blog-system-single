@@ -1,5 +1,6 @@
 package com.cy.single.blog.pojo.entity.blog;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -31,6 +32,7 @@ public class BlogContent implements Serializable {
   /**
    * 主键
    */
+  @TableId(value = "surrogate_id")
   @JsonSerialize(using = ToStringSerializer.class)
   private Long surrogateId;
 

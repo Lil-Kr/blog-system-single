@@ -21,14 +21,14 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
 
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.cy.single.blog.pojo.entity.blog.BlogDiary" useGeneratedKeys="true">
-    insert into blog_diary (title, content, creator_id, 
-      `operator`, create_time, update_time
-      )
-    values (#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{creatorId,jdbcType=BIGINT}, 
-      #{operator,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
-  </insert>
+<!--  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.cy.single.blog.pojo.entity.blog.BlogDiary" useGeneratedKeys="true">-->
+<!--    insert into blog_diary (title, content, creator_id, -->
+<!--      `operator`, create_time, update_time-->
+<!--      )-->
+<!--    values (#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{creatorId,jdbcType=BIGINT}, -->
+<!--      #{operator,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}-->
+<!--      )-->
+<!--  </insert>-->
 
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.cy.single.blog.pojo.entity.blog.BlogDiary" useGeneratedKeys="true">
     insert into blog_diary

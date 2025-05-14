@@ -34,6 +34,7 @@ public class SysUser extends Model<SysUser> {
   /**
    * 唯一主键
    */
+  @TableId(value = "surrogate_id")
   @JsonSerialize(using = ToStringSerializer.class)
   private Long surrogateId;
 

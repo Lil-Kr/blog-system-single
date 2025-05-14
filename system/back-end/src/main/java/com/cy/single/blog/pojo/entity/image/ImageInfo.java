@@ -1,5 +1,6 @@
 package com.cy.single.blog.pojo.entity.image;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -27,6 +28,7 @@ public class ImageInfo implements Serializable {
   /**
    * 主键
    */
+  @TableId(value = "surrogate_id")
   @JsonSerialize(using = ToStringSerializer.class)
   private Long surrogateId;
 
