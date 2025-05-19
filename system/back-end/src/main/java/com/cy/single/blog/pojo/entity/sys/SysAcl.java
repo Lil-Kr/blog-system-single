@@ -16,14 +16,16 @@ import java.util.Date;
  * @Description:
  */
 @Data
-@EqualsAndHashCode(of = {"surrogateId"})
+@EqualsAndHashCode(callSuper = false)
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @TableName("sys_acl")
 public class SysAcl extends Model<SysAcl>  {
+
 	private static final long serialVersionUID = 4265979647827463721L;
+
 	/**
 	 * 自增主键
 	 */

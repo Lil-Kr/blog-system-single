@@ -15,30 +15,30 @@
 ### 前端技术
 
 技术栈 | 版本 | 官网链接
----------|----------|---------
- React.js | v18.2.0 | [https://reactjs.org/](https://reactjs.org/)
- TypeScript | v5.4.3 | [https://www.typescriptlang.org/](https://www.typescriptlang.org/)
- Node env | v18.20.0 | [https://nodejs.ogr/en/](https://nodejs.ogr/en/)
- npm | 10.5.0 | 
- router | v0.4.0 | [https://github.com/lblblong/oh-router](https://github.com/lblblong/oh-router)
- zustand | v4.5.2 | [https://docs.pmnd.rs/zustand/getting-started/introduction](https://docs.pmnd.rs/zustand/getting-started/introduction)
- tinymce | v5.10.9 | [https://www.tiny.cloud/](https://www.tiny.cloud/)
- Ant Design | v5.24.3 | [https://ant.design/](https://ant.design/)
- Nextui | v2.3.6 | [https://www.heroui.com/](https://www.heroui.com/)
- Tailwind CSS | v3.4.3 | [https://tailwindcss.com/](https://tailwindcss.com/)
- vite | v5.2.0 | [https://vitejs.dev/guide/](https://vitejs.dev/guide/)
+:---|:---|:---
+React.js | v18.2.0 | [reactjs.org](https://react.dev/versions#react-18)
+TypeScript | v5.4.3 | [typescriptlang.org](https://www.typescriptlang.org/)
+Node.js | v18.20.0 | [nodejs.org](https://nodejs.org/en/)
+npm | 10.5.0 | 
+oh-router | v0.4.0 | [github.com/lblblong/oh-router](https://github.com/lblblong/oh-router)
+zustand | v4.5.2 | [docs.pmnd.rs/zustand](https://docs.pmnd.rs/zustand/getting-started/introduction)
+TinyMCE | v5.10.9 | [tiny.cloud](https://www.tiny.cloud/)
+Ant Design | v5.24.3 | [ant.design](https://ant.design/)
+Hero UI(Next UI) | v2.3.6 | [heroui.com](https://www.heroui.com/)
+Tailwind CSS | v3.4.3 | [tailwindcss.com](https://tailwindcss.com/)
+Vite | v5.2.0 | [vitejs.dev](https://vitejs.dev/guide/)
 
 --------------------
 
 ## 后端技术栈
 
 技术栈 | 版本 | 官网链接
----------|----------|---------
-SpringBoot | v2.7.18 | [https://spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)
-Mybatis-Plus | v3.5.5 | [https://mybatis.org/mybatis-3/](https://mybatis.org/mybatis-3/) / [https://baomidou.com/](https://baomidou.com/)
-MySQL | v8.0.x | [https://dev.mysql.com/downloads/mysql/](https://dev.mysql.com/downloads/mysql/)
-Nginx |  | [https://nginx.org/](https://nginx.org/)
-Docker |  | [https://www.docker.com/](https://www.docker.com/)
+:---|:---|:---
+Spring Boot | v2.7.18 | [spring.io](https://spring.io/projects/spring-boot)
+MyBatis-Plus | v3.5.5 | [mybatis.org](https://mybatis.org/mybatis-3/) / [baomidou.com](https://baomidou.com/)
+MySQL | v8.0.x | [dev.mysql.com](https://dev.mysql.com/downloads/mysql/)
+Nginx | - | [nginx.org](https://nginx.org/)
+Docker | - | [docker.com](https://www.docker.com/)
 
 --------------------
 
@@ -63,16 +63,16 @@ Docker |  | [https://www.docker.com/](https://www.docker.com/)
 
 ### 博客门户站点
 
-* 支持评论功能
-* 增加RSS订阅功能
-* 优化代码细节...
+- [ ] 支持评论功能
+- [ ] 增加RSS订阅功能
+- [ ] 优化代码细节...
 
 ### 后台管理系统
 
-* 增加后端API限流功能
-* 增加用户注册功能 与 密码找回功能
-* 增加评论模块的管理, 与上面提到的保持一致
-* 增加发送邮件功能
-* 增加 ip 访问记录功能
-* 增加权限操作日志功能
-* 未完待续...
+- [ ] 增加后端API限流功能
+- [ ] 增加用户注册功能 与 密码找回功能
+- [ ] 增加评论模块的管理, 与上面提到的保持一致
+- [ ] 增加发送邮件功能
+- [ ] 增加 ip 访问记录功能
+- [ ] 增加权限操作日志功能
+- [ ] 未完待续...
