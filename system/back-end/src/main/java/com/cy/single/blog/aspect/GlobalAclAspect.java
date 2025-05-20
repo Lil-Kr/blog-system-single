@@ -13,12 +13,11 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
+import org.aspectj.lang.annotation.Around;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import static com.cy.single.blog.enums.ReturnCodeEnum.SYSTEM_ERROR;
 
 /**
@@ -41,7 +40,7 @@ public class GlobalAclAspect {
 	@Pointcut("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
 	public void acl() {}
 
-//	@Around("acl()")
+	@Around("acl()")
 	public Object checkAcl(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		List<SysAcl> userAclList = coreService.getCurrentUserAclList();
 		Set<String> urlAclSet = userAclList.stream().map(SysAcl::getUrl).collect(Collectors.toSet());

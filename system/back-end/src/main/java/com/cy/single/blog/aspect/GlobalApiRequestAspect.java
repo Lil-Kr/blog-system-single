@@ -16,10 +16,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
-
 import static com.cy.single.blog.enums.ReturnCodeEnum.SYSTEM_ERROR;
 
 /**

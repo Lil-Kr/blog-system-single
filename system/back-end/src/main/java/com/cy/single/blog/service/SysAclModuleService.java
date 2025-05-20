@@ -17,15 +17,15 @@ import java.util.List;
  */
 public interface SysAclModuleService extends IService<SysAclModule> {
 
-    ApiResp<String> add(AclModuleReq req);
+  ApiResp<String> add(AclModuleReq req);
 
-    ApiResp<String> edit(AclModuleReq req);
+  ApiResp<String> edit(AclModuleReq req);
 
   ApiResp<List<AclModuleDto>> aclModuleTree();
 
   ApiResp<String> delete(Long surrogateId);
 
-    ApiResp<SysAclModuleResp> getAclModule(Long surrogateId);
+  ApiResp<SysAclModuleResp> getAclModule(Long surrogateId);
 
-    ApiResp<List<SysAclModuleResp>> list(AclModuleListReq req);
+  ApiResp<List<SysAclModuleResp>> list(AclModuleListReq req);
 }

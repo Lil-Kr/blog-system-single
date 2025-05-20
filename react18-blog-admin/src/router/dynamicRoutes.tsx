@@ -27,7 +27,7 @@ const rootRouterConfig: Router<RouterMetaType> = new Router({
 })
 
 /**
- * 获取用户权限数据
+ * 请求用户权限数据
  * @returns
  */
 const initUserPermission = async (): Promise<PermissionType> => {
@@ -42,7 +42,7 @@ const initUserPermission = async (): Promise<PermissionType> => {
 /**
  * 初始化字典数据
  */
-const initDictList = async (): Promise<Map<string, DictMapType[]>> => {
+const dictDetailMapping = async (): Promise<Map<string, DictMapType[]>> => {
   const dictTree = await dictApi.dictDetailMapping()
   const { code, data } = dictTree
 
@@ -65,7 +65,7 @@ const initDictMap = async () => {
   /**
    * 初始化字典表
    */
-  const dictMap: Map<string, DictMapType[]> = await initDictList()
+  const dictMap: Map<string, DictMapType[]> = await dictDetailMapping()
   setDictMap(dictMap)
 
   /**
@@ -95,36 +95,6 @@ const initDictMap = async () => {
   const switchStatues = dictMap.get('开关') ?? []
   const switchStatue = transformTypeToSeletorById(switchStatues)
   setSwitchStatue(switchStatue)
-}
-
-/**
- * 初始化权限模块数据
- */
-const aclModuleList = async (): Promise<OptionType[]> => {
-  const aclModules = await aclModuleApi.aclModuleList({})
-  const { code, data } = aclModules
-  if (code !== 200) {
-    return []
-  }
-  let aclModuleList: OptionType[] = data.map(({ surrogateId, name }) => ({
-    value: surrogateId,
-    label: name
-  }))
-  aclModuleList.push({
-    value: '0',
-    label: '-'
-  })
-  return aclModuleList
-}
-
-/**
- * 初始化权限模块数据
- */
-const initAclModule = async () => {
-  const setAclModuleSeletor = useAclModuleStore.getState().setAclModuleSeletor
-
-  const aclModuleSelector = await aclModuleList()
-  setAclModuleSeletor(aclModuleSelector)
 }
 
 /**
@@ -175,21 +145,20 @@ const resetPermissionRouters = async (token?: string) => {
      * 初始化字典数据
      */
     initDictMap()
-
-    /**
-     * 初始化权限模块数据
-     */
-    initAclModule()
   } else {
-    const clearToken = useTokenStore.getState().clearToken
+    const resetPermissions = usePermissionsStore.getState().resetPermissions
+    const resetBreadcrumbMap = useBreadcrumbStore.getState().resetBreadcrumbMap
     const restMenuState = useMenuStore.getState().restMenuState
     const resetTabs = useTabsStore.getState().resetTabs
+    const clearToken = useTokenStore.getState().clearToken
 
     rootRouterConfig.setRoutes(baseRouterConfig)
     // 退出登陆时重置所有信息
     clearToken()
     restMenuState()
     resetTabs()
+    resetPermissions()
+    resetBreadcrumbMap()
   }
   rootRouterConfig.rematch()
 }

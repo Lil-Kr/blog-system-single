@@ -8,6 +8,7 @@ import { useAclModuleStore } from '@/store/global/initDictStore'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useAclModuleModalStore } from '@/store/sys/aclStore'
 import { useDictDetailStore } from '@/store/sys/dictStore'
+import { aclModuleApi } from '@/apis/sys/aclModuleApi'
 
 const AclModuleModal = (props: ModalType.CustomModal) => {
   const { update } = props
@@ -40,9 +41,13 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
   }, [openModal])
 
   // 初始化数据
-  const initData = () => {
+  const initData = async () => {
     modalForm.resetFields()
     if (action === 'create') {
+      // 初始化父级权限模块下拉框数据
+      const aclModuleSelector = await aclModuleList()
+      setAclModuleSeletor(aclModuleSelector)
+      
       // 绑定父级权限模块初始值
       const parentAclModuleInfo: OptionType = {
         label: data?.parentAclModuleInfo?.label ?? '',
@@ -83,6 +88,23 @@ const AclModuleModal = (props: ModalType.CustomModal) => {
       })
       setModalSelector(data?.parentAclModuleInfo ?? { label: '', value: '' }, statusInfo)
     }
+  }
+
+  const aclModuleList = async (): Promise<OptionType[]> => {
+    const aclModules = await aclModuleApi.aclModuleList({})
+    const { code, data } = aclModules
+    if (code !== 200) {
+      return []
+    }
+    let aclModuleList: OptionType[] = data.map(({ surrogateId, name }) => ({
+      value: surrogateId,
+      label: name
+    }))
+    aclModuleList.push({
+      value: '0',
+      label: '-'
+    })
+    return aclModuleList
   }
 
   /**

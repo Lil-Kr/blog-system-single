@@ -30,7 +30,7 @@ Vite | v5.2.0 | [vitejs.dev](https://vitejs.dev/guide/)
 **Tech Stack** | **Version** | **Official Website**
 :---|:---|:---
 Spring Boot | v2.7.18 | [spring.io](https://spring.io/projects/spring-boot)
-MyBatis-Plus | v3.5.5 | [mybatis.org](https://mybatis.org/mybatis-3/) / [baomidou.com](https://baomidou.com/)
+MyBatis-Plus | v3.5.5 | [mybatis.org](https://mybatis.org/mybatis-3/) / [baomidou.com](https://baomidou.com/en/)
 MySQL | v8.0.x | [dev.mysql.com](https://dev.mysql.com/downloads/mysql/)
 Nginx | - | [nginx.org](https://nginx.org/)
 Docker | - | [docker.com](https://www.docker.com/)

@@ -201,7 +201,6 @@ const Role = () => {
     const fetchData = async () => {
       initRoleList()
     }
-
     fetchData()
   }, [])
 
@@ -329,7 +328,7 @@ const Role = () => {
                   } else {
                     // update
                     const req: RoleEditReq = {
-                      surrogateId: rowData.key,
+                      roleId: rowData.key,
                       name: rowData.name,
                       type: Number(typeValue),
                       status: Number(statuValue),

@@ -45,7 +45,7 @@ export interface RoleAddReq {
 }
 
 export interface RoleEditReq {
-  surrogateId: string
+  roleId: string
   name: string
   type: number
   status: number

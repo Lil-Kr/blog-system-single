@@ -13,22 +13,29 @@ interface BreadcrumbState {
 
 interface Actions {
   setBreadcrumbMap: (breadcrumbMap: Map<string, BreadcrumbType[]>) => void
+  resetBreadcrumbMap: () => void
+}
+
+const initBreadcrumbState: BreadcrumbState = {
+  breadcrumbMap: new Map<string, BreadcrumbType[]>(),
+  breadcrumbList: []
 }
 
 /**
  * useBreadcrumbStore
  */
 const useBreadcrumbStore = create<BreadcrumbState & Actions>()(set => ({
-  breadcrumbMap: new Map<string, BreadcrumbType[]>(),
-  breadcrumbList: [],
-
+  ...initBreadcrumbState,
   setBreadcrumbMap: (breadcrumbMap: Map<string, BreadcrumbType[]>) =>
     set(state => {
       return {
         ...state,
         breadcrumbMap: new Map(breadcrumbMap.entries())
       }
-    })
+    }),
+    resetBreadcrumbMap: () => {
+      set(initBreadcrumbState)
+    }
 }))
 
 export default useBreadcrumbStore
