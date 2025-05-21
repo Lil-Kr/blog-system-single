@@ -24,27 +24,8 @@ import java.util.List;
 @RequestMapping("/test")
 public class TestController {
 
-	@Autowired
-	private SysAclCoreService aclCoreService;
-
-
-	@GetMapping("/test1")
-	public String test1() {
-		SysUser user = RequestHolder.getCurrentUser();
-		log.info(JSONObject.toJSONString(user));
-		return "test1";
-	}
-
-	@GetMapping("/test2")
-	public ApiResp<List<SysAcl>> test2() {
-		List<SysAcl> userAclList = aclCoreService.getCurrentUserAclList();
-		return ApiResp.success(userAclList);
-	}
-
-	@GetMapping("/test3")
-	public ApiResp<String> test3() {
-		Long surrogateId = RequestHolder.getCurrentUser().getSurrogateId();
-
-		return ApiResp.success("token立即失效");
+	@GetMapping("/healthcheck")
+	public String healthcheck() {
+		return "on";
 	}
 }

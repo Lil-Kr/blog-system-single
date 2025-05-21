@@ -26,13 +26,15 @@ const CardBlogItem = (props: { content: CardBlogItemProps }) => {
               <SvgIcon name='user-1' style={'w-5 h-5'} />
               <span>{'Lil-K'}</span>
             </div>
+            {/* publish time */}
             <div className='flex flex-row text-sm gap-x-[0.2em]'>
               <SvgIcon name='calendar-work-1' style={'w-5 h-5'} />
               <span>{content.publishTime}</span>
             </div>
+            {/* last edit time */}
             <div className='flex flex-row text-sm gap-x-[0.2em]'>
               <SvgIcon name='pencil-square-2' style={'w-5 h-5'} />
-              <span>{content.publishTime}</span>
+              <span>{content.updateTime}</span>
             </div>
             <div className='flex flex-row text-sm gap-x-[0.2em]'>
               <SvgIcon name='eye-1' style={'w-5 h-5'} />

@@ -32,9 +32,9 @@
 				and (
 					`number` like concat('%',#{param.keyWords},'%')
 					or
-					`name` like concat('%',#{param.keyWords},'%')
-					or
 					`title` like concat('%',#{param.keyWords},'%')
+					or
+					`introduction` like concat('%',#{param.keyWords},'%')
 					or
 					remark like concat('%',#{param.keyWords},'%')
 				)
@@ -73,7 +73,7 @@
 					or
 					`title` like concat('%',#{param.keyWords},'%')
 					or
-					`name` like concat('%',#{param.keyWords},'%')
+					`introduction` like concat('%',#{param.keyWords},'%')
 					or
 					remark like concat('%',#{param.keyWords},'%')
 				)
@@ -109,12 +109,9 @@
 			<if test="param.keyWords!=null and param.keyWords!=''">
 				and (
 					`number` like concat('%',#{param.keyWords},'%')
-					or
-					`title` like concat('%',#{param.keyWords},'%')
-					or
-					`name` like concat('%',#{param.keyWords},'%')
-					or
-					remark like concat('%',#{param.keyWords},'%')
+					or `title` like concat('%',#{param.keyWords},'%')
+					or `introduction` like concat('%',#{param.keyWords},'%')
+					or remark like concat('%',#{param.keyWords},'%')
 				)
 			</if>
 		</where>
@@ -173,12 +170,9 @@
 			<if test="param.keyWords != null and param.keyWords != ''">
 				and (
 					`number` like concat('%',#{param.keyWords},'%')
-					or
-					`name` like concat('%',#{param.keyWords},'%')
-					or
-					`title` like concat('%',#{param.keyWords},'%')
-					or
-					remark like concat('%',#{param.keyWords},'%')
+					or `title` like concat('%',#{param.keyWords},'%')
+					or `introduction` like concat('%',#{param.keyWords},'%')
+					or remark like concat('%',#{param.keyWords},'%')
 				)
 			</if>
 		</where>
@@ -212,12 +206,9 @@
 			<if test="param.keyWords != null and param.keyWords != ''">
 				and (
 					`number` like concat('%',#{param.keyWords},'%')
-					or
-					`name` like concat('%',#{param.keyWords},'%')
-					or
-					`title` like concat('%',#{param.keyWords},'%')
-					or
-					remark like concat('%',#{param.keyWords},'%')
+					or `title` like concat('%',#{param.keyWords},'%')
+					or `introduction` like concat('%',#{param.keyWords},'%')
+					or remark like concat('%',#{param.keyWords},'%')
 				)
 			</if>
 		</where>

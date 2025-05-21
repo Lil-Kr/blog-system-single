@@ -87,7 +87,7 @@ public class BlogContentServiceImpl implements BlogContentService {
 
   @Override
   public ApiResp<String> add(BlogContentReq req) {
-    BlogContent blogContent = BlogContentDTO.convertSaveBlogContentReq(req);
+    BlogContent blogContent = BlogContentDTO.convertAddBlogContentReq(req);
 
     // insert into mysql
     int insert = blogContentMapper.insert(blogContent);

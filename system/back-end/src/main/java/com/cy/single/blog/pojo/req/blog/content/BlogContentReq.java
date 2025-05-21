@@ -3,9 +3,8 @@ package com.cy.single.blog.pojo.req.blog.content;
 import lombok.Data;
 import lombok.ToString;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -41,7 +40,8 @@ public class BlogContentReq {
   private Long categoryId;
 
   @NotEmpty(groups = {GroupBlogContentAdd.class, GroupBlogContentEdit.class}, message = "labelIds是必须的")
-  private Set<Long> labelIds;
+  private Set<@Pattern(groups = {GroupBlogContentAdd.class, GroupBlogContentEdit.class}, regexp = "\\d+", message = "labelId 必须为数字")
+  @NotBlank(groups = {GroupBlogContentAdd.class, GroupBlogContentEdit.class}, message = "labelId是必须的") String> labelIds;
 
   private Long topicId;
 

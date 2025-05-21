@@ -6,10 +6,13 @@ import com.cy.single.blog.pojo.req.blog.content.BlogContentReq;
 import com.cy.single.blog.utils.dateUtil.DateUtil;
 import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.cy.single.blog.utils.keyUtil.RunCodeUtil;
+import net.sf.jsqlparser.expression.operators.relational.OldOracleJoinBinaryExpression;
 import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,13 +23,12 @@ import java.util.stream.Collectors;
  */
 public class BlogContentDTO {
 
-  public static BlogContent convertSaveBlogContentReq(BlogContentReq baseReq) {
+  public static BlogContent convertAddBlogContentReq(BlogContentReq baseReq) {
     BlogContent blogContent = new BlogContent();
     BeanUtils.copyProperties(baseReq, blogContent);
     blogContent.setSurrogateId(IdWorker.getSnowFlakeId());
     blogContent.setNumber(RunCodeUtil.getFourPipelineNumbers("blog-"));
     blogContent.setLabelIds(convertBlogLabelToString(baseReq.getLabelIds()));
-    Set<Long> labelIds = baseReq.getLabelIds();
     blogContent.setDeleted(0);
 
     blogContent.setCreatorId(RequestHolder.getCurrentUser().getSurrogateId());
@@ -39,8 +41,13 @@ public class BlogContentDTO {
     return blogContent;
   }
 
-  public static String convertBlogLabelToString(Set<Long> labelIds) {
-    return labelIds.stream().map(String::valueOf).collect(Collectors.joining(","));
+  public static String convertBlogLabelToString(Set<String> labelIds) {
+    return labelIds.stream().filter(Objects::nonNull)
+      .distinct() // remove duplicate label
+      .map(String::valueOf)
+      .collect(Collectors.joining(","));
   }
+
+
 
 }

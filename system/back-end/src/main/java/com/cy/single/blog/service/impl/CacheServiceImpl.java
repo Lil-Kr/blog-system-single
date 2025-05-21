@@ -10,11 +10,13 @@ import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
 import com.cy.single.blog.service.CacheService;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import jdk.nashorn.internal.runtime.OptimisticBuiltins;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.cy.single.blog.common.constants.CommonConstants.*;
@@ -91,7 +93,7 @@ public class CacheServiceImpl implements CacheService, Serializable {
 	 */
 	@Override
 	public BlogLabel getLabelCache(Long surrogateId) {
-		return blogLabelCache.getIfPresent(surrogateId);
+		return Optional.ofNullable(blogLabelCache.getIfPresent(surrogateId)).orElse(new BlogLabel());
 	}
 
 	/**

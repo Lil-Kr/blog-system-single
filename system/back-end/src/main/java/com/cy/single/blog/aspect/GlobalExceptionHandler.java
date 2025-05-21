@@ -1,5 +1,6 @@
 package com.cy.single.blog.aspect;
 
+import com.cy.single.blog.aspect.exceptions.BusinessException;
 import com.cy.single.blog.base.ApiResp;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
@@ -18,7 +19,9 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Lil-K
@@ -119,6 +122,27 @@ public class GlobalExceptionHandler {
     String msg = exception.getMessage();
     return ApiResp.failure("请求体大小超过限制, " + msg);
   }
+
+  /**
+   * catch BusinessException exception
+   * @param exception
+   * @return
+   */
+  @ExceptionHandler(BusinessException.class)
+  public ApiResp<?> handleBusinessException(BusinessException exception) {
+    return ApiResp.failure(exception.getReturnCodeEnum().getCode(), exception.getMessage());
+  }
+
+//  @ExceptionHandler(MethodArgumentNotValidException.class)
+//  public ApiResp<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+////    Map<String, String> errors = new HashMap<>();
+////    exception.getBindingResult().getAllErrors().forEach((error) -> {
+////      String field = ((FieldError) error).getField();
+////      String message = error.getDefaultMessage();
+////      errors.put(field, message);
+////    });
+//    return ApiResp.failure(exception.getMessage());
+//  }
 
 //    /**
 //     * 目前不生效, 使用AOP解决

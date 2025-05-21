@@ -67,7 +67,7 @@ public class UserController {
   @RecordLogger
   @DeleteMapping("/logout")
   public ApiResp<Integer> logout() {
-    // 移除用户
+    // remove user
     RequestHolder.remove();
     return ApiResp.success(msgLangService.getMessage(LANG_ZH, "admin.logout.success"));
   }

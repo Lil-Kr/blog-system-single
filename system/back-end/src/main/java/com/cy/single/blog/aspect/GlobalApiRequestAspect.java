@@ -29,7 +29,7 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.SYSTEM_ERROR;
 @Slf4j
 @Component
 @Aspect
-@Order(2)
+@Order(1)
 public class GlobalApiRequestAspect {
 
 	@Autowired

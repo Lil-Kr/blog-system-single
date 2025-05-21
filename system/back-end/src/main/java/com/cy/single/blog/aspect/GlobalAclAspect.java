@@ -41,7 +41,7 @@ public class GlobalAclAspect {
 	public void acl() {}
 
 	@Around("acl()")
-	public Object checkAcl(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+	public Object checkAcl(ProceedingJoinPoint joinPoint) throws Throwable {
 		List<SysAcl> userAclList = coreService.getCurrentUserAclList();
 		Set<String> urlAclSet = userAclList.stream().map(SysAcl::getUrl).collect(Collectors.toSet());
 		try {
@@ -49,10 +49,11 @@ public class GlobalAclAspect {
 			boolean hasAcl = urlAclSet.stream().anyMatch(item -> item.contains(uri) || uri.startsWith(item));
 			if (!hasAcl) {
 				log.error("The request is not have acl to call {}", uri);
-				throw new BusinessException(ReturnCodeEnum.NOT_LOGIN);
+				throw new BusinessException(ReturnCodeEnum.NO_ACCESS);
 			}
 
-			Object proceed = proceedingJoinPoint.proceed();
+//			return joinPoint.proceed();
+			Object proceed = joinPoint.proceed();
 			return proceed;
 		} catch (Throwable e) {
 			log.error("api request ACL ERROR: {}", e.getMessage());

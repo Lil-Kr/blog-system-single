@@ -55,6 +55,7 @@ const BlogDetails = () => {
     const cardBlogItem: CardBlogItemProps = {
       ...data,
       publishTime: transformToDay(data.publishTime),
+      updateTime: transformToDay(data.updateTime),
       tags: data.labels?.map(({ surrogateId, name }) => ({
         key: surrogateId,
         text: name,
