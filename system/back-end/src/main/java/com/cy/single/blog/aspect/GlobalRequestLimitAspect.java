@@ -3,6 +3,7 @@ package com.cy.single.blog.aspect;
 import com.cy.single.blog.aspect.exceptions.BusinessException;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.enums.ReturnCodeEnum;
+import com.cy.single.blog.pojo.req.sys.user.UserLoginAdminReq;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
@@ -18,7 +19,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -42,9 +45,6 @@ import java.util.concurrent.TimeUnit;
 @Order(2)
 public class GlobalRequestLimitAspect {
 
-  @Autowired
-  private HttpServletRequest servletRequest;
-
   /**
    * not business api rule
    */
@@ -53,15 +53,14 @@ public class GlobalRequestLimitAspect {
   /**
    * request limit by minutes
    */
-  private static Cache<String, Boolean> apiRateLimiterAdminNotBusiness = CacheBuilder.newBuilder().expireAfterWrite(1500, TimeUnit.MILLISECONDS).maximumSize(50_000).build();
-  private static Cache<String, Boolean> apiRateLimiterAdmin = CacheBuilder.newBuilder().expireAfterWrite(50, TimeUnit.MILLISECONDS).maximumSize(10_000).build();
-  private static Cache<String, Object> apiRateLimiterFront = CacheBuilder.newBuilder().expireAfterAccess(2, TimeUnit.MINUTES).build();
+  private static Cache<String, Boolean> apiRateLimiterAdminNotBusiness = CacheBuilder.newBuilder().expireAfterWrite(2000, TimeUnit.MILLISECONDS).maximumSize(10_000).build();
+  private static Cache<String, Boolean> apiRateLimiterAdmin = CacheBuilder.newBuilder().expireAfterWrite(50, TimeUnit.MILLISECONDS).maximumSize(50_000).build();
+//  private static Cache<String, Object> apiRateLimiterFront = CacheBuilder.newBuilder().expireAfterAccess(2, TimeUnit.MINUTES).build();
 
-//  @Around("execution(* com.cy.single.blog.api.*..*.*(..))")
+  @Around("execution(* com.cy.single.blog.api.*..*.*(..))")
   public Object requestLimit(ProceedingJoinPoint joinPoint) throws Throwable {
     // get method name
     String methodName = joinPoint.getSignature().getName();
-
     if (StringUtils.isBlank(methodName)) {
       throw new BusinessException(ReturnCodeEnum.DO_NOT_INJECT);
     }
@@ -70,7 +69,9 @@ public class GlobalRequestLimitAspect {
      * limit for not business api
      */
     if (methodNotBusiness.contains(methodName)) {
-      return rateLimiterAdminNotBusiness(joinPoint);
+      // get request parameter
+      UserLoginAdminReq param = (UserLoginAdminReq) Arrays.stream(joinPoint.getArgs()).filter(arg -> arg instanceof UserLoginAdminReq).findFirst().get();
+      return rateLimiterAdminNotBusiness(joinPoint, param);
     }
 
     /**
@@ -81,8 +82,7 @@ public class GlobalRequestLimitAspect {
       return rateLLimiterFront(joinPoint, "");
     } else {
       // admin api limit rule
-//      return rateLLimiterAdmin(joinPoint, RequestHolder.getCurrentUser().getAccount(), methodName);
-      return joinPoint.proceed();
+      return rateLLimiterAdmin(joinPoint, RequestHolder.getCurrentUser().getAccount(), methodName);
     }
   }
 
@@ -92,8 +92,8 @@ public class GlobalRequestLimitAspect {
    * @return
    * @throws Throwable
    */
-  private Object rateLimiterAdminNotBusiness (ProceedingJoinPoint joinPoint) throws Throwable {
-    String key = "ip";
+  private Object rateLimiterAdminNotBusiness (ProceedingJoinPoint joinPoint, UserLoginAdminReq param) throws Throwable {
+    String key = param.getAccount();
     if (apiRateLimiterAdminNotBusiness.getIfPresent(key) != null) {
       log.warn("too many request, access denied");
       throw new BusinessException(ReturnCodeEnum.TOO_MANY_REQUEST);

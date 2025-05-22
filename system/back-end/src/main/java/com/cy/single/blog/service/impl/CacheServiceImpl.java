@@ -35,40 +35,40 @@ public class CacheServiceImpl implements CacheService, Serializable {
 	private static Cache<String, SysUser> userCache = CacheBuilder.newBuilder().build();
 
 	@Override
-	public void setUserCache(String token, SysUser user) {
+	public void setUserTokenCache(String token, SysUser user) {
 		userCache.put(token, user);
 	}
 
 	@Override
-	public SysUser getUserCache(String key) {
-		return userCache.getIfPresent(key);
+	public SysUser getUserTokenCache(String token) {
+		return userCache.getIfPresent(token);
 	}
 
 	@Override
-	public void removeUserCache(String key) {
-		userCache.invalidate(key);
+	public void removeUserTokenCache(String token) {
+		userCache.invalidate(token);
 	}
 
 	/** ================= admin cache by id ============== **/
 	private static Cache<Long, SysUser> userAdminCache = CacheBuilder.newBuilder().build();
 
 	@Override
-	public void saveUserAdminCache(List<SysUser> list) {
+	public void initUserAdminIdCache(List<SysUser> list) {
 		list.parallelStream().forEach(user -> userAdminCache.put(user.getSurrogateId(), user));
 	}
 
 	@Override
-	public void setUserAdminCache(Long id, SysUser user) {
+	public void setUserAdminIdCache(Long id, SysUser user) {
 		userAdminCache.put(id, user);
 	}
 
 	@Override
-	public SysUser getUserAdminCache(Long id) {
+	public SysUser getUserAdminIdCache(Long id) {
 		return userAdminCache.getIfPresent(id);
 	}
 
 	@Override
-	public void removeUserAdminCache(Long id) {
+	public void removeUserAdminIdCache(Long id) {
 		userAdminCache.invalidate(id);
 	}
 

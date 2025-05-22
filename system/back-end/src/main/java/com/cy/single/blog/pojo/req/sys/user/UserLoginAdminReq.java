@@ -3,6 +3,7 @@ package com.cy.single.blog.pojo.req.sys.user;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -17,10 +18,10 @@ public class UserLoginAdminReq {
 
   private String token;
 
-  @NotNull(groups = {AdminLogin.class}, message = "账号不能为空")
+  @NotBlank(groups = {AdminLogin.class}, message = "账号不能为空")
   private String account;
 
-  @NotNull(groups = {AdminLogin.class}, message = "密码不能为空")
+  @NotBlank(groups = {AdminLogin.class}, message = "密码不能为空")
   private String password;
 
   private String email;

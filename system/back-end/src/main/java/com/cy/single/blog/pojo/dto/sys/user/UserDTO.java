@@ -83,13 +83,11 @@ public class UserDTO {
     return build;
   }
 
-  public static SysUser convertEditUserReq(UserSaveReq req) {
-    SysUser build = SysUser.builder().build();
-    BeanUtils.copyProperties(req, build);
+  public static SysUser convertEditUserReq(SysUser before, UserSaveReq req) {
+    BeanUtils.copyProperties(req, before);
 
-    build.setToken(RequestHolder.getCurrentUser().getToken());
-    build.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
-    build.setUpdateTime(DateUtil.localDateTimeNow());
-    return build;
+    before.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
+    before.setUpdateTime(DateUtil.localDateTimeNow());
+    return before;
   }
 }

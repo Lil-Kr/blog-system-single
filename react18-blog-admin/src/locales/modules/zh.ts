@@ -1,3 +1,5 @@
+import { register } from "module";
+
 export default {
   system: {
     errorMsg1: '网络异常',
@@ -15,15 +17,22 @@ export default {
     en_US: 'English'
   },
   login: {
-    title: '博客后台系统登陆',
+    title: '后台管理系统',
     confirm: '登录',
     reset: '重置',
     btn: '登录',
-    username_placeholder: '用户名/邮箱',
+    registe_account: '注册账号',
+    forget_pwd:'忘记密码?',
+    username_placeholder: '后台管理员账号',
     password_placeholder: '密码',
     username_message: '用户名不能为空',
     password_message: '密码不能为空',
     login_failed: '用户名或密码错误!'
+  },
+  logout: {
+    me: '关于我',
+    // modify_pwd: '修改密码',
+    logout: '退出登录'
   },
   home: {
     welcome: '欢迎使用'

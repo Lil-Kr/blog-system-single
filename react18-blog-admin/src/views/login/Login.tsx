@@ -8,7 +8,7 @@ import { resetPermissionRouters } from '@/router/dynamicRoutes'
 import { LoginTpye } from '@/types/apis/sys/user/userType'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useGlobalStyleStore } from '@/store/global/globalStore'
-
+import { useTranslation } from 'react-i18next'
 import './scss/loginForm.scss'
 
 const LoginForm = () => {
@@ -16,6 +16,7 @@ const LoginForm = () => {
   const [form] = Form.useForm()
   const { setToken } = useTokenStore()
   const { btnSize, loginFormSize } = useGlobalStyleStore()
+  const { t } = useTranslation()
 
   const onFinish = async (loginInfo: LoginTpye.LoginFormType) => {
     let { password } = loginInfo
@@ -35,7 +36,7 @@ const LoginForm = () => {
     <Flex justify='center' align='center' className='login-container'>
       <Flex vertical className='login-form'>
         <Title level={2} className='login-title'>
-          {'博客系统登录'}
+          {t('login.title')}
         </Title>
         <Form form={form} name='login' onFinish={onFinish} autoComplete='off' layout='vertical' size={loginFormSize}>
           <Form.Item
@@ -43,11 +44,11 @@ const LoginForm = () => {
             rules={[
               {
                 required: true,
-                message: <>{'请输入用户名'}</>
+                message: <>{t('login.username_message')}</>
               }
             ]}
           >
-            <Input prefix={<UserOutlined />} placeholder={'管理员账号'} autoComplete='account' />
+            <Input prefix={<UserOutlined />} placeholder={t('login.username_placeholder')} autoComplete='account' />
           </Form.Item>
 
           <Form.Item
@@ -55,26 +56,30 @@ const LoginForm = () => {
             rules={[
               {
                 required: true,
-                message: <>{'请输入密码'}</>
+                message: <>{t('login.password_message')}</>
               }
             ]}
           >
-            <Input.Password prefix={<LockOutlined />} placeholder={'密码'} autoComplete='current-password' />
+            <Input.Password
+              prefix={<LockOutlined />}
+              placeholder={t('login.password_placeholder')}
+              autoComplete='current-password'
+            />
           </Form.Item>
 
           <Form.Item>
             <Button type='primary' htmlType='submit' block>
-              {'登录'}
+              {t('login.btn')}
             </Button>
           </Form.Item>
 
           <Form.Item style={{ marginBottom: 0 }}>
             <Flex justify='space-between' align='center'>
               <Button type='link' size={btnSize}>
-                {'注册账号'}
+                {t('login.registe_account')}
               </Button>
               <Button type='link' size={btnSize}>
-                {'忘记密码?'}
+                {t('login.forget_pwd')}
               </Button>
             </Flex>
           </Form.Item>

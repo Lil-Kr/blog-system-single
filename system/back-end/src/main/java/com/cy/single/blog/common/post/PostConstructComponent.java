@@ -60,23 +60,23 @@ public class PostConstructComponent {
 	 */
 	@PostConstruct
 	public void initBlogLabel() {
-		// 用户数据
+		// cache admin-user data
 		List<SysUser> users = userMapper.selectUserAllList();
-		cacheService.saveUserAdminCache(users);
+		cacheService.initUserAdminIdCache(users);
 
-		// 博客标签数据
+		// cache blog-label data
 		List<BlogLabel> labelList = blogLabelMapper.labelList(new BlogLabelListReq());
 		cacheService.saveLabelCache(CACHE_KEY_BLOG_LABEL_LIST, labelList);
 
-		// 博客分类
+		// cache blog category
 		List<BlogCategoryResp> blogCategoryList = blogCategoryMapper.categoryList(new BlogCategoryPageReq());
 		cacheService.saveBlogCategoryCache(blogCategoryList);
 
-		// 博客专题
+		// cache blog topic
 		List<BlogTopic> blogTopics = blogTopicMapper.topicList(new BlogTopicReq());
 		cacheService.saveBlogTopicCache(blogTopics);
 
-		// 数据字典
+		// cache dict data
 		List<SysDict> dictList = dictMapper.selectDictList();
 		List<SysDictDetailResp> dictDetailListVO = dictDetailMapper.dictDetailList();
 		List<SysDictDetail> dictDetailList = dictDetailListVO.stream().map(item -> {

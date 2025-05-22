@@ -54,12 +54,19 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 	public List<SysAcl> getCurrentUserAclList() {
 		// retrieve current user id
 		Long userId = RequestHolder.getCurrentUser().getSurrogateId();
-		// retrieve from cache for [user - acl]
-		List<SysAcl> userAclList = cacheService.getUserAclListCache(userId);
-		if (CollectionUtils.isEmpty(userAclList)) {
-			userAclList = this.getUserAclList(userId);
-			cacheService.saveUserAclCache(userId, userAclList);
-		}
+
+		/**
+		 * retrieve from cache for [user - acl]
+		 * if cache not exist, then get from DB
+		 */
+		List<SysAcl> userAclList = Optional.ofNullable(cacheService.getUserAclListCache(userId))
+			.filter(CollectionUtils::isNotEmpty)
+			.orElseGet(() -> {
+				List<SysAcl> aclList = this.getUserAclList(userId);
+				cacheService.saveUserAclCache(userId, aclList);
+				return aclList;
+			});
+
 		return userAclList;
 	}
 

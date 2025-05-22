@@ -5,25 +5,25 @@ import avatar from '@/assets/images/icons/avatar.png'
 import { useMessage } from '@/components/message/MessageProvider'
 import { useAdminLoginStore } from '@/store/sys/adminStore'
 import { resetPermissionRouters } from '@/router/dynamicRoutes'
+import { useTranslation } from 'react-i18next'
 
 const AvatarIcon = () => {
   const messageApi = useMessage()
-  const { admin } = useAdminLoginStore()
-
   const navigateTo = useNavigate()
+  const { t } = useTranslation()
 
   const items: MenuProps['items'] = [
     {
       key: '1',
-      label: <span className='dropdown-item'>{'关于我'}</span>
+      label: <span className='dropdown-item'>{t('logout.me')}</span>
     },
-    {
-      key: '2',
-      label: <span className='dropdown-item'>{'修改密码'}</span>
-    },
+    // {
+    //   key: '2',
+    //   label: <span className='dropdown-item'>{t('logout.modify_pwd')}</span>
+    // },
     {
       key: '3',
-      label: <span className='dropdown-item'>{'退出登录'}</span>
+      label: <span className='dropdown-item'>{t('logout.logout')}</span>
     }
   ]
 
@@ -45,9 +45,7 @@ const AvatarIcon = () => {
     }
   }
 
-  const aboutMe = () => {
-    
-  }
+  const aboutMe = () => {}
 
   /**
    * 退出登录

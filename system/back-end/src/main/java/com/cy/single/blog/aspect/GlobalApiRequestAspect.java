@@ -18,6 +18,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
+import java.util.Optional;
+
 import static com.cy.single.blog.enums.ReturnCodeEnum.SYSTEM_ERROR;
 
 /**
@@ -46,7 +48,7 @@ public class GlobalApiRequestAspect {
 
 	//    @Around("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
 	@Around("auth()")
-	public Object checkAuth(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+	public Object checkAuth(ProceedingJoinPoint joinPoint) throws Throwable {
 		try {
 			/**
 			 * get cookie
@@ -60,25 +62,23 @@ public class GlobalApiRequestAspect {
 
 			/**
 			 * 先与缓存中对应的用户 token 做校验
-			 * 如果缓存中没有token 就查询用户在DB中的 token, 并返回
+			 * 如果缓存中没有 token 就查询用户在DB中的 token, 并返回
 			 */
-			SysUser user = cacheService.getUserCache(token);
-			if (Objects.isNull(user)) {
-				user = userMapper.getUserByToken(token);
+			SysUser user = Optional.ofNullable(cacheService.getUserTokenCache(token))
+				.orElseGet(() -> userMapper.getUserByToken(token));
 
-				if (Objects.isNull(user)) {
-					log.error("The request {} try fake token", "ip");
-					throw new BusinessException(ReturnCodeEnum.NOT_LOGIN);
-				}
-				cacheService.setUserCache(token, user);
+			if (Objects.isNull(user)) {
+				log.error("The request {} try fake token", "ip");
+				throw new BusinessException(ReturnCodeEnum.NOT_LOGIN);
 			}
+			cacheService.setUserTokenCache(token, user);
 
 			/**
 			 * record user info into ThreadLocal
 			 */
 			RequestHolder.setHttpServletRequest(servletRequest);
 			RequestHolder.setCurrentUser(user);
-			Object proceed = proceedingJoinPoint.proceed();
+			Object proceed = joinPoint.proceed();
 
 			return proceed;
 		} catch (Throwable e) {

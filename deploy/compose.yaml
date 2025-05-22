@@ -1,0 +1,71 @@
+name: blog
+services:
+  nginx:
+    image: nginx:1.28.0
+    container_name: nginx_main
+    ports:
+      - "${you public port}:${you container port}" # need to change
+    volumes:
+      - /usr/local/docker_app/blog/nginx/nghtml:/usr/share/nginx/html
+      - /usr/local/docker_app/blog/nginx/ssl:/usr/share/nginx/ssl
+      - ngconfig:/etc/nginx
+    restart: always
+    networks:
+      - network
+    depends_on:
+      - backend # depends on backend container
+
+  mysql:
+    image: mysql:8.0.35
+    container_name: mysql_main
+    ports:
+      - "${you public port}:${you container port}" # need to change
+    environment:
+      - MYSQL_ROOT_PASSWORD=${you pwd} ## this is init pwd, then you need to change it when startup completed
+      - TZ=${you time zone} # time zone setting
+    volumes:
+      - /usr/local/docker_app/blog/mysql/data:/var/lib/mysql # mysql data dir
+      - /usr/local/docker_app/blog/mysql/conf/:/etc/mysql/conf.d # mysql startup config dir
+      - /usr/local/docker_app/blog/mysql/log:/var/log/ # mysql log dir
+    restart: always
+    networks: 
+      - network
+
+  mongo:
+    image: bitnami/mongodb:8.0.5
+    container_name: mongodb_main
+    ports:
+      - "${you public port}:${you container port}"
+    restart: always
+    networks: 
+      - network
+    volumes:
+      - /usr/local/docker_app/blog/mongodb/data:/bitnami/mongodb # data stage dir
+      - /usr/local/docker_app/blog/mongodb/config:/bitnami/mongodb/conf
+    environment:
+      - MONGODB_ROOT_USER=${you user name} # need to change
+      - MONGODB_ROOT_PASSWORD=${you need set pwd} # need to change
+      - MONGODB_ENABLE_JOURNAL=true
+      
+  backend:
+    image: blog-backend:v1.0
+    container_name: backend
+    ports:
+      - "${you public port}:${you container port}"
+    restart: always
+    networks: 
+      - network
+    volumes:
+      - /usr/local/docker_app/blog/back_end/jar:/jar
+      - /usr/local/docker_app/blog/nginx/nghtml/upload:/blog/upload
+    command: ["java", "-jar", "/jar/back-end-1.0.0.jar"]
+    depends_on:
+      - mysql
+      - mongo
+
+# 数据卷
+volumes:
+  ngconfig:
+  
+networks:
+  network:

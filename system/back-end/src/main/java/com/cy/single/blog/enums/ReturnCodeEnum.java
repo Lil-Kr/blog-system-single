@@ -25,7 +25,7 @@ public enum ReturnCodeEnum {
 	MAX_LIMIT(503, "登录失败次数超过上线阈值"),
 	LOGIN_ACCOUNT_ERROR(504, "邮箱或密码错误"),
 	ILLEGAL_CHARACTERS_ERROR(505, "参数中含有非法字符"),
-	TOO_MANY_REQUEST(506, "abc"), // too many request 请求过频
+	TOO_MANY_REQUEST(506, "too many request"),
 	NO_ACCESS(507, "无权访问"),
 	DO_NOT_INJECT(4003, "禁止注入扫描"),
 	NOT_LOGIN(4004, "请重新登录!"),

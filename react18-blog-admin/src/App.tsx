@@ -36,7 +36,7 @@ function App() {
       }
       initPermissionData()
     }
-  }, [language, token])
+  }, [token])
 
   /**
    * 获取用户信息

@@ -19,7 +19,6 @@ import com.cy.single.blog.utils.keyUtil.IdWorker;
 import com.luciad.imageio.webp.WebPWriteParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -82,15 +81,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		}
 
 		SysUser user = UserDTO.convertSaveAdminReq(req);
-
 		int count = userMapper.insert(user);
 		if (count < 1) {
 			return ApiResp.failure(Add_ERROR);
 		}
 
+    // update cache
+    cacheService.setUserTokenCache(user.getToken(), user);
+    cacheService.setUserAdminIdCache(user.getSurrogateId(), user);
 		return ApiResp.success(ReturnCodeEnum.SUCCESS);
 	}
 
+  /**
+   * insert admin-user
+   * @param req
+   * @return
+   */
 	@Override
 	public ApiResp<String> add(UserSaveReq req) {
 		List<SysUserResp> checkRes = userMapper.selectUserInfoExist(req);
@@ -103,29 +109,44 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		if (insert < 1) {
 			return ApiResp.failure(Add_ERROR);
 		}
-		// 更新缓存
-		cacheService.setUserCache(user.getToken(), user);
+
+		// update cache
+		cacheService.setUserTokenCache(user.getToken(), user);
+    cacheService.setUserAdminIdCache(user.getSurrogateId(), user);
 		return ApiResp.success();
 	}
 
 	/**
-	 * 编辑用户
+	 * edit admin-user
 	 * @param req
 	 * @return
 	 */
 	@Override
 	public ApiResp<String> edit(UserSaveReq req) {
-		SysUser user = convertEditUserReq(req);
+    QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
+    wrapper.eq("surrogate_id", req.getSurrogateId());
+    SysUser before = userMapper.selectOne(wrapper);
+    if (Objects.isNull(before)) {
+      return ApiResp.failure(EDITE_ERROR);
+    }
+
+    SysUser user = convertEditUserReq(before, req);
 		int update = userMapper.updateUserBySurrogateId(user);
-		if (update >= 1) {
-			// 更新缓存
-			cacheService.setUserCache(user.getToken(), user);
-			return ApiResp.success();
-		} else {
-			return ApiResp.failure(EDITE_ERROR);
+		if (update < 1) {
+      return ApiResp.failure(EDITE_ERROR);
 		}
+
+    // update cache
+    cacheService.setUserTokenCache(user.getToken(), user);
+    cacheService.setUserAdminIdCache(user.getSurrogateId(), user);
+    return ApiResp.success();
 	}
 
+  /**
+   * delete admin-user
+   * @param surrogateId
+   * @return
+   */
 	@Override
 	public ApiResp<String> delete(Long surrogateId) {
 		QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
@@ -135,13 +156,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			return ApiResp.failure(INFO_NOT_EXIST);
 		}
 		int delete = userMapper.delete(wrapper);
-		if (delete >= 1) {
-			// 移除缓存
-			cacheService.removeUserCache(StringUtils.isNotBlank(user.getToken()) ? user.getToken() : "");
-			return ApiResp.success();
-		} else {
-			return ApiResp.failure(DEL_ERROR);
+		if (delete < 1) {
+      return ApiResp.failure(DEL_ERROR);
 		}
+
+    // remove catch
+    cacheService.removeUserTokenCache(user.getToken());
+    cacheService.removeUserAdminIdCache(user.getSurrogateId());
+    return ApiResp.success();
 	}
 
   @Override
@@ -163,10 +185,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 		user.setUpdateTime(DateUtil.localDateTimeNow());
 		Integer update = userMapper.updateUserBySurrogateId(user);
-		if (update >= 1)
-			return ApiResp.success(msgService.getMessage(LANG_ZH, "admin.login.success"), user);
-		else
-			return ApiResp.failure();
+		if (update < 1) {
+			return ApiResp.warning(USER_INFO_ERROR);
+		}
+
+    // update cache
+		cacheService.setUserTokenCache(user.getToken(), user);
+    cacheService.setUserAdminIdCache(user.getSurrogateId(), user);
+		return ApiResp.success(msgService.getMessage(LANG_ZH, "admin.login.success"), SysUser.builder().token(user.getToken()).build());
 	}
 
 	@Override

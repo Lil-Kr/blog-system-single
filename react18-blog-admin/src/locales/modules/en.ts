@@ -15,15 +15,22 @@ export default {
     en_US: 'English'
   },
   login: {
-    title: 'Login System',
+    title: 'Manage System',
     confirm: 'Login',
     reset: 'Reset',
-    btn: 'Login',
-    username_placeholder: 'username/e-mail',
+    btn: 'Sign in',
+    username_placeholder: 'username',
     password_placeholder: 'password',
+    registe_account: 'Registe',
+    forget_pwd: 'Forget Password?',
     username_message: 'Please input your username!',
     password_message: 'Please input your password!',
     login_failed: 'username or password error!'
+  },
+  logout: {
+    me: 'Me',
+    // modify_pwd: 'Modify',
+    logout: 'Sign out'
   },
   tabs: {
     more: 'More',

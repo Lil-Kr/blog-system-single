@@ -17,20 +17,20 @@ import java.util.List;
  */
 public interface CacheService {
 
-	/** ================= admin cache by token ============== **/
-	void setUserCache(String token, SysUser user);
+	/** ================= admin-user cache by token ============== **/
+	void setUserTokenCache(String token, SysUser user);
 
-	SysUser getUserCache(String key);
+	SysUser getUserTokenCache(String token);
 
-	void removeUserCache(String key);
+	void removeUserTokenCache(String token);
 
-	/** ================= admin cache by id ============== **/
-	void saveUserAdminCache(List<SysUser> list);
-	void setUserAdminCache(Long id, SysUser user);
-	SysUser getUserAdminCache(Long id);
-	void removeUserAdminCache(Long id);
+	/** ================= admin-user cache by id, use for data transform case  ================= **/
+	void initUserAdminIdCache(List<SysUser> list);
+	SysUser getUserAdminIdCache(Long id);
+	void setUserAdminIdCache(Long id, SysUser user);
+	void removeUserAdminIdCache(Long id);
 
-	/** ================= blog label ============== **/
+	/** ================= blog label ================= **/
 	List<BlogLabel> getLabelListCache(String key);
 
 	BlogLabel getLabelCache(Long surrogateId);
