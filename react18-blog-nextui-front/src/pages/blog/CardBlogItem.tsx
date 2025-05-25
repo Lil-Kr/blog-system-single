@@ -1,4 +1,4 @@
-import { Button, Card, Divider } from '@heroui/react'
+import { Card, Divider } from '@heroui/react'
 import { LinkBase } from '../../components/link'
 import SvgIcon from '../../components/svg/SvgIcon'
 import { useTheme } from 'next-themes'
@@ -20,7 +20,7 @@ const CardBlogItem = (props: { content: CardBlogItemProps }) => {
               <LinkBase key={index} item={item} />
             ))}
           </div>
-          <h1 className='blog-title text-3xl font-bold mt-2'>{content.title}</h1>
+          <div className='blog-title text-3xl font-bold text-center mt-2 mb-2'>{content.title}</div>
           <div className='blog-views flex flex-row gap-x-2 text-gray-600 dark:text-gray-300'>
             <div className='flex flex-row text-sm gap-x-[0.2em]'>
               <SvgIcon name='user-1' style={'w-5 h-5'} />
@@ -76,7 +76,7 @@ const CardBlogItem = (props: { content: CardBlogItemProps }) => {
             </div>
           </a>
         ) : (
-          <div></div>
+          <></>
         )}
         {content.next?.surrogateId ? (
           <a
@@ -102,7 +102,7 @@ const CardBlogItem = (props: { content: CardBlogItemProps }) => {
             </div>
           </a>
         ) : (
-          <div></div>
+          <></>
         )}
       </div>
     </div>

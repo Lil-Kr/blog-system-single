@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import {
   Button,
   Col,
@@ -55,9 +55,6 @@ const BlogModal = () => {
     clearSaveReq
   } = useBlogModalStore()
   const { imageUrl, setImageUrl, clearImageData } = useImageManageStore()
-
-  // 控制图片混排模式, 默认 false
-  // const [mixtypography, setMixtypography] = useState<boolean>(false)
 
   useEffect(() => {
     if (openModal) {
@@ -148,11 +145,9 @@ const BlogModal = () => {
       .filter(header => header.id)
       .map(header => ({
         id: header.id,
-        text: '#' + header.textContent?.replace(/^#+/, '').trim() || '',
+        text: '#' + ' ' + header.textContent?.replace(/^#+/, '').trim() || '',
         level: parseInt(header.tagName[1], 10)
       }))
-
-    console.log('--> toc:', toc)
 
     if (action === 'create') {
       const req: BlogContentAddReq = {
@@ -356,6 +351,27 @@ const BlogModal = () => {
           header.id = anchor.id
           anchor.remove()
         }
+
+        // 2. 获取纯文本内容
+        const text = header.textContent?.trim() || ''
+
+        // 3. 判断是否以 # 开头
+        const match = text.match(/^(#+)\s*(.*)$/)
+        if (match) {
+          const hashes = match[1] // # 或 ## ...
+          const titleText = match[2]
+
+          // 构造 span
+          const span = document.createElement('span')
+          span.className = 'heading-hash'
+          span.textContent = hashes
+
+          // 重置 header 内容
+          header.textContent = ''
+          header.appendChild(span)
+          header.append(' ' + titleText)
+        }
+        
       })
     })
   }
@@ -689,8 +705,8 @@ const BlogModal = () => {
                       })
                       input.click()
                     },
-                    language: 'zh_CN',
-                    language_url: import.meta.env.BASE_URL + 'tinymce/langs/zh_CN.js',
+                    // language: 'zh_CN',
+                    // language_url: import.meta.env.BASE_URL + 'tinymce/langs/zh_CN.js',
                     insertdatetime_formats: ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d', '%Y/%m/%d', '%H:%M:%S', '%D'],
                     insertdatetime_element: true // insert time/date plugin
                     // content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px } h2 { font-size:24px; font-weight:bold; margin:20px 0; }'

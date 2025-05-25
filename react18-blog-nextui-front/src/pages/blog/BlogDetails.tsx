@@ -9,13 +9,13 @@ import { transformToDay } from '@/utils/date/dateTimeUtil'
 import { addCopyButtons } from '../../components/blog/addCopyButtons'
 import CardDirectory from './CardDirectory'
 import AnchorPoint from './AnchorPoint'
-
-// blog code segmentation
-import '@/utils/prism/prism-langs'
-import './styles/blog-content.scss'
-import Prism from 'prismjs'
 import { CardBlogItemProps, BlogContentGetReq, BlogContentVO } from '@/types/apis/blog/blogTypes'
 import { useTranslation } from 'react-i18next'
+
+// blog code segmentation
+import Prism from 'prismjs'
+import '@/utils/prism/prism-langs'
+import './styles/blog-content.scss'
 
 const BlogDetails = () => {
   const { blogId } = useParams()
@@ -75,12 +75,12 @@ const BlogDetails = () => {
 
   return (
     <>
-      <div className='col-span-2 hidden 2xl:flex flex-col gap-y-4 '>
+      <div className='w-10/12 2xl:w-10/12 xl:w-full lg:w-full md:w-10/12 sm:w-10/12 gap-y-4'>
+        <CardBlogItem content={content} />
+      </div>
+      <div className='hidden 2xl:flex flex-col w-4/12 gap-y-4'>
         {/* 文章目录 */}
         <CardDirectory cardItem={cardItem} />
-      </div>
-      <div className='col-span-12 gap-y-4 2xl:col-span-8'>
-        <CardBlogItem content={content} />
       </div>
     </>
   )

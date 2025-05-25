@@ -151,9 +151,6 @@ const Home = () => {
           ease: 'easeOut'
         }}
       >
-        {/* <div className='flex flex-col w-full gap-y-4'>
-        </div> */}
-        {/* <div className='flex w-full'>{images.length > 0 && <CarouselBase images={images} />}</div> */}
         <div className='flex w-full'>{images.length > 0 && <CarouselBase images={images} />}</div>
         <div className='grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-2'>
           {contents?.list.map((blogItem, index) => (

@@ -8,6 +8,12 @@
   h5,
   h6 {
     clear: both;
+    margin: 0.5em auto;
+  }
+
+  .heading-hash {
+    @apply text-indigo-600 font-bold cursor-pointer underline dark:text-fuchsia-400;
+    transition: all 0.3s ease;
   }
 
   /* <a /> style */

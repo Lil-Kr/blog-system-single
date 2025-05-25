@@ -25,7 +25,7 @@ const CardBlogListItem = (props: { blogItem: BlogItemsType }) => {
         />
       </a>
       <div className='flex flex-col'>
-        <div className='flex flex-row blog-tags px-1 py-1 gap-x-2'>
+        {/* <div className='flex flex-row blog-tags px-1 py-1 gap-x-2'>
           {(blogItem.tags || []).map((tag, index) => (
             <div key={index} className='flex flex-col gap-y-1'>
               <Link className='text-sm font-bold text-violet-700' href='#' underline='hover' isExternal={true}>
@@ -33,10 +33,10 @@ const CardBlogListItem = (props: { blogItem: BlogItemsType }) => {
               </Link>
             </div>
           ))}
-        </div>
+        </div> */}
         <div key={blogItem.key} className='blog-title flex px-1 py-1'>
           <Link
-            className='text-lg text-stone-700 dark:text-purple-400 font-bold'
+            className='text-lg sm:text-sm md:text-md lg:text-md 2xl:text-lg text-stone-700 dark:text-purple-400 font-bold'
             underline='hover'
             href={blogItem.backendApi}
           >
