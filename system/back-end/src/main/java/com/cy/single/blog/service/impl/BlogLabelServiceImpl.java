@@ -23,8 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.cy.single.blog.common.constants.CommonConstants.BUS_CREATE;
-import static com.cy.single.blog.common.constants.CommonConstants.CACHE_KEY_BLOG_LABEL_LIST;
+import static com.cy.single.blog.common.constants.CommonConstants.*;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**
@@ -64,22 +63,21 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 
 		if (CollectionUtils.isEmpty(labelList)) {
 			return new PageResult<>(new ArrayList<>(0), 0);
-		}else {
-			return new PageResult<>(labelList, labelList.size());
 		}
+		return new PageResult<>(labelList, labelList.size());
 	}
 
 	@Override
 	public ApiResp<String> add(BlogLabelReq req) {
 		BlogLabel saveEntity = BlogLabelDTO.convertSaveLabelReq(req);
 		Integer add = blogLabelMapper.insert(saveEntity);
-		if (add >= 1) {
-			// 更新缓存
-			cacheService.updateLabelCache(CACHE_KEY_BLOG_LABEL_LIST, BUS_CREATE, saveEntity);
-			return ApiResp.success();
-		}else {
+		if (add < 1) {
 			return ApiResp.failure(Add_ERROR);
 		}
+
+		// update cache
+		cacheService.updateLabelCache(CACHE_KEY_BLOG_LABEL_LIST, BUS_CREATE, saveEntity);
+		return ApiResp.success();
 	}
 
 	@Override
@@ -95,34 +93,32 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 		req.setOperator(RequestHolder.getCurrentUser().getSurrogateId());
 		Integer count = blogLabelMapper.editBySurrogateId(req);
 
-		if (count >= 1) {
-			// 更新缓存
-			BlogLabel cache = new BlogLabel();
-			BeanUtils.copyProperties(req, cache);
-			cacheService.updateLabelCache(CACHE_KEY_BLOG_LABEL_LIST, BUS_CREATE, cache);
-			return ApiResp.success();
-		}else {
-			return ApiResp.failure(Add_ERROR);
+		if (count < 1) {
+			return ApiResp.failure(EDITE_ERROR);
 		}
+
+		// update cache
+		BeanUtils.copyProperties(req, before);
+		cacheService.updateLabelCache(CACHE_KEY_BLOG_LABEL_LIST, BUS_EDIT, before);
+		return ApiResp.success();
 	}
 
 	@Override
 	public ApiResp<String> delete(BlogLabelReq req) {
 		int count = blogLabelMapper.deleteBySurrogateId(req.getSurrogateId());
-		if (count >= 1) {
-			return ApiResp.success();
-		}else {
+		if (count < 1) {
 			return ApiResp.failure(OPERATE_ERROR);
 		}
+		cacheService.updateLabelCache(CACHE_KEY_BLOG_LABEL_LIST, BUS_DELETE, new BlogLabel());
+		return ApiResp.success();
 	}
 
 	@Override
 	public ApiResp<String> deleteBatch(BlogLabelReq req) {
 		Integer count = blogLabelMapper.deleteBatch(req.getSurrogateIds());
-		if (count >= 1) {
-			return ApiResp.success();
-		}else {
+		if (count < 1) {
 			return ApiResp.failure(OPERATE_ERROR);
 		}
+		return ApiResp.success();
 	}
 }

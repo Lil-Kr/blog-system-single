@@ -140,29 +140,29 @@ public class BlogContentServiceImpl implements BlogContentService {
       return new PageResult<>(new ArrayList<>(0), 0);
     }
     pageList.forEach(item -> {
-      // 标签信息
+      // label info
       List<BlogLabel> labelList = Arrays.stream(item.getLabelIds().split(","))
         .map(Long::valueOf)
         .map(cacheService::getLabelCache)
         .collect(Collectors.toList());
       item.setBlogLabelList(labelList);
 
-      // 分类信息
+      // category info
       BlogCategoryResp categoryVO = cacheService.getBlogCategoryCache(item.getCategoryId());
       item.setCategoryName(categoryVO.getName());
       item.setCategoryColor(categoryVO.getColor());
 
-      // 所属专题
+      // topic info
       if (Objects.nonNull(item.getTopicId())) {
         BlogTopic topic = cacheService.getTopicCache(item.getTopicId());
         item.setTopicName(topic.getName());
         item.setTopicColor(topic.getColor());
       }
 
-      // 是否原创
+      // original
       item.setOriginalType(cacheService.getDictDetailCache(item.getOriginal()).getType());
 
-      // 是否推荐
+      // recommend
       item.setRecommendType(cacheService.getDictDetailCache(item.getRecommend()).getType());
     });
     return new PageResult<>(pageList, count);

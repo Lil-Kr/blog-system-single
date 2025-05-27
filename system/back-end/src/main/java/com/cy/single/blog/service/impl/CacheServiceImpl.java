@@ -104,23 +104,30 @@ public class CacheServiceImpl implements CacheService, Serializable {
 	public void updateLabelCache(String key, String sign, BlogLabel blogLabel) {
 		// create
 		if (sign.equals(BUS_CREATE)) {
-			// 更新 list
+			// update list
 			List<BlogLabel> cacheList = blogLabelListCache.getIfPresent(key);
 			cacheList.add(blogLabel);
 			blogLabelListCache.put(key, cacheList);
 
-			// 更新 object
+			// update object
 			blogLabelCache.put(blogLabel.getSurrogateId(), blogLabel);
 		} else if (sign.equals(BUS_EDIT)) { // edit
-			// 更新 list
+			// update list
 			List<BlogLabel> cacheList = blogLabelListCache.getIfPresent(key);
 			List<BlogLabel> newCacheList = cacheList.stream()
 				.map(item -> Objects.equals(item.getSurrogateId(), blogLabel.getSurrogateId()) ? blogLabel : item)
 				.collect(Collectors.toList());
 			blogLabelListCache.put(key, newCacheList);
 
-			// 更新 object
+			// update object
 			blogLabelCache.put(blogLabel.getSurrogateId(), blogLabel);
+		} else {
+			List<BlogLabel> cacheList = blogLabelListCache.getIfPresent(key);
+			List<BlogLabel> newCacheList = cacheList.stream()
+				.filter(item -> !item.getSurrogateId().equals(blogLabel.getSurrogateId()))
+				.collect(Collectors.toList());
+			blogLabelListCache.put(key, newCacheList);
+			blogLabelCache.invalidate(blogLabel.getSurrogateId());
 		}
 	}
 

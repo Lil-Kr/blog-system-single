@@ -20,7 +20,7 @@ const CardBlogItem = (props: { content: CardBlogItemProps }) => {
               <LinkBase key={index} item={item} />
             ))}
           </div>
-          <div className='blog-title text-3xl font-bold text-center mt-2 mb-2'>{content.title}</div>
+          <div className='blog-title text-3xl font-bold mt-2 mb-2'>{content.title}</div>
           <div className='blog-views flex flex-row gap-x-2 text-gray-600 dark:text-gray-300'>
             <div className='flex flex-row text-sm gap-x-[0.2em]'>
               <SvgIcon name='user-1' style={'w-5 h-5'} />

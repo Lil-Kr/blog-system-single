@@ -212,9 +212,6 @@ const BlogLabel = () => {
     })
   }
 
-  /**
-   * 获取标签列表, 不分页
-   */
   const initLabelList = async (req: LabelPageListReq) => {
     const values = form.getFieldsValue()
     const labelPageList = await retrieveLabelPageList({ ...values, ...req })

@@ -11,6 +11,10 @@
     margin: 0.5em auto;
   }
 
+  p {
+    margin: 0.3em auto;
+  }
+
   .heading-hash {
     @apply text-indigo-600 font-bold cursor-pointer underline dark:text-fuchsia-400;
     transition: all 0.3s ease;

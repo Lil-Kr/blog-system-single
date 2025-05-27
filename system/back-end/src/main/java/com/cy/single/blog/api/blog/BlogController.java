@@ -97,7 +97,7 @@ public class BlogController {
     return blogContentService.uploadBlogContentImage(req);
   }
 
-  /** ================== 门户网站接口 =============== **/
+  /** ================== Portal API =============== **/
   @RecordLogger
   @GetMapping("/frontContentList")
   public ApiResp<List<BlogContentResp>> frontContentList() {

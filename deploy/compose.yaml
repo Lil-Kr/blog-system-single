@@ -63,7 +63,7 @@ services:
       - mysql
       - mongo
 
-# 数据卷
+# data volumes
 volumes:
   ngconfig:
   

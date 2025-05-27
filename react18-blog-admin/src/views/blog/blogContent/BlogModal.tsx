@@ -35,9 +35,9 @@ const modalStyles = {
 }
 
 const BlogModal = () => {
+  const editorRef = useRef<EditorInstance>()
   const messageApi = useMessage()
   const [blogForm] = Form.useForm()
-  const editorRef = useRef<EditorInstance>()
   const { blogTypes, blogTopics, blogPublisStatue, switchStatue } = useDictDetailStore()
   const { labelList } = useLabelStore()
   const {
@@ -87,6 +87,7 @@ const BlogModal = () => {
         original: modalReq?.original,
         recommend: modalReq?.recommend
       }
+      console.log('--> modalReq:', modalReq?.blogLabelList ?? '')
       blogForm.setFieldsValue({ ...modalReq, ...initModalData })
       // 绑定富文本编辑器
       editorRef.current?.setContent(modalReq?.contentText ?? '')
@@ -108,12 +109,13 @@ const BlogModal = () => {
       setSaveReq(saveReq)
       setImageUrl(modalReq?.imgUrl ?? '')
     } else {
-      messageApi?.error('操作错误')
+      messageApi?.error('operation error!')
       return
     }
   }
 
   type TagRender = SelectProps['tagRender']
+
   const tagRender: TagRender = props => {
     const { label, value, closable, onClose } = props
     const option = labelList?.find(opt => opt.value === value)
@@ -371,7 +373,6 @@ const BlogModal = () => {
           header.appendChild(span)
           header.append(' ' + titleText)
         }
-        
       })
     })
   }
