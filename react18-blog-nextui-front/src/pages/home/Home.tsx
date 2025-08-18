@@ -61,7 +61,7 @@ const Home = () => {
     const totalPage = calculateTotalPages(blogPageList.total, pagination.pageSize)
     setPagination({ ...req, total: blogPageList.total, totalPage })
 
-    let newState = { ...btnDisable }
+    const newState = { ...btnDisable }
     if (pagination.currentPageNum <= 1) {
       newState.prevBtn = true
     } else {

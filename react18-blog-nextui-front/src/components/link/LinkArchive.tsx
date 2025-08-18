@@ -9,7 +9,7 @@ const LinkArchive = (props: { item: LinkArchiveType }) => {
       key={item.key}
       className={`flex flex-col border px-1 py-2 gap-2 text-md ${item.textColor} hover:bg-primary hover:text-white rounded-md`}
       href={item.url}
-      target='_blank'
+      target='_blank' rel="noreferrer"
     >
       <div className='text-small'>{item.date}</div>
       <div className='text-lg font-bold'>{item.depict}</div>

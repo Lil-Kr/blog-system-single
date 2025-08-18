@@ -70,7 +70,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 	@Override
 	public ApiResp<String> add(BlogLabelReq req) {
 		BlogLabel saveEntity = BlogLabelDTO.convertSaveLabelReq(req);
-		Integer add = blogLabelMapper.insert(saveEntity);
+		int add = blogLabelMapper.insert(saveEntity);
 		if (add < 1) {
 			return ApiResp.failure(Add_ERROR);
 		}

@@ -1,7 +1,7 @@
 import { RouterItemType } from '@/types/router/routeType'
 import { lazy } from 'react'
 import LazyLoad from '@/components/router/LazyLoad'
-import Router, { createBrowserHistory } from 'oh-router'
+import Router from 'oh-router'
 
 const rootConfig: RouterItemType[] = [
   {
@@ -121,6 +121,16 @@ const rootConfig: RouterItemType[] = [
         },
         path: 'about',
         element: LazyLoad(lazy(() => import('@/pages/about/About')))
+      },
+      {
+        meta: {
+          key: '/resume',
+          title: 'resume',
+          layout: false,
+          icon: ''
+        },
+        path: 'resume',
+        element: LazyLoad(lazy(() => import('@/pages/resume/Resume')))
       }
     ]
   }

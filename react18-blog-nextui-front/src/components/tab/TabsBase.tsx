@@ -32,8 +32,8 @@ const blogItem: BlogItemsType = {
 const TabsBase = () => {
   const [selectKey, setSelectKey] = useState<string>('0')
 
-  let tabs = Array.from({ length: 3 }).map((item, index) => {
-    let value = {
+  const tabs = Array.from({ length: 3 }).map((item, index) => {
+    const value = {
       id: index,
       label: <div className='text-medium text-fontColor hover:text-hoverFontColor'>{'随笔-' + `${index}`}</div>,
       content: (

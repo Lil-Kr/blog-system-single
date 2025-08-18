@@ -102,3 +102,7 @@ hs_err_pid*
 **/*-test.yml
 **/*.env.test
 **/*.env.production
+
+# other
+.cursorignore
+**/.cursorignore
