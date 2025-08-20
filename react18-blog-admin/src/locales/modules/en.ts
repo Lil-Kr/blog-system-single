@@ -7,7 +7,7 @@ export default {
     btn: 'click me'
   },
   logo: {
-    title: 'Blog System'
+    title: 'Dashboard'
   },
   language: {
     changeLang: 'Switch Language',
@@ -15,7 +15,7 @@ export default {
     en_US: 'English'
   },
   login: {
-    title: 'Manage System',
+    title: 'Blog Dashboard',
     confirm: 'Login',
     reset: 'Reset',
     btn: 'Sign in',
@@ -28,9 +28,9 @@ export default {
     login_failed: 'username or password error!'
   },
   logout: {
-    me: 'Me',
+    me: 'Profile',
     // modify_pwd: 'Modify',
-    logout: 'Sign out'
+    logout: 'Logout'
   },
   tabs: {
     more: 'More',

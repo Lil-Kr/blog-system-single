@@ -14,8 +14,8 @@ const resources = {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: 'zh', // 默认语言
-  fallbackLng: 'zh',
+  lng: 'en', // defalut language
+  fallbackLng: 'en',
   debug: false,
   interpolation: {
     escapeValue: false // 不转义特殊字符

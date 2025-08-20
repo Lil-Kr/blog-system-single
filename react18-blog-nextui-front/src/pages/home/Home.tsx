@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { CardBlogListItem } from '@/components/card'
 import { BlogItemsType } from '@/types/blog'
 import { PaginationBase } from '@/components/pagination'
-import { CarouselBase, CarouselMotion } from '@/components/imageCarousel'
+import { CarouselBase } from '@/components/imageCarousel'
 import { baseUrl } from '@/constant'
 import { blogContentApi } from '@/apis/contentApi'
 import { PageResult, PaginationType } from '@/types/base/response'
@@ -26,7 +26,7 @@ const Home = () => {
   const [contents, setContents] = useState<PageResult<BlogItemsType>>()
   const [pagination, setPagination] = useState<PaginationType>({
     currentPageNum: 1,
-    pageSize: 10,
+    pageSize: 6,
     total: 0,
     totalPage: 0
   })
@@ -141,7 +141,6 @@ const Home = () => {
 
   return (
     <>
-      {/* 右侧主体内容 */}
       <motion.div
         className='flex flex-col w-full gap-y-4'
         initial={{ opacity: 0, y: 12 }}
