@@ -29,76 +29,76 @@ import java.util.List;
 @Slf4j
 public class OrgController {
 
-	@Autowired
-	private SysOrgService orgService;
+  @Autowired
+  private SysOrgService orgService;
 
-	/**
-	 * add org info
-	 * @param req
-	 * @return
-	 * @throws Exception
-	 */
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("add")
-	public ApiResp<String> add(@RequestBody @Validated({OrgReq.GroupAdd.class}) OrgReq req) {
-		return orgService.add(req);
-	}
+  /**
+   * add org info
+   * @param req
+   * @return
+   * @throws Exception
+   */
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("add")
+  public ApiResp<String> add(@RequestBody @Validated({OrgReq.GroupAdd.class}) OrgReq req) {
+    return orgService.add(req);
+  }
 
-	/**
-	 * edit org info
-	 * @param req
-	 * @return
-	 */
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("edit")
-	public ApiResp<String> edit(@RequestBody @Validated({OrgReq.GroupEdit.class}) OrgReq req) {
-		return orgService.edit(req);
-	}
+  /**
+   * edit org info
+   * @param req
+   * @return
+   */
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("edit")
+  public ApiResp<String> edit(@RequestBody @Validated({OrgReq.GroupEdit.class}) OrgReq req) {
+    return orgService.edit(req);
+  }
 
-	/**
-	 * retrieve org info by tree struct
-	 * @return
-	 */
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("orgTreeList")
-	public ApiResp<List<OrgLevelDto>> orgTreeList() {
-		List<OrgLevelDto> orgLevelList = orgService.orgTree();
-		return ApiResp.success(orgLevelList);
-	}
+  /**
+   * retrieve org info by tree struct
+   * @return
+   */
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("orgTreeList")
+  public ApiResp<List<OrgLevelDto>> orgTreeList() {
+    List<OrgLevelDto> orgLevelList = orgService.orgTree();
+    return ApiResp.success(orgLevelList);
+  }
 
-	/**
-	 * retrieve page org list
-	 * @return
-	 */
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("/pageList")
-	public ApiResp<PageResult<SysOrgResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) OrgPageReq req) {
-		PageResult<SysOrgResp> list = orgService.pageList(req);
-		return ApiResp.success(list);
-	}
+  /**
+   * retrieve page org list
+   * @return
+   */
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/pageList")
+  public ApiResp<PageResult<SysOrgResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) OrgPageReq req) {
+    PageResult<SysOrgResp> list = orgService.pageList(req);
+    return ApiResp.success(list);
+  }
 
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("list")
-	public ApiResp<List<SysOrgResp>> list(@RequestBody OrgListAllReq req) {
-		List<SysOrgResp> list = orgService.list(req);
-		return ApiResp.success(list);
-	}
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("list")
+  public ApiResp<List<SysOrgResp>> list(@RequestBody OrgListAllReq req) {
+    List<SysOrgResp> list = orgService.list(req);
+    return ApiResp.success(list);
+  }
 
-	/**
-	 * delete org
-	 * @param surrogateId
-	 * @return
-	 * @throws Exception
-	 */
-	@RecordLogger
-	@CheckAuth
-	@DeleteMapping("delete")
-	public ApiResp<String> delete(@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
-		return orgService.delete(surrogateId);
-	}
+  /**
+   * delete org
+   * @param surrogateId
+   * @return
+   * @throws Exception
+   */
+  @RecordLogger
+  @CheckAuth
+  @DeleteMapping("delete")
+  public ApiResp<String> delete(@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+    return orgService.delete(surrogateId);
+  }
 }

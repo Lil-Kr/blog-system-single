@@ -17,36 +17,36 @@ import java.util.Date;
 @ToString
 public class BaseReq implements Serializable {
 
-	private static final long serialVersionUID = 7567175837804014960L;
+  private static final long serialVersionUID = 7567175837804014960L;
 
-	private String keyWords;
+  private String keyWords;
 
-	private Integer deleted;
+  private Integer deleted;
 
-	/**
-	 * 创建人
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long creatorId;
+  /**
+   * 创建人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long creatorId;
 
-	/**
-	 * 修改人
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long operator;
+  /**
+   * 修改人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long operator;
 
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
+  /**
+   * 创建时间
+   */
+  private Date createTime;
 
-	/**
-	 * 更改时间
-	 */
-	private Date updateTime;
+  /**
+   * 更改时间
+   */
+  private Date updateTime;
 
-	/**
-	 * 是否排序 ->  0:升序, 1:降序, null:不做排序
-	 */
-	private Integer isOrder;
+  /**
+   * 是否排序 ->  0:升序, 1:降序, null:不做排序
+   */
+  private Integer isOrder;
 }

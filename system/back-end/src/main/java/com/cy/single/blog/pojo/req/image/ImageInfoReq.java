@@ -22,32 +22,32 @@ public class ImageInfoReq {
   public interface GroupImageInfoDel {}
   public interface GroupImageInfoDelBatch {}
 
-  @NotNull(groups = {GroupImageInfoEdit.class, GroupImageInfoDel.class}, message = "surrogateId是必须的")
+  @NotNull(groups = {GroupImageInfoEdit.class, GroupImageInfoDel.class}, message = "surrogateId is require")
   private Long surrogateId;
 
   /**
    * batch operation
    */
-  @NotNull(groups = {GroupImageInfoDelBatch.class}, message = "批量删除surrogateId不能为空")
+  @NotNull(groups = {GroupImageInfoDelBatch.class}, message = "surrogateIds cannot be null")
   private List<Long> surrogateIds;
 
-  @NotNull(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, message = "图片分类id不能为空")
+  @NotNull(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, message = "imageCategoryId cannot be null")
   private Long imageCategoryId;
 
-  @NotNull(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, message = "编号不能为空")
+  @NotBlank(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, message = "number cannot be empty")
   private String number;
 
-  @NotBlank(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, message = "图片名不能为空")
-  @Length(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, max = 50, message = "图片名长度在50个字符以内")
+  @NotBlank(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, message = "image name cannot be empty")
+  @Length(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, max = 50, message = "image name length must be within 50 characters.")
   private String name;
 
-  @NotNull(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, message = "图片原名不能为空")
-  @Length(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, max = 50, message = "图片原名长度在50个字符以内")
+  @NotBlank(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, message = "imageOriginalName cannot be empty")
+  @Length(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, max = 50, message = "imageOriginalName length must be within 50 characters.")
   private String imageOriginalName;
 
-  @NotNull(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, message = "图片原名不能为空")
+  @NotBlank(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, message = "image type cannot be empty")
   private String imageType;
 
-  @Length(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, max = 200, message = "备注长度必须在200个字符以内")
+  @Length(groups = {GroupImageInfoAdd.class, GroupImageInfoEdit.class}, max = 200, message = "remark length must be within 200 characters.")
   private String remark;
 }

@@ -33,7 +33,6 @@ import java.util.Map;
 @Slf4j
 public class GlobalExceptionHandler {
 
-
   /**
    * com.fasterxml.jackson.databind.exc.InvalidFormatException
    * @param request
@@ -109,7 +108,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(MaxUploadSizeExceededException.class)
   public ApiResp<?> handleMaxSizeException(MaxUploadSizeExceededException exception, HttpServletResponse response) {
     String msg = exception.getMessage();
-    return ApiResp.failure("上传文件过大, 最大允许 10MB, " + msg);
+    return ApiResp.failure("upload file too big, the max size for 10MB, " + msg);
   }
 
   /**
@@ -120,7 +119,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(SizeLimitExceededException.class)
   public ApiResp<?> handleSizeLimitExceeded(SizeLimitExceededException exception) {
     String msg = exception.getMessage();
-    return ApiResp.failure("请求体大小超过限制, " + msg);
+    return ApiResp.failure("request params size is too large, " + msg);
   }
 
   /**

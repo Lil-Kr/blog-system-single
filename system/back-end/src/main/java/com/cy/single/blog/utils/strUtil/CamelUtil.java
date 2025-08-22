@@ -7,9 +7,9 @@ import cn.hutool.core.util.StrUtil;
  * @Date: 2025/3/20
  * @Description:
  */
-public class camelUtil {
+public class CamelUtil {
 
-	public static String toCamelCase(String input) {
-		return StrUtil.toCamelCase(input);
-	}
+  public static String toCamelCase(String input) {
+    return StrUtil.toCamelCase(input);
+  }
 }

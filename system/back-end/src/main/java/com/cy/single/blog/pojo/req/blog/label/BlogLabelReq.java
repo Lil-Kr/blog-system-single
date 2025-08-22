@@ -26,28 +26,28 @@ public class BlogLabelReq {
   public interface GroupLabelDel {}
   public interface GroupLabelDelBatch {}
 
-  @NotNull(groups = {GroupLabelEdit.class, GroupLabelDel.class}, message = "surrogateId是必须的")
+  @NotNull(groups = {GroupLabelEdit.class, GroupLabelDel.class}, message = "surrogateId is require")
   private Long surrogateId;
 
   /**
    * batch operation
    */
-  @NotNull(groups = {GroupLabelDelBatch.class}, message = "批量删除surrogateId不能为空")
+  @NotNull(groups = {GroupLabelDelBatch.class}, message = "surrogateIds is require")
   private List<Long> surrogateIds;
 
   private String number;
 
-  @NotNull(groups = {Default.class, GroupLabelSave.class}, message = "标签类型名不能为空")
-  @Length(groups = {Default.class, GroupLabelSave.class, GroupLabelEdit.class}, max = 50, message = "标签类型名长度在50个字符以内")
+  @NotNull(groups = {Default.class, GroupLabelSave.class}, message = "label type name cannot be null")
+  @Length(groups = {Default.class, GroupLabelSave.class, GroupLabelEdit.class}, max = 50, message = "Label type name length must be within 50 characters.")
   private String name;
 
-  @NotBlank(groups = {Default.class, GroupLabelSave.class}, message = "标签颜色不能为空")
+  @NotBlank(groups = {Default.class, GroupLabelSave.class}, message = "label color cannot be empty")
   private String color;
 
-  @NotNull(groups = {Default.class, GroupLabelSave.class, GroupLabelEdit.class}, message = "标签展示颜色不能为空")
+  @NotNull(groups = {Default.class, GroupLabelSave.class, GroupLabelEdit.class}, message = "colorText cannot be null")
   private String colorText;
 
-  @Length(groups = {Default.class, GroupLabelSave.class},max = 200, message = "备注长度必须在200个字符以内")
+  @Length(groups = {Default.class, GroupLabelSave.class}, max = 200, message = "remark length must be within 200 characters.")
   private String remark;
 
   /**

@@ -7,8 +7,8 @@ package com.cy.single.blog.common.constants;
  */
 public class FrontConstants {
 
-	/**
-	 * 前端路由公共前缀
-	 */
-	public static final String FRONT_ROUTER_PREFIX = "/admin";
+  /**
+   * 前端路由公共前缀
+   */
+  public static final String FRONT_ROUTER_PREFIX = "/admin";
 }

@@ -13,13 +13,13 @@ import lombok.ToString;
 @Data
 public class BlogCategoryPageReq extends BasePageReq {
 
-	private Long surrogateId;
+  private Long surrogateId;
 
-	private String number;
+  private String number;
 
-	private String name;
+  private String name;
 
-	private String color;
+  private String color;
 
-	private String remark;
+  private String remark;
 }

@@ -27,26 +27,26 @@ public class BlogTopicReq extends BaseReq {
   public interface GroupBlogTopicDeleted {}
   public interface GroupTopicDelBatch {}
 
-  @NotNull(groups = {GroupBlogTopicEdit.class, GroupBlogTopicDeleted.class}, message = "surrogateId是必须的")
+  @NotNull(groups = {GroupBlogTopicEdit.class, GroupBlogTopicDeleted.class}, message = "surrogateId is require")
   private Long surrogateId;
 
   /**
    * batch operation
    */
-  @NotNull(groups = {BlogLabelReq.GroupLabelDelBatch.class}, message = "批量删除surrogateId不能为空")
+  @NotNull(groups = {BlogLabelReq.GroupLabelDelBatch.class}, message = "surrogateIds cannot be null")
   private List<Long> surrogateIds;
 
-  @NotNull(groups = {GroupBlogTopicSave.class}, message = "主题编号不能为空")
+  @NotNull(groups = {GroupBlogTopicSave.class}, message = "topic number cannot be null")
   private String number;
 
-  @NotNull(groups = {GroupBlogTopicEdit.class, GroupBlogTopicSave.class}, message = "博客主题不能为空")
-  @Length(groups = {GroupBlogTopicEdit.class, GroupBlogTopicSave.class}, max = 50, message = "博客主题长度在50个字符以内")
+  @NotNull(groups = {GroupBlogTopicEdit.class, GroupBlogTopicSave.class}, message = "blog topic cannot be null")
+  @Length(groups = {GroupBlogTopicEdit.class, GroupBlogTopicSave.class}, max = 50, message = "blog topic length must be within 50 characters.")
   private String name;
 
-  @Length(groups = {Default.class, BlogCategoryReq.GroupTypeAdd.class, BlogCategoryReq.GroupTypeEdit.class}, max = 50, message = "后台展示颜色不能为空, 请输入正确的颜色禁制码")
+  @Length(groups = {Default.class, BlogCategoryReq.GroupTypeAdd.class, BlogCategoryReq.GroupTypeEdit.class}, max = 50, message = " color is required, Please enter a valid hexadecimal color code.")
   private String color = DEFAULT_COLOR;
 
-  @Length(groups = {Default.class, GroupTopicDelBatch.class},max = 200, message = "备注长度必须在200个字符以内")
+  @Length(groups = {Default.class, GroupTopicDelBatch.class}, max = 200, message = "remark length must be within 200 characters.")
   private String remark;
 
 }

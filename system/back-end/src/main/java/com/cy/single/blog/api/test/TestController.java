@@ -24,8 +24,8 @@ import java.util.List;
 @RequestMapping("/test")
 public class TestController {
 
-	@GetMapping("/healthcheck")
-	public String healthcheck() {
-		return "on";
-	}
+  @GetMapping("/healthcheck")
+  public String healthcheck() {
+    return "on";
+  }
 }

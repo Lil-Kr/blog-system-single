@@ -23,17 +23,17 @@ public class ImageCategoryReq extends BaseEntity {
   public interface GroupImageCategoryDel {}
   public interface GroupImageCategoryDelBatch {}
 
-  @NotNull(groups = {GroupImageCategoryEdit.class, GroupImageCategoryDel.class}, message = "surrogateId是必须的")
+  @NotNull(groups = {GroupImageCategoryEdit.class, GroupImageCategoryDel.class}, message = "surrogateId is require")
   private Long surrogateId;
 
   /**
    * batch operation
    */
-  @NotNull(groups = {GroupImageCategoryDelBatch.class}, message = "批量删除surrogateId不能为空")
+  @NotNull(groups = {GroupImageCategoryDelBatch.class}, message = "surrogateIds cannot be null")
   private List<Long> surrogateIds;
 
-  @NotNull(groups = {Default.class, GroupImageCategoryAdd.class}, message = "图片分类名不能为空")
-  @Length(groups = {Default.class, GroupImageCategoryAdd.class, GroupImageCategoryEdit.class}, max = 50, message = "标签类型名长度在50个字符以内")
+  @NotNull(groups = {Default.class, GroupImageCategoryAdd.class}, message = "image category name cannot be null")
+  @Length(groups = {Default.class, GroupImageCategoryAdd.class, GroupImageCategoryEdit.class}, max = 50, message = "label type name length must be within 50 characters.")
   private String name;
 
 //  @NotNull(groups = {GroupImageCategorySave.class}, message = "标题图url不能为空")
@@ -41,6 +41,6 @@ public class ImageCategoryReq extends BaseEntity {
 
   private Integer status;
 
-  @Length(groups = {Default.class, GroupImageCategoryAdd.class, GroupImageCategoryEdit.class},max = 200, message = "备注长度必须在200个字符以内")
+  @Length(groups = {Default.class, GroupImageCategoryAdd.class, GroupImageCategoryEdit.class},max = 200, message = "remark length must be within 200 characters.")
   private String remark;
 }

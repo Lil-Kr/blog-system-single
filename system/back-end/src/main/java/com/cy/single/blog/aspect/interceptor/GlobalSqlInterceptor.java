@@ -31,79 +31,79 @@ import java.util.Properties;
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class GlobalSqlInterceptor implements Interceptor {
 
-	@Override
-	public Object intercept(Invocation invocation) throws Throwable {
-		log.info("======================== sql intercept ========================");
-		StatementHandler statementHandler = (StatementHandler) invocation.getTarget();
+  @Override
+  public Object intercept(Invocation invocation) throws Throwable {
+    log.info("======================== sql intercept ========================");
+    StatementHandler statementHandler = (StatementHandler) invocation.getTarget();
 
-		BoundSql boundSql = statementHandler.getBoundSql();
+    BoundSql boundSql = statementHandler.getBoundSql();
 
-		MetaObject metaObject = SystemMetaObject.forObject(statementHandler);
-		MappedStatement mappedStatement = (MappedStatement)metaObject.getValue("delegate.mappedStatement");
+    MetaObject metaObject = SystemMetaObject.forObject(statementHandler);
+    MappedStatement mappedStatement = (MappedStatement)metaObject.getValue("delegate.mappedStatement");
 
-		/**
-		 * 判断 sql 是否为 select 查询, 只有查询才需要分页处理
-		 */
-		if (!SqlCommandType.SELECT.equals(mappedStatement.getSqlCommandType())) {
-			return invocation.proceed();
-		}
+    /**
+     * 判断 sql 是否为 select 查询, 只有查询才需要分页处理
+     */
+    if (!SqlCommandType.SELECT.equals(mappedStatement.getSqlCommandType())) {
+      return invocation.proceed();
+    }
 
-		/**
-		 * 获取执行方法的位置 -> 绝对路径
-		 * com.cy.single.blog.dao.SysUserMapper.getUserByToken
-		 */
-		String namespace = mappedStatement.getId();
+    /**
+     * 获取执行方法的位置 -> 绝对路径
+     * com.cy.single.blog.dao.SysUserMapper.getUserByToken
+     */
+    String namespace = mappedStatement.getId();
 
-		/**
-		 * 获取 mapper 的名称
-		 */
-		String className = namespace.substring(0, namespace.lastIndexOf("."));
-		log.info("sql intercept className: {}", className);
+    /**
+     * 获取 mapper 的名称
+     */
+    String className = namespace.substring(0, namespace.lastIndexOf("."));
+    log.info("sql intercept className: {}", className);
 
-		/**
-		 * 获取调用 mapper 的方法名
-		 */
-		String methodName = namespace.substring(namespace.lastIndexOf(".") + 1, namespace.length());
-		log.info("sql intercept methodName: {}", methodName);
+    /**
+     * 获取调用 mapper 的方法名
+     */
+    String methodName = namespace.substring(namespace.lastIndexOf(".") + 1, namespace.length());
+    log.info("sql intercept methodName: {}", methodName);
 
-		/** page 开头的方法需要分页 **/
-		if (StringUtils.isNotEmpty(methodName) && methodName.toLowerCase().startsWith("page")) {
-			ParameterHandler parameter = (ParameterHandler)metaObject.getValue("delegate.parameterHandler");
-			Map<String, Object> parameterObject = (Map<String, Object>) parameter.getParameterObject();
-			log.info("parameterObject: {}", JSONObject.toJSONString(parameterObject));
+    /** page 开头的方法需要分页 **/
+    if (StringUtils.isNotEmpty(methodName) && methodName.toLowerCase().startsWith("page")) {
+      ParameterHandler parameter = (ParameterHandler)metaObject.getValue("delegate.parameterHandler");
+      Map<String, Object> parameterObject = (Map<String, Object>) parameter.getParameterObject();
+      log.info("parameterObject: {}", JSONObject.toJSONString(parameterObject));
 
-			/**
-			 * 反序列化到 page 对象
-			 */
-			BasePageReq pageReqParameter = (BasePageReq)parameterObject.get("param");
-			log.info("param: {}", JSONObject.toJSONString(parameterObject));
+      /**
+       * 反序列化到 page 对象
+       */
+      BasePageReq pageReqParameter = (BasePageReq)parameterObject.get("param");
+      log.info("param: {}", JSONObject.toJSONString(parameterObject));
 
-			Integer currentPageNum = pageReqParameter.getCurrentPageNum();
-			Integer pageSize = pageReqParameter.getPageSize();
+      Integer currentPageNum = pageReqParameter.getCurrentPageNum();
+      Integer pageSize = pageReqParameter.getPageSize();
 
-			StringBuffer baseSql = new StringBuffer(boundSql.getSql());
-			log.info("base SQL: {}", baseSql);
+      StringBuffer baseSql = new StringBuffer(boundSql.getSql());
+      log.info("base SQL: {}", baseSql);
 
-			baseSql.append(" limit ")
-				.append((currentPageNum - 1) * pageSize + ", ")
-				.append(pageSize);
-			log.info("limit SQL: {}", baseSql);
-			metaObject.setValue("delegate.boundSql.sql", baseSql.toString());
-		}
+      baseSql.append(" limit ")
+        .append((currentPageNum - 1) * pageSize + ", ")
+        .append(pageSize);
+      log.info("limit SQL: {}", baseSql);
+      metaObject.setValue("delegate.boundSql.sql", baseSql.toString());
+    }
 
-		/**
-		 * 获取mapper名称
-		 */
-		return invocation.proceed();
-	}
+    /**
+     * 获取mapper名称
+     */
+    return invocation.proceed();
+  }
 
-	@Override
-	public Object plugin(Object target) {
-		return Interceptor.super.plugin(target);
-	}
+  @Override
+  public Object plugin(Object target) {
+    return Interceptor.super.plugin(target);
+  }
 
-	@Override
-	public void setProperties(Properties properties) {
-		Interceptor.super.setProperties(properties);
-	}
+  @Override
+  public void setProperties(Properties properties) {
+    Interceptor.super.setProperties(properties);
+  }
 }

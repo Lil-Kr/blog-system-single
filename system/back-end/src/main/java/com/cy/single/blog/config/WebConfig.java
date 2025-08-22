@@ -19,30 +19,30 @@ import java.util.Locale;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-	@Bean
-	public LocaleResolver localeResolver() {
-		SessionLocaleResolver slr = new SessionLocaleResolver();
-		slr.setDefaultLocale(Locale.SIMPLIFIED_CHINESE); // 设置默认语言
-		return slr;
-	}
+  @Bean
+  public LocaleResolver localeResolver() {
+    SessionLocaleResolver slr = new SessionLocaleResolver();
+    slr.setDefaultLocale(Locale.SIMPLIFIED_CHINESE); // 设置默认语言
+    return slr;
+  }
 
-	@Bean
-	public ResourceBundleMessageSource messageSource() {
-		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBasename("messages"); // 指向消息资源文件
-		messageSource.setDefaultEncoding("UTF-8");
-		return messageSource;
-	}
+  @Bean
+  public ResourceBundleMessageSource messageSource() {
+    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+    messageSource.setBasename("messages"); // 指向消息资源文件
+    messageSource.setDefaultEncoding("UTF-8");
+    return messageSource;
+  }
 
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(localeChangeInterceptor());
-	}
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(localeChangeInterceptor());
+  }
 
-	@Bean
-	public LocaleChangeInterceptor localeChangeInterceptor() {
-		LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-		lci.setParamName("lang"); // 通过请求参数 "lang" 来切换语言
-		return lci;
-	}
+  @Bean
+  public LocaleChangeInterceptor localeChangeInterceptor() {
+    LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+    lci.setParamName("lang"); // 通过请求参数 "lang" 来切换语言
+    return lci;
+  }
 }

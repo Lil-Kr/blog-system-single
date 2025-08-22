@@ -30,48 +30,48 @@ import java.util.List;
 @RequestMapping("/blog/category")
 public class CategoryController {
 
-	@Autowired
-	private BlogCategoryService blogCategoryService;
+  @Autowired
+  private BlogCategoryService blogCategoryService;
 
-	@Autowired
-	private BlogContentService blogContentService;
+  @Autowired
+  private BlogContentService blogContentService;
 
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("/pageList")
-	public ApiResp<PageResult<BlogCategoryResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogCategoryPageReq req) {
-		PageResult<BlogCategoryResp> list = blogCategoryService.pageList(req);
-		return ApiResp.success(list);
-	}
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/pageList")
+  public ApiResp<PageResult<BlogCategoryResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) BlogCategoryPageReq req) {
+    PageResult<BlogCategoryResp> list = blogCategoryService.pageList(req);
+    return ApiResp.success(list);
+  }
 
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("/list")
-	public ApiResp<PageResult<BlogCategoryResp>> list(@RequestBody @Validated BlogCategoryPageReq req) {
-		PageResult<BlogCategoryResp> list = blogCategoryService.list(req);
-		return ApiResp.success(list);
-	}
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/list")
+  public ApiResp<PageResult<BlogCategoryResp>> list(@RequestBody @Validated BlogCategoryPageReq req) {
+    PageResult<BlogCategoryResp> list = blogCategoryService.list(req);
+    return ApiResp.success(list);
+  }
 
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("/add")
-	public ApiResp<String> add(@RequestBody @Validated({BlogCategoryReq.GroupTypeAdd.class}) BlogCategoryReq req) {
-		return blogCategoryService.add(req);
-	}
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/add")
+  public ApiResp<String> add(@RequestBody @Validated({BlogCategoryReq.GroupTypeAdd.class}) BlogCategoryReq req) {
+    return blogCategoryService.add(req);
+  }
 
-	@RecordLogger
-	@CheckAuth
-	@PostMapping("/edit")
-	public ApiResp<String> edit(@RequestBody @Validated({BlogCategoryReq.GroupTypeEdit.class}) BlogCategoryReq req) {
-		return blogCategoryService.edit(req);
-	}
+  @RecordLogger
+  @CheckAuth
+  @PostMapping("/edit")
+  public ApiResp<String> edit(@RequestBody @Validated({BlogCategoryReq.GroupTypeEdit.class}) BlogCategoryReq req) {
+    return blogCategoryService.edit(req);
+  }
 
-	@RecordLogger
-	@CheckAuth
-	@DeleteMapping("/delete")
-	public ApiResp<String> delete(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
-		return blogCategoryService.delete(surrogateId);
-	}
+  @RecordLogger
+  @CheckAuth
+  @DeleteMapping("/delete")
+  public ApiResp<String> delete(@RequestParam("surrogateId") @Valid @NotNull(message = "surrogateId是必须的") Long surrogateId) {
+    return blogCategoryService.delete(surrogateId);
+  }
 
 //	@RecordLogger
 //	@CheckAuth
@@ -82,17 +82,17 @@ public class CategoryController {
 //		return blogCategoryService.deleteBatch(req);
 //	}
 
-	/** =============== 门户网站接口 ===============**/
-	@RecordLogger
-	@GetMapping("/frontCategoryCountList")
-	public ApiResp<List<BlogContentGroupResp>> frontCategoryCountList() {
-		List<BlogContentGroupResp> blogContentGroupList = blogContentService.frontContentByGroupCategory();
+  /** =============== 门户网站接口 ===============**/
+  @RecordLogger
+  @GetMapping("/frontCategoryCountList")
+  public ApiResp<List<BlogContentGroupResp>> frontCategoryCountList() {
+    List<BlogContentGroupResp> blogContentGroupList = blogContentService.frontContentByGroupCategory();
 
 //        Map<Long, BlogCategoryVO> blogCategoryAllMapCache = CacheManager.getBlogCategoryAllMapCache();
 //        blogContentGroupList.forEach(item -> {
 //            item.setCategoryName(blogCategoryAllMapCache.getOrDefault(item.getCategoryId(), new BlogCategoryVO()).getName());
 //        });
-		return ApiResp.success(blogContentGroupList);
-	}
+    return ApiResp.success(blogContentGroupList);
+  }
 
 }

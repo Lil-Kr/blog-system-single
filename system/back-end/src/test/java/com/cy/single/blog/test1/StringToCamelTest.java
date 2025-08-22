@@ -1,6 +1,6 @@
 package com.cy.single.blog.test1;
 
-import com.cy.single.blog.utils.strUtil.camelUtil;
+import com.cy.single.blog.utils.strUtil.CamelUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ public class StringToCamelTest {
 	@Test
 	public void test1() {
 		String input = "hello_world_example";
-		String camelCase = camelUtil.toCamelCase(input);
+		String camelCase = CamelUtil.toCamelCase(input);
 		System.out.println(camelCase);
 		Assertions.assertEquals("helloWorldExample", camelCase);
 	}
@@ -22,7 +22,7 @@ public class StringToCamelTest {
 	@Test
 	public void test2() {
 		String input = "hello";
-		String camelCase = camelUtil.toCamelCase(input);
+		String camelCase = CamelUtil.toCamelCase(input);
 		System.out.println(camelCase);
 		Assertions.assertEquals("hello", camelCase);
 	}
@@ -30,7 +30,7 @@ public class StringToCamelTest {
 	@Test
 	public void test3() {
 		String input = "Hello";
-		String camelCase = camelUtil.toCamelCase(input);
+		String camelCase = CamelUtil.toCamelCase(input);
 		System.out.println(camelCase);
 		Assertions.assertEquals("Hello", camelCase);
 	}
@@ -38,7 +38,7 @@ public class StringToCamelTest {
 	@Test
 	public void test4() {
 		String input = "hello_World_example";
-		String camelCase = camelUtil.toCamelCase(input);
+		String camelCase = CamelUtil.toCamelCase(input);
 		System.out.println(camelCase);
 		Assertions.assertEquals("helloWorldExample", camelCase);
 	}

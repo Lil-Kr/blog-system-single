@@ -8,25 +8,25 @@ import com.cy.single.blog.enums.ReturnCodeEnum;
  * @Description: 业务异常处理
  */
 public class BusinessException extends RuntimeException {
-    private static final long serialVersionUID = 241314324519731138L;
+  private static final long serialVersionUID = 241314324519731138L;
 
-    private ReturnCodeEnum returnCodeEnum;
+  private ReturnCodeEnum returnCodeEnum;
 
-    public BusinessException(String message){
-        super(message);
-    }
+  public BusinessException(String message){
+    super(message);
+  }
 
-    public BusinessException(ReturnCodeEnum returnCodeEnum) {
-        super(returnCodeEnum.getMessage());
-        this.returnCodeEnum = returnCodeEnum;
-    }
+  public BusinessException(ReturnCodeEnum returnCodeEnum) {
+    super(returnCodeEnum.getMessage());
+    this.returnCodeEnum = returnCodeEnum;
+  }
 
-    public BusinessException(String message, ReturnCodeEnum returnCodeEnum) {
-        super(message);
-        this.returnCodeEnum = returnCodeEnum;
-    }
+  public BusinessException(String message, ReturnCodeEnum returnCodeEnum) {
+    super(message);
+    this.returnCodeEnum = returnCodeEnum;
+  }
 
-    public ReturnCodeEnum getReturnCodeEnum() {
-        return returnCodeEnum;
-    }
+  public ReturnCodeEnum getReturnCodeEnum() {
+    return returnCodeEnum;
+  }
 }

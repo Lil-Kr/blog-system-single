@@ -17,27 +17,27 @@ import java.util.Date;
 @Data
 public class BaseEntity implements Serializable {
 
-	private static final long serialVersionUID = -4120652138040137224L;
+  private static final long serialVersionUID = -4120652138040137224L;
 
-	/**
-	 * 创建人
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long creatorId;
+  /**
+   * 创建人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long creatorId;
 
-	/**
-	 * 修改人
-	 */
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long operator;
+  /**
+   * 修改人
+   */
+  @JsonSerialize(using = ToStringSerializer.class)
+  private Long operator;
 
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
+  /**
+   * 创建时间
+   */
+  private Date createTime;
 
-	/**
-	 * 更改时间
-	 */
-	private Date updateTime;
+  /**
+   * 更改时间
+   */
+  private Date updateTime;
 }

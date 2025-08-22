@@ -27,39 +27,39 @@ import java.time.temporal.ChronoUnit;
 @Profile({"dev"})
 public class GlobalRequestLoggerAspect {
 
-    @Autowired
-    private HttpServletRequest servletRequest;
+  @Autowired
+  private HttpServletRequest servletRequest;
 
-    @Pointcut("@annotation(com.cy.single.blog.aspect.annotations.RecordLogger)")
-    public void requestLog() {}
+  @Pointcut("@annotation(com.cy.single.blog.aspect.annotations.RecordLogger)")
+  public void requestLog() {}
 
-    /**
-     * record log for request info
-     * @param proceedingJoinPoint
-     * @return
-     * @throws Throwable
-     */
-    @Around("requestLog()")
-    public Object recordLog(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        String url = servletRequest.getRequestURL().toString();
-        String reqType = servletRequest.getMethod();
-        Object[] args = proceedingJoinPoint.getArgs();
-        String apiName = proceedingJoinPoint.getSignature().getName();
-        log.info("========================= start =========================");
-        log.info("url:              {}", url);
-        log.info("request type:     {}", reqType);
-        log.info("api name:         {}", apiName);
+  /**
+   * record log for request info
+   * @param proceedingJoinPoint
+   * @return
+   * @throws Throwable
+   */
+  @Around("requestLog()")
+  public Object recordLog(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    String url = servletRequest.getRequestURL().toString();
+    String reqType = servletRequest.getMethod();
+    Object[] args = proceedingJoinPoint.getArgs();
+    String apiName = proceedingJoinPoint.getSignature().getName();
+    log.info("========================= start =========================");
+    log.info("url:              {}", url);
+    log.info("request type:     {}", reqType);
+    log.info("api name:         {}", apiName);
 //        log.info("args:             {}", JSONArray.toJSONString(args));
 //        log.info("args:             {}", args instanceof Object ? JSONObject.toJSONString(args) : JSONArray.toJSONString(args));
 
-        Instant startTime = Instant.now();
+    Instant startTime = Instant.now();
 
-        /** execute point cut **/
-        Object resp = proceedingJoinPoint.proceed();
+    /** execute point cut **/
+    Object resp = proceedingJoinPoint.proceed();
 
-        log.info("resp body:        {}", JSONObject.toJSONString(resp));
-        log.info("Time-Consuming:   {}ms", ChronoUnit.MILLIS.between(startTime, Instant.now()));
-        log.info("========================= end =========================");
-        return resp;
-    }
+    log.info("resp body:        {}", JSONObject.toJSONString(resp));
+    log.info("Time-Consuming:   {}ms", ChronoUnit.MILLIS.between(startTime, Instant.now()));
+    log.info("========================= end =========================");
+    return resp;
+  }
 }

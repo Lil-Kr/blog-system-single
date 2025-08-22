@@ -20,17 +20,17 @@ import java.util.Map;
 @RequestMapping("/sys/auth")
 public class AuthController {
 
-	@Autowired
-	private SysPermissionService permissionService;
+  @Autowired
+  private SysPermissionService permissionService;
 
-	/**
-	 * current user-admin has menu and button permission
-	 * @return
-	 */
-	@CheckAuth
-	@RecordLogger
-	@GetMapping("/permission")
-	public ApiResp<Map<String, Object>> permission() {
-		return permissionService.permission();
-	}
+  /**
+   * current user-admin has menu and button permission
+   * @return
+   */
+  @CheckAuth
+  @RecordLogger
+  @GetMapping("/permission")
+  public ApiResp<Map<String, Object>> permission() {
+    return permissionService.permission();
+  }
 }

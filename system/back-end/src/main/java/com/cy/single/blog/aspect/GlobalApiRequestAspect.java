@@ -34,61 +34,61 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.SYSTEM_ERROR;
 @Order(1)
 public class GlobalApiRequestAspect {
 
-	@Autowired
-	private HttpServletRequest servletRequest;
+  @Autowired
+  private HttpServletRequest servletRequest;
 
-	@Autowired
-	private SysUserMapper userMapper;
+  @Autowired
+  private SysUserMapper userMapper;
 
-	@Autowired
-	private CacheService cacheService;
+  @Autowired
+  private CacheService cacheService;
 
-	@Pointcut("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
-	public void auth() {}
+  @Pointcut("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
+  public void auth() {}
 
-	//    @Around("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
-	@Around("auth()")
-	public Object checkAuth(ProceedingJoinPoint joinPoint) throws Throwable {
-		try {
-			/**
-			 * get cookie
-			 */
-			String token = servletRequest.getHeader("authorization");
+  //    @Around("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
+  @Around("auth()")
+  public Object checkAuth(ProceedingJoinPoint joinPoint) throws Throwable {
+    try {
+      /**
+       * get cookie
+       */
+      String token = servletRequest.getHeader("authorization");
 
-			if (StringUtils.isBlank(token)) {
-				log.error("the request have exception:             {}");
-				throw new BusinessException("token is null", ReturnCodeEnum.BUSINESS_ERROR);
-			}
+      if (StringUtils.isBlank(token)) {
+        log.error("the request have exception:             {}");
+        throw new BusinessException("token is null", ReturnCodeEnum.BUSINESS_ERROR);
+      }
 
-			/**
-			 * 先与缓存中对应的用户 token 做校验
-			 * 如果缓存中没有 token 就查询用户在DB中的 token, 并返回
-			 */
-			SysUser user = Optional.ofNullable(cacheService.getUserTokenCache(token))
-				.orElseGet(() -> userMapper.getUserByToken(token));
+      /**
+       * 先与缓存中对应的用户 token 做校验
+       * 如果缓存中没有 token 就查询用户在DB中的 token, 并返回
+       */
+      SysUser user = Optional.ofNullable(cacheService.getUserTokenCache(token))
+        .orElseGet(() -> userMapper.getUserByToken(token));
 
-			if (Objects.isNull(user)) {
-				log.error("The request {} try fake token", "ip");
-				throw new BusinessException(ReturnCodeEnum.NOT_LOGIN);
-			}
-			cacheService.setUserTokenCache(token, user);
+      if (Objects.isNull(user)) {
+        log.error("The request {} try fake token", "ip");
+        throw new BusinessException(ReturnCodeEnum.NOT_LOGIN);
+      }
+      cacheService.setUserTokenCache(token, user);
 
-			/**
-			 * record user info into ThreadLocal
-			 */
-			RequestHolder.setHttpServletRequest(servletRequest);
-			RequestHolder.setCurrentUser(user);
-			Object proceed = joinPoint.proceed();
+      /**
+       * record user info into ThreadLocal
+       */
+      RequestHolder.setHttpServletRequest(servletRequest);
+      RequestHolder.setCurrentUser(user);
+      Object proceed = joinPoint.proceed();
 
-			return proceed;
-		} catch (Throwable e) {
-			log.error("api request ERROR: {}", e.getMessage());
-			return ApiResp.warning(SYSTEM_ERROR.getCode(), e.getMessage());
-		} finally {
-			/**
-			 * remove user info
-			 */
-			RequestHolder.remove();
-		}
-	}
+      return proceed;
+    } catch (Throwable e) {
+      log.error("api request ERROR: {}", e.getMessage());
+      return ApiResp.warning(SYSTEM_ERROR.getCode(), e.getMessage());
+    } finally {
+      /**
+       * remove user info
+       */
+      RequestHolder.remove();
+    }
+  }
 }

@@ -31,35 +31,35 @@ import static com.cy.single.blog.enums.ReturnCodeEnum.SYSTEM_ERROR;
 @Order(3)
 public class GlobalAclAspect {
 
-	@Autowired
-	private HttpServletRequest servletRequest;
+  @Autowired
+  private HttpServletRequest servletRequest;
 
-	@Autowired
-	private SysAclCoreService coreService;
+  @Autowired
+  private SysAclCoreService coreService;
 
-	@Pointcut("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
-	public void acl() {}
+  @Pointcut("@annotation(com.cy.single.blog.aspect.annotations.CheckAuth)")
+  public void acl() {}
 
-	@Around("acl()")
-	public Object checkAcl(ProceedingJoinPoint joinPoint) throws Throwable {
-		List<SysAcl> userAclList = coreService.getCurrentUserAclList();
-		Set<String> urlAclSet = userAclList.stream().map(SysAcl::getUrl).collect(Collectors.toSet());
-		try {
-			String uri = servletRequest.getRequestURI();
-			boolean hasAcl = urlAclSet.stream().anyMatch(item -> item.contains(uri) || uri.startsWith(item));
-			if (!hasAcl) {
-				log.error("The request is not have acl to call {}", uri);
-				throw new BusinessException(ReturnCodeEnum.NO_ACCESS);
-			}
+  @Around("acl()")
+  public Object checkAcl(ProceedingJoinPoint joinPoint) throws Throwable {
+    List<SysAcl> userAclList = coreService.getCurrentUserAclList();
+    Set<String> urlAclSet = userAclList.stream().map(SysAcl::getUrl).collect(Collectors.toSet());
+    try {
+      String uri = servletRequest.getRequestURI();
+      boolean hasAcl = urlAclSet.stream().anyMatch(item -> item.contains(uri) || uri.startsWith(item));
+      if (!hasAcl) {
+        log.error("The request is not have acl to call {}", uri);
+        throw new BusinessException(ReturnCodeEnum.NO_ACCESS);
+      }
 
 //			return joinPoint.proceed();
-			Object proceed = joinPoint.proceed();
-			return proceed;
-		} catch (Throwable e) {
-			log.error("api request ACL ERROR: {}", e.getMessage());
-			return ApiResp.warning(SYSTEM_ERROR.getCode(), e.getMessage());
-		} finally {
-			RequestHolder.remove();
-		}
-	}
+      Object proceed = joinPoint.proceed();
+      return proceed;
+    } catch (Throwable e) {
+      log.error("api request ACL ERROR: {}", e.getMessage());
+      return ApiResp.warning(SYSTEM_ERROR.getCode(), e.getMessage());
+    } finally {
+      RequestHolder.remove();
+    }
+  }
 }

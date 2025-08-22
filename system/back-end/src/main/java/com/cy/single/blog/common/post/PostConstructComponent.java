@@ -30,62 +30,62 @@ import static com.cy.single.blog.common.constants.CommonConstants.CACHE_KEY_BLOG
 @Component
 public class PostConstructComponent {
 
-	@Autowired
-	private CacheService cacheService;
+  @Autowired
+  private CacheService cacheService;
 
-	@Autowired
-	private BlogTopicMapper blogTopicMapper;
+  @Autowired
+  private BlogTopicMapper blogTopicMapper;
 
-	@Autowired
-	private BlogLabelMapper blogLabelMapper;
+  @Autowired
+  private BlogLabelMapper blogLabelMapper;
 
-	@Autowired
-	private SysDictMapper dictMapper;
+  @Autowired
+  private SysDictMapper dictMapper;
 
-	@Autowired
-	private SysDictDetailMapper dictDetailMapper;
+  @Autowired
+  private SysDictDetailMapper dictDetailMapper;
 
-	@Autowired
-	private BlogCategoryMapper blogCategoryMapper;
+  @Autowired
+  private BlogCategoryMapper blogCategoryMapper;
 
-	@Autowired
-	private SysUserMapper userMapper;
+  @Autowired
+  private SysUserMapper userMapper;
 
-	/**
-	 * 初始化:
-	 *  - [博客-标签]列表
-	 *  - [博客-分类]列表
-	 *  - [博客-专题]列表
-	 *  - 数据字典信息
-	 */
-	@PostConstruct
-	public void initBlogLabel() {
-		// cache admin-user data
-		List<SysUser> users = userMapper.selectUserAllList();
-		cacheService.initUserAdminIdCache(users);
+  /**
+   * 初始化:
+   *  - [博客-标签]列表
+   *  - [博客-分类]列表
+   *  - [博客-专题]列表
+   *  - 数据字典信息
+   */
+  @PostConstruct
+  public void initBlogLabel() {
+    // cache admin-user data
+    List<SysUser> users = userMapper.selectUserAllList();
+    cacheService.initUserAdminIdCache(users);
 
-		// cache blog-label data
-		List<BlogLabel> labelList = blogLabelMapper.labelList(new BlogLabelListReq());
-		cacheService.saveLabelCache(CACHE_KEY_BLOG_LABEL_LIST, labelList);
+    // cache blog-label data
+    List<BlogLabel> labelList = blogLabelMapper.labelList(new BlogLabelListReq());
+    cacheService.saveLabelCache(CACHE_KEY_BLOG_LABEL_LIST, labelList);
 
-		// cache blog category
-		List<BlogCategoryResp> blogCategoryList = blogCategoryMapper.categoryList(new BlogCategoryPageReq());
-		cacheService.saveBlogCategoryCache(blogCategoryList);
+    // cache blog category
+    List<BlogCategoryResp> blogCategoryList = blogCategoryMapper.categoryList(new BlogCategoryPageReq());
+    cacheService.saveBlogCategoryCache(blogCategoryList);
 
-		// cache blog topic
-		List<BlogTopic> blogTopics = blogTopicMapper.topicList(new BlogTopicReq());
-		cacheService.saveBlogTopicCache(blogTopics);
+    // cache blog topic
+    List<BlogTopic> blogTopics = blogTopicMapper.topicList(new BlogTopicReq());
+    cacheService.saveBlogTopicCache(blogTopics);
 
-		// cache dict data
-		List<SysDict> dictList = dictMapper.selectDictList();
-		List<SysDictDetailResp> dictDetailListVO = dictDetailMapper.dictDetailList();
-		List<SysDictDetail> dictDetailList = dictDetailListVO.stream().map(item -> {
-			SysDictDetail dictDetail = new SysDictDetail();
-			BeanUtils.copyProperties(item, dictDetail);
-			return dictDetail;
-		}).collect(Collectors.toList());
-		cacheService.saveDictDetailCache(dictList, dictDetailList);
+    // cache dict data
+    List<SysDict> dictList = dictMapper.selectDictList();
+    List<SysDictDetailResp> dictDetailListVO = dictDetailMapper.dictDetailList();
+    List<SysDictDetail> dictDetailList = dictDetailListVO.stream().map(item -> {
+      SysDictDetail dictDetail = new SysDictDetail();
+      BeanUtils.copyProperties(item, dictDetail);
+      return dictDetail;
+    }).collect(Collectors.toList());
+    cacheService.saveDictDetailCache(dictList, dictDetailList);
 
-	}
+  }
 
 }
