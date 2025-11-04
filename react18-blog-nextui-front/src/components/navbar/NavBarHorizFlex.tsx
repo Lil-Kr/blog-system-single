@@ -27,7 +27,7 @@ const NavBarHorizFlex = () => {
 
   const navItems: NavProps[] = [
     { name: t('header.favorites'), url: '/favorites' },
-    { name: t('header.timeline'), url: '/timeline' },
+    // { name: t('header.timeline'), url: '/timeline' },
     { name: t('header.about'), url: '/about' }
   ]
 

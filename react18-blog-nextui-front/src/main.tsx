@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <HeroUIProvider>
     <ThemeProvider
       attribute='class'
-      defaultTheme='purple-dark'
+      defaultTheme='light'
       value={{
         light: 'light',
         dark: 'dark',

@@ -11,7 +11,7 @@ export const resumeData: ResumeData = {
     avatar: 'https://web.lilkbox.tech/upload/image/%E6%B5%81%E5%B7%9D%E6%9E%AB-1_1915216468627296256.webp'
   },
   summarys: [
-    'I`m a Full-Stack Developer from China with 6 years of professional experience — including over 4 years in Java backend development and more than 2 years working with the React.js tech stack. I also have 3 years of remote work experience. I`m highly proficient in the Spring Framework ecosystem and experienced in building distributed systems using Spring Cloud. On the frontend, I have hands-on expertise with modern technologies like React.js, TypeScript, CSS, and HTML. This website itself is built using React.js and Java/Spring Boot — technologies I know inside and out. I have a solid grasp of core data structures and algorithms, and I`m experienced with both relational databases and popular NoSQL solutions. I`m also actively deepening my knowledge of core computer science fundamentals, including operating systems, the TCP/IP protocol stack, and database theory. With this skill set, I can design and build any web application or service from the ground up. I`m passionate about delivering high-performance, user-friendly solutions that provide exceptional user experiences.'
+    "I'm a Full-Stack Developer with 7 years of professional experience - including over 4 years in Java backend development and more than 3 years working with the React.js tech stack. I also have 3 years of remote work experience. I`m highly proficient in the Spring Framework ecosystem and experienced in building distributed systems using Spring Cloud. On the frontend, I have hands-on expertise with modern technologies like React.js, TypeScript, CSS, and HTML. This website itself is built using React.js and Java/Spring Boot — technologies I know inside and out. I have a solid grasp of core data structures and algorithms, and I`m experienced with both relational databases and popular NoSQL solutions. I`m also actively deepening my knowledge of core computer science fundamentals, including operating systems, the TCP/IP protocol stack, and database theory. With this skill set, I can design and build any web application or service from the ground up. I`m passionate about delivering high-performance, user-friendly solutions that provide exceptional user experiences."
   ],
   skills: {
     frontend: ['ReactJS', 'TypeScript', 'JavaScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'Zustand', 'Vite'],
@@ -32,8 +32,8 @@ export const resumeData: ResumeData = {
       'Nginx'
     ],
     systems: ['Linux', 'MacOS', 'Windows'],
-    tools: ['Git', 'ESLint', 'Prettier', 'Postman', 'IntelliJ IDEA', 'Eclipse', 'VS Code'],
-    other: ['Teams', 'Slack', 'Zoom', 'Google Meeting'],
+    tools: ['IntelliJ IDEA', 'VS Code', 'Git', 'Postman', 'Eclipse', 'ESLint', 'Prettier'],
+    other: ['Zoom', 'Google Meeting', 'Teams', 'Slack'],
     soft: ['Agile/Scrum', 'Project Leader']
   },
   highlights: [
@@ -53,7 +53,7 @@ export const resumeData: ResumeData = {
     {
       company: 'GZ HSBC BANK Co., Ltd.',
       position: 'Java Backend Developer / SAPI - PAPI Developer',
-      period: 'June 2021 - March 2025',
+      period: 'June 2022 - March 2025',
       description: [
         'Participated in Agile software development teams',
         'Implemented functional modules and business logic',
@@ -63,7 +63,7 @@ export const resumeData: ResumeData = {
     {
       company: 'GZ RuoYuChen Technology Co., Ltd.',
       position: 'Full-Stack Developer',
-      period: 'June 2017 -  May 2021',
+      period: 'June 2018 -  May 2022',
       description: [
         'Led the development of internal SCM (Supply Chain Management) and logistics work order monitoring systems, and drove the implementation of a microservices (Spring Cloud) architecture.',
         'Led the development of a data platform for data collection and integration, providing clean and structured data to the BI (Business Intelligence) team.'
@@ -86,7 +86,7 @@ export const resumeData: ResumeData = {
       ]
     },
     {
-      name: 'Personal Blog System',
+      name: 'Blog System',
       tech: [
         'React.js',
         'HeroUI',
@@ -102,7 +102,7 @@ export const resumeData: ResumeData = {
       ],
       description:
         'This is a Blog System by myself, This system adopts a front-end and back-end separation architecture. The admin panel implements an RBAC (Role-Based Access Control) permission model, supporting blog management, image uploads, and other administrative functions. The portal site is used to browse blog content and serves as a personal website.',
-      links: ['https://github.com/Lil-Kr/blog-system-single', 'https://web.lilkbox.tech', 'https://admin.lilkbox.tech'],
+      links: ['websit: https://web.lilkbox.tech', 'github: https://github.com/Lil-Kr/blog-system-single'],
       highlights: [
         'The public site allows users to browse blog content, with rich-text display and TOC support',
         'The admin panel includes a robust RBAC permission control system',
@@ -125,7 +125,7 @@ export const resumeData: ResumeData = {
   education: {
     degree: 'Bachelor of Science in Computer Science',
     school: 'Kunming Polytechnic University in China',
-    period: 'Sep 2013 - Jun 2017',
+    period: 'Sep 2014 - Jun 2018',
     gpa: '3.8/4.0'
   },
   certificates: []

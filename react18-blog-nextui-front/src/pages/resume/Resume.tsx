@@ -101,7 +101,7 @@ const Resume = () => {
               </CardHeader>
               <CardBody className='pt-0 space-y-4'>
                 <div>
-                  <h3 className='text-sm font-medium mb-2 text-foreground'>Frontend</h3>
+                  <h3 className='text-sm font-medium mb-2 text-foreground'>Front-End</h3>
                   <div className='flex flex-wrap gap-1'>
                     {resumeData.skills.frontend.map((skill: string, index: number) => (
                       <Chip key={index} size='sm' variant='flat' color='primary'>
@@ -112,7 +112,7 @@ const Resume = () => {
                 </div>
 
                 <div>
-                  <h3 className='text-sm font-medium mb-2 text-foreground'>Backend</h3>
+                  <h3 className='text-sm font-medium mb-2 text-foreground'>Back-End</h3>
                   <div className='flex flex-wrap gap-1'>
                     {resumeData.skills.backend.map((skill: string, index: number) => (
                       <Chip key={index} size='sm' variant='flat' color='secondary'>

@@ -79,16 +79,16 @@ const rootConfig: RouterItemType[] = [
               }
             ]
           },
-          {
-            meta: {
-              key: '/timeline',
-              title: '时间轴',
-              layout: false,
-              icon: ''
-            },
-            path: 'timeline',
-            element: LazyLoad(lazy(() => import('@/pages/timeline/Timeline')))
-          }
+          // {
+          //   meta: {
+          //     key: '/timeline',
+          //     title: '时间轴',
+          //     layout: false,
+          //     icon: ''
+          //   },
+          //   path: 'timeline',
+          //   element: LazyLoad(lazy(() => import('@/pages/timeline/Timeline')))
+          // }
         ]
       },
       {
