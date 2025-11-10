@@ -96,8 +96,8 @@ Deploy refrence: **`deploy`** Folder.
 
 ### Blog Portal
 
+- [x] Image Hotlink Protection
 - [ ] Add a commenting system.
-- [ ] Add RSS feed support.
 - [ ] Further optimize and polish the codebase.
 
 ### Admin Dashboard

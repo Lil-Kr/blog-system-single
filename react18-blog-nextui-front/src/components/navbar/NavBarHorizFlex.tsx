@@ -1,14 +1,11 @@
 import SearchIcon from '@/components/navbar/icon/SearchIcon'
 import { ThemeSwitcher, LanguageSwitcher } from '@/components/themeSwitcher'
 import { baseUrl } from '@/constant'
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Kbd, Link } from '@heroui/react'
-import { div } from 'framer-motion/client'
-import { useTheme } from 'next-themes'
+import { Button, Input, Kbd } from '@heroui/react'
 import { useNavigate } from 'oh-router-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SvgIcon from '../svg/SvgIcon'
-import StickyMusicPlayer from '../musicplayer/StickyMusicPlayer'
 import { cn } from '@/components/navbar/cn'
 
 type NavProps = {

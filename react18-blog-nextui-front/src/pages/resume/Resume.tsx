@@ -121,7 +121,7 @@ const Resume = () => {
                     ))}
                   </div>
                 </div>
-                <div>
+                {/* <div>
                   <h3 className='text-sm font-medium mb-2 text-foreground'>Operating Systems</h3>
                   <div className='flex flex-wrap gap-1'>
                     {resumeData.skills.systems.map((skill: string, index: number) => (
@@ -130,7 +130,7 @@ const Resume = () => {
                       </Chip>
                     ))}
                   </div>
-                </div>
+                </div> */}
 
                 <div>
                   <h3 className='text-sm font-medium mb-2 text-foreground'>Tools</h3>

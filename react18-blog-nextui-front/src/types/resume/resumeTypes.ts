@@ -11,7 +11,7 @@ export interface BasicInfo {
 export interface Skills {
   frontend: string[]
   backend: string[]
-  systems: string[]
+  systems?: string[]
   tools: string[]
   other: string[]
   soft: string[]

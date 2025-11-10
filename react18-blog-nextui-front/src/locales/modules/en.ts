@@ -18,7 +18,7 @@ export default {
   },
   blogcontent: {
     paragraph: 'Paragraph',
-    prev: 'Previous',
-    next: 'Next'
+    prev: 'Previous Page',
+    next: 'Next Page'
   }
 }

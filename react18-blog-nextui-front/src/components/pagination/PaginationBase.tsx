@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Pagination } from '@heroui/react'
+import React from 'react'
+import { Button } from '@heroui/react'
 import { PaginationType } from '@/types/base/response'
+import { useTranslation } from 'react-i18next'
 
 export type btnStatueProp = {
   prevBtn: boolean
@@ -13,6 +14,7 @@ const PaginationBase = (props: {
   btnDisable: btnStatueProp
   setBtnDisable: React.Dispatch<React.SetStateAction<btnStatueProp>>
 }) => {
+  const { t } = useTranslation()
   const { pageChange, pagination, btnDisable, setBtnDisable } = props
   const { currentPageNum, pageSize, total, totalPage } = pagination
 
@@ -40,7 +42,7 @@ const PaginationBase = (props: {
           color='primary'
           onPress={() => handlePageChange(currentPageNum > 1 ? currentPageNum - 1 : currentPageNum, pageSize)}
         >
-          <span>{`Prev Page`}</span>
+          <span>{t('blogcontent.prev')}</span>
         </Button>
         <Button
           className='border-1 border-borderColor hover:border-borderColor font-bold'
@@ -50,7 +52,7 @@ const PaginationBase = (props: {
           color='primary'
           onPress={() => handlePageChange(currentPageNum < totalPage ? currentPageNum + 1 : currentPageNum, pageSize)}
         >
-          <span>{`Next Page`}</span>
+          <span>{t('blogcontent.next')}</span>
         </Button>
       </div>
     </div>

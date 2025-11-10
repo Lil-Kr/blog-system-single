@@ -2,7 +2,7 @@ import { ResumeData } from '@/types/resume/resumeTypes'
 
 export const resumeData: ResumeData = {
   basicInfo: {
-    name: 'Chester CHEN',
+    name: 'CHESTER CHEN',
     title: 'Full-Stack Developer',
     email: 'cxqybox@gmail.com',
     location: 'GZ, GuangDong, China(UTC+8)',
@@ -17,7 +17,6 @@ export const resumeData: ResumeData = {
     frontend: ['ReactJS', 'TypeScript', 'JavaScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'Zustand', 'Vite'],
     backend: [
       'Java',
-      'Nest.js',
       'Srping Framework',
       'Srping Boot',
       'Srping Cloud / Alibaba',
@@ -34,7 +33,7 @@ export const resumeData: ResumeData = {
     systems: ['Linux', 'MacOS', 'Windows'],
     tools: ['IntelliJ IDEA', 'VS Code', 'Git', 'Postman', 'Eclipse', 'ESLint', 'Prettier'],
     other: ['Zoom', 'Google Meeting', 'Teams', 'Slack'],
-    soft: ['Agile/Scrum', 'Project Leader']
+    soft: ['Agile/Scrum']
   },
   highlights: [
     'Experienced in developing distributed systems using Java, Spring Framework, Spring Boot, and Spring Cloud (IoC/DI, AOP, Eureka/Nacos, OpenFeign).',
@@ -53,7 +52,7 @@ export const resumeData: ResumeData = {
     {
       company: 'GZ HSBC BANK Co., Ltd.',
       position: 'Java Backend Developer / SAPI - PAPI Developer',
-      period: 'June 2022 - March 2025',
+      period: 'July 2021 - Jan 2025',
       description: [
         'Participated in Agile software development teams',
         'Implemented functional modules and business logic',
@@ -63,7 +62,7 @@ export const resumeData: ResumeData = {
     {
       company: 'GZ RuoYuChen Technology Co., Ltd.',
       position: 'Full-Stack Developer',
-      period: 'June 2018 -  May 2022',
+      period: 'June 2017 -  June 2021',
       description: [
         'Led the development of internal SCM (Supply Chain Management) and logistics work order monitoring systems, and drove the implementation of a microservices (Spring Cloud) architecture.',
         'Led the development of a data platform for data collection and integration, providing clean and structured data to the BI (Business Intelligence) team.'
@@ -83,6 +82,17 @@ export const resumeData: ResumeData = {
         'Utilized Kettle ETL to periodically extract out-of-stock order data from third-party platforms into the system with incremental updates, enabling effective stock-out management.',
         'Redesigned the caching strategy by integrating Redis and asynchronously updating cache data via message queues, improving API response time by 20%.',
         'Optimized large-scale data export interfaces, reducing response time from 1 minute to 15ms — achieving a 4× improvement in request throughput.'
+      ]
+    },
+    {
+      name: 'Enterprise Data Warehouse (EDW) Platform',
+      tech: ['React.js', 'Ant Design UI', 'Spring Boot', 'Mybatis', 'MySQL 8.x', 'Kettle', 'Nginx', 'RocketMQ'],
+      description:
+        'Aggregated order data through data collection processes and transferred it to the Business Intelligence (BI) team for further analysis.',
+      highlights: [
+        'Led the project and resolved scheduled synchronization of third-party order data using Kettle, enabling stable parsing and storage of order data.',
+        'Optimized data parsing logic multiple times, reducing processing time from 480ms per 50,000 records to 105ms, improving performance by 4x.',
+        'Built the Elasticsearch platform, conducted internal training for the BI team, and integrated reporting data into ES, improving BI dashboard performance by 50%.'
       ]
     },
     {
@@ -109,23 +119,12 @@ export const resumeData: ResumeData = {
         'Supports user permission management, blog publishing, content and image asset management',
         'Built a scalable and modular admin dashboard template for enterprise use.'
       ]
-    },
-    {
-      name: 'Enterprise Data Warehouse (EDW) Platform',
-      tech: ['React.js', 'Ant Design UI', 'Spring Boot', 'Mybatis', 'MySQL 8.x', 'Kettle', 'Nginx', 'RocketMQ'],
-      description:
-        'Aggregated order data through data collection processes and transferred it to the Business Intelligence (BI) team for further analysis.',
-      highlights: [
-        'Led the project and resolved scheduled synchronization of third-party order data using Kettle, enabling stable parsing and storage of order data.',
-        'Optimized data parsing logic multiple times, reducing processing time from 480ms per 50,000 records to 105ms, improving performance by 4x.',
-        'Built the Elasticsearch platform, conducted internal training for the BI team, and integrated reporting data into ES, improving BI dashboard performance by 50%.'
-      ]
     }
   ],
   education: {
     degree: 'Bachelor of Science in Computer Science',
     school: 'Kunming Polytechnic University in China',
-    period: 'Sep 2014 - Jun 2018',
+    period: 'Sep 2013 - Jun 2017',
     gpa: '3.8/4.0'
   },
   certificates: []
