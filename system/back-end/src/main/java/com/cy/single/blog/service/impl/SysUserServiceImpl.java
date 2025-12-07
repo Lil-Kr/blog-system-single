@@ -83,7 +83,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		SysUser user = UserDTO.convertSaveAdminReq(req);
 		int count = userMapper.insert(user);
 		if (count < 1) {
-			return ApiResp.failure(Add_ERROR);
+			return ApiResp.failure(ADD_ERROR);
 		}
 
     // update cache
@@ -107,7 +107,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		SysUser user = convertAddUserReq(req);
 		int insert = userMapper.insert(user);
 		if (insert < 1) {
-			return ApiResp.failure(Add_ERROR);
+			return ApiResp.failure(ADD_ERROR);
 		}
 
 		// update cache
@@ -127,13 +127,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     wrapper.eq("surrogate_id", req.getSurrogateId());
     SysUser before = userMapper.selectOne(wrapper);
     if (Objects.isNull(before)) {
-      return ApiResp.failure(EDITE_ERROR);
+      return ApiResp.failure(UPDATE_ERROR);
     }
 
     SysUser user = convertEditUserReq(before, req);
 		int update = userMapper.updateUserBySurrogateId(user);
 		if (update < 1) {
-      return ApiResp.failure(EDITE_ERROR);
+      return ApiResp.failure(UPDATE_ERROR);
 		}
 
     // update cache

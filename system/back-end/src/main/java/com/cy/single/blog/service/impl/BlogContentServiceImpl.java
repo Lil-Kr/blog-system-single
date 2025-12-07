@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 
 import static com.cy.single.blog.common.constants.CommonConstants.IMAGE_TYPE_SUFFIX;
 import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
-import static com.cy.single.blog.enums.ReturnCodeEnum.Add_ERROR;
+import static com.cy.single.blog.enums.ReturnCodeEnum.ADD_ERROR;
 import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
 
 /**
@@ -92,7 +92,7 @@ public class BlogContentServiceImpl implements BlogContentService {
     // insert into mysql
     int insert = blogContentMapper.insert(blogContent);
     if (insert < 1) {
-      return ApiResp.failure(Add_ERROR);
+      return ApiResp.failure(ADD_ERROR);
     }
 
     if (StringUtils.isBlank(req.getContentText())) {

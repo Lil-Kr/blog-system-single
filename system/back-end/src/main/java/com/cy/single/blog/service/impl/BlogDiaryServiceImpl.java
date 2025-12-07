@@ -55,7 +55,7 @@ public class BlogDiaryServiceImpl implements BlogDiaryService {
 
     int insert = diaryMapper.insertSelective(diary);
     if (insert < 1) {
-      return ApiResp.failure(Add_ERROR);
+      return ApiResp.failure(ADD_ERROR);
     }
     return ApiResp.success();
   }
@@ -66,7 +66,7 @@ public class BlogDiaryServiceImpl implements BlogDiaryService {
 
     int update = diaryMapper.updateById(diary);
     if (update < 1) {
-      return ApiResp.failure(EDITE_ERROR);
+      return ApiResp.failure(UPDATE_ERROR);
     }
     return ApiResp.success();
   }

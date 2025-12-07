@@ -97,7 +97,7 @@ public class ImageInfoServiceImpl implements ImageInfoService {
     if (insert > 0) {
       return ApiResp.success();
     }else {
-      return ApiResp.failure(Add_ERROR);
+      return ApiResp.failure(ADD_ERROR);
     }
   }
 

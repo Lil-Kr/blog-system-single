@@ -72,7 +72,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 		BlogLabel saveEntity = BlogLabelDTO.convertSaveLabelReq(req);
 		int add = blogLabelMapper.insert(saveEntity);
 		if (add < 1) {
-			return ApiResp.failure(Add_ERROR);
+			return ApiResp.failure(ADD_ERROR);
 		}
 
 		// update cache
@@ -94,7 +94,7 @@ public class BlogLabelServiceImpl implements BlogLabelService {
 		Integer count = blogLabelMapper.editBySurrogateId(req);
 
 		if (count < 1) {
-			return ApiResp.failure(EDITE_ERROR);
+			return ApiResp.failure(UPDATE_ERROR);
 		}
 
 		// update cache

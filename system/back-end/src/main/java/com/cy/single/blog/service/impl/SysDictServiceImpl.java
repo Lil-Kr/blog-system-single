@@ -82,7 +82,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 			cacheService.updateDictCache(dict.getSurrogateId(), dict, BUS_CREATE);
 			return ApiResp.success();
 		} else {
-			return ApiResp.failure(Add_ERROR);
+			return ApiResp.failure(ADD_ERROR);
 		}
 	}
 

@@ -33,7 +33,7 @@ import java.util.Optional;
 import static com.cy.single.blog.common.constants.CommonConstants.ACLM_PREV_NUMBER_INFO;
 import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
 import static com.cy.single.blog.enums.ReturnCodeEnum.INFO_NOT_EXIST;
-import static com.cy.single.blog.enums.ReturnCodeEnum.Add_ERROR;
+import static com.cy.single.blog.enums.ReturnCodeEnum.ADD_ERROR;
 
 /**
  * @Author: Lil-K
@@ -105,7 +105,7 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
     if (insert >= 1) {
       return ApiResp.success(msgService.getMessage(LANG_ZH, "sys.acl.module.resp.msg1"));
     } else {
-      return ApiResp.failure(Add_ERROR);
+      return ApiResp.failure(ADD_ERROR);
     }
   }
 

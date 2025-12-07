@@ -97,7 +97,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		if (insert >= 1) {
 			return ApiResp.success();
 		} else {
-			return ApiResp.failure(Add_ERROR);
+			return ApiResp.failure(ADD_ERROR);
 		}
 	}
 
@@ -180,7 +180,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		if (update >= 1) {
 			return ApiResp.success();
 		}else {
-			return ApiResp.failure(EDITE_ERROR);
+			return ApiResp.failure(UPDATE_ERROR);
 		}
 	}
 

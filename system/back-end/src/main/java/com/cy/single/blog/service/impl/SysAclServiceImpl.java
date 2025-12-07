@@ -110,7 +110,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
 
     int insert = aclMapper.insert(build);
     if (insert < 1) {
-      return ApiResp.failure(Add_ERROR);
+      return ApiResp.failure(ADD_ERROR);
     }
 
     // 更新缓存
@@ -170,7 +170,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
     updateWrapper.eq("surrogate_id", req.getSurrogateId());
     int update = aclMapper.update(build, updateWrapper);
     if (update < 1) {
-      return ApiResp.warning(EDITE_ERROR);
+      return ApiResp.warning(UPDATE_ERROR);
     }
     // 更新缓存
     cacheService.invalidAllUserAclCache();
