@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.dto.sys.org;
+package com.cy.single.blog.pojo.dto.image.sys.org;
 
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
 import com.cy.single.blog.pojo.req.sys.org.OrgReq;

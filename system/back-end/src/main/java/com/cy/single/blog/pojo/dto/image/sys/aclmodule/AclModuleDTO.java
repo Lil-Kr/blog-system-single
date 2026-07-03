@@ -1,4 +1,4 @@
-package com.cy.single.blog.pojo.dto.sys.aclmodule;
+package com.cy.single.blog.pojo.dto.image.sys.aclmodule;
 
 import com.cy.single.blog.pojo.dto.sys.acl.AclDTO;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
