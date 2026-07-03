@@ -22,9 +22,9 @@ import javax.validation.constraints.NotNull;
  * @Date: 2025/3/5
  * @Description: acl api
  */
+@Slf4j
 @RestController
 @RequestMapping("/sys/acl")
-@Slf4j
 public class AclController {
 
   @Autowired
