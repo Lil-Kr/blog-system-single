@@ -211,7 +211,6 @@ const ProTableDemo = () => {
           type: 'multiple',
           editableKeys,
           onSave: async (rowKey, rowData, row) => {
-            // console.log('--> data:', { ...rowData })
             if (rowData.key.length < 2) {
               // 新增
               // const res = await dictApi.addDictDetail({

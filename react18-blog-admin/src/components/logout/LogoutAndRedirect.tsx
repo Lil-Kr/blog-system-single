@@ -12,7 +12,6 @@ const LogoutAndRedirect = () => {
   const { resetTabs } = useTabsStore()
   const { restMenuState } = useMenuStore()
   // useEffect(() => {
-  //   console.log('--> 退出执行的是这里:', token)
   //   const handleLogout = () => {
   //     // 移除token
   //     clearToken()

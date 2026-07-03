@@ -50,7 +50,7 @@ export const transformOrgTreeExpandeKeys = (data: SysOrgResp[]): string[] => {
  */
 export const transformToAclModuleTreeData = (data: AclModuleTreeResp[]): TreeDataNode[] => {
   return data.map(item => {
-    const children = item.aclModuleDtoList ? transformToAclModuleTreeData(item.aclModuleDtoList) : [] // 递归处理子节点
+    const children = item.aclModuleDTOList ? transformToAclModuleTreeData(item.aclModuleDTOList) : [] // 递归处理子节点
     return {
       key: item.surrogateId, // 使用 surrogateId 作为 key
       title: item.name, // 使用 name 作为 title
@@ -67,8 +67,8 @@ export const transformAclModuleTreeExpandeKeys = (data: AclModuleTreeResp[]): st
   let surrogateIds: string[] = []
   data.forEach(item => {
     surrogateIds.push(item.surrogateId) // 获取当前节点的 surrogateId
-    if (item.aclModuleDtoList && item.aclModuleDtoList.length) {
-      surrogateIds = [...surrogateIds, ...transformAclModuleTreeExpandeKeys(item.aclModuleDtoList)] // 递归获取子节点的 surrogateId
+    if (item.aclModuleDTOList && item.aclModuleDTOList.length) {
+      surrogateIds = [...surrogateIds, ...transformAclModuleTreeExpandeKeys(item.aclModuleDTOList)] // 递归获取子节点的 surrogateId
     }
   })
   return surrogateIds
@@ -92,22 +92,20 @@ interface EnhancedTreeType {
 /**
  * 将AclModuleTreeResp[]转换为EnhancedTreeType[]
  */
-const convertAclModuleToEnhancedTree = (aclModules: AclModuleTreeResp[]): EnhancedTreeType[] => {
+const convertAclModuleToEnhancedTree = (aclModules: AclModuleTreeResp[] = []): EnhancedTreeType[] => {
   return aclModules.map(module => ({
     key: module.surrogateId,
     title: module.name,
-    checked: false, // 模块默认不选中
-    hasAcl: true, // 模块默认有权限
+    checked: false,
+    hasAcl: true,
     children: [
-      // 处理权限点
-      ...module.aclDtoList.map(acl => ({
+      ...(module.aclDTOList ?? []).map(acl => ({
         key: acl.surrogateId,
         title: acl.name,
         checked: acl.checked,
         hasAcl: acl.hasAcl
       })),
-      // 递归处理子模块
-      ...convertAclModuleToEnhancedTree(module.aclModuleDtoList)
+      ...convertAclModuleToEnhancedTree(module.aclModuleDTOList ?? [])
     ]
   }))
 }
@@ -185,7 +183,7 @@ export const processAclModuleTreeData = (
  * 菜单转换
  */
 const transformMenuTree = (menu: MenuTreeType[]): RouterItemType[] => {
-  if (menu.length < 1) {
+  if (!menu || menu.length === 0) {
     return []
   }
 

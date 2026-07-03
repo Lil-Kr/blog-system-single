@@ -9,19 +9,16 @@ const TinymceCloud = () => {
   const { tinyMceContents, setTinyMCEContents } = useTinymceStore()
 
   const getEditorContent = () => {
-    console.log('--> contents: ', tinyMceContents)
   }
 
   const onSetContentHandler = () => {
     if (editorRef.current !== null) {
-      console.log('--> onSetContentHandler editorRef.current not null')
       editorRef.current?.setContent(tinyMceContents)
     }
   }
 
   // const a = 'abc'
   // useEffect(() => {
-  //   console.log('--> useEffect editorRef.current not null')
   //   if (editorRef.current !== null) {
   //     editorRef.current?.setContent(a)
   //   }
@@ -85,7 +82,6 @@ const TinymceCloud = () => {
           file_picker_callback: (callback, value, meta) => {
             // Provide image and alt text for the image dialog
             if (meta.filetype == 'image') {
-              console.log('--> file_picker_callback, value: ', value)
               const input = document.createElement('input')
               input.setAttribute('type', 'file')
               input.setAttribute('accpet', 'image/*') // 只接受图片文件

@@ -53,7 +53,6 @@ class LoginCheckMiddleware extends Middleware {
   //  */
   // register = ({ to }: MiddlewareContext<{}>) => {
   //   // 如果 前往的页面不是 '/login' 则为当前路由注册该中间件
-  //   console.log('--> register:', to.pathname)
   //   return to.pathname !== '/login'
   // }
 }

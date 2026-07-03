@@ -320,7 +320,6 @@ const BlogList = () => {
       value: surrogateId,
       ...rest
     }))
-    console.log('--> retrieveLableList:', labelRes)
     setLabelList(labelRes)
   }
 

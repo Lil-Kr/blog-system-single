@@ -114,8 +114,8 @@ export interface AclModuleTreeResp {
   operator: string
   createTime: string
   updateTime: string
-  aclModuleDtoList: AclModuleTreeResp[]
-  aclDtoList: SysAclDto[]
+  aclModuleDTOList: AclModuleTreeResp[]
+  aclDTOList: SysAclDto[]
 }
 
 export interface SysAclDto extends SysAcl {

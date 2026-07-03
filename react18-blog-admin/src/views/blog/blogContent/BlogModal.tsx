@@ -87,7 +87,6 @@ const BlogModal = () => {
         original: modalReq?.original,
         recommend: modalReq?.recommend
       }
-      console.log('--> modalReq:', modalReq?.blogLabelList ?? '')
       blogForm.setFieldsValue({ ...modalReq, ...initModalData })
       // 绑定富文本编辑器
       editorRef.current?.setContent(modalReq?.contentText ?? '')

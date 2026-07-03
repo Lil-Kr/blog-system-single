@@ -82,11 +82,9 @@ const ImageUploda = () => {
     }
 
     if (file.status === 'uploading') {
-      console.log('--> handleChange uploading: ', fileList, { ...event })
     }
 
     if (file.status === 'error') {
-      console.log('--> handleChange error: ', fileList)
     }
 
     /**

@@ -39,11 +39,9 @@ const SelectDemo = () => {
 
   const getVal = () => {
     const a = form.getFieldsValue()
-    console.log('--> a: ', a)
   }
 
   const onChange = (value: any) => {
-    console.log('--> onChange: ', value)
   }
 
   return (

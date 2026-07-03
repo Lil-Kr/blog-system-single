@@ -82,11 +82,9 @@ const ImageUploda = () => {
     }
 
     if (file.status === 'uploading') {
-      console.log('--> handleChange uploading: ', fileList, { ...event })
     }
 
     if (file.status === 'error') {
-      console.log('--> handleChange error: ', fileList)
     }
 
     /**
@@ -94,7 +92,6 @@ const ImageUploda = () => {
      * or call back-end delete api
      */
     if (file.status === 'removed') {
-      console.log('--> handleChange removed: ', fileList)
     }
   }
 
@@ -129,7 +126,6 @@ const ImageUploda = () => {
    * @param file
    */
   const onPreview = async (file: UploadFile) => {
-    console.log('--> onPreview')
     let src = file.url as string
     if (!src) {
       src = await new Promise(resolve => {

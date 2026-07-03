@@ -138,7 +138,6 @@ const resetPermissionRouters = async (token?: string) => {
     setTabMap(tabMap)
     // const firstEntry = Array.from(tabMap.entries())[0]
     // const [key, value] = firstEntry // 解构赋值
-    // console.log('--> tab:', value)
     // setTabActive(value)
 
     /**
