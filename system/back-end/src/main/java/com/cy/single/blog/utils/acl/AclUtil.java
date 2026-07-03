@@ -1,6 +1,6 @@
 package com.cy.single.blog.utils.acl;
 
-import com.cy.single.blog.pojo.dto.sys.acl.AclDto;
+import com.cy.single.blog.pojo.dto.sys.acl.AclDTO;
 
 import java.util.Comparator;
 
@@ -14,9 +14,9 @@ public class AclUtil {
   /**
    * 以AclDto排序, 权限点列表根据seq排序
    */
-  public static Comparator<AclDto> aclDtoComparator = new Comparator<AclDto>() {
+  public static Comparator<AclDTO> aclDtoComparator = new Comparator<AclDTO>() {
     @Override
-    public int compare(AclDto o1, AclDto o2) {
+    public int compare(AclDTO o1, AclDTO o2) {
       return o1.getSeq() - o2.getSeq();
     }
   };

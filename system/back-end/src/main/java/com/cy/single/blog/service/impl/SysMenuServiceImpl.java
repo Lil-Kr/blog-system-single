@@ -3,8 +3,8 @@ package com.cy.single.blog.service.impl;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysAclModuleMapper;
-import com.cy.single.blog.pojo.dto.sys.acl.AclDto;
-import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
+import com.cy.single.blog.pojo.dto.sys.acl.AclDTO;
+import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDTO;
 import com.cy.single.blog.pojo.entity.sys.SysAcl;
 import com.cy.single.blog.pojo.entity.sys.SysMenu;
 import com.cy.single.blog.service.*;
@@ -59,12 +59,12 @@ public class SysMenuServiceImpl implements SysPermissionService {
      * 1. 获取当前用户对应的菜单权限
      */
     Long userId = RequestHolder.getCurrentUser().getSurrogateId();
-    List<AclModuleDto> aclModuleDtoList = treeService.userAclTree(userId);
+    List<AclModuleDTO> aclModuleDTOList = treeService.userAclTree(userId);
 
     /**
      * 转换为菜单结构
      */
-    List<SysMenu> menuList = changeTreeToMenu(aclModuleDtoList, FRONT_ROUTER_PREFIX);
+    List<SysMenu> menuList = changeTreeToMenu(aclModuleDTOList, FRONT_ROUTER_PREFIX);
 
     /**
      * 2. 请求当前用户[按钮]类型的权限点
@@ -86,22 +86,22 @@ public class SysMenuServiceImpl implements SysPermissionService {
 
   /**
    * 构建菜单
-   * @param aclModuleDtoList
+   * @param aclModuleDTOList
    * @return
    */
-  private List<SysMenu> changeTreeToMenu(List<AclModuleDto> aclModuleDtoList, String rootPath) {
+  private List<SysMenu> changeTreeToMenu(List<AclModuleDTO> aclModuleDTOList, String rootPath) {
     List<SysMenu> menuList = Lists.newArrayList();
-    if (CollectionUtils.isEmpty(aclModuleDtoList)) {
+    if (CollectionUtils.isEmpty(aclModuleDTOList)) {
       return menuList;
     }
 
-    for (AclModuleDto aclModuleDto : aclModuleDtoList) {
+    for (AclModuleDTO aclModuleDto : aclModuleDTOList) {
       /**
        * 检查当前模块是否有满足条件的权限点
        */
-      boolean hasValidAcl = aclModuleDto.getAclDtoList().stream()
+      boolean hasValidAcl = aclModuleDto.getAclDTOList().stream()
         .anyMatch(acl -> acl.isChecked() && acl.isHasAcl());
-      if (!hasValidAcl && CollectionUtils.isEmpty(aclModuleDto.getAclModuleDtoList())) {
+      if (!hasValidAcl && CollectionUtils.isEmpty(aclModuleDto.getAclModuleDTOList())) {
         continue;
       }
 
@@ -111,10 +111,10 @@ public class SysMenuServiceImpl implements SysPermissionService {
        * case1: 当前模块构成菜单时, 并且本身需要跳转url, 并且没有下级子模块时, 比如[首页]
        */
       if (!aclModuleDto.getMenuUrl().equals("-")
-        && CollectionUtils.isNotEmpty(aclModuleDto.getAclDtoList())
-        && CollectionUtils.isEmpty(aclModuleDto.getAclModuleDtoList())
+        && CollectionUtils.isNotEmpty(aclModuleDto.getAclDTOList())
+        && CollectionUtils.isEmpty(aclModuleDto.getAclModuleDTOList())
       ) {
-        AclDto aclDto = aclModuleDto.getAclDtoList().stream()
+        AclDTO aclDto = aclModuleDto.getAclDTOList().stream()
           .filter(acl -> acl.getType() == 1 && acl.isChecked() && acl.isHasAcl()) // 过滤条件
           .findAny()
           .orElse(null);
@@ -132,10 +132,10 @@ public class SysMenuServiceImpl implements SysPermissionService {
        * case2: 当本层不作为跳转菜单, 就以权限点中的菜单作为跳转
        */
       if (aclModuleDto.getMenuUrl().equals("-")
-        && CollectionUtils.isNotEmpty(aclModuleDto.getAclDtoList())
-        && CollectionUtils.isEmpty(aclModuleDto.getAclModuleDtoList())
+        && CollectionUtils.isNotEmpty(aclModuleDto.getAclDTOList())
+        && CollectionUtils.isEmpty(aclModuleDto.getAclModuleDTOList())
       ) {
-        AclDto aclDto = aclModuleDto.getAclDtoList().stream()
+        AclDTO aclDto = aclModuleDto.getAclDTOList().stream()
           .filter(acl -> acl.getType() == 1 && acl.isChecked() && acl.isHasAcl()) // 过滤条件
           .findAny()
           .orElse(null);
@@ -153,12 +153,12 @@ public class SysMenuServiceImpl implements SysPermissionService {
        * case3: 当权限模块有值, 权限点为空时, 说明当前权限模块有子菜单, 需要递归处理
        */
       if (!aclModuleDto.getMenuUrl().equals("-")
-        && CollectionUtils.isEmpty(aclModuleDto.getAclDtoList())
-        && CollectionUtils.isNotEmpty(aclModuleDto.getAclModuleDtoList())) {
+        && CollectionUtils.isEmpty(aclModuleDto.getAclDTOList())
+        && CollectionUtils.isNotEmpty(aclModuleDto.getAclModuleDTOList())) {
         /**
          * 递归处理子菜单
          */
-        List<SysMenu> subMenuList = changeTreeToMenu(aclModuleDto.getAclModuleDtoList(), rootPath + aclModuleDto.getMenuUrl());
+        List<SysMenu> subMenuList = changeTreeToMenu(aclModuleDto.getAclModuleDTOList(), rootPath + aclModuleDto.getMenuUrl());
 
         // 如果子菜单列表不为空，才将当前模块作为父菜单
         if (CollectionUtils.isNotEmpty(subMenuList)) {

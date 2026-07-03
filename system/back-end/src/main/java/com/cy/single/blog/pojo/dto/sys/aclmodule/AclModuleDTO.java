@@ -1,6 +1,6 @@
 package com.cy.single.blog.pojo.dto.sys.aclmodule;
 
-import com.cy.single.blog.pojo.dto.sys.acl.AclDto;
+import com.cy.single.blog.pojo.dto.sys.acl.AclDTO;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Lists;
@@ -21,21 +21,23 @@ import java.util.List;
 @Data
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AclModuleDto extends SysAclModule {
+public class AclModuleDTO extends SysAclModule {
 
-  private List<AclModuleDto> aclModuleDtoList = Lists.newArrayList();
+  private static final long serialVersionUID = -6784284251265166210L;
+
+  private List<AclModuleDTO> aclModuleDTOList = Lists.newArrayList();
 
   /**
    * 权限点数据
    */
-  private List<AclDto> aclDtoList = Lists.newArrayList();
+  private List<AclDTO> aclDTOList = Lists.newArrayList();
 
   /**
    * 将权限模块数据转换为一颗树形结构
    * @return
    */
-  public static AclModuleDto adapt(SysAclModule aclModule){
-    AclModuleDto dto = new AclModuleDto();
+  public static AclModuleDTO adapt(SysAclModule aclModule){
+    AclModuleDTO dto = new AclModuleDTO();
     BeanUtils.copyProperties(aclModule, dto);
     return dto;
   }

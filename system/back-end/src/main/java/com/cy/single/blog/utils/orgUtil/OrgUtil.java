@@ -1,7 +1,7 @@
 package com.cy.single.blog.utils.orgUtil;
 
 
-import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
+import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDTO;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
 
 import java.util.Comparator;
@@ -11,9 +11,9 @@ public class OrgUtil {
   /**
    * 以OrgLevelDto排序, 组织列表根据seq排序
    */
-  public static Comparator<OrgLevelDto> orgLevelDtoComparator = new Comparator<OrgLevelDto>() {
+  public static Comparator<OrgLevelDTO> orgLevelDtoComparator = new Comparator<OrgLevelDTO>() {
     @Override
-    public int compare(OrgLevelDto o1, OrgLevelDto o2) {
+    public int compare(OrgLevelDTO o1, OrgLevelDTO o2) {
       return o1.getSeq() - o2.getSeq();
     }
   };

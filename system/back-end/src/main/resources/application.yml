@@ -2,6 +2,8 @@ server:
   port: 8089
   tomcat:
     uri-encoding: UTF-8
+  servlet:
+    context-path: /api
 
 ## spring config
 spring:

@@ -53,33 +53,33 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 	@Override
 	public List<SysAcl> getCurrentUserAclList() {
 		// retrieve current user id
-		Long userId = RequestHolder.getCurrentUser().getSurrogateId();
+		Long adminId = RequestHolder.getCurrentUser().getSurrogateId();
 
 		/**
 		 * retrieve from cache for [user - acl]
 		 * if cache not exist, then get from DB
 		 */
-		List<SysAcl> userAclList = Optional.ofNullable(cacheService.getUserAclListCache(userId))
+		List<SysAcl> adminAclList = Optional.ofNullable(cacheService.getUserAclListCache(adminId))
 			.filter(CollectionUtils::isNotEmpty)
 			.orElseGet(() -> {
-				List<SysAcl> aclList = this.getUserAclList(userId);
-				cacheService.saveUserAclCache(userId, aclList);
+				List<SysAcl> aclList = this.getUserAclList(adminId);
+				cacheService.saveUserAclCache(adminId, aclList);
 				return aclList;
 			});
 
-		return userAclList;
+		return adminAclList;
 	}
 
 	/**
 	 * retrieve [user-role-acl] list
-	 * @param userId userId
+	 * @param adminId userId
 	 * @return
 	 * @throws Exception
 	 */
 	@Override
-	public List<SysAcl> getUserAclList(Long userId) {
+	public List<SysAcl> getUserAclList(Long adminId) {
 		// if current is supper admin, then return all acl list
-		if (isSuperAdmin(userId)) {
+		if (this.isSuperAdmin(adminId)) {
 			QueryWrapper<SysAcl> wrapper = new QueryWrapper<>();
 			wrapper.eq("status", 0);// 查询启用的权限点
 			return aclMapper.selectList(wrapper);
@@ -87,17 +87,17 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 
 		/**
 		 * 1. 如果不是超级管理员, 就取出当前用户已经分配的角色id列表, 一个用户可以被分配到多个角色, 最后权限取多个角色的并集
-		 * 1 step. if not supper admin, then retrieve current adminUser already own roleId list
+		 * step1. if not supper admin, then retrieve current adminUser already own roleId list
 		 * remark: an adminUser can be assigned multiple roles
 		 */
-		List<Long> userRoleIdList = roleUserMapper.selectRoleIdListByUserId(userId);
+		List<Long> userRoleIdList = roleUserMapper.selectRoleIdListByUserId(adminId);
 		if (CollectionUtils.isEmpty(userRoleIdList)) {
 			return Lists.newArrayList();
 		}
 
 		/**
 		 * 2. 根据角色id获取对应用户已经分配的权限点列表id(acl_id)
-		 * step2. according to roleId, retrieve corresponding adminUser already assigned aclId list. it`s List<aclId>
+		 * step2. according to roleId, retrieve corresponding adminUser already assigned aclId list. it is List<aclId>
 		 */
 		List<Long> userAclIdList = roleAclMapper.selectAclIdListByRoleIdList(userRoleIdList);
 		if (CollectionUtils.isEmpty(userAclIdList)) {
@@ -106,7 +106,7 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 
 		/**
 		 * 3. 根据权限点列表id查询详细权限点列表信息
-		 * step2. according aclId list, then retrieve acl detail info list
+		 * step3. according aclId list, then retrieve acl detail info list
 		 */
 		return aclMapper.selectAclListByAclIdList(userAclIdList);
 	}
@@ -114,14 +114,14 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 	/**
 	 * 获取当前用户对应的[xxx类型]权限点
 	 * 用于菜单构建
-	 * @param userId
+	 * @param adminId
 	 * @param type
 	 * @return
 	 */
 	@Override
-	public List<SysAcl> getUserAclList(Long userId, Integer type) {
+	public List<SysAcl> getUserAclList(Long adminId, Integer type) {
 		// 如果当前用户是超级管理员, 返回所有的菜单权限点列表
-		if (isSuperAdmin(userId)) {
+		if (isSuperAdmin(adminId)) {
 			QueryWrapper<SysAcl> wrapper = new QueryWrapper<>();
 			wrapper.eq("type", type);
 			wrapper.eq("status", 0);
@@ -129,7 +129,7 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 		}
 
 		// 1. 如果不是超级管理员, 就取出当前用户已经分配的角色id列表, 一个用户可以被分配到多个角色, 最后权限取多个角色的并集
-		List<Long> userRoleIdList = roleUserMapper.selectRoleIdListByUserId(userId);
+		List<Long> userRoleIdList = roleUserMapper.selectRoleIdListByUserId(adminId);
 		if (CollectionUtils.isEmpty(userRoleIdList)) {
 			return Lists.newArrayList();
 		}

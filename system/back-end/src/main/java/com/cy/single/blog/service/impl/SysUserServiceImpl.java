@@ -61,10 +61,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 	@Autowired
 	private MessageLangService msgService;
-
 	@Autowired
 	private SysUserMapper userMapper;
-
 	@Autowired
 	private CacheService cacheService;
 
@@ -90,6 +88,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     cacheService.setUserTokenCache(user.getToken(), user);
     cacheService.setUserAdminIdCache(user.getSurrogateId(), user);
 		return ApiResp.success(ReturnCodeEnum.SUCCESS);
+	}
+
+	@Override
+	public ApiResp<SysUser> adminLogin(UserLoginAdminReq req) {
+		SysUser user = userMapper.loginAdmin(req);
+		if (Objects.isNull(user)) {
+			return ApiResp.failure(USER_INFO_ERROR);
+		}
+
+		user.setUpdateTime(DateUtil.localDateTimeNow());
+		Integer update = userMapper.updateUserBySurrogateId(user);
+		if (update < 1) {
+			return ApiResp.warning(USER_INFO_ERROR);
+		}
+
+		// update cache
+		cacheService.setUserTokenCache(user.getToken(), user);
+		cacheService.setUserAdminIdCache(user.getSurrogateId(), user);
+		return ApiResp.success(msgService.getMessage(LANG_ZH, "admin.login.success"), SysUser.builder().token(user.getToken()).build());
 	}
 
   /**
@@ -174,25 +191,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Override
 	public SysUserResp getUserBySurrogateId(Long surrogateId) {
 		return userMapper.getUserBySurrogateId(surrogateId);
-	}
-
-	@Override
-	public ApiResp<SysUser> adminLogin(UserLoginAdminReq req) {
-		SysUser user = userMapper.loginAdmin(req);
-		if (Objects.isNull(user)) {
-			return ApiResp.failure(USER_INFO_ERROR);
-		}
-
-		user.setUpdateTime(DateUtil.localDateTimeNow());
-		Integer update = userMapper.updateUserBySurrogateId(user);
-		if (update < 1) {
-			return ApiResp.warning(USER_INFO_ERROR);
-		}
-
-    // update cache
-		cacheService.setUserTokenCache(user.getToken(), user);
-    cacheService.setUserAdminIdCache(user.getSurrogateId(), user);
-		return ApiResp.success(msgService.getMessage(LANG_ZH, "admin.login.success"), SysUser.builder().token(user.getToken()).build());
 	}
 
 	@Override

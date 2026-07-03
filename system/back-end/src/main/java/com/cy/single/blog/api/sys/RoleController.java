@@ -5,7 +5,7 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
+import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDTO;
 import com.cy.single.blog.pojo.req.sys.role.RoleListPageReq;
 import com.cy.single.blog.pojo.req.sys.role.RoleSaveReq;
 import com.cy.single.blog.pojo.req.sys.roleacl.RoleAclSaveReq;
@@ -120,12 +120,12 @@ public class RoleController {
   @CheckAuth
   @RecordLogger
   @PostMapping("/roleAclTree")
-  public ApiResp<List<AclModuleDto>> roleAclTree (@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
-    List<AclModuleDto> aclModuleDtoList = treeService.roleAclTree(req.getRoleId());
-    if (CollectionUtils.isEmpty(aclModuleDtoList)) {
+  public ApiResp<List<AclModuleDTO>> roleAclTree (@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
+    List<AclModuleDTO> aclModuleDTOList = treeService.roleAclTree(req.getRoleId());
+    if (CollectionUtils.isEmpty(aclModuleDTOList)) {
       return ApiResp.failure(msgLangService.getMessage(LANG_ZH, "sys.role.api.resp.msg1"));
     }
-    return ApiResp.success(aclModuleDtoList);
+    return ApiResp.success(aclModuleDTOList);
   }
 
   /**

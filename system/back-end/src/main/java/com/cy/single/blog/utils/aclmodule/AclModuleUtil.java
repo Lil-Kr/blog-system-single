@@ -1,6 +1,6 @@
 package com.cy.single.blog.utils.aclmodule;
 
-import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
+import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDTO;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 
 import java.util.Comparator;
@@ -10,9 +10,9 @@ public class AclModuleUtil {
   /**
    * 以SysAclModule排序, 组织列表根据seq排序
    */
-  public static Comparator<AclModuleDto> aclModuleLevelDtoComparator = new Comparator<AclModuleDto>() {
+  public static Comparator<AclModuleDTO> aclModuleLevelDtoComparator = new Comparator<AclModuleDTO>() {
     @Override
-    public int compare(AclModuleDto o1, AclModuleDto o2) {
+    public int compare(AclModuleDTO o1, AclModuleDTO o2) {
       return o1.getSeq() - o2.getSeq();
     }
   };

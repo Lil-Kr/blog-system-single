@@ -13,13 +13,13 @@ import com.cy.single.blog.pojo.resp.sys.user.SysUserResp;
  */
 public interface SysUserService {
 
-	SysUser getUserById(Long id);
-
-	SysUserResp getUserBySurrogateId(Long surrogateId);
-
 	ApiResp<SysUser> adminLogin(UserLoginAdminReq reqParam);
 
 	ApiResp<Integer> registerAdmin(UserRegisterReq req);
+
+	SysUser getUserById(Long id);
+
+	SysUserResp getUserBySurrogateId(Long surrogateId);
 
 	ApiResp<String> add(UserSaveReq req);
 

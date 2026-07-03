@@ -7,7 +7,9 @@ import org.springframework.beans.BeanUtils;
 
 @Data
 @ToString
-public class AclDto extends SysAcl {
+public class AclDTO extends SysAcl {
+
+  private static final long serialVersionUID = -7446367187879726851L;
 
   /**
    * 前端是否默认要选中的样式
@@ -20,8 +22,8 @@ public class AclDto extends SysAcl {
    */
   private boolean hasAcl = false;
 
-  public static AclDto adapt(SysAcl acl) {
-    AclDto aclDto = new AclDto();
+  public static AclDTO adapt(SysAcl acl) {
+    AclDTO aclDto = new AclDTO();
     BeanUtils.copyProperties(acl,aclDto);
     return aclDto;
   }

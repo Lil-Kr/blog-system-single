@@ -21,9 +21,9 @@ public interface SysAclCoreService {
 	 */
 	List<SysAcl> getRoleAclList(Long roleSurrogateId);
 
-	List<SysAcl> getUserAclList(Long userId);
+	List<SysAcl> getUserAclList(Long adminId);
 
-	List<SysAcl> getUserAclList(Long userId, Integer type);
+	List<SysAcl> getUserAclList(Long adminId, Integer type);
 
 	boolean hasUrlAcl(String url);
 }

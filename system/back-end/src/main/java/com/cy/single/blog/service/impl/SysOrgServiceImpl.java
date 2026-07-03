@@ -7,7 +7,7 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysOrgMapper;
 import com.cy.single.blog.dao.SysUserMapper;
-import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
+import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDTO;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.sys.org.OrgListAllReq;
@@ -233,8 +233,8 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 	 * @return
 	 */
 	@Override
-	public List<OrgLevelDto> orgTree() {
-		List<OrgLevelDto> dtoList = treeService.orgTree();
+	public List<OrgLevelDTO> orgTree() {
+		List<OrgLevelDTO> dtoList = treeService.orgTree();
 		return dtoList;
 	}
 

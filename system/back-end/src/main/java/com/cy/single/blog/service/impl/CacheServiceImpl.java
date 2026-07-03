@@ -322,8 +322,8 @@ public class CacheServiceImpl implements CacheService, Serializable {
 	}
 
 	@Override
-	public List<SysAcl> getUserAclListCache(Long userId) {
-		return adminAclCache.getIfPresent(userId);
+	public List<SysAcl> getUserAclListCache(Long adminId) {
+		return adminAclCache.getIfPresent(adminId);
 	}
 
 	/**

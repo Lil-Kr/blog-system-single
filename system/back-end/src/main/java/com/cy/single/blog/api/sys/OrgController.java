@@ -5,7 +5,7 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDto;
+import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDTO;
 import com.cy.single.blog.pojo.req.sys.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.sys.org.OrgPageReq;
 import com.cy.single.blog.pojo.req.sys.org.OrgReq;
@@ -64,8 +64,8 @@ public class OrgController {
   @RecordLogger
   @CheckAuth
   @PostMapping("orgTreeList")
-  public ApiResp<List<OrgLevelDto>> orgTreeList() {
-    List<OrgLevelDto> orgLevelList = orgService.orgTree();
+  public ApiResp<List<OrgLevelDTO>> orgTreeList() {
+    List<OrgLevelDTO> orgLevelList = orgService.orgTree();
     return ApiResp.success(orgLevelList);
   }
 

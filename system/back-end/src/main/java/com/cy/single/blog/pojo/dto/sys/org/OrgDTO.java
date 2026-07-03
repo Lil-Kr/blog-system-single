@@ -10,7 +10,9 @@ import org.springframework.beans.BeanUtils;
 @Slf4j
 @Data
 @ToString
-public class OrgDto extends SysOrg {
+public class OrgDTO extends SysOrg {
+
+  private static final long serialVersionUID = 1180678072393662676L;
 
   /**
    * 参数转换为实体类

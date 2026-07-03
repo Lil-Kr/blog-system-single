@@ -84,7 +84,7 @@ public interface CacheService {
 	 */
 	void saveUserAclCache(Long surrogateId, List<SysAcl> aclList);
 
-	List<SysAcl> getUserAclListCache(Long userId);
+	List<SysAcl> getUserAclListCache(Long adminId);
 
 	void invalidUserAclCache(List<Long> userIdList);
 

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysAclModuleMapper;
-import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDto;
+import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDTO;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.cy.single.blog.pojo.req.sys.aclmodule.AclModuleListReq;
 import com.cy.single.blog.pojo.req.sys.aclmodule.AclModuleReq;
@@ -248,9 +248,9 @@ public class SysAclModuleServiceImpl extends ServiceImpl<SysAclModuleMapper, Sys
    * @return
    */
   @Override
-  public ApiResp<List<AclModuleDto>> aclModuleTree() {
-    List<AclModuleDto> aclModuleDtoList = treeService.aclModuleTree();
-    return ApiResp.success(aclModuleDtoList);
+  public ApiResp<List<AclModuleDTO>> aclModuleTree() {
+    List<AclModuleDTO> aclModuleDTOList = treeService.aclModuleTree();
+    return ApiResp.success(aclModuleDTOList);
   }
 
   /**
