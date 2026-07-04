@@ -2,7 +2,7 @@ package com.cy.single.blog.service;
 
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDTO;
+import com.cy.single.blog.pojo.dto.image.sys.org.OrgLevelDTO;
 import com.cy.single.blog.pojo.req.sys.org.OrgListAllReq;
 import com.cy.single.blog.pojo.req.sys.org.OrgPageReq;
 import com.cy.single.blog.pojo.req.sys.org.OrgReq;

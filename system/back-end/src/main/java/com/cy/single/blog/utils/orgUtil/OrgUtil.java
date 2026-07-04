@@ -1,9 +1,8 @@
 package com.cy.single.blog.utils.orgUtil;
 
 
-import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDTO;
+import com.cy.single.blog.pojo.dto.image.sys.org.OrgLevelDTO;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
-
 import java.util.Comparator;
 
 public class OrgUtil {

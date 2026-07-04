@@ -2,7 +2,7 @@ package com.cy.single.blog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cy.single.blog.base.ApiResp;
-import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDTO;
+import com.cy.single.blog.pojo.dto.image.sys.aclmodule.AclModuleDTO;
 import com.cy.single.blog.pojo.entity.sys.SysAclModule;
 import com.cy.single.blog.pojo.req.sys.aclmodule.AclModuleListReq;
 import com.cy.single.blog.pojo.req.sys.aclmodule.AclModuleReq;

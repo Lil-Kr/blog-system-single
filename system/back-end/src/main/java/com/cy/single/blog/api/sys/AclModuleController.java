@@ -4,7 +4,7 @@ package com.cy.single.blog.api.sys;
 import com.cy.single.blog.aspect.annotations.CheckAuth;
 import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
-import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDTO;
+import com.cy.single.blog.pojo.dto.image.sys.aclmodule.AclModuleDTO;
 import com.cy.single.blog.pojo.req.sys.aclmodule.AclModuleListReq;
 import com.cy.single.blog.pojo.req.sys.aclmodule.AclModuleReq;
 import com.cy.single.blog.pojo.resp.sys.aclmodule.SysAclModuleResp;
@@ -12,7 +12,6 @@ import com.cy.single.blog.service.SysAclModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.constraints.NotNull;
 import java.util.List;
 

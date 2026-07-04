@@ -5,7 +5,7 @@ import com.cy.single.blog.aspect.annotations.RecordLogger;
 import com.cy.single.blog.base.ApiResp;
 import com.cy.single.blog.base.BasePageReq;
 import com.cy.single.blog.base.PageResult;
-import com.cy.single.blog.pojo.dto.sys.aclmodule.AclModuleDTO;
+import com.cy.single.blog.pojo.dto.image.sys.aclmodule.AclModuleDTO;
 import com.cy.single.blog.pojo.req.sys.role.RoleListPageReq;
 import com.cy.single.blog.pojo.req.sys.role.RoleSaveReq;
 import com.cy.single.blog.pojo.req.sys.roleacl.RoleAclSaveReq;

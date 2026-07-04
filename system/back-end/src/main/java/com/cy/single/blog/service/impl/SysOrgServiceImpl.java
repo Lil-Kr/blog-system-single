@@ -7,7 +7,7 @@ import com.cy.single.blog.base.PageResult;
 import com.cy.single.blog.common.holder.RequestHolder;
 import com.cy.single.blog.dao.SysOrgMapper;
 import com.cy.single.blog.dao.SysUserMapper;
-import com.cy.single.blog.pojo.dto.sys.org.OrgLevelDTO;
+import com.cy.single.blog.pojo.dto.image.sys.org.OrgLevelDTO;
 import com.cy.single.blog.pojo.entity.sys.SysOrg;
 import com.cy.single.blog.pojo.entity.sys.SysUser;
 import com.cy.single.blog.pojo.req.sys.org.OrgListAllReq;
@@ -23,12 +23,15 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import static com.cy.single.blog.common.constants.CommonConstants.*;
+
+import static com.cy.single.blog.common.constants.CommonConstants.LANG_ZH;
+import static com.cy.single.blog.common.constants.CommonConstants.ORG_PREV_NUMBER_INFO;
 import static com.cy.single.blog.enums.ReturnCodeEnum.*;
 
 /**

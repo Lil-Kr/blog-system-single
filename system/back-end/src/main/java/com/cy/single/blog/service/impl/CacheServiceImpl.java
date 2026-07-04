@@ -10,9 +10,9 @@ import com.cy.single.blog.pojo.resp.blog.BlogCategoryResp;
 import com.cy.single.blog.service.CacheService;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import jdk.nashorn.internal.runtime.OptimisticBuiltins;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -335,7 +335,7 @@ public class CacheServiceImpl implements CacheService, Serializable {
 		if (CollectionUtils.isEmpty(userIdList)) {
 			return;
 		}
-		userIdList.forEach(userId-> adminAclCache.invalidate(userId));
+		userIdList.forEach(userId -> adminAclCache.invalidate(userId));
 	}
 
 	@Override
